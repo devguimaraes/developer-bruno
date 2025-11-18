@@ -6,7 +6,7 @@ const Hero = () => {
   return (
     <section className="min-h-screen flex items-center justify-center px-4 pt-20">
       <div className="container mx-auto">
-        <div className="grid lg:grid-cols-[70%_30%] gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Text Content */}
           <div className="space-y-8 animate-slide-right">
             <div className="inline-block border-4 border-foreground bg-accent px-4 py-2 shadow-brutal-sm">
