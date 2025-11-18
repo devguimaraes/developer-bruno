@@ -1,5 +1,6 @@
 import { ArrowRight, Github, Linkedin, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import heroVideo from "@/assets/hero-video.mp4";
 
 const Hero = () => {
   return (
@@ -61,13 +62,17 @@ const Hero = () => {
 
           {/* Visual Element */}
           <div className="relative animate-scale-in">
-            <div className="aspect-square bg-gradient-primary border-4 border-foreground shadow-brutal-lg relative overflow-hidden">
+            <div className="aspect-square border-4 border-foreground shadow-brutal-lg relative overflow-hidden">
+              <video 
+                autoPlay 
+                loop 
+                muted 
+                playsInline
+                className="w-full h-full object-cover"
+              >
+                <source src={heroVideo} type="video/mp4" />
+              </video>
               <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent"></div>
-              <div className="absolute top-8 right-8 w-32 h-32 border-4 border-foreground bg-accent shadow-brutal"></div>
-              <div className="absolute bottom-8 left-8 w-40 h-40 border-4 border-foreground bg-secondary shadow-brutal"></div>
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
-                <div className="font-mono text-6xl font-bold text-primary-foreground">&lt;/&gt;</div>
-              </div>
             </div>
           </div>
         </div>
