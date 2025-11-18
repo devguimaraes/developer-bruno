@@ -1,6 +1,7 @@
 # 🌿 Git Workflow Documentation
 
 ## Overview
+
 Este projeto utiliza um fluxo Git Flow manual para garantir organização e qualidade no desenvolvimento.
 
 ## Estrutura de Branches
@@ -8,12 +9,12 @@ Este projeto utiliza um fluxo Git Flow manual para garantir organização e qual
 ### Branches Principais (Long-lived)
 
 #### `main`
+
 - **Propósito**: Produção, código estável e testado
 - **Fonte**: Somente recebe merges de `hotfix/*` e `release/*`
 - **Proteção**: Branch protegido, requer PR para alterações
 - **Tags**: Cada versão recebe uma tag (`v1.0.0`, `v1.1.0`, etc.)
 
-#### `develop`
 - **Propósito**: Integração de features, desenvolvimento contínuo
 - **Fonte**: Recebe merges de `feature/*`
 - **Base**: Branch base para novas features e releases
@@ -22,6 +23,7 @@ Este projeto utiliza um fluxo Git Flow manual para garantir organização e qual
 ### Branches de Suporte (Short-lived)
 
 #### `feature/*`
+
 - **Propósito**: Desenvolvimento de novas funcionalidades
 - **Fonte**: Criado a partir de `develop`
 - **Destino**: Merge de volta em `develop`
@@ -32,6 +34,7 @@ Este projeto utiliza um fluxo Git Flow manual para garantir organização e qual
   - `feature/contact-form`
 
 #### `hotfix/*`
+
 - **Propósito**: Correções urgentes em produção
 - **Fonte**: Criado a partir de `main`
 - **Destino**: Merge em `main` E `develop`
@@ -41,6 +44,7 @@ Este projeto utiliza um fluxo Git Flow manual para garantir organização e qual
   - `hotfix/fix-payment-bug`
 
 #### `release/*`
+
 - **Propósito**: Preparação de nova versão para produção
 - **Fonte**: Criado a partir de `develop`
 - **Destino**: Merge em `main` E `develop`
@@ -139,6 +143,7 @@ git branch -d release/v1.1.0
 Utilizamos [Conventional Commits](https://www.conventionalcommits.org/):
 
 ### Estrutura
+
 ```
 <tipo>[escopo opcional]: <descrição>
 
@@ -148,6 +153,7 @@ Utilizamos [Conventional Commits](https://www.conventionalcommits.org/):
 ```
 
 ### Tipos Principais
+
 - `feat`: Nova funcionalidade
 - `fix`: Correção de bug
 - `docs`: Documentação
@@ -160,20 +166,22 @@ Utilizamos [Conventional Commits](https://www.conventionalcommits.org/):
 - `build`: Sistema de build
 
 ### Exemplos
+
 ```bash
-feat(auth): add Google OAuth integration
-fix(checkout): resolve timeout on payment processing
-docs(readme): update installation and setup guide
-style(components): fix code formatting issues
-refactor(api): simplify user validation logic
-test(contact): add unit tests for form validation
-chore(deps): update React to v18.3.0
-perf(images): optimize hero animation loading
+feat(auth): adiciona integração com Google OAuth
+fix(checkout): corrige timeout no processamento de pagamento
+docs(readme): atualiza guia de instalação e configuração
+style(components): corrige formatação do código
+refactor(api): simplifica lógica de validação de usuário
+test(contact): adiciona testes unitários para formulário de contato
+chore(deps): atualiza React para v18.3.0
+perf(images): otimiza carregamento da animação do hero
 ```
 
 ## Regras de Branch Protection (GitHub)
 
 ### Branch `main`
+
 - ✅ Require pull request reviews before merging
 - ✅ Require status checks to pass before merging
 - ✅ Require branches to be up to date before merging
@@ -181,6 +189,7 @@ perf(images): optimize hero animation loading
 - ✅ Restrict pushes that create files
 
 ### Branch `develop`
+
 - ✅ Require pull request reviews before merging
 - ✅ Require status checks to pass before merging
 - ✅ Include administrators
@@ -188,22 +197,26 @@ perf(images): optimize hero animation loading
 ## Merge Guidelines
 
 ### Tipos de Merge Permitidos
+
 - **`main`**: Somente **squash and merge**
 - **`develop`**: **Squash and merge** ou **rebase and merge**
 - **Feature branches**: Preferencialmente **squash and merge**
 
-### Quando usar cada tipo:
+### Quando usar cada tipo
 
 #### Squash and Merge
+
 - Ideal para maioria dos casos
 - Mantém histórico limpo
 - Combina múltiplos commits em um
 
 #### Rebase and Merge
+
 - Quando se quer manter todos os commits individuais
 - Útil para features complexas com múltiplos passos
 
 #### Merge Commit
+
 - Raramente utilizado
 - Apenas para hotfixes urgentes
 
@@ -242,10 +255,12 @@ git commit                            # finalizar merge
 6. **Nunca commitar em main diretamente**
 7. **Manter develop sempre estável**
 8. **Deletar branches de feature após merge**
+9. **Mensagens de descrição dos commits sempre em pt-br**
 
 ## Emergências
 
 ### Rollback de Produção
+
 ```bash
 # Identificar versão estável anterior
 git tag
@@ -257,13 +272,15 @@ git push origin main
 ```
 
 ### Hotflow Rápido
+
 Para correções extremamente urgentes:
+
 ```bash
 # Checkout, fix e push direto (apenas emergências)
 git checkout main
 git pull origin main
 # fazer correção
-git commit -m "hotfix: critical fix X"
+git commit -m "hotfix: correção crítica urgente X"
 git push origin main
 # Criar branch posteriormente para aplicação em develop
 ```
