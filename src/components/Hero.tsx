@@ -1,6 +1,6 @@
 import { ArrowRight, Github, Linkedin, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import heroVideo from "@/assets/hero-video.mp4";
+import heroAnimation from "@/assets/hero-animation.gif";
 
 const Hero = () => {
   return (
@@ -63,15 +63,11 @@ const Hero = () => {
           {/* Visual Element */}
           <div className="relative animate-scale-in">
             <div className="aspect-square border-4 border-foreground shadow-brutal-lg relative overflow-hidden">
-              <video 
-                autoPlay 
-                loop 
-                muted 
-                playsInline
+              <img 
+                src={heroAnimation} 
+                alt="Animação de código e tecnologia"
                 className="w-full h-full object-cover"
-              >
-                <source src={heroVideo} type="video/mp4" />
-              </video>
+              />
               <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent"></div>
             </div>
           </div>
