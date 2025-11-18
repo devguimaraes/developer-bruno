@@ -2,7 +2,7 @@
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/66fc18f2-40c3-4739-adc5-b8e43fe1eb06
+**URL**: <https://lovable.dev/projects/66fc18f2-40c3-4739-adc5-b8e43fe1eb06>
 
 ## How can I edit this code?
 
@@ -71,3 +71,7 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+
+## Contributing
+
+This project follows the Gitflow workflow. Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to contribute.
