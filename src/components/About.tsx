@@ -36,55 +36,69 @@ const About = () => {
   return (
     <section id="about" className="py-24 px-4">
       <div className="container mx-auto">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-12 items-start">
           {/* Text Content */}
           <div className="space-y-8 animate-slide-right">
-            <div className="flex items-center gap-6">
-              <div className="relative w-24 h-24 md:w-32 md:h-32 shrink-0">
+            <div className="flex items-center justify-between">
+              <div className="inline-block border-4 border-foreground bg-accent px-4 py-2 shadow-brutal-sm">
+                <span className="font-mono font-bold text-sm">SOBRE</span>
+              </div>
+
+              {/* Mobile Avatar (Visible only on small screens) */}
+              <div className="md:hidden relative w-20 h-20">
                 <img
                   src={avatar}
                   alt="Bruno Guimarães"
                   className="rounded-full border-4 border-foreground shadow-brutal object-cover w-full h-full"
                 />
               </div>
-              <div className="inline-block border-4 border-foreground bg-accent px-4 py-2 shadow-brutal-sm h-fit">
-                <span className="font-mono font-bold text-sm">SOBRE</span>
-              </div>
             </div>
 
-            <h2 className="font-mono font-bold text-4xl md:text-6xl">
-              Desenvolvedor Front-End
-              <br />& UI Engineer<span className="text-primary">.</span>
-            </h2>
+            <div className="relative">
+              {/* Desktop Avatar (Floating right of text) */}
+              <div className="hidden md:block float-right ml-6 mb-4 relative w-32 h-32">
+                <img
+                  src={avatar}
+                  alt="Bruno Guimarães"
+                  className="rounded-full border-4 border-foreground shadow-brutal object-cover w-full h-full hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute -bottom-2 -right-2 bg-primary text-primary-foreground text-xs font-bold px-2 py-1 border-2 border-foreground shadow-sm">
+                  5+ Anos
+                </div>
+              </div>
 
-            <div className="space-y-4 font-sans text-lg text-muted-foreground">
-              <p>
-                Sou apaixonado por criar experiências digitais que combinam{" "}
-                <span className="text-foreground font-semibold">
-                  estética moderna
-                </span>
-                ,{" "}
-                <span className="text-foreground font-semibold">
-                  performance excepcional
-                </span>{" "}
-                e{" "}
-                <span className="text-foreground font-semibold">
-                  código de qualidade
-                </span>
-                .
-              </p>
+              <h2 className="font-mono font-bold text-4xl md:text-5xl leading-tight mb-6">
+                Desenvolvedor Front-End
+                <br />& UI Engineer<span className="text-primary">.</span>
+              </h2>
 
-              <p>
-                Com mais de 5 anos de experiência, especializo-me em transformar
-                designs complexos em interfaces funcionais e responsivas usando
-                as mais recentes tecnologias web.
-              </p>
+              <div className="space-y-4 font-sans text-lg text-muted-foreground">
+                <p>
+                  Sou apaixonado por criar experiências digitais que combinam{" "}
+                  <span className="text-foreground font-semibold">
+                    estética moderna
+                  </span>
+                  ,{" "}
+                  <span className="text-foreground font-semibold">
+                    performance
+                  </span>{" "}
+                  e{" "}
+                  <span className="text-foreground font-semibold">
+                    código de qualidade
+                  </span>
+                  .
+                </p>
 
-              <p>
-                Minha abordagem combina atenção aos detalhes, raciocínio técnico
-                sólido e colaboração efetiva com designers e equipes de produto
-                para entregar soluções que realmente fazem a diferença.
-              </p>
+                <p>
+                  Com mais de 5 anos de experiência, especializo-me em
+                  transformar designs complexos em interfaces funcionais e
+                  responsivas usando as mais recentes tecnologias web. Minha
+                  abordagem combina atenção aos detalhes, raciocínio técnico
+                  sólido e colaboração efetiva com designers e equipes de
+                  produto para entregar soluções que realmente fazem a
+                  diferença.
+                </p>
+              </div>
             </div>
           </div>
 
