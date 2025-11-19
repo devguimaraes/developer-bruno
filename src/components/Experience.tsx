@@ -90,7 +90,7 @@ const Experience = () => {
 
                     <div className="space-y-2">
                       <p className="font-mono font-semibold text-sm uppercase tracking-wide">
-                        Key Achievements:
+                        Responsabilidades:
                       </p>
                       <ul className="space-y-2">
                         {exp.achievements.map((achievement) => (
