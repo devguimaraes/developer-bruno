@@ -1,35 +1,41 @@
 const experiences = [
   {
     year: "2023 - Atual",
-    role: "Senior Front-End Developer",
-    company: "Tech Innovations Inc.",
-    description: "Liderança técnica em projetos React e Next.js. Implementação de design systems, otimização de performance e mentoria de desenvolvedores júnior.",
-    achievements: [
-      "Redução de 40% no tempo de carregamento",
-      "Implementação de CI/CD com GitHub Actions",
-      "Migração bem-sucedida para Next.js 14",
-    ],
-  },
-  {
-    year: "2021 - 2023",
     role: "Front-End Developer",
-    company: "Digital Solutions Agency",
-    description: "Desenvolvimento de aplicações web modernas com React, TypeScript e Tailwind CSS. Colaboração com designers e back-end para entregar produtos de alta qualidade.",
+    company: "Pixel Pro Technologies",
+    description:
+      "Desenvolvimento de aplicações web modernas com React, TypeScript e Tailwind CSS ou WordPress. Colaboração com designers e back-end para entregar produtos de alta qualidade.",
     achievements: [
-      "Criação de 15+ projetos client-facing",
-      "Desenvolvimento de componentes reutilizáveis",
-      "Integração com APIs RESTful e GraphQL",
+      "Desenvolvimento de 30+ projetos de sites e landing pages",
+      "Implementação de CI/CD com GitHub Actions",
+      "Migração bem-sucedida para versões mais atuais do Next.js",
     ],
   },
   {
-    year: "2019 - 2021",
-    role: "Junior Front-End Developer",
-    company: "Startup Ventures",
-    description: "Construção de interfaces responsivas e implementação de features com JavaScript, HTML5 e CSS3. Trabalho em ambiente ágil com foco em entregas rápidas.",
+    year: "2022 - Atual",
+    role: "Front-End Developer & Wordpress",
+    company: "Agência Multi BR",
+    description:
+      "Atuação em agência de marketing digital com foco em resultados mensuráveis para clientes de diversos segmentos. Trabalho híbrido (Rio de Janeiro, Brasil).",
     achievements: [
-      "Desenvolvimento de landing pages de alta conversão",
-      "Implementação de testes unitários com Jest",
-      "Participação ativa em code reviews",
+      "Desenvolvimento frontend de sites institucionais e landing pages",
+      "Otimização de SEO para campanhas de Google Ads e Meta",
+      "Implementação de design responsivo e otimização de performance",
+      "Gestão de perfis Google Meu Negócio e indexação no Search Console",
+      "Stack: WordPress, Elementor Pro, Google Ads, Meta Ads, GA4",
+    ],
+  },
+  {
+    year: "2020 - 2022",
+    role: "Gerente de Suporte Técnico",
+    company: "Solution Seg",
+    description:
+      "Gestão de equipe técnica e projetos de infraestrutura de TI. Foco em resolução de problemas complexos e liderança de equipe no Rio de Janeiro.",
+    achievements: [
+      "Gestão de equipe e coordenação de chamados técnicos",
+      "Implantação e manutenção de softwares e redes",
+      "Gerenciamento de projetos técnicos e troubleshooting",
+      "Desenvolvimento de habilidades de liderança e comunicação",
     ],
   },
 ];
@@ -46,7 +52,8 @@ const Experience = () => {
             Trajetória Profissional<span className="text-primary">.</span>
           </h2>
           <p className="font-sans text-xl text-muted-foreground max-w-2xl">
-            Evolução técnica e projetos que moldaram minha expertise em desenvolvimento front-end.
+            Evolução técnica e projetos que moldaram minha expertise em
+            desenvolvimento front-end.
           </p>
         </div>
 
@@ -61,25 +68,40 @@ const Experience = () => {
                 <div className="grid md:grid-cols-[200px_1fr] gap-6">
                   <div className="space-y-2">
                     <div className="inline-block border-2 border-foreground bg-primary px-3 py-1">
-                      <span className="font-mono font-bold text-sm text-primary-foreground">{exp.year}</span>
+                      <span className="font-mono font-bold text-sm text-primary-foreground">
+                        {exp.year}
+                      </span>
                     </div>
                   </div>
 
                   <div className="space-y-4">
                     <div>
-                      <h3 className="font-mono font-bold text-2xl mb-1">{exp.role}</h3>
-                      <p className="font-sans text-lg text-primary font-semibold">{exp.company}</p>
+                      <h3 className="font-mono font-bold text-2xl mb-1">
+                        {exp.role}
+                      </h3>
+                      <p className="font-sans text-lg text-primary font-semibold">
+                        {exp.company}
+                      </p>
                     </div>
 
-                    <p className="font-sans text-muted-foreground">{exp.description}</p>
+                    <p className="font-sans text-muted-foreground">
+                      {exp.description}
+                    </p>
 
                     <div className="space-y-2">
-                      <p className="font-mono font-semibold text-sm uppercase tracking-wide">Key Achievements:</p>
+                      <p className="font-mono font-semibold text-sm uppercase tracking-wide">
+                        Key Achievements:
+                      </p>
                       <ul className="space-y-2">
                         {exp.achievements.map((achievement) => (
-                          <li key={achievement} className="flex items-start gap-3">
+                          <li
+                            key={achievement}
+                            className="flex items-start gap-3"
+                          >
                             <div className="w-2 h-2 bg-primary mt-2 flex-shrink-0" />
-                            <span className="font-sans text-muted-foreground">{achievement}</span>
+                            <span className="font-sans text-muted-foreground">
+                              {achievement}
+                            </span>
                           </li>
                         ))}
                       </ul>
