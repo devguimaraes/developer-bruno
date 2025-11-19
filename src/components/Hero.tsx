@@ -5,9 +5,24 @@ import heroIllustration from "@/assets/hero-illustration.png";
 const Hero = () => {
   return (
     <section className="min-h-screen flex items-center justify-center px-4 pt-20 relative overflow-hidden">
-      {/* Decorative Background Elements */}
-      <div className="absolute top-20 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -z-10"></div>
-      <div className="absolute bottom-20 left-0 w-96 h-96 bg-secondary/5 rounded-full blur-3xl -z-10"></div>
+      {/* Geometric Background Elements */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] -z-20"></div>
+
+      {/* Floating Shapes */}
+      <div className="absolute top-20 right-[10%] w-16 h-16 border-4 border-foreground bg-accent rotate-12 -z-10 shadow-brutal-sm"></div>
+      <div className="absolute bottom-32 left-[5%] w-24 h-24 rounded-full border-4 border-foreground bg-primary/20 -z-10 shadow-brutal-sm"></div>
+      <div className="absolute top-1/3 left-1/2 w-12 h-12 bg-foreground rotate-45 -z-10 opacity-10"></div>
+
+      {/* Plus Grid */}
+      <div className="absolute top-10 left-10 text-foreground/20 font-mono text-6xl font-black select-none">
+        +
+      </div>
+      <div className="absolute bottom-10 right-10 text-foreground/20 font-mono text-6xl font-black select-none">
+        +
+      </div>
+      <div className="absolute top-1/2 right-5 text-foreground/10 font-mono text-8xl font-black select-none rotate-90">
+        DB
+      </div>
 
       <div className="container mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -75,7 +90,7 @@ const Hero = () => {
             <div className="flex flex-wrap gap-4">
               <Button
                 size="lg"
-                className="shadow-brutal border-4 border-foreground group bg-primary text-primary-foreground hover:bg-primary/90"
+                className="shadow-neo-brutal border-4 border-foreground group bg-primary text-primary-foreground hover:bg-primary/90 hover:translate-y-1 hover:shadow-none transition-all"
               >
                 Ver Projetos
                 <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
@@ -83,7 +98,7 @@ const Hero = () => {
               <Button
                 variant="outline"
                 size="lg"
-                className="shadow-brutal border-4 border-foreground hover:bg-accent hover:text-accent-foreground"
+                className="shadow-neo-brutal border-4 border-foreground hover:bg-accent hover:text-accent-foreground hover:translate-y-1 hover:shadow-none transition-all"
               >
                 Download CV
               </Button>
