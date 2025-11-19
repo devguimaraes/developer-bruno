@@ -107,9 +107,10 @@ const About = () => {
             {skills.map((skill, index) => (
               <div
                 key={skill.title}
-                className="border-4 border-foreground shadow-brutal hover:shadow-brutal-lg transition-all hover:-translate-y-2 bg-card animate-scale-in"
+                className="border-4 border-foreground shadow-neo-brutal hover:shadow-neo-brutal-xl transition-all hover:-translate-y-1 bg-card animate-scale-in relative overflow-hidden group"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
+                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
                 <div className="p-6 space-y-4">
                   <div
                     className={`inline-flex p-3 ${skill.color} border-2 border-foreground`}

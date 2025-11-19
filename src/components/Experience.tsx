@@ -61,9 +61,10 @@ const Experience = () => {
           {experiences.map((exp, index) => (
             <div
               key={exp.company}
-              className="border-4 border-foreground bg-background shadow-brutal hover:shadow-brutal-lg transition-all hover:-translate-y-1 animate-slide-right"
+              className="border-4 border-foreground bg-background shadow-neo-brutal hover:shadow-neo-brutal-xl transition-all hover:-translate-y-1 animate-slide-right relative group"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
               <div className="p-8">
                 <div className="grid md:grid-cols-[200px_1fr] gap-6">
                   <div className="space-y-2">

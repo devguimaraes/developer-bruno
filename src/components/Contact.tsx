@@ -24,14 +24,15 @@ const Contact = () => {
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center pt-8 animate-scale-in">
             <Button
               size="lg"
-              className="bg-accent text-foreground hover:bg-accent/90 border-4 border-background shadow-[6px_6px_0px_hsl(var(--background))] hover:shadow-[8px_8px_0px_hsl(var(--background))] hover:-translate-y-1 transition-all group"
+              className="bg-accent text-foreground hover:bg-accent/90 border-4 border-background shadow-[6px_6px_0px_hsl(var(--background))] hover:shadow-[8px_8px_0px_hsl(var(--background))] hover:-translate-y-1 transition-all group relative overflow-hidden"
               asChild
             >
               <a href="mailto:bc.guimaraes@outlook.com">
-                <Mail className="mr-2" size={20} />
-                bruno@devguimaraes.io
+                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+                <Mail className="mr-2 relative z-10" size={20} />
+                <span className="relative z-10">bc.guimaraes@outlook.com</span>
                 <Send
-                  className="ml-2 group-hover:translate-x-1 transition-transform"
+                  className="ml-2 group-hover:translate-x-1 transition-transform relative z-10"
                   size={16}
                 />
               </a>
@@ -56,9 +57,10 @@ const Contact = () => {
               <a
                 key={social.label}
                 href={social.href}
-                className={`p-4 border-4 border-background ${social.color} shadow-[4px_4px_0px_hsl(var(--background))] hover:shadow-[6px_6px_0px_hsl(var(--background))] transition-all hover:-translate-y-1 group`}
+                className={`p-4 border-4 border-background ${social.color} shadow-[4px_4px_0px_hsl(var(--background))] hover:shadow-[6px_6px_0px_hsl(var(--background))] transition-all hover:-translate-y-1 group relative overflow-hidden`}
                 aria-label={social.label}
               >
+                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                 <social.icon
                   size={24}
                   className="text-foreground group-hover:scale-110 transition-transform"
