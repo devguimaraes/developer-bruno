@@ -1,10 +1,13 @@
 import { ArrowRight, Github, Linkedin, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import heroIllustration from "@/assets/hero-illustration.png";
+import computerGif from "@/assets/Computer.gif";
 
 const Hero = () => {
   return (
-    <section className="min-h-screen flex items-center justify-center px-4 pt-20 relative overflow-hidden">
+    <section className="min-h-screen flex items-center justify-center px-4 pt-32 relative overflow-hidden">
+      {/* ... existing code ... */}
+      {/* Visual Element */}
+
       {/* Geometric Background Elements */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] -z-20"></div>
 
@@ -25,9 +28,9 @@ const Hero = () => {
       </div>
 
       <div className="container mx-auto">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Text Content */}
-          <div className="space-y-8 animate-slide-right">
+          <div className="space-y-12 animate-slide-right">
             <div className="inline-block border-4 border-foreground bg-accent px-4 py-2 shadow-brutal-sm transform -rotate-2 hover:rotate-0 transition-transform">
               <span className="font-mono font-bold text-sm tracking-wider">
                 DESENVOLVEDOR FRONT END
@@ -138,16 +141,16 @@ const Hero = () => {
           {/* Visual Element */}
           <div className="relative animate-scale-in group">
             <div className="absolute -inset-4 bg-gradient-to-r from-primary to-secondary opacity-20 blur-lg group-hover:opacity-40 transition-opacity"></div>
-            <div className="aspect-square border-4 border-foreground shadow-brutal-lg relative overflow-hidden bg-muted">
+            <div className="aspect-square border-4 border-foreground shadow-brutal-lg relative overflow-hidden bg-muted flex items-center justify-center">
               <img
-                src={heroIllustration}
-                alt="Ilustração Techno Brutalist"
-                className="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
+                src={computerGif}
+                alt="Computer Animation"
+                className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent mix-blend-overlay"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent mix-blend-overlay pointer-events-none"></div>
 
               {/* Glitch Overlay Effect */}
-              <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
+              <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none"></div>
             </div>
           </div>
         </div>
