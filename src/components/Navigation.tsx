@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import logo from "@/assets/bg-logo.jpg";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,8 +17,8 @@ const Navigation = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background border-b-4 border-foreground">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <a href="#" className="font-mono font-bold text-xl">
-            BG<span className="text-primary">.</span>
+          <a href="#" className="block hover:scale-105 transition-transform">
+            <img src={logo} alt="BG Logo" className="h-12 w-auto border-2 border-foreground shadow-brutal-sm" />
           </a>
 
           {/* Desktop Navigation */}
