@@ -42,22 +42,22 @@ const experiences = [
 
 const Experience = () => {
   return (
-    <section id="experience" className="py-24 px-4 bg-muted">
+    <section id="experience" className="py-32 px-4 bg-muted">
       <div className="container mx-auto">
-        <div className="mb-16 animate-slide-up">
+        <div className="mb-24 animate-slide-up">
           <div className="inline-block border-4 border-foreground bg-accent px-4 py-2 shadow-brutal-sm mb-6">
             <span className="font-mono font-bold text-sm">EXPERIÊNCIA</span>
           </div>
-          <h2 className="font-mono font-bold text-4xl md:text-6xl mb-4">
+          <h2 className="font-mono font-bold text-4xl md:text-6xl mb-6">
             Trajetória Profissional<span className="text-primary">.</span>
           </h2>
-          <p className="font-sans text-xl text-muted-foreground max-w-2xl">
+          <p className="font-sans text-xl text-muted-foreground max-w-2xl leading-relaxed">
             Evolução técnica e projetos que moldaram minha expertise em
             desenvolvimento front-end.
           </p>
         </div>
 
-        <div className="space-y-8">
+        <div className="space-y-12">
           {experiences.map((exp, index) => (
             <div
               key={exp.company}
@@ -65,8 +65,8 @@ const Experience = () => {
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-              <div className="p-8">
-                <div className="grid md:grid-cols-[200px_1fr] gap-6">
+              <div className="p-10">
+                <div className="grid md:grid-cols-[200px_1fr] gap-8">
                   <div className="space-y-2">
                     <div className="inline-block border-2 border-foreground bg-primary px-3 py-1">
                       <span className="font-mono font-bold text-sm text-primary-foreground">
@@ -75,25 +75,25 @@ const Experience = () => {
                     </div>
                   </div>
 
-                  <div className="space-y-4">
+                  <div className="space-y-6">
                     <div>
-                      <h3 className="font-mono font-bold text-2xl mb-1">
+                      <h3 className="font-mono font-bold text-4xl mb-2">
                         {exp.role}
                       </h3>
-                      <p className="font-sans text-lg text-primary font-semibold">
+                      <p className="font-sans text-2xl text-primary font-semibold">
                         {exp.company}
                       </p>
                     </div>
 
-                    <p className="font-sans text-muted-foreground">
+                    <p className="font-sans text-muted-foreground leading-relaxed">
                       {exp.description}
                     </p>
 
-                    <div className="space-y-2">
+                    <div className="space-y-3">
                       <p className="font-mono font-semibold text-sm uppercase tracking-wide">
                         Responsabilidades:
                       </p>
-                      <ul className="space-y-2">
+                      <ul className="space-y-3">
                         {exp.achievements.map((achievement) => (
                           <li
                             key={achievement}
