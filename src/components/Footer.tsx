@@ -2,14 +2,14 @@ import logo from "@/assets/bg-logo.jpg";
 
 const Footer = () => {
   return (
-    <footer className="border-t-4 border-foreground bg-background py-8 px-4">
+    <footer className="border-t-4 border-foreground bg-background py-12 px-4">
       <div className="container mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="block hover:scale-105 transition-transform">
             <img
               src={logo}
               alt="BG Logo"
-              className="h-10 w-auto border-2 border-foreground shadow-brutal-sm"
+              className="h-12 w-auto border-2 border-foreground shadow-brutal-sm"
             />
           </div>
 
