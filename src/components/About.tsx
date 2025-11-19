@@ -34,11 +34,11 @@ const skills = [
 
 const About = () => {
   return (
-    <section id="about" className="py-24 px-4">
+    <section id="about" className="py-32 px-4">
       <div className="container mx-auto">
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
+        <div className="grid lg:grid-cols-2 gap-16 items-start">
           {/* Text Content */}
-          <div className="space-y-8 animate-slide-right">
+          <div className="space-y-16 animate-slide-right">
             <div className="flex items-center justify-between">
               <div className="inline-block border-4 border-foreground bg-accent px-4 py-2 shadow-brutal-sm">
                 <span className="font-mono font-bold text-sm">SOBRE</span>
@@ -56,23 +56,23 @@ const About = () => {
 
             <div className="relative">
               {/* Desktop Avatar (Floating right of text) */}
-              <div className="hidden md:block float-right ml-6 mb-4 relative w-32 h-32">
+              <div className="hidden md:block float-right ml-8 mb-6 relative w-40 h-40">
                 <img
                   src={avatar}
                   alt="Bruno Guimarães"
                   className="rounded-full border-4 border-foreground shadow-brutal object-cover w-full h-full hover:scale-105 transition-transform duration-300"
                 />
-                <div className="absolute -bottom-2 -right-2 bg-primary text-primary-foreground text-xs font-bold px-2 py-1 border-2 border-foreground shadow-sm">
+                <div className="absolute -bottom-2 -right-2 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 border-2 border-foreground shadow-sm">
                   5+ Anos
                 </div>
               </div>
 
-              <h2 className="font-mono font-bold text-4xl md:text-5xl leading-tight mb-6">
+              <h2 className="font-mono font-bold text-4xl md:text-5xl leading-tight mb-8">
                 Desenvolvedor Front-End
                 <br />& UI Engineer<span className="text-primary">.</span>
               </h2>
 
-              <div className="space-y-4 font-sans text-lg text-muted-foreground">
+              <div className="space-y-6 font-sans text-lg text-muted-foreground leading-relaxed">
                 <p>
                   Sou apaixonado por criar experiências digitais que combinam{" "}
                   <span className="text-foreground font-semibold">
@@ -103,7 +103,7 @@ const About = () => {
           </div>
 
           {/* Skills Grid */}
-          <div className="grid sm:grid-cols-2 gap-6">
+          <div className="grid sm:grid-cols-2 gap-8">
             {skills.map((skill, index) => (
               <div
                 key={skill.title}
@@ -111,14 +111,14 @@ const About = () => {
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-                <div className="p-6 space-y-4">
+                <div className="p-8 space-y-6">
                   <div
-                    className={`inline-flex p-3 ${skill.color} border-2 border-foreground`}
+                    className={`inline-flex p-4 ${skill.color} border-2 border-foreground`}
                   >
-                    <skill.icon size={24} className="text-foreground" />
+                    <skill.icon size={28} className="text-foreground" />
                   </div>
                   <h3 className="font-mono font-bold text-xl">{skill.title}</h3>
-                  <p className="font-sans text-sm text-muted-foreground">
+                  <p className="font-sans text-sm text-muted-foreground leading-relaxed">
                     {skill.description}
                   </p>
                 </div>
