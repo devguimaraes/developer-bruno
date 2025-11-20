@@ -17,6 +17,7 @@ npm run preview      # Preview production build
 This is a personal portfolio website for Bruno Guimarães built with a "Techno Brutalist" design aesthetic using React + TypeScript + Vite.
 
 ### Tech Stack
+
 - **Frontend**: React 18.3.1 with TypeScript
 - **Build Tool**: Vite with SWC plugin
 - **Routing**: React Router DOM
@@ -53,6 +54,7 @@ src/
 ### Design System
 
 **Brutalist Design Language:**
+
 - Heavy borders (`border-4`) with no border radius (`--radius: 0rem`)
 - Custom shadows: `shadow-brutal`, `shadow-brutal-sm`, `shadow-brutal-lg`
 - Color palette: Parakeet (green), Royal Lilac (purple), Freesia (yellow)
@@ -61,6 +63,7 @@ src/
 - Fonts: Satoshi (sans), JetBrains Mono (mono)
 
 **Key Design Tokens:**
+
 - `--primary`: Parakeet (162 100% 27%)
 - `--secondary`: Royal Lilac (282 32% 42%)
 - `--accent`: Freesia (45 87% 57%)
@@ -69,12 +72,14 @@ src/
 ### Component Patterns
 
 **UI Components (shadcn/ui):**
+
 - Uses Radix UI primitives for accessibility
 - Class Variance Authority (CVA) for component variants
 - Consistent `forwardRef` pattern
 - Custom theme integration with Tailwind
 
 **Page Components:**
+
 - Single-page portfolio layout
 - Scroll-based navigation with smooth scrolling
 - Responsive design with mobile-first approach
@@ -89,12 +94,14 @@ src/
 ### Styling Architecture
 
 **Tailwind Configuration:**
+
 - Custom design tokens in `tailwind.config.ts`
 - HSL color system for consistent theming
 - Custom animations and keyframes
 - Brutalist design variants (shadows, borders, gradients)
 
 **CSS Organization:**
+
 - Global CSS variables in `index.css`
 - Component-level styling with Tailwind utilities
 - Custom animations for interactive elements
@@ -102,18 +109,21 @@ src/
 ### Development Notes
 
 **Key Dependencies:**
+
 - Full Radix UI component suite for accessibility
 - React Hook Form with Zod for form validation
 - Embla Carousel for project showcase
 - Sonner for toast notifications
 
 **Build Configuration:**
+
 - Vite with React SWC plugin for fast builds
 - TypeScript with path aliases
 - ESLint with React and TypeScript rules
 - PostCSS with Tailwind and Autoprefixer
 
 **Deployment:**
+
 - Optimized for Vercel deployment
 - Static site generation capability
 - Asset optimization with Vite
@@ -121,6 +131,7 @@ src/
 ### Feature Implementation
 
 When adding new features:
+
 1. Follow brutalist design patterns (heavy borders, no radius)
 2. Use shadcn/ui components as base
 3. Implement responsive design (mobile-first)

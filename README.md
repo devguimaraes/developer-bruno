@@ -18,11 +18,11 @@ Um portfólio digital profissional construído com tecnologias modernas, featuri
 
 ## 📋 Índice
 
-- [Características](#características)
+- [Características] (#características)
 - [Stack Tecnológico](#stack-tecnológico)
-- [Pré-requisitos](#pré-requisitos)
-- [Instalação](#instalação)
-- [Desenvolvimento](#desenvolvimento)
+- [Pré-requisitos] (#pré-requisitos)
+- [Instalação] (#instalação)
+- [Desenvolvimento] (#desenvolvimento)
 - [Build & Deploy](#build--deploy)
 - [Estrutura do Projeto](#estrutura-do-projeto)
 - [Contribuindo](#contribuindo)
@@ -46,6 +46,7 @@ Um portfólio digital profissional construído com tecnologias modernas, featuri
 ## 🛠️ Stack Tecnológico
 
 ### Frontend
+
 - **Framework**: React 18.3 com TypeScript
 - **Build Tool**: Vite 5.4 com SWC
 - **Styling**: Tailwind CSS 3.4 + animations
@@ -55,12 +56,14 @@ Um portfólio digital profissional construído com tecnologias modernas, featuri
 - **Forms**: React Hook Form 7.61 + Zod 3.25
 
 ### DevTools
+
 - **Linting**: ESLint 9.32
 - **Type Checking**: TypeScript 5.8
 - **Code Formatting**: (via ESLint)
 - **Preview**: Vite Preview
 
 ### Design System
+
 - **Icons**: Lucide React
 - **Notifications**: Sonner Toast
 - **Date Picker**: React Day Picker
@@ -77,6 +80,7 @@ Antes de começar, certifique-se de ter instalado:
 - **Git**: v2.30+
 
 Verificar versões instaladas:
+
 ```bash
 node --version
 npm --version
@@ -84,6 +88,7 @@ git --version
 ```
 
 Para instalar Node.js, utilize [nvm](https://github.com/nvm-sh/nvm) (recomendado):
+
 ```bash
 # Instalar nvm (Linux/macOS)
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
@@ -117,6 +122,7 @@ bun install
 ### 3. Configurar Variáveis de Ambiente (se necessário)
 
 Criar arquivo `.env.local` na raiz do projeto:
+
 ```bash
 VITE_API_URL=http://localhost:3000
 ```
@@ -132,6 +138,7 @@ npm run dev
 ```
 
 O aplicativo estará disponível em `http://localhost:5173` com:
+
 - **Hot Module Replacement (HMR)**: Recarregamento instantâneo ao salvar
 - **Source Maps**: Debug facilitado em DevTools
 - **TypeScript Checking**: Validação em tempo real
@@ -163,6 +170,7 @@ npm run build
 ```
 
 Gera otimizado em `dist/`:
+
 - Minificação de código
 - Code splitting automático
 - Tree-shaking de dependências não utilizadas
@@ -185,6 +193,7 @@ O projeto está pronto para deploy em:
 #### Deploy Automático (GitHub Pages)
 
 Adicionar ao `vite.config.ts`:
+
 ```typescript
 export default defineConfig({
   base: '/developer-bruno/',
@@ -257,6 +266,7 @@ developer-bruno/
 ### Commits
 
 Seguir [Conventional Commits](https://www.conventionalcommits.org/):
+
 ```
 feat: adicionar novo componente X
 fix: corrigir bug em Y
@@ -283,6 +293,7 @@ Este projeto segue **Gitflow Workflow**:
    - `develop` - staging (desenvolvimento)
 
 2. **Branches de feature**:
+
    ```bash
    git checkout -b feature/nova-seção
    ```
@@ -306,7 +317,7 @@ Este projeto está licenciado sob a [MIT License](LICENSE) - você é livre para
 
 ## 📧 Contato & Suporte
 
-- **Email**: bruno@example.com
+- **Email**: <bruno@example.com>
 - **LinkedIn**: [Seu LinkedIn]
 - **GitHub**: [devguimaraes](https://github.com/devguimaraes)
 - **Issues**: [Abrir issue](https://github.com/devguimaraes/developer-bruno/issues)
