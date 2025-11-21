@@ -1,44 +1,4 @@
-const experiences = [
-  {
-    year: "2023 - Atual",
-    role: "Front-End Developer",
-    company: "Pixel Pro Technologies",
-    description:
-      "Desenvolvimento de aplicações web modernas com React, TypeScript e Tailwind CSS ou WordPress. Colaboração com designers e back-end para entregar produtos de alta qualidade.",
-    achievements: [
-      "Desenvolvimento de 30+ projetos de sites e landing pages",
-      "Implementação de CI/CD com GitHub Actions",
-      "Migração bem-sucedida para versões mais atuais do Next.js",
-    ],
-  },
-  {
-    year: "2022 - Atual",
-    role: "Front-End Developer & Wordpress",
-    company: "Agência Multi BR",
-    description:
-      "Atuação em agência de marketing digital com foco em resultados mensuráveis para clientes de diversos segmentos. Trabalho híbrido (Rio de Janeiro, Brasil).",
-    achievements: [
-      "Desenvolvimento frontend de sites institucionais e landing pages",
-      "Otimização de SEO para campanhas de Google Ads e Meta",
-      "Implementação de design responsivo e otimização de performance",
-      "Gestão de perfis Google Meu Negócio e indexação no Search Console",
-      "Stack: WordPress, Elementor Pro, Google Ads, Meta Ads, GA4",
-    ],
-  },
-  {
-    year: "2020 - 2022",
-    role: "Gerente de Suporte Técnico",
-    company: "Solution Seg",
-    description:
-      "Gestão de equipe técnica e projetos de infraestrutura de TI. Foco em resolução de problemas complexos e liderança de equipe no Rio de Janeiro.",
-    achievements: [
-      "Gestão de equipe e coordenação de chamados técnicos",
-      "Implantação e manutenção de softwares e redes",
-      "Gerenciamento de projetos técnicos e troubleshooting",
-      "Desenvolvimento de habilidades de liderança e comunicação",
-    ],
-  },
-];
+import { experiences } from "@/data/experience";
 
 const Experience = () => {
   return (

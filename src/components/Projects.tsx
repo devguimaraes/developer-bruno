@@ -1,44 +1,6 @@
 import { ExternalLink, Github } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-const projects = [
-  {
-    title: "E-commerce Platform",
-    description:
-      "Plataforma de e-commerce construída com Next.js 14, Stripe e Tailwind CSS. Performance otimizada com ISR e edge functions.",
-    tech: ["Next.js", "TypeScript", "Tailwind", "Stripe"],
-    github: "#",
-    live: "#",
-    color: "bg-accent",
-  },
-  {
-    title: "Design System",
-    description:
-      "Sistema de design completo com componentes React reutilizáveis, documentação Storybook e testes automatizados.",
-    tech: ["React", "Storybook", "Radix UI", "CSS Modules"],
-    github: "#",
-    live: "#",
-    color: "bg-secondary",
-  },
-  {
-    title: "Portfolio Generator",
-    description:
-      "Ferramenta para criação de portfólios com Astro, Markdown e animações Framer Motion. SSG para máxima performance.",
-    tech: ["Astro", "React", "Framer Motion", "MDX"],
-    github: "#",
-    live: "#",
-    color: "bg-primary",
-  },
-  {
-    title: "Dashboard Analytics",
-    description:
-      "Dashboard de analytics em tempo real com React Query, Recharts e WebSockets. Visualização de dados interativa.",
-    tech: ["React", "TanStack Query", "WebSocket", "Recharts"],
-    github: "#",
-    live: "#",
-    color: "bg-muted",
-  },
-];
+import { projects } from "@/data/projects";
 
 const Projects = () => {
   return (

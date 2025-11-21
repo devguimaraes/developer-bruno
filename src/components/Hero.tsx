@@ -1,6 +1,7 @@
 import { ArrowRight, Github, Linkedin, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import computerGif from "@/assets/Computer.gif";
+import { heroData, socialLinks } from "@/config/site";
 
 const Hero = () => {
   return (
@@ -33,60 +34,33 @@ const Hero = () => {
           <div className="space-y-12 animate-slide-right">
             <div className="inline-block border-4 border-foreground bg-accent px-4 py-2 shadow-brutal-sm transform -rotate-2 hover:rotate-0 transition-transform">
               <span className="font-mono font-bold text-sm tracking-wider">
-                DESENVOLVEDOR FRONT END
+                {heroData.badge}
               </span>
             </div>
 
             <h1 className="font-mono font-black text-5xl md:text-7xl leading-none tracking-tighter">
-              BRUNO
+              {heroData.title}
               <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
-                GUIMARÃES
+                {heroData.subtitle}
               </span>
               <span className="text-foreground">.</span>
             </h1>
 
             <p className="font-sans text-xl md:text-2xl text-muted-foreground max-w-xl leading-relaxed border-l-4 border-primary pl-6">
-              Transformo visão estratégica em{" "}
-              <span className="text-foreground font-bold">
-                software e sites de alta performance
-              </span>
-              . Crio interfaces que unem engenharia robusta e design intencional
-              para maximizar resultados.
+              {heroData.description}
               <br />
               <div className="flex items-center gap-4 mt-4 text-muted-foreground/80">
-                <div className="flex items-center gap-1">
-                  <img
-                    src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg"
-                    className="w-4 h-4"
-                    alt="React"
-                  />
-                  <span className="text-sm">React</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <img
-                    src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg"
-                    className="w-4 h-4 dark:invert"
-                    alt="Next.js"
-                  />
-                  <span className="text-sm">Next.js</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <img
-                    src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg"
-                    className="w-4 h-4"
-                    alt="TypeScript"
-                  />
-                  <span className="text-sm">TypeScript</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <img
-                    src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg"
-                    className="w-4 h-4"
-                    alt="Tailwind"
-                  />
-                  <span className="text-sm">Tailwind</span>
-                </div>
+                {heroData.technologies.map((tech) => (
+                  <div key={tech.name} className="flex items-center gap-1">
+                    <img
+                      src={tech.icon}
+                      className="w-4 h-4"
+                      alt={tech.alt}
+                    />
+                    <span className="text-sm">{tech.name}</span>
+                  </div>
+                ))}
               </div>
             </p>
 
@@ -94,47 +68,45 @@ const Hero = () => {
               <Button
                 size="lg"
                 className="shadow-neo-brutal border-4 border-foreground group bg-primary text-primary-foreground hover:bg-primary/90 hover:translate-y-1 hover:shadow-none transition-all"
+                asChild
               >
-                Ver Projetos
-                <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
+                <a href={heroData.cta.primary.href}>
+                  {heroData.cta.primary.text}
+                  <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
+                </a>
               </Button>
               <Button
                 variant="outline"
                 size="lg"
                 className="shadow-neo-brutal border-4 border-foreground hover:bg-accent hover:text-accent-foreground hover:translate-y-1 hover:shadow-none transition-all"
+                asChild
               >
-                Download CV
+                <a href={heroData.cta.secondary.href}>
+                  {heroData.cta.secondary.text}
+                </a>
               </Button>
             </div>
 
             {/* Social Links */}
             <div className="flex gap-4 pt-4">
-              {[
-                {
-                  icon: Github,
-                  href: "https://github.com/devguimaraes",
-                  label: "GitHub",
-                },
-                {
-                  icon: Linkedin,
-                  href: "https://www.linkedin.com/in/bcguimaraes/",
-                  label: "LinkedIn",
-                },
-                {
-                  icon: Mail,
-                  href: "mailto:bc.guimaraes@outlook.com",
-                  label: "Email",
-                },
-              ].map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  className="p-3 border-4 border-foreground bg-background shadow-brutal-sm hover:bg-primary hover:text-primary-foreground transition-all hover:-translate-y-1 hover:shadow-brutal"
-                  aria-label={social.label}
-                >
-                  <social.icon size={24} />
-                </a>
-              ))}
+              {socialLinks.map((social) => {
+                const iconMap = {
+                  github: Github,
+                  linkedin: Linkedin,
+                  email: Mail,
+                };
+                const IconComponent = iconMap[social.id as keyof typeof iconMap];
+                return (
+                  <a
+                    key={social.id}
+                    href={social.href}
+                    className="p-3 border-4 border-foreground bg-background shadow-brutal-sm hover:bg-primary hover:text-primary-foreground transition-all hover:-translate-y-1 hover:shadow-brutal"
+                    aria-label={social.label}
+                  >
+                    <IconComponent size={24} />
+                  </a>
+                );
+              })}
             </div>
           </div>
 

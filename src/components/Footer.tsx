@@ -1,4 +1,5 @@
 import logo from "@/assets/bg-logo.jpg";
+import { navigationSections, footerData } from "@/config/site";
 
 const Footer = () => {
   return (
@@ -14,34 +15,19 @@ const Footer = () => {
           </div>
 
           <div className="flex gap-8">
-            <a
-              href="#projects"
-              className="font-sans text-sm hover:text-primary transition-colors"
-            >
-              Projetos
-            </a>
-            <a
-              href="#experience"
-              className="font-sans text-sm hover:text-primary transition-colors"
-            >
-              Experiência
-            </a>
-            <a
-              href="#about"
-              className="font-sans text-sm hover:text-primary transition-colors"
-            >
-              Sobre
-            </a>
-            <a
-              href="#contact"
-              className="font-sans text-sm hover:text-primary transition-colors"
-            >
-              Contato
-            </a>
+            {navigationSections.map((section) => (
+              <a
+                key={section.id}
+                href={section.href}
+                className="font-sans text-sm hover:text-primary transition-colors"
+              >
+                {section.label}
+              </a>
+            ))}
           </div>
 
           <p className="font-mono text-sm text-muted-foreground">
-            © 2025 Bruno Guimarães
+            {footerData.copyright}
           </p>
         </div>
       </div>

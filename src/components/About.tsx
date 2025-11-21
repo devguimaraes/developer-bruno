@@ -1,36 +1,5 @@
-import { Code2, Palette, Rocket, Zap } from "lucide-react";
 import avatar from "@/assets/avatar.jpg";
-
-const skills = [
-  {
-    icon: Code2,
-    title: "Desenvolvimento",
-    description:
-      "React, Next.js, TypeScript, Astro. Código limpo, performático e escalável.",
-    color: "bg-primary",
-  },
-  {
-    icon: Palette,
-    title: "Design & UI",
-    description:
-      "Tailwind CSS, Radix UI, Framer Motion. Interfaces modernas e responsivas.",
-    color: "bg-secondary",
-  },
-  {
-    icon: Zap,
-    title: "Performance",
-    description:
-      "Otimização de bundle, lazy loading, code splitting. Web Vitals excelentes.",
-    color: "bg-accent",
-  },
-  {
-    icon: Rocket,
-    title: "Deploy & CI/CD",
-    description:
-      "Vercel, GitHub Actions, Docker. Pipelines automatizados e confiáveis.",
-    color: "bg-muted",
-  },
-];
+import { featuredSkills } from "@/data/skills";
 
 const About = () => {
   return (
@@ -104,9 +73,9 @@ const About = () => {
 
           {/* Skills Grid */}
           <div className="grid sm:grid-cols-2 gap-8">
-            {skills.map((skill, index) => (
+            {featuredSkills.map((skill, index) => (
               <div
-                key={skill.title}
+                key={skill.id}
                 className="border-4 border-foreground shadow-neo-brutal hover:shadow-neo-brutal-xl transition-all hover:-translate-y-1 bg-card animate-scale-in relative overflow-hidden group"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
