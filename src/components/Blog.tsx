@@ -1,19 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import Markdown from 'react-markdown';
-import { FileText, X, Calendar, Clock, Tag, ArrowRight, FolderOpen } from 'lucide-react';
-import { getAllBlogPosts, BlogPost } from '@/utils/blog';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Calendar, Clock, Tag, ArrowRight, FolderOpen, ExternalLink } from 'lucide-react';
+import { useRecentPosts } from '@/hooks/use-blog-posts';
 
 const Blog: React.FC = () => {
-  const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
-
-  useEffect(() => {
-    const loadPosts = async () => {
-      const posts = await getAllBlogPosts();
-      setBlogPosts(posts);
-    };
-    loadPosts();
-  }, []);
+  const { posts: blogPosts, loading } = useRecentPosts(3);
 
   return (
     <section id="blog" className="py-24 bg-white relative">
@@ -42,120 +33,91 @@ const Blog: React.FC = () => {
         </div>
 
         {/* Grid de Posts */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {blogPosts.map((post) => (
-            <article
-              key={post.slug}
-              className="group bg-white border-4 border-black flex flex-col h-full hover:-translate-y-2 transition-transform duration-300 shadow-brutal-lg hover:shadow-[12px_12px_0px_0px_#f97316]"
-            >
-              {/* Header do Card */}
-              <div className="bg-stone-100 border-b-4 border-black p-3 flex justify-between items-center">
-                 <span className="font-mono text-xs font-bold uppercase truncate max-w-[200px]">{post.slug}.md</span>
-                 <div className="flex gap-1">
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="animate-pulse">
+                <div className="bg-gray-200 border-4 border-gray-300 h-64">
+                  <div className="p-4">
+                    <div className="h-4 bg-gray-300 rounded w-3/4 mb-4"></div>
+                    <div className="h-3 bg-gray-300 rounded w-1/2 mb-2"></div>
+                    <div className="h-3 bg-gray-300 rounded w-1/4"></div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : blogPosts.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-xl text-gray-500 mb-4">Nenhum post encontrado.</p>
+            <p className="text-sm text-gray-400">Adicione arquivos .md em src/content/blog/</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {blogPosts.map((post) => (
+              <article
+                key={post.slug}
+                className="group bg-white border-4 border-black flex flex-col h-full hover:-translate-y-2 transition-transform duration-300 shadow-brutal-lg hover:shadow-[12px_12px_0px_0px_#f97316]"
+              >
+                {/* Header do Card */}
+                <div className="bg-stone-100 border-b-4 border-black p-3 flex justify-between items-center">
+                  <span className="font-mono text-xs font-bold uppercase truncate max-w-[200px]">{post.slug}.md</span>
+                  <div className="flex gap-1">
                     <div className="w-2 h-2 rounded-full bg-black"></div>
                     <div className="w-2 h-2 rounded-full border border-black"></div>
-                 </div>
-              </div>
+                  </div>
+                </div>
 
-              {/* Conteúdo do Card */}
-              <div className="p-6 flex-grow flex flex-col">
-                 <div className="flex gap-4 text-xs font-mono font-bold text-gray-500 mb-3">
+                {/* Conteúdo do Card */}
+                <div className="p-6 flex-grow flex flex-col">
+                  <div className="flex gap-4 text-xs font-mono font-bold text-gray-500 mb-3">
                     <span className="flex items-center gap-1"><Calendar size={12} /> {post.date}</span>
                     <span className="flex items-center gap-1"><Clock size={12} /> {post.readTime}</span>
-                 </div>
+                  </div>
 
-                 <h3 className="text-2xl font-black leading-tight mb-4 line-clamp-2 group-hover:text-brutal-orange transition-colors">
+                  <h3 className="text-2xl font-black leading-tight mb-4 line-clamp-2 group-hover:text-brutal-orange transition-colors">
                     {post.title}
-                 </h3>
+                  </h3>
 
-                 <p className="text-stone-600 font-medium mb-6 line-clamp-3 flex-grow">
+                  <p className="text-stone-600 font-medium mb-6 line-clamp-3 flex-grow">
                     {post.excerpt}
-                 </p>
+                  </p>
 
-                 <div className="mt-auto pt-4 border-t-2 border-stone-200 flex justify-between items-center">
+                  <div className="mt-auto pt-4 border-t-2 border-stone-200 flex justify-between items-center">
                     <div className="flex gap-2">
-                       {post.tags.slice(0,2).map(tag => (
-                          <span key={tag} className="text-[10px] font-black bg-black text-white px-2 py-0.5 uppercase">
-                             {tag}
-                          </span>
-                       ))}
+                      {post.tags.slice(0,2).map(tag => (
+                        <span key={tag} className="text-[10px] font-black bg-black text-white px-2 py-0.5 uppercase">
+                          {tag}
+                        </span>
+                      ))}
                     </div>
-                    <button
-                      onClick={() => setSelectedPost(post)}
+                    <Link
+                      to={`/blog/${post.slug}`}
                       className="flex items-center gap-1 font-black text-sm hover:underline decoration-4 decoration-brutal-yellow underline-offset-2"
                     >
-                       LER_ARQUIVO <ArrowRight size={16} />
-                    </button>
-                 </div>
-              </div>
-            </article>
-          ))}
-        </div>
+                      LER_ARQUIVO <ExternalLink size={16} />
+                    </Link>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
 
+        {/* Botão Ver Todos */}
+        <div className="mt-12 text-center">
+          <Link
+            to="/blog"
+            className="inline-flex items-center gap-2 bg-black text-white font-bold px-8 py-4 border-4 border-black hover:border-brutal-orange hover:bg-stone-900 transition-all shadow-neo group"
+          >
+            VER TODOS OS POSTS
+            <ArrowRight
+              size={20}
+              className="group-hover:translate-x-1 transition-transform duration-200"
+            />
+          </Link>
+        </div>
       </div>
-
-      {/* Modal de Leitura (Overlay) */}
-      {selectedPost && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-
-           <div className="bg-white w-full max-w-4xl h-[90vh] border-4 border-black shadow-brutal-lg flex flex-col animate-in zoom-in-95 duration-300 relative">
-
-              {/* Modal Header */}
-              <div className="bg-black text-white p-4 flex justify-between items-center border-b-4 border-black flex-shrink-0">
-                 <div className="flex items-center gap-3">
-                    <FileText className="text-brutal-yellow" />
-                    <span className="font-mono font-bold text-sm md:text-base uppercase">
-                       LENDO: {selectedPost.slug}.md
-                    </span>
-                 </div>
-                 <button
-                   onClick={() => setSelectedPost(null)}
-                   className="bg-red-500 hover:bg-red-600 text-white p-1 border-2 border-white transition-colors"
-                 >
-                    <X size={20} strokeWidth={3} />
-                 </button>
-              </div>
-
-              {/* Content Scroll Area */}
-              <div className="overflow-y-auto p-6 md:p-12 bg-stone-50 custom-scrollbar">
-                 <div className="max-w-3xl mx-auto">
-                    {/* Meta Data */}
-                    <div className="mb-8 pb-8 border-b-4 border-stone-300 border-dashed">
-                       <div className="flex flex-wrap gap-4 mb-4 text-sm font-mono font-bold text-stone-500">
-                          <span className="bg-stone-200 px-2 py-1 text-black">{selectedPost.date}</span>
-                          <span className="bg-stone-200 px-2 py-1 text-black">{selectedPost.readTime} leitura</span>
-                          {selectedPost.tags.map(tag => (
-                             <span key={tag} className="text-brutal-orange">#{tag}</span>
-                          ))}
-                       </div>
-                       <h1 className="text-3xl md:text-5xl font-black uppercase leading-tight">
-                          {selectedPost.title}
-                       </h1>
-                    </div>
-
-                    {/* Markdown Body */}
-                    <div className="markdown-content font-medium text-stone-800">
-                       <Markdown>{selectedPost.content}</Markdown>
-                    </div>
-
-                    {/* Footer */}
-                    <div className="mt-12 pt-8 border-t-4 border-black text-center">
-                       <p className="font-mono text-sm font-bold text-stone-500 mb-4">
-                          *** FIM DO ARQUIVO ***
-                       </p>
-                       <button
-                         onClick={() => setSelectedPost(null)}
-                         className="bg-black text-white font-bold px-8 py-3 border-4 border-transparent hover:border-brutal-orange hover:bg-stone-900 transition-all shadow-neo"
-                       >
-                          FECHAR LEITURA
-                       </button>
-                    </div>
-                 </div>
-              </div>
-
-           </div>
-        </div>
-      )}
     </section>
   );
 };
