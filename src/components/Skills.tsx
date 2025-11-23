@@ -12,7 +12,7 @@ const skills = [
 
 const Skills: React.FC = () => {
   return (
-    <section className="py-20 bg-brutal-yellow border-y-4 border-black relative overflow-hidden">
+    <section id="skills" className="py-20 bg-brutal-yellow border-y-4 border-black relative overflow-hidden">
 
       {/* Scrolling Marquee Background */}
       <div className="absolute inset-0 opacity-10 pointer-events-none flex flex-col justify-between rotate-3 scale-110">
