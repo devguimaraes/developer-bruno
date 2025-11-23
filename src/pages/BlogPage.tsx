@@ -17,25 +17,12 @@ const BlogPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Navigation Header */}
-      <div className="fixed top-0 w-full z-50 bg-black text-white border-b-4 border-white/20 py-4">
-        <div className="container mx-auto px-4 flex justify-between items-center">
-          <Link to="/" className="flex items-center gap-2 group">
-             <div className="w-8 h-8 bg-white flex items-center justify-center text-black shadow-neo transition-transform group-hover:translate-x-[2px] group-hover:translate-y-[2px] group-hover:shadow-none">
-                <span className="font-black font-mono text-sm">BG</span>
-             </div>
-             <span className="text-sm font-bold hover:text-brutal-orange transition-colors">← VOLTAR</span>
-          </Link>
-
-          <div className="font-mono text-xs tracking-widest opacity-60">
-            ~/BLOG
-          </div>
-        </div>
-      </div>
+    <>
+      {/* Header with proper padding for fixed navigation */}
+      <div className="pt-24">
 
       {/* Header */}
-      <div className="pt-32 pb-16">
+      <div className="pt-8 pb-16">
         <div className="container mx-auto px-4 relative z-10">
 
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6">
@@ -137,16 +124,7 @@ const BlogPage: React.FC = () => {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="bg-black text-white border-t-4 border-white/20 py-8">
-        <div className="container mx-auto px-4 text-center">
-          <p className="font-mono text-sm">
-            © {new Date().getFullYear()} Bruno Guimarães | Blog Desenvolvedor Front-End |
-            <span className="text-brutal-yellow">Powered by React & Neo-Brutalismo</span>
-          </p>
-        </div>
-      </footer>
+      </div>
 
       {/* Modal de Leitura (Overlay) */}
       {selectedPost && (
@@ -218,7 +196,7 @@ const BlogPage: React.FC = () => {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
