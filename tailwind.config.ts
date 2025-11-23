@@ -58,6 +58,17 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // Neo-Brutalist Color Palette
+        brutal: {
+          bg: "#f5f5f4", // stone-100
+          dark: "#1c1917", // stone-900
+          orange: "#f97316", // orange-500
+          yellow: "#facc15", // yellow-400
+          purple: "#a855f7", // purple-500
+          blue: "#3b82f6", // blue-500
+          green: "#22c55e", // green-500
+          red: "#ef4444", // red-500
+        },
       },
       fontFamily: {
         mono: ["JetBrains Mono", "monospace"],
@@ -67,6 +78,10 @@ export default {
         brutal: "var(--shadow-brutal)",
         "brutal-sm": "var(--shadow-brutal-sm)",
         "brutal-lg": "var(--shadow-brutal-lg)",
+        // Neo-Brutalist Shadows (hard shadows, no blur)
+        "neo": "4px 4px 0px 0px rgba(0,0,0,1)",
+        "neo-sm": "2px 2px 0px 0px rgba(0,0,0,1)",
+        "neo-lg": "8px 8px 0px 0px rgba(0,0,0,1)",
       },
       backgroundImage: {
         "gradient-aqua": "var(--gradient-aqua)",
@@ -107,6 +122,34 @@ export default {
           from: { transform: "translateX(0)" },
           to: { transform: "translateX(-50%)" },
         },
+        // Neo-Brutalist Animations
+        "float": {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-15px)" },
+        },
+        "float-slow": {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
+        "float-medium": {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-12px)" },
+        },
+        "float-fast": {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-8px)" },
+        },
+        "typing": {
+          "0%, 50%": { opacity: "1" },
+          "51%, 100%": { opacity: "0" },
+        },
+        "glitch": {
+          "0%, 100%": { transform: "translate(0)" },
+          "20%": { transform: "translate(-1px, 1px)" },
+          "40%": { transform: "translate(-1px, -1px)" },
+          "60%": { transform: "translate(1px, 1px)" },
+          "80%": { transform: "translate(1px, -1px)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -116,6 +159,13 @@ export default {
         "fade-in": "fade-in 0.5s ease-out",
         "scale-in": "scale-in 0.3s ease-out",
         marquee: "marquee 30s linear infinite",
+        // Neo-Brutalist Animations
+        "float": "float 6s ease-in-out infinite",
+        "float-slow": "float-slow 6s ease-in-out infinite",
+        "float-medium": "float-medium 4s ease-in-out infinite",
+        "float-fast": "float-fast 3s ease-in-out infinite",
+        "typing": "typing 1s ease-in-out infinite",
+        "glitch": "glitch 0.3s ease-in-out infinite",
       },
     },
   },

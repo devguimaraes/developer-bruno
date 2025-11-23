@@ -13,6 +13,7 @@ export interface Project {
   color: string;
   featured?: boolean;
   tags?: readonly string[];
+  image?: string;
 }
 
 // Work experience interface

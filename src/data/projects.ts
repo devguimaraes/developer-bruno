@@ -1,80 +1,64 @@
 import type { Project } from '@/types';
+import agenciaMultiBrImg from '@/assets/agencia-multi-br.png';
+import engerodImg from '@/assets/engerod.png';
+import semogrjImg from '@/assets/semogrj.png';
+import luisFelipeImg from '@/assets/luis-felipe-pereira.png';
 
 /**
  * Projects data with external links and proper categorization
  */
 export const projects: readonly Project[] = [
   {
-    id: 'ecommerce-platform',
-    title: 'E-commerce Platform',
+    id: 'agencia-multi-br',
+    title: 'Agência Multi BR',
     description:
-      'Plataforma de e-commerce construída com Next.js 14, Stripe e Tailwind CSS. Performance otimizada com ISR e edge functions para produtos dinâmicos.',
-    tech: ['Next.js', 'TypeScript', 'Tailwind', 'Stripe', 'Prisma'] as const,
-    github: 'https://github.com/devguimaraes/ecommerce-platform',
-    live: 'https://ecommerce-demo.devguimaraes.dev',
+      'Agência de marketing digital 360º especializada em tráfego pago, conteúdo, redes sociais, web design e identidade visual. Estratégia personalizada com atendimento local.',
+    tech: ['WordPress', 'Elementor', 'UI/UX', 'SEO'] as const,
+    github: '#',
+    live: 'https://www.agenciamultibr.com/',
     color: 'bg-accent',
     featured: true,
-    tags: ['e-commerce', 'next.js', 'stripe', 'full-stack'] as const,
+    tags: ['marketing', 'web-design', 'seo', 'branding'] as const,
+    image: agenciaMultiBrImg,
   },
   {
-    id: 'design-system',
-    title: 'Design System',
+    id: 'engerod',
+    title: 'Engerod Engenharia',
     description:
-      'Sistema de design completo com componentes React reutilizáveis, documentação Storybook e testes automatizados. Base para múltiplos projetos.',
-    tech: ['React', 'Storybook', 'Radix UI', 'CSS Modules', 'Jest'] as const,
-    github: 'https://github.com/devguimaraes/design-system',
-    live: 'https://design-system.devguimaraes.dev',
+      'Empresa especializada em pontes, viadutos e projetos especiais. Referência nacional em obras de infraestrutura com tradição desde 1972.',
+    tech: ['Wordpress', 'PHP', 'CSS', 'SEO'] as const,
+    github: '#',
+    live: 'https://engerod.com.br/',
     color: 'bg-secondary',
     featured: true,
-    tags: ['design-system', 'react', 'storybook', 'ui-components'] as const,
+    tags: ['engenharia', 'institucional', 'infraestrutura', 'corporativo'] as const,
+    image: engerodImg,
   },
   {
-    id: 'portfolio-generator',
-    title: 'Portfolio Generator',
+    id: 'semogrj',
+    title: 'SEMOGRJ',
     description:
-      'Ferramenta para criação de portfólios com Astro, Markdown e animações Framer Motion. SSG para máxima performance e SEO otimizado.',
-    tech: ['Astro', 'React', 'Framer Motion', 'MDX', 'TypeScript'] as const,
-    github: 'https://github.com/devguimaraes/portfolio-generator',
-    live: 'https://portfolio-generator.devguimaraes.dev',
+      'Abastecimento Marítimo e Logística Internacional. Empresa com presença global, frota própria e excelência operacional no setor marítimo.',
+    tech: ['Wordpress', 'PHP', 'Logística', 'B2B'] as const,
+    github: '#',
+    live: 'https://semogrj.com.br/',
     color: 'bg-primary',
-    featured: false,
-    tags: ['astro', 'static-site', 'portfolio', 'ssg'] as const,
+    featured: true,
+    tags: ['logistica', 'maritimo', 'internacional', 'b2b'] as const,
+    image: semogrjImg,
   },
   {
-    id: 'dashboard-analytics',
-    title: 'Dashboard Analytics',
+    id: 'luis-felipe-pereira',
+    title: 'Luis Felipe Pereira',
     description:
-      'Dashboard de analytics em tempo real com React Query, Recharts e WebSockets. Visualização de dados interativa com atualização automática.',
-    tech: ['React', 'TanStack Query', 'WebSocket', 'Recharts', 'Node.js'] as const,
-    github: 'https://github.com/devguimaraes/analytics-dashboard',
-    live: 'https://analytics.devguimaraes.dev',
+      'Arquitetura e Interiores de alto padrão. Portfólio visual e design sofisticado para projetos residenciais e comerciais no Rio de Janeiro.',
+    tech: ['React', 'Framer Motion', 'Gallery', 'UI/UX'] as const,
+    github: '#',
+    live: 'https://luisfelipepereira.com.br/',
     color: 'bg-muted',
-    featured: false,
-    tags: ['dashboard', 'analytics', 'real-time', 'data-visualization'] as const,
-  },
-  {
-    id: 'task-management-app',
-    title: 'Task Management App',
-    description:
-      'Aplicação de gestão de tarefas com drag-and-drop, colaboração em tempo real e notificações push. Interface intuitiva com feedback visual.',
-    tech: ['React', 'TypeScript', 'Supabase', 'Dnd Kit', 'PWA'] as const,
-    github: 'https://github.com/devguimaraes/task-app',
-    live: 'https://tasks.devguimaraes.dev',
-    color: 'bg-accent',
-    featured: false,
-    tags: ['task-management', 'pwa', 'collaboration', 'supabase'] as const,
-  },
-  {
-    id: 'weather-widget',
-    title: 'Weather Widget',
-    description:
-      'Widget de clima minimalista com geolocalização automática, previsão de 7 dias e alerts de condições extremas. Performance otimizada.',
-    tech: ['React', 'TypeScript', 'OpenWeather API', 'Geolocation', 'CSS'] as const,
-    github: 'https://github.com/devguimaraes/weather-widget',
-    live: 'https://weather.devguimaraes.dev',
-    color: 'bg-secondary',
-    featured: false,
-    tags: ['weather', 'api', 'geolocation', 'widget'] as const,
+    featured: true,
+    tags: ['arquitetura', 'design', 'portfolio', 'premium'] as const,
+    image: luisFelipeImg,
   },
 ] as const;
 
