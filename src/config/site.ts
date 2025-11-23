@@ -48,7 +48,7 @@ export const heroData: HeroData = {
     },
     secondary: {
       text: 'Download CV',
-      href: siteConfig.cv?.url || '#',
+      href: 'https://www.linkedin.com/in/bcguimaraes/',
     },
   },
   technologies: [
