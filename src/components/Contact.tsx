@@ -1,71 +1,57 @@
-import { Mail, Linkedin, Github, Send } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { contactData, socialLinks } from "@/config/site";
+import React from 'react';
+import { NeoButton } from '@/components/ui/NeoButton';
+import { Linkedin, Instagram, Github } from 'lucide-react';
 
-const Contact = () => {
+const Contact: React.FC = () => {
   return (
-    <section id="contact" className="py-32 px-4 bg-foreground text-background">
-      <div className="container mx-auto">
-        <div className="max-w-4xl mx-auto text-center space-y-12">
-          <div className="inline-block border-4 border-background bg-accent px-4 py-2 shadow-[6px_6px_0px_hsl(var(--background))] mb-6">
-            <span className="font-mono font-bold text-sm text-foreground">
-              CONTATO
-            </span>
-          </div>
+    <section id="contact" className="py-24 bg-white border-t-4 border-black relative overflow-hidden">
 
-          <h2 className="font-mono font-bold text-4xl md:text-6xl animate-slide-up">
-            {contactData.title}<span className="text-accent">?</span>
-          </h2>
+       {/* Warning Stripes Background */}
+       <div className="absolute top-0 left-0 w-full h-4 caution-stripes"></div>
+       <div className="absolute bottom-0 left-0 w-full h-4 caution-stripes"></div>
 
-          <p className="font-sans text-xl text-background/80 max-w-2xl mx-auto animate-fade-in leading-relaxed">
-            {contactData.description}
-          </p>
+       <div className="container mx-auto px-4 relative z-10">
+         <div className="max-w-4xl mx-auto bg-stone-100 border-4 border-black shadow-brutal-lg p-8 md:p-12 text-center">
 
-          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center pt-12 animate-scale-in">
-            <Button
-              size="lg"
-              className="h-16 px-8 text-lg bg-accent text-foreground hover:bg-accent/90 border-4 border-background shadow-[6px_6px_0px_hsl(var(--background))] hover:shadow-[8px_8px_0px_hsl(var(--background))] hover:-translate-y-1 transition-all group relative overflow-hidden"
-              asChild
-            >
-              <a href={`mailto:${contactData.email}`}>
-                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                <Mail className="mr-3 relative z-10" size={24} />
-                <span className="relative z-10">{contactData.email}</span>
-                <Send
-                  className="ml-3 group-hover:translate-x-1 transition-transform relative z-10"
-                  size={20}
-                />
-              </a>
-            </Button>
-          </div>
+           <div className="inline-flex items-center gap-2 bg-black text-white px-4 py-1 font-mono font-bold text-sm mb-6 rounded-full animate-pulse">
+              <div className="w-2 h-2 bg-brutal-green rounded-full"></div>
+              CANAL_ABERTO
+           </div>
 
-          <div className="flex gap-8 justify-center pt-16">
-            {socialLinks
-              .filter(social => social.id !== 'email') // Exclude email since it's already shown above
-              .map((social) => {
-                const iconMap = {
-                  github: Github,
-                  linkedin: Linkedin,
-                };
-                const IconComponent = iconMap[social.id as keyof typeof iconMap];
-                return (
-                  <a
-                    key={social.id}
-                    href={social.href}
-                    className="p-5 border-4 border-background bg-accent shadow-[4px_4px_0px_hsl(var(--background))] hover:shadow-[6px_6px_0px_hsl(var(--background))] transition-all hover:-translate-y-1 group relative overflow-hidden"
-                    aria-label={social.label}
-                  >
-                    <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                    <IconComponent
-                      size={28}
-                      className="text-foreground group-hover:scale-110 transition-transform"
-                    />
-                  </a>
-                );
-              })}
-          </div>
-        </div>
-      </div>
+           <h2 className="text-5xl md:text-7xl font-black leading-tight mb-6">
+             PRONTO PARA <span className="text-transparent bg-clip-text bg-gradient-to-r from-brutal-orange to-red-600">CRIAR?</span>
+           </h2>
+
+           <p className="text-xl md:text-2xl font-bold text-stone-600 mb-12 max-w-2xl mx-auto">
+             Inicie o protocolo de colaboração. Conecte-se comigo nas redes sociais para discutirmos seu próximo projeto.
+           </p>
+
+           <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-12">
+             <a href="https://www.linkedin.com/in/bcguimaraes/" target="_blank" rel="noopener noreferrer" className="w-full md:w-auto">
+               <NeoButton variant="primary" className="text-xl px-12 py-5 w-full md:w-auto" icon>
+                 INICIAR PROJETO (LinkedIn)
+               </NeoButton>
+             </a>
+           </div>
+
+           {/* Social Connections */}
+           <div className="border-t-4 border-black pt-8 flex justify-center gap-4">
+             {[
+               { icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/in/bcguimaraes/' },
+               { icon: Github, label: 'GitHub', href: 'https://github.com/devguimaraes' },
+               { icon: Instagram, label: 'Instagram', href: 'https://www.instagram.com/dev.guimaraes/' }
+             ].map((item, idx) => (
+               <a key={idx} href={item.href} target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-2">
+                  <div className="w-14 h-14 bg-white border-4 border-black flex items-center justify-center shadow-neo group-hover:-translate-y-1 group-hover:shadow-brutal-lg transition-all">
+                    <item.icon size={24} className="text-black" />
+                  </div>
+                  <span className="font-mono text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity">{item.label}</span>
+               </a>
+             ))}
+           </div>
+
+         </div>
+       </div>
     </section>
   );
 };
