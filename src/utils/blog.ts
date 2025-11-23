@@ -1,3 +1,50 @@
+// Parser customizado de frontmatter (compatível com navegador)
+function parseFrontmatter(content: string): { data: any; content: string } {
+  const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/;
+  const match = content.match(frontmatterRegex);
+
+  if (!match) {
+    return { data: {}, content: content.trim() };
+  }
+
+  const frontmatterStr = match[1];
+  const markdownContent = match[2];
+
+  const data: any = {};
+  const lines = frontmatterStr.split('\n');
+
+  for (const line of lines) {
+    const colonIndex = line.indexOf(':');
+    if (colonIndex > -1) {
+      const key = line.substring(0, colonIndex).trim();
+      let value = line.substring(colonIndex + 1).trim();
+
+      // Remove aspas se existirem
+      if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+        value = value.slice(1, -1);
+      }
+
+      // Parse arrays
+      if (value.startsWith('[') && value.endsWith(']')) {
+        const arrayStr = value.slice(1, -1);
+        const items = arrayStr.split(',').map(item => {
+          item = item.trim();
+          // Remove aspas dos itens
+          if ((item.startsWith('"') && item.endsWith('"')) || (item.startsWith("'") && item.endsWith("'"))) {
+            item = item.slice(1, -1);
+          }
+          return item;
+        });
+        data[key] = items;
+      } else {
+        data[key] = value;
+      }
+    }
+  }
+
+  return { data, content: markdownContent.trim() };
+}
+
 // Tipos para os posts do blog
 export interface BlogPost {
   slug: string;
@@ -9,191 +56,124 @@ export interface BlogPost {
   content: string;
 }
 
-// Função para extrair metadata do frontmatter do markdown
-function parseFrontmatter(content: string): { metadata: Partial<BlogPost>; content: string } {
-  const frontmatterRegex = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/;
-  const match = content.match(frontmatterRegex);
+// Função para converter filename em slug
+function generateSlug(filename: string): string {
+  return filename
+    .replace(/\.md$/, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+}
 
-  if (!match) {
-    return { metadata: {}, content };
+// Cache para posts carregados
+let postsCache: BlogPost[] | null = null;
+
+// Sistema automatizado de importação usando Vite glob
+const blogModules = import.meta.glob('../content/blog/*.md', { query: '?raw', import: 'default' });
+
+// Função para carregar posts dos arquivos .md (automatizado)
+async function loadBlogPosts(): Promise<BlogPost[]> {
+  // Se já temos cache, retornar
+  if (postsCache) {
+    return postsCache;
   }
 
-  const frontmatter = match[1];
-  const markdownContent = match[2];
+  try {
+    const posts: BlogPost[] = [];
 
-  // Parse simples do frontmatter
-  const metadata: Partial<BlogPost> = {};
-  const lines = frontmatter.split('\n');
+    // Iterar sobre todos os módulos encontrados
+    for (const path in blogModules) {
+      // Carregar conteúdo do arquivo
+      const content = await (blogModules[path] as Promise<string>)();
 
-  for (const line of lines) {
-    const colonIndex = line.indexOf(':');
-    if (colonIndex > -1) {
-      const key = line.substring(0, colonIndex).trim();
-      let value = line.substring(colonIndex + 1).trim();
+      // Extrair filename do path
+      const filename = path.split('/').pop() || '';
+      const slug = generateSlug(filename);
 
-      // Remove aspas se existirem
-      if (value.startsWith('"') && value.endsWith('"')) {
-        value = value.slice(1, -1);
-      }
+      // Parse frontmatter e conteúdo
+      const { data: frontmatter, content: markdown } = parseFrontmatter(content);
 
-      // Parse arrays
-      if (value.startsWith('[') && value.endsWith(']')) {
-        value = value.slice(1, -1);
-        const tags = value.split(',').map(tag => tag.trim().replace(/['"]/g, ''));
-        metadata[key as keyof BlogPost] = tags;
-      } else {
-        metadata[key as keyof BlogPost] = value;
-      }
+      // Criar objeto post
+      const post: BlogPost = {
+        slug,
+        title: frontmatter.title || 'Sem título',
+        date: frontmatter.date || 'Data não definida',
+        readTime: frontmatter.readTime || '5 min',
+        tags: Array.isArray(frontmatter.tags) ? frontmatter.tags : [],
+        excerpt: frontmatter.excerpt || '',
+        content: markdown.trim()
+      };
+
+      posts.push(post);
     }
+
+    // Ordenar por data (mais recentes primeiro)
+    posts.sort((a, b) => {
+      const dateA = convertBrazilianDate(a.date);
+      const dateB = convertBrazilianDate(b.date);
+      return dateB.getTime() - dateA.getTime();
+    });
+
+    // Cache dos posts
+    postsCache = posts;
+
+    return posts;
+  } catch (error) {
+    console.error('❌ Erro ao carregar posts do blog:', error);
+    return [];
+  }
+}
+
+// Função auxiliar para converter datas brasileiras (ex: "24 OUT 2023") para Date
+function convertBrazilianDate(dateStr: string): Date {
+  const months: { [key: string]: number } = {
+    'JAN': 0, 'FEV': 1, 'MAR': 2, 'ABR': 3, 'MAI': 4, 'JUN': 5,
+    'JUL': 6, 'AGO': 7, 'SET': 8, 'OUT': 9, 'NOV': 10, 'DEZ': 11
+  };
+
+  const parts = dateStr.split(' ');
+  if (parts.length === 3) {
+    const day = parseInt(parts[0]);
+    const month = months[parts[1].toUpperCase()] || 0;
+    const year = parseInt(parts[2]);
+    return new Date(year, month, day);
   }
 
-  return { metadata, content: markdownContent };
+  // Fallback para parsing padrão
+  return new Date(dateStr);
 }
 
-// Posts estáticos para simplificar (em um projeto real, isso poderia ser carregado de uma API)
-const staticPosts: BlogPost[] = [
-  {
-    slug: 'por-que-neo-brutalismo',
-    title: 'Por que o Neo-Brutalismo Dominou o Web Design?',
-    date: '24 OUT 2023',
-    readTime: '5 min',
-    tags: ['Design', 'Tendências', 'UI/UX'],
-    excerpt: 'Abandone o flat design entediante. Descubra como sombras duras, cores vibrantes e bordas marcadas estão redefinindo a estética digital moderna.',
-    content: `# O Retorno do "Feio" Estético
-
-O design web passou a última década obcecado com o minimalismo. Tudo branco, muito espaço negativo, sombras suaves (quase invisíveis) e cantos arredondados de 20px. Ficou... **chato**.
-
-Entra o **Neo-Brutalismo**.
-
-Não é sobre ser feio. É sobre ser **honesto**, **cru** e **funcional**.
-
-## Características Principais
-
-1. **Bordas Pretas e Grossas:** Nada de sutileza. Se há uma caixa, mostre que é uma caixa.
-2. **Cores de Alta Saturação:** Esqueça os pastéis. Use amarelo gema, laranja neon, roxo elétrico.
-3. **Sombras Duras (Hard Shadows):** Sem desfoque. A sombra é apenas uma cópia preta do elemento deslocada 4px para baixo e direita.
-4. **Tipografia Grotesca:** Fontes sem serifa, grandes, pesadas e muitas vezes monoespaçadas.
-
-> "O Neo-Brutalismo na web é a resposta digital à arquitetura de concreto exposto dos anos 50: ame ou odeie, você não pode ignorá-lo."
-
-## Como aplicar nos seus projetos
-
-Comece com o básico: remova \`border-radius\`, adicione \`border: 2px solid black\` e mude sua paleta para algo que seu monitor de 1998 conseguiria exibir com orgulho.
-
-\`\`\`css
-.botao-brutal {
-  background-color: #facc15;
-  border: 3px solid black;
-  box-shadow: 4px 4px 0px black;
-  font-family: 'Space Grotesk', monospace;
-}
-\`\`\`
-
-Seja ousado. A web precisa de mais personalidade.`
-  },
-  {
-    slug: 'react-performance-tips',
-    title: 'Otimizando React: Além do básico',
-    date: '10 NOV 2023',
-    readTime: '8 min',
-    tags: ['React', 'Dev', 'Performance'],
-    excerpt: 'useMemo não é bala de prata. Entenda renderização, keys e virtualização para interfaces realmente fluidas.',
-    content: `# Performance Real em React
-
-Muitos desenvolvedores espalham \`useMemo\` e \`useCallback\` pelo código como se fosse tempero, esperando que o app fique mágico. Spoiler: **não fica**.
-
-## O verdadeiro vilão: Re-renders Desnecessários
-
-O React é rápido, mas renderizar componentes pesados 50 vezes por segundo trava qualquer navegador.
-
-### 1. Estrutura de Estado
-O erro número 1 é colocar estado global onde estado local resolveria. Se apenas um botão muda de cor, por que a página inteira está renderizando?
-
-### 2. Listas Longas
-Se você está renderizando uma lista com mais de 100 itens, você precisa de **virtualização**.
-
-Bibliotecas recomendadas:
-* \`react-window\`
-* \`virtua\`
-
-### 3. Imagens
-Use formatos modernos (WebP, AVIF) e carregamento preguiçoso (\`lazy loading\`).
-
-\`\`\`jsx
-<img
-  src="foto-pesada.webp"
-  loading="lazy"
-  alt="Otimização"
-/>
-\`\`\`
-
-Performance é UX. Ninguém gosta de esperar.`
-  },
-  {
-    slug: 'typescript-next-level',
-    title: 'TypeScript: Nível Avançado',
-    date: '15 NOV 2023',
-    readTime: '10 min',
-    tags: ['TypeScript', 'Advanced', 'Tips'],
-    excerpt: 'Vá além dos tipos básicos. Domine generics, utility types e padrões avançados para código Type-Safe.',
-    content: `# TypeScript que Impressiona
-
-Todo mundo sabe fazer \`interface User { name: string }\`. Mas você está usando TypeScript no máximo?
-
-## Generics que Fazem Sentido
-
-### 1. Tipos Retornáveis
-\`\`\`typescript
-function apiCall<T>(endpoint: string): Promise<T> {
-  return fetch(endpoint).then(res => res.json())
-}
-
-type User = ReturnType<typeof apiCall<'/api/user'>>
-\`\`\`
-
-### 2. Utility Types Criativos
-\`\`\`typescript
-type DeepPartial<T> = {
-  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P]
-}
-
-type OptionalExcept<T, K extends keyof T> = Partial<T> & Pick<T, K>
-\`\`\`
-
-### 3. Type Guards Avançados
-\`\`\`typescript
-function isString(value: unknown): value is string {
-  return typeof value === 'string'
-}
-\`\`\`
-
-## Padrões de Empresa
-
-### 1. Branded Types
-\`\`\`typescript
-type UserId = string & { readonly brand: unique symbol }
-function createUserId(id: string): UserId {
-  return id as UserId
-}
-\`\`\`
-
-### 2. Mapped Types com Template Literals
-\`\`\`typescript
-type EventHandlers<T> = {
-  [K in keyof T as \`on\${Capitalize<string & K}>\`]: (event: T[K]) => void
-}
-\`\`\`
-
-TypeScript não é sobre restrição. É sobre **clareza** e **confiança** no seu código.`
-  }
-];
-
+// Interface pública para obter todos os posts ordenados por data
 export async function getAllBlogPosts(): Promise<BlogPost[]> {
-  return staticPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  return await loadBlogPosts();
+}
+
+// Função para obter os posts mais recentes (limitado a uma quantidade)
+export async function getRecentPosts(limit: number = 3): Promise<BlogPost[]> {
+  const posts = await loadBlogPosts();
+  return posts.slice(0, limit);
 }
 
 // Função para obter um post específico pelo slug
 export async function getBlogPost(slug: string): Promise<BlogPost | null> {
-  const posts = await getAllBlogPosts();
+  const posts = await loadBlogPosts();
   return posts.find(post => post.slug === slug) || null;
+}
+
+// Função para recarregar posts (útil para hot-reload em desenvolvimento)
+export function invalidateBlogCache(): void {
+  postsCache = null;
+}
+
+// Hook para hot-reload em desenvolvimento
+if (import.meta.hot) {
+  import.meta.hot.accept(['../content/blog/*.md'], () => {
+    console.log('🔄 Hot reload detected - invalidating blog cache');
+    invalidateBlogCache();
+
+    // Disparar evento para componentes React
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('blog-cache-invalidated'));
+    }
+  });
 }
