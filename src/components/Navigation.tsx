@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Terminal } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Navigation: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,6 +13,30 @@ const Navigation: React.FC = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const smoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
+    e.preventDefault();
+    const element = document.getElementById(targetId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href.startsWith('#')) {
+      // Para links internos (hash), fazer scroll suave
+      const targetId = href.substring(1);
+      smoothScroll(e, targetId);
+    } else if (href === '/') {
+      // Para link home, navegar usando React Router
+      e.preventDefault();
+      window.location.href = href;
+    } else {
+      // Para outras páginas (blog), navegar usando React Router
+      e.preventDefault();
+      window.location.href = href;
+    }
+  };
 
   const navLinks = [
     { name: 'INÍCIO', href: '#hero' },
@@ -27,7 +52,11 @@ const Navigation: React.FC = () => {
       <div className="container mx-auto px-4 flex justify-between items-center">
 
         {/* Logo - Terminal Style */}
-        <div className="flex items-center gap-2 group cursor-pointer">
+        <Link
+          to="/"
+          className="flex items-center gap-2 group cursor-pointer hover:scale-105 transition-transform"
+          onClick={(e) => handleNavClick(e, '/')}
+        >
            <div className="w-12 h-12 bg-black flex items-center justify-center text-white shadow-neo transition-transform group-hover:translate-x-[2px] group-hover:translate-y-[2px] group-hover:shadow-none">
              <span className="font-black font-mono text-xl">BG</span>
            </div>
@@ -35,7 +64,7 @@ const Navigation: React.FC = () => {
              <span className="text-xl md:text-2xl font-black tracking-tighter uppercase">Bruno <span className="text-brutal-orange">Guimarães</span></span>
              <span className="font-mono text-[10px] font-bold tracking-widest opacity-60">DEV_FRONTEND</span>
            </div>
-        </div>
+        </Link>
 
         {/* Desktop Menu */}
         <div className="hidden md:flex gap-8 font-bold items-center bg-white border-2 border-black px-6 py-2 shadow-neo">
@@ -44,7 +73,7 @@ const Navigation: React.FC = () => {
                key={link.name}
                href={link.href}
                className={link.href.startsWith('/') ? "font-mono hover:text-brutal-orange hover:bg-black hover:text-white px-2 transition-colors" : "font-mono hover:text-brutal-orange hover:bg-black hover:text-white px-2 transition-colors"}
-               onClick={link.href.startsWith('/') ? (e) => window.location.href = link.href : undefined}
+               onClick={(e) => handleNavClick(e, link.href)}
              >
                {`//${link.name}`}
              </a>
@@ -69,11 +98,9 @@ const Navigation: React.FC = () => {
                key={link.name}
                href={link.href}
                className={`text-2xl font-black text-white p-6 border-b border-white/20 hover:bg-brutal-orange hover:text-black transition-colors font-mono flex justify-between group`}
-               onClick={() => {
+               onClick={(e) => {
                  setIsOpen(false);
-                 if (link.href.startsWith('/')) {
-                   window.location.href = link.href;
-                 }
+                 handleNavClick(e, link.href);
                }}
              >
                <span>{link.name}</span>
