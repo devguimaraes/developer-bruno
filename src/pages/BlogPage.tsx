@@ -5,7 +5,6 @@ import { getAllBlogPosts, BlogPost } from '@/utils/blog';
 
 const BlogPage: React.FC = () => {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadPosts = async () => {
@@ -14,8 +13,6 @@ const BlogPage: React.FC = () => {
         setBlogPosts(posts);
       } catch (error) {
         console.error('Erro ao carregar posts no BlogPage:', error);
-      } finally {
-        setLoading(false);
       }
     };
     loadPosts();
@@ -104,7 +101,7 @@ const BlogPage: React.FC = () => {
             ))}
           </div>
 
-          {blogPosts.length === 0 && !loading && (
+          {blogPosts.length === 0 && (
             <div className="text-center py-12">
               <p className="text-xl text-gray-500 mb-4">Nenhum post encontrado.</p>
               <p className="text-sm text-gray-400">Adicione arquivos .md em src/content/blog/</p>

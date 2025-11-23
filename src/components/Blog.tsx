@@ -4,7 +4,7 @@ import { Calendar, Clock, Tag, ArrowRight, FolderOpen, ExternalLink } from 'luci
 import { useRecentPosts } from '@/hooks/use-blog-posts';
 
 const Blog: React.FC = () => {
-  const { posts: blogPosts, loading } = useRecentPosts(3);
+  const { posts: blogPosts } = useRecentPosts(3);
 
   return (
     <section id="blog" className="py-24 bg-white relative">
@@ -33,21 +33,7 @@ const Blog: React.FC = () => {
         </div>
 
         {/* Grid de Posts */}
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="animate-pulse">
-                <div className="bg-gray-200 border-4 border-gray-300 h-64">
-                  <div className="p-4">
-                    <div className="h-4 bg-gray-300 rounded w-3/4 mb-4"></div>
-                    <div className="h-3 bg-gray-300 rounded w-1/2 mb-2"></div>
-                    <div className="h-3 bg-gray-300 rounded w-1/4"></div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : blogPosts.length === 0 ? (
+        {blogPosts.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-xl text-gray-500 mb-4">Nenhum post encontrado.</p>
             <p className="text-sm text-gray-400">Adicione arquivos .md em src/content/blog/</p>

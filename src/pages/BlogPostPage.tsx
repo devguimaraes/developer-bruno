@@ -7,7 +7,6 @@ import {
   BlogPostHeader,
   BlogPostContent,
   BlogPostNavigation,
-  BlogPostLoading,
   BlogPostNotFound,
   BlogPostBackButton
 } from '../components/blog';
@@ -15,7 +14,7 @@ import {
 const BlogPostPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const { post, loading } = useBlogPost(slug || '');
+  const { post } = useBlogPost(slug || '');
   const [adjacentPosts, setAdjacentPosts] = useState<{
     previous: BlogPost | null;
     next: BlogPost | null;
@@ -45,10 +44,6 @@ const BlogPostPage = () => {
       loadAdjacentPosts();
     }
   }, [slug, post]);
-
-  if (loading) {
-    return <BlogPostLoading />;
-  }
 
   if (!post) {
     return <BlogPostNotFound />;
