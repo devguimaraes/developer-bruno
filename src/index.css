@@ -75,6 +75,19 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 0 0% 8%;
     --sidebar-border: 172 29% 76%;
     --sidebar-ring: 162 100% 27%;
+
+    /* Blog/Markdown typography theme variables */
+    --markdown-text: 0 0% 0%;
+    --markdown-text-muted: 0 0% 47%;
+    --markdown-border: 0 0% 0%;
+    --markdown-code-bg: 160 24% 95%;
+    --markdown-code-text: 0 0% 0%;
+    --markdown-pre-bg: 220 13% 95%;
+    --markdown-pre-text: 0 0% 0%;
+    --markdown-heading-margin: 1.5rem;
+    --markdown-paragraph-margin: 1rem;
+    --markdown-heading-border: 4px;
+    --markdown-code-border: 2px;
   }
 
   .dark {
@@ -118,6 +131,15 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 0 0% 98%;
     --sidebar-border: 159 15% 20%;
     --sidebar-ring: 162 100% 35%;
+
+    /* Blog/Markdown typography theme variables - Dark mode */
+    --markdown-text: 0 0% 100%;
+    --markdown-text-muted: 0 0% 71%;
+    --markdown-border: 0 0% 100%;
+    --markdown-code-bg: 217 19% 27%;
+    --markdown-code-text: 0 0% 100%;
+    --markdown-pre-bg: 215 28% 17%;
+    --markdown-pre-text: 0 0% 100%;
   }
 }
 
@@ -138,6 +160,111 @@ All colors MUST be HSL.
   h6 {
     @apply font-mono;
   }
+}
+
+/* Markdown Code Block Overrides - Max Specificity */
+.prose pre,
+.prose pre *,
+.prose .prose-pre {
+  background-color: hsl(var(--markdown-pre-bg)) !important;
+  color: hsl(var(--markdown-pre-text)) !important;
+}
+
+.prose code,
+.prose .prose-code {
+  background-color: hsl(var(--markdown-code-bg)) !important;
+  color: hsl(var(--markdown-code-text)) !important;
+}
+
+.prose pre code,
+.prose .prose-pre code {
+  background-color: transparent !important;
+  color: inherit !important;
+}
+
+/* Additional overrides for syntax highlighting */
+.prose .token.keyword,
+.prose .token.string,
+.prose .token.number,
+.prose .token.function,
+.prose .token.comment,
+.prose .token.operator {
+  color: hsl(var(--markdown-pre-text)) !important;
+}
+
+/* Inline code with special handling */
+.prose p > code,
+.prose li > code,
+.prose td > code {
+  background-color: hsl(var(--markdown-code-bg)) !important;
+  color: hsl(var(--markdown-code-text)) !important;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+/* Multi-line code blocks */
+.prose pre {
+  padding: 1rem;
+  overflow-x: auto;
+  border: 2px solid hsl(var(--markdown-border));
+  border-radius: 0;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+.prose pre > code {
+  padding: 0;
+  background: none;
+  border: none;
+  font-size: inherit;
+}
+
+/* Highest specificity overrides using data attribute */
+[data-markdown-content] pre,
+[data-markdown-content] pre *,
+[data-markdown-content] .prose-pre {
+  background-color: hsl(var(--markdown-pre-bg)) !important;
+  color: hsl(var(--markdown-pre-text)) !important;
+}
+
+[data-markdown-content] code,
+[data-markdown-content] .prose-code {
+  background-color: hsl(var(--markdown-code-bg)) !important;
+  color: hsl(var(--markdown-code-text)) !important;
+}
+
+[data-markdown-content] pre code,
+[data-markdown-content] .prose-pre code {
+  background-color: transparent !important;
+  color: inherit !important;
+}
+
+/* Force inline code colors */
+[data-markdown-content] :not(pre) > code {
+  background-color: hsl(var(--markdown-code-bg)) !important;
+  color: hsl(var(--markdown-code-text)) !important;
+}
+
+/* Force block code colors */
+[data-markdown-content] pre {
+  background-color: hsl(var(--markdown-pre-bg)) !important;
+  color: hsl(var(--markdown-pre-text)) !important;
+}
+
+/* Override any potential syntax highlighter conflicts */
+[data-markdown-content] .token,
+[data-markdown-content] .token.keyword,
+[data-markdown-content] .token.string,
+[data-markdown-content] .token.number,
+[data-markdown-content] .token.function,
+[data-markdown-content] .token.comment,
+[data-markdown-content] .token.operator,
+[data-markdown-content] .token.class-name,
+[data-markdown-content] .token.type,
+[data-markdown-content] .token.variable,
+[data-markdown-content] .token.property {
+  color: hsl(var(--markdown-pre-text)) !important;
 }
 
 /* Global Noise Texture */
