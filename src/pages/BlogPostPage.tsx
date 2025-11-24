@@ -1,20 +1,20 @@
-import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { useBlogPost } from '../hooks/use-blog-posts';
-import { getAllBlogPosts, BlogPost } from '../utils/blog';
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { useBlogPost } from "../hooks/use-blog-posts";
+import { getAllBlogPosts, BlogPost } from "../utils/blog";
 import {
   BlogPostHeader,
   BlogPostContent,
   BlogPostNavigation,
   BlogPostNotFound,
-  BlogPostBackButton
-} from '../components/blog';
+  BlogPostBackButton,
+} from "../components/blog";
 
 const BlogPostPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const { post } = useBlogPost(slug || '');
+  const { post } = useBlogPost(slug || "");
   const [adjacentPosts, setAdjacentPosts] = useState<{
     previous: BlogPost | null;
     next: BlogPost | null;
@@ -22,21 +22,24 @@ const BlogPostPage = () => {
 
   useEffect(() => {
     if (!slug) {
-      navigate('/blog');
+      navigate("/blog");
       return;
     }
 
     const loadAdjacentPosts = async () => {
       try {
         const allPosts = await getAllBlogPosts();
-        const currentIndex = allPosts.findIndex(p => p.slug === slug);
+        const currentIndex = allPosts.findIndex((p) => p.slug === slug);
 
         setAdjacentPosts({
           previous: currentIndex > 0 ? allPosts[currentIndex - 1] : null,
-          next: currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null
+          next:
+            currentIndex < allPosts.length - 1
+              ? allPosts[currentIndex + 1]
+              : null,
         });
       } catch (error) {
-        console.error('Erro ao carregar posts adjacentes:', error);
+        console.error("Erro ao carregar posts adjacentes:", error);
       }
     };
 
@@ -56,7 +59,7 @@ const BlogPostPage = () => {
       transition={{ duration: 0.5 }}
       className="w-full"
     >
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="container mx-auto px-4 py-28 max-w-4xl">
         <BlogPostBackButton />
         <BlogPostHeader post={post} />
         <BlogPostContent content={post.content} />
