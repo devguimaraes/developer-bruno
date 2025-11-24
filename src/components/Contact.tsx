@@ -4,7 +4,7 @@ import { Linkedin, Instagram, Github } from 'lucide-react';
 
 const Contact: React.FC = () => {
   return (
-    <section id="contact" className="py-24 bg-white border-t-4 border-black relative overflow-hidden">
+    <section className="py-24 bg-white border-t-4 border-black relative overflow-hidden">
 
        {/* Warning Stripes Background */}
        <div className="absolute top-0 left-0 w-full h-4 caution-stripes"></div>
