@@ -1,55 +1,57 @@
-import { Mail, Linkedin, Github, Send } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import React from 'react';
+import { NeoButton } from '@/components/ui/NeoButton';
+import { Linkedin, Instagram, Github } from 'lucide-react';
 
-const Contact = () => {
+const Contact: React.FC = () => {
   return (
-    <section id="contact" className="py-24 px-4 bg-foreground text-background">
-      <div className="container mx-auto">
-        <div className="max-w-4xl mx-auto text-center space-y-8">
-          <div className="inline-block border-4 border-background bg-accent px-4 py-2 shadow-[6px_6px_0px_hsl(var(--background))] mb-6">
-            <span className="font-mono font-bold text-sm text-foreground">CONTATO</span>
-          </div>
+    <section id="contact" className="py-24 bg-white border-t-4 border-black relative overflow-hidden">
 
-          <h2 className="font-mono font-bold text-4xl md:text-6xl animate-slide-up">
-            Vamos Conversar<span className="text-accent">?</span>
-          </h2>
+       {/* Warning Stripes Background */}
+       <div className="absolute top-0 left-0 w-full h-4 caution-stripes"></div>
+       <div className="absolute bottom-0 left-0 w-full h-4 caution-stripes"></div>
 
-          <p className="font-sans text-xl text-background/80 max-w-2xl mx-auto animate-fade-in">
-            Estou sempre aberto a discutir novos projetos, ideias criativas ou oportunidades
-            de fazer parte da sua visão. Entre em contato!
-          </p>
+       <div className="container mx-auto px-4 relative z-10">
+         <div className="max-w-4xl mx-auto bg-stone-100 border-4 border-black shadow-brutal-lg p-8 md:p-12 text-center">
 
-          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center pt-8 animate-scale-in">
-            <Button 
-              size="lg" 
-              className="bg-accent text-foreground hover:bg-accent/90 border-4 border-background shadow-[6px_6px_0px_hsl(var(--background))] hover:shadow-[8px_8px_0px_hsl(var(--background))] hover:-translate-y-1 transition-all group"
-              asChild
-            >
-              <a href="mailto:bruno@example.com">
-                <Mail className="mr-2" size={20} />
-                bruno@example.com
-                <Send className="ml-2 group-hover:translate-x-1 transition-transform" size={16} />
-              </a>
-            </Button>
-          </div>
+           <div className="inline-flex items-center gap-2 bg-black text-white px-4 py-1 font-mono font-bold text-sm mb-6 rounded-full animate-pulse">
+              <div className="w-2 h-2 bg-brutal-green rounded-full"></div>
+              CANAL_ABERTO
+           </div>
 
-          <div className="flex gap-6 justify-center pt-12">
-            {[
-              { icon: Linkedin, href: "#", label: "LinkedIn", color: "bg-accent" },
-              { icon: Github, href: "#", label: "GitHub", color: "bg-background" },
-            ].map((social) => (
-              <a
-                key={social.label}
-                href={social.href}
-                className={`p-4 border-4 border-background ${social.color} shadow-[4px_4px_0px_hsl(var(--background))] hover:shadow-[6px_6px_0px_hsl(var(--background))] transition-all hover:-translate-y-1 group`}
-                aria-label={social.label}
-              >
-                <social.icon size={24} className="text-foreground group-hover:scale-110 transition-transform" />
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
+           <h2 className="text-5xl md:text-7xl font-black leading-tight mb-6">
+             PRONTO PARA <span className="text-transparent bg-clip-text bg-gradient-to-r from-brutal-orange to-red-600">CRIAR?</span>
+           </h2>
+
+           <p className="text-xl md:text-2xl font-bold text-stone-600 mb-12 max-w-2xl mx-auto">
+             Inicie o protocolo de colaboração. Conecte-se comigo nas redes sociais para discutirmos seu próximo projeto.
+           </p>
+
+           <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-12">
+             <a href="https://www.linkedin.com/in/bcguimaraes/" target="_blank" rel="noopener noreferrer" className="w-full md:w-auto">
+               <NeoButton variant="primary" className="text-xl px-12 py-5 w-full md:w-auto" icon>
+                 INICIAR PROJETO (LinkedIn)
+               </NeoButton>
+             </a>
+           </div>
+
+           {/* Social Connections */}
+           <div className="border-t-4 border-black pt-8 flex justify-center gap-4">
+             {[
+               { icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/in/bcguimaraes/' },
+               { icon: Github, label: 'GitHub', href: 'https://github.com/devguimaraes' },
+               { icon: Instagram, label: 'Instagram', href: 'https://www.instagram.com/dev.guimaraes/' }
+             ].map((item, idx) => (
+               <a key={idx} href={item.href} target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-2">
+                  <div className="w-14 h-14 bg-white border-4 border-black flex items-center justify-center shadow-neo group-hover:-translate-y-1 group-hover:shadow-brutal-lg transition-all">
+                    <item.icon size={24} className="text-black" />
+                  </div>
+                  <span className="font-mono text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity">{item.label}</span>
+               </a>
+             ))}
+           </div>
+
+         </div>
+       </div>
     </section>
   );
 };

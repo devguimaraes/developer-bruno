@@ -1,89 +1,124 @@
-import { Code2, Palette, Rocket, Zap } from "lucide-react";
+import React from 'react';
+import avatar from "@/assets/avatar.jpg";
+import { Code2, Cpu, Globe, User, MapPin, Calendar } from 'lucide-react';
 
-const skills = [
-  {
-    icon: Code2,
-    title: "Desenvolvimento",
-    description: "React, Next.js, TypeScript, Astro. Código limpo, performático e escalável.",
-    color: "bg-primary",
-  },
-  {
-    icon: Palette,
-    title: "Design & UI",
-    description: "Tailwind CSS, Radix UI, Framer Motion. Interfaces modernas e responsivas.",
-    color: "bg-secondary",
-  },
-  {
-    icon: Zap,
-    title: "Performance",
-    description: "Otimização de bundle, lazy loading, code splitting. Web Vitals excelentes.",
-    color: "bg-accent",
-  },
-  {
-    icon: Rocket,
-    title: "Deploy & CI/CD",
-    description: "Vercel, GitHub Actions, Docker. Pipelines automatizados e confiáveis.",
-    color: "bg-muted",
-  },
-];
-
-const About = () => {
+const About: React.FC = () => {
   return (
-    <section id="about" className="py-24 px-4">
-      <div className="container mx-auto">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Text Content */}
-          <div className="space-y-8 animate-slide-right">
-            <div className="inline-block border-4 border-foreground bg-accent px-4 py-2 shadow-brutal-sm">
-              <span className="font-mono font-bold text-sm">SOBRE</span>
-            </div>
-            
-            <h2 className="font-mono font-bold text-4xl md:text-6xl">
-              Desenvolvedor Front-End
-              <br />
-              & UI Engineer<span className="text-primary">.</span>
-            </h2>
+    <section id="about" className="py-24 bg-white relative">
+      {/* Diagonal Stripes Background */}
+      <div className="absolute top-0 right-0 w-1/3 h-full bg-[repeating-linear-gradient(45deg,#000,#000_2px,#fff_2px,#fff_10px)] opacity-5 pointer-events-none"></div>
 
-            <div className="space-y-4 font-sans text-lg text-muted-foreground">
-              <p>
-                Sou apaixonado por criar experiências digitais que combinam{" "}
-                <span className="text-foreground font-semibold">estética moderna</span>,{" "}
-                <span className="text-foreground font-semibold">performance excepcional</span> e{" "}
-                <span className="text-foreground font-semibold">código de qualidade</span>.
-              </p>
-              
-              <p>
-                Com mais de 5 anos de experiência, especializo-me em transformar designs complexos
-                em interfaces funcionais e responsivas usando as mais recentes tecnologias web.
-              </p>
+      <div className="container mx-auto px-4 relative z-10">
 
-              <p>
-                Minha abordagem combina atenção aos detalhes, raciocínio técnico sólido e
-                colaboração efetiva com designers e equipes de produto para entregar soluções
-                que realmente fazem a diferença.
-              </p>
-            </div>
-          </div>
-
-          {/* Skills Grid */}
-          <div className="grid sm:grid-cols-2 gap-6">
-            {skills.map((skill, index) => (
-              <div
-                key={skill.title}
-                className="border-4 border-foreground shadow-brutal hover:shadow-brutal-lg transition-all hover:-translate-y-2 bg-card animate-scale-in"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <div className="p-6 space-y-4">
-                  <div className={`inline-flex p-3 ${skill.color} border-2 border-foreground`}>
-                    <skill.icon size={24} className="text-foreground" />
-                  </div>
-                  <h3 className="font-mono font-bold text-xl">{skill.title}</h3>
-                  <p className="font-sans text-sm text-muted-foreground">{skill.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+        {/* Section Header */}
+        <div className="flex items-center gap-4 mb-12">
+           <div className="w-12 h-12 bg-black text-white flex items-center justify-center font-black text-2xl border-4 border-brutal-orange">
+              01
+           </div>
+           <h2 className="text-5xl md:text-6xl font-black uppercase tracking-tighter">
+              SOBRE_MIM
+           </h2>
+           <div className="h-2 flex-1 bg-black hidden md:block"></div>
         </div>
+
+        {/* Main Content "Card" */}
+        <div className="border-4 border-black bg-stone-50 shadow-brutal-lg">
+
+            {/* Window Header */}
+            <div className="bg-black text-white p-3 flex justify-between items-center border-b-4 border-black">
+               <div className="font-mono text-sm font-bold flex items-center gap-2">
+                  <User size={16} className="text-brutal-yellow" />
+                  PERFIL_USUARIO.JSON
+               </div>
+               <div className="flex gap-2">
+                  <div className="w-4 h-4 bg-red-500 border border-white/50"></div>
+                  <div className="w-4 h-4 bg-yellow-500 border border-white/50"></div>
+                  <div className="w-4 h-4 bg-green-500 border border-white/50"></div>
+               </div>
+            </div>
+
+            <div className="p-6 md:p-12 grid md:grid-cols-12 gap-12">
+
+                {/* Avatar Column */}
+                <div className="md:col-span-4 flex flex-col items-center md:items-start">
+                    <div className="relative w-full max-w-[300px]">
+                        <div className="aspect-square rounded-full bg-brutal-orange border-4 border-black p-2 overflow-hidden relative group">
+                           {/* Scanline effect */}
+                           <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-10 bg-[size:100%_4px,4px_100%] pointer-events-none opacity-30 rounded-full"></div>
+
+                           <img
+                             src={avatar}
+                             alt="Bruno Guimarães"
+                             className="w-full h-full object-cover rounded-full border-2 border-black contrast-110 transition-all duration-500"
+                           />
+                        </div>
+                        {/* Decorative Elements */}
+                        <div className="absolute bottom-0 right-0 md:-bottom-2 md:-right-2 bg-white border-4 border-black p-3 shadow-neo z-20 rounded-lg">
+                           <div className="flex items-center gap-2 font-bold font-mono text-xs">
+                              <div className="w-3 h-3 bg-brutal-green animate-pulse rounded-full"></div>
+                              ONLINE
+                           </div>
+                        </div>
+                    </div>
+
+                    {/* Info Tags */}
+                    <div className="mt-12 space-y-3 font-mono text-sm w-full">
+                        <div className="flex items-center gap-3 border-b-2 border-gray-300 pb-2">
+                           <MapPin size={16} />
+                           <span className="font-bold">LOCAL:</span>
+                           <span>Rio de Janeiro</span>
+                        </div>
+                        <div className="flex items-center gap-3 border-b-2 border-gray-300 pb-2">
+                           <Calendar size={16} />
+                           <span className="font-bold">EXP:</span>
+                           <span>+5 Anos</span>
+                        </div>
+                        <div className="flex items-center gap-3 border-b-2 border-gray-300 pb-2">
+                           <Code2 size={16} />
+                           <span className="font-bold">CARGO:</span>
+                           <span>Eng. Frontend</span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Text Column */}
+                <div className="md:col-span-8 flex flex-col justify-center space-y-8">
+                    <h3 className="text-3xl md:text-4xl font-bold leading-tight">
+                       Eu crio interfaces de <span className="bg-brutal-yellow px-2 border-2 border-black shadow-neo">alta performance</span> para a web.
+                    </h3>
+
+                    <p className="text-lg text-stone-600 leading-relaxed font-medium">
+                       Especialista no ecossistema React, faço a ponte entre conceitos brutos de design e a realidade interativa. Minha abordagem é orientada a componentes, acessibilidade primeiro e obsessivamente pixel-perfect.
+                    </p>
+
+                    <div className="p-6 bg-white border-4 border-black relative">
+                       <div className="absolute -top-3 left-4 bg-black text-white px-2 font-mono text-xs font-bold uppercase">
+                          Valores_Centrais
+                       </div>
+                       <div className="grid grid-cols-2 gap-6">
+                          <div className="space-y-2">
+                             <h4 className="font-black flex items-center gap-2"><Cpu size={20} /> OTIMIZADO</h4>
+                             <p className="text-sm text-gray-500">Código limpo que roda rápido em qualquer dispositivo.</p>
+                          </div>
+                          <div className="space-y-2">
+                             <h4 className="font-black flex items-center gap-2"><Globe size={20} /> ESCALÁVEL</h4>
+                             <p className="text-sm text-gray-500">Arquiteturas construídas para crescer com seu negócio.</p>
+                          </div>
+                       </div>
+                    </div>
+
+                    <div className="flex gap-2">
+                        {['Criativo', 'Lógico', 'Preciso'].map(tag => (
+                           <span key={tag} className="font-mono text-xs border border-black px-2 py-1 bg-gray-200 text-gray-600">
+                              #{tag.toUpperCase()}
+                           </span>
+                        ))}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
       </div>
     </section>
   );
