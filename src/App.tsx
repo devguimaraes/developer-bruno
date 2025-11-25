@@ -1,35 +1,59 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "@/components/Layout";
 import Index from "./pages/Index";
 import BlogPage from "./pages/BlogPage";
 import BlogPostPage from "./pages/BlogPostPage";
 import NotFound from "./pages/NotFound";
-
-const queryClient = new QueryClient();
+import SEO from "@/components/SEO";
+import StructuredData from "@/components/StructuredData";
+import Analytics from "@/components/Analytics";
+import ErrorBoundary, { SafeSuspense } from "@/components/ErrorBoundary";
+import { useBrazilianPerformanceReporting } from "@/hooks/useWebVitals";
 
 const App = () => {
+  // Enable Brazilian market performance monitoring
+  useBrazilianPerformanceReporting();
+
   return (
-    <QueryClientProvider client={queryClient}>
+    <ErrorBoundary>
       <TooltipProvider>
         <Toaster />
         <Sonner />
+        <Analytics />
         <BrowserRouter>
+          {/* SEO Component - Meta tags para mercado brasileiro */}
+          <SEO
+            title="Portfólio Desenvolvedor Front-End"
+            description="Desenvolvedor Front-End especializado em React, TypeScript e interfaces modernas. Serviços para mercado brasileiro com performance otimizada."
+            keywords={[
+              'desenvolvedor front-end Brasil',
+              'programador React Rio de Janeiro',
+              'desenvolvedor TypeScript Brasil'
+            ]}
+            url="/"
+            type="website"
+          />
+
+          {/* Structured Data for Brazilian Search Engines */}
+          <StructuredData />
+
           <Layout>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/blog" element={<BlogPage />} />
-              <Route path="/blog/:slug" element={<BlogPostPage />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <SafeSuspense>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/blog" element={<BlogPage />} />
+                <Route path="/blog/:slug" element={<BlogPostPage />} />
+                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </SafeSuspense>
           </Layout>
         </BrowserRouter>
       </TooltipProvider>
-    </QueryClientProvider>
+    </ErrorBoundary>
   );
 };
 

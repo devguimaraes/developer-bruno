@@ -19,6 +19,19 @@ export const siteConfig: SiteConfig = {
   },
   seo: {
     keywords: [
+      // Brazilian Market Keywords
+      'desenvolvedor front-end Brasil',
+      'programador React Rio de Janeiro',
+      'desenvolvedor TypeScript Brasil',
+      'portfolio desenvolvedor web',
+      'Bruno Guimarães front-end',
+      'desenvolvedor web São Paulo',
+      'programador JavaScript Brasil',
+      'front-end developer Brasil',
+      'desenvolvedor React Brasil',
+      'portfolio desenvolvimento web',
+
+      // Technical Keywords
       'desenvolvedor front-end',
       'react developer',
       'typescript',
@@ -27,9 +40,47 @@ export const siteConfig: SiteConfig = {
       'web development',
       'bruno guimarães',
       'front-end rio de janeiro',
+
+      // Location-specific
+      'desenvolvedor Rio de Janeiro',
+      'programador Brasil',
+      'front-end developer Brasil',
+      'web developer Rio de Janeiro',
+      'desenvolvedor web Brasil',
     ],
     image: '/og-image.jpg',
     siteName: 'Bruno Guimarães Portfolio',
+    locale: 'pt_BR',
+    region: 'BR',
+  },
+
+  // Performance Budget Configuration for Brazilian Market
+  performanceBudget: {
+    javascript: 300000, // 300KB for Brazilian mobile networks
+    images: 500000, // 500KB for images
+    css: 50000, // 50KB for CSS
+    total: 1000000, // 1MB total budget
+  },
+
+  // Brazilian Market Configuration
+  brazilianMarket: {
+    country: 'Brasil',
+    language: 'Português',
+    currency: 'BRL',
+    locale: 'pt_BR',
+    region: 'BR',
+    timezone: 'America/Sao_Paulo',
+    phoneNumber: '+55 21 99999-9999',
+    serviceAreas: [
+      'Rio de Janeiro',
+      'São Paulo',
+      'Brasília',
+      'Belo Horizonte',
+      'Porto Alegre',
+      'Salvador',
+      'Recife',
+      'Fortaleza',
+    ],
   },
 };
 
