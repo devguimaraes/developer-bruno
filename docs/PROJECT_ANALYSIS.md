@@ -56,11 +56,6 @@ O projeto é um portfólio pessoal desenvolvido com **React**, **TypeScript** e 
 - **Observação**: O uso de `.gif` (`hero-animation.gif`) pode impactar a performance (LCP - Largest Contentful Paint).
 - **Recomendação**: Considerar substituir GIFs por vídeos (WebM/MP4) em loop ou animações vetoriais (Lottie/Rive), que são significativamente mais leves e nítidos.
 
-### � Internacionalização (i18n)
-
-- **Observação**: O site está atualmente em Português (com alguns termos em Inglês no código).
-- **Recomendação**: Se o objetivo for atrair oportunidades internacionais, preparar a estrutura para i18n (usando `react-i18next` ou similar) seria um grande "plus".
-
 ## 4. Conclusão
 
 O projeto apresenta um nível de maturidade técnica **alto**. A base de código é limpa, moderna e bem estruturada. A escolha estética é forte e bem implementada tecnicamente. As melhorias sugeridas focam principalmente em **escalabilidade** (extração de dados), **performance** (mídia) e **profissionalização** (SEO e Testes), elevando o projeto de "ótimo" para "excelente".

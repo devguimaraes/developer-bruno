@@ -3,10 +3,12 @@
 ## Problemas Resolvidos
 
 ### 1. **Referência `skills` indefinida** ✅
+
 **Problema**: Componente About estava referenciando variável `skills` que não existia.
 **Solução**: Alterado para usar `featuredSkills` importado do data module.
 
 **Arquivo**: `src/components/About.tsx`
+
 ```typescript
 // Antes
 {skills.map((skill, index) => (
@@ -16,15 +18,18 @@
 ```
 
 ### 2. **Ícones dinâmicos undefined** ✅
+
 **Problema**: Mapeamento de ícones usando string -> component estava retornando `undefined`.
 **Solução**: Simplificado para passar os componentes diretamente.
 
 **Arquivos afetados**:
+
 - `src/components/About.tsx`
 - `src/components/Contact.tsx`
 - `src/components/Hero.tsx`
 
 **Mudança**: Removido mapeamento complexo e usado componentes diretamente:
+
 ```typescript
 // Abordagem removida
 const iconMap = { Github, Linkedin, Mail };
@@ -36,10 +41,12 @@ const IconComponent = iconMap[social.icon as keyof typeof iconMap];
 ```
 
 ### 3. **Dados do Hero não externalizados** ✅
+
 **Problema**: Componente Hero ainda tinha dados hardcoded (título, descrição, CTA).
 **Solução**: Todos os dados dinâmicos agora usam `heroData` da configuração.
 
 **Atualizações**:
+
 - Badge: `{heroData.badge}`
 - Título: `{heroData.title}`
 - Subtítulo: `{heroData.subtitle}`
@@ -48,10 +55,12 @@ const IconComponent = iconMap[social.icon as keyof typeof iconMap];
 - CTA buttons: `{heroData.cta.primary.text}`, etc.
 
 ### 4. **Dados do Contact não externalizados** ✅
+
 **Problema**: Componente Contact tinha título e descrição hardcoded.
 **Solução**: Usando `contactData` da configuração.
 
 **Atualizações**:
+
 - Título: `{contactData.title}`
 - Descrição: `{contactData.description}`
 - Email: `{contactData.email}`
