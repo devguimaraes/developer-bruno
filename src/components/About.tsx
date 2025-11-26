@@ -2,9 +2,9 @@ import React from "react";
 import avatar from "@/assets/avatar.jpg";
 import { Code2, Cpu, Globe, User, MapPin, Calendar } from "lucide-react";
 
-const About: React.FC = () => {
+const About: React.FC<{ id?: string }> = ({ id }) => {
   return (
-    <section className="py-24 bg-white relative">
+    <section id={id} className="py-24 bg-white relative">
       {/* Diagonal Stripes Background */}
       <div className="absolute top-0 right-0 w-1/3 h-full bg-[repeating-linear-gradient(45deg,#000,#000_2px,#fff_2px,#fff_10px)] opacity-5 pointer-events-none"></div>
 

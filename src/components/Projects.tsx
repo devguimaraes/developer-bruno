@@ -163,9 +163,9 @@ const ProjectCard: React.FC<{ project: any; index: number }> = ({ project, index
   );
 };
 
-const Projects: React.FC = () => {
+const Projects: React.FC<{ id?: string }> = ({ id }) => {
   return (
-    <section className="py-24 bg-stone-100">
+    <section id={id} className="py-24 bg-stone-100">
       <div className="container mx-auto px-4">
 
         <div className="mb-16 flex flex-col md:flex-row items-start md:items-end justify-between gap-6">

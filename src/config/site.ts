@@ -148,6 +148,13 @@ export const contactData: ContactData = {
       label: 'GitHub',
       username: 'devguimaraes',
     },
+    {
+      id: 'instagram',
+      icon: 'Instagram',
+      href: 'https://www.instagram.com/dev.guimaraes/',
+      label: 'Instagram',
+      username: 'dev.guimaraes',
+    },
   ],
 };
 
