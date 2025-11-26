@@ -666,3 +666,13 @@ body::before {
 .markdown-content a:hover {
   color: #ea580c;
 }
+
+/* Stacking Cards System - Scroll-based */
+.stacking-section {
+  will-change: transform;
+  transition: transform 0.3s ease-out;
+}
+
+.stacking-wrapper {
+  position: relative;
+}

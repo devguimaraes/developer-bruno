@@ -84,7 +84,7 @@ async function loadBlogPosts(): Promise<BlogPost[]> {
     // Iterar sobre todos os módulos encontrados
     for (const path in blogModules) {
       // Carregar conteúdo do arquivo
-      const content = await (blogModules[path] as Promise<string>)();
+      const content = await (blogModules[path] as () => Promise<string>)();
 
       // Extrair filename do path
       const filename = path.split('/').pop() || '';
@@ -167,7 +167,7 @@ export function invalidateBlogCache(): void {
 
 // Hook para hot-reload em desenvolvimento
 if (import.meta.hot) {
-  import.meta.hot.accept(['../content/blog/*.md'], () => {
+  import.meta.hot.accept(() => {
     console.log('🔄 Hot reload detected - invalidating blog cache');
     invalidateBlogCache();
 

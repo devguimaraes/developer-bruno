@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Menu, X, Terminal } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const Navigation: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -14,6 +16,27 @@ const Navigation: React.FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Effect to handle hash scrolling after navigation
+  useEffect(() => {
+    if (location.hash) {
+      const targetId = location.hash.substring(1);
+      const element = document.getElementById(targetId);
+      if (element) {
+        setTimeout(() => {
+          const headerOffset = 80;
+          const elementPosition = element.getBoundingClientRect().top;
+          const offsetPosition =
+            elementPosition + window.pageYOffset - headerOffset;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth",
+          });
+        }, 100); // Small delay to ensure DOM is ready
+      }
+    }
+  }, [location]);
+
   const smoothScroll = (
     e: React.MouseEvent<HTMLAnchorElement>,
     targetId: string
@@ -21,7 +44,15 @@ const Navigation: React.FC = () => {
     e.preventDefault();
     const element = document.getElementById(targetId);
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      const headerOffset = 80; // Approximate header height
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition =
+        elementPosition + window.pageYOffset - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
     }
   };
 
@@ -30,17 +61,24 @@ const Navigation: React.FC = () => {
     href: string
   ) => {
     if (href.startsWith("#")) {
-      // Para links internos (hash), fazer scroll suave
-      const targetId = href.substring(1);
-      smoothScroll(e, targetId);
+      e.preventDefault();
+      // If we are already on the home page, just scroll
+      if (location.pathname === "/") {
+        const targetId = href.substring(1);
+        smoothScroll(e, targetId);
+      } else {
+        // If we are on another page, navigate to home with the hash
+        navigate("/" + href);
+      }
     } else if (href === "/") {
       // Para link home, navegar usando React Router
       e.preventDefault();
-      window.location.href = href;
+      navigate(href);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
       // Para outras páginas (blog), navegar usando React Router
       e.preventDefault();
-      window.location.href = href;
+      navigate(href);
     }
   };
 
@@ -97,10 +135,6 @@ const Navigation: React.FC = () => {
               {`//${link.name}`}
             </a>
           ))}
-          <div className="w-px h-6 bg-black mx-2"></div>
-          <button className="font-black uppercase tracking-wider hover:text-brutal-orange blink-animation">
-            Status: Online
-          </button>
         </div>
 
         {/* Mobile Toggle */}
