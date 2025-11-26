@@ -9,7 +9,7 @@ export const siteConfig: SiteConfig = {
   author: 'Bruno Guimarães',
   email: 'bc.guimaraes@outlook.com',
   location: 'Rio de Janeiro, Brasil',
-  domain: 'https://devguimaraes.dev',
+  domain: 'https://devguimaraes.com.br',
   github: 'https://github.com/devguimaraes',
   linkedin: 'https://www.linkedin.com/in/bcguimaraes/',
   avatar: '/avatar.jpg',

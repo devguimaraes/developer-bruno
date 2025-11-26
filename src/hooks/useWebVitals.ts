@@ -1,6 +1,6 @@
 import { useEffect, useCallback } from 'react';
-import type { PerformanceMetrics, WebVitalsThresholds } from '@/types';
-import { BRAZILIAN_WEB_VITALS_THRESHOLDS } from '@/types';
+import type { PerformanceMetrics, WebVitalsThresholds } from '../types';
+import { BRAZILIAN_WEB_VITALS_THRESHOLDS } from '../types';
 
 /**
  * Web Vitals monitoring hook for Brazilian market
