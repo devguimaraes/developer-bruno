@@ -1,46 +1,48 @@
-import { useEffect, useState } from 'react';
-import type { AnalyticsEvent } from '@/types';
+import { useEffect, useState } from "react";
+import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
+import type { AnalyticsEvent } from "@/types";
 
 /**
- * Brazilian market analytics component with Plausible (LGPD compliant)
+ * Brazilian market analytics component with Plausible (LGPD compliant) + Vercel Analytics
  */
 const Analytics: React.FC = () => {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     // Only load analytics in production
-    if (process.env.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV !== "production") {
       return;
     }
 
     // Privacy compliance: Only load analytics if user has consent
     // This can be enhanced with a cookie consent banner for full LGPD compliance
-    const hasAnalyticsConsent = localStorage.getItem('analytics_consent') === 'true';
+    const hasAnalyticsConsent =
+      localStorage.getItem("analytics_consent") === "true";
 
     if (!hasAnalyticsConsent) {
       return;
     }
 
     // Load Plausible script (privacy-focused, no cookies)
-    const script = document.createElement('script');
-    script.src = 'https://plausible.io/js/script.js';
+    const script = document.createElement("script");
+    script.src = "https://plausible.io/js/script.js";
     script.async = true;
     script.defer = true;
-    script.setAttribute('data-domain', 'devguimaraes.dev'); // Update with actual domain
-    script.setAttribute('data-api', 'https://plausible.io/api/event'); // For custom events
+    script.setAttribute("data-domain", "devguimaraes.dev"); // Update with actual domain
+    script.setAttribute("data-api", "https://plausible.io/api/event"); // For custom events
 
     script.onload = () => {
       setLoaded(true);
-      console.log('✅ Analytics carregado (conformidade LGPD)');
+      console.log("✅ Analytics carregado (conformidade LGPD)");
 
       // Track page view
       if (window.plausible) {
-        window.plausible('pageview');
+        window.plausible("pageview");
       }
     };
 
     script.onerror = () => {
-      console.error('❌ Falha ao carregar analytics');
+      console.error("❌ Falha ao carregar analytics");
     };
 
     document.head.appendChild(script);
@@ -53,21 +55,24 @@ const Analytics: React.FC = () => {
     };
   }, []);
 
-  // Don't render anything (analytics is invisible)
-  return null;
+  // Render Vercel Analytics component
+  return <VercelAnalytics />;
 };
 
 /**
  * Hook para enviar eventos ao Plausible (LGPD compliant)
  */
 export const usePlausible = () => {
-  const sendEvent = (eventName: string, props?: Record<string, string | number | boolean>) => {
+  const sendEvent = (
+    eventName: string,
+    props?: Record<string, string | number | boolean>
+  ) => {
     // Only send events in production and with consent
     if (
-      process.env.NODE_ENV !== 'production' ||
-      typeof window === 'undefined' ||
+      process.env.NODE_ENV !== "production" ||
+      typeof window === "undefined" ||
       !window.plausible ||
-      localStorage.getItem('analytics_consent') !== 'true'
+      localStorage.getItem("analytics_consent") !== "true"
     ) {
       return;
     }
@@ -77,13 +82,13 @@ export const usePlausible = () => {
         props: {
           ...props,
           // Add Brazilian market context
-          market: 'brasil',
-          language: 'pt-BR',
-          version: '1.0'
-        }
+          market: "brasil",
+          language: "pt-BR",
+          version: "1.0",
+        },
       });
     } catch (error) {
-      console.error('Erro ao enviar evento para analytics:', error);
+      console.error("Erro ao enviar evento para analytics:", error);
     }
   };
 
@@ -99,64 +104,64 @@ export const usePortfolioAnalytics = () => {
   return {
     // Track project interactions
     trackProjectView: (projectTitle: string, technologies: string[]) => {
-      sendEvent('portfolio_project_view', {
+      sendEvent("portfolio_project_view", {
         project: projectTitle,
-        technologies: technologies.join(','),
-        section: 'projects'
+        technologies: technologies.join(","),
+        section: "projects",
       });
     },
 
     // Track contact attempts
-    trackContactAttempt: (method: 'linkedin' | 'email' | 'instagram') => {
-      sendEvent('portfolio_contact_attempt', {
+    trackContactAttempt: (method: "linkedin" | "email" | "instagram") => {
+      sendEvent("portfolio_contact_attempt", {
         method,
-        section: 'contact'
+        section: "contact",
       });
     },
 
     // Track CTA clicks
     trackCTAClick: (ctaText: string, section: string) => {
-      sendEvent('portfolio_cta_click', {
+      sendEvent("portfolio_cta_click", {
         cta_text: ctaText,
-        section: section
+        section: section,
       });
     },
 
     // Track navigation
     trackNavigation: (section: string) => {
-      sendEvent('portfolio_navigation', {
-        section: section
+      sendEvent("portfolio_navigation", {
+        section: section,
       });
     },
 
     // Track time on page
     trackTimeOnPage: (duration: number, section?: string) => {
-      sendEvent('portfolio_time_on_page', {
+      sendEvent("portfolio_time_on_page", {
         duration_seconds: Math.round(duration),
-        section: section || 'unknown'
+        section: section || "unknown",
       });
     },
 
     // Track scroll depth
     trackScrollDepth: (depth: number) => {
-      sendEvent('portfolio_scroll_depth', {
-        depth_percent: depth
+      sendEvent("portfolio_scroll_depth", {
+        depth_percent: depth,
       });
     },
 
     // Track form submissions (when implemented)
     trackFormSubmission: (formType: string, success: boolean) => {
-      sendEvent('portfolio_form_submission', {
+      sendEvent("portfolio_form_submission", {
         form_type: formType,
-        success: success
+        success: success,
       });
     },
 
     // Track performance metrics
     trackPerformance: (metric: string, value: number) => {
-      sendEvent('portfolio_performance', {
+      sendEvent("portfolio_performance", {
         metric: metric,
-        value: value
+        value: value,
       });
     },
 
@@ -168,27 +173,30 @@ export const usePortfolioAnalytics = () => {
         userAgent: navigator.userAgent,
         screenResolution: `${screen.width}x${screen.height}`,
         colorDepth: screen.colorDepth,
-        connection: 'connection' in navigator ? (navigator as any).connection.effectiveType : 'unknown'
+        connection:
+          "connection" in navigator
+            ? (navigator as any).connection.effectiveType
+            : "unknown",
       };
 
-      sendEvent('portfolio_device_info', deviceInfo);
+      sendEvent("portfolio_device_info", deviceInfo);
     },
 
     // Track error boundaries
     trackError: (errorType: string, error: string) => {
-      sendEvent('portfolio_error', {
+      sendEvent("portfolio_error", {
         error_type: errorType,
-        error: error.substring(0, 200) // Limit error message length
+        error: error.substring(0, 200), // Limit error message length
       });
     },
 
     // Track user engagement
     trackEngagement: (event: string, details?: Record<string, any>) => {
-      sendEvent('portfolio_engagement', {
+      sendEvent("portfolio_engagement", {
         event_type: event,
-        ...details
+        ...details,
       });
-    }
+    },
   };
 };
 
@@ -197,11 +205,11 @@ export const usePortfolioAnalytics = () => {
  */
 export const useCookieConsent = () => {
   const [hasConsent, setHasConsent] = useState<boolean>(() => {
-    return localStorage.getItem('analytics_consent') === 'true';
+    return localStorage.getItem("analytics_consent") === "true";
   });
 
   const giveConsent = () => {
-    localStorage.setItem('analytics_consent', 'true');
+    localStorage.setItem("analytics_consent", "true");
     setHasConsent(true);
 
     // Reload to enable analytics
@@ -209,20 +217,22 @@ export const useCookieConsent = () => {
   };
 
   const withdrawConsent = () => {
-    localStorage.removeItem('analytics_consent');
+    localStorage.removeItem("analytics_consent");
     setHasConsent(false);
 
     // Remove Plausible cookies
-    document.cookie = 'plausible_ignore=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax';
-    document.cookie = 'plausible_ignore=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Domain=devguimaraes.dev; SameSite=Lax';
+    document.cookie =
+      "plausible_ignore=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax";
+    document.cookie =
+      "plausible_ignore=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Domain=devguimaraes.dev; SameSite=Lax";
 
-    console.log('🔒 Consentimento de analytics removido (conformidade LGPD)');
+    console.log("🔒 Consentimento de analytics removido (conformidade LGPD)");
   };
 
   return {
     hasConsent,
     giveConsent,
-    withdrawConsent
+    withdrawConsent,
   };
 };
 
@@ -235,7 +245,7 @@ export const PrivacyDisclosure: React.FC = () => {
   // Only show in Brazil or if no consent yet
   const shouldShowDisclosure = !hasConsent;
 
-  if (!shouldShowDisclosure || process.env.NODE_ENV !== 'production') {
+  if (!shouldShowDisclosure || process.env.NODE_ENV !== "production") {
     return null;
   }
 
@@ -244,11 +254,10 @@ export const PrivacyDisclosure: React.FC = () => {
       <div className="container mx-auto max-w-4xl">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="text-sm">
-            <p className="font-mono mb-1">
-              🇧🇷 PRIVACIDADE - CONFORMIDADE LGPD
-            </p>
+            <p className="font-mono mb-1">🇧🇷 PRIVACIDADE - CONFORMIDADE LGPD</p>
             <p className="text-xs text-gray-300">
-              Usamos Plausible Analytics para insights de uso, sem cookies, totalmente em conformidade com LGPD.
+              Usamos Plausible Analytics para insights de uso, sem cookies,
+              totalmente em conformidade com LGPD.
             </p>
           </div>
 
