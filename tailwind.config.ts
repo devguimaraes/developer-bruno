@@ -93,6 +93,16 @@ export default {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      zIndex: {
+        'stack-card-1': '20',
+        'stack-card-2': '25',
+        'stack-card-3': '30',
+        'stack-card-4': '32',
+        'stack-content-1': '35',
+        'stack-content-2': '40',
+        'stack-final': '45',
+        'stack-navigation': '50',
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },

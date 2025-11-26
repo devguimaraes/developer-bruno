@@ -11,22 +11,26 @@ This guide explains how to use TestSprite to test your portfolio website.
 ## Key Testing Areas
 
 ### 1. Navigation Testing
+
 - ✅ Mobile menu toggle functionality
 - ✅ Smooth scrolling between sections
 - ✅ Logo and navigation link interactions
 - ✅ Responsive navigation behavior
 
 ### 2. Contact Section Testing
+
 - ✅ Social media link functionality
 - ✅ Button interactions and hover effects
 - ✅ External link validation
 
 ### 3. Responsive Design Testing
+
 - ✅ Desktop (1920x1080)
 - ✅ Tablet (768x1024)
 - ✅ Mobile (375x667)
 
 ### 4. Visual Regression Testing
+
 - ✅ Brutalist design consistency
 - ✅ Color scheme validation
 - ✅ Typography and layout consistency
@@ -54,6 +58,7 @@ The `testsprite.config.js` file defines comprehensive test cases covering:
 ## Critical User Journeys
 
 ### Primary Flow
+
 1. User visits homepage
 2. Navigates through different sections
 3. Tests mobile menu functionality
@@ -61,6 +66,7 @@ The `testsprite.config.js` file defines comprehensive test cases covering:
 5. Interacts with social media links
 
 ### Mobile Flow
+
 1. User visits on mobile device
 2. Uses hamburger menu to navigate
 3. Tests responsive layouts
@@ -93,6 +99,7 @@ The `testsprite.config.js` file defines comprehensive test cases covering:
 ## Troubleshooting
 
 If tests fail:
+
 1. Check development server is running on `http://localhost:8082/`
 2. Verify all dependencies are installed
 3. Check browser console for errors

@@ -112,3 +112,6 @@ export interface ContentValidation {
   warnings: string[];
 }
 
+// Re-export SEO and performance types
+export * from './seo';
+
