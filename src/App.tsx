@@ -26,7 +26,7 @@ const App = () => {
         <BrowserRouter>
           {/* SEO Component - Meta tags para mercado brasileiro */}
           <SEO
-            title="Portfólio Desenvolvedor Front-End"
+            title="Desenvolvedor Front-End | Bruno Guimarães"
             description="Desenvolvedor Front-End especializado em React, TypeScript e interfaces modernas. Serviços para mercado brasileiro com performance otimizada."
             keywords={[
               'desenvolvedor front-end Brasil',
