@@ -98,7 +98,7 @@ export const heroData: HeroData = {
       href: '#projects',
     },
     secondary: {
-      text: 'Download CV',
+      text: 'Fale Comigo',
       href: 'https://www.linkedin.com/in/bcguimaraes/',
     },
   },
