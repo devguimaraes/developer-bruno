@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
-import { generateSitemap } from "./src/lib/sitemap.js";
+import { generateSitemap } from "./src/lib/sitemap";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -13,16 +13,16 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     mode === "development" && componentTagger(),
-    // Sitemap plugin for Brazilian SEO - temporarily disabled
-    // mode === "production" && {
-    //   name: 'vite-plugin-sitemap',
-    //   generateSitemap: generateSitemap,
-    //   transformSitemap: (xml) => {
-    //     // Add Brazilian specific headers
-    //     return xml.replace('<?xml version="1.0" encoding="UTF-8"?>',
-    //       '<?xml version="1.0" encoding="UTF-8"?>\n<!-- Brazilian Market SEO Sitemap -->');
-    //   }
-    // }
+    // Sitemap plugin for Brazilian SEO
+    mode === "production" && {
+      name: 'vite-plugin-sitemap',
+      generateSitemap: generateSitemap,
+      transformSitemap: (xml) => {
+        // Add Brazilian specific headers
+        return xml.replace('<?xml version="1.0" encoding="UTF-8"?>',
+          '<?xml version="1.0" encoding="UTF-8"?>\n<!-- Brazilian Market SEO Sitemap -->');
+      }
+    }
   ].filter(Boolean),
   resolve: {
     alias: {

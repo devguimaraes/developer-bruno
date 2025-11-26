@@ -1,5 +1,5 @@
-import { siteConfig } from '@/config/site';
-import type { SitemapEntry } from '@/types';
+import { siteConfig } from '../config/site';
+import type { SitemapEntry } from '../types';
 
 /**
  * Brazilian market sitemap configuration
