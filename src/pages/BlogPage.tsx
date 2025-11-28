@@ -1,22 +1,39 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, Tag, ArrowRight, FolderOpen, Home, ExternalLink } from 'lucide-react';
+import { Calendar, Clock, Tag, ArrowRight, FolderOpen, Home, ExternalLink, AlertCircle, RefreshCw } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { getAllBlogPosts, BlogPost } from '@/utils/blog';
+import { BlogPostSkeleton } from '@/components/blog/BlogPostSkeleton';
 
 const BlogPage: React.FC = () => {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const loadPosts = async () => {
+      setIsLoading(true);
+      setError(null);
+
       try {
         const posts = await getAllBlogPosts();
         setBlogPosts(posts);
       } catch (error) {
         console.error('Erro ao carregar posts no BlogPage:', error);
+        setError('Não foi possível carregar os posts do blog. Tente novamente mais tarde.');
+      } finally {
+        setIsLoading(false);
       }
     };
+
+    // Scroll to top when component mounts
+    window.scrollTo(0, 0);
+
     loadPosts();
   }, []);
+
+  const handleRetry = () => {
+    loadPosts();
+  };
 
   return (
     <>
@@ -52,7 +69,35 @@ const BlogPage: React.FC = () => {
 
           {/* Posts Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts.map((post) => (
+            {/* Error State */}
+            {error && (
+              <div className="col-span-full">
+                <div className="bg-white border-4 border-black p-8 shadow-brutal-lg">
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0">
+                      <AlertCircle className="w-6 h-6 text-red-600" />
+                    </div>
+                    <div className="flex-grow">
+                      <h3 className="font-bold text-lg mb-2">Erro ao Carregar Blog</h3>
+                      <p className="text-stone-600 mb-4">{error}</p>
+                      <button
+                        onClick={handleRetry}
+                        className="inline-flex items-center gap-2 bg-brutal-yellow border-2 border-black px-4 py-2 font-mono text-sm hover:bg-brutal-yellow/80 transition-colors duration-300"
+                      >
+                        <RefreshCw className="w-4 h-4" />
+                        Tentar Novamente
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Loading State */}
+            {isLoading && !error && <BlogPostSkeleton count={6} />}
+
+            {/* Success State */}
+            {!isLoading && !error && blogPosts.map((post) => (
               <article
                 key={post.slug}
                 className="group bg-white border-4 border-black flex flex-col h-full hover:-translate-y-2 transition-transform duration-300 shadow-brutal-lg hover:shadow-[12px_12px_0px_0px_#f97316]"

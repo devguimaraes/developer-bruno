@@ -10,6 +10,7 @@ import {
   BlogPostNotFound,
   BlogPostBackButton,
 } from "../components/blog";
+import { BlogPostContentSkeleton } from "../components/blog/BlogPostContentSkeleton";
 
 const BlogPostPage = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -25,6 +26,9 @@ const BlogPostPage = () => {
       navigate("/blog");
       return;
     }
+
+    // Scroll to top when component mounts
+    window.scrollTo(0, 0);
 
     const loadAdjacentPosts = async () => {
       try {
@@ -49,7 +53,7 @@ const BlogPostPage = () => {
   }, [slug, post]);
 
   if (!post) {
-    return <BlogPostNotFound />;
+    return <BlogPostContentSkeleton />;
   }
 
   return (
