@@ -195,15 +195,5 @@ export const markdownThemeCSS = `
   }
 `;
 
-// Função para injetar o CSS de tema do markdown no documento
-export const injectMarkdownTheme = () => {
-  if (typeof document !== 'undefined') {
-    const existingStyle = document.getElementById('markdown-theme-styles');
-    if (!existingStyle) {
-      const style = document.createElement('style');
-      style.id = 'markdown-theme-styles';
-      style.textContent = markdownThemeCSS;
-      document.head.appendChild(style);
-    }
-  }
-};
+// Markdown theme styles are now handled by CSS modules
+// See: src/styles/markdown.css

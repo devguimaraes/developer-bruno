@@ -10,7 +10,7 @@ import {
   BlogPostNotFound,
   BlogPostBackButton,
 } from "../components/blog";
-import { BlogPostContentSkeleton } from "../components/blog/BlogPostContentSkeleton";
+import { BlogPostLoadingSkeleton } from "../components/blog/BlogPostLoadingSkeleton";
 
 const BlogPostPage = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -50,10 +50,10 @@ const BlogPostPage = () => {
     if (post) {
       loadAdjacentPosts();
     }
-  }, [slug, post]);
+  }, [slug, post, navigate]);
 
   if (!post) {
-    return <BlogPostContentSkeleton />;
+    return <BlogPostLoadingSkeleton />;
   }
 
   return (

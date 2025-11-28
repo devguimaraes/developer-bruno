@@ -1,9 +1,10 @@
 import React from 'react';
 import { ExternalLink, ArrowUpRight, Globe } from 'lucide-react';
 import { projects } from '@/data/projects';
+import type { Project } from '@/types';
 
 // Componente para renderizar a arte do projeto baseada no ID
-const ProjectVisual: React.FC<{ project: any; index: number }> = ({ project, index }) => {
+const ProjectVisual: React.FC<{ project: Project; index: number }> = ({ project, index }) => {
   // Mapeamento baseado no ID do projeto para visual customizado
   switch (project.id) {
     case 'semogrj': // SEMOG - Maritime/Logistics (Pixel Art Ocean/Container)
@@ -119,7 +120,7 @@ const ProjectVisual: React.FC<{ project: any; index: number }> = ({ project, ind
   }
 };
 
-const ProjectCard: React.FC<{ project: any; index: number }> = ({ project, index }) => {
+const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, index }) => {
   return (
     <div className="group relative bg-white border-4 border-black p-0 transition-all duration-300 hover:-translate-y-2">
        {/* Massive Index Number */}

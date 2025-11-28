@@ -100,7 +100,7 @@ export interface StructuredDataProps {
   type: 'Person' | 'WebSite' | 'Project' | 'WorkExperience' | 'ContactPoint' | 'ProfessionalService';
 
   /** Structured data content */
-  data: Record<string, any>;
+  data: Record<string, unknown>;
 }
 
 export interface PerformanceMetrics {

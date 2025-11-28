@@ -1,6 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import { useMemo } from 'react';
 import { siteConfig } from '@/config/site';
+import { BlogPost } from '@/utils/blog';
 
 interface RouteSEOProps {
   title: string;
@@ -18,7 +19,7 @@ interface RouteSEOProps {
   };
 }
 
-export const useRouteSEO = (blogPost?: any): RouteSEOProps => {
+export const useRouteSEO = (blogPost?: BlogPost): RouteSEOProps => {
   const location = useLocation();
 
   return useMemo(() => {
@@ -136,5 +137,5 @@ export const useRouteSEO = (blogPost?: any): RouteSEOProps => {
       ...defaultSEO,
       url: pathname
     };
-  }, [location.pathname, blogPost]);
+  }, [location.pathname, blogPost?.slug, blogPost?.title]);
 };

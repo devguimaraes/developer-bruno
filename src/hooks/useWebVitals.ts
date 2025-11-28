@@ -2,9 +2,30 @@ import { useEffect, useCallback } from 'react';
 import type { PerformanceMetrics, WebVitalsThresholds } from '../types';
 import { BRAZILIAN_WEB_VITALS_THRESHOLDS } from '../types';
 
+// Type definitions for extended interfaces
+interface ExtendedPerformanceEntry extends PerformanceEntry {
+  transferSize?: number;
+}
+
+interface NetworkConnection {
+  effectiveType: string;
+  downlink: number;
+  rtt: number;
+}
+
+interface ExtendedNavigator extends Navigator {
+  connection?: NetworkConnection;
+}
+
+declare global {
+  interface Navigator extends ExtendedNavigator {}
+}
+
 /**
  * Web Vitals monitoring hook for Brazilian market
  */
+export { type ExtendedNavigator } from './useWebVitals';
+
 export const useWebVitals = (
   onReport?: (metric: PerformanceMetrics) => void,
   thresholds: WebVitalsThresholds = BRAZILIAN_WEB_VITALS_THRESHOLDS
@@ -139,7 +160,7 @@ export const usePerformanceMonitoring = () => {
 
         // Monitor image sizes for Brazilian networks
         if (entry.name.includes('.png') || entry.name.includes('.jpg') || entry.name.includes('.jpeg')) {
-          const size = (entry as any).transferSize || 0;
+          const size = (entry as ExtendedPerformanceEntry).transferSize || 0;
           const sizeKB = Math.round(size / 1024);
 
           if (sizeKB > 500) { // 500KB threshold for images
@@ -157,7 +178,7 @@ export const usePerformanceMonitoring = () => {
 
     // Monitor connection quality for Brazilian users
     if ('connection' in navigator) {
-      const connection = (navigator as any).connection;
+      const connection = (navigator as ExtendedNavigator).connection;
       console.log('🌐 Connection Quality:', {
         effectiveType: connection.effectiveType,
         downlink: `${connection.downlink} Mbps`,
@@ -199,7 +220,7 @@ export const usePerformanceBudget = (budget = { total: 1000000, javascript: 3000
       let imageSize = 0;
 
       entries.forEach((entry) => {
-        const size = (entry as any).transferSize || 0;
+        const size = (entry as ExtendedPerformanceEntry).transferSize || 0;
         totalSize += size;
 
         if (entry.name.includes('.js')) {
