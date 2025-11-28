@@ -12,6 +12,8 @@ import StructuredData from "@/components/StructuredData";
 import Analytics from "@/components/Analytics";
 import ErrorBoundary, { SafeSuspense } from "@/components/ErrorBoundary";
 import { useBrazilianPerformanceReporting } from "@/hooks/useWebVitals";
+import { useRouteSEO } from "@/hooks/useRouteSEO";
+import { RouteSEO } from "@/components/RouteSEO";
 
 const App = () => {
   // Enable Brazilian market performance monitoring
@@ -24,18 +26,8 @@ const App = () => {
         <Sonner />
         <Analytics />
         <BrowserRouter>
-          {/* SEO Component - Meta tags para mercado brasileiro */}
-          <SEO
-            title="Desenvolvedor Front-End | Bruno Guimarães"
-            description="Desenvolvedor Front-End especializado em React, TypeScript e interfaces modernas. Serviços para mercado brasileiro com performance otimizada."
-            keywords={[
-              'desenvolvedor front-end Brasil',
-              'programador React Rio de Janeiro',
-              'desenvolvedor TypeScript Brasil'
-            ]}
-            url="/"
-            type="website"
-          />
+          {/* Route-based SEO Component - Meta tags dinâmicas para cada rota */}
+          <RouteSEO />
 
           {/* Structured Data for Brazilian Search Engines */}
           <StructuredData />
