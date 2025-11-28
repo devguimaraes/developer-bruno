@@ -185,7 +185,7 @@ export const socialLinks = [
 export const navigationSections = [
   { id: 'hero', label: 'Início', href: '#hero' },
   { id: 'about', label: 'Sobre', href: '#about' },
-  { id: 'experience', label: 'Experiência', href: '#experience' },
+  { id: 'skills', label: 'Skills', href: '#skills' },
   { id: 'projects', label: 'Projetos', href: '#projects' },
   { id: 'contact', label: 'Contato', href: '#contact' },
 ] as const;
