@@ -18,6 +18,8 @@ export function BlogPostContent({ content }: BlogPostContentProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.5 }}
       className={getMarkdownClasses()}
+      role="article"
+      aria-label="Conteúdo do post"
     >
       <MarkdownWrapper>
         <ReactMarkdown>{content}</ReactMarkdown>

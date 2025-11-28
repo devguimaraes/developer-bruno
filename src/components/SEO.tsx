@@ -1,6 +1,6 @@
-import { Helmet } from 'react-helmet-async';
-import { siteConfig } from '@/config/site';
-import type { SEOProps, OpenGraphProps, TwitterCardProps } from '@/types/seo';
+import { Helmet } from "react-helmet-async";
+import { siteConfig } from "@/config/site";
+import type { SEOProps, OpenGraphProps, TwitterCardProps } from "@/types/seo";
 
 const SEO: React.FC<SEOProps> = ({
   title,
@@ -8,17 +8,19 @@ const SEO: React.FC<SEOProps> = ({
   keywords,
   image,
   url,
-  type = 'website',
-  locale = 'pt_BR',
+  type = "website",
+  locale = "pt_BR",
   author,
   publishedDate,
   modifiedDate,
   noindex = false,
   nofollow = false,
+  articleMeta,
 }) => {
-  // Build full title with site name
+  // Build full title using consistent template
   const fullTitle = title
-    ? `${title} | ${siteConfig.title}`
+    ? siteConfig.titleTemplate?.replace("%s", title) ||
+      `${title} | ${siteConfig.title}`
     : siteConfig.title;
 
   // Use provided description or fallback to site description
@@ -30,9 +32,7 @@ const SEO: React.FC<SEOProps> = ({
     : siteConfig.seo.keywords;
 
   // Build absolute URL
-  const absoluteUrl = url
-    ? `${siteConfig.domain}${url}`
-    : siteConfig.domain;
+  const absoluteUrl = url ? `${siteConfig.domain}${url}` : siteConfig.domain;
 
   // Build absolute image URL
   const absoluteImage = image
@@ -40,13 +40,14 @@ const SEO: React.FC<SEOProps> = ({
     : siteConfig.seo.image;
 
   // Build robots meta tag
-  const robots = noindex && nofollow
-    ? 'noindex,nofollow'
-    : noindex
-    ? 'noindex'
-    : nofollow
-    ? 'nofollow'
-    : 'index,follow';
+  const robots =
+    noindex && nofollow
+      ? "noindex,nofollow"
+      : noindex
+      ? "noindex"
+      : nofollow
+      ? "nofollow"
+      : "index,follow";
 
   // Open Graph props
   const openGraph: OpenGraphProps = {
@@ -61,12 +62,12 @@ const SEO: React.FC<SEOProps> = ({
 
   // Twitter Card props
   const twitterCard: TwitterCardProps = {
-    card: 'summary_large_image',
+    card: "summary_large_image",
     title: fullTitle,
     description: metaDescription,
     image: absoluteImage,
-    site: '@brunoguimaraes',
-    creator: '@brunoguimaraes',
+    site: "@brunoguimaraes",
+    creator: "@brunoguimaraes",
   };
 
   return (
@@ -74,7 +75,7 @@ const SEO: React.FC<SEOProps> = ({
       {/* Basic Meta Tags */}
       <title>{fullTitle}</title>
       <meta name="description" content={metaDescription} />
-      <meta name="keywords" content={allKeywords.join(', ')} />
+      <meta name="keywords" content={allKeywords.join(", ")} />
       <meta name="author" content={author || siteConfig.author} />
       <meta name="robots" content={robots} />
 
@@ -110,33 +111,72 @@ const SEO: React.FC<SEOProps> = ({
 
       {/* Structured Data for Brazilian Market */}
       <script type="application/ld+json">
-        {JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": type === 'profile' ? 'Person' : 'WebPage',
-          "name": title || siteConfig.title,
-          "description": metaDescription,
-          "url": absoluteUrl,
-          "inLanguage": locale,
-          "isPartOf": {
-            "@type": "WebSite",
-            "name": siteConfig.title,
-            "url": siteConfig.domain,
-            "inLanguage": locale
-          },
-          "author": {
-            "@type": "Person",
-            "name": siteConfig.author,
-            "url": siteConfig.domain
-          },
-          "datePublished": publishedDate,
-          "dateModified": modifiedDate || publishedDate,
-          "image": absoluteImage,
-          "publisher": {
-            "@type": "Person",
-            "name": siteConfig.author,
-            "url": siteConfig.domain
-          }
-        })}
+        {JSON.stringify(
+          type === "article"
+            ? {
+                // Article schema for blog posts
+                "@context": "https://schema.org",
+                "@type": "Article",
+                headline: title || siteConfig.title,
+                description: metaDescription,
+                url: absoluteUrl,
+                inLanguage: locale,
+                author: {
+                  "@type": "Person",
+                  name: author || siteConfig.author,
+                  url: siteConfig.domain,
+                },
+                publisher: {
+                  "@type": "Person",
+                  name: siteConfig.author,
+                  url: siteConfig.domain,
+                },
+                datePublished: publishedDate,
+                dateModified: modifiedDate || publishedDate,
+                image: absoluteImage,
+                articleSection: articleMeta?.section || "Desenvolvimento Web",
+                keywords:
+                  articleMeta?.tags?.join(", ") || allKeywords.join(", "),
+                wordCount: articleMeta?.wordCount,
+                timeRequired: articleMeta?.readingTime
+                  ? `PT${articleMeta.readingTime}M`
+                  : undefined,
+                isPartOf: {
+                  "@type": "WebSite",
+                  name: siteConfig.title,
+                  url: siteConfig.domain,
+                  inLanguage: locale,
+                },
+              }
+            : {
+                // WebPage schema for other content
+                "@context": "https://schema.org",
+                "@type": type === "profile" ? "Person" : "WebPage",
+                name: title || siteConfig.title,
+                description: metaDescription,
+                url: absoluteUrl,
+                inLanguage: locale,
+                isPartOf: {
+                  "@type": "WebSite",
+                  name: siteConfig.title,
+                  url: siteConfig.domain,
+                  inLanguage: locale,
+                },
+                author: {
+                  "@type": "Person",
+                  name: siteConfig.author,
+                  url: siteConfig.domain,
+                },
+                datePublished: publishedDate,
+                dateModified: modifiedDate || publishedDate,
+                image: absoluteImage,
+                publisher: {
+                  "@type": "Person",
+                  name: siteConfig.author,
+                  url: siteConfig.domain,
+                },
+              }
+        )}
       </script>
 
       {/* Additional SEO for Brazilian Market */}

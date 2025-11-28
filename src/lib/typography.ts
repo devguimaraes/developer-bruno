@@ -176,18 +176,24 @@ export function getMarkdownClasses() {
 // Classe CSS customizada para variáveis do tema
 export const markdownThemeCSS = `
   :root {
-    --markdown-text: rgb(0, 0, 0);
-    --markdown-text-muted: rgb(75, 85, 99);
-    --markdown-border: rgb(0, 0, 0);
-    --markdown-code-bg: rgb(241, 245, 244);
-    --markdown-pre-bg: rgb(243, 244, 246);
+    --markdown-text: 0 0% 0%;
+    --markdown-text-muted: 217 20% 39%;
+    --markdown-border: 0 0% 0%;
+    --markdown-code-bg: 0 0% 96%;
+    --markdown-code-text: 0 0% 0%;
+    --markdown-pre-bg: 0 0% 96%;
+    --markdown-pre-text: 0 0% 0%;
   }
 
   [data-theme="dark"] {
-    --markdown-text: rgb(255, 255, 255);
-    --markdown-text-muted: rgb(156, 163, 175);
-    --markdown-border: rgb(255, 255, 255);
-    --markdown-code-bg: rgb(31, 41, 55);
-    --markdown-pre-bg: rgb(17, 24, 39);
+    --markdown-text: 0 0% 100%;
+    --markdown-text-muted: 215 25% 69%;
+    --markdown-border: 0 0% 100%;
+    --markdown-code-bg: 221 35% 22%;
+    --markdown-pre-bg: 216 33% 15%;
+    --markdown-pre-text: 0 0% 100%;
   }
 `;
+
+// Markdown theme styles are now handled by CSS modules
+// See: src/styles/markdown.css

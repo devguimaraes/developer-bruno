@@ -1,22 +1,62 @@
-import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, Tag, ArrowRight, FolderOpen, Home, ExternalLink } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { Calendar, Clock, Tag, ArrowRight, FolderOpen, Home, ExternalLink, AlertCircle, RefreshCw } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { getAllBlogPosts, BlogPost } from '@/utils/blog';
+import { BlogPostCardSkeleton } from '@/components/blog/BlogPostCardSkeleton';
+import { ERROR_MESSAGES, ACCESSIBILITY_LABELS } from '@/constants/ui';
 
 const BlogPage: React.FC = () => {
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const {
+    data: blogPosts = [],
+    isLoading,
+    error,
+    refetch
+  } = useQuery({
+    queryKey: ['blog-posts'],
+    queryFn: getAllBlogPosts,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: 3,
+  });
 
+  // Scroll to top when component mounts
   useEffect(() => {
-    const loadPosts = async () => {
-      try {
-        const posts = await getAllBlogPosts();
-        setBlogPosts(posts);
-      } catch (error) {
-        console.error('Erro ao carregar posts no BlogPage:', error);
-      }
-    };
-    loadPosts();
+    window.scrollTo(0, 0);
   }, []);
+
+  const handleRetry = () => {
+    refetch();
+  };
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-brutal-light pt-24">
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="bg-white border-4 border-black p-8 shadow-brutal-lg max-w-2xl mx-auto">
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0">
+                <AlertCircle className="w-6 h-6 text-red-600" aria-hidden="true" />
+              </div>
+              <div className="flex-grow">
+                <h2 className="font-bold text-lg mb-2">
+                  {ACCESSIBILITY_LABELS.ERROR_LOADING_POSTS}
+                </h2>
+                <p className="text-stone-600 mb-4">{ERROR_MESSAGES.BLOG_LOAD_FAILED}</p>
+                <button
+                  onClick={handleRetry}
+                  className="inline-flex items-center gap-2 bg-brutal-yellow border-2 border-black px-4 py-2 font-mono text-sm hover:bg-brutal-yellow/80 transition-colors duration-300"
+                  aria-label={ACCESSIBILITY_LABELS.RETRY_BUTTON}
+                >
+                  <RefreshCw className="w-4 h-4" aria-hidden="true" />
+                  Tentar Novamente
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -52,7 +92,11 @@ const BlogPage: React.FC = () => {
 
           {/* Posts Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts.map((post) => (
+            {/* Loading State */}
+            {isLoading && <BlogPostCardSkeleton count={6} aria-label={ACCESSIBILITY_LABELS.LOADING_POSTS} />}
+
+            {/* Success State */}
+            {!isLoading && blogPosts.map((post) => (
               <article
                 key={post.slug}
                 className="group bg-white border-4 border-black flex flex-col h-full hover:-translate-y-2 transition-transform duration-300 shadow-brutal-lg hover:shadow-[12px_12px_0px_0px_#f97316]"

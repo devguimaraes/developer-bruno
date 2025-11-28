@@ -1,5 +1,5 @@
 // Parser customizado de frontmatter (compatível com navegador)
-function parseFrontmatter(content: string): { data: any; content: string } {
+function parseFrontmatter(content: string): { data: Record<string, unknown>; content: string } {
   const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/;
   const match = content.match(frontmatterRegex);
 
@@ -10,7 +10,7 @@ function parseFrontmatter(content: string): { data: any; content: string } {
   const frontmatterStr = match[1];
   const markdownContent = match[2];
 
-  const data: any = {};
+  const data: Record<string, unknown> = {};
   const lines = frontmatterStr.split('\n');
 
   for (const line of lines) {
@@ -51,9 +51,14 @@ export interface BlogPost {
   title: string;
   date: string;
   readTime: string;
+  readingTime?: number;
   tags: string[];
   excerpt: string;
+  description?: string;
   content: string;
+  image?: string;
+  lastModified?: string;
+  wordCount?: number;
 }
 
 // Função para converter filename em slug

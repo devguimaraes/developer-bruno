@@ -80,9 +80,9 @@ const About: React.FC<{ id?: string }> = ({ id }) => {
 
             {/* Text Column */}
             <div className="md:col-span-8 flex flex-col justify-center space-y-8">
-              <h3 className="text-3xl md:text-4xl font-bold leading-tight">
+              <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold leading-tight sm:leading-none">
                 Eu crio interfaces de{" "}
-                <span className="bg-brutal-yellow px-2 border-2 border-black shadow-neo">
+                <span className="bg-brutal-yellow px-2 border-2 border-black shadow-neo inline-block">
                   alta performance
                 </span>{" "}
                 para a web.

@@ -51,6 +51,7 @@ export interface SocialLink {
 // Site configuration interface
 export interface SiteConfig {
   title: string;
+  titleTemplate?: string;
   description: string;
   author: string;
   email: string;

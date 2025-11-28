@@ -5,6 +5,7 @@ import type { SiteConfig, HeroData, ContactData } from '@/types';
  */
 export const siteConfig: SiteConfig = {
   title: 'Bruno Guimarães | Desenvolvedor Front-End',
+  
   description: 'Desenvolvedor Front-End especializado em React, TypeScript e interfaces modernas. Transformando visão estratégica em software de alta performance.',
   author: 'Bruno Guimarães',
   email: 'bc.guimaraes@outlook.com',
@@ -185,7 +186,7 @@ export const socialLinks = [
 export const navigationSections = [
   { id: 'hero', label: 'Início', href: '#hero' },
   { id: 'about', label: 'Sobre', href: '#about' },
-  { id: 'experience', label: 'Experiência', href: '#experience' },
+  { id: 'skills', label: 'Skills', href: '#skills' },
   { id: 'projects', label: 'Projetos', href: '#projects' },
   { id: 'contact', label: 'Contato', href: '#contact' },
 ] as const;

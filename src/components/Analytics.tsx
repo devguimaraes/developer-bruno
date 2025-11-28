@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
 import type { AnalyticsEvent } from "@/types";
+import type { ExtendedNavigator } from "@/hooks/useWebVitals";
 
 /**
  * Brazilian market analytics component with Plausible (LGPD compliant) + Vercel Analytics
@@ -175,7 +176,7 @@ export const usePortfolioAnalytics = () => {
         colorDepth: screen.colorDepth,
         connection:
           "connection" in navigator
-            ? (navigator as any).connection.effectiveType
+            ? (navigator as ExtendedNavigator).connection?.effectiveType || "unknown"
             : "unknown",
       };
 
@@ -191,7 +192,7 @@ export const usePortfolioAnalytics = () => {
     },
 
     // Track user engagement
-    trackEngagement: (event: string, details?: Record<string, any>) => {
+    trackEngagement: (event: string, details?: Record<string, unknown>) => {
       sendEvent("portfolio_engagement", {
         event_type: event,
         ...details,
