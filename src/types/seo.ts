@@ -38,6 +38,18 @@ export interface SEOProps {
 
   /** Whether to nofollow links on this page */
   nofollow?: boolean;
+
+  /** Article-specific metadata for blog posts */
+  articleMeta?: {
+    /** Article tags/categories */
+    tags?: string[];
+    /** Article section */
+    section?: string;
+    /** Reading time in minutes */
+    readingTime?: number;
+    /** Article word count */
+    wordCount?: number;
+  };
 }
 
 export interface OpenGraphProps {

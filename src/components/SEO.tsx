@@ -15,6 +15,7 @@ const SEO: React.FC<SEOProps> = ({
   modifiedDate,
   noindex = false,
   nofollow = false,
+  articleMeta,
 }) => {
   // Build full title with site name
   const fullTitle = title
@@ -110,33 +111,71 @@ const SEO: React.FC<SEOProps> = ({
 
       {/* Structured Data for Brazilian Market */}
       <script type="application/ld+json">
-        {JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": type === 'profile' ? 'Person' : 'WebPage',
-          "name": title || siteConfig.title,
-          "description": metaDescription,
-          "url": absoluteUrl,
-          "inLanguage": locale,
-          "isPartOf": {
-            "@type": "WebSite",
-            "name": siteConfig.title,
-            "url": siteConfig.domain,
-            "inLanguage": locale
-          },
-          "author": {
-            "@type": "Person",
-            "name": siteConfig.author,
-            "url": siteConfig.domain
-          },
-          "datePublished": publishedDate,
-          "dateModified": modifiedDate || publishedDate,
-          "image": absoluteImage,
-          "publisher": {
-            "@type": "Person",
-            "name": siteConfig.author,
-            "url": siteConfig.domain
-          }
-        })}
+        {JSON.stringify(
+          type === 'article'
+            ? {
+                // Article schema for blog posts
+                "@context": "https://schema.org",
+                "@type": "Article",
+                "headline": title || siteConfig.title,
+                "description": metaDescription,
+                "url": absoluteUrl,
+                "inLanguage": locale,
+                "author": {
+                  "@type": "Person",
+                  "name": author || siteConfig.author,
+                  "url": siteConfig.domain
+                },
+                "publisher": {
+                  "@type": "Person",
+                  "name": siteConfig.author,
+                  "url": siteConfig.domain
+                },
+                "datePublished": publishedDate,
+                "dateModified": modifiedDate || publishedDate,
+                "image": absoluteImage,
+                "articleSection": articleMeta?.section || "Desenvolvimento Web",
+                "keywords": articleMeta?.tags?.join(', ') || allKeywords.join(', '),
+                "wordCount": articleMeta?.wordCount,
+                "timeRequired": articleMeta?.readingTime
+                  ? `PT${articleMeta.readingTime}M`
+                  : undefined,
+                "isPartOf": {
+                  "@type": "WebSite",
+                  "name": siteConfig.title,
+                  "url": siteConfig.domain,
+                  "inLanguage": locale
+                }
+              }
+            : {
+                // WebPage schema for other content
+                "@context": "https://schema.org",
+                "@type": type === 'profile' ? 'Person' : 'WebPage',
+                "name": title || siteConfig.title,
+                "description": metaDescription,
+                "url": absoluteUrl,
+                "inLanguage": locale,
+                "isPartOf": {
+                  "@type": "WebSite",
+                  "name": siteConfig.title,
+                  "url": siteConfig.domain,
+                  "inLanguage": locale
+                },
+                "author": {
+                  "@type": "Person",
+                  "name": siteConfig.author,
+                  "url": siteConfig.domain
+                },
+                "datePublished": publishedDate,
+                "dateModified": modifiedDate || publishedDate,
+                "image": absoluteImage,
+                "publisher": {
+                  "@type": "Person",
+                  "name": siteConfig.author,
+                  "url": siteConfig.domain
+                }
+              }
+        )}
       </script>
 
       {/* Additional SEO for Brazilian Market */}
