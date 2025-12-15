@@ -11,7 +11,7 @@ This is a **Code Project**—specifically, a frontend web application built with
 ### Frontend
 
 * **Framework**: React 18.3 with TypeScript
-* **Build Tool**: Vite 5.4 with SWC (Speedy Web Compiler)
+* **Build Tool**: Vite 7.2 with SWC (Speedy Web Compiler)
 * **Styling**: Tailwind CSS 3.4 for utility-first styling, complemented by custom animations.
 * **UI Components**: Utilizes `shadcn/ui` and `Radix UI` primitives for accessible and customizable UI components.
 * **Routing**: React Router DOM 6.30
@@ -22,7 +22,7 @@ This is a **Code Project**—specifically, a frontend web application built with
 
 * **SEO Meta Tags**: React Helmet Async 2.0 for dynamic meta tags optimized for the Brazilian market (pt-BR).
 * **Structured Data**: Schema.org JSON-LD markup.
-* **Performance Monitoring**: Web Vitals 3.5 to monitor Core Web Vitals with thresholds adapted for Brazilian 3G/4G networks.
+* **Performance Monitoring**: Web Vitals 5.1 to monitor Core Web Vitals with thresholds adapted for Brazilian 3G/4G networks.
 * **Privacy Analytics**: Plausible Tracker for LGPD compliant, privacy-focused analytics.
 * **Error Tracking**: Custom Error Boundaries for friendly fallback UX.
 * **Sitemap Generation**: Automated XML sitemap optimized for search engines.
@@ -30,7 +30,7 @@ This is a **Code Project**—specifically, a frontend web application built with
 ### DevTools
 
 * **Linting**: ESLint 9.32
-* **Type Checking**: TypeScript 5.8
+* **Type Checking**: TypeScript 5.8.3
 
 ### Design System
 
