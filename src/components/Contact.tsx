@@ -3,6 +3,7 @@ import { NeoButton } from "@/components/ui/NeoButton";
 import { contactData } from "@/config/site";
 import { Linkedin, Github, Instagram, Mail, Send, Clock } from "lucide-react";
 import { LucideIcon } from "lucide-react";
+import { TextReveal } from "@/components/ui/motion-components";
 
 // Dynamic icon import helper
 const iconMap: Record<string, LucideIcon> = {
@@ -66,12 +67,12 @@ Aguardo seu retorno!`);
 
           {/* Main Heading */}
           <h2 className="text-5xl md:text-7xl font-black leading-tight mb-6">
-            PRONTO PARA{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brutal-orange to-red-600">
-              CONSTRUIR
+            <TextReveal text="PRONTO PARA" />{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brutal-orange to-red-600 inline-block">
+              <TextReveal text="CONSTRUIR" delay={0.3} />
             </span>
             <br />
-            JUNTOS?
+            <TextReveal text="JUNTOS?" delay={0.6} />
           </h2>
 
           <p className="text-xl md:text-2xl font-bold text-stone-600 mb-12 max-w-3xl mx-auto">

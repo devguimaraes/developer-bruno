@@ -1,4 +1,10 @@
 import { experiences } from "@/data/experience";
+import {
+  FadeInStagger,
+  FadeInItem,
+  TextReveal,
+  ScaleOnHover,
+} from "@/components/ui/motion-components";
 
 const Experience = () => {
   return (
@@ -9,7 +15,10 @@ const Experience = () => {
             <span className="font-mono font-bold text-sm">EXPERIÊNCIA</span>
           </div>
           <h2 className="font-mono font-bold text-4xl md:text-6xl mb-6">
-            Trajetória Profissional<span className="text-primary">.</span>
+            <TextReveal text="Trajetória" />{" "}
+            <span className="text-primary">
+              <TextReveal text="Profissional." delay={0.2} />
+            </span>
           </h2>
           <p className="font-sans text-xl text-muted-foreground max-w-2xl leading-relaxed">
             Evolução técnica e projetos que moldaram minha expertise em
@@ -17,65 +26,48 @@ const Experience = () => {
           </p>
         </div>
 
-        <div className="space-y-12">
-          {experiences.map((exp, index) => (
-            <div
-              key={exp.company}
-              className="border-4 border-foreground bg-background shadow-neo-brutal hover:shadow-neo-brutal-xl transition-all hover:-translate-y-1 animate-slide-right relative group"
-              style={{ animationDelay: `${index * 0.1}s` }}
+        <FadeInStagger className="space-y-12">
+          {experiences.map((job, index) => (
+            <FadeInItem
+              key={index}
+              className="relative p-6 md:p-8 border-4 border-black dark:border-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[6px_6px_0px_0px_rgba(255,255,255,1)] transition-all"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-              <div className="p-10">
-                <div className="grid md:grid-cols-[200px_1fr] gap-8">
-                  <div className="space-y-2">
-                    <div className="inline-block border-2 border-foreground bg-primary px-3 py-1">
-                      <span className="font-mono font-bold text-sm text-primary-foreground">
-                        {exp.year}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="space-y-6">
-                    <div>
-                      <h3 className="font-mono font-bold text-4xl mb-2">
-                        {exp.role}
-                      </h3>
-                      <p className="font-sans text-2xl text-primary font-semibold">
-                        {exp.company}
-                      </p>
-                    </div>
-
-                    <p className="font-sans text-muted-foreground leading-relaxed">
-                      {exp.description}
-                    </p>
-
-                    <div className="space-y-3">
-                      <p className="font-mono font-semibold text-sm uppercase tracking-wide">
-                        Responsabilidades:
-                      </p>
-                      <ul className="space-y-3">
-                        {exp.achievements.map((achievement) => (
-                          <li
-                            key={achievement}
-                            className="flex items-start gap-3"
-                          >
-                            <div className="w-2 h-2 bg-primary mt-2 flex-shrink-0" />
-                            <span className="font-sans text-muted-foreground">
-                              {achievement}
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+              <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
+                <div>
+                  <h3 className="text-2xl font-bold uppercase">{job.role}</h3>
+                  <div className="text-xl font-bold text-neutral-600 dark:text-neutral-400">
+                    {job.company}
                   </div>
                 </div>
+                <div className="px-4 py-2 bg-neutral-100 dark:bg-neutral-900 border-2 border-black dark:border-white font-mono font-bold text-sm whitespace-nowrap">
+                  {job.period}
+                </div>
               </div>
-            </div>
+
+              <p className="text-lg mb-6 font-medium leading-relaxed">
+                {job.description}
+              </p>
+
+              <div>
+                <h4 className="font-bold uppercase mb-4 text-sm tracking-wider">
+                  Tech Stack:
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {job.tech.map((tech) => (
+                    <ScaleOnHover
+                      key={tech}
+                      className="px-3 py-1 text-sm font-bold border-2 border-black dark:border-white bg-white dark:bg-black hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors cursor-default"
+                    >
+                      {tech}
+                    </ScaleOnHover>
+                  ))}
+                </div>
+              </div>
+            </FadeInItem>
           ))}
-        </div>
+        </FadeInStagger>
       </div>
     </section>
   );
 };
-
 export default Experience;
