@@ -2,6 +2,7 @@ import React from "react";
 import { Cpu, Zap } from "lucide-react";
 import { featuredSkills, getAllTechnologies } from "@/data/skills";
 import type { Skill } from "@/types";
+import { ScrollAnimation } from "@/components/ui/scroll-animation";
 
 const Skills: React.FC<{ id?: string }> = ({ id }) => {
   // Get featured skills for display (first 6 skills or use categories)
@@ -72,7 +73,9 @@ const Skills: React.FC<{ id?: string }> = ({ id }) => {
             {displaySkills.map((skill, idx) => {
               const displayData = getSkillDisplayData(skill, idx);
               return (
-                <div
+                <ScrollAnimation
+                  variant="scaleIn"
+                  delay={idx * 0.1}
                   key={skill.id}
                   className="group relative h-48 border-4 border-black bg-white hover:bg-stone-100 transition-colors cursor-none"
                 >
@@ -132,7 +135,7 @@ const Skills: React.FC<{ id?: string }> = ({ id }) => {
                       <div className="bg-black h-full w-[90%]"></div>
                     </div>
                   </div>
-                </div>
+                </ScrollAnimation>
               );
             })}
           </div>

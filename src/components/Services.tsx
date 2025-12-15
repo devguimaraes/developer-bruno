@@ -1,5 +1,10 @@
 import React, { useState } from "react";
 import { ArrowUpRight, Code, Palette, Zap, Box } from "lucide-react";
+import {
+  FadeInStagger,
+  FadeInItem,
+  TextReveal,
+} from "@/components/ui/motion-components";
 
 const services = [
   {
@@ -47,14 +52,14 @@ const Services: React.FC = () => {
             02
           </div>
           <h2 className="text-5xl md:text-6xl font-black uppercase tracking-tighter">
-            SERVIÇOS
+            <TextReveal text="SERVIÇOS" />
           </h2>
           <div className="h-2 flex-1 bg-black hidden md:block"></div>
         </div>
 
-        <div className="grid grid-cols-1 gap-6">
+        <FadeInStagger className="grid grid-cols-1 gap-6">
           {services.map((service, index) => (
-            <div
+            <FadeInItem
               key={service.id}
               className="group relative bg-white border-4 border-black flex flex-col md:flex-row min-h-[150px] hover:-translate-y-2 transition-all duration-300 shadow-brutal-lg hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,0.8)] overflow-hidden cursor-none"
               onMouseEnter={() => setHovered(index)}
@@ -83,7 +88,7 @@ const Services: React.FC = () => {
                 {/* Text Content */}
                 <div className="flex-1 text-center md:text-left md:ml-8">
                   <h3 className="text-2xl md:text-3xl font-black uppercase leading-tight mb-2 group-hover:translate-x-2 transition-transform duration-300">
-                    {service.title}
+                    <TextReveal text={service.title} delay={0.1} />
                   </h3>
 
                   <p className="font-mono font-bold text-lg text-gray-600 leading-relaxed">
@@ -110,14 +115,6 @@ const Services: React.FC = () => {
                     className="opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-x-4 group-hover:translate-x-0 text-black"
                   />
                 </div>
-
-                {/* Arrow on mobile only */}
-                <div className="md:hidden">
-                  <ArrowUpRight
-                    size={32}
-                    className="opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-x-4 group-hover:translate-x-0 text-black"
-                  />
-                </div>
               </div>
 
               {/* Hover Background Reveal */}
@@ -139,9 +136,9 @@ const Services: React.FC = () => {
               <div className="absolute inset-0 opacity-5 pointer-events-none">
                 <div className="absolute inset-0 pixel-pattern"></div>
               </div>
-            </div>
+            </FadeInItem>
           ))}
-        </div>
+        </FadeInStagger>
 
         {/* Footer Tag */}
         <div className="mt-16 flex justify-center">

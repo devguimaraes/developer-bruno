@@ -1,5 +1,36 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { TrendingUp, Users, Clock } from "lucide-react";
+import { useInView, useMotionValue, useSpring } from "framer-motion";
+
+const Counter: React.FC<{ value: number; duration?: number }> = ({
+  value,
+  duration = 2,
+}) => {
+  const ref = useRef<HTMLSpanElement>(null);
+  const motionValue = useMotionValue(0);
+  const springValue = useSpring(motionValue, {
+    damping: 60,
+    stiffness: 100,
+    duration: duration * 1000,
+  });
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+
+  useEffect(() => {
+    if (isInView) {
+      motionValue.set(value);
+    }
+  }, [isInView, value, motionValue]);
+
+  useEffect(() => {
+    return springValue.on("change", (latest) => {
+      if (ref.current) {
+        ref.current.textContent = Math.floor(latest).toLocaleString();
+      }
+    });
+  }, [springValue]);
+
+  return <span ref={ref}>0</span>;
+};
 
 const Metrics: React.FC = () => {
   return (
@@ -10,8 +41,9 @@ const Metrics: React.FC = () => {
           <div className="p-6 flex items-center justify-between group">
             <div>
               <p className="font-mono text-stone-500 text-xs mb-1">NIVEL_XP</p>
-              <h3 className="text-5xl font-black text-brutal-yellow group-hover:translate-x-2 transition-transform">
-                05<span className="text-2xl text-white">+</span>
+              <h3 className="text-5xl font-black text-brutal-yellow group-hover:translate-x-2 transition-transform flex items-center">
+                <Counter value={5} />
+                <span className="text-2xl text-white ml-1">+</span>
               </h3>
               <p className="font-bold text-sm uppercase tracking-widest mt-2">
                 Anos de Experiência
@@ -29,8 +61,9 @@ const Metrics: React.FC = () => {
               <p className="font-mono text-stone-500 text-xs mb-1">
                 PROJETOS_CONCLUIDOS
               </p>
-              <h3 className="text-5xl font-black text-brutal-orange group-hover:translate-x-2 transition-transform">
-                42<span className="text-2xl text-white">x</span>
+              <h3 className="text-5xl font-black text-brutal-orange group-hover:translate-x-2 transition-transform flex items-center">
+                <Counter value={42} />
+                <span className="text-2xl text-white ml-1">x</span>
               </h3>
               <p className="font-bold text-sm uppercase tracking-widest mt-2">
                 Deploys com Sucesso
@@ -48,8 +81,9 @@ const Metrics: React.FC = () => {
               <p className="font-mono text-stone-500 text-xs mb-1">
                 SATISFACAO_CLIENTE
               </p>
-              <h3 className="text-5xl font-black text-brutal-purple group-hover:translate-x-2 transition-transform">
-                100<span className="text-2xl text-white">%</span>
+              <h3 className="text-5xl font-black text-brutal-purple group-hover:translate-x-2 transition-transform flex items-center">
+                <Counter value={100} />
+                <span className="text-2xl text-white ml-1">%</span>
               </h3>
               <p className="font-bold text-sm uppercase tracking-widest mt-2">
                 Avaliações 5 Estrelas

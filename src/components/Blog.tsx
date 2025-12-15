@@ -9,6 +9,11 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { useRecentPosts } from "@/hooks/use-blog-posts";
+import {
+  FadeInStagger,
+  FadeInItem,
+  TextReveal,
+} from "@/components/ui/motion-components";
 
 const Blog: React.FC = () => {
   const { posts: blogPosts } = useRecentPosts(3);
@@ -27,16 +32,18 @@ const Blog: React.FC = () => {
               ~/DOCUMENTS/BLOG
             </div>
             <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-none">
-              INSIGHTS
+              <TextReveal text="INSIGHTS" />
               <br />
               <span className="text-transparent bg-clip-text bg-black text-stroke-2">
-                TÉCNICOS
+                <TextReveal text="TÉCNICOS" delay={0.2} />
               </span>
             </h2>
           </div>
           <p className="max-w-md font-mono text-sm bg-stone-100 border-2 border-black p-4 shadow-neo">
-            Pensamentos sobre código, design e a entropia do desenvolvimento web
-            moderno.
+            <TextReveal
+              text="Pensamentos sobre código, design e a entropia do desenvolvimento web moderno."
+              delay={0.4}
+            />
           </p>
         </div>
 
@@ -51,9 +58,9 @@ const Blog: React.FC = () => {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <FadeInStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {blogPosts.map((post) => (
-              <article
+              <FadeInItem
                 key={post.slug}
                 className="group bg-white border-4 border-black flex flex-col h-full hover:-translate-y-2 transition-transform duration-300 shadow-brutal-lg hover:shadow-[12px_12px_0px_0px_#f97316]"
               >
@@ -106,9 +113,9 @@ const Blog: React.FC = () => {
                     </Link>
                   </div>
                 </div>
-              </article>
+              </FadeInItem>
             ))}
-          </div>
+          </FadeInStagger>
         )}
 
         {/* Botão Ver Todos */}
