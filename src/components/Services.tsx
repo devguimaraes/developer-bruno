@@ -1,10 +1,33 @@
-import React, { useState } from "react";
+import React from "react";
+import { useRive, Layout, Fit, Alignment } from "@rive-app/react-canvas";
 import { ArrowUpRight, Code, Palette, Zap, Box } from "lucide-react";
 import {
   FadeInStagger,
   FadeInItem,
   TextReveal,
 } from "@/components/ui/motion-components";
+import {
+  RIVE_ASSETS,
+  RIVE_STATE_MACHINES,
+  RIVE_OPACITY,
+} from "@/lib/constants/rive";
+
+const ServicesBackground = () => {
+  const { RiveComponent } = useRive({
+    src: RIVE_ASSETS.ISO_TOY,
+    stateMachines: RIVE_STATE_MACHINES.DEFAULT,
+    autoplay: true,
+    layout: new Layout({
+      fit: Fit.Cover,
+      alignment: Alignment.Center,
+    }),
+  });
+  return (
+    <RiveComponent
+      className={`w-full h-full ${RIVE_OPACITY.SERVICES_BACKGROUND}`}
+    />
+  );
+};
 
 const services = [
   {
@@ -38,12 +61,15 @@ const services = [
 ];
 
 const Services: React.FC = () => {
-  const [hovered, setHovered] = useState<number | null>(null);
-
   return (
-    <section className="py-24 bg-white relative">
+    <section className="py-24 bg-white relative overflow-hidden">
+      {/* Rive Background */}
+      <div className="absolute inset-0 z-0">
+        <ServicesBackground />
+      </div>
+
       {/* Technical Grid Background */}
-      <div className="absolute inset-0 bg-technical-grid opacity-5 pointer-events-none"></div>
+      <div className="absolute inset-0 bg-technical-grid opacity-5 pointer-events-none z-[1]"></div>
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
@@ -58,12 +84,10 @@ const Services: React.FC = () => {
         </div>
 
         <FadeInStagger className="grid grid-cols-1 gap-6">
-          {services.map((service, index) => (
+          {services.map((service) => (
             <FadeInItem
               key={service.id}
               className="group relative bg-white border-4 border-black flex flex-col md:flex-row min-h-[150px] hover:-translate-y-2 transition-all duration-300 shadow-brutal-lg hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,0.8)] overflow-hidden cursor-none"
-              onMouseEnter={() => setHovered(index)}
-              onMouseLeave={() => setHovered(null)}
             >
               {/* Service Number Badge */}
               <div className="md:absolute md:-top-4 md:-left-4 w-12 h-12 bg-black text-white flex items-center justify-center font-bold text-lg border-4 border-white shadow-neo z-10">
@@ -115,26 +139,6 @@ const Services: React.FC = () => {
                     className="opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-x-4 group-hover:translate-x-0 text-black"
                   />
                 </div>
-              </div>
-
-              {/* Hover Background Reveal */}
-              <div
-                className={`absolute inset-0 ${
-                  service.color
-                } origin-left transition-transform duration-500 ease-out z-0 ${
-                  service.color === "bg-brutal-yellow"
-                    ? "opacity-20"
-                    : "opacity-15"
-                }`}
-                style={{
-                  transform: hovered === index ? "scaleX(1)" : "scaleX(0)",
-                  transformOrigin: "left center",
-                }}
-              ></div>
-
-              {/* Pattern Overlay */}
-              <div className="absolute inset-0 opacity-5 pointer-events-none">
-                <div className="absolute inset-0 pixel-pattern"></div>
               </div>
             </FadeInItem>
           ))}

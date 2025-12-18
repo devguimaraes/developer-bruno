@@ -4,18 +4,27 @@ import { NeoButton } from "@/components/ui/NeoButton";
 import { ComputerIllustration } from "./ComputerIllustration";
 import { MoveRight, Plus } from "lucide-react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import {
+  RIVE_ASSETS,
+  RIVE_STATE_MACHINES,
+  RIVE_OPACITY,
+} from "@/lib/constants/rive";
 
 const HeroBackground = () => {
   const { RiveComponent } = useRive({
-    src: "/rive/iso-toy.riv",
-    stateMachines: "State Machine 1", // Assuming default, will verify
+    src: RIVE_ASSETS.ISO_TOY,
+    stateMachines: RIVE_STATE_MACHINES.DEFAULT,
     autoplay: true,
     layout: new Layout({
       fit: Fit.Cover,
       alignment: Alignment.Center,
     }),
   });
-  return <RiveComponent className="w-full h-full opacity-30" />; // Low opacity for background
+  return (
+    <RiveComponent
+      className={`w-full h-full ${RIVE_OPACITY.HERO_BACKGROUND}`}
+    />
+  );
 };
 
 const Hero: React.FC = () => {

@@ -42,7 +42,6 @@ const Index = () => {
     () => [
       "hero",
       "about",
-      "rive-animation",
       "services",
       "rive-keyboard",
       "blog",
@@ -67,19 +66,6 @@ const Index = () => {
         style={{ transform: getTransform("about"), zIndex: getZIndex("about") }}
         className="stacking-section"
       />
-      <Suspense fallback={<SectionLoader />}>
-        <LazyRiveSection
-          id="rive-animation"
-          src="/rive/cursor-meet-gaze.riv"
-          style={{
-            transform: getTransform("rive-animation"),
-            zIndex: getZIndex("rive-animation"),
-          }}
-          // Remove stacking-section class to prevent overlapping if desired, or keep it to maintain the effect.
-          // Assuming user wants the same behavior as other sections.
-          className="stacking-section"
-        />
-      </Suspense>
       <Suspense fallback={<SectionLoader />}>
         <LazyServices
           id="services"
