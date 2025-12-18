@@ -4,7 +4,7 @@
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-18.3-61dafb?logo=react&logoColor=white)](https://react.dev/)
-[![Vite](https://img.shields.io/badge/Vite-5.4-646cff?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Vite](https://img.shields.io/badge/Vite-7.2-646cff?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-06b6d4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![License](https://img.shields.io/badge/License-MIT-green)](#licença)
 
@@ -38,6 +38,7 @@ Um portfólio digital profissional construído com tecnologias modernas, featuri
 ## 🎯 Status Atual
 
 ### ✅ **PHASE1: Content Management - 100% COMPLETA**
+
 - **Arquitetura de Dados**: 100% externalizada com TypeScript strict
 - **Validação Runtime**: Schemas Zod para todas as estruturas de dados
 - **Type Safety**: Interfaces completas para Projects, Experience, Skills
@@ -45,6 +46,7 @@ Um portfólio digital profissional construído com tecnologias modernas, featuri
 - **Component Integration**: Hero, Projects, Experience usando dados externos
 
 ### ✅ **PHASE2: SEO & Monitoring - 100% COMPLETA**
+
 - **SEO Otimizado**: Meta tags dinâmicas para mercado brasileiro (pt-BR)
 - **Structured Data**: Schema.org markup em português para buscadores brasileiros
 - **Performance Monitoring**: Core Web Vitals com thresholds para redes 3G/4G brasileiras
@@ -53,11 +55,13 @@ Um portfólio digital profissional construído com tecnologias modernas, featuri
 - **Sitemap Generation**: XML sitemap otimizado para buscadores nacionais
 
 ### 🚧 **Em Progresso**
+
 - **Skills Component**: Migração para dados externos em andamento
 - **Performance**: Otimização de imagens e bundle size
 - **Testing**: Infraestrutura de testes planejada
 
 ### 📋 **Próximos Fases**
+
 1. **Fase 3**: Testing Infrastructure (Vitest + React Testing Library)
 2. **Fase 4**: Performance Optimization Avançada
 3. **Fase 5**: PWA Features & Offline Support
@@ -67,23 +71,27 @@ Um portfólio digital profissional construído com tecnologias modernas, featuri
 ## ✨ Características
 
 ### 🎨 **Design & UX**
+
 - **Design Brutalist Moderno**: Estética minimalista e contraste elevado para máxima legibilidade
 - **Totalmente Responsivo**: Otimizado para desktop, tablet e mobile
 - **Dark Mode Nativo**: Suporte integrado a temas escuro/claro com transições suaves
 - **Animações Customizadas**: Keyframes brutais com efeitos glitch, float e typing
 
 ### ⚡ **Performance & Tecnologia**
+
 - **Performance Otimizada**: Build rápido com Vite + SWC, lazy loading de componentes
 - **TypeScript Strict**: Tipagem estática completa para maior segurança
 - **Componentes Acessíveis**: Integração com Radix UI para acessibilidade WCAG 2.1
 
 ### 📝 **Content Management**
+
 - **Dados Externalizados**: 100% do conteúdo em arquivos dedicados com validação
 - **Blog Integrado**: Sistema de blog com suporte a markdown e navegação
 - **Services Section**: Seção de serviços organizada por categoria
 - **Experience Timeline**: Timeline interativa com achievements e skills
 
 ### 🚀 **SEO & Monitoring**
+
 - **SEO Brasileiro**: Meta tags dinâmicas otimizadas para mercado brasileiro (pt-BR)
 - **Structured Data**: Schema.org markup em português para buscadores nacionais
 - **Performance Monitoring**: Core Web Vitals com thresholds para redes 3G/4G brasileiras
@@ -92,6 +100,7 @@ Um portfólio digital profissional construído com tecnologias modernas, featuri
 - **Sitemap XML**: Geração automática otimizada para Google Brasil e buscadores
 
 ### 🔧 **Desenvolvimento**
+
 - **SEO-Friendly**: Estrutura semântica HTML e meta tags otimizadas
 - **Component Architecture**: Separação clara entre UI primitives e feature components
 - **State Management**: React Query para server state, useState para UI state
@@ -104,7 +113,7 @@ Um portfólio digital profissional construído com tecnologias modernas, featuri
 ### Frontend
 
 - **Framework**: React 18.3 com TypeScript
-- **Build Tool**: Vite 5.4 com SWC
+- **Build Tool**: Vite 7.2 com SWC
 - **Styling**: Tailwind CSS 3.4 + animations
 - **UI Components**: shadcn/ui + Radix UI primitives
 - **Routing**: React Router DOM 6.30
@@ -115,7 +124,7 @@ Um portfólio digital profissional construído com tecnologias modernas, featuri
 
 - **SEO Meta Tags**: React Helmet Async 2.0
 - **Structured Data**: Schema.org JSON-LD markup
-- **Performance Monitoring**: Web Vitals 3.5
+- **Performance Monitoring**: Web Vitals 5.1
 - **Privacy Analytics**: Plausible Tracker (LGPD compliant)
 - **Error Tracking**: Custom Error Boundaries
 - **Sitemap Generation**: Automated XML sitemap

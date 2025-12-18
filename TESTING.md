@@ -5,7 +5,7 @@ This guide explains how to use TestSprite to test your portfolio website.
 ## Setup
 
 1. **TestSprite MCP Server**: Already configured and connected
-2. **Development Server**: Running on `http://localhost:8082/`
+2. **Development Server**: Running on `http://localhost:8080/`
 3. **Test Configuration**: `testsprite.config.js` contains test cases
 
 ## Key Testing Areas
@@ -100,7 +100,7 @@ The `testsprite.config.js` file defines comprehensive test cases covering:
 
 If tests fail:
 
-1. Check development server is running on `http://localhost:8082/`
+1. Check development server is running on `http://localhost:8080/`
 2. Verify all dependencies are installed
 3. Check browser console for errors
 4. Ensure no blocking network issues
