@@ -7,9 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2025-12-18
+
 ### Added
 
 - Animação glitch permanente no avatar da seção About
+- Aplicação de animações hyper-motion em seções restantes
+- Melhorias na animação de bio
+- Refinamento do parallax no Hero e sequência de bootstrapping do terminal
+- Componente Typewriter com variante mecânica e acessibilidade
+- Componentes reutilizáveis de movimento e utilitários
+- Tokens globais de animação
+
+### Changed
+
+- Atualização de documentação (PHASE1_IMPLEMENTATION, TESTING.md)
+- Correção de porta do servidor de desenvolvimento na documentação
 
 ---
 
