@@ -1,64 +1,42 @@
 import React, { useEffect } from "react";
+import { useRive, Layout, Fit, Alignment } from "@rive-app/react-canvas";
 import { NeoButton } from "@/components/ui/NeoButton";
 import { ComputerIllustration } from "./ComputerIllustration";
 import { MoveRight, Plus } from "lucide-react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import {
+  RIVE_ASSETS,
+  RIVE_STATE_MACHINES,
+  RIVE_OPACITY,
+} from "@/lib/constants/rive";
+
+const HeroBackground = () => {
+  const { RiveComponent } = useRive({
+    src: RIVE_ASSETS.ISO_TOY,
+    stateMachines: RIVE_STATE_MACHINES.DEFAULT,
+    autoplay: true,
+    layout: new Layout({
+      fit: Fit.Cover,
+      alignment: Alignment.Center,
+    }),
+  });
+  return (
+    <RiveComponent
+      className={`w-full h-full ${RIVE_OPACITY.HERO_BACKGROUND}`}
+    />
+  );
+};
 
 const Hero: React.FC = () => {
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  // Smooth spring animation for mouse movement
-  const springConfig = { damping: 25, stiffness: 150 };
-  const mouseXSpring = useSpring(mouseX, springConfig);
-  const mouseYSpring = useSpring(mouseY, springConfig);
-
-  // Parallax transforms for different layers
-  // Background moves slightly opposite to mouse
-  const bgX = useTransform(mouseXSpring, [-0.5, 0.5], ["2%", "-2%"]);
-  const bgY = useTransform(mouseYSpring, [-0.5, 0.5], ["2%", "-2%"]);
-
-  // Text moves slightly with mouse (depth effect)
-  const textX = useTransform(mouseXSpring, [-0.5, 0.5], ["-10px", "10px"]);
-  const textY = useTransform(mouseYSpring, [-0.5, 0.5], ["-10px", "10px"]);
-
-  // Illustration moves more (closer to camera)
-  const illusX = useTransform(mouseXSpring, [-0.5, 0.5], ["-20px", "20px"]);
-  const illusY = useTransform(mouseYSpring, [-0.5, 0.5], ["-20px", "20px"]);
-  const illusRotateX = useTransform(
-    mouseYSpring,
-    [-0.5, 0.5],
-    ["5deg", "-5deg"]
-  );
-  const illusRotateY = useTransform(
-    mouseXSpring,
-    [-0.5, 0.5],
-    ["-5deg", "5deg"]
-  );
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      // Normalize mouse position from -0.5 to 0.5
-      const x = e.clientX / window.innerWidth - 0.5;
-      const y = e.clientY / window.innerHeight - 0.5;
-      mouseX.set(x);
-      mouseY.set(y);
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [mouseX, mouseY]);
-
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center justify-center pt-32 pb-20 overflow-hidden bg-brutal-bg perspective-1000"
+      className="relative min-h-screen flex items-center justify-center pt-32 pb-20 overflow-hidden bg-brutal-bg"
     >
-      {/* Technical Grid Background - Parallax Layer 0 */}
-      <motion.div style={{ x: bgX, y: bgY }} className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:50px_50px]"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(#000000_1px,transparent_1px)] [background-size:20px_20px] opacity-[0.05]"></div>
-      </motion.div>
+      {/* Rive Background */}
+      <div className="absolute inset-0 z-0">
+        <HeroBackground />
+      </div>
 
       {/* HUD Elements */}
       <div className="absolute top-24 left-4 font-mono text-xs font-bold writing-vertical-rl text-gray-400 tracking-widest hidden md:block z-10">
@@ -73,7 +51,7 @@ const Hero: React.FC = () => {
       <Plus className="absolute top-28 right-8 w-6 h-6 text-black stroke-[4] z-10" />
 
       <div className="container mx-auto px-4 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center relative z-10">
-        {/* Typography Content - Parallax Layer 1 */}
+        {/* Typography Content */}
         <div className="text-left space-y-6 order-2 lg:order-1 relative">
           <div className="flex items-center gap-4">
             <div className="bg-brutal-yellow border-2 border-black px-3 py-1 font-bold font-mono text-sm shadow-[4px_4px_0px_0px_#000]">
@@ -138,23 +116,14 @@ const Hero: React.FC = () => {
           </div>
         </div>
 
-        {/* Visual Content - Parallax Layer 2 (3D) */}
-        <motion.div
-          style={{
-            x: illusX,
-            y: illusY,
-            rotateX: illusRotateX,
-            rotateY: illusRotateY,
-            z: 50,
-          }}
-          className="order-1 lg:order-2 flex justify-center items-center relative perspective-container"
-        >
+        {/* Visual Content */}
+        <div className="order-1 lg:order-2 flex justify-center items-center relative">
           {/* Background Graphic */}
           <div className="absolute w-[120%] h-[120%] bg-gradient-to-tr from-brutal-purple/20 to-brutal-yellow/20 rounded-full filter blur-3xl -z-10 animate-pulse-slow"></div>
-          <div className="transform-style-3d">
+          <div>
             <ComputerIllustration />
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
