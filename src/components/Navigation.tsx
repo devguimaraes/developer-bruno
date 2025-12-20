@@ -88,6 +88,7 @@ const Navigation: React.FC = () => {
     { name: "SKILLS", href: "#skills" },
     { name: "PROJETOS", href: "#projects" },
     { name: "BLOG", href: "/blog" },
+    { name: "ANTIGRAVITY", href: "/antigravity" },
     { name: "CONTATO", href: "#contact" },
   ];
 
@@ -125,11 +126,7 @@ const Navigation: React.FC = () => {
             <a
               key={link.name}
               href={link.href}
-              className={
-                link.href.startsWith("/")
-                  ? "font-mono hover:text-brutal-orange hover:bg-black hover:text-white px-2 transition-colors"
-                  : "font-mono hover:text-brutal-orange hover:bg-black hover:text-white px-2 transition-colors"
-              }
+              className="font-mono hover:bg-black hover:text-white px-2 transition-colors"
               onClick={(e) => handleNavClick(e, link.href)}
             >
               {`//${link.name}`}
