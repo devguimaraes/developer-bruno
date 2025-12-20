@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import BlogPage from "./pages/BlogPage";
 import BlogPostPage from "./pages/BlogPostPage";
 import NotFound from "./pages/NotFound";
+import AntigravityPage from "./pages/AntigravityPage";
 import SEO from "@/components/SEO";
 import StructuredData from "@/components/StructuredData";
 import Analytics from "@/components/Analytics";
@@ -38,6 +39,7 @@ const App = () => {
                 <Route path="/" element={<Index />} />
                 <Route path="/blog" element={<BlogPage />} />
                 <Route path="/blog/:slug" element={<BlogPostPage />} />
+                <Route path="/antigravity" element={<AntigravityPage />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
