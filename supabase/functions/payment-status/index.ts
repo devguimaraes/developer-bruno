@@ -2,8 +2,8 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const ALLOWED_ORIGINS = [
-  'https://brunoguimaraes.dev',
-  'https://www.brunoguimaraes.dev',
+  'https://devguimaraes.com.br',
+  'https://www.devguimaraes.com.br',
   'http://localhost:8080',
   'http://localhost:8081',
   'http://localhost:8082',
