@@ -9,7 +9,7 @@ interface HeroSectionProps {
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ onBuyClick }) => {
   return (
-    <section className="min-h-[80vh] flex items-center justify-center pt-40 pb-20 bg-brutal-bg relative overflow-hidden">
+    <section className="min-h-[80vh] flex items-center justify-center pt-10 pb-20 bg-brutal-bg relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-grid-pattern opacity-50" />
 
