@@ -1,26 +1,26 @@
 # 🚀 Antigravity Config Store - Plano de Implementação
 
-> **Status**: ✅ Aprovado  
+> **Status**: ✅ Implementado  
 > **Criado em**: 20 de Dezembro de 2025  
-> **Última atualização**: 20 de Dezembro de 2025
+> **Última atualização**: 23 de Dezembro de 2025
 
 Landing page para venda de configurações Antigravity/Gemini CLI com pagamento PIX via Mercado Pago.
 
 ---
 
-## 📋 Ordem de Implementação
+## 📋 Status de Implementação
 
 | # | Fase | Status | Descrição |
 |---|------|--------|-----------|
-| 1 | **Frontend** | 🔲 Pendente | Landing page React brutalista |
-| 2 | **Backend** | 🔲 Pendente | Supabase (projeto novo) + Edge Functions |
-| 3 | **Pagamento** | 🔲 Pendente | Integração Mercado Pago PIX |
-| 4 | **Conteúdo** | 🔲 Pendente | GEMINI.md + Comandos + Guia PDF |
-| 5 | **Testes** | 🔲 Pendente | Fluxo completo e verificação |
+| 1 | **Frontend** | ✅ Completo | Landing page React brutalista |
+| 2 | **Backend** | ✅ Completo | Supabase + Edge Functions |
+| 3 | **Pagamento** | ✅ Completo | Mercado Pago PIX (Produção) |
+| 4 | **Conteúdo** | ✅ Completo | GEMINI.md + Comandos |
+| 5 | **Segurança** | ✅ Completo | Auditoria + CORS + RLS |
 
 ---
 
-## 🏗️ Arquitetura
+## 🏗️ Arquitetura Implementada
 
 ```mermaid
 sequenceDiagram
@@ -53,47 +53,38 @@ sequenceDiagram
 
 ---
 
-## 📦 Fase 1: Frontend (Landing Page)
+## 📦 Fase 1: Frontend (Landing Page) ✅
 
-### Arquivos a criar
+### Componentes Implementados
 
 | Arquivo | Descrição |
 |---------|-----------|
-| `src/pages/AntigravityPage.tsx` | Página principal da landing |
+| `src/pages/AntigravityPage.tsx` | Página principal com SEO |
 | `src/components/antigravity/HeroSection.tsx` | Hero com headline e CTA |
 | `src/components/antigravity/ComparisonSection.tsx` | "Antes vs Depois" |
 | `src/components/antigravity/FeaturesSection.tsx` | O que vem no pacote |
-| `src/components/antigravity/PricingCard.tsx` | Card de preço único |
+| `src/components/antigravity/PricingSection.tsx` | Card de preço único |
 | `src/components/antigravity/FAQSection.tsx` | Perguntas frequentes |
 | `src/components/antigravity/CheckoutModal.tsx` | Modal de checkout PIX |
-
-### Modificações
-
-- **`src/App.tsx`**: Adicionar rota `/antigravity`
 
 ### Design Brutalista
 
 ```css
-/* Tokens a usar */
 --border: 4px solid;
 --radius: 0rem;
 --shadow: 4px 4px 0px;
 --font-family: 'Space Mono', monospace;
 ```
 
-- Cards: `border-4 border-black shadow-brutal`
-- Botões: `hover:translate-x-1 hover:translate-y-1`
-- Cores: Preto, branco, acentos vibrantes (amarelo/verde)
-
 ---
 
-## 🗄️ Fase 2: Backend (Supabase)
+## 🗄️ Fase 2: Backend (Supabase) ✅
 
-### Criar Projeto Supabase
+### Projeto Supabase
 
-1. Novo projeto no Supabase Dashboard
-2. Região: `sa-east-1` (São Paulo)
-3. Configurar variáveis de ambiente
+- **Project ID**: `fhssyflsioligyecqlts`
+- **Região**: São Paulo (sa-east-1)
+- **Dashboard**: [Link](https://supabase.com/dashboard/project/fhssyflsioligyecqlts)
 
 ### Tabela: `payments`
 
@@ -110,12 +101,9 @@ CREATE TABLE payments (
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now()
 );
-
-CREATE INDEX idx_payments_external_reference ON payments(external_reference);
-CREATE INDEX idx_payments_download_token ON payments(download_token);
 ```
 
-### Edge Functions
+### Edge Functions Deployadas
 
 | Função | Endpoint | Descrição |
 |--------|----------|-----------|
@@ -126,14 +114,14 @@ CREATE INDEX idx_payments_download_token ON payments(download_token);
 
 ---
 
-## 💳 Fase 3: Pagamento (Mercado Pago)
+## 💳 Fase 3: Pagamento (Mercado Pago) ✅
 
-### Credenciais Necessárias
+### Credenciais Configuradas
 
-- `ACCESS_TOKEN` (sandbox e produção)
-- `PUBLIC_KEY`
+- ✅ `MERCADOPAGO_ACCESS_TOKEN` (Produção)
+- ✅ `PRODUCT_PRICE` = 47.00
 
-### Fluxo PIX
+### Fluxo PIX Implementado
 
 1. Frontend envia e-mail do comprador
 2. Backend cria pagamento via `/v1/payments`
@@ -141,29 +129,60 @@ CREATE INDEX idx_payments_download_token ON payments(download_token);
 4. Frontend faz polling até status = `approved`
 5. Webhook atualiza banco e gera token de download
 
-### Validação de Webhook
-
-- Verificar header `x-signature`
-- Validar `external_reference`
-
 ---
 
-## 📚 Fase 4: Conteúdo do Produto
+## 📚 Fase 4: Conteúdo do Produto ✅
 
-### Arquivos do Pacote
+### Arquivos do Pacote (`antigravity-pack/`)
 
 | Arquivo | Descrição |
 |---------|-----------|
-| `GEMINI.md` | Versão otimizada (~80 linhas) |
-| `GEMINI-verbose.md` | Versão com explicações completas |
-| `commands/create-feature.toml` | Criação de feature com worktree |
-| `commands/investigate.toml` | Descoberta sistemática |
-| `commands/investigate-batch.toml` | Descoberta econômica |
-| `commands/open-pr.toml` | Abertura de PR com diagramas |
-| `commands/review-staged.toml` | Review de código staged |
-| `commands/trim.toml` | Redução de PR descriptions |
-| `commands/audit.toml` | Auditoria de segurança |
-| `guia-antigravity.pdf` | Guia completo de configuração |
+| `GEMINI.md` | Versão otimizada |
+| `GEMINI-verbose.md` | Versão com explicações |
+| `GUIA_ANTIGRAVITY.md` | Guia de configuração |
+| `commands/create-feature.toml` | Comando criar feature |
+| `commands/investigate.toml` | Comando descoberta |
+
+### Storage
+
+- **Bucket**: `antigravity-files`
+- **Arquivo**: `antigravity-pack.zip`
+
+---
+
+## 🔐 Fase 5: Segurança ✅
+
+### Auditoria Realizada
+
+| Check | Status |
+|-------|--------|
+| npm audit (0 vulnerabilidades) | ✅ |
+| Validação de email (regex) | ✅ |
+| CORS restrito ao domínio | ✅ |
+| RLS com políticas deny anon | ✅ |
+| Secrets via environment | ✅ |
+
+### CORS Configurado
+
+```typescript
+const ALLOWED_ORIGINS = [
+  'https://devguimaraes.com.br',
+  'https://www.devguimaraes.com.br',
+  'http://localhost:8080',
+  'http://localhost:8081',
+  'http://localhost:8082',
+]
+```
+
+### RLS Policies
+
+```sql
+-- Deny all access for anonymous users
+CREATE POLICY "Deny anonymous select" ON payments FOR SELECT TO anon USING (false);
+CREATE POLICY "Deny anonymous insert" ON payments FOR INSERT TO anon WITH CHECK (false);
+CREATE POLICY "Deny anonymous update" ON payments FOR UPDATE TO anon USING (false);
+CREATE POLICY "Deny anonymous delete" ON payments FOR DELETE TO anon USING (false);
+```
 
 ---
 
@@ -175,57 +194,36 @@ CREATE INDEX idx_payments_download_token ON payments(download_token);
 
 - Pagamento único via PIX
 - Download instantâneo
-- Garantia de 7 dias
 
 ---
 
 ## 🔧 Environment Variables
 
 ```bash
-# Supabase Edge Functions
-MERCADOPAGO_ACCESS_TOKEN=your_access_token
-MERCADOPAGO_PUBLIC_KEY=your_public_key
+# Supabase Edge Functions (configurados via CLI)
+MERCADOPAGO_ACCESS_TOKEN=APP_USR-xxxx
 PRODUCT_PRICE=47.00
 
 # Frontend (.env.local)
-VITE_SUPABASE_URL=https://your-project.supabase.co
-VITE_SUPABASE_ANON_KEY=your_anon_key
+VITE_SUPABASE_URL=https://fhssyflsioligyecqlts.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJhbG...
 ```
 
 ---
 
-## ✅ Checklist de Verificação
+## ✅ Testes Realizados
 
-### Testes Automatizados
-
-```bash
-# Testar Edge Functions localmente
-supabase functions serve --env-file .env.local
-
-# Testar criação de pagamento (sandbox)
-curl -X POST http://localhost:54321/functions/v1/create-pix-payment \
-  -H "Content-Type: application/json" \
-  -d '{"email": "test@test.com"}'
-```
-
-### Testes Manuais
-
-- [ ] Fluxo completo de pagamento (sandbox)
-- [ ] Geração e expiração de links
-- [ ] Webhooks
-- [ ] Responsividade (mobile/tablet/desktop)
-- [ ] Download do ZIP
+- ✅ Criação de pagamento PIX (R$ 1.00 sandbox)
+- ✅ Recebimento de webhook
+- ✅ Polling de status funcionando
+- ✅ CORS validado
+- ✅ Deploy de Edge Functions
 
 ---
 
-## 📊 Timeline Estimada
+## 🔜 Pendências Opcionais
 
-| Fase | Duração |
-|------|---------|
-| Frontend (Landing Page) | ~4h |
-| Backend (Supabase Setup) | ~3h |
-| Pagamento (Mercado Pago) | ~2h |
-| Conteúdo (GEMINI + Comandos) | ~2h |
-| Guia PDF | ~2h |
-| Testes e Ajustes | ~2h |
-| **Total** | **~15h** |
+- [ ] Envio de email pós-pagamento (Resend/SendGrid)
+- [ ] Guia em PDF formatado
+- [ ] Analytics de conversão
+- [ ] Teste pagamento real R$ 47,00
