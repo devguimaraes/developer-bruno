@@ -2,6 +2,14 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Clock, Flame, TrendingUp } from "lucide-react";
 
+// Configuration constants
+const COUNTDOWN_HOURS = 72;
+const COUNTDOWN_MS = COUNTDOWN_HOURS * 60 * 60 * 1000;
+const INCREMENT_CHECK_INTERVAL_MS = 30000; // 30 seconds
+const INCREMENT_PROBABILITY = 0.7; // 70% chance to NOT increment
+const INITIAL_COUNT_MIN = 45;
+const INITIAL_COUNT_RANGE = 20;
+
 const UrgencyBanner: React.FC = () => {
   const [timeLeft, setTimeLeft] = useState({
     hours: 0,
@@ -28,7 +36,7 @@ const UrgencyBanner: React.FC = () => {
       // Calculate 72h from current midnight (resets daily)
       const todayMidnight = new Date(now);
       todayMidnight.setHours(0, 0, 0, 0);
-      const endTime = new Date(todayMidnight.getTime() + 72 * 60 * 60 * 1000);
+      const endTime = new Date(todayMidnight.getTime() + COUNTDOWN_MS);
 
       localStorage.setItem(storageKey, endTime.toISOString());
       return endTime;
@@ -53,7 +61,7 @@ const UrgencyBanner: React.FC = () => {
       } else {
         // Reset when expired (new day)
         localStorage.removeItem("urgency_countdown_end");
-        setTimeLeft({ hours: 72, minutes: 0, seconds: 0 });
+        setTimeLeft({ hours: COUNTDOWN_HOURS, minutes: 0, seconds: 0 });
       }
     };
 
@@ -70,21 +78,22 @@ const UrgencyBanner: React.FC = () => {
       setDownloadCount(parseInt(storedCount, 10));
     } else {
       // Random starting number between 45-65
-      const baseCount = Math.floor(Math.random() * 20) + 45;
+      const baseCount =
+        Math.floor(Math.random() * INITIAL_COUNT_RANGE) + INITIAL_COUNT_MIN;
       localStorage.setItem("download_count", baseCount.toString());
       setDownloadCount(baseCount);
     }
 
     // Occasionally increment (simulates real activity)
     const incrementInterval = setInterval(() => {
-      if (Math.random() > 0.7) {
+      if (Math.random() > INCREMENT_PROBABILITY) {
         setDownloadCount((prev) => {
           const newCount = prev + 1;
           localStorage.setItem("download_count", newCount.toString());
           return newCount;
         });
       }
-    }, 30000); // Check every 30 seconds
+    }, INCREMENT_CHECK_INTERVAL_MS);
 
     return () => clearInterval(incrementInterval);
   }, []);
