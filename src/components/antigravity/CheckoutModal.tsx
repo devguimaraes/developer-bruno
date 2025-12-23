@@ -9,6 +9,7 @@ import {
   Clock,
   Download,
   AlertCircle,
+  Loader2,
 } from "lucide-react";
 
 interface CheckoutModalProps {
@@ -18,6 +19,17 @@ interface CheckoutModalProps {
 
 type CheckoutStep = "email" | "payment" | "success";
 
+interface PaymentData {
+  external_reference: string;
+  qr_code: string;
+  qr_code_base64: string;
+  payment_id: number;
+}
+
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const FUNCTIONS_URL = `${SUPABASE_URL}/functions/v1`;
+
 export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   isOpen,
   onClose,
@@ -25,14 +37,44 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   const [step, setStep] = useState<CheckoutStep>("email");
   const [email, setEmail] = useState("");
   const [copied, setCopied] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(15 * 60); // 15 minutes in seconds
+  const [timeLeft, setTimeLeft] = useState(15 * 60); // 15 minutes
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [paymentData, setPaymentData] = useState<PaymentData | null>(null);
+  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 
-  // Mock PIX data (will be replaced with real API call)
-  const mockPixCode =
-    "00020126580014br.gov.bcb.pix0136a1b2c3d4-e5f6-7890-abcd-ef1234567890520400005303986540547.005802BR5925BRUNO GUIMARAES DEV6009SAO PAULO62070503***6304ABCD";
-  const mockQRCodeUrl =
-    "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" +
-    encodeURIComponent(mockPixCode);
+  // Polling for payment status
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout;
+
+    if (step === "payment" && paymentData?.external_reference) {
+      intervalId = setInterval(async () => {
+        try {
+          const response = await fetch(
+            `${FUNCTIONS_URL}/payment-status?id=${paymentData.external_reference}`,
+            {
+              headers: {
+                Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+              },
+            }
+          );
+          if (response.ok) {
+            const data = await response.json();
+            if (data.status === "approved") {
+              setDownloadUrl(data.download_url);
+              setStep("success");
+            }
+          }
+        } catch (err) {
+          console.error("Error checking status:", err);
+        }
+      }, 3000); // Check every 3 seconds
+    }
+
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [step, paymentData]);
 
   // Countdown timer
   useEffect(() => {
@@ -55,8 +97,9 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
   // Handle copy
   const handleCopy = async () => {
+    if (!paymentData?.qr_code) return;
     try {
-      await navigator.clipboard.writeText(mockPixCode);
+      await navigator.clipboard.writeText(paymentData.qr_code);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
@@ -64,17 +107,40 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
     }
   };
 
-  // Handle email submit
-  const handleEmailSubmit = (e: React.FormEvent) => {
+  // Handle email submit & Create Payment
+  const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email) {
-      setStep("payment");
-    }
-  };
+    if (!email) return;
 
-  // Simulate payment success (for demo purposes)
-  const simulatePayment = () => {
-    setStep("success");
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(`${FUNCTIONS_URL}/create-pix-payment`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Falha ao criar pagamento. Tente novamente.");
+      }
+
+      const data = await response.json();
+      setPaymentData(data);
+      setStep("payment");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Erro desconhecido ao gerar PIX");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Reset modal on close
@@ -82,6 +148,9 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
     setStep("email");
     setEmail("");
     setTimeLeft(15 * 60);
+    setPaymentData(null);
+    setError(null);
+    setDownloadUrl(null);
     onClose();
   };
 
@@ -112,6 +181,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
               <button
                 onClick={handleClose}
                 className="p-1 hover:bg-white/20 transition-colors"
+                disabled={step === "payment" && !paymentData} // Prevent closing while creating
               >
                 <X className="w-6 h-6" />
               </button>
@@ -119,6 +189,14 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
             {/* Content */}
             <div className="p-6">
+              {/* Error Message */}
+              {error && (
+                <div className="mb-4 bg-red-100 border-2 border-red-500 text-red-700 p-3 flex items-center gap-2">
+                  <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                  <p className="text-sm font-bold">{error}</p>
+                </div>
+              )}
+
               {/* Step 1: Email */}
               {step === "email" && (
                 <form onSubmit={handleEmailSubmit} className="space-y-6">
@@ -134,7 +212,8 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="seu@email.com"
                         required
-                        className="w-full pl-12 pr-4 py-4 border-4 border-black font-mono text-lg focus:outline-none focus:ring-4 focus:ring-brutal-yellow"
+                        disabled={isLoading}
+                        className="w-full pl-12 pr-4 py-4 border-4 border-black font-mono text-lg focus:outline-none focus:ring-4 focus:ring-brutal-yellow disabled:opacity-50"
                       />
                     </div>
                     <p className="mt-2 text-sm text-stone-500">
@@ -152,15 +231,23 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                   <NeoButton
                     type="submit"
                     fullWidth
-                    className="bg-brutal-orange text-white py-4 shadow-[6px_6px_0px_0px_#000]"
+                    disabled={isLoading}
+                    className="bg-brutal-orange text-white py-4 shadow-[6px_6px_0px_0px_#000] flex items-center justify-center gap-2"
                   >
-                    GERAR PIX
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        GERANDO PIX...
+                      </>
+                    ) : (
+                      "GERAR PIX"
+                    )}
                   </NeoButton>
                 </form>
               )}
 
               {/* Step 2: Payment */}
-              {step === "payment" && (
+              {step === "payment" && paymentData && (
                 <div className="space-y-6">
                   {/* Timer */}
                   <div className="bg-brutal-yellow border-2 border-black p-4 flex items-center justify-center gap-2">
@@ -174,9 +261,9 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                   <div className="flex justify-center">
                     <div className="border-4 border-black p-4 bg-white">
                       <img
-                        src={mockQRCodeUrl}
+                        src={`data:image/png;base64,${paymentData.qr_code_base64}`}
                         alt="QR Code PIX"
-                        className="w-48 h-48"
+                        className="w-48 h-48 block"
                       />
                     </div>
                   </div>
@@ -189,9 +276,10 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     <div className="flex gap-2">
                       <input
                         type="text"
-                        value={mockPixCode}
+                        value={paymentData.qr_code}
                         readOnly
-                        className="flex-1 px-4 py-3 border-2 border-black font-mono text-xs bg-stone-100 truncate"
+                        className="flex-1 px-4 py-3 border-2 border-black font-mono text-xs bg-stone-100 truncate focus:outline-none"
+                        onClick={(e) => (e.target as HTMLInputElement).select()}
                       />
                       <button
                         onClick={handleCopy}
@@ -217,20 +305,12 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                   </div>
 
                   {/* Status */}
-                  <div className="flex items-center justify-center gap-2 text-stone-500">
-                    <div className="w-4 h-4 border-2 border-stone-400 border-t-transparent animate-spin rounded-full" />
-                    <span className="font-mono text-sm">
-                      Aguardando pagamento...
+                  <div className="flex items-center justify-center gap-2 text-stone-500 py-2">
+                    <Loader2 className="w-5 h-5 animate-spin text-brutal-orange" />
+                    <span className="font-mono text-sm font-bold animate-pulse">
+                      Aguardando confirmação do banco...
                     </span>
                   </div>
-
-                  {/* Demo button - remove in production */}
-                  <button
-                    onClick={simulatePayment}
-                    className="w-full py-2 text-sm text-stone-400 hover:text-stone-600 underline"
-                  >
-                    [DEV] Simular pagamento confirmado
-                  </button>
                 </div>
               )}
 
@@ -257,8 +337,9 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
                   <NeoButton
                     onClick={() => {
-                      // TODO: Replace with actual download link
-                      window.open("/downloads/antigravity-pack.zip", "_blank");
+                      if (downloadUrl) {
+                        window.location.href = downloadUrl;
+                      }
                     }}
                     fullWidth
                     className="bg-green-500 text-white py-4 shadow-[6px_6px_0px_0px_#000]"
