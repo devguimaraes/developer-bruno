@@ -1,15 +1,28 @@
 import React from "react";
-import { Cpu, Zap } from "lucide-react";
+import { Cpu, Zap, LucideIcon } from "lucide-react";
 import { featuredSkills, getAllTechnologies } from "@/data/skills";
 import type { Skill } from "@/types";
 import { ScrollAnimation } from "@/components/ui/scroll-animation";
 
-const Skills: React.FC<{ id?: string }> = ({ id }) => {
+type SkillsProps = React.HTMLAttributes<HTMLElement>;
+
+interface SkillDisplayData {
+  name: string;
+  icon: LucideIcon;
+  color: string;
+  text: string;
+  technologies: readonly string[];
+}
+
+const Skills: React.FC<SkillsProps> = ({ className, ...props }) => {
   // Get featured skills for display (first 6 skills or use categories)
   const displaySkills = featuredSkills.slice(0, 6);
 
   // Transform skills data to match chip design format
-  const getSkillDisplayData = (skill: Skill, index: number) => {
+  const getSkillDisplayData = (
+    skill: Skill,
+    index: number
+  ): SkillDisplayData => {
     // Map skill categories to appropriate display colors
     const colorMap = {
       "bg-primary": "bg-[hsl(162,100%,27%)]",
@@ -26,7 +39,7 @@ const Skills: React.FC<{ id?: string }> = ({ id }) => {
 
     return {
       name: skill.title,
-      icon: skill.icon,
+      icon: skill.icon as LucideIcon,
       color: colorMap[skill.color as keyof typeof colorMap] || skill.color,
       text: textColor,
       technologies: skill.technologies?.slice(0, 3) || [], // Show first 3 technologies
@@ -37,8 +50,10 @@ const Skills: React.FC<{ id?: string }> = ({ id }) => {
 
   return (
     <section
-      id={id}
-      className="py-20 bg-brutal-yellow border-y-4 border-black relative overflow-hidden"
+      {...props}
+      className={`py-20 bg-brutal-yellow border-y-4 border-black relative overflow-hidden ${
+        className ?? ""
+      }`}
     >
       {/* Scrolling Marquee Background */}
       <div className="absolute inset-0 opacity-10 pointer-events-none flex flex-col justify-between rotate-3 scale-110">
@@ -101,7 +116,10 @@ const Skills: React.FC<{ id?: string }> = ({ id }) => {
                       <div
                         className={`${displayData.color} ${displayData.text} p-3 border-2 border-black rounded shadow-neo group-hover:scale-110 transition-transform`}
                       >
-                        <displayData.icon size={28} />
+                        {(() => {
+                          const IconComponent = displayData.icon;
+                          return <IconComponent size={28} />;
+                        })()}
                       </div>
                       <span className="font-black uppercase tracking-wider text-center text-sm leading-tight">
                         {displayData.name
