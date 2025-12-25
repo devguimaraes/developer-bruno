@@ -15,11 +15,16 @@ import {
   TextReveal,
 } from "@/components/ui/motion-components";
 
-const Blog: React.FC = () => {
+type BlogProps = React.HTMLAttributes<HTMLElement>;
+
+const Blog: React.FC<BlogProps> = ({ className, ...props }) => {
   const { posts: blogPosts } = useRecentPosts(3);
 
   return (
-    <section className="py-24 bg-white relative">
+    <section
+      {...props}
+      className={`py-24 bg-white relative ${className ?? ""}`}
+    >
       {/* Grid Dot Background */}
       <div className="absolute inset-0 bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:16px_16px] opacity-10 pointer-events-none"></div>
 
