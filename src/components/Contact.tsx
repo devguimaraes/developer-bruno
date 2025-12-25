@@ -14,7 +14,13 @@ const iconMap: Record<string, LucideIcon> = {
   Send,
 };
 
-const Contact: React.FC<{ id?: string }> = ({ id }) => {
+interface ContactProps {
+  id?: string;
+  style?: React.CSSProperties;
+  className?: string;
+}
+
+const Contact: React.FC<ContactProps> = ({ id, style, className }) => {
   const handleEmailContact = () => {
     const subject = encodeURIComponent(
       "Proposta de Projeto - Portfolio Contact"
@@ -44,7 +50,10 @@ Aguardo seu retorno!`);
   return (
     <section
       id={id}
-      className="py-24 bg-white border-t-4 border-black relative overflow-hidden"
+      style={style}
+      className={`py-24 bg-white border-t-4 border-black relative overflow-hidden ${
+        className ?? ""
+      }`}
     >
       {/* Warning Stripes Background */}
       <div className="absolute top-0 left-0 w-full h-4 caution-stripes"></div>
