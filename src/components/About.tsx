@@ -44,34 +44,18 @@ const About: React.FC<{ id?: string }> = ({ id }) => {
               {/* Avatar Column */}
               <div className="md:col-span-4 flex flex-col items-center md:items-start">
                 <div className="relative w-full max-w-[300px]">
-                  <div className="aspect-square rounded-full bg-brutal-orange border-4 border-black p-2 overflow-hidden relative group">
-                    {/* Scanline effect */}
-                    <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-10 bg-[size:100%_4px,4px_100%] pointer-events-none opacity-30 rounded-full"></div>
-
-                    {/* Glitch Container */}
-                    <div
-                      className="relative w-full h-full glitch-container always-on"
-                      style={
-                        {
-                          "--avatar-url": `url(${avatar})`,
-                        } as React.CSSProperties
-                      }
-                    >
-                      <ImageWithSkeleton
-                        src={avatar}
-                        alt="Bruno Guimarães"
-                        className="w-full h-full object-cover rounded-full border-2 border-black contrast-110"
-                        wrapperClassName="w-full h-full"
-                      />
-                      {/* Glitch Layers using CSS variables and absolute positioning */}
-                      <div className="glitch-layer mix-blend-screen bg-red-500/20"></div>
-                      <div className="glitch-layer mix-blend-screen bg-blue-500/20"></div>
-                    </div>
+                  <div className="aspect-square rounded-full bg-brutal-orange border-4 border-black p-2 overflow-hidden relative">
+                    <ImageWithSkeleton
+                      src={avatar}
+                      alt="Bruno Guimarães"
+                      className="w-full h-full object-cover rounded-full border-2 border-black contrast-110"
+                      wrapperClassName="w-full h-full"
+                    />
                   </div>
                   {/* Decorative Elements */}
                   <div className="absolute bottom-0 right-0 md:-bottom-2 md:-right-2 bg-white border-4 border-black p-3 shadow-neo z-20 rounded-lg">
                     <div className="flex items-center gap-2 font-bold font-mono text-xs">
-                      <div className="w-3 h-3 bg-brutal-green animate-pulse rounded-full"></div>
+                      <div className="w-3 h-3 bg-brutal-green rounded-full"></div>
                       ONLINE
                     </div>
                   </div>
