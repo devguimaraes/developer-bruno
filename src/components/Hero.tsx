@@ -27,11 +27,15 @@ const HeroBackground = () => {
   );
 };
 
-const Hero: React.FC = () => {
+type HeroProps = React.HTMLAttributes<HTMLElement>;
+
+const Hero: React.FC<HeroProps> = ({ className, ...props }) => {
   return (
     <section
-      id="hero"
-      className="relative min-h-screen flex items-center justify-center pt-32 pb-20 overflow-hidden bg-brutal-bg"
+      {...props}
+      className={`relative min-h-screen flex items-center justify-center pt-32 pb-20 overflow-hidden bg-brutal-bg ${
+        className ?? ""
+      }`}
     >
       {/* Rive Background */}
       <div className="absolute inset-0 z-0">
