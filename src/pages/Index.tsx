@@ -20,11 +20,6 @@ const LazyBlog = lazy(() =>
     default: module.default,
   }))
 );
-const LazyRiveSection = lazy(() =>
-  import("@/components/RiveSection").then((module) => ({
-    default: module.default,
-  }))
-);
 
 // Loading component for lazy loaded sections
 const SectionLoader = () => (
@@ -43,7 +38,6 @@ const Index = () => {
       "hero",
       "about",
       "services",
-      "rive-keyboard",
       "blog",
       "skills",
       "projects",
@@ -76,18 +70,7 @@ const Index = () => {
           className="stacking-section"
         />
       </Suspense>
-      <Suspense fallback={<SectionLoader />}>
-        <LazyRiveSection
-          id="rive-keyboard"
-          src="/rive/13506-25564-onimotion-lp.riv"
-          stateMachine="Animation"
-          style={{
-            transform: getTransform("rive-keyboard"),
-            zIndex: getZIndex("rive-keyboard"),
-          }}
-          className="stacking-section"
-        />
-      </Suspense>
+
       <Suspense fallback={<SectionLoader />}>
         <LazyBlog
           id="blog"
