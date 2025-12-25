@@ -6,9 +6,14 @@ import { ImageWithSkeleton } from "@/components/ui/image-with-skeleton";
 import { Typewriter } from "@/components/ui/typewriter";
 import { TextReveal } from "@/components/ui/motion-components";
 
-const About: React.FC<{ id?: string }> = ({ id }) => {
+type AboutProps = React.HTMLAttributes<HTMLElement>;
+
+const About: React.FC<AboutProps> = ({ className, ...props }) => {
   return (
-    <section id={id} className="py-24 bg-white relative">
+    <section
+      {...props}
+      className={`py-24 bg-white relative ${className ?? ""}`}
+    >
       {/* Diagonal Stripes Background */}
       <div className="absolute top-0 right-0 w-1/3 h-full bg-[repeating-linear-gradient(45deg,#000,#000_2px,#fff_2px,#fff_10px)] opacity-5 pointer-events-none"></div>
 
