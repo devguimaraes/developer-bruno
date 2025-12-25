@@ -32,9 +32,16 @@ const Counter: React.FC<{ value: number; duration?: number }> = ({
   return <span ref={ref}>0</span>;
 };
 
-const Metrics: React.FC = () => {
+type MetricsProps = React.HTMLAttributes<HTMLElement>;
+
+const Metrics: React.FC<MetricsProps> = ({ className, ...props }) => {
   return (
-    <section className="py-12 bg-black text-white border-y-4 border-white/20">
+    <section
+      {...props}
+      className={`py-12 bg-black text-white border-y-4 border-white/20 ${
+        className ?? ""
+      }`}
+    >
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1  md:grid-cols-3 divide-y-4 md:divide-y-0 md:divide-x-4 divide-stone-800">
           {/* Stat 1 */}
