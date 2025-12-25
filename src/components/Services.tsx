@@ -60,9 +60,14 @@ const services = [
   },
 ];
 
-const Services: React.FC = () => {
+type ServicesProps = React.HTMLAttributes<HTMLElement>;
+
+const Services: React.FC<ServicesProps> = ({ className, ...props }) => {
   return (
-    <section className="py-24 bg-white relative overflow-hidden">
+    <section
+      className={`py-24 bg-white relative overflow-hidden ${className ?? ""}`}
+      {...props}
+    >
       {/* Rive Background */}
       <div className="absolute inset-0 z-0">
         <ServicesBackground />
