@@ -1,5 +1,6 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { checkRateLimit, getClientIP } from '../_shared/security.ts'
 
 const ALLOWED_ORIGINS = [
   'https://devguimaraes.com.br',
@@ -17,6 +18,10 @@ const getCorsHeaders = (origin: string | null) => {
   }
 }
 
+// Rate limit: 30 requests per minute per IP (polling endpoint)
+const RATE_LIMIT_MAX = 30
+const RATE_LIMIT_WINDOW = 60000
+
 Deno.serve(async (req) => {
   const origin = req.headers.get('origin')
   const corsHeaders = getCorsHeaders(origin)
@@ -26,11 +31,38 @@ Deno.serve(async (req) => {
   }
 
   try {
+    // Rate limiting check
+    const clientIP = getClientIP(req)
+    const rateLimit = checkRateLimit(`payment-status:${clientIP}`, RATE_LIMIT_MAX, RATE_LIMIT_WINDOW)
+    
+    if (!rateLimit.allowed) {
+      return new Response(
+        JSON.stringify({ 
+          error: 'Too many requests. Please try again later.',
+          retryAfter: Math.ceil(rateLimit.resetIn / 1000)
+        }),
+        {
+          headers: { 
+            ...corsHeaders, 
+            'Content-Type': 'application/json',
+            'Retry-After': Math.ceil(rateLimit.resetIn / 1000).toString()
+          },
+          status: 429,
+        }
+      )
+    }
+
     const url = new URL(req.url)
     const id = url.searchParams.get('id') // external_reference
     
     if (!id) {
        throw new Error('ID required')
+    }
+
+    // Basic input validation for UUID format
+    const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+    if (!UUID_REGEX.test(id)) {
+      throw new Error('Invalid ID format')
     }
 
     const supabase = createClient(
@@ -57,7 +89,11 @@ Deno.serve(async (req) => {
           download_url: downloadUrl
       }),
       {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        headers: { 
+          ...corsHeaders, 
+          'Content-Type': 'application/json',
+          'X-RateLimit-Remaining': rateLimit.remaining.toString()
+        },
         status: 200,
       }
     )
