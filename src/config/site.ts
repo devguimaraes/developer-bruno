@@ -152,7 +152,7 @@ export const contactData: ContactData = {
     {
       id: 'instagram',
       icon: 'Instagram',
-      href: 'https://www.instagram.com/dev.guimaraes/',
+      href: 'https://www.instagram.com/brunoguimraes/',
       label: 'Instagram',
       username: 'dev.guimaraes',
     },
