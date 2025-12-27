@@ -38,14 +38,20 @@ const Metrics: React.FC<MetricsProps> = ({ className, ...props }) => {
   return (
     <section
       {...props}
-      className={`py-12 bg-black text-white border-y-4 border-white/20 ${
+      className={`py-16 bg-black text-white border-y-4 border-brutal-yellow relative overflow-hidden ${
         className ?? ""
       }`}
     >
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1  md:grid-cols-3 divide-y-4 md:divide-y-0 md:divide-x-4 divide-stone-800">
+      {/* Neo-Brutalist Background Pattern */}
+      <div className="absolute inset-0 bg-neo-dots opacity-5 pointer-events-none" />
+
+      {/* Decorative Elements */}
+      <div className="absolute top-0 left-0 w-24 h-full bg-gradient-to-r from-brutal-orange/10 to-transparent" />
+      <div className="absolute top-0 right-0 w-24 h-full bg-gradient-to-l from-brutal-purple/10 to-transparent" />
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 divide-y-4 md:divide-y-0 md:divide-x-4 divide-brutal-yellow/30">
           {/* Stat 1 */}
-          <div className="p-6 flex items-center justify-between group">
+          <div className="p-8 flex items-center justify-between group hover:bg-white/5 transition-colors">
             <div>
               <p className="font-mono text-stone-500 text-xs mb-1">NIVEL_XP</p>
               <h3 className="text-5xl font-black text-brutal-yellow group-hover:translate-x-2 transition-transform flex items-center">
@@ -63,7 +69,7 @@ const Metrics: React.FC<MetricsProps> = ({ className, ...props }) => {
           </div>
 
           {/* Stat 2 */}
-          <div className="p-6 flex items-center justify-between group">
+          <div className="p-8 flex items-center justify-between group hover:bg-white/5 transition-colors">
             <div>
               <p className="font-mono text-stone-500 text-xs mb-1">
                 PROJETOS_CONCLUIDOS
@@ -83,7 +89,7 @@ const Metrics: React.FC<MetricsProps> = ({ className, ...props }) => {
           </div>
 
           {/* Stat 3 */}
-          <div className="p-6 flex items-center justify-between group">
+          <div className="p-8 flex items-center justify-between group hover:bg-white/5 transition-colors">
             <div>
               <p className="font-mono text-stone-500 text-xs mb-1">
                 SATISFACAO_CLIENTE

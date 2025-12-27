@@ -25,8 +25,9 @@ const Blog: React.FC<BlogProps> = ({ className, ...props }) => {
       {...props}
       className={`py-24 bg-white relative ${className ?? ""}`}
     >
-      {/* Grid Dot Background */}
-      <div className="absolute inset-0 bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:16px_16px] opacity-10 pointer-events-none"></div>
+      {/* Neo-Brutalist Background */}
+      <div className="absolute inset-0 bg-neo-dots opacity-[0.03] pointer-events-none" />
+      <div className="absolute top-0 left-0 w-full h-2 bg-brutal-purple" />
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Header */}
@@ -67,16 +68,19 @@ const Blog: React.FC<BlogProps> = ({ className, ...props }) => {
             {blogPosts.map((post) => (
               <FadeInItem
                 key={post.slug}
-                className="group bg-white border-4 border-black flex flex-col h-full hover:-translate-y-2 transition-transform duration-300 shadow-brutal-lg hover:shadow-[12px_12px_0px_0px_#f97316]"
+                className="group bg-white border-4 border-black flex flex-col h-full transition-all duration-300 shadow-brutal-lg hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-2"
               >
-                {/* Header do Card */}
+                {/* Accent Border Top */}
+                <div className="h-2 bg-brutal-orange w-full" />
                 <div className="bg-stone-100 border-b-4 border-black p-3 flex justify-between items-center">
-                  <span className="font-mono text-xs font-bold uppercase truncate max-w-[200px]">
+                  <span className="font-mono text-xs font-bold uppercase truncate max-w-[200px] flex items-center gap-2">
+                    <span className="w-2 h-2 bg-brutal-green rounded-full animate-pulse" />
                     {post.slug}.md
                   </span>
-                  <div className="flex gap-1">
-                    <div className="w-2 h-2 rounded-full bg-black"></div>
-                    <div className="w-2 h-2 rounded-full border border-black"></div>
+                  <div className="flex gap-1.5">
+                    <div className="w-3 h-3 rounded-full bg-red-500 border-2 border-black" />
+                    <div className="w-3 h-3 rounded-full bg-yellow-500 border-2 border-black" />
+                    <div className="w-3 h-3 rounded-full bg-green-500 border-2 border-black" />
                   </div>
                 </div>
 
@@ -91,7 +95,7 @@ const Blog: React.FC<BlogProps> = ({ className, ...props }) => {
                     </span>
                   </div>
 
-                  <h3 className="text-2xl font-black leading-tight mb-4 line-clamp-2 group-hover:text-brutal-orange transition-colors">
+                  <h3 className="text-xl md:text-2xl font-black leading-tight mb-4 line-clamp-2 group-hover:text-brutal-orange transition-colors uppercase tracking-tight">
                     {post.title}
                   </h3>
 
