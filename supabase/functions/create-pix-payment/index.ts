@@ -1,5 +1,6 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { sanitizeEmail, checkRateLimit, getClientIP } from '../_shared/security.ts'
 
 const ALLOWED_ORIGINS = [
   'https://devguimaraes.com.br',
@@ -17,7 +18,9 @@ const getCorsHeaders = (origin: string | null) => {
   }
 }
 
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+// Rate limit: 5 requests per minute per IP
+const RATE_LIMIT_MAX = 5
+const RATE_LIMIT_WINDOW = 60000
 
 Deno.serve(async (req) => {
   const origin = req.headers.get('origin')
@@ -28,13 +31,34 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { email } = await req.json()
-    if (!email) {
+    // Rate limiting check
+    const clientIP = getClientIP(req)
+    const rateLimit = checkRateLimit(`create-pix:${clientIP}`, RATE_LIMIT_MAX, RATE_LIMIT_WINDOW)
+    
+    if (!rateLimit.allowed) {
+      return new Response(
+        JSON.stringify({ 
+          error: 'Too many requests. Please try again later.',
+          retryAfter: Math.ceil(rateLimit.resetIn / 1000)
+        }),
+        {
+          headers: { 
+            ...corsHeaders, 
+            'Content-Type': 'application/json',
+            'Retry-After': Math.ceil(rateLimit.resetIn / 1000).toString()
+          },
+          status: 429,
+        }
+      )
+    }
+
+    const { email: rawEmail } = await req.json()
+    
+    // Sanitize and validate email
+    if (!rawEmail) {
       throw new Error('Email is required')
     }
-    if (!EMAIL_REGEX.test(email)) {
-      throw new Error('Invalid email format')
-    }
+    const email = sanitizeEmail(rawEmail)
 
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
@@ -49,6 +73,7 @@ Deno.serve(async (req) => {
     // 1. Create a partial record to get an ID or generate external_reference
     const external_reference = crypto.randomUUID()
     const amount = Number(Deno.env.get('PRODUCT_PRICE') || '47.00')
+
 
     const { error: insertError } = await supabase
       .from('payments')
@@ -112,7 +137,11 @@ Deno.serve(async (req) => {
         payment_id: mpData.id
       }),
       {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        headers: { 
+          ...corsHeaders, 
+          'Content-Type': 'application/json',
+          'X-RateLimit-Remaining': rateLimit.remaining.toString()
+        },
         status: 200,
       }
     )

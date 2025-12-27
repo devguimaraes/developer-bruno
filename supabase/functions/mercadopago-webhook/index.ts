@@ -1,10 +1,11 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { validateMercadoPagoSignature } from '../_shared/security.ts'
 
 // Webhook receives requests from Mercado Pago servers, so CORS must allow any origin
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-signature, x-request-id',
 }
 
 Deno.serve(async (req) => {
@@ -27,6 +28,22 @@ Deno.serve(async (req) => {
        // Just acknowledge unrelated notifications
        console.log('Ignored notification:', { body, queryId, queryType })
        return new Response('ok', { status: 200 })
+    }
+
+    // Validate Mercado Pago signature
+    const mpSecretKey = Deno.env.get('MERCADOPAGO_WEBHOOK_SECRET')
+    if (mpSecretKey) {
+      const isValid = await validateMercadoPagoSignature(req, paymentId.toString(), mpSecretKey)
+      if (!isValid) {
+        console.warn('Invalid webhook signature for payment:', paymentId)
+        return new Response(
+          JSON.stringify({ error: 'Invalid signature' }),
+          { status: 401 }
+        )
+      }
+      console.log('Webhook signature validated successfully for payment:', paymentId)
+    } else {
+      console.warn('MERCADOPAGO_WEBHOOK_SECRET not configured, skipping signature validation')
     }
 
     const supabase = createClient(
