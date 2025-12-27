@@ -8,7 +8,6 @@ import FAQSection from "@/components/antigravity/FAQSection";
 import CheckoutModal from "@/components/antigravity/CheckoutModal";
 import TestimonialsSection from "@/components/antigravity/TestimonialsSection";
 import UrgencyBanner from "@/components/antigravity/UrgencyBanner";
-import LeadMagnetSection from "@/components/antigravity/LeadMagnetSection";
 
 const AntigravityPage: React.FC = () => {
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
@@ -70,7 +69,6 @@ const AntigravityPage: React.FC = () => {
         <ComparisonSection />
         <FeaturesSection />
         <TestimonialsSection />
-        <LeadMagnetSection />
         <PricingSection onBuyClick={openCheckout} />
         <FAQSection />
 
