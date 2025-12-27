@@ -14,7 +14,13 @@ const iconMap: Record<string, LucideIcon> = {
   Send,
 };
 
-const Contact: React.FC<{ id?: string }> = ({ id }) => {
+interface ContactProps {
+  id?: string;
+  style?: React.CSSProperties;
+  className?: string;
+}
+
+const Contact: React.FC<ContactProps> = ({ id, style, className }) => {
   const handleEmailContact = () => {
     const subject = encodeURIComponent(
       "Proposta de Projeto - Portfolio Contact"
@@ -44,21 +50,30 @@ Aguardo seu retorno!`);
   return (
     <section
       id={id}
-      className="py-24 bg-white border-t-4 border-black relative overflow-hidden"
+      style={style}
+      className={`py-24 bg-brutal-bg border-t-4 border-black relative overflow-hidden ${
+        className ?? ""
+      }`}
     >
       {/* Warning Stripes Background */}
-      <div className="absolute top-0 left-0 w-full h-4 caution-stripes"></div>
-      <div className="absolute bottom-0 left-0 w-full h-4 caution-stripes"></div>
+      <div className="absolute top-0 left-0 w-full h-6 caution-stripes" />
+      <div className="absolute bottom-0 left-0 w-full h-6 caution-stripes" />
 
-      {/* Circuit Pattern Background */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-10 right-10 w-32 h-32 border-4 border-black rounded-full"></div>
-        <div className="absolute bottom-10 left-10 w-24 h-24 border-4 border-black transform rotate-45"></div>
-        <div className="absolute top-1/2 left-1/4 w-16 h-16 border-4 border-black transform rotate-12"></div>
-      </div>
+      {/* Neo-Brutalist Pattern Background */}
+      <div className="absolute inset-0 bg-neo-dots opacity-[0.02] pointer-events-none" />
+
+      {/* Decorative Geometric Elements */}
+      <div className="absolute top-20 right-20 w-32 h-32 border-4 border-brutal-orange rotate-12 opacity-20" />
+      <div className="absolute bottom-20 left-20 w-24 h-24 bg-brutal-yellow rotate-45 opacity-20" />
+      <div className="absolute top-1/2 left-10 w-16 h-16 border-4 border-black -rotate-12 opacity-10" />
 
       <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-5xl mx-auto bg-stone-100 border-4 border-black shadow-brutal-lg p-8 md:p-12 text-center">
+        <div className="max-w-5xl mx-auto bg-white border-4 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] p-8 md:p-12 text-center relative">
+          {/* Corner Decorations */}
+          <div className="absolute -top-3 -left-3 w-6 h-6 bg-brutal-orange border-2 border-black" />
+          <div className="absolute -top-3 -right-3 w-6 h-6 bg-brutal-yellow border-2 border-black" />
+          <div className="absolute -bottom-3 -left-3 w-6 h-6 bg-brutal-purple border-2 border-black" />
+          <div className="absolute -bottom-3 -right-3 w-6 h-6 bg-brutal-green border-2 border-black" />
           {/* Status Badge */}
           <div className="inline-flex items-center gap-2 bg-black text-white px-4 py-1 font-mono font-bold text-sm mb-6 rounded-full animate-pulse">
             <div className="w-2 h-2 bg-brutal-green rounded-full animate-ping"></div>
@@ -93,9 +108,9 @@ Aguardo seu retorno!`);
                     href={item.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex flex-col items-center gap-2 transform hover:scale-110 transition-all duration-300"
+                    className="group flex flex-col items-center gap-2 transition-all duration-300"
                   >
-                    <div className="w-16 h-16 bg-white border-4 border-black flex items-center justify-center shadow-neo group-hover:-translate-y-1 group-hover:shadow-brutal-lg transition-all">
+                    <div className="w-16 h-16 bg-white border-4 border-black flex items-center justify-center shadow-neo group-hover:bg-brutal-yellow group-hover:-translate-y-2 group-hover:shadow-brutal-lg transition-all duration-300">
                       {IconComponent && (
                         <IconComponent size={28} className="text-black" />
                       )}
@@ -103,7 +118,7 @@ Aguardo seu retorno!`);
                     <span className="font-mono text-xs font-bold opacity-0 group-hover:opacity-100 transition-all duration-300">
                       {item.label}
                     </span>
-                    <span className="font-mono text-xs text-gray-500 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-100">
+                    <span className="font-mono text-[10px] text-stone-500 opacity-0 group-hover:opacity-100 transition-all duration-300">
                       @{item.username}
                     </span>
                   </a>

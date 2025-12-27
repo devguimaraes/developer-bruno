@@ -6,15 +6,23 @@ import { ImageWithSkeleton } from "@/components/ui/image-with-skeleton";
 import { Typewriter } from "@/components/ui/typewriter";
 import { TextReveal } from "@/components/ui/motion-components";
 
-const About: React.FC<{ id?: string }> = ({ id }) => {
-  return (
-    <section id={id} className="py-24 bg-white relative">
-      {/* Diagonal Stripes Background */}
-      <div className="absolute top-0 right-0 w-1/3 h-full bg-[repeating-linear-gradient(45deg,#000,#000_2px,#fff_2px,#fff_10px)] opacity-5 pointer-events-none"></div>
+type AboutProps = React.HTMLAttributes<HTMLElement>;
 
-      <div className="container mx-auto px-4 relative z-10">
+const About: React.FC<AboutProps> = ({ className, ...props }) => {
+  return (
+    <section
+      {...props}
+      className={`min-h-screen max-h-screen h-screen py-16 md:py-20 bg-brutal-bg relative overflow-hidden flex flex-col ${
+        className ?? ""
+      }`}
+    >
+      {/* Neo-Brutalist Background Pattern */}
+      <div className="absolute inset-0 bg-neo-grid opacity-30 pointer-events-none" />
+      <div className="absolute top-0 right-0 w-1/3 h-full bg-neo-diagonal pointer-events-none" />
+
+      <div className="container mx-auto px-4 relative z-10 flex-1 flex flex-col overflow-hidden">
         {/* Section Header */}
-        <div className="flex items-center gap-4 mb-12">
+        <div className="flex items-center gap-4 mb-6 md:mb-8 flex-shrink-0">
           <div className="w-12 h-12 bg-black text-white flex items-center justify-center font-black text-2xl border-4 border-brutal-orange">
             01
           </div>
@@ -25,8 +33,12 @@ const About: React.FC<{ id?: string }> = ({ id }) => {
         </div>
 
         {/* Main Content "Card" */}
-        <ScrollAnimation variant="scaleIn" duration={0.6}>
-          <div className="border-4 border-black bg-stone-50 shadow-brutal-lg">
+        <ScrollAnimation
+          variant="scaleIn"
+          duration={0.6}
+          className="flex-1 min-h-0 overflow-auto"
+        >
+          <div className="border-4 border-black bg-white shadow-brutal-lg neo-hover-lift h-full">
             {/* Window Header */}
             <div className="bg-black text-white p-3 flex justify-between items-center border-b-4 border-black">
               <div className="font-mono text-sm font-bold flex items-center gap-2">
@@ -40,45 +52,29 @@ const About: React.FC<{ id?: string }> = ({ id }) => {
               </div>
             </div>
 
-            <div className="p-6 md:p-12 grid md:grid-cols-12 gap-12">
+            <div className="p-4 md:p-8 lg:p-10 grid md:grid-cols-12 gap-6 md:gap-8">
               {/* Avatar Column */}
               <div className="md:col-span-4 flex flex-col items-center md:items-start">
-                <div className="relative w-full max-w-[300px]">
-                  <div className="aspect-square rounded-full bg-brutal-orange border-4 border-black p-2 overflow-hidden relative group">
-                    {/* Scanline effect */}
-                    <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-10 bg-[size:100%_4px,4px_100%] pointer-events-none opacity-30 rounded-full"></div>
-
-                    {/* Glitch Container */}
-                    <div
-                      className="relative w-full h-full glitch-container always-on"
-                      style={
-                        {
-                          "--avatar-url": `url(${avatar})`,
-                        } as React.CSSProperties
-                      }
-                    >
-                      <ImageWithSkeleton
-                        src={avatar}
-                        alt="Bruno Guimarães"
-                        className="w-full h-full object-cover rounded-full border-2 border-black contrast-110"
-                        wrapperClassName="w-full h-full"
-                      />
-                      {/* Glitch Layers using CSS variables and absolute positioning */}
-                      <div className="glitch-layer mix-blend-screen bg-red-500/20"></div>
-                      <div className="glitch-layer mix-blend-screen bg-blue-500/20"></div>
-                    </div>
+                <div className="relative w-full max-w-[220px] md:max-w-[250px]">
+                  <div className="aspect-square rounded-full bg-brutal-orange border-4 border-black p-1.5 overflow-hidden relative">
+                    <ImageWithSkeleton
+                      src={avatar}
+                      alt="Bruno Guimarães"
+                      className="w-full h-full object-cover rounded-full border-2 border-black contrast-110"
+                      wrapperClassName="w-full h-full"
+                    />
                   </div>
                   {/* Decorative Elements */}
                   <div className="absolute bottom-0 right-0 md:-bottom-2 md:-right-2 bg-white border-4 border-black p-3 shadow-neo z-20 rounded-lg">
                     <div className="flex items-center gap-2 font-bold font-mono text-xs">
-                      <div className="w-3 h-3 bg-brutal-green animate-pulse rounded-full"></div>
+                      <div className="w-3 h-3 bg-brutal-green rounded-full"></div>
                       ONLINE
                     </div>
                   </div>
                 </div>
 
                 {/* Info Tags */}
-                <div className="mt-12 space-y-3 font-mono text-sm w-full">
+                <div className="mt-6 space-y-2 font-mono text-sm w-full hidden lg:block">
                   <div className="flex items-center gap-3 border-b-2 border-gray-300 pb-2">
                     <MapPin size={16} />
                     <span className="font-bold">LOCAL:</span>
@@ -98,7 +94,7 @@ const About: React.FC<{ id?: string }> = ({ id }) => {
               </div>
 
               {/* Text Column */}
-              <div className="md:col-span-8 flex flex-col justify-center space-y-8">
+              <div className="md:col-span-8 flex flex-col justify-center space-y-4 md:space-y-6">
                 <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold leading-tight sm:leading-none">
                   <TextReveal text="Eu crio interfaces de" />{" "}
                   <span className="bg-brutal-yellow px-2 border-2 border-black shadow-neo inline-block">
@@ -115,8 +111,8 @@ const About: React.FC<{ id?: string }> = ({ id }) => {
                   variant="mechanical"
                 />
 
-                <div className="p-6 bg-white border-4 border-black relative">
-                  <div className="absolute -top-3 left-4 bg-black text-white px-2 font-mono text-xs font-bold uppercase">
+                <div className="p-6 bg-stone-50 border-4 border-black relative shadow-brutal hover:shadow-brutal-sm hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-200">
+                  <div className="absolute -top-3 left-4 bg-brutal-orange text-white px-3 py-1 font-mono text-xs font-bold uppercase border-2 border-black shadow-neo-sm">
                     Valores_Centrais
                   </div>
                   <div className="grid grid-cols-2 gap-6">
@@ -139,11 +135,11 @@ const About: React.FC<{ id?: string }> = ({ id }) => {
                   </div>
                 </div>
 
-                <div className="flex gap-2">
+                <div className="flex gap-2 flex-wrap">
                   {["Criativo", "Lógico", "Preciso"].map((tag) => (
                     <span
                       key={tag}
-                      className="font-mono text-xs border border-black px-2 py-1 bg-gray-200 text-gray-600"
+                      className="font-mono text-xs border-2 border-black px-3 py-1 bg-brutal-yellow text-black font-bold shadow-neo-sm hover:bg-black hover:text-white transition-colors cursor-default"
                     >
                       #{tag.toUpperCase()}
                     </span>

@@ -60,16 +60,27 @@ const services = [
   },
 ];
 
-const Services: React.FC = () => {
+type ServicesProps = React.HTMLAttributes<HTMLElement>;
+
+const Services: React.FC<ServicesProps> = ({ className, ...props }) => {
   return (
-    <section className="py-24 bg-white relative overflow-hidden">
+    <section
+      className={`py-24 bg-stone-100 relative overflow-hidden ${
+        className ?? ""
+      }`}
+      {...props}
+    >
       {/* Rive Background */}
       <div className="absolute inset-0 z-0">
         <ServicesBackground />
       </div>
 
       {/* Technical Grid Background */}
-      <div className="absolute inset-0 bg-technical-grid opacity-5 pointer-events-none z-[1]"></div>
+      <div className="absolute inset-0 bg-neo-grid opacity-50 pointer-events-none z-[1]" />
+
+      {/* Decorative Elements */}
+      <div className="absolute top-10 left-10 w-20 h-20 border-4 border-brutal-orange opacity-20 rotate-12" />
+      <div className="absolute bottom-10 right-10 w-16 h-16 bg-brutal-yellow opacity-20 -rotate-6" />
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
@@ -87,7 +98,7 @@ const Services: React.FC = () => {
           {services.map((service) => (
             <FadeInItem
               key={service.id}
-              className="group relative bg-white border-4 border-black flex flex-col md:flex-row min-h-[150px] hover:-translate-y-2 transition-all duration-300 shadow-brutal-lg hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,0.8)] overflow-hidden cursor-none"
+              className="group relative bg-white border-4 border-black flex flex-col md:flex-row min-h-[150px] hover:-translate-y-2 transition-all duration-300 shadow-brutal-lg hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] overflow-hidden cursor-pointer"
             >
               {/* Service Number Badge */}
               <div className="md:absolute md:-top-4 md:-left-4 w-12 h-12 bg-black text-white flex items-center justify-center font-bold text-lg border-4 border-white shadow-neo z-10">
