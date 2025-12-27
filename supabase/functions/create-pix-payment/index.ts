@@ -74,6 +74,7 @@ Deno.serve(async (req) => {
     const external_reference = crypto.randomUUID()
     const amount = Number(Deno.env.get('PRODUCT_PRICE') || '47.00')
 
+
     const { error: insertError } = await supabase
       .from('payments')
       .insert({
