@@ -129,7 +129,7 @@ const TechCard: React.FC<TechCardProps> = ({ Icon, label, color, bgHover }) => {
 
 // 3. Marquee Component
 const Marquee = () => (
-  <div className="bg-brutal-yellow border-b-4 border-black py-3 overflow-hidden whitespace-nowrap relative z-10">
+  <div className="bg-brutal-yellow border-b-4 border-black py-3 mb-4 overflow-hidden whitespace-nowrap relative z-10">
     <motion.div
       animate={{ x: ["0%", "-50%"] }}
       transition={{ repeat: Infinity, duration: 15, ease: "linear" }}
@@ -161,7 +161,7 @@ const Hero: React.FC<HeroProps> = ({ className, ...props }) => {
   return (
     <section
       {...props}
-      className={`relative h-screen max-h-screen overflow-hidden flex flex-col pt-16 md:pt-20 bg-brutal-bg ${
+      className={`relative h-screen max-h-screen overflow-hidden flex flex-col pt-20 md:pt-24 bg-brutal-bg ${
         className ?? ""
       }`}
     >
@@ -169,7 +169,7 @@ const Hero: React.FC<HeroProps> = ({ className, ...props }) => {
       <Marquee />
 
       {/* Main Grid Container */}
-      <div className="flex-1 container mx-auto px-4 md:px-8 pb-4 md:pb-8 flex flex-col min-h-0">
+      <div className="flex-1 container mx-auto px-4 md:px-8 pb-4 md:pb-4 flex flex-col min-h-0">
         <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 border-4 border-black bg-white shadow-brutal-2xl relative min-h-0">
           {/* LEFT COLUMN: Content (8 cols) */}
           <div className="lg:col-span-12 xl:col-span-8 p-6 md:p-8 lg:p-12 pb-12 flex flex-col justify-center relative overflow-hidden bg-white">
@@ -203,16 +203,16 @@ const Hero: React.FC<HeroProps> = ({ className, ...props }) => {
               </h1>
 
               <p className="text-lg md:text-2xl font-medium max-w-2xl leading-relaxed text-stone-800 border-l-4 border-brutal-orange pl-6 mb-10">
-                Engenharia de software com{" "}
+                Desenvolvedor Front-end focado em{" "}
                 <span className="bg-brutal-yellow/50 px-1 border border-black/10 font-bold">
-                  alma criativa
+                  performance
                 </span>
-                . Transformo ideias complexas em interfaces pixel-perfect de
-                alta performance.
+                . Crio interfaces modernas e responsivas para sites e aplicações
+                web.
               </p>
 
               {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-4 py-2">
                 <NeoButton
                   onClick={() =>
                     document
