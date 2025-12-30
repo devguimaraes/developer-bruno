@@ -2,6 +2,10 @@
  * Type definitions for all portfolio data structures
  */
 
+export * from './seo';
+export * from './sitemap';
+export * from './performance';
+
 // Base project interface
 export interface Project {
   id: string;
@@ -24,6 +28,7 @@ export interface Experience {
   company: string;
   description: string;
   achievements: readonly string[];
+  tech: readonly string[];
   location?: string;
   type?: 'full-time' | 'part-time' | 'freelance' | 'contract';
 }
@@ -31,7 +36,7 @@ export interface Experience {
 // Skill/technology interface
 export interface Skill {
   id: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>; // Lucide icon component
+  icon: any; // Lucide icon component
   title: string;
   description: string;
   color: string;
@@ -42,7 +47,7 @@ export interface Skill {
 // Social link interface
 export interface SocialLink {
   id: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>; // Lucide icon component
+  icon: any; // Lucide icon component
   href: string;
   label: string;
   username?: string;
@@ -69,6 +74,24 @@ export interface SiteConfig {
     keywords: readonly string[];
     image: string;
     siteName: string;
+    locale?: string;
+    region?: string;
+  };
+  performanceBudget?: {
+    javascript: number;
+    images: number;
+    css: number;
+    total: number;
+  };
+  brazilianMarket?: {
+    country: string;
+    language: string;
+    currency: string;
+    locale: string;
+    region: string;
+    timezone: string;
+    phoneNumber: string;
+    serviceAreas: string[];
   };
 }
 
@@ -113,6 +136,21 @@ export interface ContentValidation {
   warnings: string[];
 }
 
-// Re-export SEO and performance types
-export * from './seo';
+// Analytics Event Interface
+export interface AnalyticsEvent {
+  name: string;
+  properties?: Record<string, string | number | boolean>;
+}
 
+// Error Boundary State
+export interface ErrorBoundaryState {
+  hasError: boolean;
+  error?: Error;
+  errorInfo?: React.ErrorInfo;
+}
+
+// Structured Data Props
+export interface StructuredDataProps {
+  type: 'Organization' | 'Person' | 'WebSite' | 'BlogPosting';
+  data: Record<string, any>;
+}

@@ -167,7 +167,7 @@ export const formatValidationErrors = (result: z.ZodError): string[] => {
 // Content validation helper
 export const validateContent = <T>(
   data: unknown,
-  validator: (data: unknown) => { success: boolean; error?: z.ZodError }
+  validator: (data: unknown) => { success: boolean; error?: z.ZodError; data?: unknown }
 ): { isValid: boolean; data?: T; errors: string[] } => {
   const result = validator(data);
 
@@ -183,14 +183,4 @@ export const validateContent = <T>(
     isValid: false,
     errors: result.error ? formatValidationErrors(result.error) : ['Unknown validation error'],
   };
-};
-
-export {
-  ProjectSchema,
-  ExperienceSchema,
-  SkillSchema,
-  SocialLinkSchema,
-  SiteConfigSchema,
-  HeroDataSchema,
-  ContactDataSchema,
 };
