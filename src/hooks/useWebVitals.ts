@@ -1,4 +1,5 @@
 import { useEffect, useCallback } from 'react';
+import { onCLS, onINP, onLCP, onFCP, onTTFB, type Metric } from 'web-vitals';
 import type { PerformanceMetrics, WebVitalsThresholds } from '../types';
 import { BRAZILIAN_WEB_VITALS_THRESHOLDS } from '../types';
 
@@ -13,47 +14,57 @@ interface NetworkConnection {
   rtt: number;
 }
 
-interface ExtendedNavigator extends Navigator {
+export interface ExtendedNavigator extends Navigator {
   connection?: NetworkConnection;
-}
-
-declare global {
-  interface Navigator extends ExtendedNavigator {}
 }
 
 /**
  * Web Vitals monitoring hook for Brazilian market
  */
-export { type ExtendedNavigator } from './useWebVitals';
-
 export const useWebVitals = (
   onReport?: (metric: PerformanceMetrics) => void,
   thresholds: WebVitalsThresholds = BRAZILIAN_WEB_VITALS_THRESHOLDS
 ) => {
-  const reportMetric = useCallback((metric: PerformanceMetrics) => {
+  const reportMetric = useCallback((metric: Partial<PerformanceMetrics>) => {
     // Log to console in development
     if (process.env.NODE_ENV === 'development') {
+      const metricName = Object.keys(metric)[0] as keyof PerformanceMetrics;
+      const metricValue = metric[metricName] as number;
+      
+      // Safe threshold lookup
+      let threshold = 0;
+      if (metricName === 'lcp') threshold = thresholds.LCP;
+      if (metricName === 'fid') threshold = thresholds.FID;
+      if (metricName === 'cls') threshold = thresholds.CLS;
+      if (metricName === 'fcp') threshold = thresholds.FCP;
+      if (metricName === 'ttfb') threshold = thresholds.TTFB;
+      if (metricName === 'inp') threshold = thresholds.INP;
+
       console.log('📊 Web Vitals:', {
-        metric: Object.keys(metric)[0],
-        value: Object.values(metric)[0],
-        threshold: thresholds[Object.keys(metric)[0] as keyof WebVitalsThresholds],
-        status: getMetricStatus(Object.values(metric)[0], thresholds[Object.keys(metric)[0] as keyof WebVitalsThresholds])
+        metric: metricName,
+        value: metricValue,
+        threshold,
+        status: getMetricStatus(metricValue, threshold)
       });
     }
 
     // Call custom report function if provided
     if (onReport) {
-      onReport(metric);
+      // We know metric has at least one key, but for TS safety in strict mode we cast
+      onReport(metric as PerformanceMetrics);
     }
 
-    // Send to analytics (will be implemented with Plausible)
+    // Send to analytics
     if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('event', Object.keys(metric)[0], {
+      const metricName = Object.keys(metric)[0];
+      const metricValue = Object.values(metric)[0] as number;
+      
+      window.gtag('event', metricName, {
         event_category: 'Web Vitals',
-        value: Math.round(Object.values(metric)[0] as number),
+        value: Math.round(metricValue),
         non_interaction: true,
         custom_map: {
-          [Object.keys(metric)[0]]: 'custom_dimension_1'
+          [metricName]: 'custom_dimension_1'
         }
       });
     }
@@ -63,51 +74,31 @@ export const useWebVitals = (
     // Only run in browser
     if (typeof window === 'undefined') return;
 
-    const loadWebVitals = async () => {
-      try {
-        const { onCLS, onFID, onLCP, onINP, onTTFB, onFCP } = await import('web-vitals');
+    // Largest Contentful Paint (LCP)
+    onLCP((metric: Metric) => {
+      reportMetric({ lcp: metric.value });
+    });
 
-        // Largest Contentful Paint (LCP)
-        onLCP((metric) => {
-          reportMetric({ lcp: metric.value });
-        });
+    // Cumulative Layout Shift (CLS)
+    onCLS((metric: Metric) => {
+      reportMetric({ cls: metric.value });
+    });
 
-        // First Input Delay (FID) - legacy, replaced by INP
-        onFID((metric) => {
-          reportMetric({ fid: metric.value });
-        });
+    // Interaction to Next Paint (INP)
+    onINP((metric: Metric) => {
+      reportMetric({ inp: metric.value });
+    });
 
-        // Cumulative Layout Shift (CLS)
-        onCLS((metric) => {
-          reportMetric({ cls: metric.value });
-        });
+    // Time to First Byte (TTFB)
+    onTTFB((metric: Metric) => {
+      reportMetric({ ttfb: metric.value });
+    });
 
-        // Interaction to Next Paint (INP) - replaces FID
-        onINP((metric) => {
-          reportMetric({ inp: metric.value });
-        });
+    // First Contentful Paint (FCP)
+    onFCP((metric: Metric) => {
+      reportMetric({ fcp: metric.value });
+    });
 
-        // Time to First Byte (TTFB)
-        onTTFB((metric) => {
-          reportMetric({ ttfb: metric.value });
-        });
-
-        // First Contentful Paint (FCP)
-        onFCP((metric) => {
-          reportMetric({ fcp: metric.value });
-        });
-
-      } catch (error) {
-        console.error('Error loading web-vitals:', error);
-      }
-    };
-
-    // Load web-vitals after initial page load to not affect performance
-    if (document.readyState === 'complete') {
-      loadWebVitals();
-    } else {
-      window.addEventListener('load', loadWebVitals, { once: true });
-    }
   }, [reportMetric]);
 };
 
@@ -141,7 +132,7 @@ export const usePerformanceMonitoring = () => {
       entries.forEach((entry) => {
         // Monitor JavaScript bundle sizes
         if (entry.name.includes('.js') && 'transferSize' in entry) {
-          const size = entry.transferSize || 0;
+          const size = (entry as ExtendedPerformanceEntry).transferSize || 0;
           const sizeKB = Math.round(size / 1024);
 
           if (sizeKB > 300) { // 300KB threshold for Brazilian mobile
@@ -159,7 +150,7 @@ export const usePerformanceMonitoring = () => {
         }
 
         // Monitor image sizes for Brazilian networks
-        if (entry.name.includes('.png') || entry.name.includes('.jpg') || entry.name.includes('.jpeg')) {
+        if (entry.name.match(/\.(png|jpg|jpeg|webp)$/i)) {
           const size = (entry as ExtendedPerformanceEntry).transferSize || 0;
           const sizeKB = Math.round(size / 1024);
 
@@ -179,21 +170,24 @@ export const usePerformanceMonitoring = () => {
     // Monitor connection quality for Brazilian users
     if ('connection' in navigator) {
       const connection = (navigator as ExtendedNavigator).connection;
-      console.log('🌐 Connection Quality:', {
-        effectiveType: connection.effectiveType,
-        downlink: `${connection.downlink} Mbps`,
-        rtt: `${connection.rtt} ms`
-      });
-
-      // Report connection quality
-      if (window.gtag) {
-        window.gtag('event', 'connection_quality', {
-          event_category: 'Performance',
-          effective_type: connection.effectiveType,
-          downlink: Math.round(connection.downlink),
-          rtt: connection.rtt,
-          non_interaction: true
+      
+      if (connection) {
+        console.log('🌐 Connection Quality:', {
+          effectiveType: connection.effectiveType,
+          downlink: `${connection.downlink} Mbps`,
+          rtt: `${connection.rtt} ms`
         });
+
+        // Report connection quality
+        if (window.gtag) {
+          window.gtag('event', 'connection_quality', {
+            event_category: 'Performance',
+            effective_type: connection.effectiveType,
+            downlink: Math.round(connection.downlink),
+            rtt: connection.rtt,
+            non_interaction: true
+          });
+        }
       }
     }
 
@@ -227,7 +221,7 @@ export const usePerformanceBudget = (budget = { total: 1000000, javascript: 3000
           jsSize += size;
         } else if (entry.name.includes('.css')) {
           cssSize += size;
-        } else if (entry.name.match(/\.(png|jpg|jpeg|webp|gif)$/)) {
+        } else if (entry.name.match(/\.(png|jpg|jpeg|webp|gif)$/i)) {
           imageSize += size;
         }
       });
@@ -249,15 +243,6 @@ export const usePerformanceBudget = (budget = { total: 1000000, javascript: 3000
       if (jsKB > jsBudgetKB) {
         console.warn(`⚠️ JavaScript budget exceeded: ${jsKB}/${jsBudgetKB}KB`);
       }
-
-      // Log performance metrics
-      console.log('📊 Performance Budget Report:', {
-        total: `${totalKB}KB`,
-        javascript: `${jsKB}KB`,
-        css: `${cssKB}KB`,
-        images: `${imageKB}KB`,
-        resources: entries.length
-      });
 
       // Report to analytics
       if (window.gtag) {

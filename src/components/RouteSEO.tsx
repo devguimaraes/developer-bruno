@@ -11,12 +11,15 @@ export const RouteSEO: React.FC = () => {
   const location = useLocation();
 
   // Get blog post data if on blog post page
-  const { post } = useBlogPost(location.pathname.startsWith('/blog/')
+  const slug = location.pathname.startsWith('/blog/') && location.pathname.split('/').length > 2
     ? location.pathname.split('/')[2]
-    : '');
+    : '';
+
+  const { post } = useBlogPost(slug);
 
   // Get route-specific SEO data
-  const routeSEO = useRouteSEO(post);
+  // Fix: Converte null para undefined para satisfazer a tipagem do hook
+  const routeSEO = useRouteSEO(post || undefined);
 
   return <SEO {...routeSEO} />;
 };

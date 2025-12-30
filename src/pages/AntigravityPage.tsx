@@ -37,9 +37,12 @@ const AntigravityPage: React.FC = () => {
         <meta property="og:type" content="product" />
         <meta
           property="og:url"
-          content="https://devguimaraes.com.br/antigravity"
+          content="https://www.devguimaraes.com.br/antigravity"
         />
-        <link rel="canonical" href="https://devguimaraes.com.br/antigravity" />
+        <link
+          rel="canonical"
+          href="https://www.devguimaraes.com.br/antigravity"
+        />
 
         {/* Product structured data */}
         <script type="application/ld+json">
