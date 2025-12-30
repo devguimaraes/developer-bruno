@@ -47,25 +47,30 @@ function parseFrontmatter(content: string): { data: Record<string, unknown>; con
 
 // Tipos para os posts do blog
 export interface BlogPost {
+  id: string;
   slug: string;
   title: string;
   date: string;
   readTime: string;
   readingTime?: number;
   tags: string[];
+  author: string;
   excerpt: string;
   description?: string;
   content: string;
   image?: string;
+  featured?: boolean;
   lastModified?: string;
   wordCount?: number;
 }
 
 // Função para converter filename em slug
-function generateSlug(filename: string): string {
+export function generateSlug(filename: string): string {
   return filename
     .replace(/\.md$/, '')
     .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/(^-|-$)/g, '');
 }
@@ -99,14 +104,24 @@ async function loadBlogPosts(): Promise<BlogPost[]> {
       const { data: frontmatter, content: markdown } = parseFrontmatter(content);
 
       // Criar objeto post
+      // Validate frontmatter structure
+      if (!frontmatter || typeof frontmatter !== 'object') {
+        console.warn(`Invalid frontmatter in ${filename}`);
+        continue;
+      }
+      
       const post: BlogPost = {
+        id: slug,
         slug,
-        title: frontmatter.title || 'Sem título',
-        date: frontmatter.date || 'Data não definida',
-        readTime: frontmatter.readTime || '5 min',
-        tags: Array.isArray(frontmatter.tags) ? frontmatter.tags : [],
-        excerpt: frontmatter.excerpt || '',
-        content: markdown.trim()
+        title: (frontmatter.title as string) || 'Sem título',
+        date: (frontmatter.date as string) || 'Data não definida',
+        readTime: (frontmatter.readTime as string) || '5 min',
+        tags: Array.isArray(frontmatter.tags) ? (frontmatter.tags as string[]) : [],
+        author: (frontmatter.author as string) || 'Bruno Guimarães',
+        excerpt: (frontmatter.excerpt as string) || '',
+        content: content,
+        image: (frontmatter.image as string) || undefined,
+        featured: Boolean(frontmatter.featured)
       };
 
       posts.push(post);
