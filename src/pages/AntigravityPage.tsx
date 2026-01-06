@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import HeroSection from "@/components/antigravity/HeroSection";
 import ComparisonSection from "@/components/antigravity/ComparisonSection";
@@ -11,6 +11,11 @@ import UrgencyBanner from "@/components/antigravity/UrgencyBanner";
 
 const AntigravityPage: React.FC = () => {
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+
+  // Garante que a página sempre carregue no topo
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const openCheckout = () => setIsCheckoutOpen(true);
   const closeCheckout = () => setIsCheckoutOpen(false);
