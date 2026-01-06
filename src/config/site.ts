@@ -13,7 +13,7 @@ export const siteConfig: SiteConfig = {
   domain: 'https://devguimaraes.com.br',
   github: 'https://github.com/devguimaraes',
   linkedin: 'https://www.linkedin.com/in/bcguimaraes/',
-  avatar: '/avatar.jpg',
+  avatar: '/avatar.webp',
   cv: {
     url: '/cv-bruno-guimaraes.pdf',
     filename: 'Bruno-Guimaraes-CV.pdf',
@@ -49,7 +49,7 @@ export const siteConfig: SiteConfig = {
       'web developer Rio de Janeiro',
       'desenvolvedor web Brasil',
     ],
-    image: '/og-image.jpg',
+    image: '/og-image.webp',
     siteName: 'Bruno Guimarães Portfolio',
     locale: 'pt_BR',
     region: 'BR',

@@ -1,5 +1,5 @@
 import React from "react";
-import avatar from "@/assets/avatar.jpg";
+import avatar from "@/assets/avatar.webp";
 import { Code2, Cpu, Globe, User, MapPin, Calendar } from "lucide-react";
 import { ScrollAnimation } from "@/components/ui/scroll-animation";
 import { ImageWithSkeleton } from "@/components/ui/image-with-skeleton";
