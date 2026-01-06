@@ -1,6 +1,24 @@
 {
-  "mcpServers": {"vercel": {
+  "mcpServers": {
+    "vercel": {
       "command": "npx",
-      "args": ["mcp-remote", "https://mcp.vercel.com"]
+      "args": [
+        "mcp-remote",
+        "https://mcp.vercel.com"
+      ]
+    },
+    "mercadopago-mcp-server": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://mcp.mercadopago.com/mcp",
+        "--header",
+        "Authorization:${AUTH_HEADER}"
+      ],
+      "env": {
+        "AUTH_HEADER": "Bearer APP_USR-5742761756654384-122223-9c8cc8cbdbf13e41c50164274b7141ba-286104491"
+      }
     }
-}}
+  }
+}
