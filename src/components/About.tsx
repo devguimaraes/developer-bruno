@@ -12,7 +12,7 @@ const About: React.FC<AboutProps> = ({ className, ...props }) => {
   return (
     <section
       {...props}
-      className={`min-h-screen max-h-screen h-screen py-16 md:py-20 bg-brutal-bg relative overflow-hidden flex flex-col ${
+      className={`min-h-screen md:max-h-screen md:h-screen py-16 md:py-20 bg-brutal-bg relative md:overflow-hidden overflow-x-hidden flex flex-col ${
         className ?? ""
       }`}
     >
@@ -20,9 +20,9 @@ const About: React.FC<AboutProps> = ({ className, ...props }) => {
       <div className="absolute inset-0 bg-neo-grid opacity-30 pointer-events-none" />
       <div className="absolute top-0 right-0 w-1/3 h-full bg-neo-diagonal pointer-events-none" />
 
-      <div className="container mx-auto px-4 relative z-10 flex-1 flex flex-col overflow-hidden">
+      <div className="container mx-auto px-4 relative z-10 flex-1 flex flex-col md:overflow-hidden">
         {/* Section Header */}
-        <div className="flex items-center gap-4 mb-6 md:mb-8 flex-shrink-0">
+        <div className="flex items-center gap-4 mb-6 md:mb-8 md:flex-shrink-0">
           <div className="w-12 h-12 bg-black text-white flex items-center justify-center font-black text-2xl border-4 border-brutal-orange">
             01
           </div>
@@ -36,7 +36,7 @@ const About: React.FC<AboutProps> = ({ className, ...props }) => {
         <ScrollAnimation
           variant="scaleIn"
           duration={0.6}
-          className="flex-1 min-h-0 overflow-auto"
+          className="flex-1 md:min-h-0 md:overflow-auto"
         >
           <div className="border-4 border-black bg-white shadow-brutal-lg neo-hover-lift h-full">
             {/* Window Header */}
