@@ -18,6 +18,7 @@ interface ExtendedNavigator extends Navigator {
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   interface Navigator extends ExtendedNavigator {}
 }
 
