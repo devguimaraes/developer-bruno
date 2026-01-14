@@ -99,7 +99,7 @@ Deno.serve(async (req) => {
     return new Response('ok', { status: 200 })
 
   } catch (error) {
-    console.error(error)
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 })
+    console.error('Webhook error:', error)
+    return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 })
   }
 })

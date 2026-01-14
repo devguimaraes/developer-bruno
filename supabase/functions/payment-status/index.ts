@@ -99,11 +99,12 @@ Deno.serve(async (req) => {
     )
 
   } catch (error) {
+    console.error('Payment status error:', error)
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: 'Internal Server Error' }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 400,
+        status: 500,
       }
     )
   }

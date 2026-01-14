@@ -67,6 +67,7 @@ Deno.serve(async (req) => {
     return Response.redirect(signedData.signedUrl)
 
   } catch (error) {
-    return new Response(error.message, { status: 500 })
+    console.error('Download error:', error)
+    return new Response('Internal Server Error', { status: 500 })
   }
 })
