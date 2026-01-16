@@ -27,7 +27,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onBuyClick }) => {
             transition={{ duration: 0.5 }}
             className="inline-flex items-center gap-2 bg-black text-white px-4 py-2 font-mono text-sm border-2 border-black shadow-[4px_4px_0px_0px_#facc15]"
           >
-            <Zap className="w-4 h-4" />2 EM 1: ANTIGRAVITY + GEMINI CLI
+            <Zap className="w-4 h-4" />6 SKILLS + COMANDOS PRONTOS
           </motion.div>
 
           {/* Main Headline */}
@@ -52,15 +52,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onBuyClick }) => {
             className="max-w-2xl mx-auto"
           >
             <p className="text-xl md:text-2xl text-stone-700 font-medium leading-relaxed">
-              Uma única configuração para{" "}
               <span className="bg-brutal-yellow px-2 font-bold border-2 border-black inline-block">
-                Antigravity
+                6 Skills
               </span>{" "}
-              e{" "}
+              modularizadas +{" "}
               <span className="bg-brutal-orange text-white px-2 font-bold border-2 border-black inline-block">
-                Gemini CLI
-              </span>
-              . Comandos específicos para cada ambiente.
+                Comandos prontos
+              </span>{" "}
+              para Antigravity e Gemini CLI.
             </p>
           </motion.div>
 
@@ -72,9 +71,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onBuyClick }) => {
             className="flex flex-wrap justify-center gap-3"
           >
             {[
-              "GEMINI.md Universal",
+              "6 Skills Modularizadas",
               "Comandos TOML + MD",
-              "Guia em PDF",
+              "Guia PDF Completo",
               "Atualizações Vitalícias",
             ].map((feature, index) => (
               <span

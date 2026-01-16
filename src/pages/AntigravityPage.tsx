@@ -24,20 +24,23 @@ const AntigravityPage: React.FC = () => {
     <>
       <Helmet>
         <title>
-          Gemini Config Pack | Configuração para Antigravity e Gemini CLI
+          Gemini Config Pack | 6 Skills + Comandos para Antigravity e Gemini CLI
         </title>
         <meta
           name="description"
-          content="Uma única configuração para Antigravity e Gemini CLI. GEMINI.md universal, comandos TOML + MD, guia em PDF. Pagamento único via PIX."
+          content="6 skills modularizadas (React, TypeScript, Planning...) + comandos prontos para Antigravity e Gemini CLI. Melhore seu código com padrões de engenharia."
         />
         <meta
           name="keywords"
-          content="Gemini CLI, Antigravity, GEMINI.md, configuração, produtividade, comandos TOML, comandos MD, automação"
+          content="Gemini CLI, Antigravity, skills, planning, software engineering, react, typescript, code review, writing, GEMINI.md"
         />
-        <meta property="og:title" content="Gemini Config Pack - 2 em 1" />
+        <meta
+          property="og:title"
+          content="Gemini Config Pack - 6 Skills + Comandos"
+        />
         <meta
           property="og:description"
-          content="Uma config para Antigravity e Gemini CLI. GEMINI.md universal + comandos TOML/MD + Guia PDF."
+          content="6 skills modularizadas + comandos prontos para Antigravity e Gemini CLI. React, TypeScript, Planning e mais."
         />
         <meta property="og:type" content="product" />
         <meta
@@ -56,7 +59,7 @@ const AntigravityPage: React.FC = () => {
             "@type": "Product",
             name: "Gemini Config Pack",
             description:
-              "Configuração universal para Antigravity e Gemini CLI. GEMINI.md otimizado, comandos TOML e MD, guia em PDF.",
+              "6 skills modularizadas + comandos prontos para Antigravity e Gemini CLI. Planning, React, TypeScript, Software Engineering, Code Review e Writing.",
             offers: {
               "@type": "Offer",
               price: "47.00",

@@ -29,22 +29,22 @@ export const FeaturesSection: React.FC = () => {
   const features: Feature[] = [
     {
       icon: <FileCode2 className="w-8 h-8" />,
-      title: "GEMINI.md",
+      title: "6 Skills Modularizadas",
       description:
-        "Arquivo de regras otimizado (~80 linhas) compatível com Antigravity e Gemini CLI. Boas práticas de engenharia, padrões TypeScript/React e fluxo Git.",
-      tag: "UNIVERSAL",
+        "Planning, Software Engineering, React, TypeScript, Code Review e Writing. Cada skill é um guia especializado que melhora a qualidade do seu código.",
+      tag: "PRINCIPAL",
     },
     {
       icon: <BookOpen className="w-8 h-8" />,
-      title: "GEMINI-verbose.md",
+      title: "GEMINI.md Universal",
       description:
-        "Versão detalhada com explicações completas de cada regra e conceito. Ideal para aprendizado e customização.",
+        "Arquivo de regras otimizado, compatível com Antigravity e Gemini CLI. Referencia as skills automaticamente.",
     },
     {
       icon: <Terminal className="w-8 h-8" />,
-      title: "Guia em PDF",
+      title: "Guia PDF + Comandos",
       description:
-        "Manual completo de configuração para ambos os ambientes, com dicas de economia de tokens.",
+        "Manual completo de configuração + comandos TOML/MD para ambos os ambientes. Inclui dicas de economia de tokens.",
       tag: "BÔNUS",
     },
   ];
@@ -162,6 +162,65 @@ export const FeaturesSection: React.FC = () => {
             </motion.div>
           ))}
         </div>
+
+        {/* Skills Grid Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="max-w-5xl mx-auto mb-16"
+        >
+          <div className="text-center mb-8">
+            <h3 className="text-2xl font-black mb-2">
+              <span className="bg-brutal-yellow px-4 py-2 inline-block border-2 border-black">
+                🎯 AS 6 SKILLS INCLUÍDAS
+              </span>
+            </h3>
+            <p className="text-stone-600 mt-4 font-medium">
+              Cada skill é um guia especializado que o Gemini usa para melhorar
+              seu código
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {[
+              {
+                emoji: "📋",
+                name: "planning",
+                desc: "Arquitetura e decisões técnicas",
+              },
+              {
+                emoji: "⚙️",
+                name: "software-engineering",
+                desc: "Princípios core (KISS, YAGNI)",
+              },
+              { emoji: "⚛️", name: "react", desc: "React 19 + Next.js" },
+              { emoji: "📘", name: "typescript", desc: "Type-safety e2e" },
+              {
+                emoji: "🔍",
+                name: "reviewing-code",
+                desc: "Code review guidelines",
+              },
+              { emoji: "✍️", name: "writing", desc: "Documentação clara" },
+            ].map((skill, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
+                className="bg-white border-3 border-black p-4 shadow-[4px_4px_0px_0px_#000] hover:shadow-[2px_2px_0px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
+              >
+                <div className="text-2xl mb-2">{skill.emoji}</div>
+                <h4 className="font-mono font-bold text-sm text-brutal-orange">
+                  {skill.name}
+                </h4>
+                <p className="text-xs text-stone-600 mt-1">{skill.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
 
         {/* Commands Section */}
         <motion.div
