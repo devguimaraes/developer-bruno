@@ -21,7 +21,7 @@ const SITEMAP_CONFIG = {
     CONTACT: 0.6,
     STATIC: 0.5
   }
-};
+} as const;
 
 /**
  * Generate sitemap entries for Brazilian search engines

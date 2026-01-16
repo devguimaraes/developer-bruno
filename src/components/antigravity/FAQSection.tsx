@@ -12,6 +12,11 @@ export const FAQSection: React.FC = () => {
 
   const faqItems: FAQItem[] = [
     {
+      question: "O que são as 6 Skills incluídas?",
+      answer:
+        "São guias especializados que o Gemini usa para melhorar seu código: Planning (arquitetura), Software Engineering (princípios KISS/YAGNI), React (React 19), TypeScript (type-safety), Reviewing Code (code review) e Writing (documentação). Cada skill é um arquivo .md modular.",
+    },
+    {
       question: "Como recebo os arquivos após o pagamento?",
       answer:
         "Após a confirmação do pagamento via PIX, você receberá automaticamente um link de download na mesma página. O link também será enviado para o seu e-mail.",
@@ -19,22 +24,17 @@ export const FAQSection: React.FC = () => {
     {
       question: "Funciona com Antigravity e Gemini CLI?",
       answer:
-        "Sim! O GEMINI.md e GEMINI-verbose.md funcionam em ambos os ambientes. Os comandos vêm em dois formatos: TOML para Antigravity e MD para Gemini CLI.",
+        "Sim! O GEMINI.md e as 6 skills funcionam em ambos os ambientes. Os comandos vêm em dois formatos: MD para Antigravity e TOML para Gemini CLI.",
     },
     {
       question: "Posso usar em múltiplos projetos?",
       answer:
-        "Sim! A licença é pessoal e você pode usar as configurações em todos os seus projetos. O arquivo GEMINI.md funciona globalmente.",
+        "Sim! A licença é pessoal e você pode usar as configurações em todos os seus projetos. As skills são instaladas globalmente.",
     },
     {
       question: "Recebo atualizações futuras?",
       answer:
-        "Sim! Todas as atualizações do pacote são vitalícias. Quando lançarmos novos comandos ou melhorias, você receberá acesso automaticamente.",
-    },
-    {
-      question: "O pacote inclui suporte?",
-      answer:
-        "Sim, oferecemos suporte por e-mail para dúvidas sobre configuração e uso. Respondemos em até 24 horas úteis.",
+        "Sim! Todas as atualizações do pacote são vitalícias. Quando lançarmos novas skills ou melhorias, você receberá acesso automaticamente.",
     },
   ];
 

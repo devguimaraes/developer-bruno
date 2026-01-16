@@ -5,7 +5,7 @@ import { X, Check } from "lucide-react";
 export const ComparisonSection: React.FC = () => {
   const beforeItems = [
     "Repetir instruções a cada conversa",
-    "Configuração separada para cada ferramenta",
+    "Instruções genéricas sem especialização",
     "Sem padrões de engenharia definidos",
     "Tarefas manuais: branch, commit, PR...",
     "Código inconsistente entre projetos",
@@ -13,12 +13,12 @@ export const ComparisonSection: React.FC = () => {
   ];
 
   const afterItems = [
-    "GEMINI.md universal para ambos ambientes",
+    "6 skills especializadas (React, TypeScript, Planning...)",
     "Uma config, funciona no Antigravity e Gemini CLI",
     "Boas práticas de engenharia integradas",
     "Comandos prontos: /create-feature, /open-pr",
     "Código consistente e padronizado",
-    "Comandos TOML + MD organizados",
+    "GEMINI.md universal + comandos TOML/MD",
   ];
 
   return (

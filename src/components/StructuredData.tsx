@@ -3,6 +3,8 @@ import { siteConfig } from '@/config/site';
 import type { StructuredDataProps } from '@/types';
 
 const StructuredData: React.FC = () => {
+  if (!siteConfig.brazilianMarket) return null;
+
   // Person Schema for Brazilian Market
   const personSchema = {
     "@context": "https://schema.org",

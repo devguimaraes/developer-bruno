@@ -1,8 +1,8 @@
 import type { Project } from '@/types';
-import agenciaMultiBrImg from '@/assets/agencia-multi-br.png';
-import engerodImg from '@/assets/engerod.png';
-import semogrjImg from '@/assets/semogrj.png';
-import luisFelipeImg from '@/assets/luis-felipe-pereira.png';
+import agenciaMultiBrImg from '@/assets/agencia-multi-br.webp';
+import engerodImg from '@/assets/engerod.webp';
+import semogrjImg from '@/assets/semogrj.webp';
+import luisFelipeImg from '@/assets/luis-felipe-pereira.webp';
 
 /**
  * Projects data with external links and proper categorization

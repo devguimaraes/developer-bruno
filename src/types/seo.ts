@@ -103,66 +103,11 @@ export interface StructuredDataProps {
   data: Record<string, unknown>;
 }
 
-export interface PerformanceMetrics {
-  /** Largest Contentful Paint */
-  lcp?: number;
 
-  /** First Input Delay */
-  fid?: number;
-
-  /** Cumulative Layout Shift */
-  cls?: number;
-
-  /** Interaction to Next Paint */
-  inp?: number;
-
-  /** Time to First Byte */
-  ttfb?: number;
-
-  /** First Contentful Paint */
-  fcp?: number;
-}
-
-export interface AnalyticsEvent {
-  /** Event name */
-  name: string;
-
-  /** Event properties */
-  props?: Record<string, string | number | boolean>;
-
-  /** Event URL */
-  url?: string;
-}
-
-export interface ErrorBoundaryState {
-  /** Whether an error occurred */
-  hasError: boolean;
-
-  /** The error that occurred */
-  error?: Error;
-
-  /** Error info from React */
-  errorInfo?: React.ErrorInfo;
-}
-
-export interface SitemapEntry {
-  /** URL path */
-  path: string;
-
-  /** Change frequency */
-  changefreq: 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never';
-
-  /** Priority 0.0-1.0 */
-  priority: number;
-
-  /** Last modification date */
-  lastmod?: string;
-}
 
 /**
  * Brazilian SEO specific interfaces
  */
-
 export interface BrazilianSEOOptimization {
   /** Keywords specific to Brazilian market */
   brazilianKeywords: string[];
@@ -190,56 +135,6 @@ export interface BrazilianSEOOptimization {
     language: 'Português';
   };
 }
-
-export interface RichSnippetProps {
-  /** Rich snippet type */
-  type: 'software' | 'service' | 'article' | 'product' | 'event';
-
-  /** Rich snippet data */
-  data: {
-    name?: string;
-    description?: string;
-    image?: string;
-    url?: string;
-    price?: string;
-    rating?: number;
-    reviewCount?: number;
-    provider?: string;
-    offers?: {
-      price?: string;
-      priceCurrency?: string;
-      availability?: string;
-    };
-  };
-}
-
-export interface WebVitalsThresholds {
-  /** LCP threshold in milliseconds (Good: <2500) */
-  lcp: number;
-
-  /** FID threshold in milliseconds (Good: <100) */
-  fid: number;
-
-  /** CLS threshold (Good: <0.1) */
-  cls: number;
-
-  /** INP threshold in milliseconds (Good: <200) */
-  inp: number;
-
-  /** TTFB threshold in milliseconds (Good: <800) */
-  ttfb: number;
-}
-
-/**
- * Default Brazilian market thresholds
- */
-export const BRAZILIAN_WEB_VITALS_THRESHOLDS: WebVitalsThresholds = {
-  lcp: 2500, // Conservative for 3G networks
-  fid: 100,
-  cls: 0.1,
-  inp: 200,
-  ttfb: 800, // Consider Brazilian network conditions
-};
 
 /**
  * Default Brazilian SEO configuration

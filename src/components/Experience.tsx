@@ -40,7 +40,7 @@ const Experience = () => {
                   </div>
                 </div>
                 <div className="px-4 py-2 bg-neutral-100 dark:bg-neutral-900 border-2 border-black dark:border-white font-mono font-bold text-sm whitespace-nowrap">
-                  {job.period}
+                  {job.year}
                 </div>
               </div>
 

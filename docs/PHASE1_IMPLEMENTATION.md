@@ -180,11 +180,10 @@ src/
 
 ## 🚧 Issues Descobertas Pós-Implementação
 
-### **Critical Issues**
+### ✅ **Issues Resolvidas**
 
-1. **Skills Component**: Ainda usa dados hardcoded (inconsistência PHASE1)
-2. **Performance**: Imagens grandes afetando load time
-3. **Testing**: Nenhuma infraestrutura de testes implementada
+1. **Skills Component**: Integração com dados externalizados CONFIRMADA (Janeiro 2026)
+2. **Performance**: Imagens otimizadas para WebP - 89.9% economia (6.89MB → 0.70MB)
 
 ### **Medium Priority Issues**
 
