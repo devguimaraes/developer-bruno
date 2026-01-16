@@ -43,7 +43,8 @@ Aguardo seu retorno!`);
     );
     window.open(
       `${contactData.socialLinks[0].href}?message=${message}`,
-      "_blank"
+      "_blank",
+      "noopener,noreferrer"
     );
   };
 

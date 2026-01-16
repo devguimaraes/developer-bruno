@@ -18,6 +18,12 @@ export interface ExtendedNavigator extends Navigator {
   connection?: NetworkConnection;
 }
 
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  interface Navigator extends ExtendedNavigator {}
+}
+
+
 /**
  * Web Vitals monitoring hook for Brazilian market
  */
