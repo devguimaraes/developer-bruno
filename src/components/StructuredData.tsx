@@ -222,7 +222,8 @@ const StructuredData: React.FC = () => {
           key={`structured-data-${index}`}
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(schema, null, 2)
+            // Sentinel Security: Sanitize JSON to prevent XSS (script injection)
+            __html: JSON.stringify(schema, null, 2).replace(/</g, '\\u003c')
           }}
         />
       ))}
