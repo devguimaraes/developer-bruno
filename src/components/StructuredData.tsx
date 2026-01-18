@@ -215,6 +215,11 @@ const StructuredData: React.FC = () => {
     breadcrumbSchema
   ];
 
+  // Helper to safely stringify JSON for script tags, preventing XSS
+  const safeJsonStringify = (value: unknown) => {
+    return JSON.stringify(value, null, 2).replace(/</g, '\\u003c');
+  };
+
   return (
     <>
       {schemas.map((schema, index) => (
@@ -222,7 +227,7 @@ const StructuredData: React.FC = () => {
           key={`structured-data-${index}`}
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(schema, null, 2)
+            __html: safeJsonStringify(schema)
           }}
         />
       ))}
