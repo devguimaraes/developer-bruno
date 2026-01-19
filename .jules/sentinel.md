@@ -7,3 +7,8 @@
 **Vulnerability:** The chart component injected configuration values directly into a `dangerouslySetInnerHTML` style block. This could allow CSS injection if the configuration data was controlled by a malicious actor.
 **Learning:** Even internal configuration objects passed as props should be treated with suspicion when rendered into raw HTML or CSS. Attack surfaces can evolve if "trusted" data sources become user-controlled in the future.
 **Prevention:** Sanitize all values interpolated into style blocks. For simple values like colors, stripping control characters like `;`, `{`, and `}` is an effective defense.
+
+## 2025-05-22 - XSS in Chart and Structured Data
+**Vulnerability:** `dangerouslySetInnerHTML` was used with unsanitized user/config input in `ChartStyle` (CSS injection) and `StructuredData` (Script tag injection).
+**Learning:** Helper functions for specific sanitization contexts (CSS values vs Script JSON) are critical to prevent injection when `dangerouslySetInnerHTML` is unavoidable.
+**Prevention:** Use `sanitizeCSSValue` for style props and `serializeJSONForScript` for JSON-LD script tags.
