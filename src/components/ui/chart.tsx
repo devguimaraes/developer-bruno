@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as RechartsPrimitive from "recharts";
 
-import { cn } from "@/lib/utils";
+import { cn, sanitizeCSSValue } from "@/lib/utils";
 
 // Format: { THEME_NAME: CSS_SELECTOR }
 const THEMES = { light: "", dark: ".dark" } as const;
@@ -76,7 +76,7 @@ ${colorConfig
   .map(([key, itemConfig]) => {
     const color = itemConfig.theme?.[theme as keyof typeof itemConfig.theme] || itemConfig.color;
     // Sentinel Security: Sanitize color to prevent CSS injection
-    const safeColor = color ? color.replace(/[;{}]/g, "") : "";
+    const safeColor = color ? sanitizeCSSValue(color) : "";
     return safeColor ? `  --color-${key}: ${safeColor};` : null;
   })
   .join("\n")}

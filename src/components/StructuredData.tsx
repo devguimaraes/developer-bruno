@@ -1,6 +1,7 @@
 import React from 'react';
 import { siteConfig } from '@/config/site';
 import type { StructuredDataProps } from '@/types';
+import { serializeJSONForScript } from '@/lib/utils';
 
 const StructuredData: React.FC = () => {
   if (!siteConfig.brazilianMarket) return null;
@@ -222,7 +223,8 @@ const StructuredData: React.FC = () => {
           key={`structured-data-${index}`}
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(schema, null, 2)
+            // Sentinel Security: Use safe serialization to prevent XSS via script tag termination
+            __html: serializeJSONForScript(schema)
           }}
         />
       ))}
