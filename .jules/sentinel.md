@@ -7,3 +7,8 @@
 **Vulnerability:** The chart component injected configuration values directly into a `dangerouslySetInnerHTML` style block. This could allow CSS injection if the configuration data was controlled by a malicious actor.
 **Learning:** Even internal configuration objects passed as props should be treated with suspicion when rendered into raw HTML or CSS. Attack surfaces can evolve if "trusted" data sources become user-controlled in the future.
 **Prevention:** Sanitize all values interpolated into style blocks. For simple values like colors, stripping control characters like `;`, `{`, and `}` is an effective defense.
+
+## 2025-05-22 - XSS Risk in Structured Data Script Tags
+**Vulnerability:** `StructuredData` component injected JSON directly into `<script>` tags using `JSON.stringify`. While the data source is currently static, future changes could introduce user-controlled data, allowing XSS via script tag termination (`</script>`).
+**Learning:** React's `dangerouslySetInnerHTML` combined with `JSON.stringify` inside `<script>` tags is a common pitfall. Standard `JSON.stringify` does not escape `<` characters.
+**Prevention:** Use a helper function `serializeJSONForScript` that escapes `<` to `\u003c`, preventing the browser from interpreting `</script>` as a tag closer.
