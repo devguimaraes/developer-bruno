@@ -1,5 +1,6 @@
 import React from 'react';
 import { siteConfig } from '@/config/site';
+import { serializeJSONForScript } from '@/lib/utils';
 import type { StructuredDataProps } from '@/types';
 
 const StructuredData: React.FC = () => {
@@ -222,7 +223,7 @@ const StructuredData: React.FC = () => {
           key={`structured-data-${index}`}
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(schema, null, 2)
+            __html: serializeJSONForScript(schema)
           }}
         />
       ))}
