@@ -19,7 +19,7 @@ interface RouteSEOProps {
   };
 }
 
-export const useRouteSEO = (blogPost?: BlogPost): RouteSEOProps => {
+export const useRouteSEO = (blogPost?: BlogPost | null): RouteSEOProps => {
   const location = useLocation();
 
   return useMemo(() => {

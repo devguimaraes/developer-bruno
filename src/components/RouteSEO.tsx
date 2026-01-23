@@ -18,8 +18,7 @@ export const RouteSEO: React.FC = () => {
   const { post } = useBlogPost(slug);
 
   // Get route-specific SEO data
-  // Fix: Converte null para undefined para satisfazer a tipagem do hook
-  const routeSEO = useRouteSEO(post || undefined);
+  const routeSEO = useRouteSEO(post);
 
   return <SEO {...routeSEO} />;
 };
