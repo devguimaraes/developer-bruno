@@ -76,7 +76,7 @@ ${colorConfig
   .map(([key, itemConfig]) => {
     const color = itemConfig.theme?.[theme as keyof typeof itemConfig.theme] || itemConfig.color;
     // Sentinel Security: Sanitize color to prevent CSS injection
-    const safeColor = color ? color.replace(/[;{}]/g, "") : "";
+    const safeColor = color ? color.replace(/[;{}<>]/g, "") : "";
     return safeColor ? `  --color-${key}: ${safeColor};` : null;
   })
   .join("\n")}
