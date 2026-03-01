@@ -18,10 +18,12 @@ export const useStackingSections = (sectionIds: string[]) => {
     observersRef.current.forEach(observer => observer.disconnect());
     observersRef.current = [];
 
-    // Update sections with actual DOM elements
-    const updatedSections = sections.map(section => ({
-      ...section,
-      element: document.getElementById(section.id)
+    // Create sections with actual DOM elements from IDs
+    const updatedSections: Section[] = sectionIds.map(id => ({
+      id,
+      element: document.getElementById(id),
+      progress: 0,
+      isVisible: false
     }));
 
     // Create IntersectionObserver for visibility tracking
@@ -80,7 +82,6 @@ export const useStackingSections = (sectionIds: string[]) => {
     const sectionIndex = sections.findIndex(s => s.id === sectionId);
     if (sectionIndex === -1) return 'translateY(0px)';
 
-    const currentSection = sections[sectionIndex];
     const prevSection = sections[sectionIndex - 1];
 
     // If this is the first section (Hero), no transform
@@ -105,7 +106,7 @@ export const useStackingSections = (sectionIds: string[]) => {
 
     const baseZ = 10;
     const currentSection = sections[sectionIndex];
-
+    
     // Increase z-index based on scroll progress for dynamic stacking
     const progressBonus = currentSection.progress * 5;
 

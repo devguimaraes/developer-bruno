@@ -5,12 +5,9 @@ import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { buttonVariants, type ButtonVariantsProps } from "./button-variants";
 
-// Re-export for backwards compatibility
-export { buttonVariants } from "./button-variants";
-
+// Interface for button props
 export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    ButtonVariantsProps {
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>, ButtonVariantsProps {
   asChild?: boolean;
   icon?: boolean;
 }
@@ -26,7 +23,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       children,
       ...props
     },
-    ref
+    ref,
   ) => {
     const Comp = asChild ? Slot : "button";
     return (
@@ -39,7 +36,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {icon && <ArrowRight className="ml-1" />}
       </Comp>
     );
-  }
+  },
 );
 Button.displayName = "Button";
 

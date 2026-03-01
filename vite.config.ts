@@ -12,6 +12,7 @@ export default defineConfig(({ mode }) => ({
     environment: "jsdom",
     setupFiles: "./src/test/setup.ts",
     css: true,
+    exclude: ["**/src/test/e2e/**", "node_modules/**"],
   },
   server: {
     host: "::",
