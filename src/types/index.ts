@@ -1,3 +1,4 @@
+import type { LucideIcon } from 'lucide-react';
 /**
  * Type definitions for all portfolio data structures
  */
@@ -36,7 +37,7 @@ export interface Experience {
 // Skill/technology interface
 export interface Skill {
   id: string;
-  icon: any; // Lucide icon component
+  icon: LucideIcon; // Lucide icon component
   title: string;
   description: string;
   color: string;
@@ -47,7 +48,7 @@ export interface Skill {
 // Social link interface
 export interface SocialLink {
   id: string;
-  icon: any; // Lucide icon component
+  icon: LucideIcon; // Lucide icon component
   href: string;
   label: string;
   username?: string;
@@ -152,5 +153,5 @@ export interface ErrorBoundaryState {
 // Structured Data Props
 export interface StructuredDataProps {
   type: 'Organization' | 'Person' | 'WebSite' | 'BlogPosting';
-  data: Record<string, any>;
+  data: Record<string, unknown>;
 }

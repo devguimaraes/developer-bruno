@@ -3,12 +3,8 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { cardVariants, type CardVariantsProps } from "./card-variants";
 
-// Re-export for backwards compatibility
-export { cardVariants } from "./card-variants";
-
 export interface CardProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    CardVariantsProps {}
+  extends React.HTMLAttributes<HTMLDivElement>, CardVariantsProps {}
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ className, variant, ...props }, ref) => (
@@ -17,7 +13,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
       className={cn(cardVariants({ variant, className }))}
       {...props}
     />
-  )
+  ),
 );
 Card.displayName = "Card";
 
@@ -29,7 +25,7 @@ const CardHeader = React.forwardRef<
     ref={ref}
     className={cn(
       "flex flex-col space-y-1.5 p-6 border-b-4 border-black bg-stone-100",
-      className
+      className,
     )}
     {...props}
   />
@@ -44,7 +40,7 @@ const CardTitle = React.forwardRef<
     ref={ref}
     className={cn(
       "text-2xl font-black leading-none tracking-tight uppercase",
-      className
+      className,
     )}
     {...props}
   />
@@ -59,7 +55,7 @@ const CardDescription = React.forwardRef<
     ref={ref}
     className={cn(
       "text-sm font-medium text-muted-foreground font-mono",
-      className
+      className,
     )}
     {...props}
   />
@@ -82,7 +78,7 @@ const CardFooter = React.forwardRef<
     ref={ref}
     className={cn(
       "flex items-center p-6 pt-0 border-t-4 border-black bg-stone-50",
-      className
+      className,
     )}
     {...props}
   />
