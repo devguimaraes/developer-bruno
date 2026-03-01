@@ -2,6 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import Layout from "@/components/Layout";
 import Index from "./pages/Index";
 import BlogPage from "./pages/BlogPage";
@@ -26,6 +27,7 @@ const App = () => {
         <Toaster />
         <Sonner />
         <Analytics />
+        <SpeedInsights />
         <BrowserRouter>
           {/* Route-based SEO Component - Meta tags dinâmicas para cada rota */}
           <RouteSEO />
