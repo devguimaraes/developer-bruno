@@ -1,0 +1,555 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e3]:
+    - navigation [ref=e4]:
+      - generic [ref=e5]:
+        - link "BG Bruno Guimarães DEV_FRONTEND" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - generic [ref=e8]: BG
+          - generic [ref=e9]:
+            - generic [ref=e10]: Bruno Guimarães
+            - generic [ref=e11]:
+              - img [ref=e12]
+              - text: DEV_FRONTEND
+        - generic [ref=e14]:
+          - link "//INÍCIO" [ref=e15] [cursor=pointer]:
+            - /url: /
+          - link "//SOBRE" [ref=e16] [cursor=pointer]:
+            - /url: "#about"
+          - link "//SKILLS" [ref=e17] [cursor=pointer]:
+            - /url: "#skills"
+          - link "//PROJETOS" [ref=e18] [cursor=pointer]:
+            - /url: "#projects"
+          - link "//BLOG" [ref=e19] [cursor=pointer]:
+            - /url: /blog
+          - link "//ANTIGRAVITY" [ref=e20] [cursor=pointer]:
+            - /url: /antigravity
+          - link "//CONTATO" [ref=e21] [cursor=pointer]:
+            - /url: "#contact"
+            - text: //CONTATO
+    - main [ref=e23]:
+      - generic [ref=e24]:
+        - generic [ref=e25]:
+          - generic [ref=e27]:
+            - generic [ref=e28]:
+              - img [ref=e29]
+              - text: Available for Projects
+            - generic [ref=e32]: ●
+            - generic [ref=e33]:
+              - img [ref=e34]
+              - text: Front-End Engineer
+            - generic [ref=e38]: ●
+            - generic [ref=e39]:
+              - img [ref=e40]
+              - text: High Performance
+            - generic [ref=e42]: ●
+            - generic [ref=e43]:
+              - img [ref=e44]
+              - text: Available for Projects
+            - generic [ref=e47]: ●
+            - generic [ref=e48]:
+              - img [ref=e49]
+              - text: Front-End Engineer
+            - generic [ref=e53]: ●
+            - generic [ref=e54]:
+              - img [ref=e55]
+              - text: High Performance
+            - generic [ref=e57]: ●
+            - generic [ref=e58]:
+              - img [ref=e59]
+              - text: Available for Projects
+            - generic [ref=e62]: ●
+            - generic [ref=e63]:
+              - img [ref=e64]
+              - text: Front-End Engineer
+            - generic [ref=e68]: ●
+            - generic [ref=e69]:
+              - img [ref=e70]
+              - text: High Performance
+            - generic [ref=e72]: ●
+            - generic [ref=e73]:
+              - img [ref=e74]
+              - text: Available for Projects
+            - generic [ref=e77]: ●
+            - generic [ref=e78]:
+              - img [ref=e79]
+              - text: Front-End Engineer
+            - generic [ref=e83]: ●
+            - generic [ref=e84]:
+              - img [ref=e85]
+              - text: High Performance
+            - generic [ref=e87]: ●
+          - generic [ref=e88]:
+            - generic [ref=e89]:
+              - generic [ref=e90]:
+                - img [ref=e92]
+                - generic [ref=e95]:
+                  - generic [ref=e96]: SYSTEM_READY // v.4.0
+                  - heading "Bruno Guimarães" [level=1] [ref=e98]:
+                    - text: Bruno
+                    - generic [ref=e99]: Guimarães
+                  - paragraph [ref=e100]: Desenvolvedor Front-end focado em performance. Crio interfaces modernas e responsivas para sites e aplicações web.
+                  - generic [ref=e101]:
+                    - button "EXPLORAR PORTFÓLIO" [ref=e102] [cursor=pointer]:
+                      - text: EXPLORAR PORTFÓLIO
+                      - img
+                    - button "INICIAR PROJETO" [ref=e103] [cursor=pointer]
+              - generic [ref=e104]:
+                - generic [ref=e105]:
+                  - generic [ref=e106]:
+                    - generic [ref=e107]: CURRENT_STATUS
+                    - generic [ref=e108]: ONLINE
+                  - img [ref=e110]
+                - generic [ref=e112]:
+                  - generic [ref=e113] [cursor=pointer]:
+                    - img "React" [ref=e116]
+                    - generic [ref=e118]: React
+                  - generic [ref=e120] [cursor=pointer]:
+                    - img "TypeScript" [ref=e123]
+                    - generic [ref=e125]: TS
+                  - generic [ref=e127] [cursor=pointer]:
+                    - img "Next.js" [ref=e130]
+                    - generic [ref=e132]: Next.js
+                  - generic [ref=e134] [cursor=pointer]:
+                    - img "Tailwind CSS" [ref=e137]
+                    - generic [ref=e139]: Tailwind
+                - generic [ref=e142]:
+                  - generic [ref=e147]: TERMINAL_OUTPUT
+                  - generic [ref=e148]:
+                    - generic [ref=e149]: "> INITIALIZING_CORE..."
+                    - generic [ref=e150]: "> LOADING_ASSETS..."
+                    - generic [ref=e151]: "> OPTIMIZING_RENDER..."
+                    - generic [ref=e152]: "> CONNECTING_TO_MAINNET..."
+                  - generic [ref=e153]: _
+            - generic [ref=e156]: "COORDS: 22.9068° S, 43.1729° W"
+        - generic [ref=e161]:
+          - generic [ref=e162]:
+            - generic [ref=e163]: "01"
+            - heading "SOBRE_MIM" [level=2] [ref=e164]:
+              - generic [ref=e167]: SOBRE_MIM
+          - generic [ref=e170]:
+            - generic [ref=e172]:
+              - img [ref=e173]
+              - text: PERFIL_USUARIO.JSON
+            - generic [ref=e180]:
+              - generic [ref=e181]:
+                - generic [ref=e182]:
+                  - img "Bruno Guimarães" [ref=e185]
+                  - generic [ref=e187]: ONLINE
+                - generic [ref=e189]:
+                  - generic [ref=e190]:
+                    - img [ref=e191]
+                    - generic [ref=e194]: "LOCAL:"
+                    - generic [ref=e195]: Rio de Janeiro
+                  - generic [ref=e196]:
+                    - img [ref=e197]
+                    - generic [ref=e199]: "EXP:"
+                    - generic [ref=e200]: +5 Anos
+                  - generic [ref=e201]:
+                    - img [ref=e202]
+                    - generic [ref=e206]: "CARGO:"
+                    - generic [ref=e207]: Dev. Front-end
+              - generic [ref=e208]:
+                - heading "Eu crio interfaces de alta performance para a web." [level=3] [ref=e209]:
+                  - generic [ref=e210]:
+                    - generic [ref=e212]: Eu
+                    - generic [ref=e214]: crio
+                    - generic [ref=e216]: interfaces
+                    - generic [ref=e218]: de
+                  - generic [ref=e220]:
+                    - generic [ref=e222]: alta
+                    - generic [ref=e224]: performance
+                  - generic [ref=e225]:
+                    - generic [ref=e227]: para
+                    - generic [ref=e229]: a
+                    - generic [ref=e231]: web.
+                - paragraph [ref=e232]: Com 5 anos de experiência em desenvolvimento front‑end e formação emDesenvolvimento Web pelo Senac‑RJ, transformo conceitos de design em interfaces reais,rápidas e funcionais para sites e sofwares.
+                - generic [ref=e233]:
+                  - generic [ref=e234]: Valores_Centrais
+                  - generic [ref=e235]:
+                    - generic [ref=e236]:
+                      - heading "OTIMIZADO" [level=4] [ref=e237]:
+                        - img [ref=e238]
+                        - text: OTIMIZADO
+                      - paragraph [ref=e241]: Código limpo que roda rápido em qualquer dispositivo.
+                    - generic [ref=e242]:
+                      - heading "ESCALÁVEL" [level=4] [ref=e243]:
+                        - img [ref=e244]
+                        - text: ESCALÁVEL
+                      - paragraph [ref=e247]: Arquiteturas construídas para crescer com seu negócio.
+                - generic [ref=e248]:
+                  - generic [ref=e249]: "#CRIATIVO"
+                  - generic [ref=e250]: "#LÓGICO"
+                  - generic [ref=e251]: "#PRECISO"
+        - generic [ref=e257]:
+          - generic [ref=e258]:
+            - generic [ref=e259]: "02"
+            - heading "SERVIÇOS" [level=2] [ref=e260]:
+              - generic [ref=e263]: SERVIÇOS
+          - generic [ref=e265]:
+            - generic [ref=e266] [cursor=pointer]:
+              - generic [ref=e267]: "01"
+              - generic [ref=e268]:
+                - generic [ref=e269]:
+                  - heading "FRONT-END ENGINEERING" [level=3] [ref=e270]:
+                    - generic [ref=e271]:
+                      - generic [ref=e273]: FRONT-END
+                      - generic [ref=e275]: ENGINEERING
+                  - paragraph [ref=e276]: React, Next.js, Architecture
+                - generic [ref=e277]:
+                  - img [ref=e279]
+                  - img [ref=e282]
+            - generic [ref=e285] [cursor=pointer]:
+              - generic [ref=e286]: "02"
+              - generic [ref=e287]:
+                - generic [ref=e288]:
+                  - heading "UI & UX" [level=3] [ref=e289]:
+                    - generic [ref=e290]:
+                      - generic [ref=e292]: UI
+                      - generic [ref=e294]: "&"
+                      - generic [ref=e296]: UX
+                  - paragraph [ref=e297]: Typography Systems, Visual Hierarchy
+                - generic [ref=e298]:
+                  - img [ref=e300]
+                  - img [ref=e306]
+            - generic [ref=e309] [cursor=pointer]:
+              - generic [ref=e310]: "03"
+              - generic [ref=e311]:
+                - generic [ref=e312]:
+                  - heading "PERFORMANCE" [level=3] [ref=e313]:
+                    - generic [ref=e316]: PERFORMANCE
+                  - paragraph [ref=e317]: SEO, Core Web Vitals, Speed
+                - generic [ref=e318]:
+                  - img [ref=e320]
+                  - img [ref=e322]
+            - generic [ref=e325] [cursor=pointer]:
+              - generic [ref=e326]: "04"
+              - generic [ref=e327]:
+                - generic [ref=e328]:
+                  - heading "MOTION DESIGN" [level=3] [ref=e329]:
+                    - generic [ref=e330]:
+                      - generic [ref=e332]: MOTION
+                      - generic [ref=e334]: DESIGN
+                  - paragraph [ref=e335]: GSAP, Framer Motion, WebGL
+                - generic [ref=e336]:
+                  - img [ref=e338]
+                  - img [ref=e341]
+          - generic [ref=e345]: SERVICOS_ATIVOS
+        - generic [ref=e349]:
+          - generic [ref=e350]:
+            - generic [ref=e351]:
+              - generic [ref=e352]:
+                - img [ref=e353]
+                - text: ~/DOCUMENTS/BLOG
+              - heading "INSIGHTS TÉCNICOS" [level=2] [ref=e355]:
+                - generic [ref=e358]: INSIGHTS
+                - generic [ref=e362]: TÉCNICOS
+            - paragraph [ref=e363]:
+              - generic [ref=e364]:
+                - generic [ref=e366]: Pensamentos
+                - generic [ref=e368]: sobre
+                - generic [ref=e370]: código,
+                - generic [ref=e372]: design
+                - generic [ref=e374]: e
+                - generic [ref=e376]: a
+                - generic [ref=e378]: entropia
+                - generic [ref=e380]: do
+                - generic [ref=e382]: desenvolvimento
+                - generic [ref=e384]: web
+                - generic [ref=e386]: moderno.
+          - generic [ref=e387]:
+            - paragraph [ref=e388]: Nenhum post encontrado.
+            - paragraph [ref=e389]: Adicione arquivos .md em src/content/blog/
+          - link "VER TODOS OS POSTS" [ref=e391] [cursor=pointer]:
+            - /url: /blog
+            - text: VER TODOS OS POSTS
+            - img [ref=e392]
+        - generic [ref=e394]:
+          - generic:
+            - generic: STACK STACK STACK STACK STACK STACK
+            - generic: STACK STACK STACK STACK STACK STACK
+            - generic: STACK STACK STACK STACK STACK STACK
+          - generic [ref=e396]:
+            - generic [ref=e397]:
+              - generic [ref=e398]:
+                - heading "MÓDULOS_INSTALADOS" [level=2] [ref=e399]
+                - paragraph [ref=e400]: // 63 TECNOLOGIAS_DETECTADAS
+              - generic [ref=e401]:
+                - img [ref=e402]
+                - generic [ref=e405]: SISTEMA_OTIMIZADO
+            - generic [ref=e406]:
+              - generic [ref=e414]:
+                - generic [ref=e415]:
+                  - generic [ref=e416]: "01"
+                  - img [ref=e417]
+                - generic [ref=e419]:
+                  - img [ref=e421]
+                  - generic [ref=e425]: Desenvolvimento
+                - generic [ref=e426]:
+                  - generic [ref=e427]: React
+                  - generic [ref=e428]: Next.j
+                  - generic [ref=e429]: "+1"
+              - generic [ref=e439]:
+                - generic [ref=e440]:
+                  - generic [ref=e441]: "02"
+                  - img [ref=e442]
+                - generic [ref=e444]:
+                  - img [ref=e446]
+                  - generic [ref=e452]: Design_& UI
+                - generic [ref=e453]:
+                  - generic [ref=e454]: Tailwi
+                  - generic [ref=e455]: Radix
+                  - generic [ref=e456]: "+1"
+              - generic [ref=e466]:
+                - generic [ref=e467]:
+                  - generic [ref=e468]: "03"
+                  - img [ref=e469]
+                - generic [ref=e471]:
+                  - img [ref=e473]
+                  - generic [ref=e475]: Performance
+                - generic [ref=e476]:
+                  - generic [ref=e477]: Web Vi
+                  - generic [ref=e478]: Lighth
+                  - generic [ref=e479]: "+1"
+              - generic [ref=e489]:
+                - generic [ref=e490]:
+                  - generic [ref=e491]: "04"
+                  - img [ref=e492]
+                - generic [ref=e494]:
+                  - img [ref=e496]
+                  - generic [ref=e501]: Deploy_& CI/CD
+                - generic [ref=e502]:
+                  - generic [ref=e503]: Vercel
+                  - generic [ref=e504]: GitHub
+                  - generic [ref=e505]: "+1"
+            - generic [ref=e509]:
+              - generic [ref=e510]:
+                - text: // SKILL_CATEGORIES_LOADED
+                - generic [ref=e511]: 4 CATEGORIAS
+              - generic [ref=e512]:
+                - text: // TOTAL_TECHNOLOGIES
+                - generic [ref=e513]: 63+ TECNOLOGIAS
+              - generic [ref=e514]:
+                - text: // SYSTEM_STATUS
+                - generic [ref=e515]: ● ONLINE
+        - generic [ref=e517]:
+          - generic [ref=e518]:
+            - generic [ref=e519]:
+              - generic [ref=e520]: // ACESSO_DADOS
+              - heading "TRABALHOS SELECIONADOS_" [level=2] [ref=e521]:
+                - generic [ref=e524]: TRABALHOS
+                - generic [ref=e528]: SELECIONADOS_
+            - paragraph [ref=e529]: Cases reais de transformação digital, de sites institucionais a plataformas globais.
+          - generic [ref=e530]:
+            - generic [ref=e532]:
+              - generic [ref=e534]: "01"
+              - generic [ref=e535]:
+                - generic [ref=e536]:
+                  - generic [ref=e544]: "@"
+                  - generic [ref=e546]: ADS
+                  - generic:
+                    - img
+                - link [ref=e548] [cursor=pointer]:
+                  - /url: https://www.agenciamultibr.com/
+                  - img [ref=e549]
+              - generic [ref=e553]:
+                - generic [ref=e554]:
+                  - generic [ref=e555]: WordPress
+                  - generic [ref=e556]: Elementor
+                  - generic [ref=e557]: UI/UX
+                  - generic [ref=e558]: SEO
+                - heading "Agência Multi BR" [level=3] [ref=e559]:
+                  - text: Agência Multi BR
+                  - img [ref=e560]
+                - paragraph [ref=e563]: Agência de marketing digital 360º especializada em tráfego pago, conteúdo, redes sociais, web design e identidade visual. Estratégia personalizada com atendimento local.
+            - generic [ref=e565]:
+              - generic [ref=e567]: "02"
+              - generic [ref=e568]:
+                - generic [ref=e569]:
+                  - img [ref=e572]
+                  - generic [ref=e575]:
+                    - generic [ref=e576]: CIVIL
+                    - generic [ref=e577]: ENG.
+                - link [ref=e579] [cursor=pointer]:
+                  - /url: https://engerod.com.br/
+                  - img [ref=e580]
+              - generic [ref=e584]:
+                - generic [ref=e585]:
+                  - generic [ref=e586]: Wordpress
+                  - generic [ref=e587]: PHP
+                  - generic [ref=e588]: CSS
+                  - generic [ref=e589]: SEO
+                - heading "Engerod Engenharia" [level=3] [ref=e590]:
+                  - text: Engerod Engenharia
+                  - img [ref=e591]
+                - paragraph [ref=e594]: Empresa especializada em pontes, viadutos e projetos especiais. Referência nacional em obras de infraestrutura com tradição desde 1972.
+            - generic [ref=e596]:
+              - generic [ref=e598]: "03"
+              - generic [ref=e599]:
+                - generic [ref=e600]:
+                  - generic [ref=e604]: ⚓
+                  - generic [ref=e605]: LOGISTICA_GLOBAL // SECTOR_7
+                - link [ref=e607] [cursor=pointer]:
+                  - /url: https://semogrj.com.br/
+                  - img [ref=e608]
+              - generic [ref=e612]:
+                - generic [ref=e613]:
+                  - generic [ref=e614]: Wordpress
+                  - generic [ref=e615]: PHP
+                  - generic [ref=e616]: Logística
+                  - generic [ref=e617]: B2B
+                - heading "SEMOGRJ" [level=3] [ref=e618]:
+                  - text: SEMOGRJ
+                  - img [ref=e619]
+                - paragraph [ref=e622]: Abastecimento Marítimo e Logística Internacional. Empresa com presença global, frota própria e excelência operacional no setor marítimo.
+            - generic [ref=e624]:
+              - generic [ref=e626]: "04"
+              - link [ref=e639] [cursor=pointer]:
+                - /url: https://luisfelipepereira.com.br/
+                - img [ref=e640]
+              - generic [ref=e644]:
+                - generic [ref=e645]:
+                  - generic [ref=e646]: React
+                  - generic [ref=e647]: Framer Motion
+                  - generic [ref=e648]: Gallery
+                  - generic [ref=e649]: UI/UX
+                - heading "Luis Felipe Pereira" [level=3] [ref=e650]:
+                  - text: Luis Felipe Pereira
+                  - img [ref=e651]
+                - paragraph [ref=e654]: Arquitetura e Interiores de alto padrão. Portfólio visual e design sofisticado para projetos residenciais e comerciais no Rio de Janeiro.
+        - generic [ref=e659]:
+          - generic [ref=e660]:
+            - generic [ref=e661]:
+              - paragraph [ref=e662]: NIVEL_XP
+              - heading "0 +" [level=3] [ref=e663]:
+                - generic [ref=e664]: "0"
+                - generic [ref=e665]: +
+              - paragraph [ref=e666]: Anos de Experiência
+            - img [ref=e667]
+          - generic [ref=e670]:
+            - generic [ref=e671]:
+              - paragraph [ref=e672]: PROJETOS_CONCLUIDOS
+              - heading "0 x" [level=3] [ref=e673]:
+                - generic [ref=e674]: "0"
+                - generic [ref=e675]: x
+              - paragraph [ref=e676]: Deploys com Sucesso
+            - img [ref=e677]
+          - generic [ref=e680]:
+            - generic [ref=e681]:
+              - paragraph [ref=e682]: SATISFACAO_CLIENTE
+              - heading "0 %" [level=3] [ref=e683]:
+                - generic [ref=e684]: "0"
+                - generic [ref=e685]: "%"
+              - paragraph [ref=e686]: Avaliações 5 Estrelas
+            - img [ref=e687]
+        - generic [ref=e699]:
+          - generic [ref=e704]: CANAL_ABERTO • RESPONDO EM 24H
+          - heading "PRONTO PARA CONSTRUIR JUNTOS?" [level=2] [ref=e706]:
+            - generic [ref=e707]:
+              - generic [ref=e709]: PRONTO
+              - generic [ref=e711]: PARA
+            - generic [ref=e715]: CONSTRUIR
+            - generic [ref=e718]: JUNTOS?
+          - paragraph [ref=e719]: Estou sempre aberto a discutir novos projetos, ideias criativas ou oportunidades de fazer parte da sua visão. Entre em contato!
+          - generic [ref=e720]:
+            - heading "// CONECTE-SE" [level=3] [ref=e721]
+            - generic [ref=e722]:
+              - link "LinkedIn @bcguimaraes" [ref=e723] [cursor=pointer]:
+                - /url: https://www.linkedin.com/in/bcguimaraes/
+                - img [ref=e725]
+                - generic [ref=e729]: LinkedIn
+                - generic [ref=e730]: "@bcguimaraes"
+              - link "GitHub @devguimaraes" [ref=e731] [cursor=pointer]:
+                - /url: https://github.com/devguimaraes
+                - img [ref=e733]
+                - generic [ref=e736]: GitHub
+                - generic [ref=e737]: "@devguimaraes"
+              - link "Instagram @dev.guimaraes" [ref=e738] [cursor=pointer]:
+                - /url: https://www.instagram.com/brunoguimraes/
+                - img [ref=e740]
+                - generic [ref=e743]: Instagram
+                - generic [ref=e744]: "@dev.guimaraes"
+          - generic [ref=e746]:
+            - img [ref=e747]
+            - generic [ref=e750]: "STATUS: DISPONÍVEL PARA NOVOS PROJETOS"
+    - contentinfo [ref=e751]:
+      - generic [ref=e755]:
+        - generic [ref=e756]:
+          - link "BG Bruno Guimarães FRONT-END ENGINEER" [ref=e757] [cursor=pointer]:
+            - /url: /
+            - generic [ref=e759]: BG
+            - generic [ref=e760]:
+              - generic [ref=e761]: Bruno Guimarães
+              - generic [ref=e762]: FRONT-END ENGINEER
+          - paragraph [ref=e763]:
+            - text: Transformando ideias em interfaces
+            - text: pixel-perfect de alta performance.
+          - generic [ref=e764]:
+            - link "GitHub" [ref=e765] [cursor=pointer]:
+              - /url: https://github.com/devguimaraes
+              - img [ref=e766]
+            - link "LinkedIn" [ref=e769] [cursor=pointer]:
+              - /url: https://linkedin.com/in/devguimaraes
+              - img [ref=e770]
+            - link "Instagram" [ref=e774] [cursor=pointer]:
+              - /url: https://www.instagram.com/brunoguimraes/
+              - img [ref=e775]
+            - link "Email" [ref=e778] [cursor=pointer]:
+              - /url: mailto:contato@brunoguimaraes.dev
+              - img [ref=e779]
+        - generic [ref=e783]:
+          - generic [ref=e784]:
+            - img [ref=e785]
+            - generic [ref=e787]: NAVIGATION.SH
+          - generic [ref=e788]:
+            - link "01. Início" [ref=e789] [cursor=pointer]:
+              - /url: "#hero"
+              - generic [ref=e790]: "01."
+              - generic [ref=e791]: Início
+            - link "02. Sobre" [ref=e792] [cursor=pointer]:
+              - /url: "#about"
+              - generic [ref=e793]: "02."
+              - generic [ref=e794]: Sobre
+            - link "03. Skills" [ref=e795] [cursor=pointer]:
+              - /url: "#skills"
+              - generic [ref=e796]: "03."
+              - generic [ref=e797]: Skills
+            - link "04. Projetos" [ref=e798] [cursor=pointer]:
+              - /url: "#projects"
+              - generic [ref=e799]: "04."
+              - generic [ref=e800]: Projetos
+            - link "05. Contato" [ref=e801] [cursor=pointer]:
+              - /url: "#contact"
+              - generic [ref=e802]: "05."
+              - generic [ref=e803]: Contato
+        - generic [ref=e805]:
+          - generic [ref=e806]:
+            - img [ref=e807]
+            - generic [ref=e809]: SYSTEM_STATUS
+          - generic [ref=e810]:
+            - generic [ref=e811]:
+              - generic [ref=e812]: SERVIDOR
+              - generic [ref=e813]: ONLINE
+            - generic [ref=e815]:
+              - generic [ref=e816]: VERSÃO
+              - generic [ref=e817]: v4.0.0
+            - generic [ref=e818]:
+              - generic [ref=e819]: DISPONÍVEL
+              - generic [ref=e820]: PROJETOS
+          - link "INICIAR_CONTATO →" [ref=e821] [cursor=pointer]:
+            - /url: mailto:contato@brunoguimaraes.dev
+      - generic [ref=e824]:
+        - paragraph [ref=e825]: © 2026 Bruno Guimarães. Todos os direitos reservados.
+        - paragraph [ref=e826]:
+          - text: Feito com
+          - img [ref=e827]
+          - text: e muito café
+        - generic [ref=e829]:
+          - generic [ref=e830]: RIO DE JANEIRO, BR
+          - generic [ref=e831]: 22.9068° S, 43.1729° W
+```
