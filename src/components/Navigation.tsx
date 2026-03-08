@@ -11,35 +11,65 @@ const Navigation: React.FC = () => {
   const location = useLocation();
 
   useEffect(() => {
+    let frameId: number | null = null;
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      if (frameId !== null) return;
+      frameId = requestAnimationFrame(() => {
+        frameId = null;
+        setScrolled(window.scrollY > 50);
+      });
+    };
 
-      // Detect active section
-      const sections = [
-        "about",
-        "services",
-        "skills",
-        "projects",
-        "blog",
-        "contact",
-      ];
+    handleScroll();
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (frameId !== null) {
+        cancelAnimationFrame(frameId);
+      }
+    };
+  }, []);
 
+  useEffect(() => {
+    if (location.pathname !== "/") {
+      setActiveSection("");
+      return;
+    }
+
+    const sectionIds = ["about", "services", "skills", "projects", "blog", "contact"];
+    const getSectionElements = () =>
+      sectionIds
+        .map((id) => document.getElementById(id))
+        .filter((element): element is HTMLElement => Boolean(element));
+
+    const updateActiveSection = () => {
+      const elements = getSectionElements();
       let foundSection = "";
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top <= 150 && rect.bottom >= 150) {
-            foundSection = section;
-            break;
-          }
+      for (const element of elements) {
+        const rect = element.getBoundingClientRect();
+        if (rect.top <= 150 && rect.bottom >= 150) {
+          foundSection = element.id;
+          break;
         }
       }
-      setActiveSection(foundSection);
+      setActiveSection((prev) => (prev === foundSection ? prev : foundSection));
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+
+    const observer = new IntersectionObserver(
+      () => updateActiveSection(),
+      { threshold: [0, 0.25, 0.5, 0.75, 1] }
+    );
+
+    const elements = getSectionElements();
+    elements.forEach((element) => observer.observe(element));
+    updateActiveSection();
+
+    window.addEventListener("resize", updateActiveSection);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", updateActiveSection);
+    };
+  }, [location.pathname]);
 
   // Effect to handle hash scrolling after navigation
   useEffect(() => {

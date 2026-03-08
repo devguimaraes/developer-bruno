@@ -97,11 +97,27 @@ export interface TwitterCardProps {
 
 export interface StructuredDataProps {
   /** Structured data type */
-  type: 'Person' | 'WebSite' | 'Project' | 'WorkExperience' | 'ContactPoint' | 'ProfessionalService';
+  type:
+    | 'Person'
+    | 'WebSite'
+    | 'Organization'
+    | 'BlogPosting'
+    | 'Project'
+    | 'WorkExperience'
+    | 'ContactPoint'
+    | 'ProfessionalService'
+    | 'BreadcrumbList';
 
   /** Structured data content */
   data: Record<string, unknown>;
 }
+
+export type StructuredDataType = StructuredDataProps['type'];
+
+export type StructuredDataSchema = {
+  '@context': 'https://schema.org';
+  '@type': StructuredDataType;
+} & Record<string, unknown>;
 
 
 

@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { BlogPost } from '@/utils/blog';
+import type { BlogPost } from '@/types/blog';
 
 interface BlogPostNavigationProps {
   previous: BlogPost | null;

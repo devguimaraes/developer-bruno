@@ -12,11 +12,15 @@ export const useStackingSections = (sectionIds: string[]) => {
     sectionIds.map(id => ({ id, element: null, progress: 0, isVisible: false }))
   );
   const observersRef = useRef<IntersectionObserver[]>([]);
+  const flushScheduledRef = useRef(false);
+  const pendingUpdatesRef = useRef<Map<string, Partial<Section>>>(new Map());
 
   useEffect(() => {
     // Clean up previous observers
     observersRef.current.forEach(observer => observer.disconnect());
     observersRef.current = [];
+    flushScheduledRef.current = false;
+    pendingUpdatesRef.current.clear();
 
     // Create sections with actual DOM elements from IDs
     const updatedSections: Section[] = sectionIds.map(id => ({
@@ -26,37 +30,56 @@ export const useStackingSections = (sectionIds: string[]) => {
       isVisible: false
     }));
 
+    const queueSectionUpdate = (sectionId: string, patch: Partial<Section>) => {
+      const currentPatch = pendingUpdatesRef.current.get(sectionId) || {};
+      pendingUpdatesRef.current.set(sectionId, { ...currentPatch, ...patch });
+
+      if (flushScheduledRef.current) return;
+      flushScheduledRef.current = true;
+
+      queueMicrotask(() => {
+        flushScheduledRef.current = false;
+        const updates = pendingUpdatesRef.current;
+        pendingUpdatesRef.current = new Map();
+
+        setSections(prev => prev.map(section => {
+          const update = updates.get(section.id);
+          if (!update) return section;
+
+          const nextProgress = update.progress ?? section.progress;
+          const nextVisible = update.isVisible ?? section.isVisible;
+          if (nextProgress === section.progress && nextVisible === section.isVisible) {
+            return section;
+          }
+
+          return {
+            ...section,
+            progress: nextProgress,
+            isVisible: nextVisible,
+          };
+        }));
+      });
+    };
+
     // Create IntersectionObserver for visibility tracking
     const visibilityObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          const sectionId = entry.target.id;
-          setSections(prev => prev.map(section =>
-            section.id === sectionId
-              ? { ...section, isVisible: entry.isIntersecting }
-              : section
-          ));
+          queueSectionUpdate(entry.target.id, { isVisible: entry.isIntersecting });
         });
       },
-      { threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1] }
+      { threshold: [0, 0.25, 0.5, 0.75, 1] }
     );
 
     // Create IntersectionObserver for progress tracking
     const progressObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          const sectionId = entry.target.id;
-          const progress = entry.intersectionRatio;
-
-          setSections(prev => prev.map(section =>
-            section.id === sectionId
-              ? { ...section, progress }
-              : section
-          ));
+          queueSectionUpdate(entry.target.id, { progress: entry.intersectionRatio });
         });
       },
       {
-        threshold: Array.from({ length: 101 }, (_, i) => i / 100),
+        threshold: [0, 0.25, 0.5, 0.75, 1],
         rootMargin: '-10% 0px -10% 0px'
       }
     );
@@ -74,6 +97,7 @@ export const useStackingSections = (sectionIds: string[]) => {
 
     return () => {
       observersRef.current.forEach(observer => observer.disconnect());
+      flushScheduledRef.current = false;
     };
   }, [sectionIds]);
 

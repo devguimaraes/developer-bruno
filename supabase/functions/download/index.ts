@@ -1,21 +1,6 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-
-const ALLOWED_ORIGINS = [
-  'https://devguimaraes.com.br',
-  'https://www.devguimaraes.com.br',
-  'http://localhost:8080',
-  'http://localhost:8081',
-  'http://localhost:8082',
-]
-
-const getCorsHeaders = (origin: string | null) => {
-  const allowedOrigin = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0]
-  return {
-    'Access-Control-Allow-Origin': allowedOrigin,
-    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-  }
-}
+import { getCorsHeaders, logSecurityEvent } from '../_shared/security.ts'
 
 Deno.serve(async (req) => {
   const origin = req.headers.get('origin')
@@ -39,17 +24,24 @@ Deno.serve(async (req) => {
     // Verify token
     const { data, error } = await supabase
       .from('payments')
-      .select('id')
+      .select('id, download_used_at, download_token_expires_at')
       .eq('download_token', token)
       .eq('status', 'approved')
       .single()
 
     if (error || !data) {
+        logSecurityEvent('warn', 'download_invalid_token_lookup')
         return new Response('Invalid or expired token', { status: 403 })
     }
-
-    // Update used_at (optional log)
-    await supabase.from('payments').update({ download_used_at: new Date().toISOString() }).eq('id', data.id)
+    if (data.download_used_at) {
+      logSecurityEvent('warn', 'download_token_already_used', { paymentId: data.id })
+      return new Response('Invalid or expired token', { status: 403 })
+    }
+    // Backward compatibility: tokens issued before expiration support may have NULL expiration.
+    if (data.download_token_expires_at && new Date(data.download_token_expires_at).getTime() <= Date.now()) {
+      logSecurityEvent('warn', 'download_token_expired', { paymentId: data.id })
+      return new Response('Invalid or expired token', { status: 403 })
+    }
 
     // Serve file from Storage
     // Assuming bucket 'antigravity-files' and file 'antigravity-pack.zip'
@@ -61,6 +53,26 @@ Deno.serve(async (req) => {
     if (signError || !signedData) {
         console.error('Storage error:', signError)
         return new Response('File not found', { status: 404 })
+    }
+
+    // Single-use token consumption (guarded against race conditions)
+    const nowIso = new Date().toISOString()
+    const { data: consumed, error: consumeError } = await supabase
+      .from('payments')
+      .update({
+        download_used_at: nowIso,
+        download_token: null,
+        download_token_expires_at: null,
+      })
+      .eq('id', data.id)
+      .eq('download_token', token)
+      .is('download_used_at', null)
+      .select('id')
+      .single()
+
+    if (consumeError || !consumed) {
+      logSecurityEvent('warn', 'download_token_consumption_failed', { paymentId: data.id })
+      return new Response('Invalid or expired token', { status: 403 })
     }
 
     // Redirect to the signed URL

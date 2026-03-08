@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Calendar, Clock, Tag } from 'lucide-react';
-import { BlogPost } from '@/utils/blog';
+import type { BlogPost } from '@/types/blog';
 
 interface BlogPostHeaderProps {
   post: BlogPost;

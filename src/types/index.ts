@@ -6,6 +6,7 @@ import type { LucideIcon } from 'lucide-react';
 export * from './seo';
 export * from './sitemap';
 export * from './performance';
+export * from './blog';
 
 // Base project interface
 export interface Project {
@@ -148,10 +149,4 @@ export interface ErrorBoundaryState {
   hasError: boolean;
   error?: Error;
   errorInfo?: React.ErrorInfo;
-}
-
-// Structured Data Props
-export interface StructuredDataProps {
-  type: 'Organization' | 'Person' | 'WebSite' | 'BlogPosting';
-  data: Record<string, unknown>;
 }
