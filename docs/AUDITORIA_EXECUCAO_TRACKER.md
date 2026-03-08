@@ -73,3 +73,4 @@ Critério de aceite:
 - Review de regressão de tokens legados recebido; sem impacto prático (sem clientes antigos).
 - Fase 3 implementada (scroll/render + polling) e validada com lint + testes unitários.
 - Fase 4 implementada: tipos SEO/StructuredData centralizados, pipeline de blog modularizado e `StructuredData` decomposto em builder dedicado.
+- Decisão de entrega: PR direcionado para `main` (exceção ao fluxo padrão) por tratar-se de pacote de auditoria com correções críticas e validação consolidada ponta a ponta.
