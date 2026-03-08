@@ -24,11 +24,21 @@ interface PaymentData {
   qr_code: string;
   qr_code_base64: string;
   payment_id: number;
+  status_access_token: string;
 }
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
-const FUNCTIONS_URL = `${SUPABASE_URL}/functions/v1`;
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL?.trim();
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim();
+const FUNCTIONS_URL = SUPABASE_URL
+  ? `${SUPABASE_URL.replace(/\/+$/, "")}/functions/v1`
+  : null;
+const MISSING_SUPABASE_ENV_MESSAGE =
+  "Configuração local ausente: defina VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY no .env.local e reinicie o servidor.";
+const INITIAL_POLL_DELAY_MS = 3000;
+const MAX_POLL_DELAY_MS = 15000;
+const POLL_BACKOFF_FACTOR = 1.3;
+const MAX_CONSECUTIVE_ERRORS = 3;
+const PAYMENT_EXPIRATION_SECONDS = 15 * 60;
 
 export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   isOpen,
@@ -37,7 +47,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   const [step, setStep] = useState<CheckoutStep>("email");
   const [email, setEmail] = useState("");
   const [copied, setCopied] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(15 * 60); // 15 minutes
+  const [timeLeft, setTimeLeft] = useState(PAYMENT_EXPIRATION_SECONDS);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [paymentData, setPaymentData] = useState<PaymentData | null>(null);
@@ -45,46 +55,87 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
   // Polling for payment status
   useEffect(() => {
-    let intervalId: NodeJS.Timeout;
+    let timeoutId: number | null = null;
+    let isCancelled = false;
+    const expiresAt = Date.now() + PAYMENT_EXPIRATION_SECONDS * 1000;
+
+    const pollStatus = async (
+      delayMs: number = INITIAL_POLL_DELAY_MS,
+      consecutiveErrors: number = 0
+    ) => {
+      if (isCancelled) return;
+      if (Date.now() >= expiresAt) return;
+      if (!FUNCTIONS_URL || !SUPABASE_ANON_KEY) {
+        setError(MISSING_SUPABASE_ENV_MESSAGE);
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `${FUNCTIONS_URL}/payment-status?id=${paymentData?.external_reference}`,
+          {
+            headers: {
+              Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+              "x-status-access-token": paymentData?.status_access_token ?? "",
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === "approved") {
+            setDownloadUrl(data.download_url);
+            setStep("success");
+            return;
+          }
+        }
+
+        const nextDelay = Math.min(
+          MAX_POLL_DELAY_MS,
+          Math.round(delayMs * POLL_BACKOFF_FACTOR)
+        );
+        timeoutId = window.setTimeout(() => {
+          void pollStatus(nextDelay, 0);
+        }, delayMs);
+      } catch (err) {
+        console.error("Error checking status:", err);
+        const nextErrorCount = consecutiveErrors + 1;
+        if (nextErrorCount >= MAX_CONSECUTIVE_ERRORS) {
+          setError("Conexão instável ao verificar pagamento. Tente novamente em instantes.");
+          return;
+        }
+
+        const nextDelay = Math.min(
+          MAX_POLL_DELAY_MS,
+          Math.round(delayMs * POLL_BACKOFF_FACTOR)
+        );
+        timeoutId = window.setTimeout(() => {
+          void pollStatus(nextDelay, nextErrorCount);
+        }, delayMs);
+      }
+    };
 
     if (step === "payment" && paymentData?.external_reference) {
-      intervalId = setInterval(async () => {
-        try {
-          const response = await fetch(
-            `${FUNCTIONS_URL}/payment-status?id=${paymentData.external_reference}`,
-            {
-              headers: {
-                Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-              },
-            }
-          );
-          if (response.ok) {
-            const data = await response.json();
-            if (data.status === "approved") {
-              setDownloadUrl(data.download_url);
-              setStep("success");
-            }
-          }
-        } catch (err) {
-          console.error("Error checking status:", err);
-        }
-      }, 3000); // Check every 3 seconds
+      void pollStatus();
     }
 
     return () => {
-      if (intervalId) clearInterval(intervalId);
+      isCancelled = true;
+      if (timeoutId !== null) {
+        window.clearTimeout(timeoutId);
+      }
     };
   }, [step, paymentData]);
 
   // Countdown timer
   useEffect(() => {
-    if (step === "payment" && timeLeft > 0) {
-      const timer = setInterval(() => {
-        setTimeLeft((prev) => prev - 1);
+    if (step === "payment") {
+      const timer = window.setInterval(() => {
+        setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
       }, 1000);
-      return () => clearInterval(timer);
+      return () => window.clearInterval(timer);
     }
-  }, [step, timeLeft]);
+  }, [step]);
 
   // Format time
   const formatTime = (seconds: number) => {
@@ -111,6 +162,10 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
+    if (!FUNCTIONS_URL || !SUPABASE_ANON_KEY) {
+      setError(MISSING_SUPABASE_ENV_MESSAGE);
+      return;
+    }
 
     setIsLoading(true);
     setError(null);
@@ -147,7 +202,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   const handleClose = () => {
     setStep("email");
     setEmail("");
-    setTimeLeft(15 * 60);
+    setTimeLeft(PAYMENT_EXPIRATION_SECONDS);
     setPaymentData(null);
     setError(null);
     setDownloadUrl(null);

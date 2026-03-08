@@ -30,6 +30,7 @@ window.IntersectionObserver = MockIntersectionObserver;
 
 describe("useStackingSections", () => {
   const sectionIds = ["section-1", "section-2", "section-3"];
+  const flushMicrotasks = () => new Promise((resolve) => setTimeout(resolve, 0));
 
   beforeEach(() => {
     // Setup DOM elements
@@ -70,13 +71,13 @@ describe("useStackingSections", () => {
     expect(mockDisconnect).toHaveBeenCalledTimes(2);
   });
 
-  it("should update progress state when intersection changes", () => {
+  it("should update progress state when intersection changes", async () => {
     const { result } = renderHook(() => useStackingSections(sectionIds));
 
     // Acessar a instância do observer de progresso (segundo observer criado)
     const progressObserverInstance = observerInstances[1];
 
-    act(() => {
+    await act(async () => {
       progressObserverInstance.trigger([
         {
           target: { id: "section-1" } as unknown as Element,
@@ -84,12 +85,13 @@ describe("useStackingSections", () => {
           isIntersecting: true,
         },
       ]);
+      await flushMicrotasks();
     });
 
     expect(result.current.sections[0].progress).toBe(0.5);
   });
 
-  it("should calculate transforms correctly based on previous section progress", () => {
+  it("should calculate transforms correctly based on previous section progress", async () => {
     const { result } = renderHook(() => useStackingSections(sectionIds));
 
     // Initial state: no transforms
@@ -100,7 +102,7 @@ describe("useStackingSections", () => {
     // Update section-1 progress to trigger section-2 transform
     const progressObserverInstance = observerInstances[1];
 
-    act(() => {
+    await act(async () => {
       // Simulate section-1 being 85% scrolled (triggers > 0.7 logic)
       progressObserverInstance.trigger([
         {
@@ -109,6 +111,7 @@ describe("useStackingSections", () => {
           isIntersecting: true,
         },
       ]);
+      await flushMicrotasks();
     });
 
     // (0.85 - 0.7) / 0.3 = 0.5 (50% do efeito)
