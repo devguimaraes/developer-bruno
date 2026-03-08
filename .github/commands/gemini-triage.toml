@@ -29,7 +29,7 @@ You are an issue triage assistant. Analyze the current GitHub issue and identify
 
 **Output File Path**:
 ```
-!{echo $GITHUB_ENV}
+!{echo $GITHUB_OUTPUT}
 ```
 
 ## Steps
@@ -43,12 +43,12 @@ You are an issue triage assistant. Analyze the current GitHub issue and identify
 4. Use the "echo" shell command to append the CSV labels to the output file path provided above:
 
     ```
-    echo "SELECTED_LABELS=[APPROPRIATE_LABELS_AS_CSV]" >> "[filepath_for_env]"
+    echo "selected_labels=[APPROPRIATE_LABELS_AS_CSV]" >> "[filepath_for_output]"
     ```
 
     for example:
 
     ```
-    echo "SELECTED_LABELS=bug,enhancement" >> "/tmp/runner/env"
+    echo "selected_labels=bug,enhancement" >> "/tmp/runner/output"
     ```
 """
