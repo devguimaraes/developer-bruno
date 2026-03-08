@@ -1,22 +1,12 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-import { checkRateLimit, getClientIP } from '../_shared/security.ts'
-
-const ALLOWED_ORIGINS = [
-  'https://devguimaraes.com.br',
-  'https://www.devguimaraes.com.br',
-  'http://localhost:8080',
-  'http://localhost:8081',
-  'http://localhost:8082',
-]
-
-const getCorsHeaders = (origin: string | null) => {
-  const allowedOrigin = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0]
-  return {
-    'Access-Control-Allow-Origin': allowedOrigin,
-    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-  }
-}
+import {
+  checkRateLimitDistributed,
+  getClientIP,
+  verifyStatusAccessToken,
+  getCorsHeaders,
+  logSecurityEvent
+} from '../_shared/security.ts'
 
 // Rate limit: 30 requests per minute per IP (polling endpoint)
 const RATE_LIMIT_MAX = 30
@@ -24,18 +14,32 @@ const RATE_LIMIT_WINDOW = 60000
 
 Deno.serve(async (req) => {
   const origin = req.headers.get('origin')
-  const corsHeaders = getCorsHeaders(origin)
+  const corsHeaders = getCorsHeaders(origin, ['x-status-access-token'])
 
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
 
   try {
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+    )
+
     // Rate limiting check
     const clientIP = getClientIP(req)
-    const rateLimit = checkRateLimit(`payment-status:${clientIP}`, RATE_LIMIT_MAX, RATE_LIMIT_WINDOW)
+    const rateLimit = await checkRateLimitDistributed(
+      supabase,
+      `payment-status:${clientIP}`,
+      RATE_LIMIT_MAX,
+      RATE_LIMIT_WINDOW
+    )
     
     if (!rateLimit.allowed) {
+      logSecurityEvent('warn', 'payment_status_rate_limited', {
+        clientIP,
+        retryAfterSeconds: Math.ceil(rateLimit.resetIn / 1000),
+      })
       return new Response(
         JSON.stringify({ 
           error: 'Too many requests. Please try again later.',
@@ -54,9 +58,22 @@ Deno.serve(async (req) => {
 
     const url = new URL(req.url)
     const id = url.searchParams.get('id') // external_reference
+    const statusAccessToken =
+      url.searchParams.get('status_access_token') ||
+      req.headers.get('x-status-access-token')
     
     if (!id) {
        throw new Error('ID required')
+    }
+    if (!statusAccessToken) {
+      logSecurityEvent('warn', 'payment_status_missing_access_token', { clientIP })
+      return new Response(
+        JSON.stringify({ error: 'Missing status access token' }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 401,
+        }
+      )
     }
 
     // Basic input validation for UUID format
@@ -64,11 +81,24 @@ Deno.serve(async (req) => {
     if (!UUID_REGEX.test(id)) {
       throw new Error('Invalid ID format')
     }
-
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-    )
+    const statusTokenSecret = Deno.env.get('STATUS_ACCESS_TOKEN_SECRET')
+    if (!statusTokenSecret) {
+      throw new Error('STATUS_ACCESS_TOKEN_SECRET not configured')
+    }
+    const isValidStatusToken = await verifyStatusAccessToken(statusAccessToken, statusTokenSecret, id)
+    if (!isValidStatusToken) {
+      logSecurityEvent('warn', 'payment_status_invalid_access_token', {
+        clientIP,
+        externalReference: id,
+      })
+      return new Response(
+        JSON.stringify({ error: 'Invalid or expired status access token' }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 403,
+        }
+      )
+    }
 
     const { data, error } = await supabase
       .from('payments')
