@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getRecentPosts, getBlogPost, BlogPost, invalidateBlogCache } from '@/utils/blog';
+import type { BlogPost } from '@/types/blog';
+import { getRecentPosts, getBlogPost, invalidateBlogCache } from '@/utils/blog';
 
 // Hook para posts recentes (usado na página principal)
 export function useRecentPosts(limit: number = 3) {

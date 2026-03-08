@@ -1,33 +1,17 @@
 import { useLocation } from 'react-router-dom';
 import { useMemo } from 'react';
 import { siteConfig } from '@/config/site';
-import { BlogPost } from '@/utils/blog';
+import type { BlogPost } from '@/types/blog';
+import type { SEOProps } from '@/types/seo';
 
-interface RouteSEOProps {
-  title: string;
-  description: string;
-  keywords?: string[];
-  url: string;
-  type: 'website' | 'article' | 'blog';
-  image?: string;
-  articleMeta?: {
-    author?: string;
-    publishedTime?: string;
-    modifiedTime?: string;
-    tags?: string[];
-    section?: string;
-  };
-}
-
-export const useRouteSEO = (blogPost?: BlogPost | null): RouteSEOProps => {
+export const useRouteSEO = (blogPost?: BlogPost | null): SEOProps => {
   const location = useLocation();
 
   return useMemo(() => {
     const { pathname } = location;
-    const baseUrl = siteConfig.domain;
 
     // SEO Default
-    const defaultSEO: RouteSEOProps = {
+    const defaultSEO: SEOProps = {
       title: siteConfig.title,
       description: siteConfig.description,
       keywords: [
@@ -60,8 +44,6 @@ export const useRouteSEO = (blogPost?: BlogPost | null): RouteSEOProps => {
 
     // SEO para posts individuais do blog
     if (pathname.startsWith('/blog/') && blogPost) {
-      const baseUrlFull = `${baseUrl}${pathname}`;
-
       return {
         title: blogPost.title,
         description: blogPost.excerpt || blogPost.description || siteConfig.description,
