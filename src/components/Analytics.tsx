@@ -29,7 +29,9 @@ const Analytics: React.FC = () => {
     script.setAttribute("data-api", "https://plausible.io/api/event"); // For custom events
 
     script.onload = () => {
-      console.log("✅ Analytics carregado (conformidade LGPD)");
+      if (process.env.NODE_ENV === "development") {
+        console.log("✅ Analytics carregado (conformidade LGPD)");
+      }
 
       // Track page view
       if (window.plausible) {
