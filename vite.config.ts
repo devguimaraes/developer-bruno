@@ -43,23 +43,27 @@ export default defineConfig(({ mode }) => ({
     // Optimize chunks
     rollupOptions: {
       output: {
-        // Manual chunk splitting for better caching
-        manualChunks: {
-          // Vendor chunks
-          vendor: ['react', 'react-dom'],
-          // UI components
-          ui: [
-            '@radix-ui/react-slot',
-            '@radix-ui/react-toast',
-            '@radix-ui/react-hover-card',
-            'class-variance-authority',
-            'clsx',
-            'tailwind-merge'
-          ],
-          // Animation and utilities
-          animations: ['framer-motion', 'lucide-react'],
-          // Form handling
-          forms: ['react-hook-form', 'zod', '@hookform/resolvers']
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('react') || id.includes('react-dom') || id.includes('scheduler') || id.includes('react-helmet-async') || id.includes('react-router-dom')) {
+              return 'vendor';
+            }
+            if (id.includes('@tanstack/react-query')) {
+              return 'query-client';
+            }
+            if (id.includes('framer-motion')) {
+              return 'animations';
+            }
+            if (id.includes('lucide-react')) {
+              return 'icons';
+            }
+            if (id.includes('@radix-ui')) {
+              return 'radix';
+            }
+            if (id.includes('react-hook-form') || id.includes('zod')) {
+              return 'forms';
+            }
+          }
         },
       },
     },
