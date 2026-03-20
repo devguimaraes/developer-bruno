@@ -1,0 +1,111 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e3]:
+    - navigation [ref=e4]:
+      - generic [ref=e5]:
+        - link "BG Bruno Guimarães DEV_FRONTEND" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - generic [ref=e8]: BG
+          - generic [ref=e9]:
+            - generic [ref=e10]: Bruno Guimarães
+            - generic [ref=e11]:
+              - img [ref=e12]
+              - text: DEV_FRONTEND
+        - generic [ref=e14]:
+          - link "//INÍCIO" [ref=e15] [cursor=pointer]:
+            - /url: /
+          - link "//SOBRE" [ref=e16] [cursor=pointer]:
+            - /url: "#about"
+          - link "//SKILLS" [ref=e17] [cursor=pointer]:
+            - /url: "#skills"
+          - link "//PROJETOS" [ref=e18] [cursor=pointer]:
+            - /url: "#projects"
+          - link "//BLOG" [ref=e19] [cursor=pointer]:
+            - /url: /blog
+          - link "//ANTIGRAVITY" [ref=e20] [cursor=pointer]:
+            - /url: /antigravity
+          - link "//CONTATO" [ref=e21] [cursor=pointer]:
+            - /url: "#contact"
+    - main [ref=e22]:
+      - status "Carregando posts do blog" [ref=e23]
+    - contentinfo [ref=e61]:
+      - generic [ref=e65]:
+        - generic [ref=e66]:
+          - link "BG Bruno Guimarães FRONT-END ENGINEER" [ref=e67] [cursor=pointer]:
+            - /url: /
+            - generic [ref=e69]: BG
+            - generic [ref=e70]:
+              - generic [ref=e71]: Bruno Guimarães
+              - generic [ref=e72]: FRONT-END ENGINEER
+          - paragraph [ref=e73]:
+            - text: Transformando ideias em interfaces
+            - text: pixel-perfect de alta performance.
+          - generic [ref=e74]:
+            - link "GitHub" [ref=e75] [cursor=pointer]:
+              - /url: https://github.com/devguimaraes
+              - img [ref=e76]
+            - link "LinkedIn" [ref=e79] [cursor=pointer]:
+              - /url: https://linkedin.com/in/devguimaraes
+              - img [ref=e80]
+            - link "Instagram" [ref=e84] [cursor=pointer]:
+              - /url: https://www.instagram.com/brunoguimraes/
+              - img [ref=e85]
+            - link "Email" [ref=e88] [cursor=pointer]:
+              - /url: mailto:contato@brunoguimaraes.dev
+              - img [ref=e89]
+        - generic [ref=e93]:
+          - generic [ref=e94]:
+            - img [ref=e95]
+            - generic [ref=e97]: NAVIGATION.SH
+          - generic [ref=e98]:
+            - link "01. Início" [ref=e99] [cursor=pointer]:
+              - /url: "#hero"
+              - generic [ref=e100]: "01."
+              - generic [ref=e101]: Início
+            - link "02. Sobre" [ref=e102] [cursor=pointer]:
+              - /url: "#about"
+              - generic [ref=e103]: "02."
+              - generic [ref=e104]: Sobre
+            - link "03. Skills" [ref=e105] [cursor=pointer]:
+              - /url: "#skills"
+              - generic [ref=e106]: "03."
+              - generic [ref=e107]: Skills
+            - link "04. Projetos" [ref=e108] [cursor=pointer]:
+              - /url: "#projects"
+              - generic [ref=e109]: "04."
+              - generic [ref=e110]: Projetos
+            - link "05. Contato" [ref=e111] [cursor=pointer]:
+              - /url: "#contact"
+              - generic [ref=e112]: "05."
+              - generic [ref=e113]: Contato
+        - generic [ref=e115]:
+          - generic [ref=e116]:
+            - img [ref=e117]
+            - generic [ref=e119]: SYSTEM_STATUS
+          - generic [ref=e120]:
+            - generic [ref=e121]:
+              - generic [ref=e122]: SERVIDOR
+              - generic [ref=e123]: ONLINE
+            - generic [ref=e125]:
+              - generic [ref=e126]: VERSÃO
+              - generic [ref=e127]: v4.0.0
+            - generic [ref=e128]:
+              - generic [ref=e129]: DISPONÍVEL
+              - generic [ref=e130]: PROJETOS
+          - link "INICIAR_CONTATO →" [ref=e131] [cursor=pointer]:
+            - /url: mailto:contato@brunoguimaraes.dev
+      - generic [ref=e134]:
+        - paragraph [ref=e135]: © 2026 Bruno Guimarães. Todos os direitos reservados.
+        - paragraph [ref=e136]:
+          - text: Feito com
+          - img [ref=e137]
+          - text: e muito café
+        - generic [ref=e139]:
+          - generic [ref=e140]: RIO DE JANEIRO, BR
+          - generic [ref=e141]: 22.9068° S, 43.1729° W
+```

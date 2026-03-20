@@ -26,7 +26,7 @@ describe('ProjectSchema', () => {
   });
 
   it('should fail if ID is missing', () => {
-    const { id, ...invalidProject } = validProject;
+    const { id: _id, ...invalidProject } = validProject;
     const result = ProjectSchema.safeParse(invalidProject);
     expect(result.success).toBe(false);
   });
