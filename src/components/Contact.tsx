@@ -1,5 +1,5 @@
 import React from "react";
-import { NeoButton } from "@/components/ui/NeoButton";
+
 import { contactData } from "@/config/site";
 import { Linkedin, Github, Instagram, Mail, Send, Clock } from "lucide-react";
 import { LucideIcon } from "lucide-react";
@@ -21,32 +21,7 @@ interface ContactProps {
 }
 
 const Contact: React.FC<ContactProps> = ({ id, style, className }) => {
-  const handleEmailContact = () => {
-    const subject = encodeURIComponent(
-      "Proposta de Projeto - Portfolio Contact"
-    );
-    const body = encodeURIComponent(`Olá Bruno,
 
-Vi seu portfólio e gostaria de discutir um projeto.
-
-[Descreva brevemente seu projeto aqui]
-
-Aguardo seu retorno!`);
-
-    window.location.href = `mailto:${contactData.email}?subject=${subject}&body=${body}`;
-  };
-
-  const handleLinkedInContact = () => {
-    // Enhanced LinkedIn message URL
-    const message = encodeURIComponent(
-      "Olá Bruno! Vim através do seu portfólio e gostaria de discutir uma oportunidade de projeto."
-    );
-    window.open(
-      `${contactData.socialLinks[0].href}?message=${message}`,
-      "_blank",
-      "noopener,noreferrer"
-    );
-  };
 
   return (
     <section
@@ -101,8 +76,8 @@ Aguardo seu retorno!`);
               // CONECTE-SE
             </h3>
             <div className="flex justify-center gap-6 flex-wrap">
-              {contactData.socialLinks.map((item, idx) => {
-                const IconComponent = iconMap[item.icon];
+              {contactData.socialLinks.map((item) => {
+                const IconComponent = iconMap[item.icon as unknown as keyof typeof iconMap];
                 return (
                   <a
                     key={item.id}

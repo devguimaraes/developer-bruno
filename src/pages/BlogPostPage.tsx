@@ -3,12 +3,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import type { BlogPost } from "@/types/blog";
 import { useBlogPost } from "../hooks/use-blog-posts";
-import { getAllBlogPosts } from "../utils/blog";
+import { getAllBlogPosts } from '@/lib/blog';
 import {
   BlogPostHeader,
   BlogPostContent,
   BlogPostNavigation,
-  BlogPostNotFound,
   BlogPostBackButton,
 } from "../components/blog";
 import { BlogPostLoadingSkeleton } from "../components/blog/BlogPostLoadingSkeleton";

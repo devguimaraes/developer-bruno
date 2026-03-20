@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Calendar, Clock, Tag, ArrowRight, FolderOpen, Home, ExternalLink, AlertCircle, RefreshCw } from 'lucide-react';
+import { Calendar, Clock, FolderOpen, ExternalLink, AlertCircle, RefreshCw } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import type { BlogPost } from '@/types/blog';
-import { getAllBlogPosts } from '@/utils/blog';
+
+import { getAllBlogPosts } from '@/lib/blog';
 import { BlogPostCardSkeleton } from '@/components/blog/BlogPostCardSkeleton';
 import { ERROR_MESSAGES, ACCESSIBILITY_LABELS } from '@/constants/ui';
 

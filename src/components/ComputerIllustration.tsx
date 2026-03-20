@@ -1,5 +1,5 @@
-import React from "react";
-import { Terminal, Code, Sparkles, Plus, Cpu, MoveRight } from "lucide-react";
+
+
 import { Typewriter } from "@/components/ui/typewriter";
 import { motion } from "framer-motion";
 

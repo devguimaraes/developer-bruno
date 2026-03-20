@@ -1,5 +1,4 @@
-import logo from "@/assets/bg-logo.webp";
-import { navigationSections, footerData, contactData } from "@/config/site";
+import { navigationSections, footerData } from "@/config/site";
 import { Link } from "react-router-dom";
 import { FadeInStagger, FadeInItem } from "@/components/ui/motion-components";
 import {
