@@ -27,7 +27,6 @@ const SITEMAP_CONFIG = {
  * Generate sitemap entries for Brazilian search engines
  */
 export const generateSitemapEntries = (): SitemapEntry[] => {
-  const baseUrl = siteConfig.domain;
   const currentDate = new Date().toISOString().split('T')[0];
 
   const entries: SitemapEntry[] = [

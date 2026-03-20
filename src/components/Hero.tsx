@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { NeoButton } from "@/components/ui/NeoButton";
 import {
   MoveRight,
-  ArrowDown,
   Globe,
   Terminal,
   Cpu,

@@ -212,28 +212,3 @@ export const themeConfig = {
   themes: ['light', 'dark'] as const,
 };
 
-/**
- * Analytics configuration (for future implementation)
- */
-export const analyticsConfig = {
-  // Google Analytics, Plausible, etc.
-  // Leave empty for now
-  googleAnalyticsId: '',
-  plausibleDomain: '',
-};
-
-/**
- * Performance budget configuration
- */
-export const performanceBudget = {
-  // Maximum bundle sizes in bytes
-  javascript: 244 * 1024, // 244KB
-  css: 50 * 1024, // 50KB
-  images: 512 * 1024, // 512KB
-  fonts: 200 * 1024, // 200KB
-};
-
-/**
- * Export all configurations
- */
-export default siteConfig;

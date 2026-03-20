@@ -21,7 +21,7 @@ const Skills: React.FC<SkillsProps> = ({ className, ...props }) => {
   // Transform skills data to match chip design format
   const getSkillDisplayData = (
     skill: Skill,
-    index: number
+    _index: number
   ): SkillDisplayData => {
     // Map skill categories to appropriate display colors
     const colorMap = {

@@ -1,13 +1,13 @@
 import { lazy, Suspense, useMemo } from "react";
 import Hero from "@/components/Hero";
 import Projects from "@/components/Projects";
-import Experience from "@/components/Experience";
+
 import About from "@/components/About";
 import Skills from "@/components/Skills";
 import Metrics from "@/components/Metrics";
 import Contact from "@/components/Contact";
 import { useStackingSections } from "@/hooks/useStackingSections";
-import TechTicker from "@/components/TechTicker";
+
 
 // Lazy load non-critical components for better initial load performance
 const LazyServices = lazy(() =>

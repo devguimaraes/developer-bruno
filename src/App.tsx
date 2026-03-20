@@ -9,12 +9,12 @@ import BlogPage from "./pages/BlogPage";
 import BlogPostPage from "./pages/BlogPostPage";
 import NotFound from "./pages/NotFound";
 import AntigravityPage from "./pages/AntigravityPage";
-import SEO from "@/components/SEO";
+
 import StructuredData from "@/components/StructuredData";
 import Analytics from "@/components/Analytics";
 import ErrorBoundary, { SafeSuspense } from "@/components/ErrorBoundary";
 import { useBrazilianPerformanceReporting } from "@/hooks/useWebVitals";
-import { useRouteSEO } from "@/hooks/useRouteSEO";
+
 import { RouteSEO } from "@/components/RouteSEO";
 
 const App = () => {

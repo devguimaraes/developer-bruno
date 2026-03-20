@@ -174,7 +174,7 @@ const Navigation: React.FC = () => {
 
         {/* Desktop Menu */}
         <div className="hidden lg:flex items-center bg-white border-4 border-black shadow-neo">
-          {navLinks.map((link, idx) => {
+          {navLinks.map((link, _idx) => {
             // Lógica de isActive:
             // - INÍCIO: só ativo se estamos em "/" E nenhuma seção está ativa
             // - Seções (#about, etc): ativo se activeSection corresponde

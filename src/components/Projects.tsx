@@ -6,9 +6,8 @@ import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { TextReveal } from "@/components/ui/motion-components";
 
 // Componente para renderizar a arte do projeto baseada no ID
-const ProjectVisual: React.FC<{ project: Project; index: number }> = ({
+const ProjectVisual: React.FC<{ project: Project }> = ({
   project,
-  index,
 }) => {
   // Mapeamento baseado no ID do projeto para visual customizado
   switch (project.id) {
@@ -219,7 +218,7 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({
         className="relative border-b-4 border-black aspect-video overflow-hidden bg-stone-200 group-hover:shadow-inner"
         style={{ transform: "translateZ(20px)" }}
       >
-        <ProjectVisual project={project} index={index} />
+        <ProjectVisual project={project} />
 
         {/* Overlay Actions */}
         <div className="absolute bottom-0 right-0 z-20 flex">
