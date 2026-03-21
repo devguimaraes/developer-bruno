@@ -18,7 +18,7 @@ interface Props {
 const { title, description, image, structuredData } = Astro.props;
 
 // Meta values with fallbacks
-const finalTitle = title ? `${title} | ${siteConfig.title}` : siteConfig.title;
+const finalTitle = title ? `${title} | ${siteConfig.title}` : `${siteConfig.title} | Desenvolvedor Web RJ`;
 const finalDesc = description || siteConfig.description;
 const finalImage = image ? new URL(image, Astro.url) : new URL(siteConfig.seo.image, Astro.url);
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);

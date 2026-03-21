@@ -69,12 +69,12 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
                   <FolderOpen size={14} />
                   ~/DOCUMENTS/BLOG
                 </div>
-                <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-none">
+                <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-none">
                   TODOS OS<br/>
                   <span className="text-transparent bg-clip-text bg-black text-stroke-2">
                     INSIGHTS
                   </span>
-                </h2>
+                </h1>
               </div>
               <p className="max-w-md font-mono text-sm bg-stone-100 border-2 border-black p-4 shadow-neo">
                 Biblioteca completa de conhecimentos técnicos e reflexões sobre desenvolvimento web.
