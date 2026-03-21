@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Menu, X, Zap } from "lucide-react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
 const Navigation: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("");
-  const navigate = useNavigate();
-  const location = useLocation();
-
+  const pathname = typeof window !== 'undefined' ? window.location.pathname : '/';
+  
   useEffect(() => {
     let frameId: number | null = null;
     const handleScroll = () => {
@@ -31,7 +29,7 @@ const Navigation: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (location.pathname !== "/") {
+    if (pathname !== "/") {
       setActiveSection("");
       return;
     }
@@ -69,12 +67,13 @@ const Navigation: React.FC = () => {
       observer.disconnect();
       window.removeEventListener("resize", updateActiveSection);
     };
-  }, [location.pathname]);
+  }, [pathname]);
 
   // Effect to handle hash scrolling after navigation
   useEffect(() => {
-    if (location.hash) {
-      const targetId = location.hash.substring(1);
+    if (typeof window === 'undefined') return;
+    if (window.location.hash) {
+      const targetId = window.location.hash.substring(1);
       const element = document.getElementById(targetId);
       if (element) {
         setTimeout(() => {
@@ -90,7 +89,7 @@ const Navigation: React.FC = () => {
         }, 100);
       }
     }
-  }, [location]);
+  }, []);
 
   const smoothScroll = (
     e: React.MouseEvent<HTMLAnchorElement>,
@@ -117,19 +116,22 @@ const Navigation: React.FC = () => {
   ) => {
     if (href.startsWith("#")) {
       e.preventDefault();
-      if (location.pathname === "/") {
+      if (pathname === "/") {
         const targetId = href.substring(1);
         smoothScroll(e, targetId);
       } else {
-        navigate("/" + href);
+        window.location.href = "/" + href;
       }
     } else if (href === "/") {
       e.preventDefault();
-      navigate(href);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      if (pathname === "/") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        window.location.href = href;
+      }
     } else {
       e.preventDefault();
-      navigate(href);
+      window.location.href = href;
     }
   };
 
@@ -153,8 +155,8 @@ const Navigation: React.FC = () => {
     >
       <div className="container mx-auto px-4 flex justify-between items-center">
         {/* Logo - Terminal Style */}
-        <Link
-          to="/"
+        <a
+          href="/"
           className="flex items-center gap-3 group cursor-pointer"
           onClick={(e) => handleNavClick(e, "/")}
         >
@@ -170,7 +172,7 @@ const Navigation: React.FC = () => {
               DEV_FRONTEND
             </span>
           </div>
-        </Link>
+        </a>
 
         {/* Desktop Menu */}
         <div className="hidden lg:flex items-center bg-white border-4 border-black shadow-neo">
@@ -184,10 +186,10 @@ const Navigation: React.FC = () => {
             const isPageLink = !isHomeLink && !isSectionLink;
 
             const isActive = isHomeLink
-              ? location.pathname === "/" && !activeSection
+              ? pathname === "/" && !activeSection
               : isSectionLink
               ? link.id && activeSection === link.id
-              : isPageLink && link.href === location.pathname;
+              : isPageLink && link.href === pathname;
 
             return (
               <a
@@ -243,10 +245,10 @@ const Navigation: React.FC = () => {
               const isPageLink = !isHomeLink && !isSectionLink;
 
               const isActive = isHomeLink
-                ? location.pathname === "/" && !activeSection
+                ? pathname === "/" && !activeSection
                 : isSectionLink
                 ? link.id && activeSection === link.id
-                : isPageLink && link.href === location.pathname;
+                : isPageLink && link.href === pathname;
 
               return (
                 <motion.a

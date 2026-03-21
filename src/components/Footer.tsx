@@ -1,5 +1,5 @@
 import { navigationSections, footerData } from "@/config/site";
-import { Link } from "react-router-dom";
+
 import { FadeInStagger, FadeInItem } from "@/components/ui/motion-components";
 import {
   Github,
@@ -61,8 +61,8 @@ const Footer = () => {
         <FadeInStagger className="grid grid-cols-1 md:grid-cols-12 gap-12">
           {/* Brand Column */}
           <FadeInItem className="md:col-span-4">
-            <Link
-              to="/"
+            <a
+              href="/"
               className="flex items-center gap-3 group mb-6"
               onClick={(e) => handleFooterNavClick(e, "/")}
             >
@@ -77,7 +77,7 @@ const Footer = () => {
                   FRONT-END ENGINEER
                 </span>
               </div>
-            </Link>
+            </a>
 
             <p className="font-mono text-sm text-stone-600 border-l-4 border-brutal-orange pl-4 mb-6">
               Transformando ideias em interfaces

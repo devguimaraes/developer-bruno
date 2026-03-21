@@ -1,5 +1,4 @@
-import React from "react";
-import { useRive, Layout, Fit, Alignment } from "@rive-app/react-canvas";
+import React, { useState, useEffect } from "react";
 import { ArrowUpRight, Code, Palette, Zap, Box } from "lucide-react";
 import {
   FadeInStagger,
@@ -13,20 +12,38 @@ import {
 } from "@/lib/constants/rive";
 
 const ServicesBackground = () => {
-  const { RiveComponent } = useRive({
-    src: RIVE_ASSETS.ISO_TOY,
-    stateMachines: RIVE_STATE_MACHINES.DEFAULT,
-    autoplay: true,
-    layout: new Layout({
-      fit: Fit.Cover,
-      alignment: Alignment.Center,
-    }),
-  });
-  return (
-    <RiveComponent
-      className={`w-full h-full ${RIVE_OPACITY.SERVICES_BACKGROUND}`}
-    />
-  );
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [RiveMod, setRiveMod] = useState<any>(null);
+
+  useEffect(() => {
+    import("@rive-app/react-canvas").then((mod) => {
+      const exportsExtracted = { ...mod, ...(mod.default || {}) };
+      setRiveMod(() => exportsExtracted);
+    }).catch(console.error);
+  }, []);
+
+  if (!RiveMod) return null;
+
+  const { useRive, Layout, Fit, Alignment } = RiveMod;
+
+  const RiveRenderer = () => {
+    const { RiveComponent } = useRive({
+      src: RIVE_ASSETS.ISO_TOY,
+      stateMachines: RIVE_STATE_MACHINES.DEFAULT,
+      autoplay: true,
+      layout: new Layout({
+        fit: Fit.Cover,
+        alignment: Alignment.Center,
+      }),
+    });
+    return (
+      <RiveComponent
+        className={`w-full h-full ${RIVE_OPACITY.SERVICES_BACKGROUND}`}
+      />
+    );
+  };
+
+  return <RiveRenderer />;
 };
 
 const services = [

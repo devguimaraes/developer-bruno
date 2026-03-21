@@ -1,8 +1,7 @@
 import React from "react";
-import avatar from "@/assets/avatar.webp";
+import { Avatar } from "@/components/ui/Avatar";
 import { Code2, Cpu, Globe, User, MapPin, Calendar } from "lucide-react";
 import { ScrollAnimation } from "@/components/ui/scroll-animation";
-import { ImageWithSkeleton } from "@/components/ui/image-with-skeleton";
 import { Typewriter } from "@/components/ui/typewriter";
 import { TextReveal } from "@/components/ui/motion-components";
 
@@ -56,14 +55,7 @@ const About: React.FC<AboutProps> = ({ className, ...props }) => {
               {/* Avatar Column */}
               <div className="md:col-span-4 flex flex-col items-center md:items-start">
                 <div className="relative w-full max-w-[220px] md:max-w-[250px]">
-                  <div className="aspect-square rounded-full bg-brutal-orange border-4 border-black p-1.5 overflow-hidden relative">
-                    <ImageWithSkeleton
-                      src={avatar}
-                      alt="Bruno Guimarães"
-                      className="w-full h-full object-cover rounded-full border-2 border-black contrast-110"
-                      wrapperClassName="w-full h-full"
-                    />
-                  </div>
+                  <Avatar />
                   {/* Decorative Elements */}
                   <div className="absolute bottom-0 right-0 md:-bottom-2 md:-right-2 bg-white border-4 border-black p-3 shadow-neo z-20 rounded-lg">
                     <div className="flex items-center gap-2 font-bold font-mono text-xs">

@@ -1,4 +1,4 @@
-import { useRive, Layout, Fit, Alignment } from "@rive-app/react-canvas";
+import { useState, useEffect } from "react";
 
 interface RiveSectionProps {
   id?: string;
@@ -15,21 +15,41 @@ const RiveItem = ({
   src: string;
   stateMachine?: string;
 }) => {
-  const { RiveComponent } = useRive({
-    src,
-    stateMachines: stateMachine,
-    autoplay: true,
-    layout: new Layout({
-      fit: Fit.Cover,
-      alignment: Alignment.Center,
-    }),
-  });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [RiveMod, setRiveMod] = useState<any>(null);
 
-  return (
-    <div className="relative w-full h-full group">
-      <RiveComponent className="w-full h-full" />
-    </div>
-  );
+  useEffect(() => {
+    import("@rive-app/react-canvas").then((mod) => {
+      const exportsExtracted = { ...mod, ...(mod.default || {}) };
+      setRiveMod(() => exportsExtracted);
+    }).catch(console.error);
+  }, []);
+
+  if (!RiveMod) {
+    return <div className="relative w-full h-full group" />;
+  }
+
+  const { useRive, Layout, Fit, Alignment } = RiveMod;
+
+  const RiveRenderer = () => {
+    const { RiveComponent } = useRive({
+      src,
+      stateMachines: stateMachine,
+      autoplay: true,
+      layout: new Layout({
+        fit: Fit.Cover,
+        alignment: Alignment.Center,
+      }),
+    });
+
+    return (
+      <div className="relative w-full h-full group">
+        <RiveComponent className="w-full h-full" />
+      </div>
+    );
+  };
+
+  return <RiveRenderer />;
 };
 
 const RiveSection = ({

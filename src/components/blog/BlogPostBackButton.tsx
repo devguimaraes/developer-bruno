@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+
 import { ArrowLeft } from 'lucide-react';
 
 export function BlogPostBackButton() {
@@ -10,13 +10,13 @@ export function BlogPostBackButton() {
       transition={{ delay: 0.2 }}
       className="mb-8"
     >
-      <Link
-        to="/blog"
+      <a
+        href="/blog"
         className="inline-flex items-center gap-2 text-stone-600 hover:text-black transition-colors font-bold"
       >
         <ArrowLeft className="w-4 h-4" />
         Voltar para o blog
-      </Link>
+      </a>
     </motion.div>
   );
 }
