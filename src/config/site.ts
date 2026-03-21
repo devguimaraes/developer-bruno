@@ -4,9 +4,9 @@ import type { SiteConfig, HeroData, ContactData } from '@/types';
  * Site configuration and metadata
  */
 export const siteConfig: SiteConfig = {
-  title: 'Bruno Guimarães | Desenvolvedor Front-End',
+  title: 'Bruno Guimarães',
   
-  description: 'Desenvolvedor Front-End especializado em React, TypeScript e interfaces modernas. Transformando visão estratégica em software de alta performance.',
+  description: 'Desenvolvedor Front-End especializado em React, TypeScript e interfaces modernas. Criação de Sites e Softwares de alta performance.',
   author: 'Bruno Guimarães',
   email: 'bc.guimaraes@outlook.com',
   location: 'Rio de Janeiro, Brasil',
@@ -21,15 +21,17 @@ export const siteConfig: SiteConfig = {
   seo: {
     keywords: [
       // Brazilian Market Keywords
-      'desenvolvedor front-end Brasil',
-      'programador React Rio de Janeiro',
-      'desenvolvedor TypeScript Brasil',
+      'desenvolvedor Web',
+      'programador React',
+      'desenvolvedor Web Rio de Janeiro',
+      'desenvolvedor TypeScript',
       'portfolio desenvolvedor web',
       'Bruno Guimarães front-end',
+      'Bruno Guimarães Desenvolvedor Web',
       'desenvolvedor web São Paulo',
-      'programador JavaScript Brasil',
-      'front-end developer Brasil',
-      'desenvolvedor React Brasil',
+      'programador JavaScript ',
+      'front-end developer',
+      'desenvolvedor React ',
       'portfolio desenvolvimento web',
 
       // Technical Keywords
@@ -197,9 +199,9 @@ export const navigationSections = [
 export const footerData = {
   copyright: `© ${new Date().getFullYear()} ${siteConfig.author}. Todos os direitos reservados.`,
   builtWith: [
+    { name: 'Astro', url: 'https://astro.build' },
     { name: 'React', url: 'https://react.dev' },
     { name: 'TypeScript', url: 'https://typescriptlang.org' },
-    { name: 'Vite', url: 'https://vitejs.dev' },
     { name: 'Tailwind CSS', url: 'https://tailwindcss.com' },
   ],
 };
