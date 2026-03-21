@@ -23,10 +23,11 @@ npm run preview      # Preview production build
 
 **Tech Stack:**
 
-- React 18.3 + TypeScript + Vite 7.2 (SWC plugin)
+- Astro 5.0+ (SSG Mode)
+- React 18.3 + TypeScript + Vite 7.2 (via Astro)
 - Tailwind CSS 3.4 + shadcn/ui (36 components) + Radix UI
-- React Router DOM 6.30, React Query 5.83, React Hook Form 7.61 + Zod 3.25
 - Framer Motion, Embla Carousel, Sonner, lucide-react
+- (Removed: react-router-dom, react-helmet-async)
 
 **Project Structure:**
 
@@ -34,33 +35,24 @@ npm run preview      # Preview production build
 src/
 ├── components/
 │   ├── ui/             # 36 shadcn/ui components
-│   ├── Navigation.tsx  # Site navigation with mobile toggle
+│   ├── Navigation.tsx  # Site navigation (client:load)
 │   ├── Hero.tsx        # Main hero with animated content
-│   ├── Projects.tsx    # Project showcase with carousel
-│   ├── Experience.tsx  # Work experience timeline
-│   ├── About.tsx       # About section
-│   ├── Skills.tsx      # Skills display
-│   ├── Contact.tsx     # Contact form
-│   ├── Services.tsx    # Services (lazy load)
-│   ├── Blog.tsx        # Blog section (lazy load)
-│   └── Footer.tsx      # Site footer
+│   ├── About.tsx       # About section using <Avatar />
+│   └── ...
+├── layouts/
+│   └── Layout.astro    # Main layout (SEO, Fonts, Scripts)
 ├── pages/
-│   ├── Index.tsx       # Main portfolio page
-│   ├── BlogPage.tsx    # Blog listing
-│   ├── BlogPostPage.tsx # Individual post
-│   └── NotFound.tsx    # 404 page
+│   ├── index.astro     # Home page
+│   ├── blog/
+│   │   ├── index.astro # Blog listing (SSG)
+│   │   └── [slug].astro # Individual post (Dynamic SSG)
+│   └── 404.astro       # 404 page
 ├── hooks/
-│   ├── useStackingSections.ts  # Scroll stacking effect
-│   ├── useWebVitals.ts        # Performance monitoring
-│   ├── use-blog-posts.ts       # Blog data
-│   ├── use-mobile.tsx          # Mobile detection
-│   └── use-toast.ts            # Toast notifications
-├── data/
-│   ├── projects.ts     # Portfolio projects data
-│   ├── experience.ts   # Work experience data
-│   └── skills.ts       # Skills data
+│   ├── useStackingSections.ts
+│   ├── use-mobile.tsx
+│   └── use-toast.ts
 ├── types/              # TypeScript interfaces
-├── lib/                # Utilities and validation (Zod schemas)
+├── lib/                # Utilities and blog data logic
 └── config/
     └── site.ts         # SEO and Brazilian market config
 ```
@@ -150,9 +142,17 @@ Advanced scroll-based section stacking:
 | File | Purpose |
 |------|---------|
 | `tailwind.config.ts` | Design tokens, animations, brutalist variants |
-| `vite.config.ts` | Build optimization, component tagger, path aliases |
+| `astro.config.mjs` | Astro core config (React, Tailwind, Sitemap) |
+| `vitest.config.ts` | Test environment (jsdom, aliases) |
 | `site.ts` | SEO, Brazilian market config, performance budgets |
-| `components/ui/` | shadcn/ui component library (36 components) |
+
+## 🖼️ Asset Handling (Astro vs Vite)
+
+Para imagens que precisam de carregamento instantâneo ou que não devem ser processadas como `ImageMetadata` (para evitar bugs de hidratação/cache em navegação):
+
+1. Use o sufixo `?url` no import: `import avatarUrl from "@/assets/avatar.webp?url";`
+2. Use a tag `img` nativa com `loading="eager"` e `fetchPriority="high"`.
+3. Para imagens de conteúdo comum, use o componente `Image` do Astro ou os wrappers de Skeleton se a interatividade for necessária.
 
 ## ⚡ Deployment
 
