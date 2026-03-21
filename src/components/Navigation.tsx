@@ -141,7 +141,6 @@ const Navigation: React.FC = () => {
     { name: "SKILLS", href: "#skills", id: "skills" },
     { name: "PROJETOS", href: "#projects", id: "projects" },
     { name: "BLOG", href: "/blog", id: "blog" },
-    { name: "ANTIGRAVITY", href: "/antigravity", id: "antigravity" },
     { name: "CONTATO", href: "#contact", id: "contact" },
   ];
 
