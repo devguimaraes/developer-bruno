@@ -1,0 +1,77 @@
+---
+// src/layouts/Layout.astro
+import '@/index.css';
+import '@/styles/markdown.css';
+import { siteConfig } from '@/config/site';
+
+import Navigation from '@/components/Navigation.tsx';
+import Footer from '@/components/Footer.tsx';
+import { Toaster } from '@/components/ui/sonner.tsx';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  structuredData?: object;
+}
+
+const { title, description, image, structuredData } = Astro.props;
+
+// Meta values with fallbacks
+const finalTitle = title ? `${title} | ${siteConfig.title}` : siteConfig.title;
+const finalDesc = description || siteConfig.description;
+const finalImage = image ? new URL(image, Astro.url) : new URL(siteConfig.seo.image, Astro.url);
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/logo.png" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <!-- Primary Meta Tags -->
+    <title>{finalTitle}</title>
+    <meta name="title" content={finalTitle} />
+    <meta name="description" content={finalDesc} />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={finalTitle} />
+    <meta property="og:description" content={finalDesc} />
+    <meta property="og:image" content={finalImage} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={finalTitle} />
+    <meta property="twitter:description" content={finalDesc} />
+    <meta property="twitter:image" content={finalImage} />
+    
+    <!-- Preconnects -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
+
+    <!-- Performance/Analytics scripts base (como Plausible se houver) -->
+    { import.meta.env.PROD && (
+      <script defer data-domain="devguimaraes.com.br" src="https://plausible.io/js/script.js"></script>
+    )}
+
+    {structuredData && (
+      <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    )}
+  </head>
+  <body>
+    <Navigation client:load />
+    <main class="flex-grow w-full">
+      <slot />
+    </main>
+    <Footer client:visible />
+    <Toaster client:load />
+  </body>
+</html>

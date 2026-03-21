@@ -1,0 +1,16 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import BlogPageClient from '@/components/pages/BlogPage';
+import { getAllBlogPosts } from '@/lib/blog';
+
+// Fetch data at build time (SSG)
+const posts = await getAllBlogPosts();
+---
+
+<Layout 
+  title="Blog | Front-End e Desenvolvimento Web" 
+  description="Artigos sobre React, Next.js, arquitetura front-end e dicas de desenvolvimento."
+>
+  <!-- Pass the pre-fetched posts as initialData to avoid client-side waterfalls, but keep React interactivity -->
+  <BlogPageClient initialPosts={posts} client:load />
+</Layout>

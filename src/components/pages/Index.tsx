@@ -1,4 +1,5 @@
 import { lazy, Suspense, useMemo } from "react";
+import type { BlogPost } from "@/types/blog";
 import Hero from "@/components/Hero";
 import Projects from "@/components/Projects";
 
@@ -31,7 +32,11 @@ const SectionLoader = () => (
   </div>
 );
 
-const Index = () => {
+interface IndexProps {
+  recentPosts?: BlogPost[];
+}
+
+const Index: React.FC<IndexProps> = ({ recentPosts = [] }) => {
   // Define section IDs for stacking (memoized to prevent infinite loops)
   const sectionIds = useMemo(
     () => [
@@ -74,6 +79,7 @@ const Index = () => {
       <Suspense fallback={<SectionLoader />}>
         <LazyBlog
           id="blog"
+          posts={recentPosts}
           style={{ transform: getTransform("blog"), zIndex: getZIndex("blog") }}
           className="stacking-section"
         />

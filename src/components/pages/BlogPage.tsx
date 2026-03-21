@@ -1,24 +1,19 @@
 import React, { useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { Calendar, Clock, FolderOpen, ExternalLink, AlertCircle, RefreshCw } from 'lucide-react';
-import { Link } from 'react-router-dom';
 
-import { getAllBlogPosts } from '@/lib/blog';
+import { Calendar, Clock, FolderOpen, ExternalLink, AlertCircle, RefreshCw } from 'lucide-react';
+import type { BlogPost } from '@/types/blog';
+
 import { BlogPostCardSkeleton } from '@/components/blog/BlogPostCardSkeleton';
 import { ERROR_MESSAGES, ACCESSIBILITY_LABELS } from '@/constants/ui';
 
-const BlogPage: React.FC = () => {
-  const {
-    data: blogPosts = [],
-    isLoading,
-    error,
-    refetch
-  } = useQuery({
-    queryKey: ['blog-posts'],
-    queryFn: getAllBlogPosts,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    retry: 3,
-  });
+interface BlogPageProps {
+  initialPosts?: BlogPost[];
+}
+
+const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
+  const blogPosts = initialPosts;
+  const isLoading = false;
+  const error = null;
 
   // Scroll to top when component mounts
   useEffect(() => {
@@ -26,7 +21,7 @@ const BlogPage: React.FC = () => {
   }, []);
 
   const handleRetry = () => {
-    refetch();
+    window.location.reload();
   };
 
   if (error) {
@@ -134,12 +129,12 @@ const BlogPage: React.FC = () => {
                         </span>
                       ))}
                     </div>
-                    <Link
-                      to={`/blog/${post.slug}`}
+                    <a
+                      href={`/blog/${post.slug}`}
                       className="flex items-center gap-1 font-black text-sm hover:underline decoration-4 decoration-brutal-yellow underline-offset-2"
                     >
                       LER ARQUIVO <ExternalLink size={16} />
-                    </Link>
+                    </a>
                   </div>
                 </div>
               </article>
