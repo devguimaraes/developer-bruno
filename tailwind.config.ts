@@ -8,7 +8,10 @@ export default {
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+      padding: {
+        DEFAULT: "1rem",
+        sm: "2rem",
+      },
       screens: {
         "2xl": "1400px",
       },
@@ -73,6 +76,8 @@ export default {
       fontFamily: {
         mono: ["JetBrains Mono", "monospace"],
         sans: ["Satoshi", "system-ui", "sans-serif"],
+        pixel: ["Pixelify Sans", "sans-serif"],
+        vt: ["VT323", "monospace"],
       },
       boxShadow: {
         brutal: "var(--shadow-brutal)",
@@ -82,6 +87,7 @@ export default {
         "neo": "4px 4px 0px 0px rgba(0,0,0,1)",
         "neo-sm": "2px 2px 0px 0px rgba(0,0,0,1)",
         "neo-lg": "8px 8px 0px 0px rgba(0,0,0,1)",
+        "pixel": "4px 0 0 0 #000, -4px 0 0 0 #000, 0 4px 0 0 #000, 0 -4px 0 0 #000",
       },
       backgroundImage: {
         "gradient-aqua": "var(--gradient-aqua)",

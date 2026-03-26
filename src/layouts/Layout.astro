@@ -68,7 +68,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   </head>
   <body>
     <Navigation client:load />
-    <main class="flex-grow w-full">
+    <main class="w-full">
       <slot />
     </main>
     <Footer client:visible />

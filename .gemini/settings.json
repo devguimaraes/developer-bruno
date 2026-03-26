@@ -10,7 +10,6 @@
     "mercadopago-mcp-server": {
       "command": "npx",
       "args": [
-        "-y",
         "mcp-remote",
         "https://mcp.mercadopago.com/mcp",
         "--header",
@@ -19,6 +18,20 @@
       "env": {
         "AUTH_HEADER": "Bearer APP_USR-5742761756654384-122223-9c8cc8cbdbf13e41c50164274b7141ba-286104491"
       }
+    },
+    "chrome-devtools": {
+      "command": "npx",
+      "args": [
+        "chrome-devtools-mcp@latest",
+        "--headless",
+        "--chrome-arg='--no-sandbox'",
+        "--chrome-arg='--disable-setuid-sandbox'"
+      ]
+    }
+  },
+  "agents": {
+    "browser": {
+      "headless": true
     }
   }
 }

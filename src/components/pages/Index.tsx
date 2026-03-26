@@ -1,121 +1,67 @@
-import { lazy, Suspense, useMemo } from "react";
-import type { BlogPost } from "@/types/blog";
-import Hero from "@/components/Hero";
-import Projects from "@/components/Projects";
+import React, { useMemo, useState } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
+// Layout Components
+import HorizontalSplitLayout from "@/components/layout/HorizontalSplitLayout";
+import FixedSidebar from "@/components/layout/FixedSidebar";
+import BackgroundGrid from "@/components/ui/BackgroundGrid";
+
+// Section Components
+import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Skills from "@/components/Skills";
-import Metrics from "@/components/Metrics";
+import Projects from "@/components/Projects";
 import Contact from "@/components/Contact";
-import { useStackingSections } from "@/hooks/useStackingSections";
 
+const Index: React.FC = () => {
+  const isMobile = useIsMobile();
+  const [activeIndex, setActiveIndex] = useState(0);
 
-// Lazy load non-critical components for better initial load performance
-const LazyServices = lazy(() =>
-  import("@/components/Services").then((module) => ({
-    default: module.default,
-  }))
-);
-const LazyBlog = lazy(() =>
-  import("@/components/Blog").then((module) => ({
-    default: module.default,
-  }))
-);
-
-// Loading component for lazy loaded sections
-const SectionLoader = () => (
-  <div className="min-h-[400px] bg-brutal-yellow border-y-4 border-black flex items-center justify-center">
-    <div className="text-center">
-      <div className="inline-block w-8 h-8 border-4 border-black border-t-transparent animate-spin mb-4"></div>
-      <p className="font-mono font-bold">CARREGANDO_SEÇÃO...</p>
-    </div>
-  </div>
-);
-
-interface IndexProps {
-  recentPosts?: BlogPost[];
-}
-
-const Index: React.FC<IndexProps> = ({ recentPosts = [] }) => {
-  // Define section IDs for stacking (memoized to prevent infinite loops)
-  const sectionIds = useMemo(
-    () => [
-      "hero",
-      "about",
-      "services",
-      "blog",
-      "skills",
-      "projects",
-      "metrics",
-      "contact",
-    ],
-    []
-  );
-  const { getTransform, getZIndex } = useStackingSections(sectionIds);
+  const sections = useMemo(() => [
+    { id: "hero", label: "Início", component: <Hero /> },
+    { id: "about", label: "Sobre", component: <About /> },
+    { id: "projects", label: "Projetos", component: <Projects />, hasVerticalScroll: true },
+    { id: "skills", label: "Skills", component: <Skills />, hasVerticalScroll: true },
+    { id: "contact", label: "Contato", component: <Contact /> },
+  ], []);
 
   return (
-    <div className="stacking-wrapper">
-      <Hero
-        id="hero"
-        style={{ transform: getTransform("hero"), zIndex: getZIndex("hero") }}
-        className="stacking-section"
-      />
-      <About
-        id="about"
-        style={{ transform: getTransform("about"), zIndex: getZIndex("about") }}
-        className="stacking-section"
-      />
-      <Suspense fallback={<SectionLoader />}>
-        <LazyServices
-          id="services"
-          style={{
-            transform: getTransform("services"),
-            zIndex: getZIndex("services"),
-          }}
-          className="stacking-section"
+    <div className="relative w-full bg-background min-h-screen">
+      {/* Background fixo */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <BackgroundGrid />
+      </div>
+      <div className="scanlines fixed inset-0 pointer-events-none z-[100] opacity-[0.03]" />
+      
+      {!isMobile && (
+        <FixedSidebar 
+          activeSection={{
+            id: sections[activeIndex].id,
+            index: activeIndex,
+            label: sections[activeIndex].label
+          }} 
         />
-      </Suspense>
+      )}
 
-      <Suspense fallback={<SectionLoader />}>
-        <LazyBlog
-          id="blog"
-          posts={recentPosts}
-          style={{ transform: getTransform("blog"), zIndex: getZIndex("blog") }}
-          className="stacking-section"
-        />
-      </Suspense>
-      <Skills
-        id="skills"
-        style={{
-          transform: getTransform("skills"),
-          zIndex: getZIndex("skills"),
-        }}
-        className="stacking-section"
-      />
-      <Projects
-        id="projects"
-        style={{
-          transform: getTransform("projects"),
-          zIndex: getZIndex("projects"),
-        }}
-        className="stacking-section"
-      />
-      <Metrics
-        id="metrics"
-        style={{
-          transform: getTransform("metrics"),
-          zIndex: getZIndex("metrics"),
-        }}
-        className="stacking-section"
-      />
-      <Contact
-        id="contact"
-        style={{
-          transform: getTransform("contact"),
-          zIndex: getZIndex("contact"),
-        }}
-        className="stacking-section"
-      />
+      <main 
+        className="relative z-10"
+        style={{ paddingLeft: !isMobile ? 'var(--sidebar-width)' : '0' }}
+      >
+        {isMobile ? (
+          <div className="flex flex-col">
+            <Hero />
+            <About />
+            <Projects />
+            <Skills />
+            <Contact />
+          </div>
+        ) : (
+          <HorizontalSplitLayout 
+            sections={sections} 
+            onSectionChange={(index) => setActiveIndex(index)}
+          />
+        )}
+      </main>
     </div>
   );
 };

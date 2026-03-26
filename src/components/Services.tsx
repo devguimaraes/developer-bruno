@@ -1,50 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { ArrowUpRight, Code, Palette, Zap, Box } from "lucide-react";
 import {
   FadeInStagger,
   FadeInItem,
   TextReveal,
 } from "@/components/ui/motion-components";
-import {
-  RIVE_ASSETS,
-  RIVE_STATE_MACHINES,
-  RIVE_OPACITY,
-} from "@/lib/constants/rive";
-
-const ServicesBackground = () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [RiveMod, setRiveMod] = useState<any>(null);
-
-  useEffect(() => {
-    import("@rive-app/react-canvas").then((mod) => {
-      const exportsExtracted = { ...mod, ...(mod.default || {}) };
-      setRiveMod(() => exportsExtracted);
-    }).catch(console.error);
-  }, []);
-
-  if (!RiveMod) return null;
-
-  const { useRive, Layout, Fit, Alignment } = RiveMod;
-
-  const RiveRenderer = () => {
-    const { RiveComponent } = useRive({
-      src: RIVE_ASSETS.ISO_TOY,
-      stateMachines: RIVE_STATE_MACHINES.DEFAULT,
-      autoplay: true,
-      layout: new Layout({
-        fit: Fit.Cover,
-        alignment: Alignment.Center,
-      }),
-    });
-    return (
-      <RiveComponent
-        className={`w-full h-full ${RIVE_OPACITY.SERVICES_BACKGROUND}`}
-      />
-    );
-  };
-
-  return <RiveRenderer />;
-};
 
 const services = [
   {
@@ -82,16 +42,12 @@ type ServicesProps = React.HTMLAttributes<HTMLElement>;
 const Services: React.FC<ServicesProps> = ({ className, ...props }) => {
   return (
     <section
+      id="services"
       className={`py-24 bg-stone-100 relative overflow-hidden ${
         className ?? ""
       }`}
       {...props}
     >
-      {/* Rive Background */}
-      <div className="absolute inset-0 z-0">
-        <ServicesBackground />
-      </div>
-
       {/* Technical Grid Background */}
       <div className="absolute inset-0 bg-neo-grid opacity-50 pointer-events-none z-[1]" />
 

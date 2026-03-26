@@ -1,0 +1,39 @@
+$ eslint .
+
+/home/devguimaraes/estudo/developer-bruno/developer-bruno-latyou-design/.astro/content.d.ts
+    5:43  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   24:34  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  110:53  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  120:5   error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  122:22  error  The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+
+/home/devguimaraes/estudo/developer-bruno/developer-bruno-latyou-design/.astro/types.d.ts
+  2:1  error  Do not use a triple slash reference for content.d.ts, use `import` style instead  @typescript-eslint/triple-slash-reference
+
+/home/devguimaraes/estudo/developer-bruno/developer-bruno-latyou-design/src/components/ErrorBoundary.tsx
+  216:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+/home/devguimaraes/estudo/developer-bruno/developer-bruno-latyou-design/src/components/Navigation.test.tsx
+  1:42  warning  'waitFor' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/devguimaraes/estudo/developer-bruno/developer-bruno-latyou-design/src/components/Navigation.tsx
+  2:19  warning  'Zap' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/devguimaraes/estudo/developer-bruno/developer-bruno-latyou-design/src/components/pages/Index.tsx
+  2:10  warning  'motion' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/devguimaraes/estudo/developer-bruno/developer-bruno-latyou-design/src/components/ui/DesktopIcon.tsx
+  2:10  warning  'motion' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/devguimaraes/estudo/developer-bruno/developer-bruno-latyou-design/src/components/ui/OSWindow.tsx
+  1:17  warning  'useState' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/devguimaraes/estudo/developer-bruno/developer-bruno-latyou-design/src/components/ui/sonner.tsx
+  27:19  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+✖ 13 problems (6 errors, 7 warnings)
+
+error: script "lint" exited with code 1

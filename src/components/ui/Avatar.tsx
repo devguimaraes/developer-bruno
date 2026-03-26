@@ -29,7 +29,7 @@ export const Avatar: React.FC<AvatarProps> = ({
         src={avatarUrl}
         alt="Bruno Guimarães"
         loading="eager"
-        fetchPriority="high"
+        fetchpriority="high"
         className={cn(
           "w-full h-full object-cover rounded-full border-2 border-black contrast-110",
           className

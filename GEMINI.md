@@ -27,7 +27,7 @@ bun run preview      # Preview production build locally
 - **Core:** Astro 6.0+ (SSG Mode)
 - **Frontend:** React 18.3 + TypeScript + Tailwind CSS 3.4
 - **UI System:** shadcn/ui (36 components) + Radix UI + Framer Motion
-- **Interactivity:** Rive (interactive animations), Embla Carousel, Sonner
+- **Interactivity:** Framer Motion (animations), Embla Carousel, Sonner
 - **Backend/Integrations:** Supabase (Edge Functions), Mercado Pago (PIX flow)
 - **Monitoring:** Vercel Analytics, Speed Insights, Plausible (Privacy-first)
 
@@ -38,7 +38,6 @@ src/
 ├── components/
 │   ├── ui/             # shadcn/ui component library
 │   ├── Navigation.tsx  # Interactive nav with mobile toggle
-│   ├── RiveSection.tsx # Rive animation wrapper
 │   └── ...             # Feature components (Hero, About, etc.)
 ├── layouts/
 │   └── Layout.astro    # Master layout (SEO, Fonts, Analytics)
@@ -57,11 +56,13 @@ antigravity-pack/       # Antigravity product assets & docs
 ## 🎯 Development & Testing Strategy
 
 **1. Verification Flow:**
+
 - **Unit/Component:** `bun run test` (Vitest + React Testing Library)
 - **E2E/Flow:** `bun run test:e2e` (Playwright)
 - **Types/Lint:** `bun run lint` (ESLint + `tsc --noEmit`)
 
 **2. Git Workflow:**
+
 - **Pre-commit:** Husky + lint-staged runs linting and type checks automatically.
 - **Conventional Commits:** Use clear prefixing (feat:, fix:, chore:, etc.).
 
@@ -72,6 +73,7 @@ antigravity-pack/       # Antigravity product assets & docs
 **SEO:** Automatic sitemap generation and schema.org structured data.
 
 **Key Files:**
+
 - `astro.config.mjs` - Integration & build config
 - `src/config/site.ts` - SEO keywords & performance budgets
 - `playwright.config.ts` - E2E test orchestration
@@ -79,13 +81,14 @@ antigravity-pack/       # Antigravity product assets & docs
 ## 🎨 Design System (Brutalist)
 
 **Core Principles:**
+
 - Heavy borders (`border-4`) with no border radius (`--radius: 0rem`)
 - High contrast shadows: `shadow-brutal` / `shadow-neo`
 - Neo-brutalist color palette (Parakeet, Royal Lilac, Freesia)
 
 **Animations:**
+
 - **Framer Motion:** Component transitions and scroll effects.
-- **Rive:** Complex interactive animations (files in `/public/rive`).
 - **Scroll Stacking:** `useStackingSections.ts` for layered navigation.
 
 ## 👨‍💻 Guidelines for AI Agents
@@ -99,6 +102,7 @@ antigravity-pack/       # Antigravity product assets & docs
 ## ⚡ Deployment
 
 **Optimized for Vercel:**
+
 - SSG deployment for maximum speed.
 - Middleware for redirects and performance monitoring.
 - Serverless Edge Functions (via Supabase) for transactional flows.

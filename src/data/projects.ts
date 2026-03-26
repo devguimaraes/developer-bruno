@@ -1,25 +1,27 @@
 import type { Project } from '@/types';
-import agenciaMultiBrImg from '@/assets/agencia-multi-br.webp';
-import engerodImg from '@/assets/engerod.webp';
-import semogrjImg from '@/assets/semogrj.webp';
-import luisFelipeImg from '@/assets/luis-felipe-pereira.webp';
+import agenciaMultiBr from '@/assets/agencia-multi-br.png';
+import engerod from '@/assets/engerod.png';
+import semogrj from '@/assets/semogrj.png';
+import luisFelipePereira from '@/assets/luis-felipe-pereira.png';
+import moviesBremen from '@/assets/movies-bremen.png';
 
 /**
  * Projects data with external links and proper categorization
  */
-export const projects: readonly Project[] = [
+const rawProjects = [
   {
     id: 'agencia-multi-br',
     title: 'Agência Multi BR',
     description:
       'Agência de marketing digital 360º especializada em tráfego pago, conteúdo, redes sociais, web design e identidade visual. Estratégia personalizada com atendimento local.',
-    tech: ['WordPress', 'Elementor', 'UI/UX', 'SEO'] as const,
+    tech: ['React', 'NextJS', 'Tailwind', 'UI/UX'] as const,
     github: '#',
     live: 'https://www.agenciamultibr.com/',
     color: 'bg-accent',
     featured: true,
     tags: ['marketing', 'web-design', 'seo', 'branding'] as const,
-    image: agenciaMultiBrImg,
+    previewAnimation: 'grid-scan',
+    image: agenciaMultiBr,
   },
   {
     id: 'engerod',
@@ -32,7 +34,8 @@ export const projects: readonly Project[] = [
     color: 'bg-secondary',
     featured: true,
     tags: ['engenharia', 'institucional', 'infraestrutura', 'corporativo'] as const,
-    image: engerodImg,
+    previewAnimation: 'faulty-terminal',
+    image: engerod,
   },
   {
     id: 'semogrj',
@@ -45,22 +48,46 @@ export const projects: readonly Project[] = [
     color: 'bg-primary',
     featured: true,
     tags: ['logistica', 'maritimo', 'internacional', 'b2b'] as const,
-    image: semogrjImg,
+    previewAnimation: 'pixel-blast',
+    image: semogrj,
   },
   {
     id: 'luis-felipe-pereira',
     title: 'Luis Felipe Pereira',
     description:
       'Arquitetura e Interiores de alto padrão. Portfólio visual e design sofisticado para projetos residenciais e comerciais no Rio de Janeiro.',
-    tech: ['React', 'Framer Motion', 'Gallery', 'UI/UX'] as const,
+    tech: ['WordPress', 'Elementor', 'Gallery', 'UI/UX'] as const,
     github: '#',
     live: 'https://luisfelipepereira.com.br/',
     color: 'bg-muted',
     featured: true,
     tags: ['arquitetura', 'design', 'portfolio', 'premium'] as const,
-    image: luisFelipeImg,
+    previewAnimation: 'letter-glitch',
+    image: luisFelipePereira,
+  },
+  {
+    id: 'movies-bremen',
+    title: 'Movies Bremen',
+    description:
+      'Plataforma oficial da Movies Event House em Bremen (Alemanha), dedicada ao entretenimento adulto premium com cinema erótico, sex shop, cabines privativas e áreas de cruising em ambiente inclusivo.',
+    tech: ['Next.js', 'React', 'Tailwind CSS', 'UI/UX'] as const,
+    github: '#',
+    live: 'https://www.moviesbremen.com/',
+    color: 'bg-accent',
+    featured: true,
+    tags: ['entretenimento', 'premium', 'internacional', 'adult'] as const,
+    previewAnimation: 'pixel-blast',
+    image: moviesBremen,
   },
 ] as const;
+
+/**
+ * Normalize projects to ensure image property is a string URL
+ */
+export const projects = (rawProjects as unknown as (Omit<Project, 'image'> & { image: string | { src: string } })[]).map(project => ({
+  ...project,
+  image: typeof project.image === 'string' ? project.image : project.image?.src
+})) as readonly Project[];
 
 /**
  * Get featured projects

@@ -20,6 +20,7 @@ export interface Project {
   featured?: boolean;
   tags?: readonly string[];
   image?: string;
+  previewAnimation?: 'pixel-blast' | 'grid-scan' | 'letter-glitch' | 'faulty-terminal';
 }
 
 // Work experience interface

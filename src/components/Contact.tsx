@@ -1,115 +1,107 @@
-import React from "react";
-
+import React, { useState } from "react";
+import ShuffleText from "@/components/ui/ShuffleText";
+import { ArrowUpRight, Mail } from "lucide-react";
 import { contactData } from "@/config/site";
-import { Linkedin, Github, Instagram, Mail, Send, Clock } from "lucide-react";
-import { LucideIcon } from "lucide-react";
-import { TextReveal } from "@/components/ui/motion-components";
+import ScrollReveal from "@/components/ui/ScrollReveal";
+import BorderGlow from "@/components/ui/BorderGlow";
 
-// Dynamic icon import helper
-const iconMap: Record<string, LucideIcon> = {
-  Linkedin,
-  Github,
-  Instagram,
-  Mail,
-  Send,
-};
-
-interface ContactProps {
-  id?: string;
-  style?: React.CSSProperties;
-  className?: string;
-}
-
-const Contact: React.FC<ContactProps> = ({ id, style, className }) => {
-
+const Contact: React.FC = () => {
+  const [showEmail, setShowEmail] = useState(false);
 
   return (
-    <section
-      id={id}
-      style={style}
-      className={`py-24 bg-brutal-bg border-t-4 border-black relative overflow-hidden ${
-        className ?? ""
-      }`}
-    >
-      {/* Warning Stripes Background */}
-      <div className="absolute top-0 left-0 w-full h-6 caution-stripes" />
-      <div className="absolute bottom-0 left-0 w-full h-6 caution-stripes" />
-
-      {/* Neo-Brutalist Pattern Background */}
-      <div className="absolute inset-0 bg-neo-dots opacity-[0.02] pointer-events-none" />
-
-      {/* Decorative Geometric Elements */}
-      <div className="absolute top-20 right-20 w-32 h-32 border-4 border-brutal-orange rotate-12 opacity-20" />
-      <div className="absolute bottom-20 left-20 w-24 h-24 bg-brutal-yellow rotate-45 opacity-20" />
-      <div className="absolute top-1/2 left-10 w-16 h-16 border-4 border-black -rotate-12 opacity-10" />
-
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-5xl mx-auto bg-white border-4 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] p-8 md:p-12 text-center relative">
-          {/* Corner Decorations */}
-          <div className="absolute -top-3 -left-3 w-6 h-6 bg-brutal-orange border-2 border-black" />
-          <div className="absolute -top-3 -right-3 w-6 h-6 bg-brutal-yellow border-2 border-black" />
-          <div className="absolute -bottom-3 -left-3 w-6 h-6 bg-brutal-purple border-2 border-black" />
-          <div className="absolute -bottom-3 -right-3 w-6 h-6 bg-brutal-green border-2 border-black" />
-          {/* Status Badge */}
-          <div className="inline-flex items-center gap-2 bg-black text-white px-4 py-1 font-mono font-bold text-sm mb-6 rounded-full animate-pulse">
-            <div className="w-2 h-2 bg-brutal-green rounded-full animate-ping"></div>
-            CANAL_ABERTO • RESPONDO EM 24H
-          </div>
-
-          {/* Main Heading */}
-          <h2 className="text-5xl md:text-7xl font-black leading-tight mb-6">
-            <TextReveal text="PRONTO PARA" />{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brutal-orange to-red-600 inline-block">
-              <TextReveal text="CONSTRUIR" delay={0.3} />
-            </span>
-            <br />
-            <TextReveal text="JUNTOS?" delay={0.6} />
-          </h2>
-
-          <p className="text-xl md:text-2xl font-bold text-stone-600 mb-12 max-w-3xl mx-auto">
-            {contactData.description}
-          </p>
-
-          {/* Social Links */}
-          <div className="mb-12">
-            <h3 className="font-mono text-sm text-black font-bold mb-6">
-              // CONECTE-SE
-            </h3>
-            <div className="flex justify-center gap-6 flex-wrap">
-              {contactData.socialLinks.map((item) => {
-                const IconComponent = iconMap[item.icon as unknown as keyof typeof iconMap];
-                return (
-                  <a
-                    key={item.id}
-                    href={item.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group flex flex-col items-center gap-2 transition-all duration-300"
-                  >
-                    <div className="w-16 h-16 bg-white border-4 border-black flex items-center justify-center shadow-neo group-hover:bg-brutal-yellow group-hover:-translate-y-2 group-hover:shadow-brutal-lg transition-all duration-300">
-                      {IconComponent && (
-                        <IconComponent size={28} className="text-black" />
-                      )}
-                    </div>
-                    <span className="font-mono text-xs font-bold opacity-0 group-hover:opacity-100 transition-all duration-300">
-                      {item.label}
-                    </span>
-                    <span className="font-mono text-[10px] text-stone-500 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                      @{item.username}
-                    </span>
-                  </a>
-                );
-              })}
+    <section id="contact" className="min-h-screen py-24 px-8 md:px-16 text-black relative overflow-hidden flex flex-col justify-center">
+      <div className="w-full max-w-6xl mx-auto space-y-32">
+        <ScrollReveal direction="down">
+          <div className="space-y-4">
+            <div className="font-pixel text-[10px] md:text-xs tracking-[0.4em] opacity-40 uppercase mb-4">
+              <ShuffleText text="// COMMUNICATION_PORT_OPEN" stagger={0.02} duration={0.8} />
             </div>
+            <h2 className="text-6xl sm:text-8xl md:text-[110px] font-black font-pixel leading-[0.8] tracking-tighter flex flex-col uppercase text-black">
+              <span className="block mb-2 text-black">
+                <ShuffleText text="LET'S" duration={1.2} />
+              </span>
+              <span className="text-transparent block" style={{ WebkitTextStroke: "2px black" }}>
+                <ShuffleText 
+                  text="CONNECT_" 
+                  duration={1.2} 
+                  delay={0.4} 
+                />
+              </span>
+            </h2>
+          </div>
+        </ScrollReveal>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+          <div className="lg:col-span-7 space-y-12">
+            <ScrollReveal direction="up" delay={0.3}>
+              <div className="relative group">
+                <div className="absolute -top-4 -left-4 w-8 h-8 border-t-4 border-l-4 border-brutal-orange transition-all group-hover:-top-6 group-hover:-left-6" />
+                <BorderGlow 
+                  glowColor="162 100% 27%" 
+                  borderRadius={0} 
+                  className="inline-block w-full"
+                >
+                  <div 
+                    onClick={() => setShowEmail(true)}
+                    className={`block p-10 bg-white/5 backdrop-blur-md border-4 border-black shadow-brutal transition-all duration-500 overflow-hidden relative cursor-pointer ${showEmail ? 'bg-black text-white' : 'hover:bg-stone-100'}`}
+                  >
+                    {!showEmail ? (
+                      <div className="flex flex-col items-center justify-center py-4 gap-4 animate-in fade-in duration-700">
+                        <Mail size={48} className="text-brutal-orange animate-pulse" />
+                        <span className="font-pixel text-xl uppercase tracking-[0.3em] font-black">
+                          [ ACCESS_SIGNAL_PORT ]
+                        </span>
+                        <span className="font-pixel text-[10px] opacity-40 uppercase">Click to decrypt contact address</span>
+                      </div>
+                    ) : (
+                      <a 
+                        href={`mailto:${contactData.email}`}
+                        className="animate-in slide-in-from-bottom-4 duration-500 block"
+                      >
+                        <span className="font-pixel text-xl md:text-5xl leading-none uppercase break-all block relative z-10 font-black">
+                          {contactData.email}
+                        </span>
+                      </a>
+                    )}
+                    
+                    {/* Background Text Decor */}
+                    <div className="absolute -bottom-4 -right-4 font-pixel text-6xl opacity-5 select-none pointer-events-none font-black italic">
+                      {showEmail ? 'DECRYPTED' : 'ENCRYPTED'}
+                    </div>
+                  </div>
+                </BorderGlow>
+              </div>
+            </ScrollReveal>
           </div>
 
-          {/* Bottom CTA */}
-          <div className="mt-12 p-6 bg-black text-white border-4 border-black">
-            <div className="flex items-center justify-center gap-3">
-              <Clock size={20} />
-              <span className="font-mono text-sm">
-                STATUS: DISPONÍVEL PARA NOVOS PROJETOS
-              </span>
+          <div className="lg:col-span-5 space-y-12 lg:pt-4">
+            <div className="space-y-6">
+              <p className="font-pixel text-[10px] opacity-30 tracking-[0.3em] uppercase font-bold text-black border-b border-black/10 pb-2">
+                SOCIAL_NETWORKS
+              </p>
+              <div className="flex flex-col gap-6">
+                {contactData.socialLinks.map((link, idx) => (
+                  <ScrollReveal key={link.id} direction="left" delay={0.4 + (idx * 0.1)}>
+                    <a 
+                      href={link.href}
+                      target="_blank"
+                      className="group flex justify-between items-center border-b-2 border-black/5 hover:border-black pb-4 transition-all"
+                    >
+                      <div className="flex items-center gap-4">
+                        <span className="font-pixel text-[10px] opacity-20">0{idx + 1}</span>
+                        <span className="font-pixel text-lg md:text-2xl uppercase tracking-widest font-black group-hover:text-brutal-orange transition-colors">
+                          {link.label}
+                        </span>
+                      </div>
+                      <ArrowUpRight size={24} className="opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0 text-brutal-orange" />
+                    </a>
+                  </ScrollReveal>
+                ))}
+              </div>
+            </div>
+            
+            <div className="pt-8 opacity-20 font-pixel text-[9px] tracking-[0.2em] leading-relaxed uppercase font-bold text-black">
+              DISCLAIMER: ESTE PORTFÓLIO É UMA DEMONSTRAÇÃO DE ENGENHARIA E DESIGN SYSTEM DE ALTA PERFORMANCE.
             </div>
           </div>
         </div>
