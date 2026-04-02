@@ -18,15 +18,15 @@ export function BlogPostNavigation({ previous, next }: BlogPostNavigationProps) 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.6 }}
-      className="mt-16 pt-8 border-t-4 border-black"
+      className="mt-12 sm:mt-16 pt-6 sm:pt-8 border-t-4 border-black"
     >
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8">
         {previous && (
           <a
             href={`/blog/${previous.slug}`}
-            className="group flex flex-col gap-2 p-4 border-4 border-black hover:border-brutal-orange transition-colors"
+            className="group flex flex-col gap-2 p-4 sm:p-5 border-4 border-black hover:border-brutal-orange transition-colors min-h-28"
           >
-            <div className="flex items-center gap-2 text-sm text-stone-600 font-bold">
+            <div className="flex items-center gap-2 text-xs sm:text-sm text-stone-600 font-bold">
               <ChevronLeft className="w-4 h-4" />
               Post anterior
             </div>
@@ -39,9 +39,9 @@ export function BlogPostNavigation({ previous, next }: BlogPostNavigationProps) 
         {next && (
           <a
             href={`/blog/${next.slug}`}
-            className="group flex flex-col gap-2 p-4 border-4 border-black hover:border-brutal-orange transition-colors text-right md:ml-auto"
+            className="group flex flex-col gap-2 p-4 sm:p-5 border-4 border-black hover:border-brutal-orange transition-colors text-left md:text-right md:ml-auto min-h-28"
           >
-            <div className="flex items-center justify-end gap-2 text-sm text-stone-600 font-bold">
+            <div className="flex items-center md:justify-end gap-2 text-xs sm:text-sm text-stone-600 font-bold">
               Próximo post
               <ChevronRight className="w-4 h-4" />
             </div>

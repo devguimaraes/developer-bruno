@@ -12,13 +12,13 @@ export function BlogPostHeader({ post }: BlogPostHeaderProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3 }}
-      className="mb-8"
+      className="mb-6 sm:mb-8"
     >
-      <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-black">
+      <h1 className="text-[clamp(1.9rem,8vw,3rem)] md:text-4xl lg:text-5xl font-bold mb-5 sm:mb-6 text-black leading-tight break-words">
         {post.title}
       </h1>
 
-      <div className="flex flex-wrap items-center gap-6 text-stone-500 mb-6">
+      <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-stone-500 mb-5 sm:mb-6 text-sm sm:text-base">
         <div className="flex items-center gap-2">
           <Calendar className="w-4 h-4" />
           <span>{post.date}</span>
@@ -37,7 +37,7 @@ export function BlogPostHeader({ post }: BlogPostHeaderProps) {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.4 + index * 0.1 }}
-              className="inline-flex items-center gap-1 px-3 py-1 bg-stone-200 text-black border-2 border-black text-sm"
+              className="inline-flex items-center gap-1 px-3 py-1 bg-stone-200 text-black border-2 border-black text-xs sm:text-sm"
             >
               <Tag className="w-3 h-3" />
               {tag}

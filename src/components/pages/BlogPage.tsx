@@ -57,26 +57,26 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
   return (
     <>
       {/* Header with proper padding for fixed navigation */}
-      <div className="pt-24">
+      <div className="pt-20 sm:pt-24 overflow-x-clip">
 
         {/* Header */}
-        <div className="pt-8 pb-16">
+        <div className="pt-6 sm:pt-8 pb-10 sm:pb-16">
           <div className="container mx-auto px-4 relative z-10">
 
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 sm:mb-16 gap-5 sm:gap-6">
               <div>
                 <div className="inline-flex items-center gap-2 bg-brutal-purple border-2 border-black text-white px-3 py-1 font-mono font-bold text-xs mb-4 shadow-neo">
                   <FolderOpen size={14} />
                   ~/DOCUMENTS/BLOG
                 </div>
-                <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-none">
+                <h1 className="text-[14vw] sm:text-5xl md:text-7xl font-black uppercase tracking-tighter leading-[0.92]">
                   TODOS OS<br/>
                   <span className="text-transparent bg-clip-text bg-black text-stroke-2">
                     INSIGHTS
                   </span>
                 </h1>
               </div>
-              <p className="max-w-md font-mono text-sm bg-stone-100 border-2 border-black p-4 shadow-neo">
+              <p className="max-w-md font-mono text-xs sm:text-sm bg-stone-100 border-2 border-black p-3 sm:p-4 shadow-neo">
                 Biblioteca completa de conhecimentos técnicos e reflexões sobre desenvolvimento web.
               </p>
             </div>
@@ -84,10 +84,10 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
         </div>
 
         {/* Main Content */}
-        <div className="container mx-auto px-4 pb-16 relative z-10">
+        <div className="container mx-auto px-4 pb-12 sm:pb-16 relative z-10">
 
           {/* Posts Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8">
             {/* Loading State */}
             {isLoading && <BlogPostCardSkeleton count={6} aria-label={ACCESSIBILITY_LABELS.LOADING_POSTS} />}
 
@@ -95,11 +95,11 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
             {!isLoading && blogPosts.map((post) => (
               <article
                 key={post.slug}
-                className="group bg-white border-4 border-black flex flex-col h-full hover:-translate-y-2 transition-transform duration-300 shadow-brutal-lg hover:shadow-[12px_12px_0px_0px_#f97316]"
+                className="group bg-white border-4 border-black flex flex-col h-full hover:-translate-y-1 sm:hover:-translate-y-2 transition-transform duration-300 shadow-brutal-lg hover:shadow-[10px_10px_0px_0px_#f97316] sm:hover:shadow-[12px_12px_0px_0px_#f97316]"
               >
                 {/* Header do Card */}
-                <div className="bg-stone-100 border-b-4 border-black p-3 flex justify-between items-center">
-                  <span className="font-mono text-xs font-bold uppercase truncate max-w-[200px]">{post.slug}.md</span>
+                <div className="bg-stone-100 border-b-4 border-black p-3 flex justify-between items-center gap-2">
+                  <span className="font-mono text-xs font-bold uppercase truncate max-w-[180px] sm:max-w-[200px]">{post.slug}.md</span>
                   <div className="flex gap-1">
                     <div className="w-2 h-2 rounded-full bg-black"></div>
                     <div className="w-2 h-2 rounded-full border border-black"></div>
@@ -107,13 +107,13 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
                 </div>
 
                 {/* Conteúdo do Card */}
-                <div className="p-6 flex-grow flex flex-col">
-                  <div className="flex gap-4 text-xs font-mono font-bold text-gray-500 mb-3">
+                <div className="p-5 sm:p-6 flex-grow flex flex-col">
+                  <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs font-mono font-bold text-gray-500 mb-3">
                     <span className="flex items-center gap-1"><Calendar size={12} /> {post.date}</span>
                     <span className="flex items-center gap-1"><Clock size={12} /> {post.readTime}</span>
                   </div>
 
-                  <h3 className="text-2xl font-black leading-tight mb-4 line-clamp-2 group-hover:text-brutal-orange transition-colors">
+                  <h3 className="text-xl sm:text-2xl font-black leading-tight mb-4 line-clamp-2 group-hover:text-brutal-orange transition-colors">
                     {post.title}
                   </h3>
 
@@ -121,8 +121,8 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
                     {post.excerpt}
                   </p>
 
-                  <div className="mt-auto pt-4 border-t-2 border-stone-200 flex justify-between items-center">
-                    <div className="flex gap-2">
+                  <div className="mt-auto pt-4 border-t-2 border-stone-200 flex justify-between items-center gap-3">
+                    <div className="flex flex-wrap gap-2">
                       {post.tags.slice(0,2).map(tag => (
                         <span key={tag} className="text-[10px] font-black bg-black text-white px-2 py-0.5 uppercase">
                           {tag}
@@ -131,7 +131,7 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
                     </div>
                     <a
                       href={`/blog/${post.slug}`}
-                      className="flex items-center gap-1 font-black text-sm hover:underline decoration-4 decoration-brutal-yellow underline-offset-2"
+                      className="inline-flex items-center gap-1 font-black text-sm hover:underline decoration-4 decoration-brutal-yellow underline-offset-2 py-1 shrink-0"
                     >
                       LER ARQUIVO <ExternalLink size={16} />
                     </a>

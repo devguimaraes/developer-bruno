@@ -31,9 +31,9 @@ const BlogPostPage: React.FC<BlogPostPageClientProps> = ({ post, previous, next 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="w-full"
+      className="w-full overflow-x-clip"
     >
-      <div className="container mx-auto px-4 py-28 max-w-4xl">
+      <div className="container mx-auto px-4 py-20 sm:py-24 md:py-28 max-w-4xl">
         <BlogPostBackButton />
         <BlogPostHeader post={post} />
         <BlogPostContent content={post.content} />
