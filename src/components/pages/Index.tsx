@@ -26,7 +26,7 @@ const Index: React.FC = () => {
   ], []);
 
   return (
-    <div className="relative w-full bg-background min-h-screen">
+    <div className="relative w-full bg-background min-h-screen overflow-x-clip">
       {/* Background fixo */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <BackgroundGrid />

@@ -5,17 +5,17 @@ import ShuffleText from "@/components/ui/ShuffleText";
 
 const About: React.FC = () => {
   return (
-    <section id="about" className="min-h-screen flex flex-col justify-center py-24 px-8 md:px-16 relative overflow-hidden">
+    <section id="about" className="min-h-screen flex flex-col justify-center py-16 sm:py-20 md:py-24 px-4 sm:px-6 md:px-16 relative overflow-hidden">
       <div className="w-full max-w-6xl mx-auto">
         <ScrollReveal direction="up" delay={0.2}>
-          <div className="space-y-16">
+          <div className="space-y-10 sm:space-y-14 md:space-y-16">
             
             {/* Title - Hero Style Match */}
-            <div className="space-y-4">
-              <div className="font-pixel text-[10px] md:text-xs tracking-[0.4em] opacity-40 uppercase mb-4">
+            <div className="space-y-3 sm:space-y-4">
+              <div className="type-ui-label text-[10px] md:text-xs opacity-40 mb-4">
                 <ShuffleText text="// PROFILE_DATA_STORAGE" stagger={0.02} duration={0.8} />
               </div>
-              <h2 className="text-6xl sm:text-8xl md:text-[110px] font-black font-pixel leading-[0.8] tracking-tighter flex flex-col uppercase">
+              <h2 className="type-display-section text-[16vw] leading-[0.9] sm:text-8xl md:text-[110px] font-black flex flex-col">
                 <span className="block mb-2">
                   <ShuffleText text="DESENVOLVEDOR" duration={1.2} />
                 </span>
@@ -29,19 +29,19 @@ const About: React.FC = () => {
               </h2>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16 items-start pt-8">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 sm:gap-10 md:gap-16 items-start pt-2 sm:pt-4 md:pt-8">
               {/* Description - Technical Border */}
-              <div className="md:col-span-8 border-l-[12px] border-black pl-8 md:pl-10 relative">
+              <div className="md:col-span-8 border-l-8 sm:border-l-[12px] border-black pl-5 sm:pl-8 md:pl-10 relative">
                 <div className="absolute -left-3 top-0 w-3 h-3 bg-brutal-orange" />
                 <BlurText 
                   text="com 5 anos de experiência em desenvolvimento front-end e formação em desenvolvimento web pelo senac-rj, transformo conceitos de design em interfaces reais, rápidas e funcionais para sites e softwares."
-                  className="text-xl md:text-3xl lg:text-4xl font-pixel lowercase leading-relaxed md:leading-[1.1] text-stone-600 tracking-tight"
+                  className="type-body-lg text-lg sm:text-xl md:text-3xl lg:text-4xl"
                   delay={0.04}
                 />
               </div>
 
               {/* Technical HUD Stats - Reimagined */}
-              <div className="md:col-span-4 space-y-8 p-6 bg-black/5 backdrop-blur-sm border-2 border-dashed border-stone-300 relative">
+              <div className="md:col-span-4 space-y-7 p-5 sm:p-6 bg-black/5 backdrop-blur-sm border-2 border-dashed border-stone-300 relative">
                 <div className="absolute -top-2 -right-2 w-4 h-4 bg-black" />
                 <div className="flex flex-col gap-6">
                   {[
@@ -53,9 +53,9 @@ const About: React.FC = () => {
                       <div className="group space-y-2">
                         <div className="flex items-center gap-2">
                           <div className={`w-2 h-2 ${stat.color} animate-pulse`} />
-                          <p className="font-pixel text-[9px] tracking-[0.3em] text-stone-400 uppercase font-bold">{stat.label}</p>
+                          <p className="type-ui-label text-[9px] text-stone-400 font-bold">{stat.label}</p>
                         </div>
-                        <p className="font-pixel text-xl tracking-tight uppercase text-black font-black group-hover:text-brutal-orange transition-colors">
+                        <p className="type-display-card text-base sm:text-lg md:text-xl text-black font-black group-hover:text-brutal-orange transition-colors">
                           {stat.val}
                         </p>
                       </div>
