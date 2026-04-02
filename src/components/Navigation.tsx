@@ -1,294 +1,120 @@
 import React, { useState, useEffect } from "react";
-import { Menu, X, Zap } from "lucide-react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { Menu } from "lucide-react";
+import GlassSurface from "@/components/ui/GlassSurface";
+import StaggeredMenu from "@/components/ui/StaggeredMenu";
+import BorderGlow from "@/components/ui/BorderGlow";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Navigation: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState("");
-  const navigate = useNavigate();
-  const location = useLocation();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
-    let frameId: number | null = null;
-    const handleScroll = () => {
-      if (frameId !== null) return;
-      frameId = requestAnimationFrame(() => {
-        frameId = null;
-        setScrolled(window.scrollY > 50);
-      });
-    };
-
-    handleScroll();
+    const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      if (frameId !== null) {
-        cancelAnimationFrame(frameId);
-      }
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    if (location.pathname !== "/") {
-      setActiveSection("");
-      return;
-    }
-
-    const sectionIds = ["about", "services", "skills", "projects", "blog", "contact"];
-    const getSectionElements = () =>
-      sectionIds
-        .map((id) => document.getElementById(id))
-        .filter((element): element is HTMLElement => Boolean(element));
-
-    const updateActiveSection = () => {
-      const elements = getSectionElements();
-      let foundSection = "";
-      for (const element of elements) {
-        const rect = element.getBoundingClientRect();
-        if (rect.top <= 150 && rect.bottom >= 150) {
-          foundSection = element.id;
-          break;
-        }
-      }
-      setActiveSection((prev) => (prev === foundSection ? prev : foundSection));
-    };
-
-    const observer = new IntersectionObserver(
-      () => updateActiveSection(),
-      { threshold: [0, 0.25, 0.5, 0.75, 1] }
-    );
-
-    const elements = getSectionElements();
-    elements.forEach((element) => observer.observe(element));
-    updateActiveSection();
-
-    window.addEventListener("resize", updateActiveSection);
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("resize", updateActiveSection);
-    };
-  }, [location.pathname]);
-
-  // Effect to handle hash scrolling after navigation
-  useEffect(() => {
-    if (location.hash) {
-      const targetId = location.hash.substring(1);
-      const element = document.getElementById(targetId);
-      if (element) {
-        setTimeout(() => {
-          const headerOffset = 80;
-          const elementPosition = element.getBoundingClientRect().top;
-          const offsetPosition =
-            elementPosition + window.pageYOffset - headerOffset;
-
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: "smooth",
-          });
-        }, 100);
-      }
-    }
-  }, [location]);
-
-  const smoothScroll = (
-    e: React.MouseEvent<HTMLAnchorElement>,
-    targetId: string
-  ) => {
-    e.preventDefault();
-    const element = document.getElementById(targetId);
-    if (element) {
-      const headerOffset = 80;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition =
-        elementPosition + window.pageYOffset - headerOffset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth",
-      });
-    }
-  };
-
-  const handleNavClick = (
-    e: React.MouseEvent<HTMLAnchorElement>,
-    href: string
-  ) => {
-    if (href.startsWith("#")) {
-      e.preventDefault();
-      if (location.pathname === "/") {
-        const targetId = href.substring(1);
-        smoothScroll(e, targetId);
-      } else {
-        navigate("/" + href);
-      }
-    } else if (href === "/") {
-      e.preventDefault();
-      navigate(href);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    } else {
-      e.preventDefault();
-      navigate(href);
-    }
-  };
-
   const navLinks = [
-    { name: "INÍCIO", href: "/", id: "" },
-    { name: "SOBRE", href: "#about", id: "about" },
-    { name: "SKILLS", href: "#skills", id: "skills" },
-    { name: "PROJETOS", href: "#projects", id: "projects" },
-    { name: "BLOG", href: "/blog", id: "blog" },
-    { name: "ANTIGRAVITY", href: "/antigravity", id: "antigravity" },
-    { name: "CONTATO", href: "#contact", id: "contact" },
+    { name: "SOBRE", href: "#about" },
+    { name: "PROJETOS", href: "#projects" },
+    { name: "SKILLS", href: "#skills" },
+    { name: "CONTATO", href: "#contact" },
   ];
 
   return (
-    <nav
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-white/95 backdrop-blur-sm border-b-4 border-black py-2"
-          : "bg-transparent py-4"
-      }`}
-    >
-      <div className="container mx-auto px-4 flex justify-between items-center">
-        {/* Logo - Terminal Style */}
-        <Link
-          to="/"
-          className="flex items-center gap-3 group cursor-pointer"
-          onClick={(e) => handleNavClick(e, "/")}
+    <>
+      <nav 
+        className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
+        style={{ left: !isMobile ? 'var(--sidebar-width)' : '0' }}
+      >
+        <GlassSurface 
+          className={`w-full transition-all duration-500 ${
+            scrolled ? "opacity-100 border-b-4 border-black" : "opacity-0"
+          }`}
+          height={scrolled ? 72 : 0}
+          backgroundOpacity={0.4}
+          blur={12}
+          saturation={1.5}
         >
-          <div className="w-12 h-12 bg-black flex items-center justify-center text-white shadow-neo transition-all duration-200 group-hover:translate-x-[2px] group-hover:translate-y-[2px] group-hover:shadow-none border-2 border-black">
-            <span className="font-black font-mono text-xl">BG</span>
-          </div>
-          <div className="flex flex-col leading-none">
-            <span className="text-xl md:text-2xl font-black tracking-tighter uppercase">
-              Bruno <span className="text-brutal-orange">Guimarães</span>
-            </span>
-            <span className="font-mono text-[10px] font-bold tracking-widest text-stone-500 flex items-center gap-1">
-              <Zap size={10} className="text-brutal-green" />
-              DEV_FRONTEND
-            </span>
-          </div>
-        </Link>
-
-        {/* Desktop Menu */}
-        <div className="hidden lg:flex items-center bg-white border-4 border-black shadow-neo">
-          {navLinks.map((link, _idx) => {
-            // Lógica de isActive:
-            // - INÍCIO: só ativo se estamos em "/" E nenhuma seção está ativa
-            // - Seções (#about, etc): ativo se activeSection corresponde
-            // - Outras páginas (/blog, etc): ativo se pathname corresponde
-            const isHomeLink = link.href === "/";
-            const isSectionLink = link.href.startsWith("#");
-            const isPageLink = !isHomeLink && !isSectionLink;
-
-            const isActive = isHomeLink
-              ? location.pathname === "/" && !activeSection
-              : isSectionLink
-              ? link.id && activeSection === link.id
-              : isPageLink && link.href === location.pathname;
-
-            return (
-              <a
-                key={link.name}
-                href={link.href}
-                className={`relative px-4 py-3 font-mono font-bold text-sm transition-all duration-200 border-r-2 border-black last:border-r-0 ${
-                  isActive
-                    ? "bg-black text-white"
-                    : "bg-white text-black hover:bg-brutal-yellow"
-                }`}
-                onClick={(e) => handleNavClick(e, link.href)}
-              >
-                <span className="relative z-10">{`//${link.name}`}</span>
-                {isActive && (
-                  <motion.div
-                    layoutId="activeNav"
-                    className="absolute inset-0 bg-black -z-0"
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  />
-                )}
-              </a>
-            );
-          })}
-        </div>
-
-        {/* Mobile Toggle */}
-        <button
-          className="lg:hidden p-3 border-4 border-black bg-brutal-yellow shadow-neo active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all"
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label="Toggle menu"
-        >
-          {isOpen ? (
-            <X strokeWidth={3} size={24} />
-          ) : (
-            <Menu strokeWidth={3} size={24} />
-          )}
-        </button>
-      </div>
-
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.2 }}
-            className="lg:hidden absolute top-full left-0 w-full bg-white border-b-4 border-black shadow-brutal-lg"
-          >
-            {navLinks.map((link, idx) => {
-              const isHomeLink = link.href === "/";
-              const isSectionLink = link.href.startsWith("#");
-              const isPageLink = !isHomeLink && !isSectionLink;
-
-              const isActive = isHomeLink
-                ? location.pathname === "/" && !activeSection
-                : isSectionLink
-                ? link.id && activeSection === link.id
-                : isPageLink && link.href === location.pathname;
-
-              return (
-                <motion.a
-                  key={link.name}
-                  href={link.href}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: idx * 0.05 }}
-                  className={`flex items-center justify-between text-xl font-black p-6 border-b-2 border-black/10 transition-colors font-mono group ${
-                    isActive
-                      ? "bg-black text-white"
-                      : "bg-white text-black hover:bg-brutal-yellow"
-                  }`}
-                  onClick={(e) => {
-                    setIsOpen(false);
-                    handleNavClick(e, link.href);
-                  }}
-                >
-                  <span className="flex items-center gap-3">
-                    <span className="w-8 h-8 bg-brutal-orange text-white flex items-center justify-center text-sm border-2 border-black">
-                      {String(idx + 1).padStart(2, "0")}
-                    </span>
-                    {link.name}
-                  </span>
-                  <span className="opacity-0 group-hover:opacity-100 transition-opacity text-brutal-orange">
-                    ➜
-                  </span>
-                </motion.a>
-              );
-            })}
-
-            {/* Mobile Menu Footer */}
-            <div className="p-4 bg-stone-100 border-t-4 border-black">
-              <div className="flex items-center justify-center gap-2 font-mono text-xs font-bold text-stone-600">
-                <div className="w-2 h-2 bg-brutal-green rounded-full animate-pulse" />
-                SISTEMA_ONLINE • v4.0
+          <div className="flex justify-between items-center w-full h-full px-8">
+            <a href="/" className="flex items-center gap-3 group">
+              <div className="w-10 h-10 bg-black text-white flex items-center justify-center pixel-border-sm group-hover:bg-brutal-orange transition-colors">
+                <span className="font-pixel text-lg">BG</span>
               </div>
+              <span className="font-pixel text-xl hidden sm:block tracking-tighter">BRUNO_GUIMARAES</span>
+            </a>
+
+            <div className="hidden md:flex items-center gap-8">
+              {navLinks.map((link) => (
+                <a 
+                  key={link.name} 
+                  href={link.href}
+                  className="font-pixel text-sm hover:text-brutal-orange transition-colors uppercase"
+                >
+                  {link.name}
+                </a>
+              ))}
             </div>
-          </motion.div>
+
+            <BorderGlow glowColor="162 100% 27%" borderRadius={0} className="md:hidden">
+              <button 
+                className="p-2 bg-black text-white border-2 border-black"
+                onClick={() => setIsOpen(true)}
+              >
+                <Menu size={24} />
+              </button>
+            </BorderGlow>
+          </div>
+        </GlassSurface>
+
+        {/* Transparent initial state content */}
+        {!scrolled && (
+          <div className="absolute top-0 left-0 w-full py-6 transition-all duration-500">
+            <div className="flex justify-between items-center w-full px-8">
+              <a href="/" className="flex items-center gap-3 group">
+                <div className="w-10 h-10 bg-black text-white flex items-center justify-center pixel-border-sm group-hover:bg-brutal-orange transition-colors">
+                  <span className="font-pixel text-lg">BG</span>
+                </div>
+                <span className="font-pixel text-xl hidden sm:block tracking-tighter text-black">BRUNO_GUIMARAES</span>
+              </a>
+
+              <div className="hidden md:flex items-center gap-8">
+                {navLinks.map((link) => (
+                  <a 
+                    key={link.name} 
+                    href={link.href}
+                    className="font-pixel text-sm hover:text-brutal-orange transition-colors uppercase text-black"
+                  >
+                    {link.name}
+                  </a>
+                ))}
+              </div>
+
+              <BorderGlow glowColor="162 100% 27%" borderRadius={0} className="md:hidden">
+                <button 
+                  className="p-2 bg-black text-white border-2 border-black"
+                  onClick={() => setIsOpen(true)}
+                >
+                  <Menu size={24} />
+                </button>
+              </BorderGlow>
+            </div>
+          </div>
         )}
-      </AnimatePresence>
-    </nav>
+      </nav>
+
+      {/* Mobile Staggered Menu */}
+      <StaggeredMenu 
+        isOpen={isOpen} 
+        onClose={() => setIsOpen(false)}
+        items={[
+          { label: 'HOME', href: '#hero' },
+          ...navLinks.map(link => ({ label: link.name, href: link.href }))
+        ]}
+      />
+    </>
   );
 };
 

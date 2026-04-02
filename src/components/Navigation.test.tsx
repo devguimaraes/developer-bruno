@@ -1,6 +1,5 @@
 import { render, screen, fireEvent, act, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { BrowserRouter } from "react-router-dom";
 import Navigation from "./Navigation";
 
 // Mock do framer-motion
@@ -34,11 +33,7 @@ describe("Navigation Component", () => {
   });
 
   const renderNav = () => {
-    return render(
-      <BrowserRouter>
-        <Navigation />
-      </BrowserRouter>
-    );
+    return render(<Navigation />);
   };
 
   it("deve renderizar o logo com o nome do desenvolvedor", () => {

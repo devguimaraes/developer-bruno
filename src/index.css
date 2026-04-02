@@ -2,286 +2,76 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
-
 @layer base {
   :root {
-    /* Techno Brutalist Prism Palette */
-    --background: 0 0% 98%;
-    --foreground: 0 0% 8%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 8%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 8%;
-
-    /* Parakeet - Primary brand color */
+    --background: 45 15% 95%;
+    --foreground: 0 0% 0%;
     --primary: 162 100% 27%;
-    --primary-foreground: 0 0% 100%;
-
-    /* Royal Lilac - Secondary accent */
-    --secondary: 282 32% 42%;
-    --secondary-foreground: 0 0% 100%;
-
-    /* Aqua Glass - Muted surfaces */
-    --muted: 159 31% 85%;
-    --muted-foreground: 0 0% 35%;
-
-    /* Freesia - Accent highlights */
     --accent: 45 87% 57%;
-    --accent-foreground: 0 0% 8%;
-
-    /* Icy Morn - Borders and subtle elements */
-    --border: 172 29% 76%;
-    --input: 172 29% 76%;
-    --ring: 162 100% 27%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 100%;
-
+    --border: 0 0% 0%;
     --radius: 0rem;
-
-    /* Custom brutalist tokens */
-    --shadow-brutal: 6px 6px 0px hsl(var(--foreground));
-    --shadow-brutal-sm: 4px 4px 0px hsl(var(--foreground));
-    --shadow-brutal-lg: 8px 8px 0px hsl(var(--foreground));
-
-    /* Gradients */
-    --gradient-aqua: linear-gradient(
-      135deg,
-      hsl(159 31% 85%) 0%,
-      hsl(172 29% 76%) 100%
-    );
-    --gradient-primary: linear-gradient(
-      135deg,
-      hsl(162 100% 27%) 0%,
-      hsl(162 100% 35%) 100%
-    );
-    --gradient-accent: linear-gradient(
-      135deg,
-      hsl(45 87% 57%) 0%,
-      hsl(45 87% 65%) 100%
-    );
-
-    /* Sidebar variables */
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 0 0% 8%;
-    --sidebar-primary: 162 100% 27%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 159 31% 85%;
-    --sidebar-accent-foreground: 0 0% 8%;
-    --sidebar-border: 172 29% 76%;
-    --sidebar-ring: 162 100% 27%;
-
-    /* Blog/Markdown typography theme variables */
-    --markdown-text: 0 0% 0%;
-    --markdown-text-muted: 0 0% 47%;
-    --markdown-border: 0 0% 0%;
-    --markdown-code-bg: 160 24% 95%;
-    --markdown-code-text: 0 0% 0%;
-    --markdown-pre-bg: 220 13% 95%;
-    --markdown-pre-text: 0 0% 0%;
-    --markdown-heading-margin: 1.5rem;
-    --markdown-paragraph-margin: 1rem;
-    --markdown-heading-border: 4px;
-    --markdown-code-border: 2px;
+    --sidebar-width: 80px;
   }
 
-  .dark {
-    --background: 0 0% 8%;
-    --foreground: 0 0% 98%;
-
-    --card: 0 0% 12%;
-    --card-foreground: 0 0% 98%;
-
-    --popover: 0 0% 12%;
-    --popover-foreground: 0 0% 98%;
-
-    --primary: 162 100% 35%;
-    --primary-foreground: 0 0% 8%;
-
-    --secondary: 282 32% 50%;
-    --secondary-foreground: 0 0% 98%;
-
-    --muted: 159 20% 25%;
-    --muted-foreground: 0 0% 70%;
-
-    --accent: 45 87% 60%;
-    --accent-foreground: 0 0% 8%;
-
-    --border: 159 15% 20%;
-    --input: 159 15% 20%;
-    --ring: 162 100% 35%;
-
-    --destructive: 0 62.8% 50.6%;
-    --destructive-foreground: 0 0% 98%;
-
-    --shadow-brutal: 6px 6px 0px hsl(var(--accent));
-    --shadow-brutal-sm: 4px 4px 0px hsl(var(--accent));
-    --shadow-brutal-lg: 8px 8px 0px hsl(var(--accent));
-
-    --sidebar-background: 0 0% 12%;
-    --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 162 100% 35%;
-    --sidebar-primary-foreground: 0 0% 8%;
-    --sidebar-accent: 159 20% 25%;
-    --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 159 15% 20%;
-    --sidebar-ring: 162 100% 35%;
-
-    /* Blog/Markdown typography theme variables - Dark mode */
-    --markdown-text: 0 0% 100%;
-    --markdown-text-muted: 0 0% 71%;
-    --markdown-border: 0 0% 100%;
-    --markdown-code-bg: 217 19% 27%;
-    --markdown-code-text: 0 0% 100%;
-    --markdown-pre-bg: 215 28% 17%;
-    --markdown-pre-text: 0 0% 100%;
+  html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    scroll-behavior: smooth;
   }
-}
 
-@layer base {
-  * {
-    @apply border-border;
+  /* Quando o layout horizontal está ativo, bloqueia scroll do body */
+  html.has-horizontal-layout,
+  html.has-horizontal-layout body {
+    overflow: hidden;
+    height: 100vh;
   }
 
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-[#f5f5f4] text-black font-pixel min-h-screen;
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    @apply font-mono;
+  h1, h2, h3, h4 {
+    @apply font-pixel uppercase tracking-tighter;
   }
 }
 
-/* Markdown Code Block Overrides - Max Specificity */
-.prose pre,
-.prose pre *,
-.prose .prose-pre {
-  background-color: hsl(var(--markdown-pre-bg)) !important;
-  color: hsl(var(--markdown-pre-text)) !important;
+@layer components {
+  .pixel-border {
+    @apply shadow-[4px_0_0_0_#000,-4px_0_0_0_#000,0_4px_0_0_0_#000,0_-4px_0_0_0_#000];
+  }
+
+  .pixel-border-sm {
+    @apply shadow-[2px_0_0_0_#000,-2px_0_0_0_#000,0_2px_0_0_0_#000,0_-2px_0_0_0_#000];
+  }
+
+  .grid-technical {
+    background-image: 
+      linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+    background-size: 80px 80px;
+  }
+
+  .grid-dots {
+    background-image: radial-gradient(circle, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .scanlines {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scanlines::before {
+    content: "";
+    @apply pointer-events-none absolute inset-0 z-10;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.05) 50%);
+    background-size: 100% 4px;
+  }
 }
 
-.prose code,
-.prose .prose-code {
-  background-color: hsl(var(--markdown-code-bg)) !important;
-  color: hsl(var(--markdown-code-text)) !important;
-}
-
-.prose pre code,
-.prose .prose-pre code {
-  background-color: transparent !important;
-  color: inherit !important;
-}
-
-/* Additional overrides for syntax highlighting */
-.prose .token.keyword,
-.prose .token.string,
-.prose .token.number,
-.prose .token.function,
-.prose .token.comment,
-.prose .token.operator {
-  color: hsl(var(--markdown-pre-text)) !important;
-}
-
-/* Inline code with special handling */
-.prose p > code,
-.prose li > code,
-.prose td > code {
-  background-color: hsl(var(--markdown-code-bg)) !important;
-  color: hsl(var(--markdown-code-text)) !important;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
-  font-size: 0.875rem;
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas,
-    "Liberation Mono", Menlo, monospace;
-}
-
-/* Multi-line code blocks */
-.prose pre {
-  padding: 1rem;
-  overflow-x: auto;
-  border: 2px solid hsl(var(--markdown-border));
-  border-radius: 0;
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas,
-    "Liberation Mono", Menlo, monospace;
-}
-
-.prose pre > code {
-  padding: 0;
-  background: none;
-  border: none;
-  font-size: inherit;
-}
-
-/* Highest specificity overrides using data attribute */
-[data-markdown-content] pre,
-[data-markdown-content] pre *,
-[data-markdown-content] .prose-pre {
-  background-color: hsl(var(--markdown-pre-bg)) !important;
-  color: hsl(var(--markdown-pre-text)) !important;
-}
-
-[data-markdown-content] code,
-[data-markdown-content] .prose-code {
-  background-color: hsl(var(--markdown-code-bg)) !important;
-  color: hsl(var(--markdown-code-text)) !important;
-}
-
-[data-markdown-content] pre code,
-[data-markdown-content] .prose-pre code {
-  background-color: transparent !important;
-  color: inherit !important;
-}
-
-/* Force inline code colors */
-[data-markdown-content] :not(pre) > code {
-  background-color: hsl(var(--markdown-code-bg)) !important;
-  color: hsl(var(--markdown-code-text)) !important;
-}
-
-/* Force block code colors */
-[data-markdown-content] pre {
-  background-color: hsl(var(--markdown-pre-bg)) !important;
-  color: hsl(var(--markdown-pre-text)) !important;
-}
-
-/* Override any potential syntax highlighter conflicts */
-[data-markdown-content] .token,
-[data-markdown-content] .token.keyword,
-[data-markdown-content] .token.string,
-[data-markdown-content] .token.number,
-[data-markdown-content] .token.function,
-[data-markdown-content] .token.comment,
-[data-markdown-content] .token.operator,
-[data-markdown-content] .token.class-name,
-[data-markdown-content] .token.type,
-[data-markdown-content] .token.variable,
-[data-markdown-content] .token.property {
-  color: hsl(var(--markdown-pre-text)) !important;
-}
-
-/* Global Noise Texture */
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 50;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
-  opacity: 0.4;
-  mix-blend-mode: overlay;
+.pixelated {
+  image-rendering: pixelated;
 }
 
 /* Custom Scrollbar */
@@ -290,756 +80,65 @@ body::before {
 }
 
 ::-webkit-scrollbar-track {
-  background: hsl(var(--background));
-  border-left: 2px solid hsl(var(--foreground));
+  @apply bg-[#f5f5f4];
 }
 
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--primary));
-  border: 2px solid hsl(var(--foreground));
-  box-shadow: 2px 2px 0px hsl(var(--foreground));
+  @apply bg-black border-2 border-[#f5f5f4];
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--primary) / 0.8);
-}
+@layer components {
+  /* Container horizontal principal — flex em linha, snap x mandatory */
+  .horizontal-scroll-container {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+  }
 
-/* Neo-Brutalist Design System */
-@layer base {
-  :root {
-    /* Neo-Brutalist hard shadow definitions */
-    --shadow-neo: 4px 4px 0px 0px rgba(0, 0, 0, 1);
-    --shadow-neo-sm: 2px 2px 0px 0px rgba(0, 0, 0, 1);
-    --shadow-neo-lg: 8px 8px 0px 0px rgba(0, 0, 0, 1);
+  /* Cada seção ocupa 100% da viewport */
+  .horizontal-section {
+    flex: 0 0 100%;
+    width: 100vw;
+    height: 100vh;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    position: relative;
+  }
 
-    /* Technical grid patterns */
-    --grid-size: 50px;
-    --dot-size: 20px;
+  /* Container interno com scroll vertical + snap */
+  .vertical-scroll-inner {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    scroll-snap-type: y proximity;
+    padding: 0 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .vertical-scroll-inner {
+      padding: 0 3rem;
+    }
+  }
+
+  /* Cada bloco interno como unidade de snap vertical */
+  .vertical-snap-child {
+    min-height: 100%;
+    scroll-snap-align: start;
   }
 }
 
-/* Grid Background Pattern Utility */
-.bg-grid-pattern {
-  background-image: linear-gradient(to right, #80808012 1px, transparent 1px),
-    linear-gradient(to bottom, #80808012 1px, transparent 1px);
-  background-size: 40px 40px;
-}
-
-.bg-technical-grid {
-  background-image: linear-gradient(to right, #80808012 1px, transparent 1px),
-    linear-gradient(to bottom, #80808012 1px, transparent 1px);
-  background-size: var(--grid-size) var(--grid-size);
-}
-
-.bg-dots-pattern {
-  background-image: radial-gradient(#000000 1px, transparent 1px);
-  background-size: var(--dot-size) var(--dot-size);
-  opacity: 0.05;
-}
-
-/* Scanline effect for terminal/retro elements */
-.scanlines {
-  position: relative;
-  overflow: hidden;
-}
-
-.scanlines::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
-  background-size: 100% 2px;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.scanlines-crt::before {
-  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
-    linear-gradient(
-      90deg,
-      rgba(255, 0, 0, 0.06),
-      rgba(0, 255, 0, 0.02),
-      rgba(0, 0, 255, 0.06)
-    );
-  background-size: 100% 2px, 3px 100%;
-}
-
-/* Text stroke utility for brutalist typography */
-.text-stroke {
-  -webkit-text-stroke: 2px currentColor;
-  -webkit-text-fill-color: transparent;
-  text-stroke: 2px currentColor;
-}
-
-.text-stroke-2 {
-  -webkit-text-stroke: 2px black;
-  -webkit-text-fill-color: transparent;
-}
-
-/* Writing vertical mode for HUD elements */
-.writing-vertical-rl {
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-}
-
-/* Glitch effect utilities */
-.glitch {
-  position: relative;
-  animation: glitch 0.3s ease-in-out infinite;
-}
-
-.glitch::before,
-.glitch::after {
-  content: attr(data-text);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.glitch::before {
-  animation: glitch-1 0.5s ease-in-out infinite alternate-reverse;
-  color: #f97316;
-  z-index: -1;
-}
-
-.glitch::after {
-  animation: glitch-2 0.5s ease-in-out infinite alternate-reverse;
-  color: #a855f7;
-  z-index: -2;
-}
-
-@keyframes glitch-1 {
-  0% {
-    clip-path: inset(0 0 100% 0);
-    transform: translate(0);
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
-  20% {
-    clip-path: inset(20% 0 30% 0);
-    transform: translate(-2px, 2px);
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
-  40% {
-    clip-path: inset(50% 0 20% 0);
-    transform: translate(2px, -2px);
-  }
-  60% {
-    clip-path: inset(10% 0 60% 0);
-    transform: translate(2px, 1px);
-  }
-  80% {
-    clip-path: inset(80% 0 5% 0);
-    transform: translate(-1px, -1px);
-  }
-  100% {
-    clip-path: inset(0 0 100% 0);
-    transform: translate(0);
-  }
-}
-
-@keyframes glitch-2 {
-  0% {
-    clip-path: inset(100% 0 0 0);
-    transform: translate(0);
-  }
-  20% {
-    clip-path: inset(30% 0 40% 0);
-    transform: translate(2px, -1px);
-  }
-  40% {
-    clip-path: inset(20% 0 50% 0);
-    transform: translate(-2px, 1px);
-  }
-  60% {
-    clip-path: inset(60% 0 10% 0);
-    transform: translate(-1px, 2px);
-  }
-  80% {
-    clip-path: inset(5% 0 80% 0);
-    transform: translate(1px, -2px);
-  }
-  100% {
-    clip-path: inset(100% 0 0 0);
-    transform: translate(0);
-  }
-}
-
-/* Enhanced perspective for 3D effects */
-.perspective-1000 {
-  perspective: 1000px;
-}
-
-/* Terminal typing cursor effect */
-.typing-cursor::after {
-  content: "_";
-  animation: typing 1s ease-in-out infinite;
-  color: currentColor;
-}
-
-/* Matrix/pixel art pattern utilities */
-.pixel-pattern {
-  background-image: linear-gradient(135deg, #000 25%, transparent 25%),
-    linear-gradient(225deg, #000 25%, transparent 25%),
-    linear-gradient(45deg, #000 25%, transparent 25%),
-    linear-gradient(315deg, #000 25%, transparent 25%);
-  background-position: 10px 0, 10px 0, 0 0, 0 0;
-  background-size: 20px 20px;
-  background-repeat: repeat;
-}
-
-/* Caution stripes pattern */
-.caution-stripes {
-  background: repeating-linear-gradient(
-    45deg,
-    #facc15,
-    #facc15 10px,
-    #000 10px,
-    #000 20px
-  );
-}
-
-/* Truss/bridge pattern for engineering theme */
-.truss-pattern {
-  background-image: linear-gradient(
-      45deg,
-      transparent 40%,
-      rgba(255, 255, 255, 0.1) 50%,
-      transparent 60%
-    ),
-    linear-gradient(
-      -45deg,
-      transparent 40%,
-      rgba(255, 255, 255, 0.1) 50%,
-      transparent 60%
-    );
-  background-size: 40px 40px;
-}
-
-/* Float animation delays for varied movement */
-.animation-delay-1000 {
-  animation-delay: 1s;
-}
-.animation-delay-1500 {
-  animation-delay: 1.5s;
-}
-.animation-delay-2000 {
-  animation-delay: 2s;
-}
-.animation-delay-2500 {
-  animation-delay: 2.5s;
-}
-
-/* Blink animation for status indicator */
-.blink-animation {
-  animation: blink 1.5s ease-in-out infinite;
-}
-
-@keyframes blink {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-
-/* Animations for modal */
-.animate-in {
-  animation-duration: 0.2s;
-  animation-fill-mode: both;
-}
-
-.fade-in {
-  animation-name: fadeIn;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.zoom-in-95 {
-  animation-name: zoomIn95;
-}
-
-@keyframes zoomIn95 {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Custom scrollbar for blog modal */
-.custom-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: #000 #f5f5f4;
-}
-
-.custom-scrollbar::-webkit-scrollbar {
-  width: 12px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: #f5f5f4;
-  border-left: 2px solid black;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #000;
-  border: 2px solid black;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #333;
-}
-
-/* Line clamp utilities */
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.line-clamp-3 {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-/* Markdown Content Styles for Blog */
-.markdown-content {
-  font-family: "Satoshi", system-ui, sans-serif;
-  line-height: 1.8;
-}
-
-.markdown-content h1 {
-  font-size: 2.5rem;
-  font-weight: 900;
-  margin-bottom: 1.5rem;
-  text-transform: uppercase;
-  border-bottom: 4px solid black;
-  padding-bottom: 0.5rem;
-  font-family: "JetBrains Mono", monospace;
-}
-
-.markdown-content h2 {
-  font-size: 2rem;
-  font-weight: 800;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-  font-family: "JetBrains Mono", monospace;
-}
-
-.markdown-content h3 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-top: 1.5rem;
-  margin-bottom: 0.5rem;
-  font-family: "JetBrains Mono", monospace;
-}
-
-.markdown-content p {
-  margin-bottom: 1.5rem;
-  font-size: 1.1rem;
-  color: #44403c;
-}
-
-.markdown-content ul {
-  list-style: square;
-  margin-left: 1.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.markdown-content li {
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-}
-
-.markdown-content code {
-  background: #000;
-  color: #0f0;
-  font-family: "JetBrains Mono", monospace;
-  padding: 0.2rem 0.4rem;
-  border-radius: 4px;
-  font-size: 0.9rem;
-  display: inline-block;
-}
-
-.markdown-content pre {
-  background: #1c1917;
-  color: #facc15;
-  padding: 1.5rem;
-  overflow-x: auto;
-  border: 2px solid black;
-  margin-bottom: 1.5rem;
-  border-radius: 0;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.9rem;
-}
-
-.markdown-content pre code {
-  background: transparent;
-  color: inherit;
-  padding: 0;
-}
-
-.markdown-content blockquote {
-  border-left: 8px solid #f97316;
-  padding-left: 1.5rem;
-  font-style: italic;
-  background: #fff7ed;
-  padding: 1rem;
-  margin-bottom: 1.5rem;
-  border-top: 2px solid black;
-  border-bottom: 2px solid black;
-  border-right: 2px solid black;
-}
-
-.markdown-content strong {
-  font-weight: 900;
-  color: black;
-}
-
-.markdown-content a {
-  color: #f97316;
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 2px;
-}
-
-.markdown-content a:hover {
-  color: #ea580c;
-}
-
-/* Stacking Cards System - Scroll-based */
-.stacking-section {
-  will-change: transform;
-  transition: transform 0.3s ease-out;
-}
-
-.stacking-wrapper {
-  position: relative;
-}
-
-/* Advanced Cyberpunk/TV Glitch Effect */
-.glitch-container {
-  position: relative;
-  overflow: hidden;
-}
-
-.glitch-layer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: var(--avatar-url);
-  background-size: cover;
-  background-position: center;
-  z-index: 2;
-  opacity: 0;
-  pointer-events: none;
-  mix-blend-mode: hard-light;
-}
-
-.glitch-container:hover .glitch-layer {
-  opacity: 1;
-}
-
-/* Red Shift Layer */
-.glitch-layer:nth-child(1) {
-  background-color: transparent;
-  background-blend-mode: overlay;
-  animation: glitch-anim-1 2.5s infinite linear alternate-reverse;
-}
-
-/* Blue Shift Layer */
-.glitch-layer:nth-child(2) {
-  background-color: transparent;
-  background-blend-mode: overlay;
-  animation: glitch-anim-2 3s infinite linear alternate-reverse;
-}
-
-/* Flash/Noise Layer */
-.glitch-container::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.1);
-  z-index: 4;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.glitch-container:hover::after {
-  animation: glitch-flash 4s infinite;
-}
-
-.glitch-container.always-on .glitch-layer {
-  opacity: 1;
-}
-
-.glitch-container.always-on::after {
-  animation: glitch-flash 4s infinite;
-}
-
-@keyframes glitch-anim-1 {
-  0% {
-    clip-path: inset(20% 0 80% 0);
-    transform: translate(-2px, 1px);
-  }
-  20% {
-    clip-path: inset(60% 0 10% 0);
-    transform: translate(2px, -1px);
-  }
-  40% {
-    clip-path: inset(40% 0 50% 0);
-    transform: translate(-2px, 2px);
-  }
-  60% {
-    clip-path: inset(80% 0 5% 0);
-    transform: translate(2px, -2px);
-  }
-  80% {
-    clip-path: inset(10% 0 70% 0);
-    transform: translate(-1px, 1px);
-  }
-  100% {
-    clip-path: inset(30% 0 20% 0);
-    transform: translate(1px, -1px);
-  }
-}
-
-@keyframes glitch-anim-2 {
-  0% {
-    clip-path: inset(10% 0 60% 0);
-    transform: translate(2px, -1px);
-  }
-  20% {
-    clip-path: inset(80% 0 5% 0);
-    transform: translate(-2px, 2px);
-  }
-  40% {
-    clip-path: inset(30% 0 20% 0);
-    transform: translate(1px, -2px);
-  }
-  60% {
-    clip-path: inset(15% 0 80% 0);
-    transform: translate(-1px, 1px);
-  }
-  80% {
-    clip-path: inset(55% 0 10% 0);
-    transform: translate(2px, -1px);
-  }
-  100% {
-    clip-path: inset(40% 0 30% 0);
-    transform: translate(-2px, 2px);
-  }
-}
-
-@keyframes glitch-flash {
-  0%,
-  95% {
-    opacity: 0;
-  }
-  96%,
-  100% {
-    opacity: 0.15;
-  }
-}
-
-/* ==============================================
-   NEO-BRUTALIST UTILITY CLASSES
-   ============================================== */
-
-/* Standard Neo Card - reusable container */
-.neo-card {
-  @apply bg-white border-4 border-black shadow-brutal transition-all duration-200;
-}
-
-.neo-card-elevated {
-  @apply bg-white border-4 border-black shadow-brutal-lg transition-all duration-200;
-}
-
-.neo-card-interactive {
-  @apply bg-white border-4 border-black shadow-brutal transition-all duration-200 cursor-pointer;
-  @apply hover:shadow-brutal-sm hover:translate-x-[2px] hover:translate-y-[2px];
-}
-
-/* Neo Window Header - Terminal/Window Style */
-.neo-window-header {
-  @apply bg-black text-white p-3 flex justify-between items-center border-b-4 border-black font-mono text-sm font-bold;
-}
-
-.neo-window-dots {
-  @apply flex gap-2;
-}
-
-.neo-window-dot {
-  @apply w-4 h-4 border border-white/50;
-}
-
-.neo-window-dot-red {
-  @apply neo-window-dot bg-red-500;
-}
-.neo-window-dot-yellow {
-  @apply neo-window-dot bg-yellow-500;
-}
-.neo-window-dot-green {
-  @apply neo-window-dot bg-green-500;
-}
-
-/* Hover Effect Utilities */
-.neo-hover {
-  @apply transition-all duration-200;
-  @apply hover:shadow-brutal-sm hover:translate-x-[2px] hover:translate-y-[2px];
-}
-
-.neo-hover-lift {
-  @apply transition-all duration-300;
-  @apply hover:-translate-y-2 hover:shadow-brutal-lg;
-}
-
-.neo-hover-scale {
-  @apply transition-transform duration-200;
-  @apply hover:scale-105;
-}
-
-/* Active/Click State */
-.neo-active {
-  @apply active:translate-x-[2px] active:translate-y-[2px] active:shadow-none;
-}
-
-/* Section Utilities */
-.neo-section {
-  @apply py-24 relative overflow-hidden;
-}
-
-.neo-section-header {
-  @apply flex items-center gap-4 mb-12;
-}
-
-.neo-section-number {
-  @apply w-12 h-12 bg-black text-white flex items-center justify-center font-black text-2xl border-4 border-brutal-orange;
-}
-
-.neo-section-title {
-  @apply text-5xl md:text-6xl font-black uppercase tracking-tighter;
-}
-
-.neo-section-line {
-  @apply h-2 flex-1 bg-black hidden md:block;
-}
-
-/* Badge Utilities */
-.neo-badge {
-  @apply inline-flex items-center gap-2 border-2 border-black px-3 py-1 font-mono font-bold text-xs uppercase shadow-neo-sm;
-}
-
-.neo-badge-status {
-  @apply neo-badge bg-black text-white;
-}
-
-.neo-badge-status::before {
-  content: "";
-  @apply w-2 h-2 bg-brutal-green rounded-full animate-pulse;
-}
-
-/* Divider Utilities */
-.neo-divider {
-  @apply border-t-4 border-black;
-}
-
-.neo-divider-accent {
-  @apply border-t-4 border-brutal-orange;
-}
-
-/* Background Patterns */
-.bg-neo-dots {
-  background-image: radial-gradient(#000 1px, transparent 1px);
-  background-size: 16px 16px;
-}
-
-.bg-neo-grid {
-  background-image: linear-gradient(
-      to right,
-      rgba(0, 0, 0, 0.05) 1px,
-      transparent 1px
-    ),
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
-  background-size: 24px 24px;
-}
-
-.bg-neo-diagonal {
-  background: repeating-linear-gradient(
-    45deg,
-    transparent,
-    transparent 10px,
-    rgba(0, 0, 0, 0.03) 10px,
-    rgba(0, 0, 0, 0.03) 20px
-  );
-}
-
-/* Text Utilities */
-.text-neo-stroke {
-  -webkit-text-stroke: 2px currentColor;
-  -webkit-text-fill-color: transparent;
-}
-
-.text-neo-shadow {
-  text-shadow: 4px 4px 0px rgba(0, 0, 0, 1);
-}
-
-/* Decorative Elements */
-.neo-corner-decoration {
-  @apply absolute top-1 right-1 w-2 h-2 border border-black;
-}
-
-.neo-corner-decoration-filled {
-  @apply absolute top-1 right-1 w-2 h-2 bg-black;
-}
-
-/* Container with brutalist border */
-.neo-container {
-  @apply container mx-auto px-4;
-}
-
-/* Status Indicators */
-.neo-status-online {
-  @apply flex items-center gap-2 font-mono font-bold text-xs;
-}
-
-.neo-status-online::before {
-  content: "";
-  @apply w-3 h-3 bg-brutal-green rounded-full animate-pulse;
-}
-
-/* Transitions */
-.neo-transition {
-  @apply transition-all duration-200 ease-out;
-}
-
-.neo-transition-slow {
-  @apply transition-all duration-300 ease-out;
-}
-
-.neo-transition-fast {
-  @apply transition-all duration-150 ease-out;
 }

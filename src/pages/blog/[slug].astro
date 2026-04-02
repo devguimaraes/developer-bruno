@@ -1,0 +1,36 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import BlogPostPageClient from '@/components/pages/BlogPostPage';
+import { getAllBlogPosts } from '@/lib/blog';
+import type { BlogPost } from '@/types/blog';
+
+// Generate paths for all blog posts at build time (SSG)
+export async function getStaticPaths() {
+  const posts = await getAllBlogPosts();
+  
+  return posts.map((post, index) => {
+    return {
+      params: { slug: post.slug },
+      props: {
+        post,
+        previous: index > 0 ? posts[index - 1] : null,
+        next: index < posts.length - 1 ? posts[index + 1] : null,
+      },
+    };
+  });
+}
+
+const { post, previous, next } = Astro.props;
+---
+
+<Layout 
+  title={post.title} 
+  description={post.excerpt} 
+>
+  <BlogPostPageClient 
+    post={post} 
+    previous={previous} 
+    next={next} 
+    client:load 
+  />
+</Layout>

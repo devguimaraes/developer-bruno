@@ -21,7 +21,7 @@ export const skills: readonly Skill[] = [
     description: 'Tailwind CSS, Radix UI, Framer Motion. Interfaces modernas, acessíveis e responsivas com design systems.',
     color: 'bg-secondary',
     category: 'design',
-    technologies: ['Tailwind CSS', 'Radix UI', 'Framer Motion', 'shadcn/ui', 'CSS Modules', 'Sass', 'Figma', 'Adobe XD'],
+    technologies: ['Tailwind CSS', 'Radix UI', 'Framer Motion', 'shadcn/ui', 'CSS Modules', 'Sass', 'Figma', 'Stitch UI do Google'],
   },
   {
     id: 'performance',

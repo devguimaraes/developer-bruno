@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import type { BlogPost } from '@/types/blog';
 
@@ -22,8 +22,8 @@ export function BlogPostNavigation({ previous, next }: BlogPostNavigationProps) 
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {previous && (
-          <Link
-            to={`/blog/${previous.slug}`}
+          <a
+            href={`/blog/${previous.slug}`}
             className="group flex flex-col gap-2 p-4 border-4 border-black hover:border-brutal-orange transition-colors"
           >
             <div className="flex items-center gap-2 text-sm text-stone-600 font-bold">
@@ -33,12 +33,12 @@ export function BlogPostNavigation({ previous, next }: BlogPostNavigationProps) 
             <h3 className="font-bold text-black group-hover:text-brutal-orange transition-colors">
               {previous.title}
             </h3>
-          </Link>
+          </a>
         )}
 
         {next && (
-          <Link
-            to={`/blog/${next.slug}`}
+          <a
+            href={`/blog/${next.slug}`}
             className="group flex flex-col gap-2 p-4 border-4 border-black hover:border-brutal-orange transition-colors text-right md:ml-auto"
           >
             <div className="flex items-center justify-end gap-2 text-sm text-stone-600 font-bold">
@@ -48,7 +48,7 @@ export function BlogPostNavigation({ previous, next }: BlogPostNavigationProps) 
             <h3 className="font-bold text-black group-hover:text-brutal-orange transition-colors">
               {next.title}
             </h3>
-          </Link>
+          </a>
         )}
       </div>
     </motion.nav>

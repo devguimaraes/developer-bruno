@@ -1,0 +1,28 @@
+$ astro build
+23:15:17 [vite] Re-optimizing dependencies because vite config has changed
+23:15:18 [types] Generated 616ms
+23:15:18 [build] output: "static"
+23:15:18 [build] mode: "static"
+23:15:18 [build] directory: /home/devguimaraes/estudo/developer-bruno/developer-bruno-latyou-design/dist/
+23:15:18 [build] Collecting build info...
+23:15:18 [build] ✓ Completed in 706ms.
+23:15:18 [build] Building static entrypoints...
+23:15:21 [WARN] [vite] "toast" is imported from external module "sonner" but never used in "src/components/ui/sonner.tsx".
+23:15:21 [vite] ✓ built in 2.82s
+23:15:26 [vite] ✓ built in 5.34s
+23:15:26 [build] Rearranging server assets...
+
+ generating static routes 
+23:15:28   ├─ /404.html (+62ms) 
+23:15:28   ├─ /blog/shai-hulud-detector/index.html (+56ms) 
+23:15:28   ├─ /blog/react-server-components/index.html (+29ms) 
+23:15:28   ├─ /blog/typescript-performance/index.html (+31ms) 
+23:15:28   ├─ /blog/css-grid-moderno/index.html (+22ms) 
+23:15:28   ├─ /blog/index.html (+13ms) 
+23:15:28   ├─ /index.html (+26ms) 
+23:15:29 ✓ Completed in 2.02s.
+
+23:15:29 [build] ✓ Completed in 10.39s.
+23:15:29 [@astrojs/sitemap] `sitemap-index.xml` created at `dist`
+23:15:29 [build] 7 page(s) built in 11.75s
+23:15:29 [build] Complete!

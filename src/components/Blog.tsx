@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+
 import {
   Calendar,
   Clock,
@@ -7,18 +7,16 @@ import {
   FolderOpen,
   ExternalLink,
 } from "lucide-react";
-import { useRecentPosts } from "@/hooks/use-blog-posts";
+import type { BlogPost } from "@/types/blog";
 import {
   FadeInStagger,
   FadeInItem,
   TextReveal,
 } from "@/components/ui/motion-components";
 
-type BlogProps = React.HTMLAttributes<HTMLElement>;
+type BlogProps = React.HTMLAttributes<HTMLElement> & { posts?: BlogPost[] };
 
-const Blog: React.FC<BlogProps> = ({ className, ...props }) => {
-  const { posts: blogPosts } = useRecentPosts(3);
-
+const Blog: React.FC<BlogProps> = ({ className, posts: blogPosts = [], ...props }) => {
   return (
     <section
       {...props}
@@ -113,12 +111,12 @@ const Blog: React.FC<BlogProps> = ({ className, ...props }) => {
                         </span>
                       ))}
                     </div>
-                    <Link
-                      to={`/blog/${post.slug}`}
+                    <a
+                      href={`/blog/${post.slug}`}
                       className="flex items-center gap-1 font-black text-sm hover:underline decoration-4 decoration-brutal-yellow underline-offset-2"
                     >
                       LER_ARQUIVO <ExternalLink size={16} />
-                    </Link>
+                    </a>
                   </div>
                 </div>
               </FadeInItem>
@@ -128,8 +126,8 @@ const Blog: React.FC<BlogProps> = ({ className, ...props }) => {
 
         {/* Botão Ver Todos */}
         <div className="my-12 text-center">
-          <Link
-            to="/blog"
+          <a
+            href="/blog"
             className="inline-flex items-center gap-2 bg-black text-white font-bold px-8 py-4 border-4 border-black hover:border-brutal-orange hover:bg-stone-900 transition-all shadow-neo group"
           >
             VER TODOS OS POSTS
@@ -137,7 +135,7 @@ const Blog: React.FC<BlogProps> = ({ className, ...props }) => {
               size={20}
               className="group-hover:translate-x-1 transition-transform duration-200"
             />
-          </Link>
+          </a>
         </div>
       </div>
     </section>
