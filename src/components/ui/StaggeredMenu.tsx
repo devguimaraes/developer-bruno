@@ -85,22 +85,22 @@ const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
       {/* Menu Content */}
       <div
         ref={menuRef}
-        className={`fixed inset-0 z-[90] flex flex-col p-12 ${isOpen ? 'visible' : 'invisible'}`}
+        className={`fixed inset-0 z-[90] flex flex-col px-6 py-5 sm:px-8 sm:py-6 ${isOpen ? 'visible' : 'invisible'}`}
       >
         <div className="flex justify-end mb-8">
-          <button onClick={onClose} className="p-2 text-white">
-            <X size={32} />
+          <button onClick={onClose} className="min-h-11 min-w-11 p-2 text-white" aria-label="Fechar menu">
+            <X size={30} />
           </button>
         </div>
 
         <div ref={contentRef} className="flex flex-col h-full justify-center">
-          <nav className="space-y-8">
+          <nav className="space-y-5 sm:space-y-6">
             {items.map((item, idx) => (
               <a
                 key={idx}
                 href={item.href}
                 onClick={onClose}
-                className="menu-item block text-4xl font-black font-pixel text-white uppercase flex items-baseline gap-4 hover:text-brutal-orange transition-colors"
+                className="menu-item flex items-center gap-3 py-2 text-[1.9rem] sm:text-4xl font-black font-pixel text-white uppercase hover:text-brutal-orange transition-colors"
               >
                 <span className="text-xs opacity-50 font-mono">0{idx + 1}</span>
                 {item.label}
@@ -108,11 +108,11 @@ const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
             ))}
           </nav>
 
-          <div className="mt-auto flex gap-8 menu-item border-t-4 border-white/10 pt-8">
-            <a href="https://github.com/devguimaraes" target="_blank" className="text-white hover:text-brutal-orange"><Github size={24} /></a>
-            <a href="https://linkedin.com/in/bcguimaraes" target="_blank" className="text-white hover:text-brutal-orange"><Linkedin size={24} /></a>
-            <a href="https://instagram.com/devguimaraes" target="_blank" className="text-white hover:text-brutal-orange"><Instagram size={24} /></a>
-            <a href="mailto:bc.guimaraes@outlook.com" className="text-white hover:text-brutal-orange"><Mail size={24} /></a>
+          <div className="mt-auto flex gap-6 menu-item border-t-4 border-white/10 pt-6">
+            <a href="https://github.com/devguimaraes" target="_blank" rel="noreferrer" className="min-h-11 min-w-11 inline-flex items-center justify-center text-white hover:text-brutal-orange"><Github size={24} /></a>
+            <a href="https://linkedin.com/in/bcguimaraes" target="_blank" rel="noreferrer" className="min-h-11 min-w-11 inline-flex items-center justify-center text-white hover:text-brutal-orange"><Linkedin size={24} /></a>
+            <a href="https://instagram.com/devguimaraes" target="_blank" rel="noreferrer" className="min-h-11 min-w-11 inline-flex items-center justify-center text-white hover:text-brutal-orange"><Instagram size={24} /></a>
+            <a href="mailto:bc.guimaraes@outlook.com" className="min-h-11 min-w-11 inline-flex items-center justify-center text-white hover:text-brutal-orange"><Mail size={24} /></a>
           </div>
         </div>
       </div>
