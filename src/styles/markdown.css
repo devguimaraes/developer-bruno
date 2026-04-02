@@ -59,6 +59,10 @@
 
 [data-markdown-content] table {
   border-color: hsl(var(--markdown-border));
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 [data-markdown-content] th,
@@ -72,4 +76,11 @@
 
 [data-markdown-content] a:hover {
   opacity: 0.8;
+}
+
+[data-markdown-content] img,
+[data-markdown-content] video,
+[data-markdown-content] iframe {
+  max-width: 100%;
+  height: auto;
 }

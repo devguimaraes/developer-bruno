@@ -23,7 +23,7 @@ export const markdownTheme = {
 
 // Configurações de tipografia responsiva
 export const typographyConfig = {
-  base: 'prose prose-lg max-w-none prose-stone',
+  base: 'prose prose-base sm:prose-lg max-w-none prose-stone',
 
   // Cores e tema usando CSS custom properties
   colors: [
@@ -132,14 +132,16 @@ export const typographyConfig = {
       'prose-code:border-[hsl(var(--markdown-border))]',
       'prose-code:rounded',
       'prose-code:font-mono',
-      'prose-code:text-sm',
+      'prose-code:text-xs sm:prose-code:text-sm',
+      'prose-code:break-words',
     ],
     pre: [
       'prose-pre:border-2',
       'prose-pre:border-[hsl(var(--markdown-border))]',
-      'prose-pre:p-4',
+      'prose-pre:p-3 sm:prose-pre:p-4',
       'prose-pre:overflow-x-auto',
       'prose-pre:rounded-none',
+      'prose-pre:text-xs sm:prose-pre:text-sm',
     ],
     blockquote: [
       'prose-blockquote:border-l-4',

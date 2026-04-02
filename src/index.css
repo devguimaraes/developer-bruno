@@ -11,6 +11,7 @@
     --border: 0 0% 0%;
     --radius: 0rem;
     --sidebar-width: 80px;
+    --font-pixel-display: "Jersey 25", monospace;
   }
 
   html, body {
@@ -18,6 +19,13 @@
     padding: 0;
     min-height: 100%;
     scroll-behavior: smooth;
+    overflow-x: clip;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
   }
 
   /* Quando o layout horizontal está ativo, bloqueia scroll do body */
@@ -28,11 +36,41 @@
   }
 
   body {
-    @apply bg-[#f5f5f4] text-black font-pixel min-h-screen;
+    @apply bg-[#f5f5f4] text-black font-sans min-h-screen;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@layer utilities {
+  .font-pixel,
+  .font-hero-pixel,
+  .font-vt {
+    font-family: var(--font-pixel-display) !important;
   }
 
-  h1, h2, h3, h4 {
-    @apply font-pixel uppercase tracking-tighter;
+  .type-display-hero {
+    @apply font-hero-pixel uppercase tracking-[0.05em] leading-[0.92];
+  }
+
+  .type-display-section {
+    @apply font-pixel uppercase tracking-[0.06em] leading-[0.9];
+  }
+
+  .type-display-card {
+    @apply font-pixel uppercase tracking-[0.035em] leading-[0.98];
+  }
+
+  .type-ui-label {
+    @apply font-pixel uppercase tracking-[0.22em] leading-none;
+  }
+
+  .type-body {
+    @apply font-sans tracking-[0.01em] leading-relaxed text-stone-600;
+  }
+
+  .type-body-lg {
+    @apply font-sans tracking-[0.01em] leading-[1.6] text-stone-600;
   }
 }
 
