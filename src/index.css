@@ -11,7 +11,7 @@
     --border: 0 0% 0%;
     --radius: 0rem;
     --sidebar-width: 80px;
-    --font-pixel-display: "Jersey 25", monospace;
+    --font-pixel-display: "Jersey 15", monospace;
   }
 
   html, body {
@@ -39,6 +39,15 @@
     @apply bg-[#f5f5f4] text-black font-sans min-h-screen;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-pixel-display);
   }
 }
 
@@ -71,6 +80,19 @@
 
   .type-body-lg {
     @apply font-sans tracking-[0.01em] leading-[1.6] text-stone-600;
+  }
+
+  .outlined-title-mobile-solid {
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+}
+
+@media (max-width: 639px) {
+  .outlined-title-mobile-solid {
+    color: #000 !important;
+    -webkit-text-stroke: 0 !important;
+    text-shadow: none;
   }
 }
 

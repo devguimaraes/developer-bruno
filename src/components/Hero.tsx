@@ -34,7 +34,7 @@ const Hero: React.FC = () => {
               shuffleTimes={3}
               duration={1.2}
             />
-            <span className="text-transparent block mt-1 sm:mt-0" style={{ WebkitTextStroke: "1.5px black" }}>
+            <span className="outlined-title-mobile-solid text-transparent block mt-1 sm:mt-0" style={{ WebkitTextStroke: "1.5px black" }}>
               <ShuffleText 
                 text="GUIMARAES" 
                 className="block text-[13.8vw] sm:text-[8vw] md:text-[11vw] uppercase tracking-[0.03em] md:tracking-[0.05em]"
@@ -45,21 +45,15 @@ const Hero: React.FC = () => {
             </span>
           </h1>
 
-          <div className="max-w-[380px] sm:max-w-2xl md:max-w-3xl mb-9 md:mb-16 px-2 sm:px-6 flex flex-col items-center gap-2.5">
-            <ShuffleText 
-              text="Desenvolvedor Front-End especializado na criação de sites e sistemas web."
-              className="type-body-lg text-[15px] leading-relaxed md:text-xl block"
-              stagger={0.008}
-              duration={0.4}
-              delay={1}
-            />
-            <ShuffleText 
-              text="Entrego interfaces escaláveis com React e Next.js para projetos ao redor do mundo."
-              className="type-body-lg text-[15px] leading-relaxed md:text-xl block"
-              stagger={0.008}
-              duration={0.4}
-              delay={1.6}
-            />
+          <div className="max-w-[380px] sm:max-w-3xl lg:max-w-none mb-9 md:mb-16 px-2 sm:px-4 lg:px-0 flex flex-col items-center gap-2.5">
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, delay: 1, ease: [0.16, 1, 0.3, 1] }}
+              className="type-body-lg text-[15px] leading-relaxed md:text-lg xl:text-xl block max-w-full text-center [word-break:normal] [overflow-wrap:normal] lg:whitespace-nowrap"
+            >
+              Front-End Developer | React, Next.js & TypeScript | Performance, SEO & DX | Vibe Coder
+            </motion.p>
           </div>
 
           <BorderGlow glowColor="162 100% 27%" borderRadius={0} className="inline-block">

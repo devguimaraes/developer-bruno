@@ -15,11 +15,11 @@ const About: React.FC = () => {
               <div className="type-ui-label text-[10px] md:text-xs opacity-40 mb-4">
                 <ShuffleText text="// PROFILE_DATA_STORAGE" stagger={0.02} duration={0.8} />
               </div>
-              <h2 className="type-display-section text-[16vw] leading-[0.9] sm:text-8xl md:text-[110px] font-black flex flex-col">
+              <h2 className="type-display-section text-[13vw] leading-[0.9] sm:text-8xl md:text-[110px] font-black flex flex-col">
                 <span className="block mb-2">
                   <ShuffleText text="DESENVOLVEDOR" duration={1.2} />
                 </span>
-                <span className="text-transparent block" style={{ WebkitTextStroke: "2px black" }}>
+                <span className="outlined-title-mobile-solid text-transparent block" style={{ WebkitTextStroke: "2px black" }}>
                   <ShuffleText 
                     text="WEB_CORE" 
                     duration={1.2} 
@@ -35,7 +35,7 @@ const About: React.FC = () => {
                 <div className="absolute -left-3 top-0 w-3 h-3 bg-brutal-orange" />
                 <BlurText 
                   text="com 5 anos de experiência em desenvolvimento front-end e formação em desenvolvimento web pelo senac-rj, transformo conceitos de design em interfaces reais, rápidas e funcionais para sites e softwares."
-                  className="type-body-lg text-lg sm:text-xl md:text-3xl lg:text-4xl"
+                  className="type-body-lg text-base sm:text-lg md:text-xl lg:text-2xl"
                   delay={0.04}
                 />
               </div>

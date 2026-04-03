@@ -17,10 +17,10 @@ const Navigation: React.FC = () => {
   }, []);
 
   const navLinks = [
-    { name: "SOBRE", href: "#about" },
-    { name: "PROJETOS", href: "#projects" },
-    { name: "SKILLS", href: "#skills" },
-    { name: "CONTATO", href: "#contact" },
+    { name: "SOBRE", href: "/#about" },
+    { name: "PROJETOS", href: "/#projects" },
+    { name: "SKILLS", href: "/#skills" },
+    { name: "CONTATO", href: "/#contact" },
   ];
 
   return (
@@ -112,7 +112,7 @@ const Navigation: React.FC = () => {
         isOpen={isOpen} 
         onClose={() => setIsOpen(false)}
         items={[
-          { label: 'HOME', href: '#hero' },
+          { label: "HOME", href: "/#hero" },
           ...navLinks.map(link => ({ label: link.name, href: link.href }))
         ]}
       />

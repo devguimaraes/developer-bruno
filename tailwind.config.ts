@@ -76,7 +76,7 @@ export default {
       fontFamily: {
         mono: ["JetBrains Mono", "monospace"],
         sans: ["Satoshi", "system-ui", "sans-serif"],
-        pixel: ["Pixelify Sans", "sans-serif"],
+        pixel: ["Jersey 15", "monospace"],
         vt: ["VT323", "monospace"],
       },
       boxShadow: {
