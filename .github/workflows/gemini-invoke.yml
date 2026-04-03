@@ -37,6 +37,9 @@ jobs:
           permission-issues: 'write'
           permission-pull-requests: 'write'
 
+      - name: 'Checkout Code'
+        uses: 'actions/checkout@v4' # ratchet:exclude
+
       - name: 'Run Gemini CLI'
         id: 'run_gemini'
         uses: 'google-github-actions/run-gemini-cli@v0' # ratchet:exclude
@@ -63,6 +66,7 @@ jobs:
           use_vertex_ai: '${{ vars.GOOGLE_GENAI_USE_VERTEXAI }}'
           upload_artifacts: '${{ vars.UPLOAD_ARTIFACTS }}'
           workflow_name: 'gemini-invoke'
+          # issue_read (includeTools below) supports method get_comments — there is no separate get_issue_comments in github-mcp-server v0.27.
           settings: |-
             {
               "model": {
@@ -82,26 +86,19 @@ jobs:
                     "--rm",
                     "-e",
                     "GITHUB_PERSONAL_ACCESS_TOKEN",
-                    "ghcr.io/github/github-mcp-server:v0.18.0"
+                    "ghcr.io/github/github-mcp-server:v0.27.0"
                   ],
                   "includeTools": [
                     "add_issue_comment",
-                    "get_issue",
-                    "get_issue_comments",
+                    "issue_read",
                     "list_issues",
                     "search_issues",
-                    "create_pull_request",
                     "pull_request_read",
                     "list_pull_requests",
                     "search_pull_requests",
-                    "create_branch",
-                    "create_or_update_file",
-                    "delete_file",
-                    "fork_repository",
                     "get_commit",
                     "get_file_contents",
                     "list_commits",
-                    "push_files",
                     "search_code"
                   ],
                   "env": {
