@@ -36,7 +36,7 @@ jobs:
       pull-requests: 'read'
     outputs:
       available_labels: '${{ steps.get_labels.outputs.available_labels }}'
-      triaged_issues: '${{ steps.gemini_issue_analysis.outputs.triaged_issues }}'
+      triaged_issues: '${{ env.TRIAGED_ISSUES }}'
     steps:
       - name: 'Get repository labels'
         id: 'get_labels'
@@ -71,26 +71,12 @@ jobs:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN || github.token }}'
         run: |-
           echo '🔍 Finding unlabeled issues and issues marked for triage...'
-          UNLABELED_ISSUES="$(gh issue list \
+          ISSUES="$(gh issue list \
             --state 'open' \
-            --search 'no:label' \
+            --search 'no:label label:"status/needs-triage"' \
             --json number,title,body \
             --limit '100' \
             --repo "${GITHUB_REPOSITORY}"
-          )"
-
-          NEEDS_TRIAGE_ISSUES="$(gh issue list \
-            --state 'open' \
-            --search 'label:"status/needs-triage"' \
-            --json number,title,body \
-            --limit '100' \
-            --repo "${GITHUB_REPOSITORY}"
-          )"
-
-          ISSUES="$(
-            jq -cs 'add | unique_by(.number)' \
-              <(echo "${UNLABELED_ISSUES}") \
-              <(echo "${NEEDS_TRIAGE_ISSUES}")
           )"
 
           echo '📝 Setting output for GitHub Actions...'
