@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { X, Github, Linkedin, Mail, Instagram } from 'lucide-react';
+import GlassSurface from './GlassSurface';
 
 interface StaggeredMenuItem {
   label: string;
@@ -82,39 +83,48 @@ const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
         />
       ))}
 
-      {/* Menu Content */}
+      {/* Menu Content with Glass Effect */}
       <div
         ref={menuRef}
-        className={`fixed inset-0 z-[90] flex flex-col px-6 py-5 sm:px-8 sm:py-6 ${isOpen ? 'visible' : 'invisible'}`}
+        className={`fixed inset-0 z-[90] flex flex-col ${isOpen ? 'visible' : 'invisible'}`}
       >
-        <div className="flex justify-end mb-8">
-          <button onClick={onClose} className="min-h-11 min-w-11 p-2 text-white" aria-label="Fechar menu">
-            <X size={30} />
-          </button>
-        </div>
+        <GlassSurface
+          className="w-full h-full"
+          height="100vh"
+          backgroundOpacity={0.8}
+          blur={30}
+          brightness={20}
+          distortionScale={-200}
+        >
+          <div ref={contentRef} className="flex flex-col h-full w-full justify-center px-6 py-5 sm:px-8 sm:py-6">
+            <div className="flex justify-end mb-8 pt-4">
+              <button onClick={onClose} className="min-h-11 min-w-11 p-2 text-white" aria-label="Fechar menu">
+                <X size={32} strokeWidth={3} />
+              </button>
+            </div>
 
-        <div ref={contentRef} className="flex flex-col h-full justify-center">
-          <nav className="space-y-5 sm:space-y-6">
-            {items.map((item, idx) => (
-              <a
-                key={idx}
-                href={item.href}
-                onClick={onClose}
-                className="menu-item flex items-center gap-3 py-2 text-[1.9rem] sm:text-4xl font-black font-pixel text-white uppercase hover:text-brutal-orange transition-colors"
-              >
-                <span className="text-xs opacity-50 font-mono">0{idx + 1}</span>
-                {item.label}
-              </a>
-            ))}
-          </nav>
+            <nav className="space-y-6 sm:space-y-8 flex-1 flex flex-col justify-center">
+              {items.map((item, idx) => (
+                <a
+                  key={idx}
+                  href={item.href}
+                  onClick={onClose}
+                  className="menu-item flex items-center gap-4 py-2 text-4xl sm:text-6xl font-black font-pixel text-white uppercase hover:text-accent transition-colors"
+                >
+                  <span className="text-xs opacity-30 font-mono tracking-tighter">0{idx + 1}</span>
+                  {item.label}
+                </a>
+              ))}
+            </nav>
 
-          <div className="mt-auto flex gap-6 menu-item border-t-4 border-white/10 pt-6">
-            <a href="https://github.com/devguimaraes" target="_blank" rel="noreferrer" className="min-h-11 min-w-11 inline-flex items-center justify-center text-white hover:text-brutal-orange"><Github size={24} /></a>
-            <a href="https://linkedin.com/in/bcguimaraes" target="_blank" rel="noreferrer" className="min-h-11 min-w-11 inline-flex items-center justify-center text-white hover:text-brutal-orange"><Linkedin size={24} /></a>
-            <a href="https://instagram.com/devguimaraes" target="_blank" rel="noreferrer" className="min-h-11 min-w-11 inline-flex items-center justify-center text-white hover:text-brutal-orange"><Instagram size={24} /></a>
-            <a href="mailto:bc.guimaraes@outlook.com" className="min-h-11 min-w-11 inline-flex items-center justify-center text-white hover:text-brutal-orange"><Mail size={24} /></a>
+            <div className="mt-8 flex gap-8 menu-item border-t border-white/10 pt-8 pb-8">
+              <a href="https://github.com/devguimaraes" target="_blank" rel="noreferrer" className="text-white/60 hover:text-white transition-colors"><Github size={28} /></a>
+              <a href="https://linkedin.com/in/bcguimaraes" target="_blank" rel="noreferrer" className="text-white/60 hover:text-white transition-colors"><Linkedin size={28} /></a>
+              <a href="https://instagram.com/devguimaraes" target="_blank" rel="noreferrer" className="text-white/60 hover:text-white transition-colors"><Instagram size={28} /></a>
+              <a href="mailto:bc.guimaraes@outlook.com" className="text-white/60 hover:text-white transition-colors"><Mail size={28} /></a>
+            </div>
           </div>
-        </div>
+        </GlassSurface>
       </div>
     </div>
   );
