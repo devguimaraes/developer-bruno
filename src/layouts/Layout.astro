@@ -7,6 +7,10 @@ import { siteConfig } from '@/config/site';
 import Navigation from '@/components/Navigation.tsx';
 import Footer from '@/components/Footer.tsx';
 import { Toaster } from '@/components/ui/sonner.tsx';
+import GrainOverlay from '@/components/ui/GrainOverlay';
+import PixelLoader from '@/components/ui/PixelLoader';
+import CustomCursor from '@/components/ui/CustomCursor';
+import SmoothScroll from '@/components/ui/SmoothScroll';
 
 interface Props {
   title?: string;
@@ -54,9 +58,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <!-- Preconnects -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Jersey+15&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Jersey+15&family=Silkscreen&family=Newsreader:ital,wght@0,400;1,400&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
 
     <!-- Performance/Analytics scripts base (como Plausible se houver) -->
     { import.meta.env.PROD && (
@@ -67,12 +70,21 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
     )}
   </head>
-  <body>
-    <Navigation client:load />
-    <main class="w-full">
-      <slot />
-    </main>
-    <Footer client:visible />
+  <body class="bg-black">
+    <PixelLoader client:load />
+    <CustomCursor client:load />
+    
+    <SmoothScroll client:load>
+      <Navigation client:load />
+      <main class="w-full relative">
+        <slot />
+      </main>
+      <Footer client:visible />
+    </SmoothScroll>
+
     <Toaster client:load />
+    
+    {/* Global Assets for Sasha Aesthetic */}
+    <GrainOverlay client:load />
   </body>
 </html>

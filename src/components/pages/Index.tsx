@@ -1,69 +1,34 @@
-import React, { useMemo, useState } from "react";
-import { useIsMobile } from "@/hooks/use-mobile";
-
-// Layout Components
-import HorizontalSplitLayout from "@/components/layout/HorizontalSplitLayout";
-import FixedSidebar from "@/components/layout/FixedSidebar";
-import BackgroundGrid from "@/components/ui/BackgroundGrid";
-
-// Section Components
+import React from "react";
 import Hero from "@/components/Hero";
-import About from "@/components/About";
-import Skills from "@/components/Skills";
 import Projects from "@/components/Projects";
-import Contact from "@/components/Contact";
+import SectionEntrance from "@/components/ui/SectionEntrance";
 
 const Index: React.FC = () => {
-  const isMobile = useIsMobile();
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  const sections = useMemo(() => [
-    { id: "hero", label: "Início", component: <Hero /> },
-    { id: "about", label: "Sobre", component: <About /> },
-    { id: "projects", label: "Projetos", component: <Projects />, hasVerticalScroll: true },
-    { id: "skills", label: "Skills", component: <Skills />, hasVerticalScroll: true },
-    { id: "contact", label: "Contato", component: <Contact /> },
-  ], []);
-
   return (
-    <div className="relative w-full bg-background min-h-screen overflow-x-clip">
-      {/* Background fixo */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <BackgroundGrid />
-      </div>
-      <div className="scanlines fixed inset-0 pointer-events-none z-[100] opacity-[0.03]" />
-      
-      {!isMobile && (
-        <FixedSidebar 
-          activeSection={{
-            id: sections[activeIndex].id,
-            index: activeIndex,
-            label: sections[activeIndex].label
-          }} 
-        />
-      )}
+    <div className="flex flex-col">
+      {/* Hero Section */}
+      <SectionEntrance>
+        <Hero />
+      </SectionEntrance>
 
-      <main 
-        className="relative z-10"
-        style={{ paddingLeft: !isMobile ? 'var(--sidebar-width)' : '0' }}
-      >
-        {isMobile ? (
-          <div className="flex flex-col">
-            <Hero />
-            <About />
-            <Projects />
-            <Skills />
-            <Contact />
-          </div>
-        ) : (
-          <HorizontalSplitLayout 
-            sections={sections} 
-            onSectionChange={(index) => setActiveIndex(index)}
-          />
-        )}
-      </main>
+      {/* Projects Section */}
+      <SectionEntrance>
+        <Projects />
+      </SectionEntrance>
+
+      {/* Footer Info / Showreel Placeholder */}
+      <SectionEntrance className="py-40 flex flex-col items-center justify-center text-center">
+        <div className="type-mono mb-8">Ready to start a project?</div>
+        <a href="mailto:dev@bruno.com" className="type-raster-section text-[12vw] hover:text-accent transition-colors cursor-pointer block">
+          LET'S_TALK
+        </a>
+        <div className="mt-20 type-mono opacity-50">
+          © 2026 BRUNO GUIMARÃES / ALL RIGHTS RESERVED
+        </div>
+      </SectionEntrance>
     </div>
   );
 };
+
 
 export default Index;
