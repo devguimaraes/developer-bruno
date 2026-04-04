@@ -1,75 +1,105 @@
-﻿import React from "react";
-import PixelBlast from "@/components/ui/PixelBlast";
-import ShuffleText from "@/components/ui/ShuffleText";
-import BorderGlow from "@/components/ui/BorderGlow";
-import { motion } from "framer-motion";
+import React, { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useVideoLoading } from "@/hooks/useVideoLoading";
 
 const Hero: React.FC = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { videoRef, isVisible } = useVideoLoading();
+  const { scrollY } = useScroll();
+
+  // Efeito de movimento sutil para as camadas
+  const textY = useTransform(scrollY, [0, 500], [0, 100]);
+  const videoScale = useTransform(scrollY, [0, 1000], [1, 1.2]);
+  const videoOpacity = useTransform(scrollY, [0, 500], [0.7, 0.4]);
+
   return (
-    <section id="hero" className="min-h-screen flex items-center justify-center relative overflow-hidden pt-28 pb-16 sm:py-20 md:py-0 px-4 sm:px-6">
-      {/* Pixel Blast Animation Background */}
-      <div className="absolute inset-0 z-0 opacity-80">
-        <PixelBlast 
-          pixelSize={20}
-          pixelColor="#000000"
-          animationSpeed={1.5}
-        />
+    <section 
+      ref={containerRef}
+      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-black w-full"
+    >
+      {/* Background Video Section - Full Edge-to-Edge */}
+      <motion.div 
+        style={{ scale: videoScale, opacity: isVisible ? videoOpacity : 0 }}
+        className="absolute inset-0 z-0 pointer-events-none w-full h-full"
+      >
+        <video
+          ref={videoRef}
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster="/hero-render-1.png"
+          className="w-full h-full object-cover"
+        >
+          {isVisible && (
+            <source src="/backgroundvideo.mp4" type="video/mp4" />
+          )}
+        </video>
+        {/* Adjusted gradient for zero-border feel */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80" />
+      </motion.div>
+
+      {/* Content - No fixed container for full impact but keep text central */}
+      <div className="relative z-10 w-full px-6 sm:px-12 pt-32 sm:pt-40">
+        <div className="flex flex-col items-center text-center">
+          {/* Massive Raster Headline */}
+          <motion.h1
+            style={{ y: textY }}
+            className="type-raster-hero text-[15vw] lg:text-[11vw] leading-[0.8] mb-8 select-none"
+          >
+            <div className="flex flex-col items-center">
+              <span className="block opacity-100 text-white leading-[0.8]">
+                BRUNO
+              </span>
+              <span className="block opacity-100 text-white leading-[0.8]">
+                GUIMARÃES
+              </span>
+            </div>
+          </motion.h1>
+
+          <motion.div
+            style={{ y: textY }}
+            className="mb-12 type-mono tracking-[0.12em] text-[8px] sm:text-[10px] md:text-xs opacity-100 uppercase text-white"
+          >
+            Front-End Developer | React, Next.js & TypeScript | SEO & DX
+          </motion.div>
+
+          {/* Action Row - Simplified without button */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8 }}
+            className="flex flex-col md:flex-row items-center gap-12 sm:gap-24 w-full justify-between mt-12 border-t border-white/10 pt-8"
+          >
+            <div className="text-left max-w-[320px]">
+              <p className="type-mono text-[10px] mb-4 opacity-40 uppercase">
+                // ESTABLISHED_IN_RJ
+              </p>
+              <p className="text-white/60 text-sm leading-relaxed">
+                Transformando complexidade em simplicidade através de design
+                editorial e tecnologia de ponta.
+              </p>
+            </div>
+
+            <div className="flex flex-col items-end">
+              <div className="type-mono text-[10px] opacity-40 mb-2">
+                SCROLL_FOR_MORE
+              </div>
+              <div className="w-px h-12 bg-white/20 animate-pulse mx-auto md:mr-0" />
+            </div>
+          </motion.div>
+        </div>
       </div>
 
-      <div className="w-full text-center z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col items-center"
-        >
-          <div className="type-ui-label text-[10px] md:text-xs mb-5 md:mb-12 opacity-40">
-            <ShuffleText text="Developer Front-End" stagger={0.02} duration={1} />
-          </div>
-
-          <h1 className="type-display-hero text-[16vw] leading-[0.88] sm:text-[8vw] md:text-[11vw] font-black mb-6 md:mb-12 w-full max-w-[98vw]">
-            <ShuffleText 
-              text="BRUNO" 
-              className="block"
-              shuffleTimes={3}
-              duration={1.2}
-            />
-            <span className="outlined-title-mobile-solid text-transparent block mt-1 sm:mt-0" style={{ WebkitTextStroke: "1.5px black" }}>
-              <ShuffleText 
-                text="GUIMARAES" 
-                className="block text-[13.8vw] sm:text-[8vw] md:text-[11vw] uppercase tracking-[0.03em] md:tracking-[0.05em]"
-                shuffleTimes={3}
-                duration={1.2}
-                delay={0.4}
-              />
-            </span>
-          </h1>
-
-          <div className="max-w-[380px] sm:max-w-3xl lg:max-w-none mb-9 md:mb-16 px-2 sm:px-4 lg:px-0 flex flex-col items-center gap-2.5">
-            <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.45, delay: 1, ease: [0.16, 1, 0.3, 1] }}
-              className="type-body-lg text-[15px] leading-relaxed md:text-lg xl:text-xl block max-w-full text-center [word-break:normal] [overflow-wrap:normal] lg:whitespace-nowrap"
-            >
-              Front-End Developer | React, Next.js & TypeScript | Performance, SEO & DX | Vibe Coder
-            </motion.p>
-          </div>
-
-          <BorderGlow glowColor="162 100% 27%" borderRadius={0} className="inline-block">
-            <button 
-              onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
-              className="group relative min-h-12 bg-black text-white type-ui-label text-sm sm:text-base md:text-lg py-4 sm:py-5 px-8 sm:px-10 md:py-6 md:px-12 border-4 border-black transition-all hover:bg-white hover:text-black active:scale-95"
-            >
-              VER_PROJETOS
-            </button>
-          </BorderGlow>
-        </motion.div>
+      {/* Decorative Matrix/Coordinate Elements */}
+      <div className="absolute top-28 left-4 sm:left-10 type-mono text-[8px] opacity-40 hidden md:block">
+        POS: 22.9068 S / 43.1729 W
+      </div>
+      <div className="absolute bottom-1/4 right-10 type-mono text-[8px] opacity-20 hidden md:block vertical-text">
+        VER: 4.0.0_STABLE
       </div>
     </section>
   );
 };
 
 export default Hero;
-
-

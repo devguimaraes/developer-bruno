@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Menu } from "lucide-react";
 import GlassSurface from "@/components/ui/GlassSurface";
 import StaggeredMenu from "@/components/ui/StaggeredMenu";
-import BorderGlow from "@/components/ui/BorderGlow";
 import { useIsMobile } from "@/hooks/use-mobile";
+import Magnetic from "@/components/ui/Magnetic";
 
 const Navigation: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,7 +16,6 @@ const Navigation: React.FC = () => {
   }, []);
 
   const navLinks = [
-    { name: "SOBRE", href: "/#about" },
     { name: "PROJETOS", href: "/#projects" },
     { name: "SKILLS", href: "/#skills" },
     { name: "CONTATO", href: "/#contact" },
@@ -26,85 +24,60 @@ const Navigation: React.FC = () => {
   return (
     <>
       <nav 
-        className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
-        style={{ left: !isMobile ? 'var(--sidebar-width)' : '0' }}
+        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
       >
         <GlassSurface 
-          className={`w-full transition-all duration-500 ${
-            scrolled ? "opacity-100 border-b-4 border-black" : "opacity-0"
-          }`}
-          height={scrolled ? (isMobile ? 64 : 72) : 0}
-          backgroundOpacity={0.4}
-          blur={12}
-          saturation={1.5}
+          className={`w-full transition-all duration-500`}
+          height={scrolled ? (isMobile ? 64 : 80) : (isMobile ? 72 : 90)}
+          backgroundOpacity={scrolled ? 0.3 : 0.05}
+          blur={scrolled ? 20 : 0}
+          brightness={scrolled ? 30 : 50}
+          saturation={1.8}
+          distortionScale={scrolled ? -150 : 0}
+          borderRadius={0}
         >
-          <div className="flex justify-between items-center w-full h-full px-4 sm:px-6 md:px-8">
-            <a href="/" className="flex items-center gap-2 sm:gap-3 group min-h-11 py-1 pr-1">
-              <div className="w-9 h-9 sm:w-10 sm:h-10 bg-black text-white flex items-center justify-center pixel-border-sm group-hover:bg-brutal-orange transition-colors">
-                <span className="font-pixel text-base sm:text-lg">BG</span>
-              </div>
-              <span className="type-display-card text-base sm:text-xl hidden sm:block font-black">BRUNO_GUIMARAES</span>
-            </a>
-
-            <div className="hidden md:flex items-center gap-8">
-              {navLinks.map((link) => (
-                <a 
-                  key={link.name} 
-                  href={link.href}
-                  className="type-ui-label text-sm hover:text-brutal-orange transition-colors"
-                >
-                  {link.name}
-                </a>
-              ))}
-            </div>
-
-            <BorderGlow glowColor="162 100% 27%" borderRadius={0} className="md:hidden">
-              <button 
-                className="min-h-11 min-w-11 p-2 bg-black text-white border-2 border-black"
-                onClick={() => setIsOpen(true)}
-                aria-label="Abrir menu"
-              >
-                <Menu size={24} />
-              </button>
-            </BorderGlow>
-          </div>
-        </GlassSurface>
-
-        {/* Transparent initial state content */}
-        {!scrolled && (
-          <div className="absolute top-0 left-0 w-full py-4 sm:py-6 transition-all duration-500">
-            <div className="flex justify-between items-center w-full px-4 sm:px-6 md:px-8">
-              <a href="/" className="flex items-center gap-2 sm:gap-3 group min-h-11 py-1 pr-1">
-                <div className="w-9 h-9 sm:w-10 sm:h-10 bg-black text-white flex items-center justify-center pixel-border-sm group-hover:bg-brutal-orange transition-colors">
-                  <span className="font-pixel text-base sm:text-lg">BG</span>
+          <div className="flex justify-between items-center w-full h-full px-4 sm:px-6 md:px-8 max-w-[1800px] mx-auto">
+            <Magnetic>
+              <a href="/" className="flex items-center gap-2 sm:gap-4 group py-2">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-white/20 group-hover:border-accent transition-all duration-300">
+                  <img 
+                    src="/avatar-bruno-bg.jpg" 
+                    alt="Bruno Guimarães" 
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-                <span className="type-display-card text-base sm:text-xl hidden sm:block font-black text-black">BRUNO_GUIMARAES</span>
+                <span className="type-mono text-sm sm:text-base font-black text-white tracking-widest uppercase items-center flex gap-3">
+                  BRUNO
+                  <span className="opacity-40 font-thin">/</span>
+                  GUIMARÃES
+                </span>
               </a>
+            </Magnetic>
 
-              <div className="hidden md:flex items-center gap-8">
-                {navLinks.map((link) => (
+            <div className="hidden md:flex items-center gap-12">
+              {navLinks.map((link) => (
+                <Magnetic key={link.name}>
                   <a 
-                    key={link.name} 
                     href={link.href}
-                    className="type-ui-label text-sm hover:text-brutal-orange transition-colors text-black"
+                    className="type-mono text-[10px] tracking-[0.2em] hover:text-accent transition-colors text-white/80 hover:text-white uppercase font-bold"
                   >
                     {link.name}
                   </a>
-                ))}
-              </div>
-
-              <BorderGlow glowColor="162 100% 27%" borderRadius={0} className="md:hidden">
-                <button 
-                  className="min-h-11 min-w-11 p-2 bg-black text-white border-2 border-black"
-                  onClick={() => setIsOpen(true)}
-                  aria-label="Abrir menu"
-                >
-                  <Menu size={24} />
-                </button>
-              </BorderGlow>
+                </Magnetic>
+              ))}
             </div>
+
+            <button 
+              className="md:hidden flex flex-col items-end gap-1.5 p-2"
+              onClick={() => setIsOpen(true)}
+              aria-label="Abrir menu"
+            >
+              <div className="w-8 h-0.5 bg-white" />
+              <div className="w-5 h-0.5 bg-white" />
+              <div className="w-8 h-0.5 bg-white" />
+            </button>
           </div>
-        )}
+        </GlassSurface>
       </nav>
 
       {/* Mobile Staggered Menu */}
