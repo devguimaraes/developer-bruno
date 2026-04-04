@@ -27,6 +27,10 @@ dist-ssr
 
 .vercel
 .gemini/
+.astro/
+.cursor/
+.codex
+.geminiignore
 
 gha-creds-*.json
 .gemini/settings.json
