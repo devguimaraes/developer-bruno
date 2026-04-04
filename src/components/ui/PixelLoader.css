@@ -1,0 +1,51 @@
+.pixel-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  display: flex;
+  flex-wrap: wrap;
+  pointer-events: none;
+}
+
+/* Desktop: ~200 blocos → ~14 colunas × ~14 linhas */
+.pixel-block {
+  background-color: #000;
+  width: 7.15vw;
+  height: 7.15vh;
+  opacity: 1;
+}
+
+/* Mobile: ~100 blocos → 10 colunas × 10 linhas */
+@media (max-width: 768px) {
+  .pixel-block {
+    width: 10vw;
+    height: 10vh;
+  }
+}
+
+/* Animação de saída ruidosa */
+@keyframes pixel-out {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+    background-color: #000;
+  }
+  30% {
+    background-color: #6a0dad; /* Lilas real */
+  }
+  60% {
+    background-color: #00ff00; /* Parakeet */
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0);
+    background-color: transparent;
+  }
+}
+
+.pixel-block.exit {
+  animation: pixel-out 0.6s forwards ease-in-out;
+}
