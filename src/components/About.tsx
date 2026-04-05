@@ -69,7 +69,7 @@ const About: React.FC = () => {
           </div>
 
           {/* Lado Direito: Conteúdo */}
-          <div className="flex flex-col space-y-12">
+          <div className="flex flex-col space-y-8">
             
             {/* Badges */}
             <div className="flex flex-wrap gap-3">
@@ -90,7 +90,7 @@ const About: React.FC = () => {
 
             {/* Descrição */}
             <div className="space-y-4">
-              <h2 className="type-raster-section text-4xl md:text-6xl leading-none opacity-80 italic">THE_CODER</h2>
+              <h2 className="type-raster-section text-4xl md:text-5xl leading-none opacity-80 italic uppercase tracking-tighter">BRUNO GUIMARÃES</h2>
               <div className="max-w-xl">
                  <p className="text-xl md:text-2xl leading-relaxed font-serif italic text-white/90">
                     <TextReveal 
@@ -100,8 +100,8 @@ const About: React.FC = () => {
               </div>
             </div>
 
-            {/* Social Links - Espaçamento ajustado e sem bordas */}
-            <div className="flex items-center gap-6 pt-8">
+            {/* Social Links - Espaçamento ajustado para minimalismo */}
+            <div className="flex items-center gap-6 pt-2">
                {socialLinks.map((social) => (
                  <Magnetic key={social.name}>
                      <a 
