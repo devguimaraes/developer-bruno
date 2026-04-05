@@ -12,9 +12,12 @@ import {
   SiGithub, 
   SiAnthropic,
   SiInstagram,
-  SiX
+  SiX,
+  SiSupabase,
+  SiFramer,
+  SiOpenai
 } from "@icons-pack/react-simple-icons";
-import { Linkedin } from "lucide-react";
+import { Linkedin, MousePointer2 } from "lucide-react";
 
 const About: React.FC = () => {
   const techs = [
@@ -25,6 +28,10 @@ const About: React.FC = () => {
     { name: "Vercel", icon: SiVercel },
     { name: "GitHub", icon: SiGithub },
     { name: "Claude Code", icon: SiAnthropic },
+    { name: "Supabase", icon: SiSupabase },
+    { name: "OpenAI Codex", icon: SiOpenai },
+    { name: "Cursor", icon: MousePointer2 },
+    { name: "Framer", icon: SiFramer }
   ];
 
   const socialLinks = [
@@ -41,8 +48,8 @@ const About: React.FC = () => {
   ];
 
   return (
-    <section id="about" className="min-h-screen pt-40 pb-24 px-6 md:px-12 bg-black text-white overflow-hidden relative">
-      <div className="max-w-6xl mx-auto">
+    <section id="about" className="min-h-screen pt-40 pb-24 bg-black text-white overflow-hidden relative">
+      <div className="max-w-6xl mx-auto px-6 md:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-12 lg:gap-24 items-start">
           
           {/* Lado Esquerdo: Foto com Glitch */}
@@ -111,35 +118,23 @@ const About: React.FC = () => {
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Stack Ticker - Expandido para largura total com bordas sutis */}
-        <div className="w-full relative mt-32 py-12 border-y border-white/10 overflow-hidden bg-white/[0.02]">
-           <div className="flex animate-marquee whitespace-nowrap">
-              <div className="flex items-center gap-12 mx-6">
-                 {techs.map((tech, index) => (
-                    <div key={index} className="flex items-center gap-4 group">
-                       <tech.icon size={28} className="text-white group-hover:text-accent transition-colors" />
-                       <span className="type-mono text-[10px] md:text-sm opacity-50 group-hover:opacity-100 transition-opacity uppercase tracking-widest">
-                          {tech.name}
-                       </span>
-                       <span className="text-white/10 text-xl font-black mx-4 select-none">/</span>
-                    </div>
-                 ))}
-              </div>
-              {/* Duplicado para loop infinito */}
-              <div className="flex items-center gap-12 mx-6" aria-hidden="true">
-                 {techs.map((tech, index) => (
-                    <div key={`dup-${index}`} className="flex items-center gap-4 group">
-                       <tech.icon size={28} className="text-white group-hover:text-accent transition-colors" />
-                       <span className="type-mono text-[10px] md:text-sm opacity-50 group-hover:opacity-100 transition-opacity uppercase tracking-widest">
-                          {tech.name}
-                       </span>
-                       <span className="text-white/10 text-xl font-black mx-4 select-none">/</span>
-                    </div>
-                 ))}
-              </div>
-           </div>
-        </div>
+      {/* Stack Ticker - 100% real de largura (Edge-to-Edge) */}
+      <div className="w-full relative mt-32 py-12 border-y border-white/10 overflow-hidden bg-white/[0.02]">
+         <div className="flex animate-marquee whitespace-nowrap">
+            <div className="flex items-center gap-12">
+               {[...techs, ...techs].map((tech, index) => (
+                  <div key={index} className="flex items-center gap-4 group px-6">
+                     <tech.icon size={28} className="text-white group-hover:text-accent transition-colors" />
+                     <span className="type-mono text-[10px] md:text-sm opacity-50 group-hover:opacity-100 transition-opacity uppercase tracking-[0.2em]">
+                        {tech.name}
+                     </span>
+                     <span className="text-white/10 text-xl font-black mx-4 select-none">/</span>
+                  </div>
+               ))}
+            </div>
+         </div>
       </div>
     </section>
   );
