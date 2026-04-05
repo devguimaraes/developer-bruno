@@ -16,8 +16,8 @@ const Navigation: React.FC = () => {
   }, []);
 
   const navLinks = [
-    { name: "PROJETOS", href: "/#projects" },
-    { name: "SKILLS", href: "/#skills" },
+    { name: "PROJETOS", href: "/#projetos" },
+    { name: "SOBRE", href: "/#about" },
     { name: "CONTATO", href: "/#contact" },
   ];
 
@@ -84,10 +84,7 @@ const Navigation: React.FC = () => {
       <StaggeredMenu 
         isOpen={isOpen} 
         onClose={() => setIsOpen(false)}
-        items={[
-          { label: "HOME", href: "/#hero" },
-          ...navLinks.map(link => ({ label: link.name, href: link.href }))
-        ]}
+        items={navLinks.map(link => ({ label: link.name, href: link.href }))}
       />
     </>
   );

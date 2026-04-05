@@ -49,10 +49,10 @@ const Hero: React.FC = () => {
           >
             <div className="flex flex-col items-center">
               <span className="block opacity-100 text-white leading-[0.8]">
-                BRUNO
+                FRONT END
               </span>
               <span className="block opacity-100 text-white leading-[0.8]">
-                GUIMARÃES
+                DEVELOPER
               </span>
             </div>
           </motion.h1>
@@ -61,7 +61,7 @@ const Hero: React.FC = () => {
             style={{ y: textY }}
             className="mb-12 type-mono tracking-[0.12em] text-[8px] sm:text-[10px] md:text-xs opacity-100 uppercase text-white"
           >
-            Front-End Developer | React, Next.js & TypeScript | SEO & DX
+            React, Next.js & TypeScript | SEO & DX
           </motion.div>
 
           {/* Action Row - Simplified without button */}

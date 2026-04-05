@@ -1,25 +1,35 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import GlitchImage from "./ui/GlitchImage";
 import TextReveal from "./ui/TextReveal";
-import Magnetic from "./ui/Magnetic";
 import { 
-  SiNextdotjs, 
-  SiTypescript, 
-  SiTailwindcss, 
-  SiNodedotjs, 
-  SiVercel, 
-  SiGithub, 
-  SiAnthropic,
   SiInstagram,
   SiX,
   SiSupabase,
+  SiWhatsapp,
   SiFramer,
-  SiOpenai
+  SiOpenai,
+  SiGithub,
+  SiNextdotjs,
+  SiTypescript,
+  SiTailwindcss,
+  SiNodedotjs,
+  SiVercel,
+  SiAnthropic
 } from "@icons-pack/react-simple-icons";
 import { Linkedin, MousePointer2 } from "lucide-react";
 
 const About: React.FC = () => {
+  const [time, setTime] = useState("");
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const now = new Date();
+      setTime(now.toLocaleTimeString("pt-BR", { hour12: false }));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   const techs = [
     { name: "Next.js", icon: SiNextdotjs },
     { name: "TypeScript", icon: SiTypescript },
@@ -35,86 +45,85 @@ const About: React.FC = () => {
   ];
 
   const socialLinks = [
-    { name: "LinkedIn", icon: Linkedin, href: "https://linkedin.com/in/devguimaraes" },
-    { name: "GitHub", icon: SiGithub, href: "https://github.com/devguimaraes" },
-    { name: "Instagram", icon: SiInstagram, href: "https://instagram.com/devguimaraes" },
+    { name: "LinkedIn", icon: Linkedin, href: "https://www.linkedin.com/in/bcguimaraes/" },
+    { name: "Instagram", icon: SiInstagram, href: "https://www.instagram.com/brunoguimraes/" },
+    { name: "WhatsApp", icon: SiWhatsapp, href: "https://wa.me/5521969715247?text=Ol%C3%A1%20Bruno%2C%20vi%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar!" },
     { name: "X", icon: SiX, href: "https://x.com/devguimraes" },
+    { name: "GitHub", icon: SiGithub, href: "https://github.com/devguimaraes" },
   ];
 
-  const badges = [
-    "5 ANOS DE EXPERIÊNCIA",
-    "DEVELOPER FRONT END",
-    "RIO DE JANEIRO"
-  ];
+  // Badges removidas para layout editorial minimalista
 
   return (
-    <section id="about" className="min-h-screen pt-40 pb-24 bg-black text-white overflow-hidden relative">
-      <div className="max-w-6xl mx-auto px-6 md:px-12">
-        <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-12 lg:gap-24 items-start">
+    <section id="about" className="min-h-screen pt-12 md:pt-32 pb-24 bg-black text-white overflow-hidden relative">
+      {/* Dynamic Info Bar - Posicionada no topo para transição entre seções */}
+      <div className="w-full py-6 border-b border-white/10 flex flex-col md:flex-row justify-between items-center gap-6 px-6 md:px-12 text-[10px] type-mono uppercase tracking-[0.2em] text-white">
+        <div className="flex flex-wrap items-center gap-8 justify-center md:justify-start">
+          <span className="font-bold">© {new Date().getFullYear()}</span>
+          <span className="tabular-nums font-bold">{time || "--:--:--"}</span>
+          <span className="font-bold">Rio de Janeiro, BR</span>
           
-          {/* Lado Esquerdo: Foto com Glitch */}
-          <div className="relative group grayscale hover:grayscale-0 transition-all duration-700 max-w-[240px] md:max-w-none -scale-x-100">
-             <div className="aspect-square w-full overflow-hidden border-2 border-white/20 shadow-neo bg-white/[0.05]">
+          {/* Social Icons Integrados com Separador */}
+          <div className="flex items-center gap-5 ml-2 border-l border-white/10 pl-8">
+             {socialLinks.map((social) => (
+               <a 
+                  key={social.name}
+                  href={social.href} 
+                  target="_blank" 
+                  rel="noreferrer" 
+                  className="hover:text-accent transition-colors duration-300 transform hover:scale-110"
+                  title={social.name}
+               >
+                  <social.icon size={16} />
+               </a>
+             ))}
+          </div>
+        </div>
+        
+        <div className="text-white hover:text-accent transition-colors cursor-default tracking-[0.3em] font-bold">
+          Built by Bruno Guimarães
+        </div>
+      </div>
+
+      <div className="w-full px-6 md:px-12 pt-32">
+        <div className="flex flex-col md:flex-row gap-12 lg:gap-32 items-center md:items-start">
+          
+          {/* Lado Esquerdo: GIF como Poster Animado (Sem Bordas) */}
+          <div className="relative group grayscale hover:grayscale-0 transition-all duration-700 w-full max-w-[320px] lg:max-w-[400px] shrink-0">
+             <div className="aspect-[9/16] w-full overflow-hidden">
                 <GlitchImage 
-                   src="/about-avatar.jpg" 
+                   src="/avatar-bio3.gif" 
                    alt="Bruno Guimarães" 
-                   className="w-full h-full object-cover object-[50%_10%]"
+                   className="w-full h-full object-cover"
                    active={true}
                 />
              </div>
-             {/* Overlay Brutalista */}
-             <div className="absolute -bottom-6 -right-6 bg-accent text-black p-4 type-mono text-xs font-bold border-2 border-black hidden md:block">
-                SYS_OPERATOR: BRUNO_G
+             {/* Overlay Minimalista */}
+             <div className="absolute -bottom-4 -left-4 bg-white text-black px-3 py-1 type-mono text-[9px] font-bold uppercase tracking-widest">
+                STREAM_BIO_03
              </div>
           </div>
 
-          {/* Lado Direito: Conteúdo */}
-          <div className="flex flex-col space-y-8">
+          {/* Lado Direito: Bio Tipográfica Massiva */}
+          <div className="flex flex-col justify-center flex-1">
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="type-raster-section text-[15vw] md:text-[11vw] leading-[0.75] opacity-100 uppercase tracking-tighter mb-12"
+            >
+              BRUNO<br />GUIMARÃES
+            </motion.h2>
             
-            {/* Badges */}
-            <div className="flex flex-wrap gap-3">
-              {badges.map((badge, i) => (
-                <motion.span 
-                  key={badge}
-                  initial={{ opacity: 0, x: -10 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  className="type-mono text-[10px] uppercase tracking-[0.3em] text-white/40 flex items-center"
-                >
-                  <span className="mr-3 w-1 h-1 bg-accent rounded-full" />
-                  {badge}
-                </motion.span>
-              ))}
-            </div>
-
-            {/* Descrição */}
-            <div className="space-y-4">
-              <h2 className="type-raster-section text-4xl md:text-5xl leading-none opacity-80 italic uppercase tracking-tighter">BRUNO GUIMARÃES</h2>
-              <div className="max-w-xl">
-                 <p className="text-xl md:text-2xl leading-relaxed font-serif italic text-white/90">
-                    <TextReveal 
-                        text="5 anos de experiência em desenvolvimento front-end e formação em desenvolvimento web pelo SENAC-RJ, transformo conceitos de design em interfaces reais, rápidas e funcionais para sites e softwares."
-                    />
-                 </p>
-              </div>
-            </div>
-
-            {/* Social Links - Espaçamento ajustado para minimalismo */}
-            <div className="flex items-center gap-6 pt-2">
-               {socialLinks.map((social) => (
-                 <Magnetic key={social.name}>
-                     <a 
-                        href={social.href} 
-                        target="_blank" 
-                        rel="noreferrer" 
-                        className="group flex items-center justify-center text-white/30 hover:text-accent transition-all duration-300"
-                        title={social.name}
-                     >
-                        <social.icon size={20} className="group-hover:scale-110 transition-transform" />
-                     </a>
-                 </Magnetic>
-               ))}
+            <div className="max-w-xl border-l border-white/10 pl-8 ml-2">
+               <p className="text-2xl md:text-3xl leading-snug font-serif italic text-white/90">
+                  <TextReveal 
+                      text="Com 5 anos de experiência e formação em desenvolvimento web pelo SENAC-RJ, transformo conceitos de design em interfaces de alta performance — rápidas, reais e funcionais para o cenário digital global."
+                  />
+               </p>
+               <p className="type-mono text-[10px] opacity-30 mt-8 uppercase tracking-[0.3em]">
+                  // BASED_IN_RIO_DE_JANEIRO
+               </p>
             </div>
           </div>
         </div>

@@ -8,22 +8,22 @@ const Index: React.FC = () => {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <SectionEntrance>
+      <SectionEntrance id="hero">
         <Hero />
       </SectionEntrance>
 
       {/* Projects Section */}
-      <SectionEntrance>
+      <SectionEntrance id="projetos">
         <Projects />
       </SectionEntrance>
 
       {/* About Section */}
-      <SectionEntrance>
+      <SectionEntrance id="about">
         <About />
       </SectionEntrance>
 
       {/* Footer Info / Showreel Placeholder */}
-      <SectionEntrance className="py-40 flex flex-col items-center justify-center text-center">
+      <SectionEntrance id="contact" className="py-40 flex flex-col items-center justify-center text-center">
         <div className="type-mono mb-8">Ready to start a project?</div>
         <a href="mailto:dev@bruno.com" className="type-raster-section text-[12vw] hover:text-accent transition-colors cursor-pointer block">
           LET'S_TALK
