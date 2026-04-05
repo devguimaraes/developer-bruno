@@ -82,7 +82,7 @@ const About: React.FC = () => {
                   transition={{ delay: i * 0.1 }}
                   className="type-mono text-[10px] uppercase tracking-[0.3em] text-white/40 flex items-center"
                 >
-                  {i > 0 && <span className="mx-3 w-1 h-1 bg-accent rounded-full" />}
+                  <span className="mr-3 w-1 h-1 bg-accent rounded-full" />
                   {badge}
                 </motion.span>
               ))}
