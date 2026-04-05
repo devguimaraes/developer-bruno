@@ -41,17 +41,18 @@ const About: React.FC = () => {
   ];
 
   return (
-    <section id="about" className="min-h-screen py-24 px-6 md:px-12 bg-black text-white overflow-hidden relative">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+    <section id="about" className="min-h-screen pt-40 pb-24 px-6 md:px-12 bg-black text-white overflow-hidden relative">
+      <div className="max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-12 lg:gap-24 items-start">
           
           {/* Lado Esquerdo: Foto com Glitch */}
-          <div className="relative group grayscale hover:grayscale-0 transition-all duration-700">
-             <div className="aspect-[4/5] w-full overflow-hidden border-4 border-white shadow-brutal">
+          <div className="relative group grayscale hover:grayscale-0 transition-all duration-700 max-w-[240px] md:max-w-none">
+             <div className="aspect-square w-full overflow-hidden border-2 border-white/20 shadow-neo">
                 <GlitchImage 
-                   src="/avatar_bruno.jpg" 
+                   src="/avatar-bruno-bg.jpg" 
                    alt="Bruno Guimarães" 
                    className="w-full h-full object-cover"
+                   active={true}
                 />
              </div>
              {/* Overlay Brutalista */}
@@ -68,20 +69,21 @@ const About: React.FC = () => {
               {badges.map((badge, i) => (
                 <motion.span 
                   key={badge}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
+                  initial={{ opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className="px-4 py-1 border-2 border-white/20 type-mono text-[10px] md:text-xs tracking-widest hover:border-accent hover:text-accent transition-colors"
+                  className="type-mono text-[10px] uppercase tracking-[0.3em] text-white/40 flex items-center"
                 >
+                  {i > 0 && <span className="mx-3 w-1 h-1 bg-accent rounded-full" />}
                   {badge}
                 </motion.span>
               ))}
             </div>
 
             {/* Descrição */}
-            <div className="space-y-6">
-              <h2 className="type-raster-section text-6xl md:text-8xl leading-none">THE_CODER</h2>
+            <div className="space-y-4">
+              <h2 className="type-raster-section text-4xl md:text-6xl leading-none opacity-80 italic">THE_CODER</h2>
               <div className="max-w-xl">
                  <p className="text-xl md:text-2xl leading-relaxed font-serif italic text-white/90">
                     <TextReveal 
@@ -122,20 +124,17 @@ const About: React.FC = () => {
 
             {/* Social Links */}
             <div className="pt-8 border-t border-white/10">
-               <div className="flex items-center gap-8">
+               <div className="flex items-center gap-4">
                   {socialLinks.map((social) => (
                     <Magnetic key={social.name}>
                         <a 
                            href={social.href} 
                            target="_blank" 
                            rel="noreferrer" 
-                           className="group flex flex-col items-center gap-2"
+                           className="group flex items-center justify-center w-12 h-12 border-2 border-white/10 hover:border-accent hover:bg-accent/10 transition-all duration-300"
                            title={social.name}
                         >
-                           <social.icon size={24} className="text-white/60 group-hover:text-white transition-colors" />
-                           <span className="type-mono text-[8px] opacity-0 group-hover:opacity-100 transition-all font-bold tracking-tighter">
-                              {social.name.toUpperCase()}
-                           </span>
+                           <social.icon size={22} className="text-white/60 group-hover:text-white transition-colors" />
                         </a>
                     </Magnetic>
                   ))}
