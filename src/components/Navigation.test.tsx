@@ -1,113 +1,102 @@
-import { render, screen, fireEvent, act } from "@testing-library/react";
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { render, screen, fireEvent } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import Navigation from "./Navigation";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Mock do framer-motion
 vi.mock("framer-motion", () => ({
   motion: {
-    div: ({ children, ...props }: { children: React.ReactNode }) => <div {...props}>{children}</div>,
-    a: ({ children, ...props }: { children: React.ReactNode }) => <a {...props}>{children}</a>,
+    div: ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) => <div {...props}>{children}</div>,
+    a: ({ children, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => <a {...props}>{children}</a>,
+    span: ({ children, ...props }: React.HTMLAttributes<HTMLSpanElement>) => <span {...props}>{children}</span>,
+    nav: ({ children, ...props }: React.HTMLAttributes<HTMLElement>) => <nav {...props}>{children}</nav>,
   },
   AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  useScroll: () => ({ scrollY: { get: () => 0, onChange: vi.fn(), on: vi.fn() } }),
+  useTransform: () => ({ get: () => 0 }),
 }));
 
-// Mock do IntersectionObserver
-class MockIntersectionObserver {
-  observe = vi.fn();
-  disconnect = vi.fn();
-  unobserve = vi.fn();
-}
-vi.stubGlobal("IntersectionObserver", MockIntersectionObserver);
+// Mock do hook useIsMobile
+vi.mock("@/hooks/use-mobile", () => ({
+  useIsMobile: vi.fn(() => false),
+}));
 
-// Mock do window.scrollTo
-vi.stubGlobal("scrollTo", vi.fn());
+// Mock do componente StaggeredMenu
+vi.mock("@/components/ui/StaggeredMenu", () => ({
+  default: ({ isOpen, onClose, items }: { isOpen: boolean; onClose: () => void; items: Array<{ label: string; href: string }> }) => (
+    isOpen ? (
+      <div data-testid="mobile-menu">
+        <button onClick={onClose}>Close</button>
+        {items.map((item) => (
+          <a key={item.label} href={item.href} onClick={onClose}>{item.label}</a>
+        ))}
+      </div>
+    ) : null
+  ),
+}));
 
-describe("Navigation Component", () => {
+// Mock do componente Magnetic
+vi.mock("@/components/ui/Magnetic", () => ({
+  default: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}));
+
+describe("Navigation Component - Brutalist Glass", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.useFakeTimers();
-  });
-
-  afterEach(() => {
-    vi.useRealTimers();
   });
 
   const renderNav = () => {
     return render(<Navigation />);
   };
 
-  it("deve renderizar o logo com o nome do desenvolvedor", () => {
+  it("deve renderizar o logo com o nome BRUNO / GUIMARÃES", () => {
     renderNav();
-    expect(screen.getByText(/Bruno/i)).toBeDefined();
-    expect(screen.getByText(/Guimarães/i)).toBeDefined();
+    // No redesign, o nome aparece no menu desktop e pode aparecer em outros lugares (ex: mobile)
+    expect(screen.getAllByText("BRUNO").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("GUIMARÃES").length).toBeGreaterThan(0);
   });
 
-  it("deve renderizar os links de navegação no desktop", () => {
+  it("deve renderizar os links de navegação corretos no desktop", () => {
     renderNav();
-    // Links desktop têm prefixo //, usamos regex exata ou texto completo
-    expect(screen.getByText("//INÍCIO")).toBeDefined();
-    expect(screen.getByText("//SOBRE")).toBeDefined();
+    expect(screen.getByText("PROJETOS")).toBeInTheDocument();
+    expect(screen.getByText("SOBRE")).toBeInTheDocument();
+    expect(screen.getByText("CONTATO")).toBeInTheDocument();
+  });
+
+  it("não deve renderizar o link de INÍCIO (removido no redesign)", () => {
+    renderNav();
+    expect(screen.queryByText("INÍCIO")).toBeNull();
+    expect(screen.queryByText("//INÍCIO")).toBeNull();
   });
 
   it("deve abrir o menu mobile ao clicar no botão de toggle", () => {
+    vi.mocked(useIsMobile).mockReturnValue(true);
+    
     renderNav();
     
-    const toggleButton = screen.getByLabelText(/Toggle menu/i);
-    
-    act(() => {
-      fireEvent.click(toggleButton);
-    });
+    const toggleButton = screen.getByLabelText(/Abrir menu/i);
+    fireEvent.click(toggleButton);
 
-    // No menu mobile, os links não têm o // mas têm números. 
-    // Usamos getAllByText ou seletores mais específicos para evitar o do desktop.
-    // O link mobile do "INÍCIO" é um <a> que contém "01" e "INÍCIO"
-    expect(screen.getByText("01")).toBeDefined();
-    
-    // Verifica se existe o texto "INÍCIO" (sem //) que é do menu mobile
-    const mobileLinks = screen.getAllByText("INÍCIO");
-    // Um é o logo (Bruno Guimarães), outro é o link mobile. 
-    // Na verdade o link mobile contém o texto.
-    expect(mobileLinks.length).toBeGreaterThan(0);
+    expect(screen.getByTestId("mobile-menu")).toBeInTheDocument();
+    // No mobile menu, os links são renderizados. 
+    // Como getByText falha com múltiplos, usamos getAllByText e pegamos o do menu ou verificamos a existência.
+    const projectsLinks = screen.getAllByText("PROJETOS");
+    expect(projectsLinks.length).toBeGreaterThan(0);
+    expect(screen.getByText("SOBRE", { selector: "#mobile-menu a, [data-testid='mobile-menu'] a" })).toBeInTheDocument();
   });
 
-  it("deve fechar o menu mobile ao clicar em um link", async () => {
+  it("deve fechar o menu mobile ao clicar em um link", () => {
+    vi.mocked(useIsMobile).mockReturnValue(true);
+    
     renderNav();
     
     // Abre o menu
-    const toggleButton = screen.getByLabelText(/Toggle menu/i);
-    act(() => {
-      fireEvent.click(toggleButton);
-    });
-
-    // O link mobile tem texto "SOBRE" (o desktop tem "//SOBRE")
-    const mobileAboutLink = screen.getByText("SOBRE");
-    act(() => {
-      fireEvent.click(mobileAboutLink);
-    });
-
-    // O menu deve fechar. Como o mock do AnimatePresence é síncrono (<>{children}</>),
-    // o conteúdo deve sumir imediatamente após o setOpen(false) no clique.
-    expect(screen.queryByText("01")).toBeNull();
-  });
-
-  it("deve alterar o estilo da navbar ao fazer scroll", () => {
-    renderNav();
-    const nav = screen.getByRole("navigation");
+    fireEvent.click(screen.getByLabelText(/Abrir menu/i));
     
-    expect(nav.className).toContain("bg-transparent");
+    // Pega o link no menu mobile especificamente
+    const mobileLink = screen.getByText("SOBRE", { selector: "[data-testid='mobile-menu'] a" });
+    fireEvent.click(mobileLink);
 
-    act(() => {
-      vi.stubGlobal("scrollY", 100);
-      window.dispatchEvent(new Event("scroll"));
-    });
-
-    // O hook usa requestAnimationFrame, então precisamos disparar os timers
-    act(() => {
-       // raf mock
-       vi.advanceTimersByTime(16);
-    });
-
-    // Nota: O teste pode falhar se o RAF não for disparado corretamente no ambiente jsdom
-    // Mas o objetivo é testar a intenção.
+    expect(screen.queryByTestId("mobile-menu")).toBeNull();
   });
 });
