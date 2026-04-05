@@ -1,6 +1,7 @@
 import React from "react";
 import Hero from "@/components/Hero";
 import Projects from "@/components/Projects";
+import About from "@/components/About";
 import SectionEntrance from "@/components/ui/SectionEntrance";
 
 const Index: React.FC = () => {
@@ -14,6 +15,11 @@ const Index: React.FC = () => {
       {/* Projects Section */}
       <SectionEntrance>
         <Projects />
+      </SectionEntrance>
+
+      {/* About Section */}
+      <SectionEntrance>
+        <About />
       </SectionEntrance>
 
       {/* Footer Info / Showreel Placeholder */}
