@@ -93,55 +93,52 @@ const About: React.FC = () => {
               </div>
             </div>
 
-            {/* Stack Ticker (Movimento Lateral) */}
-            <div className="w-full relative py-8 overflow-hidden">
-               <div className="flex animate-marquee whitespace-nowrap">
-                  <div className="flex items-center gap-12 mx-6">
-                     {techs.map((tech, index) => (
-                        <div key={index} className="flex items-center gap-4 group">
-                           <tech.icon size={32} className="text-white group-hover:text-accent transition-colors" />
-                           <span className="type-mono text-sm opacity-50 group-hover:opacity-100 transition-opacity uppercase tracking-tighter">
-                              {tech.name}
-                           </span>
-                           <span className="text-white/10 text-xl font-black mx-4 select-none">/</span>
-                        </div>
-                     ))}
-                  </div>
-                  {/* Duplicado para loop infinito */}
-                  <div className="flex items-center gap-12 mx-6" aria-hidden="true">
-                     {techs.map((tech, index) => (
-                        <div key={`dup-${index}`} className="flex items-center gap-4 group">
-                           <tech.icon size={32} className="text-white group-hover:text-accent transition-colors" />
-                           <span className="type-mono text-sm opacity-50 group-hover:opacity-100 transition-opacity uppercase tracking-tighter">
-                              {tech.name}
-                           </span>
-                           <span className="text-white/10 text-xl font-black mx-4 select-none">/</span>
-                        </div>
-                     ))}
-                  </div>
-               </div>
+            {/* Social Links - Espaçamento ajustado e sem bordas */}
+            <div className="flex items-center gap-6 pt-8">
+               {socialLinks.map((social) => (
+                 <Magnetic key={social.name}>
+                     <a 
+                        href={social.href} 
+                        target="_blank" 
+                        rel="noreferrer" 
+                        className="group flex items-center justify-center text-white/30 hover:text-accent transition-all duration-300"
+                        title={social.name}
+                     >
+                        <social.icon size={20} className="group-hover:scale-110 transition-transform" />
+                     </a>
+                 </Magnetic>
+               ))}
             </div>
-
-            {/* Social Links */}
-            <div className="pt-8 border-t border-white/10">
-               <div className="flex items-center gap-4">
-                  {socialLinks.map((social) => (
-                    <Magnetic key={social.name}>
-                        <a 
-                           href={social.href} 
-                           target="_blank" 
-                           rel="noreferrer" 
-                           className="group flex items-center justify-center w-12 h-12 border-2 border-white/10 hover:border-accent hover:bg-accent/10 transition-all duration-300"
-                           title={social.name}
-                        >
-                           <social.icon size={22} className="text-white/60 group-hover:text-white transition-colors" />
-                        </a>
-                    </Magnetic>
-                  ))}
-               </div>
-            </div>
-
           </div>
+        </div>
+
+        {/* Stack Ticker - Expandido para largura total com bordas sutis */}
+        <div className="w-full relative mt-32 py-12 border-y border-white/10 overflow-hidden bg-white/[0.02]">
+           <div className="flex animate-marquee whitespace-nowrap">
+              <div className="flex items-center gap-12 mx-6">
+                 {techs.map((tech, index) => (
+                    <div key={index} className="flex items-center gap-4 group">
+                       <tech.icon size={28} className="text-white group-hover:text-accent transition-colors" />
+                       <span className="type-mono text-[10px] md:text-sm opacity-50 group-hover:opacity-100 transition-opacity uppercase tracking-widest">
+                          {tech.name}
+                       </span>
+                       <span className="text-white/10 text-xl font-black mx-4 select-none">/</span>
+                    </div>
+                 ))}
+              </div>
+              {/* Duplicado para loop infinito */}
+              <div className="flex items-center gap-12 mx-6" aria-hidden="true">
+                 {techs.map((tech, index) => (
+                    <div key={`dup-${index}`} className="flex items-center gap-4 group">
+                       <tech.icon size={28} className="text-white group-hover:text-accent transition-colors" />
+                       <span className="type-mono text-[10px] md:text-sm opacity-50 group-hover:opacity-100 transition-opacity uppercase tracking-widest">
+                          {tech.name}
+                       </span>
+                       <span className="text-white/10 text-xl font-black mx-4 select-none">/</span>
+                    </div>
+                 ))}
+              </div>
+           </div>
         </div>
       </div>
     </section>
