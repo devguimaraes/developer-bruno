@@ -58,19 +58,19 @@ export function GlitchImage({
       
       <div className={cn("glitch-layer-1 absolute inset-0 mix-blend-screen opacity-0", shouldGlitch && "is-active")}>
         <div className="w-full h-full" style={{ transform: 'translateX(-4px)' }}>
-          <GlitchMedia src={src} videoSrc={videoSrc} alt={alt} className={layerMediaClass} />
+          <GlitchMedia src={src} videoSrc={videoSrc} alt={alt} className={cn(layerMediaClass, className)} />
         </div>
       </div>
 
       <div className={cn("glitch-layer-2 absolute inset-0 mix-blend-screen opacity-0", shouldGlitch && "is-active")}>
         <div className="w-full h-full" style={{ transform: 'translateX(4px)' }}>
-          <GlitchMedia src={src} videoSrc={videoSrc} alt={alt} className={layerMediaClass} />
+          <GlitchMedia src={src} videoSrc={videoSrc} alt={alt} className={cn(layerMediaClass, className)} />
         </div>
       </div>
 
       <div className={cn("glitch-layer-3 absolute inset-0 mix-blend-overlay opacity-0", shouldGlitch && "is-active")}>
         <div className="w-full h-full" style={{ transform: 'translateY(-2px)' }}>
-          <GlitchMedia src={src} videoSrc={videoSrc} alt={alt} className={layerMediaClass} />
+          <GlitchMedia src={src} videoSrc={videoSrc} alt={alt} className={cn(layerMediaClass, className)} />
         </div>
       </div>
 

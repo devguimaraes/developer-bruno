@@ -53,12 +53,12 @@ const About: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-12 lg:gap-24 items-start">
           
           {/* Lado Esquerdo: Foto com Glitch */}
-          <div className="relative group grayscale hover:grayscale-0 transition-all duration-700 max-w-[240px] md:max-w-none">
+          <div className="relative group grayscale hover:grayscale-0 transition-all duration-700 max-w-[240px] md:max-w-none -scale-x-100">
              <div className="aspect-square w-full overflow-hidden border-2 border-white/20 shadow-neo bg-white/[0.05]">
                 <GlitchImage 
                    src="/about-avatar.jpg" 
                    alt="Bruno Guimarães" 
-                   className="w-full h-full object-cover object-top"
+                   className="w-full h-full object-cover object-[50%_10%]"
                    active={true}
                 />
              </div>
