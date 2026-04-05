@@ -88,14 +88,19 @@ const About: React.FC = () => {
       <div className="w-full px-6 md:px-12 pt-32">
         <div className="flex flex-col md:flex-row gap-12 lg:gap-32 items-center md:items-start">
           
-          {/* Lado Esquerdo: GIF como Poster Animado (Sem Bordas) */}
+          {/* Lado Esquerdo: loop em vídeo (WebM + MP4) — muito menor que GIF para a CDN */}
           <div className="relative group grayscale hover:grayscale-0 transition-all duration-700 w-full max-w-[320px] lg:max-w-[400px] shrink-0">
              <div className="aspect-[9/16] w-full overflow-hidden">
                 <GlitchImage 
-                   src="/avatar-bio3.gif" 
+                   videoSources={[
+                     { src: "/avatar-bio3.webm", type: "video/webm" },
+                     { src: "/avatar-bio3.mp4", type: "video/mp4" },
+                   ]}
+                   posterSrc="/about-avatar.jpg"
                    alt="Bruno Guimarães" 
                    className="w-full h-full object-cover"
                    active={true}
+                   loadingLazy
                 />
              </div>
              {/* Overlay Minimalista */}

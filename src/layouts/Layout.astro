@@ -33,7 +33,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/logo.png" />
+    <link rel="icon" type="image/webp" href="/logo.webp" />
     <meta name="generator" content={Astro.generator} />
     
     <!-- Primary Meta Tags -->
@@ -54,6 +54,10 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta property="twitter:title" content={finalTitle} />
     <meta property="twitter:description" content={finalDesc} />
     <meta property="twitter:image" content={finalImage} />
+
+    {import.meta.env.VERCEL_ENV === 'preview' && (
+      <meta name="robots" content="noindex, nofollow" />
+    )}
     
     <!-- Preconnects -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

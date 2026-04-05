@@ -49,6 +49,7 @@ export const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
             src={project.image} 
             alt={project.title} 
             active={true}
+            loadingLazy
             className="w-full h-full grayscale group-hover:grayscale-0 transition-all duration-700 opacity-60"
           />
         </motion.div>

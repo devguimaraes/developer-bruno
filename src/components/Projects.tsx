@@ -7,7 +7,7 @@ const projects = [
     id: "01",
     title: "MOVIES_BREMEN",
     category: "Event House / Cinema",
-    image: "/banner-movies-event-house-bremen.png",
+    image: "/banner-movies-event-house-bremen.webp",
     link: "https://moviesbremen.com/",
     aspectClass: "aspect-[4/5] md:aspect-video",
     technologies: ["Next.js", "React", "Tailwind CSS"]
@@ -16,7 +16,7 @@ const projects = [
     id: "02",
     title: "AGÊNCIA_MULTI_BR",
     category: "Corporate / Agency",
-    image: "/banner-multi-macbook.png",
+    image: "/banner-multi-macbook.webp",
     link: "https://www.agenciamultibr.com/",
     aspectClass: "aspect-[4/5] md:aspect-video",
     technologies: ["Next.js", "React", "Tailwind CSS"]
@@ -25,7 +25,7 @@ const projects = [
     id: "03",
     title: "DANILA_RIZO",
     category: "Portfolio / Architecture",
-    image: "/banner-danila-rizo.png",
+    image: "/banner-danila-rizo.webp",
     link: "https://www.danilapalmieri.com/",
     aspectClass: "aspect-[4/5] md:aspect-video",
     technologies: ["Wordpress", "PHP", "Elementor"]

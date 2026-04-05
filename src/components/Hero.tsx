@@ -28,11 +28,14 @@ const Hero: React.FC = () => {
           muted
           loop
           playsInline
-          poster="/hero-render-1.png"
+          poster="/hero-render-1.webp"
           className="w-full h-full object-cover"
         >
           {isVisible && (
-            <source src="/backgroundvideo.mp4" type="video/mp4" />
+            <>
+              <source src="/backgroundvideo.webm" type="video/webm" />
+              <source src="/backgroundvideo.mp4" type="video/mp4" />
+            </>
           )}
         </video>
         {/* Adjusted gradient for zero-border feel */}
