@@ -122,9 +122,7 @@ const About: React.FC = () => {
             
             <div className="max-w-xl border-l border-white/10 pl-8 ml-2">
                <p className="text-2xl md:text-3xl leading-snug font-serif italic text-white/90">
-                  <TextReveal 
-                      text="Com 5 anos de experiência e formação em desenvolvimento web pelo SENAC-RJ, transformo conceitos de design em interfaces de alta performance — rápidas, reais e funcionais para o cenário digital global."
-                  />
+                  Com 5 anos de experiência e formação em desenvolvimento web pelo SENAC-RJ, transformo conceitos de design em interfaces de alta performance — rápidas, reais e funcionais para o cenário digital global.
                </p>
                <p className="type-mono text-[10px] opacity-30 mt-8 uppercase tracking-[0.3em]">
                   // BASED_IN_RIO_DE_JANEIRO
