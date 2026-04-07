@@ -7,7 +7,10 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "lint": "eslint .",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint . --fix",
+    "format": "biome format .",
+    "format:fix": "biome format . --write",
     "prepare": "husky",
     "test": "vitest",
     "test:unit": "vitest run",
@@ -51,6 +54,7 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.4.10",
     "@eslint/js": "^9.32.0",
     "@playwright/mcp": "^0.0.48",
     "@playwright/test": "^1.56.1",
@@ -79,7 +83,8 @@
   },
   "lint-staged": {
     "src/**/*.{ts,tsx}": [
-      "eslint --fix",
+      "biome lint --fix",
+      "biome format --write",
       "bash -c 'tsc --noEmit'"
     ]
   },
