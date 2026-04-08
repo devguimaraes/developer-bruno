@@ -1,177 +1,125 @@
 # CLAUDE.md
 
-Guide for Claude Code (claude.ai/code) working with this portfolio repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## 🚀 Quick Start
-
-```bash
-npm install && npm run dev    # Start development server on port 8080
-npm run build && npm run preview  # Test production build
-```
-
-## 📋 Essential Commands
+## Commands
 
 ```bash
-npm run dev          # Development server (port 8080)
-npm run build        # Production build
-npm run build:dev    # Development build
-npm run lint         # ESLint
-npm run preview      # Preview production build
+npm install                    # Install dependencies
+npm run dev                    # Astro dev server (port 8080)
+npm run build                  # Production build (static SSG)
+npm run preview                # Preview production build
+npm run lint                   # Biome lint
+npm run lint:fix               # Biome lint with auto-fix
+npm run format                 # Biome format check
+npm run format:fix             # Biome format with write
+npm run test                   # Vitest (watch mode)
+npm run test:unit              # Vitest single run
+npm run test:e2e               # Playwright e2e tests
+npm run optimize:media         # Optimize media assets via scripts/optimize-media.mjs
 ```
 
-## 🏗️ Architecture Overview
-
-**Tech Stack:**
-- React 18.3.1 + TypeScript + Vite (SWC plugin)
-- Tailwind CSS + shadcn/ui (36 components) + Radix UI
-- React Router DOM, React Query, React Hook Form + Zod
-- Framer Motion, Embla Carousel, Sonner, lucide-react
-
-**Project Structure:**
-```
-src/
-├── components/
-│   ├── ui/             # 36 shadcn/ui components
-│   ├── Navigation.tsx  # Site navigation with mobile toggle
-│   ├── Hero.tsx        # Main hero with animated content
-│   ├── Projects.tsx    # Project showcase with carousel
-│   ├── Experience.tsx  # Work experience timeline
-│   ├── About.tsx       # About section
-│   ├── Skills.tsx      # Skills display
-│   ├── Contact.tsx     # Contact form
-│   ├── Services.tsx    # Services (lazy load)
-│   ├── Blog.tsx        # Blog section (lazy load)
-│   └── Footer.tsx      # Site footer
-├── pages/
-│   ├── Index.tsx       # Main portfolio page
-│   ├── BlogPage.tsx    # Blog listing
-│   ├── BlogPostPage.tsx # Individual post
-│   └── NotFound.tsx    # 404 page
-├── hooks/
-│   ├── useStackingSections.ts  # Scroll stacking effect
-│   ├── useWebVitals.ts        # Performance monitoring
-│   ├── use-blog-posts.ts       # Blog data
-│   ├── use-mobile.tsx          # Mobile detection
-│   └── use-toast.ts            # Toast notifications
-├── data/
-│   ├── projects.ts     # Portfolio projects data
-│   ├── experience.ts   # Work experience data
-│   └── skills.ts       # Skills data
-└── config/
-    └── site.ts         # SEO and Brazilian market config
+**Run a single test file:**
+```bash
+npx vitest run src/lib/utils.test.ts
 ```
 
-## 🎯 Scroll Stacking System
+**Pre-commit hook:** Husky runs lint-staged — Biome lint + format + `tsc --noEmit` on staged `.ts/.tsx` files.
 
-**Hook:** `useStackingSections.ts`
+## Architecture
 
-Advanced scroll-based section stacking:
-- Components layer based on scroll progress
-- Transform and z-index calculations for visual depth
-- IntersectionObserver with 101 thresholds for smooth tracking
-- Previous sections trigger next section animations at 70% progress
+**Stack:** Astro 5 (static SSG) + React 18 islands + TypeScript + Tailwind CSS
 
-**Usage:**
-```tsx
-const { getTransform, getZIndex } = useStackingSections(['hero', 'about', 'projects']);
-// Apply to section elements
+The project is a portfolio site for a Brazilian front-end developer, deployed at `devguimaraes.com.br` on Vercel. Output is fully static (no SSR).
+
+### Astro + React Integration
+
+Astro handles routing and layout. React components are hydrated via `client:*` directives:
+
+```astro
+---
+import Layout from '@/layouts/Layout.astro';
+import HomeClient from '@/components/pages/Index';
+---
+<Layout title="...">
+  <HomeClient client:load />
+</Layout>
 ```
 
-## ⚡ Performance & SEO
+- `client:load` — interactive from page load (Navigation, PixelLoader, main page content)
+- `client:visible` — hydrate when visible (Footer)
 
-**Brazilian Market Optimizations:**
-- Performance budgets: JS 300KB, Images 500KB, Total 1MB
-- Web Vitals monitoring with Brazilian thresholds
-- Connection quality tracking for mobile networks
-- Bundle size monitoring and warnings
+### Routing
 
-**Key Files:**
-- `useWebVitals.ts` - Performance monitoring
-- `site.ts` - Brazilian SEO keywords and config
-- `vite.config.ts` - Build optimizations and code splitting
+File-based routing under `src/pages/`:
+- `index.astro` — Home
+- `blog/index.astro` — Blog listing
+- `blog/[slug].astro` — Individual blog post (dynamic route)
+- `404.astro` — Not found
 
-**Performance Features:**
-- Lazy loading for non-critical components (Services, Blog)
-- Image optimization with Next.js Image patterns
-- Code splitting with dynamic imports
-- Resource budget monitoring
+### Layout
 
-## 📝 Blog System
+Single global layout at `src/layouts/Layout.astro`:
+- SEO meta tags (Open Graph, Twitter Cards, canonical URL)
+- Google Fonts (Jersey 15, Silkscreen, Newsreader, JetBrains Mono, Inter)
+- Plausible Analytics (production only)
+- Global UI: PixelLoader, CustomCursor, GrainOverlay, SmoothScroll wrapper, Toaster
 
-- Markdown processing with frontmatter
-- SEO optimized for individual posts
-- Dynamic routing with slugs
-- Brazilian market content focus
+### Page Structure
 
-## 🎨 Design System (Brutalist)
+Astro pages are thin wrappers. The real UI lives in React components under `src/components/pages/`:
+- `Index.tsx` — Home page with Hero, Projects, About sections wrapped in `SectionEntrance`
+- `BlogPage.tsx` — Blog listing
+- `BlogPostPage.tsx` — Individual blog post
+- `NotFound.tsx` — 404 page
 
-**Core Principles:**
-- Heavy borders (`border-4`) with no border radius
-- Custom shadows: `shadow-brutal`, `shadow-brutal-sm`, `shadow-brutal-lg`
-- Neo-brutalist color palette
+### Content Layer
 
-**Color Tokens (HSL):**
-- `--primary`: Parakeet (162 100% 27%)
-- `--secondary`: Royal Lilac (282 32% 42%)
-- `--accent`: Freesia (45 87% 57%)
-- `--background`: Light (0 0% 98%), Dark (0 0% 8%)
+- `src/content/blog/` — Markdown files with frontmatter (title, date, tags, excerpt)
+- `src/data/` — Static data files (projects, experience, skills, testimonials)
+- `src/config/site.ts` — SEO config, Brazilian market keywords, performance budgets
 
-**Gradients:** `gradient-aqua`, `gradient-primary`, `gradient-accent`
-**Animations:** `float`, `glitch`, `typing`, custom scroll effects
-**Fonts:** Satoshi (sans), JetBrains Mono (mono)
+### Key React Patterns
 
-## 👨‍💻 Development Guidelines
+**Section Entrance:** `SectionEntrance` wraps each page section with scroll-based animations.
 
-**Component Development:**
-1. Use shadcn/ui components as base (forwardRef pattern)
-2. Follow brutalist design patterns (heavy borders, no radius)
-3. Implement responsive design (mobile-first)
-4. Add smooth animations using existing keyframes
-5. Ensure dark mode compatibility with HSL variables
-6. Use TypeScript with strict mode
-7. Test on both mobile and desktop viewports
+**Hooks:** Custom hooks in `src/hooks/` handle:
+- `useStackingSections` — scroll-based stacking transforms
+- `useHorizontalScroll` — horizontal scroll with vertical scroll support per section
+- `useWebVitals` — performance monitoring
+- `use-analytics` — Plausible event tracking
+- `useVideoLoading` — video loading state
 
-**State Management:**
-- **React Query:** Server state (projects, blog posts)
-- **Local State:** useState for UI interactions
-- **Theme:** next-themes for dark/light mode
+**Animations:** Framer Motion for UI transitions. GSAP for advanced text effects (`ShuffleText`). Three.js available but minimally used.
 
-**Form Handling:**
-- React Hook Form + Zod validation
-- Sonner for toast notifications
-- TypeScript schemas in `validation.ts`
+## Design System
 
-## 🔧 Key Configuration Files
+Brutalist/neo-brutalist aesthetic:
+- **Borders:** `border-4`, `rounded-none`
+- **Shadows:** `shadow-brutal`, `shadow-brutal-sm`, `shadow-brutal-lg`
+- **Fonts:** Jersey 15 + Silkscreen (pixel/display), Newsreader (serif), Inter (sans), JetBrains Mono (mono)
+- **Colors:** HSL tokens — primary (Parakeet green), secondary (Royal Lilac), accent (Freesia gold)
+- **Effects:** GrainOverlay, CustomCursor, BorderGlow, BackgroundGrid
 
-- `tailwind.config.ts` - Design tokens, animations, brutalist variants
-- `vite.config.ts` - Build optimization, component tagger, path aliases
-- `site.ts` - SEO, Brazilian market config, performance budgets
-- `components/ui/` - shadcn/ui component library (36 components)
+## Testing
 
-## 🌍 Brazilian Market Focus
+- **Unit:** Vitest with jsdom, setup at `src/test/setup.ts` (mocks IntersectionObserver, ResizeObserver, Framer Motion)
+- **E2E:** Playwright with chromium, firefox, webkit, Mobile Chrome, Mobile Safari — tests in `src/test/e2e/`
+- **Path alias:** `@/` → `./src/` (configured in both `tsconfig.json` and `vitest.config.ts`)
 
-**SEO Configuration:**
-- Keywords: "desenvolvedor front-end Brasil", "programador React Rio de Janeiro"
-- Locale: pt_BR, Region: BR
-- Service areas: Rio, São Paulo, Brasília, etc.
-- Performance budgets optimized for Brazilian mobile networks
+## Brazilian Market
 
-**Contact & Social:**
-- Email: bc.guimaraes@outlook.com
-- Location: Rio de Janeiro, Brasil
-- LinkedIn: /in/bcguimaraes/
-- GitHub: /devguimaraes
+- Locale: pt-BR, all content in Portuguese
+- Performance budgets for Brazilian mobile networks (3G/4G)
+- LGPD-compliant analytics (Plausible, no cookies)
+- SEO keywords targeting "desenvolvedor front-end Brasil", "programador React Rio de Janeiro"
+- Service areas: Rio de Janeiro, São Paulo, Brasília
 
-## ⚡ Deployment
+## Configuration Files
 
-**Optimized for Vercel:**
-- Static site generation capability
-- Asset optimization with Vite
-- Performance budget enforcement
-- Brazilian market analytics integration
-
-**Build Features:**
-- SWC plugin for fast compilation
-- Path aliases (@/ for src/)
-- PostCSS with Tailwind + Autoprefixer
-- ESLint with React/TypeScript rules
+- `astro.config.mjs` — Astro config with React, Tailwind, Sitemap integrations
+- `biome.json` — Linting (recommended rules) and formatting (2-space indent, 100px line width, double quotes)
+- `vitest.config.ts` — Unit test config with jsdom and `@/` alias
+- `playwright.config.ts` — E2E test config (baseURL: localhost:8080)
+- `tailwind.config.ts` — Design tokens, animations, brutalist variants
+- `src/config/site.ts` — SEO metadata and performance budgets
