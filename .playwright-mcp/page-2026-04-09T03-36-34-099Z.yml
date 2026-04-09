@@ -1,0 +1,261 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e4]:
+    - navigation [ref=e6]:
+      - generic [ref=e7]:
+        - img
+        - generic [ref=e9]:
+          - link "Bruno Guimarães BRUNO / GUIMARÃES" [ref=e11] [cursor=pointer]:
+            - /url: /
+            - img "Bruno Guimarães" [ref=e13]
+            - generic [ref=e14]:
+              - text: BRUNO
+              - generic [ref=e15]: /
+              - text: GUIMARÃES
+          - generic [ref=e16]:
+            - link "PROJETOS" [ref=e18] [cursor=pointer]:
+              - /url: /#projetos
+            - link "SOBRE" [ref=e20] [cursor=pointer]:
+              - /url: /#about
+            - link "CONTATO" [ref=e22] [cursor=pointer]:
+              - /url: /#contact
+    - main [ref=e23]:
+      - generic [ref=e25]:
+        - generic [ref=e27]:
+          - generic [ref=e29]:
+            - heading "FRONT END DEVELOPER" [level=1] [ref=e30]:
+              - generic [ref=e31]:
+                - generic [ref=e32]: FRONT END
+                - generic [ref=e33]: DEVELOPER
+            - generic [ref=e34]: React, Next.js & TypeScript | SEO & DX
+            - generic [ref=e35]:
+              - generic [ref=e36]:
+                - paragraph [ref=e37]: // ESTABLISHED_IN_RJ
+                - paragraph [ref=e38]: Transformando complexidade em simplicidade através de design editorial e tecnologia de ponta.
+              - generic [ref=e40]: SCROLL_FOR_MORE
+          - generic [ref=e42]: "POS: 22.9068 S / 43.1729 W"
+          - generic [ref=e43]: "VER: 4.0.0_STABLE"
+        - generic [ref=e45]:
+          - generic [ref=e46]:
+            - heading "SELECTED_WORKS" [level=2] [ref=e47]
+            - generic [ref=e48]:
+              - paragraph [ref=e49]: Explorando fronteiras da interação digital
+              - paragraph [ref=e50]: 03 TOTAL
+          - generic [ref=e51]:
+            - generic [ref=e52]:
+              - link "MOVIES_BREMEN MOVIES_BREMEN MOVIES_BREMEN MOVIES_BREMEN Event House / Cinema MOVIES_BREMEN [ OPEN LIVE SITE ]" [ref=e53] [cursor=pointer]:
+                - /url: https://moviesbremen.com/
+                - generic [ref=e55]:
+                  - img "MOVIES_BREMEN" [ref=e56]
+                  - img "MOVIES_BREMEN" [ref=e59]
+                  - img "MOVIES_BREMEN" [ref=e62]
+                  - img "MOVIES_BREMEN" [ref=e65]
+                - generic:
+                  - paragraph: Event House / Cinema
+                  - heading "MOVIES_BREMEN" [level=3]:
+                    - generic: MOVIES_BREMEN
+                - generic: "[ OPEN LIVE SITE ]"
+              - generic:
+                - generic: Next.js
+                - generic: React
+                - generic: Tailwind CSS
+              - link "View Project" [ref=e68] [cursor=pointer]:
+                - /url: https://moviesbremen.com/
+            - generic [ref=e69]:
+              - link "AGÊNCIA_MULTI_BR AGÊNCIA_MULTI_BR AGÊNCIA_MULTI_BR AGÊNCIA_MULTI_BR Corporate / Agency AGÊNCIA_MULTI_BR [ OPEN LIVE SITE ]" [ref=e70] [cursor=pointer]:
+                - /url: https://www.agenciamultibr.com/
+                - generic [ref=e72]:
+                  - img "AGÊNCIA_MULTI_BR" [ref=e73]
+                  - img "AGÊNCIA_MULTI_BR" [ref=e76]
+                  - img "AGÊNCIA_MULTI_BR" [ref=e79]
+                  - img "AGÊNCIA_MULTI_BR" [ref=e82]
+                - generic:
+                  - paragraph: Corporate / Agency
+                  - heading "AGÊNCIA_MULTI_BR" [level=3]:
+                    - generic: AGÊNCIA_MULTI_BR
+                - generic: "[ OPEN LIVE SITE ]"
+              - generic:
+                - generic: Next.js
+                - generic: React
+                - generic: Tailwind CSS
+              - link "View Project" [ref=e85] [cursor=pointer]:
+                - /url: https://www.agenciamultibr.com/
+            - generic [ref=e86]:
+              - link "DANILA_RIZO DANILA_RIZO DANILA_RIZO DANILA_RIZO Portfolio / Architecture DANILA_RIZO [ OPEN LIVE SITE ]" [ref=e87] [cursor=pointer]:
+                - /url: https://www.danilapalmieri.com/
+                - generic [ref=e89]:
+                  - img "DANILA_RIZO" [ref=e90]
+                  - img "DANILA_RIZO" [ref=e93]
+                  - img "DANILA_RIZO" [ref=e96]
+                  - img "DANILA_RIZO" [ref=e99]
+                - generic:
+                  - paragraph: Portfolio / Architecture
+                  - heading "DANILA_RIZO" [level=3]:
+                    - generic: DANILA_RIZO
+                - generic: "[ OPEN LIVE SITE ]"
+              - generic:
+                - generic: Wordpress
+                - generic: PHP
+                - generic: Elementor
+              - link "View Project" [ref=e102] [cursor=pointer]:
+                - /url: https://www.danilapalmieri.com/
+        - generic [ref=e104]:
+          - generic [ref=e105]:
+            - generic [ref=e106]:
+              - generic [ref=e107]: © 2026
+              - generic [ref=e108]: "--:--:--"
+              - generic [ref=e109]: Rio de Janeiro, BR
+              - generic [ref=e110]:
+                - link "LinkedIn" [ref=e111] [cursor=pointer]:
+                  - /url: https://www.linkedin.com/in/bcguimaraes/
+                  - img [ref=e112]
+                - link "Instagram" [ref=e116] [cursor=pointer]:
+                  - /url: https://www.instagram.com/brunoguimraes/
+                  - img "Instagram" [ref=e117]
+                - link "WhatsApp" [ref=e119] [cursor=pointer]:
+                  - /url: https://wa.me/5521969715247?text=Ol%C3%A1%20Bruno%2C%20vi%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar!
+                  - img "WhatsApp" [ref=e120]
+                - link "X" [ref=e122] [cursor=pointer]:
+                  - /url: https://x.com/devguimraes
+                  - img "X" [ref=e123]
+                - link "GitHub" [ref=e125] [cursor=pointer]:
+                  - /url: https://github.com/devguimaraes
+                  - img "GitHub" [ref=e126]
+            - generic [ref=e128]: Built by Bruno Guimarães
+          - generic [ref=e130]:
+            - generic [ref=e131]:
+              - generic [ref=e133]:
+                - generic "Bruno Guimarães" [ref=e134]
+                - generic "Bruno Guimarães" [ref=e137]
+                - generic "Bruno Guimarães" [ref=e140]
+                - generic "Bruno Guimarães" [ref=e143]
+              - generic [ref=e144]: STREAM_BIO_03
+            - generic [ref=e145]:
+              - heading "BRUNO GUIMARÃES" [level=2] [ref=e146]:
+                - text: BRUNO
+                - text: GUIMARÃES
+              - generic [ref=e147]:
+                - paragraph [ref=e148]: Com 5 anos de experiência e formação em desenvolvimento web pelo SENAC-RJ, transformo conceitos de design em interfaces de alta performance — rápidas, reais e funcionais para o cenário digital global.
+                - paragraph [ref=e149]: // BASED_IN_RIO_DE_JANEIRO
+          - generic [ref=e152]:
+            - generic [ref=e153]:
+              - img "Next.js" [ref=e154]
+              - generic [ref=e156]: Next.js
+              - generic [ref=e157]: /
+            - generic [ref=e158]:
+              - img "TypeScript" [ref=e159]
+              - generic [ref=e161]: TypeScript
+              - generic [ref=e162]: /
+            - generic [ref=e163]:
+              - img "Tailwind CSS" [ref=e164]
+              - generic [ref=e166]: Tailwind
+              - generic [ref=e167]: /
+            - generic [ref=e168]:
+              - img "Node.js" [ref=e169]
+              - generic [ref=e171]: Node.js
+              - generic [ref=e172]: /
+            - generic [ref=e173]:
+              - img "Vercel" [ref=e174]
+              - generic [ref=e176]: Vercel
+              - generic [ref=e177]: /
+            - generic [ref=e178]:
+              - img "GitHub" [ref=e179]
+              - generic [ref=e181]: GitHub
+              - generic [ref=e182]: /
+            - generic [ref=e183]:
+              - img "Anthropic" [ref=e184]
+              - generic [ref=e186]: Claude Code
+              - generic [ref=e187]: /
+            - generic [ref=e188]:
+              - img "Supabase" [ref=e189]
+              - generic [ref=e191]: Supabase
+              - generic [ref=e192]: /
+            - generic [ref=e193]:
+              - img "OpenAI" [ref=e194]
+              - generic [ref=e196]: OpenAI Codex
+              - generic [ref=e197]: /
+            - generic [ref=e198]:
+              - img [ref=e199]
+              - generic [ref=e201]: Cursor
+              - generic [ref=e202]: /
+            - generic [ref=e203]:
+              - img "Framer" [ref=e204]
+              - generic [ref=e206]: Framer
+              - generic [ref=e207]: /
+            - generic [ref=e208]:
+              - img "Next.js" [ref=e209]
+              - generic [ref=e211]: Next.js
+              - generic [ref=e212]: /
+            - generic [ref=e213]:
+              - img "TypeScript" [ref=e214]
+              - generic [ref=e216]: TypeScript
+              - generic [ref=e217]: /
+            - generic [ref=e218]:
+              - img "Tailwind CSS" [ref=e219]
+              - generic [ref=e221]: Tailwind
+              - generic [ref=e222]: /
+            - generic [ref=e223]:
+              - img "Node.js" [ref=e224]
+              - generic [ref=e226]: Node.js
+              - generic [ref=e227]: /
+            - generic [ref=e228]:
+              - img "Vercel" [ref=e229]
+              - generic [ref=e231]: Vercel
+              - generic [ref=e232]: /
+            - generic [ref=e233]:
+              - img "GitHub" [ref=e234]
+              - generic [ref=e236]: GitHub
+              - generic [ref=e237]: /
+            - generic [ref=e238]:
+              - img "Anthropic" [ref=e239]
+              - generic [ref=e241]: Claude Code
+              - generic [ref=e242]: /
+            - generic [ref=e243]:
+              - img "Supabase" [ref=e244]
+              - generic [ref=e246]: Supabase
+              - generic [ref=e247]: /
+            - generic [ref=e248]:
+              - img "OpenAI" [ref=e249]
+              - generic [ref=e251]: OpenAI Codex
+              - generic [ref=e252]: /
+            - generic [ref=e253]:
+              - img [ref=e254]
+              - generic [ref=e256]: Cursor
+              - generic [ref=e257]: /
+            - generic [ref=e258]:
+              - img "Framer" [ref=e259]
+              - generic [ref=e261]: Framer
+              - generic [ref=e262]: /
+        - generic [ref=e263]:
+          - generic [ref=e264]: Ready to start a project?
+          - link "LET'S_TALK" [ref=e265] [cursor=pointer]:
+            - /url: mailto:dev@bruno.com
+          - generic [ref=e266]: © 2026 BRUNO GUIMARÃES / ALL RIGHTS RESERVED
+    - contentinfo [ref=e268]:
+      - generic [ref=e270]:
+        - generic [ref=e271]:
+          - generic [ref=e272]:
+            - generic [ref=e273]: V4.0_FINAL
+            - generic [ref=e274]: © 2026 BRUNO GUIMARÃES. TODOS OS DIREITOS RESERVADOS.
+          - generic [ref=e275]: Built with precision
+        - generic [ref=e276]:
+          - generic [ref=e277]:
+            - generic [ref=e278]: "LAT: 22.9068° S"
+            - generic [ref=e279]: "LON: 43.1729° W"
+          - generic [ref=e281]: BG
+  - generic:
+    - region "Notifications alt+T"
+  - generic [ref=e285]:
+    - button "Menu" [ref=e286]:
+      - img [ref=e288]
+      - generic: Menu
+    - button "Inspect" [ref=e292]:
+      - img [ref=e294]
+      - generic: Inspect
+    - button "Audit" [ref=e296]:
+      - generic [ref=e297]:
+        - img [ref=e298]
+        - img [ref=e301]
+      - generic: Audit
+    - button "Settings" [ref=e304]:
+      - img [ref=e306]
+      - generic: Settings
