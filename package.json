@@ -42,8 +42,7 @@
     "sonner": "^1.7.4",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
-    "web-vitals": "^5.1.0",
-    "zod": "^3.25.76"
+    "web-vitals": "^5.1.0"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.10",
