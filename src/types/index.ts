@@ -3,9 +3,6 @@ import type { LucideIcon } from 'lucide-react';
  * Type definitions for all portfolio data structures
  */
 
-export * from './seo';
-export * from './sitemap';
-export * from './performance';
 export * from './blog';
 
 // Base project interface
