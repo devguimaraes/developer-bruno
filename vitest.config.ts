@@ -9,6 +9,33 @@ export default defineConfig({
     setupFiles: "./src/test/setup.ts",
     css: true,
     exclude: ["**/src/test/e2e/**", "node_modules/**"],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'html', 'lcov', 'json'],
+      include: ['src/**/*.{js,jsx,ts,tsx}'],
+      exclude: [
+        'src/test/**',
+        'src/**/*.test.{ts,tsx}',
+        'src/**/*.spec.{ts,tsx}',
+        'src/types/**',
+        'node_modules/**',
+        '**/*.config.{ts,js}',
+        '**/*.astro',
+      ],
+      reportsDirectory: './coverage',
+      thresholds: {
+        statements: 30,  // baseline atual: 25.43%
+        branches: 25,    // baseline atual: 26.68%
+        functions: 25,   // baseline atual: 22.17%
+        lines: 30,       // baseline atual: 26.96%
+      },
+      watermarks: {
+        statements: [50, 80],
+        branches: [50, 80],
+        functions: [50, 80],
+        lines: [50, 80],
+      },
+    },
   },
   resolve: {
     alias: {
