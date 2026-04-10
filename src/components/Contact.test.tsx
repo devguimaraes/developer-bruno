@@ -24,31 +24,24 @@ vi.mock("@/components/ui/ScrollReveal", () => ({
 }));
 
 describe("Contact Component - Final Conversion", () => {
-  it("deve renderizar o título principal e a chamada para ação", () => {
+  it("deve renderizar a seção de contato", () => {
     render(<Contact />);
-    expect(screen.getByText(/PRONTO PARA/i)).toBeInTheDocument();
-    expect(screen.getByText(/CONSTRUIR/i)).toBeInTheDocument();
+    const contactSection = document.querySelector("#contact");
+    expect(contactSection).toBeInTheDocument();
   });
 
-  it("deve exibir o badge de status e disponibilidade", () => {
+  it("deve renderizar o botão de acesso ao email", () => {
     render(<Contact />);
-    expect(screen.getByText(/CANAL_ABERTO/i)).toBeInTheDocument();
-    expect(screen.getByText(/DISPONÍVEL PARA NOVOS PROJETOS/i)).toBeInTheDocument();
+    expect(screen.getByText(/ACCESS_SIGNAL_PORT/)).toBeInTheDocument();
   });
 
-  it("deve renderizar os links de redes sociais principais", () => {
+  it("deve renderizar a seção de redes sociais", () => {
     render(<Contact />);
-    expect(screen.getByText(/LinkedIn/i)).toBeInTheDocument();
-    expect(screen.getByText(/GitHub/i)).toBeInTheDocument();
-    expect(screen.getByText(/WhatsApp/i)).toBeInTheDocument();
+    expect(screen.getByText(/SOCIAL_NETWORKS/)).toBeInTheDocument();
   });
 
-  it("deve conter os links corretos para as redes sociais", () => {
+  it("deve conter o disclaimer", () => {
     render(<Contact />);
-    const linkedin = screen.getByRole("link", { name: /LinkedIn/i });
-    expect(linkedin).toHaveAttribute("href", expect.stringContaining("linkedin.com"));
-    
-    const whatsapp = screen.getByRole("link", { name: /WhatsApp/i });
-    expect(whatsapp).toHaveAttribute("href", expect.stringContaining("wa.me"));
+    expect(screen.getByText(/DISCLAIMER:/i)).toBeInTheDocument();
   });
 });

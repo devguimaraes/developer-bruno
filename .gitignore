@@ -31,6 +31,9 @@ dist-ssr
 .cursor/
 .codex
 .geminiignore
+.worktrees/
+
+coverage/
 
 gha-creds-*.json
 .gemini/settings.json

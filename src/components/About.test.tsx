@@ -1,22 +1,6 @@
 import { render, screen } from "@testing-library/react";
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect } from "vitest";
 import About from "./About";
-
-// Mock do framer-motion robusto
-vi.mock("framer-motion", () => ({
-  motion: {
-    div: ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) => <div {...props}>{children}</div>,
-    h2: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => <h2 {...props}>{children}</h2>,
-    p: ({ children, ...props }: React.HTMLAttributes<HTMLParagraphElement>) => <p {...props}>{children}</p>,
-    section: ({ children, ...props }: React.HTMLAttributes<HTMLElement>) => <section {...props}>{children}</section>,
-    span: ({ children, ...props }: React.HTMLAttributes<HTMLSpanElement>) => <span {...props}>{children}</span>,
-    a: ({ children, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => <a {...props}>{children}</a>,
-  },
-  AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-  useScroll: () => ({ scrollY: { get: () => 0, onChange: vi.fn(), on: vi.fn() } }),
-  useTransform: () => ({ get: () => 0 }),
-  useInView: () => true,
-}));
 
 // Mock do GlassSurface
 vi.mock("@/components/ui/GlassSurface", () => ({
@@ -41,28 +25,43 @@ describe("About Component - Editorial Biography", () => {
 
   it("deve renderizar os links sociais corretos", () => {
     render(<About />);
-    const linkedin = screen.getByLabelText(/LinkedIn/i);
-    const instagram = screen.getByLabelText(/Instagram/i);
-    const twitter = screen.getByLabelText(/X \(Twitter\)/i);
-    const whatsapp = screen.getByLabelText(/WhatsApp/i);
+    // Usar getAllByTitle porque há múltiplos elementos (incluindo os icons)
+    const linkedins = screen.getAllByTitle(/LinkedIn/i);
+    const instagrams = screen.getAllByTitle(/Instagram/i);
+    const xLinks = screen.getAllByTitle(/X/i);
+    const whatsapps = screen.getAllByTitle(/WhatsApp/i);
 
-    expect(linkedin).toHaveAttribute("href", "https://www.linkedin.com/in/bcguimaraes/");
-    expect(instagram).toHaveAttribute("href", "https://www.instagram.com/brunoguimraes/");
-    expect(twitter).toHaveAttribute("href", "https://x.com/devguimraes");
-    expect(whatsapp).toHaveAttribute("href", expect.stringMatching(/wa\.me/i));
+    // Verificar que pelo menos um link de cada tipo existe
+    expect(linkedins.length).toBeGreaterThan(0);
+    expect(instagrams.length).toBeGreaterThan(0);
+    expect(xLinks.length).toBeGreaterThan(0);
+    expect(whatsapps.length).toBeGreaterThan(0);
+
+    // Verificar que pelo menos um tem o href correto
+    expect(linkedins.some(el => el.getAttribute("href") === "https://www.linkedin.com/in/bcguimaraes/")).toBe(true);
+    expect(instagrams.some(el => el.getAttribute("href") === "https://www.instagram.com/brunoguimraes/")).toBe(true);
+    expect(xLinks.some(el => el.getAttribute("href") === "https://x.com/devguimraes")).toBe(true);
+    expect(whatsapps.some(el => el.getAttribute("href")?.includes("wa.me"))).toBe(true);
   });
 
   it("o link do WhatsApp deve conter a mensagem personalizada", () => {
     render(<About />);
-    const whatsapp = screen.getByLabelText(/WhatsApp/i);
-    const href = whatsapp.getAttribute("href") || "";
-    expect(decodeURIComponent(href)).toContain("Olá Bruno, vim através do seu site");
+    const whatsapps = screen.getAllByTitle(/WhatsApp/i);
+    const whatsappLink = whatsapps.find(el => el.getAttribute("href")?.includes("wa.me"));
+    expect(whatsappLink).toBeDefined();
+    const href = whatsappLink?.getAttribute("href") || "";
+    expect(decodeURIComponent(href)).toContain("vi seu portfólio");
   });
 
   it("deve renderizar o ticker de tecnologias", () => {
     render(<About />);
-    expect(screen.getByText("REACT")).toBeInTheDocument();
-    expect(screen.getByText("TYPESCRIPT")).toBeInTheDocument();
-    expect(screen.getByText("NEXT.JS")).toBeInTheDocument();
+    // Usar getAllByText porque o marquee duplica as techs
+    const nextjsElements = screen.getAllByText("Next.js");
+    const typescriptElements = screen.getAllByText("TypeScript");
+    const tailwindElements = screen.getAllByText("Tailwind");
+
+    expect(nextjsElements.length).toBeGreaterThan(0);
+    expect(typescriptElements.length).toBeGreaterThan(0);
+    expect(tailwindElements.length).toBeGreaterThan(0);
   });
 });

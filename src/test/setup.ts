@@ -46,12 +46,13 @@ vi.mock('framer-motion', async () => {
   return {
     motion: motionProxy,
     AnimatePresence: ({ children }: { children: React.ReactNode }) => children,
-    useScroll: () => ({ 
-      scrollY: { get: () => 0, onChange: vi.fn(), on: vi.fn() }, 
-      scrollYProgress: { get: () => 0, onChange: vi.fn(), on: vi.fn() } 
+    useScroll: () => ({
+      scrollY: { get: () => 0, onChange: vi.fn(), on: vi.fn() },
+      scrollYProgress: { get: () => 0, onChange: vi.fn(), on: vi.fn() }
     }),
     useTransform: () => ({ get: () => 0 }),
-    useSpring: () => ({ get: () => 0 }),
+    useSpring: (value: unknown, config?: { damping?: number; stiffness?: number }) => ({ get: () => 0, set: vi.fn() }),
+    useMotionValue: (initial?: number | string) => ({ get: () => initial ?? 0, set: vi.fn() }),
     useInView: () => true, // Hook crítico para ScrollReveal e Contact
     useAnimation: () => ({
       start: vi.fn(),
