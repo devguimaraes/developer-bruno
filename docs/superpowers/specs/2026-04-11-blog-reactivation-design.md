@@ -77,7 +77,7 @@ export const collections = { blog };
 
 **Posicao:** Entre Projects e About (`Hero -> Projects -> LatestPosts -> About -> Contact`)
 
-- Exibe os 3 posts mais recentes usando `getRecentPosts(3)`
+- Exibe os 3 posts mais recentes via `getCollection('blog')` ordenado por data (refatorado de `getRecentPosts`)
 - Layout horizontal com cards estilo `grayscale hover:grayscale-0`
 - CTA no final: "VER TODOS OS POSTS ->" linkando para `/blog`
 - Fundo `bg-black`, tipografia `type-raster-section` para titulo da secao
@@ -98,7 +98,7 @@ export const collections = { blog };
 
 **Lazy loading (client-side):**
 - Posts iniciais: 6 carregados automaticamente
-- Botao "Carregar mais" exibe os proximos
+- Botao "Carregar mais" exibe os proximos 6 (ou restantes)
 - SSG estatico: todos os posts ja estao no HTML — toggle de visibilidade via React state
 
 ### 3.3 Pagina /blog/[slug] — Post individual
@@ -157,7 +157,12 @@ export const collections = { blog };
 
 ## 5. Novos Posts
 
-Adicionar 2-3 novos posts alem dos 4 existentes, com temas atuais relevantes para o mercado brasileiro de front-end. Mesmo formato de frontmatter, conteudo em portugues.
+Adicionar 2-3 novos posts alem dos 4 existentes. Temas sugeridos:
+- **Astro 5:** Visao geral do framework e Content Collections (sincrono com a migracao do projeto)
+- **Performance Web:** Core Web Vitals e otimizacoes para o cenario brasileiro (3G/4G)
+- **TypeScript avancado:** Padroes uteis para projetos front-end
+
+Mesmo formato de frontmatter, conteudo em portugues.
 
 Frontmatter padronizado via schema Zod:
 ```yaml
