@@ -1,61 +1,360 @@
 /* Markdown Theme Styles — Dark Editorial */
 [data-markdown-content] {
   color: hsl(0 0% 90%);
+  line-height: 1.75;
 }
 
-[data-markdown-content] h1,
-[data-markdown-content] h2,
-[data-markdown-content] h3,
+/* Headings — rhythm and spacing */
+[data-markdown-content] h1 {
+  color: hsl(0 0% 100%);
+  font-weight: 700;
+  font-size: 2.25rem;
+  line-height: 1.2;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+[data-markdown-content] h2 {
+  color: hsl(0 0% 100%);
+  font-weight: 700;
+  font-size: 1.875rem;
+  line-height: 1.3;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  letter-spacing: -0.01em;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid hsl(0 0% 100% / 0.1);
+}
+
+[data-markdown-content] h3 {
+  color: hsl(0 0% 100%);
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: 1.4;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
 [data-markdown-content] h4,
 [data-markdown-content] h5,
 [data-markdown-content] h6 {
   color: hsl(0 0% 100%);
-  font-weight: bold;
+  font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 1.4;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
 }
 
+/* Paragraphs — readable line length */
 [data-markdown-content] p {
   color: hsl(0 0% 90%);
+  margin-bottom: 1.5rem;
+  max-width: 75ch;
 }
 
-[data-markdown-content] code {
-  background-color: hsl(0 0% 100% / 0.05);
-  color: hsl(0 0% 100%);
-}
-
-[data-markdown-content] pre {
-  background-color: hsl(0 0% 100% / 0.05);
-  color: hsl(0 0% 100%);
+/* Inline code — distinct from code blocks */
+[data-markdown-content] :not(pre) > code {
+  background-color: hsl(0 0% 100% / 0.08);
+  color: hsl(var(--accent));
+  padding: 0.2em 0.4em;
+  border-radius: 0.25rem;
+  font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+  font-size: 0.875em;
+  font-weight: 500;
   border: 1px solid hsl(0 0% 100% / 0.1);
 }
 
-[data-markdown-content] blockquote {
-  color: hsl(0 0% 70%);
-  border-left-color: hsl(var(--accent));
+/* Pre blocks — containers for code */
+[data-markdown-content] pre {
+  background-color: hsl(0 0% 10% / 0.5);
+  border: 1px solid hsl(0 0% 100% / 0.12);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin: 2rem 0;
+  overflow-x: auto;
+  position: relative;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
+/* Language label - added via CSS ::before or data attribute */
+[data-markdown-content] pre[data-language]::before {
+  content: attr(data-language);
+  position: absolute;
+  top: -0.75rem;
+  left: 1rem;
+  background: hsl(0 0% 5% / 0.9);
+  border: 1px solid hsl(0 0% 100% / 0.1);
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.625rem;
+  color: hsl(0 0% 60%);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+  pointer-events: none;
+}
+
+/* Copy button container */
+[data-markdown-content] pre .copy-button {
+  position: absolute;
+  top: -0.75rem;
+  right: 1rem;
+  background: hsl(0 0% 5% / 0.9);
+  border: 1px solid hsl(0 0% 100% / 0.1);
+  padding: 0.375rem 0.5rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease, border-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.75rem;
+  color: hsl(0 0% 60%);
+  font-family: 'JetBrains Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+[data-markdown-content] pre:hover .copy-button,
+[data-markdown-content] pre .copy-button:hover {
+  opacity: 1;
+}
+
+[data-markdown-content] pre .copy-button:hover {
+  border-color: hsl(var(--accent) / 0.5);
+}
+
+[data-markdown-content] pre .copy-button.copied {
+  opacity: 1;
+  color: hsl(var(--accent));
+  border-color: hsl(var(--accent) / 0.5);
+}
+
+[data-markdown-content] pre .copy-button svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+/* Astro/Shiki code blocks — syntax highlighting */
+[data-markdown-content] pre > code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  border: none;
+  font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  display: block;
+}
+
+[data-markdown-content] .astro-code {
+  background: transparent !important;
+  color: hsl(0 0% 92%) !important;
+  font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+/* Shiki syntax highlighting — dark theme */
+[data-markdown-content] .astro-code .token.keyword,
+[data-markdown-content] .astro-code .token.control-flow {
+  color: #c678dd;
+  font-weight: 500;
+}
+
+[data-markdown-content] .astro-code .token.string,
+[data-markdown-content] .astro-code .token.string literal {
+  color: #98c379;
+}
+
+[data-markdown-content] .astro-code .token.comment,
+[data-markdown-content] .astro-code .token.prolog,
+[data-markdown-content] .astro-code .token.doctype,
+[data-markdown-content] .astro-code .token.cdata {
+  color: #5c6370;
+  font-style: italic;
+}
+
+[data-markdown-content] .astro-code .token.function,
+[data-markdown-content] .astro-code .token.function-name {
+  color: #61afef;
+}
+
+[data-markdown-content] .astro-code .token.number,
+[data-markdown-content] .astro-code .token.boolean,
+[data-markdown-content] .astro-code .token.constant {
+  color: #d19a66;
+}
+
+[data-markdown-content] .astro-code .token.operator,
+[data-markdown-content] .astro-code .token.punctuation {
+  color: #abb2bf;
+}
+
+[data-markdown-content] .astro-code .token.class-name,
+[data-markdown-content] .astro-code .token.type {
+  color: #e5c07b;
+}
+
+[data-markdown-content] .astro-code .token.property,
+[data-markdown-content] .astro-code .token.tag {
+  color: #e06c75;
+}
+
+[data-markdown-content] .astro-code .token.attr-name,
+[data-markdown-content] .astro-code .token.attribute {
+  color: #d19a66;
+}
+
+[data-markdown-content] .astro-code .token.attr-value,
+[data-markdown-content] .astro-code .token.string .attr-value {
+  color: #98c379;
+}
+
+[data-markdown-content] .astro-code .token.regex,
+[data-markdown-content] .astro-code .token.important {
+  color: #e5c07b;
+}
+
+[data-markdown-content] .astro-code .token.symbol,
+[data-markdown-content] .astro-code .token.inserted {
+  color: #98c379;
+}
+
+[data-markdown-content] .astro-code .token.deleted {
+  color: #e06c75;
+}
+
+/* Links */
 [data-markdown-content] a {
   color: hsl(var(--accent));
+  text-decoration: none;
+  transition: opacity 0.2s ease;
 }
 
 [data-markdown-content] a:hover {
   opacity: 0.8;
+  text-decoration: underline;
 }
 
+/* Blockquotes */
+[data-markdown-content] blockquote {
+  color: hsl(0 0% 70%);
+  border-left: 4px solid hsl(var(--accent));
+  padding-left: 1.25rem;
+  margin: 2rem 0;
+  font-style: italic;
+  background: linear-gradient(to right, hsl(var(--accent) / 0.05), transparent);
+  padding: 1rem 1.25rem;
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+/* Lists — spacing and indentation */
+[data-markdown-content] ul,
+[data-markdown-content] ol {
+  margin: 1.5rem 0;
+  padding-left: 1.75rem;
+}
+
+[data-markdown-content] li {
+  color: hsl(0 0% 90%);
+  margin-bottom: 0.5rem;
+  line-height: 1.75;
+}
+
+[data-markdown-content] li > ul,
+[data-markdown-content] li > ol {
+  margin: 0.75rem 0;
+}
+
+[data-markdown-content] ul li::marker {
+  color: hsl(var(--accent));
+}
+
+[data-markdown-content] ol li::marker {
+  color: hsl(var(--accent));
+  font-weight: 600;
+}
+
+/* Horizontal rule */
+[data-markdown-content] hr {
+  border: none;
+  border-top: 2px solid hsl(0 0% 100% / 0.1);
+  margin: 3rem 0;
+}
+
+/* Images and media */
 [data-markdown-content] img,
 [data-markdown-content] video,
 [data-markdown-content] iframe {
   max-width: 100%;
   height: auto;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
+/* Tables */
 [data-markdown-content] table {
-  border-color: hsl(0 0% 100% / 0.1);
-  display: block;
+  border-collapse: collapse;
   width: 100%;
-  overflow-x: auto;
+  margin: 2rem 0;
+  border: 1px solid hsl(0 0% 100% / 0.1);
+  border-radius: 0.5rem;
+  overflow: hidden;
 }
 
 [data-markdown-content] th,
 [data-markdown-content] td {
-  border-color: hsl(0 0% 100% / 0.1);
+  border: 1px solid hsl(0 0% 100% / 0.1);
+  padding: 0.75rem 1rem;
+  text-align: left;
+}
+
+[data-markdown-content] th {
+  background: hsl(0 0% 100% / 0.05);
+  font-weight: 600;
+  color: hsl(0 0% 100%);
+}
+
+[data-markdown-content] tr:hover {
+  background: hsl(0 0% 100% / 0.02);
+}
+
+/* Strong and emphasis */
+[data-markdown-content] strong {
+  color: hsl(0 0% 100%);
+  font-weight: 700;
+}
+
+[data-markdown-content] em {
+  font-style: italic;
+  color: hsl(0 0% 85%);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  [data-markdown-content] h1 {
+    font-size: 1.875rem;
+  }
+
+  [data-markdown-content] h2 {
+    font-size: 1.5rem;
+  }
+
+  [data-markdown-content] h3 {
+    font-size: 1.25rem;
+  }
+
+  [data-markdown-content] pre {
+    padding: 1rem;
+    border-radius: 0.5rem;
+  }
+
+  [data-markdown-content] .astro-code {
+    font-size: 0.8125rem;
+  }
 }

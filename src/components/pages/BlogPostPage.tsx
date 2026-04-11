@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import type { BlogPost } from '@/types/blog';
+import { initializeCodeBlocks } from '@/lib/blog/code-blocks';
 
 import {
   BlogPostHeader,
@@ -13,11 +14,19 @@ interface BlogPostPageClientProps {
   post: BlogPost;
   previous: BlogPost | null;
   next: BlogPost | null;
+  children?: React.ReactNode;
 }
 
-const BlogPostPage: React.FC<BlogPostPageClientProps> = ({ post, previous, next }) => {
+const BlogPostPage: React.FC<BlogPostPageClientProps> = ({ post, previous, next, children }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
+
+    // Initialize code blocks after content is rendered
+    const timer = setTimeout(() => {
+      initializeCodeBlocks();
+    }, 100);
+
+    return () => clearTimeout(timer);
   }, []);
 
   if (!post) {
@@ -34,7 +43,7 @@ const BlogPostPage: React.FC<BlogPostPageClientProps> = ({ post, previous, next 
       <div className="container mx-auto px-4 py-20 sm:py-24 md:py-28 max-w-4xl">
         <BlogPostBackButton />
         <BlogPostHeader post={post} />
-        <BlogPostContent content={post.content} />
+        <BlogPostContent>{children}</BlogPostContent>
         <BlogPostNavigation previous={previous} next={next} />
       </div>
     </motion.div>
