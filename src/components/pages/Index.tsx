@@ -2,9 +2,15 @@ import React from "react";
 import Hero from "@/components/Hero";
 import Projects from "@/components/Projects";
 import About from "@/components/About";
+import LatestPosts from "@/components/pages/LatestPosts";
 import SectionEntrance from "@/components/ui/SectionEntrance";
+import type { BlogPost } from "@/types/blog";
 
-const Index: React.FC = () => {
+interface IndexProps {
+  latestPosts?: BlogPost[];
+}
+
+const Index: React.FC<IndexProps> = ({ latestPosts = [] }) => {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
@@ -17,6 +23,13 @@ const Index: React.FC = () => {
         <Projects />
       </SectionEntrance>
 
+      {/* Latest Posts Section */}
+      {latestPosts.length > 0 && (
+        <SectionEntrance id="blog">
+          <LatestPosts posts={latestPosts} />
+        </SectionEntrance>
+      )}
+
       {/* About Section */}
       <SectionEntrance id="about">
         <About />
@@ -26,7 +39,7 @@ const Index: React.FC = () => {
       <SectionEntrance id="contact" className="py-40 flex flex-col items-center justify-center text-center">
         <div className="type-mono mb-8">Ready to start a project?</div>
         <a href="mailto:dev@bruno.com" className="type-raster-section text-[12vw] hover:text-accent transition-colors cursor-pointer block">
-          LET'S_TALK
+          LET&apos;S_TALK
         </a>
         <div className="mt-20 type-mono opacity-50">
           © 2026 BRUNO GUIMARÃES / ALL RIGHTS RESERVED
@@ -35,6 +48,5 @@ const Index: React.FC = () => {
     </div>
   );
 };
-
 
 export default Index;

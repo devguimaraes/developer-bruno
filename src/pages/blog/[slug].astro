@@ -1,36 +1,90 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import BlogPostPageClient from '@/components/pages/BlogPostPage';
-import { getAllBlogPosts } from '@/lib/blog';
+import { getCollection, render } from 'astro:content';
+import { generateSlug } from '@/lib/blog';
 import type { BlogPost } from '@/types/blog';
 
-// Generate paths for all blog posts at build time (SSG)
 export async function getStaticPaths() {
-  const posts = await getAllBlogPosts();
-  
-  return posts.map((post, index) => {
-    return {
-      params: { slug: post.slug },
-      props: {
-        post,
-        previous: index > 0 ? posts[index - 1] : null,
-        next: index < posts.length - 1 ? posts[index + 1] : null,
-      },
-    };
+  const entries = await getCollection('blog');
+  const months: Record<string, number> = {
+    JAN: 0, FEV: 1, MAR: 2, ABR: 3, MAI: 4, JUN: 5,
+    JUL: 6, AGO: 7, SET: 8, OUT: 9, NOV: 10, DEZ: 11,
+  };
+  const parseDate = (d: string) => {
+    const parts = d.split(' ');
+    if (parts.length === 3) return new Date(Number(parts[2]), months[parts[1].toUpperCase()] ?? 0, Number(parts[0]));
+    return new Date(d);
+  };
+  const sortedEntries = [...entries].sort((a, b) => parseDate(b.data.date).getTime() - parseDate(a.data.date).getTime());
+
+  // Render all entries in parallel first
+  const renderedEntries = await Promise.all(
+    sortedEntries.map(async (entry) => ({
+      entry,
+      rendered: await render(entry)
+    }))
+  );
+
+  const toBlogPost = (entry: typeof entries[number]): BlogPost => ({
+    id: entry.id,
+    slug: generateSlug(entry.id),
+    title: entry.data.title,
+    date: entry.data.date,
+    readTime: entry.data.readTime || '5 min',
+    tags: entry.data.tags,
+    author: entry.data.author,
+    excerpt: entry.data.excerpt,
+    content: entry.body || '',
+    image: entry.data.image,
+    featured: entry.data.featured,
   });
+
+  return renderedEntries.map(({ entry, rendered: { Content } }, index) => ({
+    params: { slug: generateSlug(entry.id) },
+    props: {
+      post: toBlogPost(entry),
+      previous: index > 0 ? toBlogPost(sortedEntries[index - 1]) : null,
+      next: index < sortedEntries.length - 1 ? toBlogPost(sortedEntries[index + 1]) : null,
+      Content,
+    },
+  }));
 }
 
-const { post, previous, next } = Astro.props;
+const { post, previous, next, Content } = Astro.props;
 ---
 
-<Layout 
-  title={post.title} 
-  description={post.excerpt} 
+<Layout
+  title={post.title}
+  description={post.excerpt}
+  ogType="article"
+  structuredData={{
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.excerpt,
+    author: {
+      '@type': 'Person',
+      name: post.author,
+      url: 'https://devguimaraes.com.br',
+    },
+    datePublished: post.date,
+    publisher: {
+      '@type': 'Person',
+      name: 'Bruno Guimaraes',
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://devguimaraes.com.br/blog/${post.slug}`,
+    },
+  }}
 >
-  <BlogPostPageClient 
-    post={post} 
-    previous={previous} 
-    next={next} 
-    client:load 
-  />
+  <BlogPostPageClient
+    post={post}
+    previous={previous}
+    next={next}
+    client:load
+  >
+    <Content />
+  </BlogPostPageClient>
 </Layout>

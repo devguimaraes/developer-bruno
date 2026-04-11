@@ -1,156 +1,122 @@
-import React, { useEffect } from 'react';
-
-import { Calendar, Clock, FolderOpen, ExternalLink, AlertCircle, RefreshCw } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { Calendar, Clock, ArrowRight } from 'lucide-react';
 import type { BlogPost } from '@/types/blog';
 
-import { BlogPostCardSkeleton } from '@/components/blog/BlogPostCardSkeleton';
-import { ERROR_MESSAGES, ACCESSIBILITY_LABELS } from '@/constants/ui';
+const POSTS_PER_PAGE = 6;
 
 interface BlogPageProps {
   initialPosts?: BlogPost[];
 }
 
 const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
+  const [visibleCount, setVisibleCount] = useState(POSTS_PER_PAGE);
   const blogPosts = initialPosts;
-  const isLoading = false;
-  const error = null;
 
-  // Scroll to top when component mounts
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const handleRetry = () => {
-    window.location.reload();
-  };
-
-  if (error) {
-    return (
-      <div className="min-h-screen bg-brutal-light pt-24">
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="bg-white border-4 border-black p-8 shadow-brutal-lg max-w-2xl mx-auto">
-            <div className="flex items-start gap-4">
-              <div className="flex-shrink-0">
-                <AlertCircle className="w-6 h-6 text-red-600" aria-hidden="true" />
-              </div>
-              <div className="flex-grow">
-                <h2 className="font-bold text-lg mb-2">
-                  {ACCESSIBILITY_LABELS.ERROR_LOADING_POSTS}
-                </h2>
-                <p className="text-stone-600 mb-4">{ERROR_MESSAGES.BLOG_LOAD_FAILED}</p>
-                <button
-                  onClick={handleRetry}
-                  className="inline-flex items-center gap-2 bg-brutal-yellow border-2 border-black px-4 py-2 font-mono text-sm hover:bg-brutal-yellow/80 transition-colors duration-300"
-                  aria-label={ACCESSIBILITY_LABELS.RETRY_BUTTON}
-                >
-                  <RefreshCw className="w-4 h-4" aria-hidden="true" />
-                  Tentar Novamente
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const visiblePosts = blogPosts.slice(0, visibleCount);
+  const hasMore = visibleCount < blogPosts.length;
 
   return (
-    <>
-      {/* Header with proper padding for fixed navigation */}
-      <div className="pt-20 sm:pt-24 overflow-x-clip">
-
-        {/* Header */}
-        <div className="pt-6 sm:pt-8 pb-10 sm:pb-16">
-          <div className="container mx-auto px-4 relative z-10">
-
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 sm:mb-16 gap-5 sm:gap-6">
-              <div>
-                <div className="inline-flex items-center gap-2 bg-brutal-purple border-2 border-black text-white px-3 py-1 font-mono font-bold text-xs mb-4 shadow-neo">
-                  <FolderOpen size={14} />
-                  ~/DOCUMENTS/BLOG
-                </div>
-                <h1 className="text-[14vw] sm:text-5xl md:text-7xl font-black uppercase tracking-tighter leading-[0.92]">
-                  TODOS OS<br/>
-                  <span className="text-transparent bg-clip-text bg-black text-stroke-2">
-                    INSIGHTS
-                  </span>
-                </h1>
-              </div>
-              <p className="max-w-md font-mono text-xs sm:text-sm bg-stone-100 border-2 border-black p-3 sm:p-4 shadow-neo">
-                Biblioteca completa de conhecimentos técnicos e reflexões sobre desenvolvimento web.
+    <div className="bg-black min-h-screen pt-20 sm:pt-24 overflow-x-clip">
+      {/* Header */}
+      <div className="pt-6 sm:pt-8 pb-10 sm:pb-16">
+        <div className="container mx-auto px-4">
+          <div className="mb-10 sm:mb-16">
+            <p className="type-mono text-[10px] text-white/40 uppercase tracking-widest mb-4">
+              // LATEST_POSTS &middot; TOTAL: {blogPosts.length}
+            </p>
+            <h1 className="type-raster-section text-[14vw] sm:text-5xl md:text-7xl text-white uppercase tracking-tighter leading-[0.92]">
+              TODOS OS<br />INSIGHTS
+            </h1>
+            <div className="border-t border-white/10 mt-6 pt-4 max-w-md">
+              <p className="type-mono text-xs text-white/40">
+                Biblioteca completa de conhecimentos tecnicos e reflexoes sobre desenvolvimento web.
               </p>
             </div>
           </div>
         </div>
-
-        {/* Main Content */}
-        <div className="container mx-auto px-4 pb-12 sm:pb-16 relative z-10">
-
-          {/* Posts Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8">
-            {/* Loading State */}
-            {isLoading && <BlogPostCardSkeleton count={6} aria-label={ACCESSIBILITY_LABELS.LOADING_POSTS} />}
-
-            {/* Success State */}
-            {!isLoading && blogPosts.map((post) => (
-              <article
-                key={post.slug}
-                className="group bg-white border-4 border-black flex flex-col h-full hover:-translate-y-1 sm:hover:-translate-y-2 transition-transform duration-300 shadow-brutal-lg hover:shadow-[10px_10px_0px_0px_#f97316] sm:hover:shadow-[12px_12px_0px_0px_#f97316]"
-              >
-                {/* Header do Card */}
-                <div className="bg-stone-100 border-b-4 border-black p-3 flex justify-between items-center gap-2">
-                  <span className="font-mono text-xs font-bold uppercase truncate max-w-[180px] sm:max-w-[200px]">{post.slug}.md</span>
-                  <div className="flex gap-1">
-                    <div className="w-2 h-2 rounded-full bg-black"></div>
-                    <div className="w-2 h-2 rounded-full border border-black"></div>
-                  </div>
-                </div>
-
-                {/* Conteúdo do Card */}
-                <div className="p-5 sm:p-6 flex-grow flex flex-col">
-                  <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs font-mono font-bold text-gray-500 mb-3">
-                    <span className="flex items-center gap-1"><Calendar size={12} /> {post.date}</span>
-                    <span className="flex items-center gap-1"><Clock size={12} /> {post.readTime}</span>
-                  </div>
-
-                  <h3 className="text-xl sm:text-2xl font-black leading-tight mb-4 line-clamp-2 group-hover:text-brutal-orange transition-colors">
-                    {post.title}
-                  </h3>
-
-                  <p className="text-stone-600 font-medium mb-6 line-clamp-3 flex-grow">
-                    {post.excerpt}
-                  </p>
-
-                  <div className="mt-auto pt-4 border-t-2 border-stone-200 flex justify-between items-center gap-3">
-                    <div className="flex flex-wrap gap-2">
-                      {post.tags.slice(0,2).map(tag => (
-                        <span key={tag} className="text-[10px] font-black bg-black text-white px-2 py-0.5 uppercase">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                    <a
-                      href={`/blog/${post.slug}`}
-                      className="inline-flex items-center gap-1 font-black text-sm hover:underline decoration-4 decoration-brutal-yellow underline-offset-2 py-1 shrink-0"
-                    >
-                      LER ARQUIVO <ExternalLink size={16} />
-                    </a>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-
-          {blogPosts.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-xl text-gray-500 mb-4">Nenhum post encontrado.</p>
-              <p className="text-sm text-gray-400">Adicione arquivos .md em src/content/blog/</p>
-            </div>
-          )}
-
-        </div>
       </div>
-    </>
+
+      {/* Posts Grid */}
+      <div className="container mx-auto px-4 pb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          {visiblePosts.map((post, index) => (
+            <motion.article
+              key={post.slug}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index < POSTS_PER_PAGE ? index * 0.1 : 0 }}
+              className="group flex flex-col h-full border border-white/10 hover:border-accent/30 transition-colors"
+            >
+              <div className="p-4 border-b border-white/10 flex justify-between items-center">
+                <span className="type-mono text-[10px] text-white/40 uppercase tracking-widest truncate max-w-[200px]">
+                  {post.slug}.md
+                </span>
+                <div className="flex gap-1.5">
+                  <div className="w-1.5 h-1.5 rounded-full bg-white/40" />
+                  <div className="w-1.5 h-1.5 rounded-full border border-white/20" />
+                </div>
+              </div>
+
+              <div className="p-5 flex-grow flex flex-col">
+                <div className="flex gap-4 type-mono text-[10px] text-white/40 uppercase tracking-widest mb-4">
+                  <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{post.date}</span>
+                  <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{post.readTime}</span>
+                </div>
+
+                <h2 className="text-lg sm:text-xl font-bold text-white leading-tight mb-3 group-hover:text-accent transition-colors">
+                  {post.title}
+                </h2>
+
+                <p className="text-white/50 text-sm mb-6 line-clamp-3 flex-grow">
+                  {post.excerpt}
+                </p>
+
+                <div className="mt-auto pt-4 border-t border-white/10 flex justify-between items-center gap-3">
+                  <div className="flex flex-wrap gap-2">
+                    {post.tags.slice(0, 3).map((tag) => (
+                      <span key={tag} className="border border-white/20 text-white/60 px-2.5 py-1 rounded-full type-mono text-[9px] uppercase tracking-widest">
+                        {tag}
+                      </span>
+                    ))}
+                    {post.tags.length > 3 && (
+                      <span className="type-mono text-[9px] text-white/30">+{post.tags.length - 3}</span>
+                    )}
+                  </div>
+                  <a
+                    href={`/blog/${post.slug}`}
+                    className="inline-flex items-center gap-1 type-mono text-[10px] text-white/60 hover:text-accent transition-colors uppercase tracking-widest shrink-0"
+                  >
+                    Ler <ArrowRight className="w-3 h-3" />
+                  </a>
+                </div>
+              </div>
+            </motion.article>
+          ))}
+        </div>
+
+        {hasMore && (
+          <div className="flex justify-center mt-12">
+            <button
+              onClick={() => setVisibleCount((prev) => prev + POSTS_PER_PAGE)}
+              className="border border-white/20 text-white hover:border-accent hover:text-accent px-8 py-3 type-mono text-[10px] uppercase tracking-widest transition-colors"
+            >
+              Carregar mais ({blogPosts.length - visibleCount} restantes)
+            </button>
+          </div>
+        )}
+
+        {blogPosts.length === 0 && (
+          <div className="text-center py-16">
+            <p className="type-mono text-white/40 uppercase tracking-widest">Nenhum post encontrado</p>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 

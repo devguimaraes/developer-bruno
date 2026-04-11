@@ -35,5 +35,9 @@ dist-ssr
 
 coverage/
 
+# Test reports and results
+playwright-report/
+test-results/
+
 gha-creds-*.json
 .gemini/settings.json

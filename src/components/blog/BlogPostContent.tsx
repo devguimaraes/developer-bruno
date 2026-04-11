@@ -1,29 +1,19 @@
 import { motion } from 'framer-motion';
-import ReactMarkdown from 'react-markdown';
-import { getMarkdownClasses } from '@/lib/typography';
-
-// Adiciona data-attribute para estilização específica
-const MarkdownWrapper = ({ children }: { children: React.ReactNode }) => (
-  <div data-markdown-content>{children}</div>
-);
 
 interface BlogPostContentProps {
-  content: string;
+  children: React.ReactNode;
 }
 
-export function BlogPostContent({ content }: BlogPostContentProps) {
+export function BlogPostContent({ children }: BlogPostContentProps) {
   return (
-    <motion.article
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.5 }}
-      className={getMarkdownClasses()}
-      role="article"
-      aria-label="Conteúdo do post"
+      data-markdown-content
+      className="blog-post-content"
     >
-      <MarkdownWrapper>
-        <ReactMarkdown>{content}</ReactMarkdown>
-      </MarkdownWrapper>
-    </motion.article>
+      {children}
+    </motion.div>
   );
 }

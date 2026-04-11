@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Calendar, Clock, Tag } from 'lucide-react';
+import { Calendar, Clock } from 'lucide-react';
 import type { BlogPost } from '@/types/blog';
 
 interface BlogPostHeaderProps {
@@ -12,36 +12,32 @@ export function BlogPostHeader({ post }: BlogPostHeaderProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3 }}
-      className="mb-6 sm:mb-8"
+      className="mb-8 sm:mb-12"
     >
-      <h1 className="text-[clamp(1.9rem,8vw,3rem)] md:text-4xl lg:text-5xl font-bold mb-5 sm:mb-6 text-black leading-tight break-words">
+      <h1 className="type-raster-section text-[clamp(1.9rem,8vw,3rem)] md:text-4xl lg:text-5xl text-white leading-tight mb-6">
         {post.title}
       </h1>
 
-      <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-stone-500 mb-5 sm:mb-6 text-sm sm:text-base">
-        <div className="flex items-center gap-2">
-          <Calendar className="w-4 h-4" />
+      <div className="flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-b border-white/10 py-4 mb-6">
+        <div className="flex items-center gap-2 type-mono text-[10px] text-white/60 uppercase tracking-widest">
+          <Calendar className="w-3 h-3" />
           <span>{post.date}</span>
         </div>
-        <div className="flex items-center gap-2">
-          <Clock className="w-4 h-4" />
+        <div className="flex items-center gap-2 type-mono text-[10px] text-white/60 uppercase tracking-widest">
+          <Clock className="w-3 h-3" />
           <span>{post.readTime}</span>
         </div>
       </div>
 
       {post.tags.length > 0 && (
         <div className="flex flex-wrap gap-2">
-          {post.tags.map((tag, index) => (
-            <motion.span
+          {post.tags.map((tag) => (
+            <span
               key={tag}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.4 + index * 0.1 }}
-              className="inline-flex items-center gap-1 px-3 py-1 bg-stone-200 text-black border-2 border-black text-xs sm:text-sm"
+              className="border border-white text-white px-3 py-1.5 rounded-full type-mono text-[10px] uppercase tracking-widest"
             >
-              <Tag className="w-3 h-3" />
               {tag}
-            </motion.span>
+            </span>
           ))}
         </div>
       )}
