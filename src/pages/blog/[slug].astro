@@ -27,7 +27,7 @@ export async function getStaticPaths() {
     tags: entry.data.tags,
     author: entry.data.author,
     excerpt: entry.data.excerpt,
-    content: '',
+    content: entry.body || '',
     image: entry.data.image,
     featured: entry.data.featured,
   });

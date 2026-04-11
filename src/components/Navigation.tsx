@@ -17,6 +17,7 @@ const Navigation: React.FC = () => {
 
   const navLinks = [
     { name: "PROJETOS", href: "/#projetos" },
+    { name: "POSTS", href: "/blog" },
     { name: "SOBRE", href: "/#about" },
     { name: "CONTATO", href: "/#contact" },
   ];
