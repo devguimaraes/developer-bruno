@@ -8,7 +8,7 @@ describe('Blog Utils', () => {
     });
 
     it('should handle special characters', () => {
-      expect(generateSlug('Post com Acentuação!.md')).toBe('post-com-acentuacao');
+      expect(generateSlug('Post com Acentuacao!.md')).toBe('post-com-acentuacao');
     });
 
     it('should remove file extension', () => {

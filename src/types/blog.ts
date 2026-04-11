@@ -4,25 +4,12 @@ export interface BlogPost {
   title: string;
   date: string;
   readTime: string;
-  readingTime?: number;
   tags: string[];
   author: string;
   excerpt: string;
-  description?: string;
   content: string;
   image?: string;
   featured?: boolean;
-  lastModified?: string;
+  readingTime?: number;
   wordCount?: number;
-}
-
-export interface BlogFrontmatter {
-  title?: string;
-  date?: string;
-  readTime?: string;
-  tags?: string[];
-  author?: string;
-  excerpt?: string;
-  image?: string;
-  featured?: boolean;
 }
