@@ -17,9 +17,10 @@ interface Props {
   description?: string;
   image?: string;
   structuredData?: object;
+  ogType?: string;
 }
 
-const { title, description, image, structuredData } = Astro.props;
+const { title, description, image, structuredData, ogType } = Astro.props;
 
 // Meta values with fallbacks
 const finalTitle = title ? `${title} | ${siteConfig.title}` : `${siteConfig.title} | Desenvolvedor Web RJ`;
@@ -42,7 +43,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta name="description" content={finalDesc} />
     
     <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType || 'website'} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={finalTitle} />
     <meta property="og:description" content={finalDesc} />

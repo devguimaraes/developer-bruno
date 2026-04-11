@@ -41,6 +41,17 @@ posts.sort((a, b) => {
 <Layout
   title="Blog de Desenvolvimento Web"
   description="Artigos sobre React, Next.js e engenharia front-end por Bruno Guimaraes."
+  structuredData={{
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    name: 'Blog — Bruno Guimaraes',
+    description: 'Artigos sobre React, Next.js, TypeScript e engenharia front-end.',
+    url: 'https://devguimaraes.com.br/blog',
+    author: {
+      '@type': 'Person',
+      name: 'Bruno Guimaraes',
+    },
+  }}
 >
   <BlogPageClient initialPosts={posts} client:load />
 </Layout>

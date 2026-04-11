@@ -48,6 +48,27 @@ const { post, previous, next } = Astro.props;
 <Layout
   title={post.title}
   description={post.excerpt}
+  ogType="article"
+  structuredData={{
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.excerpt,
+    author: {
+      '@type': 'Person',
+      name: post.author,
+      url: 'https://devguimaraes.com.br',
+    },
+    datePublished: post.date,
+    publisher: {
+      '@type': 'Person',
+      name: 'Bruno Guimaraes',
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://devguimaraes.com.br/blog/${post.slug}`,
+    },
+  }}
 >
   <BlogPostPageClient
     post={post}
