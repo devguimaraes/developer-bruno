@@ -1,11 +1,5 @@
 import { motion } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
-import { getMarkdownClasses } from '@/lib/typography';
-
-// Adiciona data-attribute para estilização específica
-const MarkdownWrapper = ({ children }: { children: React.ReactNode }) => (
-  <div data-markdown-content>{children}</div>
-);
 
 interface BlogPostContentProps {
   content: string;
@@ -17,13 +11,19 @@ export function BlogPostContent({ content }: BlogPostContentProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.5 }}
-      className={getMarkdownClasses()}
-      role="article"
-      aria-label="Conteúdo do post"
+      className="prose prose-invert prose-lg max-w-none
+        prose-headings:text-white prose-headings:font-bold
+        prose-p:text-white/90 prose-p:leading-relaxed
+        prose-a:text-accent prose-a:no-underline hover:prose-a:underline
+        prose-strong:text-white
+        prose-code:text-accent prose-code:bg-white/5 prose-code:px-2 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:before:content-none prose-code:after:content-none
+        prose-pre:bg-white/5 prose-pre:border prose-pre:border-white/10
+        prose-blockquote:border-l-accent prose-blockquote:text-white/70
+        prose-li:text-white/90
+        prose-hr:border-white/10
+        prose-img:rounded"
     >
-      <MarkdownWrapper>
-        <ReactMarkdown>{content}</ReactMarkdown>
-      </MarkdownWrapper>
+      <ReactMarkdown>{content}</ReactMarkdown>
     </motion.article>
   );
 }

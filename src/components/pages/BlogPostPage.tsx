@@ -1,14 +1,13 @@
-import { useEffect } from "react";
-import { motion } from "framer-motion";
-import type { BlogPost } from "@/types/blog";
+import { useEffect } from 'react';
+import { motion } from 'framer-motion';
+import type { BlogPost } from '@/types/blog';
 
 import {
   BlogPostHeader,
   BlogPostContent,
   BlogPostNavigation,
   BlogPostBackButton,
-} from "../blog";
-import { BlogPostLoadingSkeleton } from "../blog/BlogPostLoadingSkeleton";
+} from '../blog';
 
 interface BlogPostPageClientProps {
   post: BlogPost;
@@ -17,13 +16,12 @@ interface BlogPostPageClientProps {
 }
 
 const BlogPostPage: React.FC<BlogPostPageClientProps> = ({ post, previous, next }) => {
-  // Scroll to top on mount
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   if (!post) {
-    return <BlogPostLoadingSkeleton />;
+    return <div className="bg-black min-h-screen" />;
   }
 
   return (
@@ -31,16 +29,13 @@ const BlogPostPage: React.FC<BlogPostPageClientProps> = ({ post, previous, next 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="w-full overflow-x-clip"
+      className="w-full overflow-x-clip bg-black"
     >
       <div className="container mx-auto px-4 py-20 sm:py-24 md:py-28 max-w-4xl">
         <BlogPostBackButton />
         <BlogPostHeader post={post} />
         <BlogPostContent content={post.content} />
-        <BlogPostNavigation
-          previous={previous}
-          next={next}
-        />
+        <BlogPostNavigation previous={previous} next={next} />
       </div>
     </motion.div>
   );

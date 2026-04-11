@@ -1,27 +1,6 @@
-/* Markdown Theme Styles for Blog Posts */
-
-:root {
-  --markdown-text: hsl(0 0% 0%);
-  --markdown-text-muted: hsl(217 20% 39%);
-  --markdown-border: hsl(0 0% 0%);
-  --markdown-code-bg: hsl(0 0% 96%);
-  --markdown-code-text: hsl(0 0% 0%);
-  --markdown-pre-bg: hsl(0 0% 96%);
-  --markdown-pre-text: hsl(0 0% 0%);
-}
-
-[data-theme="dark"] {
-  --markdown-text: hsl(0 0% 100%);
-  --markdown-text-muted: hsl(215 25% 69%);
-  --markdown-border: hsl(0 0% 100%);
-  --markdown-code-bg: hsl(221 35% 22%);
-  --markdown-pre-bg: hsl(216 33% 15%);
-  --markdown-pre-text: hsl(0 0% 100%);
-}
-
-/* Custom markdown content styles */
+/* Markdown Theme Styles — Dark Editorial */
 [data-markdown-content] {
-  color: hsl(var(--markdown-text));
+  color: hsl(0 0% 90%);
 }
 
 [data-markdown-content] h1,
@@ -30,48 +9,32 @@
 [data-markdown-content] h4,
 [data-markdown-content] h5,
 [data-markdown-content] h6 {
-  color: hsl(var(--markdown-text));
-  border-color: hsl(var(--markdown-border));
+  color: hsl(0 0% 100%);
   font-weight: bold;
 }
 
 [data-markdown-content] p {
-  color: hsl(var(--markdown-text));
-  border-color: hsl(var(--markdown-border));
+  color: hsl(0 0% 90%);
 }
 
 [data-markdown-content] code {
-  background-color: hsl(var(--markdown-code-bg));
-  color: hsl(var(--markdown-code-text));
-  border-color: hsl(var(--markdown-border));
+  background-color: hsl(0 0% 100% / 0.05);
+  color: hsl(0 0% 100%);
 }
 
 [data-markdown-content] pre {
-  background-color: hsl(var(--markdown-pre-bg));
-  color: hsl(var(--markdown-pre-text));
-  border-color: hsl(var(--markdown-border));
+  background-color: hsl(0 0% 100% / 0.05);
+  color: hsl(0 0% 100%);
+  border: 1px solid hsl(0 0% 100% / 0.1);
 }
 
 [data-markdown-content] blockquote {
-  color: hsl(var(--markdown-text-muted));
-  border-color: hsl(var(--markdown-border));
-}
-
-[data-markdown-content] table {
-  border-color: hsl(var(--markdown-border));
-  display: block;
-  width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-[data-markdown-content] th,
-[data-markdown-content] td {
-  border-color: hsl(var(--markdown-border));
+  color: hsl(0 0% 70%);
+  border-left-color: hsl(var(--accent));
 }
 
 [data-markdown-content] a {
-  color: hsl(var(--markdown-text));
+  color: hsl(var(--accent));
 }
 
 [data-markdown-content] a:hover {
@@ -83,4 +46,16 @@
 [data-markdown-content] iframe {
   max-width: 100%;
   height: auto;
+}
+
+[data-markdown-content] table {
+  border-color: hsl(0 0% 100% / 0.1);
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+}
+
+[data-markdown-content] th,
+[data-markdown-content] td {
+  border-color: hsl(0 0% 100% / 0.1);
 }
