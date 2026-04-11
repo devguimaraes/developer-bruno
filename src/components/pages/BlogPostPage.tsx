@@ -40,7 +40,7 @@ const BlogPostPage: React.FC<BlogPostPageClientProps> = ({ post, previous, next,
       transition={{ duration: 0.5 }}
       className="w-full overflow-x-clip bg-black"
     >
-      <div className="container mx-auto px-4 py-20 sm:py-24 md:py-28 max-w-4xl">
+      <div className="container mx-auto px-4 sm:px-6 py-20 sm:py-24 md:py-28 max-w-3xl">
         <BlogPostBackButton />
         <BlogPostHeader post={post} />
         <BlogPostContent>{children}</BlogPostContent>
