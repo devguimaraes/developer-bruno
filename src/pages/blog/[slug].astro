@@ -1,7 +1,7 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import BlogPostPageClient from '@/components/pages/BlogPostPage';
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import { generateSlug } from '@/lib/blog';
 import type { BlogPost } from '@/types/blog';
 
@@ -18,6 +18,14 @@ export async function getStaticPaths() {
   };
   const sortedEntries = [...entries].sort((a, b) => parseDate(b.data.date).getTime() - parseDate(a.data.date).getTime());
 
+  // Render all entries in parallel first
+  const renderedEntries = await Promise.all(
+    sortedEntries.map(async (entry) => ({
+      entry,
+      rendered: await render(entry)
+    }))
+  );
+
   const toBlogPost = (entry: typeof entries[number]): BlogPost => ({
     id: entry.id,
     slug: generateSlug(entry.id),
@@ -32,17 +40,18 @@ export async function getStaticPaths() {
     featured: entry.data.featured,
   });
 
-  return sortedEntries.map((entry, index) => ({
+  return renderedEntries.map(({ entry, rendered: { Content } }, index) => ({
     params: { slug: generateSlug(entry.id) },
     props: {
       post: toBlogPost(entry),
       previous: index > 0 ? toBlogPost(sortedEntries[index - 1]) : null,
       next: index < sortedEntries.length - 1 ? toBlogPost(sortedEntries[index + 1]) : null,
+      Content,
     },
   }));
 }
 
-const { post, previous, next } = Astro.props;
+const { post, previous, next, Content } = Astro.props;
 ---
 
 <Layout
@@ -75,5 +84,7 @@ const { post, previous, next } = Astro.props;
     previous={previous}
     next={next}
     client:load
-  />
+  >
+    <Content />
+  </BlogPostPageClient>
 </Layout>
