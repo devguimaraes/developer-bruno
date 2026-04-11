@@ -157,10 +157,19 @@ export const collections = { blog };
 
 ## 5. Novos Posts
 
-Adicionar 2-3 novos posts alem dos 4 existentes. Temas sugeridos:
-- **Astro 5:** Visao geral do framework e Content Collections (sincrono com a migracao do projeto)
-- **Performance Web:** Core Web Vitals e otimizacoes para o cenario brasileiro (3G/4G)
-- **TypeScript avancado:** Padroes uteis para projetos front-end
+Adicionar 3 novos posts alem dos 4 existentes, ordenados por data (mais recentes primeiro):
+
+1. **React 19 e Server Components: cortando JavaScript do cliente e ganhando pontos no Core Web Vitals**
+   - Tags: React, Server Components, Performance, Core Web Vitals
+   - Foco: explicar o problema (muito JS no cliente), mostrar metricas (LCP, TTI, CLS), comparar antes/depois num projeto Next.js
+
+2. **Interfaces inteligentes: como usar IA no front-end para personalizar UI em tempo real**
+   - Tags: IA, React, UX, Personalizacao, Acessibilidade
+   - Foco: personalizacao de layout/componente por comportamento, recomendacoes na UI, acessibilidade adaptativa, exemplos praticos em React/Vue
+
+3. **Engenharia de interface: padroes de arquitetura para front-ends modernos em 2026**
+   - Tags: Arquitetura, Front-end, Design System, Testes, Observabilidade
+   - Foco: camadas (UI, state, services), design system, acessibilidade, testes e observabilidade, front-end como engenharia de software
 
 Mesmo formato de frontmatter, conteudo em portugues.
 
