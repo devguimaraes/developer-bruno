@@ -1,16 +1,46 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import BlogPageClient from '@/components/pages/BlogPage';
-import { getAllBlogPosts } from '@/lib/blog';
+import { getCollection } from 'astro:content';
+import { parseReadingTime } from '@/lib/blog/content';
+import { generateSlug } from '@/lib/blog';
+import type { BlogPost } from '@/types/blog';
 
-// Fetch data at build time (SSG)
-const posts = await getAllBlogPosts();
+const entries = await getCollection('blog');
+
+const months: Record<string, number> = {
+  JAN: 0, FEV: 1, MAR: 2, ABR: 3, MAI: 4, JUN: 5,
+  JUL: 6, AGO: 7, SET: 8, OUT: 9, NOV: 10, DEZ: 11,
+};
+
+const posts: BlogPost[] = entries.map((entry) => ({
+  id: entry.id,
+  slug: generateSlug(entry.id),
+  title: entry.data.title,
+  date: entry.data.date,
+  readTime: entry.data.readTime || '5 min',
+  readingTime: parseReadingTime(entry.data.readTime),
+  tags: entry.data.tags,
+  author: entry.data.author,
+  excerpt: entry.data.excerpt,
+  content: '',
+  image: entry.data.image,
+  featured: entry.data.featured,
+}));
+
+posts.sort((a, b) => {
+  const parseDate = (d: string) => {
+    const parts = d.split(' ');
+    if (parts.length === 3) return new Date(Number(parts[2]), months[parts[1].toUpperCase()] ?? 0, Number(parts[0]));
+    return new Date(d);
+  };
+  return parseDate(b.date).getTime() - parseDate(a.date).getTime();
+});
 ---
 
-<Layout 
-  title="Blog de Desenvolvimento Web" 
-  description="Artigos sobre React, Next.js e engenharia front-end por Bruno Guimarães."
+<Layout
+  title="Blog de Desenvolvimento Web"
+  description="Artigos sobre React, Next.js e engenharia front-end por Bruno Guimaraes."
 >
-  <!-- Pass the pre-fetched posts as initialData to avoid client-side waterfalls, but keep React interactivity -->
   <BlogPageClient initialPosts={posts} client:load />
 </Layout>
