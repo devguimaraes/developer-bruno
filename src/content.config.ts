@@ -9,7 +9,7 @@ const blog = defineCollection({
     date: z.string(),
     readTime: z.string().optional(),
     tags: z.array(z.string()).default([]),
-    author: z.string().default("Bruno Guimaraes"),
+    author: z.string().default("Bruno Guimarães"),
     excerpt: z.string(),
     image: z.string().optional(),
     featured: z.boolean().default(false),
