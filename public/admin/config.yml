@@ -2,8 +2,8 @@ backend:
   name: github
   repo: devguimaraes/developer-bruno
   branch: main
-  auth_endpoint: /api/auth?provider=github
-  token_endpoint: /api/auth/callback
+  auth_endpoint: https://api.netlify.com/auth/github
+  app_id: Ov23li1qdPhwOLKOleXS
 
 media_folder: public/uploads
 public_folder: /uploads
