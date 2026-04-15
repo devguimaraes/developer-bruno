@@ -3,6 +3,7 @@ backend:
   repo: devguimaraes/developer-bruno
   branch: main
   auth_type: pkce
+  site_domain: alurageek777.netlify.app
 
 media_folder: public/uploads
 public_folder: /uploads
