@@ -39,18 +39,37 @@ posts.sort((a, b) => {
 ---
 
 <Layout
-  title="Blog de Desenvolvimento Web"
-  description="Artigos sobre React, Next.js e engenharia front-end por Bruno Guimaraes."
+  title="Blog - Bruno Guimarães | Desenvolvedor Front-End Brasil"
+  description="Blog sobre desenvolvimento web com artigos sobre React, Next.js, TypeScript, engenharia front-end e melhores práticas. Aprenda com um desenvolvedor brasileiro."
+  ogType="blog"
   structuredData={{
     '@context': 'https://schema.org',
     '@type': 'Blog',
-    name: 'Blog — Bruno Guimaraes',
+    name: 'Blog — Bruno Guimarães',
     description: 'Artigos sobre React, Next.js, TypeScript e engenharia front-end.',
     url: 'https://devguimaraes.com.br/blog',
+    inLanguage: 'pt-BR',
     author: {
       '@type': 'Person',
-      name: 'Bruno Guimaraes',
+      name: 'Bruno Guimarães',
+      url: 'https://devguimaraes.com.br',
     },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Bruno Guimarães',
+      url: 'https://devguimaraes.com.br',
+    },
+    blogPost: posts.map((post) => ({
+      '@type': 'BlogPosting',
+      headline: post.title,
+      url: `https://devguimaraes.com.br/blog/${post.slug}`,
+      datePublished: post.date,
+      description: post.excerpt,
+      author: {
+        '@type': 'Person',
+        name: post.author,
+      },
+    })),
   }}
 >
   <BlogPageClient initialPosts={posts} client:load />

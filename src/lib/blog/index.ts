@@ -46,20 +46,30 @@ function convertBrazilianDate(dateStr: string): Date {
 
 export async function getAllBlogPosts(): Promise<BlogPost[]> {
   const entries = await getCollection('blog');
-  const posts: BlogPost[] = entries.map((entry) => ({
-    id: entry.id,
-    slug: entry.id,
-    title: entry.data.title,
-    date: entry.data.date,
-    readTime: entry.data.readTime || '5 min',
-    readingTime: parseReadingTime(entry.data.readTime),
-    tags: entry.data.tags,
-    author: entry.data.author,
-    excerpt: entry.data.excerpt,
-    content: '',
-    image: entry.data.image,
-    featured: entry.data.featured,
-  }));
+  const posts: BlogPost[] = [];
+
+  for (const entry of entries) {
+    const rawContent = entry.body ?? '';
+    const wordCount = countWords(rawContent);
+    const readTime = entry.data.readTime || `${Math.ceil(wordCount / 200)} min`;
+
+    posts.push({
+      id: entry.id,
+      slug: entry.id,
+      title: entry.data.title,
+      date: entry.data.date,
+      readTime,
+      readingTime: parseReadingTime(readTime),
+      wordCount,
+      tags: entry.data.tags,
+      author: entry.data.author,
+      excerpt: entry.data.excerpt,
+      content: '',
+      image: entry.data.image,
+      featured: entry.data.featured,
+    });
+  }
+
   posts.sort(
     (a, b) => convertBrazilianDate(b.date).getTime() - convertBrazilianDate(a.date).getTime(),
   );

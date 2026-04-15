@@ -58,6 +58,7 @@ const { post, previous, next, Content } = Astro.props;
   title={post.title}
   description={post.excerpt}
   ogType="article"
+  articlePublishedTime={post.date}
   structuredData={{
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
@@ -68,15 +69,25 @@ const { post, previous, next, Content } = Astro.props;
       name: post.author,
       url: 'https://devguimaraes.com.br',
     },
-    datePublished: post.date,
     publisher: {
-      '@type': 'Person',
-      name: 'Bruno Guimaraes',
+      '@type': 'Organization',
+      name: 'Bruno Guimarães',
+      url: 'https://devguimaraes.com.br',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://devguimaraes.com.br/logo.webp',
+      },
     },
+    datePublished: post.date,
+    dateModified: post.date,
     mainEntityOfPage: {
       '@type': 'WebPage',
       '@id': `https://devguimaraes.com.br/blog/${post.slug}`,
     },
+    image: post.image ? `https://devguimaraes.com.br${post.image}` : 'https://devguimaraes.com.br/og-image.webp',
+    inLanguage: 'pt-BR',
+    articleSection: post.tags?.[0] || 'Desenvolvimento Web',
+    keywords: post.tags?.join(', '),
   }}
 >
   <BlogPostPageClient
