@@ -2,8 +2,7 @@ backend:
   name: github
   repo: devguimaraes/developer-bruno
   branch: main
-  auth_endpoint: /api/auth?provider=github
-  token_endpoint: /api/auth/callback
+  auth_endpoint: /api/auth
 
 media_folder: public/uploads
 public_folder: /uploads
