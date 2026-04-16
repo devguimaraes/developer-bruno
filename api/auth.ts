@@ -3,6 +3,7 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 const CLIENT_ID = process.env.GITHUB_CLIENT_ID ?? "";
 const CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET ?? "";
 const ALLOWED_USER = process.env.ALLOWED_GITHUB_USER ?? "";
+const CSRF_STATE_PREFIX = "oauth_state:";
 
 export default async function handler(
   req: VercelRequest,
@@ -21,6 +22,7 @@ export default async function handler(
     }
 
     const state = crypto.randomUUID();
+    res.setHeader("Set-Cookie", `${CSRF_STATE_PREFIX}${state}=1; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=600`);
     const params = new URLSearchParams({
       client_id: CLIENT_ID,
       redirect_uri: redirectUri,
@@ -33,6 +35,14 @@ export default async function handler(
 
   // Route 2: Handle callback — exchange code for token
   if (url.pathname === "/api/auth/callback") {
+    // Validate CSRF state
+    const state = url.searchParams.get("state");
+    const cookieHeader = req.headers.cookie ?? "";
+    if (!state || !cookieHeader.includes(`${CSRF_STATE_PREFIX}${state}=`)) {
+      res.status(403).send("Invalid state parameter");
+      return;
+    }
+
     const code = url.searchParams.get("code");
     if (!code) {
       res.status(400).send("Missing authorization code");
