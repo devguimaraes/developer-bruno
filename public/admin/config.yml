@@ -2,7 +2,7 @@ backend:
   name: github
   repo: devguimaraes/developer-bruno
   branch: main
-  base_url: https://devguimaraes.com.br
+  base_url: https://www.devguimaraes.com.br
   auth_endpoint: /api/auth
 
 media_folder: public/uploads

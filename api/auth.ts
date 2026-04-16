@@ -4,7 +4,7 @@ const CLIENT_ID = process.env.GITHUB_CLIENT_ID ?? "";
 const CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET ?? "";
 const ALLOWED_USER = process.env.ALLOWED_GITHUB_USER ?? "";
 const CSRF_STATE_PREFIX = "oauth_state:";
-const REDIRECT_URI = process.env.OAUTH_REDIRECT_URI ?? "https://devguimaraes.com.br/api/auth/callback";
+const REDIRECT_URI = process.env.OAUTH_REDIRECT_URI ?? "https://www.devguimaraes.com.br/api/auth/callback";
 
 export default async function handler(
   req: VercelRequest,
