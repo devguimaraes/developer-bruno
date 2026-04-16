@@ -4,14 +4,13 @@ const CLIENT_ID = process.env.GITHUB_CLIENT_ID ?? "";
 const CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET ?? "";
 const ALLOWED_USER = process.env.ALLOWED_GITHUB_USER ?? "";
 const CSRF_STATE_PREFIX = "oauth_state:";
+const REDIRECT_URI = process.env.OAUTH_REDIRECT_URI ?? "https://devguimaraes.com.br/api/auth/callback";
 
 export default async function handler(
   req: VercelRequest,
   res: VercelResponse,
 ): Promise<void> {
   const url = new URL(req.url ?? "", `https://${req.headers.host}`);
-  const origin = req.headers.origin ?? "https://devguimaraes.com.br";
-  const redirectUri = `${origin}/api/auth/callback`;
 
   // Route 1: Start OAuth flow — redirect to GitHub
   if (url.pathname === "/api/auth" || url.pathname === "/api/auth/") {
@@ -25,7 +24,7 @@ export default async function handler(
     res.setHeader("Set-Cookie", `${CSRF_STATE_PREFIX}${state}=1; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=600`);
     const params = new URLSearchParams({
       client_id: CLIENT_ID,
-      redirect_uri: redirectUri,
+      redirect_uri: REDIRECT_URI,
       scope: "repo,user:email",
       state,
     });
@@ -60,7 +59,7 @@ export default async function handler(
         client_id: CLIENT_ID,
         client_secret: CLIENT_SECRET,
         code,
-        redirect_uri: redirectUri,
+        redirect_uri: REDIRECT_URI,
       }),
     });
 
