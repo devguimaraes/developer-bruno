@@ -90,12 +90,20 @@ export default async function handler(
       return;
     }
 
-    // Return token in the format Decap CMS expects
-    res.status(200).json({
-      access_token: tokenData.access_token,
+    // Return HTML that sends token back to parent via postMessage and closes popup
+    const tokenPayload = JSON.stringify({
       token_type: tokenData.token_type,
+      access_token: tokenData.access_token,
       scope: tokenData.scope,
     });
+    res.status(200).setHeader("Content-Type", "text/html; charset=utf-8").send(`<!DOCTYPE html>
+<html><body><script>
+  window.opener.postMessage(
+    JSON.stringify({ type: "authorization", authorization: ${tokenPayload} }),
+    "*"
+  );
+  window.close();
+</script></body></html>`);
     return;
   }
 
