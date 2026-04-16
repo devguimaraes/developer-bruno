@@ -78,25 +78,38 @@ export default async function handler(
       },
     });
 
-    const userData = (await userRes.json()) as { login?: string };
+    const userData = (await userRes.json()) as { login?: string; name?: string; avatar_url?: string; bio?: string };
     if (!userData.login || userData.login !== ALLOWED_USER) {
       res.status(403).send("Access denied");
       return;
     }
 
-    // Return HTML that sends token back to parent via postMessage and closes popup
-    const tokenPayload = JSON.stringify({
-      token_type: tokenData.token_type,
-      access_token: tokenData.access_token,
+    // Return HTML that uses the NetlifyAuthenticator protocol:
+    // 1. Listen for "authorizing:github" from parent, respond to handshake
+    // 2. Then send "authorization:github:success:{JSON}" with token data
+    const authData = JSON.stringify({
+      token: tokenData.access_token,
+      provider: "github",
       scope: tokenData.scope,
+      login: userData.login,
+      name: userData.name || userData.login,
+      avatar_url: userData.avatar_url || "",
+      bio: userData.bio || "",
     });
     res.status(200).setHeader("Content-Type", "text/html; charset=utf-8").send(`<!DOCTYPE html>
 <html><body><script>
-  window.opener.postMessage(
-    JSON.stringify({ type: "authorization", authorization: ${tokenPayload} }),
-    "*"
-  );
-  window.close();
+  function receiveMessage(e) {
+    if (e.data === 'authorizing:github') {
+      window.removeEventListener('message', receiveMessage, false);
+      window.opener.postMessage('authorization:github:success:${authData}', e.origin);
+      window.close();
+    }
+  }
+  window.addEventListener('message', receiveMessage, false);
+  // Fallback: some configurations may need the parent to initiate
+  if (window.opener) {
+    window.opener.postMessage('authorizing:github', '*');
+  }
 </script></body></html>`);
     return;
   }

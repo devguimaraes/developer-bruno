@@ -151,7 +151,7 @@ describe("api/auth handler", () => {
           }),
       })
       .mockResolvedValueOnce({
-        json: () => Promise.resolve({ login: "devguimaraes" }),
+        json: () => Promise.resolve({ login: "devguimaraes", name: "Bruno", avatar_url: "https://example.com/avatar.png", bio: "dev" }),
       });
 
     const req = mockReq({
@@ -169,8 +169,10 @@ describe("api/auth handler", () => {
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "text/html; charset=utf-8");
     const html = (res.send as ReturnType<typeof vi.fn>).mock.calls[0][0] as string;
-    expect(html).toContain('"access_token":"tok456"');
-    expect(html).toContain("window.opener.postMessage");
+    expect(html).toContain("authorization:github:success:");
+    expect(html).toContain('"token":"tok456"');
+    expect(html).toContain('"login":"devguimaraes"');
+    expect(html).toContain("window.addEventListener");
     expect(html).toContain("window.close");
   });
 
