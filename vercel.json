@@ -1,6 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
+    { "source": "/api/auth/(.*)", "destination": "/api/auth" },
     { "source": "/admin/(.*)", "destination": "/admin/$1" },
     { "source": "/uploads/(.*)", "destination": "/uploads/$1" },
     { "source": "/(.*)", "destination": "/index.html" }

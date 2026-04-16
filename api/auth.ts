@@ -10,41 +10,35 @@ export default async function handler(
   req: VercelRequest,
   res: VercelResponse,
 ): Promise<void> {
-  const url = new URL(req.url ?? "", `https://${req.headers.host}`);
+  const code = req.query?.code as string | undefined;
+  const state = req.query?.state as string | undefined;
+  const provider = req.query?.provider as string | undefined;
 
   // Route 1: Start OAuth flow — redirect to GitHub
-  if (url.pathname === "/api/auth" || url.pathname === "/api/auth/") {
-    const provider = url.searchParams.get("provider");
+  if (!code && provider) {
     if (provider !== "github") {
       res.status(400).send("Unsupported provider");
       return;
     }
 
-    const state = crypto.randomUUID();
-    res.setHeader("Set-Cookie", `${CSRF_STATE_PREFIX}${state}=1; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=600`);
+    const oauthState = crypto.randomUUID();
+    res.setHeader("Set-Cookie", `${CSRF_STATE_PREFIX}${oauthState}=1; Path=/; Domain=devguimaraes.com.br; HttpOnly; Secure; SameSite=Lax; Max-Age=600`);
     const params = new URLSearchParams({
       client_id: CLIENT_ID,
       redirect_uri: REDIRECT_URI,
       scope: "repo,user:email",
-      state,
+      state: oauthState,
     });
     res.redirect(`https://github.com/login/oauth/authorize?${params}`);
     return;
   }
 
   // Route 2: Handle callback — exchange code for token
-  if (url.pathname === "/api/auth/callback") {
+  if (code) {
     // Validate CSRF state
-    const state = url.searchParams.get("state");
     const cookieHeader = req.headers.cookie ?? "";
     if (!state || !cookieHeader.includes(`${CSRF_STATE_PREFIX}${state}=`)) {
       res.status(403).send("Invalid state parameter");
-      return;
-    }
-
-    const code = url.searchParams.get("code");
-    if (!code) {
-      res.status(400).send("Missing authorization code");
       return;
     }
 
