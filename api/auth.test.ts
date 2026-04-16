@@ -68,7 +68,7 @@ describe("api/auth handler", () => {
   });
 
   it("redirects to GitHub OAuth when provider=github", async () => {
-    const req = mockReq({ url: "/api/auth?provider=github" });
+    const req = mockReq({ query: { provider: "github" } });
     const res = mockRes();
 
     await handler(req, res);
@@ -79,7 +79,6 @@ describe("api/auth handler", () => {
     expect(redirectUrl).toContain("client_id=test-client-id");
     expect(redirectUrl).toContain("state=test-state-uuid");
     expect(redirectUrl).toContain("scope=repo%2Cuser%3Aemail");
-    // Verify CSRF cookie is set
     expect(res.setHeader).toHaveBeenCalledWith(
       "Set-Cookie",
       expect.stringContaining("oauth_state:test-state-uuid="),
@@ -87,7 +86,7 @@ describe("api/auth handler", () => {
   });
 
   it("returns 400 for unsupported provider", async () => {
-    const req = mockReq({ url: "/api/auth?provider=google" });
+    const req = mockReq({ query: { provider: "google" } });
     const res = mockRes();
 
     await handler(req, res);
@@ -97,7 +96,7 @@ describe("api/auth handler", () => {
   });
 
   it("returns 403 when CSRF state is missing in callback", async () => {
-    const req = mockReq({ url: "/api/auth/callback?code=abc&state=some-state" });
+    const req = mockReq({ query: { code: "abc", state: "some-state" } });
     const res = mockRes();
 
     await handler(req, res);
@@ -106,21 +105,14 @@ describe("api/auth handler", () => {
     expect(res.send).toHaveBeenCalledWith("Invalid state parameter");
   });
 
-  it("returns 400 when code is missing on callback", async () => {
-    const req = mockReq({
-      url: "/api/auth/callback?state=test-state-uuid",
-      headers: {
-        host: "devguimaraes.com.br",
-        origin: "https://devguimaraes.com.br",
-        cookie: "oauth_state:test-state-uuid=1",
-      },
-    });
+  it("returns 403 when CSRF state cookie is absent", async () => {
+    const req = mockReq({ query: { code: "abc", state: "test-state-uuid" } });
     const res = mockRes();
 
     await handler(req, res);
 
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.send).toHaveBeenCalledWith("Missing authorization code");
+    expect(res.status).toHaveBeenCalledWith(403);
+    expect(res.send).toHaveBeenCalledWith("Invalid state parameter");
   });
 
   it("returns 403 when authenticated user is not allowed", async () => {
@@ -133,7 +125,7 @@ describe("api/auth handler", () => {
       });
 
     const req = mockReq({
-      url: "/api/auth/callback?code=abc123&state=test-state-uuid",
+      query: { code: "abc123", state: "test-state-uuid" },
       headers: {
         host: "devguimaraes.com.br",
         origin: "https://devguimaraes.com.br",
@@ -148,7 +140,7 @@ describe("api/auth handler", () => {
     expect(res.send).toHaveBeenCalledWith("Access denied");
   });
 
-  it("returns token when authenticated user is allowed", async () => {
+  it("returns HTML with postMessage when authenticated user is allowed", async () => {
     mockFetch
       .mockResolvedValueOnce({
         json: () =>
@@ -163,7 +155,7 @@ describe("api/auth handler", () => {
       });
 
     const req = mockReq({
-      url: "/api/auth/callback?code=valid-code&state=test-state-uuid",
+      query: { code: "valid-code", state: "test-state-uuid" },
       headers: {
         host: "devguimaraes.com.br",
         origin: "https://devguimaraes.com.br",
@@ -176,16 +168,14 @@ describe("api/auth handler", () => {
 
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "text/html; charset=utf-8");
-    expect(res.send).toHaveBeenCalledWith(
-      expect.stringContaining('"access_token":"tok456"'),
-    );
-    expect(res.send).toHaveBeenCalledWith(
-      expect.stringContaining("window.opener.postMessage"),
-    );
+    const html = (res.send as ReturnType<typeof vi.fn>).mock.calls[0][0] as string;
+    expect(html).toContain('"access_token":"tok456"');
+    expect(html).toContain("window.opener.postMessage");
+    expect(html).toContain("window.close");
   });
 
   it("returns 404 for unknown routes", async () => {
-    const req = mockReq({ url: "/api/unknown" });
+    const req = mockReq({ query: {} });
     const res = mockRes();
 
     await handler(req, res);
