@@ -33,8 +33,9 @@ function mockRes() {
       this.headers = { Location: url };
       return this;
     }),
-    setHeader: vi.fn(),
-    getHeader: vi.fn(),
+    setHeader: vi.fn(function (this: Record<string, unknown>) {
+      return this;
+    }),
   };
 }
 
@@ -174,11 +175,13 @@ describe("api/auth handler", () => {
     await handler(req, res);
 
     expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith({
-      access_token: "tok456",
-      token_type: "bearer",
-      scope: "repo,user:email",
-    });
+    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "text/html; charset=utf-8");
+    expect(res.send).toHaveBeenCalledWith(
+      expect.stringContaining('"access_token":"tok456"'),
+    );
+    expect(res.send).toHaveBeenCalledWith(
+      expect.stringContaining("window.opener.postMessage"),
+    );
   });
 
   it("returns 404 for unknown routes", async () => {
