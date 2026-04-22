@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="820" viewBox="0 0 1400 820">
+  <rect width="1400" height="820" fill="#0b1220"/>
+  <text x="80" y="95" fill="#f8fafc" font-family="Arial, sans-serif" font-size="42" font-weight="700">Matriz de Correções Prioritárias</text>
+  <text x="80" y="135" fill="#94a3b8" font-family="Arial, sans-serif" font-size="23">Do incidente para o plano de ação que evita repetição.</text>
+
+  <rect x="80" y="180" width="600" height="260" rx="16" fill="#111827" stroke="#60a5fa"/>
+  <text x="115" y="230" fill="#bfdbfe" font-family="Arial, sans-serif" font-size="30" font-weight="700">Identidade e OAuth</text>
+  <text x="115" y="280" fill="#e2e8f0" font-family="Arial, sans-serif" font-size="24">• Revogar apps não essenciais</text>
+  <text x="115" y="320" fill="#e2e8f0" font-family="Arial, sans-serif" font-size="24">• Escopos mínimos por integração</text>
+  <text x="115" y="360" fill="#e2e8f0" font-family="Arial, sans-serif" font-size="24">• MFA forte para contas críticas</text>
+  <text x="115" y="400" fill="#e2e8f0" font-family="Arial, sans-serif" font-size="24">• Alertas para login/token anômalo</text>
+
+  <rect x="720" y="180" width="600" height="260" rx="16" fill="#111827" stroke="#f59e0b"/>
+  <text x="755" y="230" fill="#fde68a" font-family="Arial, sans-serif" font-size="30" font-weight="700">Autorização e Visibilidade</text>
+  <text x="755" y="280" fill="#e2e8f0" font-family="Arial, sans-serif" font-size="24">• Private-by-default</text>
+  <text x="755" y="320" fill="#e2e8f0" font-family="Arial, sans-serif" font-size="24">• Testes BOLA/IDOR em APIs</text>
+  <text x="755" y="360" fill="#e2e8f0" font-family="Arial, sans-serif" font-size="24">• Semântica clara de "público"</text>
+  <text x="755" y="400" fill="#e2e8f0" font-family="Arial, sans-serif" font-size="24">• Logs auditáveis por recurso</text>
+
+  <rect x="80" y="480" width="1240" height="250" rx="16" fill="#111827" stroke="#22c55e"/>
+  <text x="115" y="530" fill="#bbf7d0" font-family="Arial, sans-serif" font-size="30" font-weight="700">Governança de Segredos e Resposta</text>
+  <text x="115" y="580" fill="#e2e8f0" font-family="Arial, sans-serif" font-size="24">• Rotação imediata (24h), recorrente (30 dias)</text>
+  <text x="115" y="620" fill="#e2e8f0" font-family="Arial, sans-serif" font-size="24">• Classificação obrigatória de variáveis sensíveis</text>
+  <text x="115" y="660" fill="#e2e8f0" font-family="Arial, sans-serif" font-size="24">• Playbook de incidente + disclosure transparente</text>
+  <text x="115" y="700" fill="#e2e8f0" font-family="Arial, sans-serif" font-size="24">• Simulados trimestrais com cenário de supply chain</text>
+</svg>
