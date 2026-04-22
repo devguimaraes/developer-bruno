@@ -54,21 +54,27 @@ Desenvolvido para entregar a melhor experiência possível sob as condições de
 ### Comandos Essenciais
 
 ```bash
-# Instalação (Recomendado: Bun ou npm)
-npm install
+# Instalação
+bun install
 
-# Ambiente de Desenvolvimento (Porta 5173)
-npm run dev
+# Ambiente de Desenvolvimento (http://127.0.0.1:4321)
+bun run dev
 
 # Build de Produção com Geração de Sitemap
-npm run build
+bun run build
 
 # Preview da Build Local
-npm run preview
+bun run preview
 
-# Linting & Type Checking
-npm run lint
+# Linting com Biome
+bun run lint
+
+# Testes
+bun run test:unit
+bun run test:e2e
 ```
+
+O servidor local sobe em `http://127.0.0.1:4321/`, e esse é o endereço esperado para E2E/Playwright.
 
 ### Estrutura de Pastas
 
