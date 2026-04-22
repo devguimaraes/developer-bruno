@@ -64,10 +64,9 @@ async function main() {
 
   const totalOriginal = assets.totalOriginal + pub.totalOriginal;
   const totalConverted = assets.totalConverted + pub.totalConverted;
-  const totalSavings = (
-    ((totalOriginal - totalConverted) / totalOriginal) *
-    100
-  ).toFixed(1);
+  const totalSavings = totalOriginal > 0
+    ? (((totalOriginal - totalConverted) / totalOriginal) * 100).toFixed(1)
+    : "0.0";
 
   console.log("\n========================================");
   console.log(
