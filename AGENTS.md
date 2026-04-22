@@ -1,7 +1,7 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-This repository is an Astro 6.0 + React + TypeScript portfolio app.
+This repository is an Astro 5 + React + TypeScript portfolio app.
 
 - `src/`: application code.
 - `src/components/`: page sections and reusable UI primitives (`src/components/ui`).

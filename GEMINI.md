@@ -24,7 +24,7 @@ bun run preview      # Preview production build locally
 
 **Tech Stack:**
 
-- **Core:** Astro 6.0+ (SSG Mode)
+- **Core:** Astro 5 (SSG Mode)
 - **Frontend:** React 18.3 + TypeScript + Tailwind CSS 3.4
 - **UI System:** shadcn/ui (36 components) + Radix UI + Framer Motion
 - **Interactivity:** Framer Motion (animations), Embla Carousel, Sonner

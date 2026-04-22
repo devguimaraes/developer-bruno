@@ -5,23 +5,23 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
-npm install                    # Install dependencies
-npm run dev                    # Astro dev server (port 8080)
-npm run build                  # Production build (static SSG)
-npm run preview                # Preview production build
-npm run lint                   # Biome lint
-npm run lint:fix               # Biome lint with auto-fix
-npm run format                 # Biome format check
-npm run format:fix             # Biome format with write
-npm run test                   # Vitest (watch mode)
-npm run test:unit              # Vitest single run
-npm run test:e2e               # Playwright e2e tests
-npm run optimize:media         # Optimize media assets via scripts/optimize-media.mjs
+bun install                    # Install dependencies
+bun run dev                    # Astro dev server (port 4321)
+bun run build                  # Production build (static SSG)
+bun run preview                # Preview production build
+bun run lint                   # Biome lint
+bun run lint:fix               # Biome lint with auto-fix
+bun run format                 # Biome format check
+bun run format:fix             # Biome format with write
+bun run test                   # Vitest (watch mode)
+bun run test:unit              # Vitest single run
+bun run test:e2e               # Playwright e2e tests
+bun run optimize:media         # Optimize media assets via scripts/optimize-media.mjs
 ```
 
 **Run a single test file:**
 ```bash
-npx vitest run src/lib/utils.test.ts
+bunx vitest run src/lib/utils.test.ts
 ```
 
 **Pre-commit hook:** Husky runs lint-staged — Biome lint + format + `tsc --noEmit` on staged `.ts/.tsx` files.
@@ -120,6 +120,6 @@ Brutalist/neo-brutalist aesthetic:
 - `astro.config.mjs` — Astro config with React, Tailwind, Sitemap integrations
 - `biome.json` — Linting (recommended rules) and formatting (2-space indent, 100px line width, double quotes)
 - `vitest.config.ts` — Unit test config with jsdom and `@/` alias
-- `playwright.config.ts` — E2E test config (baseURL: localhost:8080)
+- `playwright.config.ts` — E2E test config (baseURL: http://127.0.0.1:4321)
 - `tailwind.config.ts` — Design tokens, animations, brutalist variants
 - `src/config/site.ts` — SEO metadata and performance budgets

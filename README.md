@@ -6,7 +6,7 @@
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178c6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-18.3-61dafb?style=for-the-badge&logo=react&logoColor=white)](https://react.dev/)
-[![Vite](https://img.shields.io/badge/Vite-7.2-646cff?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Astro](https://img.shields.io/badge/Astro-5-ff5d01?style=for-the-badge&logo=astro&logoColor=white)](https://astro.build/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-06b6d4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com/)
 
@@ -14,7 +14,7 @@
 
 Um ecossistema digital de alta performance focado no mercado brasileiro, construído com uma arquitetura "Data-First" e design neo-brutalista.
 
-[Visualizar Demo](https://devguimaraes.com.br) • [Relatório de Auditoria](tasks/Relatorio_Auditoria.md) • [Guia de Estilo](docs/DESIGN_SYSTEM_GUIDELINE.md)
+[Visualizar Demo](https://devguimaraes.com.br) • [Guia de Estilo](docs/DESIGN_SYSTEM_GUIDELINE.md)
 
 </div>
 
@@ -25,8 +25,8 @@ Um ecossistema digital de alta performance focado no mercado brasileiro, constru
 Este não é apenas um site estático, mas uma aplicação React robusta com foco em escalabilidade e manutenção simplificada.
 
 ### 🧩 Core Stack
-- **Engine**: React 18.3 + Vite 7.2 (SWC) para compilação ultra-rápida.
-- **Design System**: Tailwind CSS 3.4 + **shadcn/ui** (36 componentes customizados).
+- **Engine**: Astro 5 (SSG) + React 18.3 + TypeScript para compilação ultra-rápida.
+- **Design System**: Tailwind CSS 3.4 com estética brutalista customizada.
 - **Animações**: Framer Motion para transições de UI e **Rive** para animações vetoriais interativas de baixo consumo.
 - **Data Layer**: 100% do conteúdo externalizado em `src/data/`, validado em tempo de execução com **Zod**.
 - **Performance**: **React Query 5** para cache inteligente e gerenciamento de estado assíncrono.
