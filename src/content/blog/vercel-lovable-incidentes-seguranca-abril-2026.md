@@ -4,15 +4,15 @@ date: "22 ABR 2026"
 readTime: "8 min"
 tags: ["Segurança", "Vercel", "Lovable", "OAuth", "Incidentes"]
 excerpt: "Uma análise direta dos incidentes recentes envolvendo Vercel e Lovable, com foco em clarificação técnica e plano prático de mitigação em 24h, 7 dias e 30 dias."
-image: "https://techcrunch.com/wp-content/uploads/2026/04/vercel-2249343327-smaller.jpg?w=1024"
+image: "/uploads/blog/incident-timeline-abril-2026.svg"
 featured: true
 ---
 
 # Vercel + Lovable: o que realmente vazou e como mitigar agora
 
-![Imagem de referência da cobertura da TechCrunch sobre o caso Vercel](https://techcrunch.com/wp-content/uploads/2026/04/vercel-2249343327-smaller.jpg?w=1024)
+![Linha do tempo dos incidentes de abril de 2026](/uploads/blog/incident-timeline-abril-2026.svg)
 
-> Crédito da imagem acima: TechCrunch (artigo de 20 de abril de 2026). Uso recomendado como referência editorial com atribuição e link para a fonte.
+> Referência editorial da cobertura: TechCrunch (artigo de 20 de abril de 2026).
 
 Nos últimos dias, os nomes **Vercel** e **Lovable** apareceram juntos em muitas discussões sobre "hack". O problema é que, tecnicamente, os casos não são iguais.
 
