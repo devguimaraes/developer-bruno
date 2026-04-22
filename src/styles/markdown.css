@@ -90,7 +90,6 @@
 /* ---- Code blocks (Astro/Shiki) ---- */
 
 [data-markdown-content] pre {
-  background-color: #0d1117 !important;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 10px;
   padding: 1.25rem 1.5rem;
@@ -99,16 +98,14 @@
   position: relative;
 }
 
-[data-markdown-content] pre > code,
-[data-markdown-content] .astro-code {
-  background: transparent !important;
-  color: #e6edf3 !important;
-  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace !important;
-  font-size: 0.875rem !important;
-  line-height: 1.7 !important;
-  padding: 0 !important;
-  border: none !important;
-  border-radius: 0 !important;
+[data-markdown-content] pre > code {
+  background: transparent;
+}
+
+[data-markdown-content] pre.astro-code {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+  font-size: 0.875rem;
+  line-height: 1.7;
 }
 
 /* Language label */
@@ -304,7 +301,7 @@
     margin-right: -0.5rem;
   }
 
-  [data-markdown-content] .astro-code {
-    font-size: 0.8125rem !important;
+  [data-markdown-content] pre.astro-code {
+    font-size: 0.8125rem;
   }
 }

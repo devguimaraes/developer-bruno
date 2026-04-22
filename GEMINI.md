@@ -5,7 +5,7 @@ Guide for Gemini (AI assistant) working with this brutalist portfolio repository
 ## 🚀 Quick Start
 
 ```bash
-bun install && bun run dev    # Development server (port 4321)
+bun install && bun run dev    # Development server (http://127.0.0.1:4321)
 bun run build && bun run preview  # Test production build
 ```
 
@@ -16,7 +16,7 @@ bun run dev          # Astro dev server
 bun run build        # Production build + sitemap generation
 bun run test         # Unit/Component tests (Vitest)
 bun run test:e2e     # E2E tests (Playwright)
-bun run lint         # ESLint + TypeScript check
+bun run lint         # Biome linting
 bun run preview      # Preview production build locally
 ```
 
@@ -24,7 +24,7 @@ bun run preview      # Preview production build locally
 
 **Tech Stack:**
 
-- **Core:** Astro 6.0+ (SSG Mode)
+- **Core:** Astro 5 (SSG Mode)
 - **Frontend:** React 18.3 + TypeScript + Tailwind CSS 3.4
 - **UI System:** shadcn/ui (36 components) + Radix UI + Framer Motion
 - **Interactivity:** Framer Motion (animations), Embla Carousel, Sonner
@@ -59,11 +59,13 @@ antigravity-pack/       # Antigravity product assets & docs
 
 - **Unit/Component:** `bun run test` (Vitest + React Testing Library)
 - **E2E/Flow:** `bun run test:e2e` (Playwright)
-- **Types/Lint:** `bun run lint` (ESLint + `tsc --noEmit`)
+- **Types/Lint:** `bun run lint` (Biome)
+- **Playwright target:** local server at `http://127.0.0.1:4321/`
 
 **2. Git Workflow:**
 
 - **Pre-commit:** Husky + lint-staged runs linting and type checks automatically.
+- **Package manager:** use Bun for install, scripts, and local workflows.
 - **Conventional Commits:** Use clear prefixing (feat:, fix:, chore:, etc.).
 
 ## ⚡ Performance & SEO (Brazilian Market)

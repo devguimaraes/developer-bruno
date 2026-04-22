@@ -1,9 +1,10 @@
-import React from "react";
+import type React from "react";
 import Hero from "@/components/Hero";
 import Projects from "@/components/Projects";
 import About from "@/components/About";
 import LatestPosts from "@/components/pages/LatestPosts";
 import SectionEntrance from "@/components/ui/SectionEntrance";
+import { contactData } from "@/config/site";
 import type { BlogPost } from "@/types/blog";
 
 interface IndexProps {
@@ -36,9 +37,15 @@ const Index: React.FC<IndexProps> = ({ latestPosts = [] }) => {
       </SectionEntrance>
 
       {/* Footer Info / Showreel Placeholder */}
-      <SectionEntrance id="contact" className="py-40 flex flex-col items-center justify-center text-center">
+      <SectionEntrance
+        id="contact"
+        className="py-40 flex flex-col items-center justify-center text-center"
+      >
         <div className="type-mono mb-8">Ready to start a project?</div>
-        <a href="mailto:dev@bruno.com" className="type-raster-section text-[12vw] hover:text-accent transition-colors cursor-pointer block">
+        <a
+          href={`mailto:${contactData.email}`}
+          className="type-raster-section text-[12vw] hover:text-accent transition-colors cursor-pointer block"
+        >
           LET&apos;S_TALK
         </a>
         <div className="mt-20 type-mono opacity-50">

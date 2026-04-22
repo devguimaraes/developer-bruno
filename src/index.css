@@ -33,16 +33,16 @@
 
 @layer utilities {
   .font-pixel {
-    font-family: var(--font-pixel-display) !important;
+    font-family: var(--font-pixel-display);
   }
   
   .font-silkscreen {
-    font-family: var(--font-pixel-tech) !important;
+    font-family: var(--font-pixel-tech);
   }
 
   .font-hero-pixel,
   .font-vt {
-    font-family: var(--font-pixel-display) !important;
+    font-family: var(--font-pixel-display);
   }
 
   .type-raster-hero {
@@ -80,11 +80,6 @@
   .type-body-lg {
     @apply font-sans tracking-[0.01em] leading-[1.6] text-stone-600;
   }
-
-  .outlined-title-mobile-solid {
-    overflow-wrap: normal;
-    word-break: normal;
-  }
 }
 
 .modular-grid {
@@ -112,14 +107,6 @@
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
   perspective: 1000px;
-}
-
-@media (max-width: 639px) {
-  .outlined-title-mobile-solid {
-    color: #000 !important;
-    -webkit-text-stroke: 0 !important;
-    text-shadow: none;
-  }
 }
 
 @layer components {

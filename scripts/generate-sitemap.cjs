@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 
 /**
  * Generate XML sitemap for Brazilian market
@@ -23,7 +23,7 @@ function generateSitemap() {
       // Fallback to correct domain
       siteConfig = { domain: 'https://devguimaraes.com.br' };
     }
-  } catch (error) {
+  } catch (_error) {
     console.warn('Warning: Could not read config file, using default domain');
     siteConfig = { domain: 'https://devguimaraes.com.br' };
   }

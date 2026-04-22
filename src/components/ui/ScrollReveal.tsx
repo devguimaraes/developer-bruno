@@ -1,4 +1,5 @@
-import React, { useRef } from "react";
+import type React from "react";
+import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 
 interface ScrollRevealProps {
@@ -25,12 +26,18 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
 
   const getInitialProps = () => {
     switch (direction) {
-      case "up": return { opacity: 0, y: 30 };
-      case "down": return { opacity: 0, y: -30 };
-      case "left": return { opacity: 0, x: 30 };
-      case "right": return { opacity: 0, x: -30 };
-      case "none": return { opacity: 0, scale: 0.95 };
-      default: return { opacity: 0, y: 30 };
+      case "up":
+        return { opacity: 0, y: 30 };
+      case "down":
+        return { opacity: 0, y: -30 };
+      case "left":
+        return { opacity: 0, x: 30 };
+      case "right":
+        return { opacity: 0, x: -30 };
+      case "none":
+        return { opacity: 0, scale: 0.95 };
+      default:
+        return { opacity: 0, y: 30 };
     }
   };
 

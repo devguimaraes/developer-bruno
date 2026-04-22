@@ -1,11 +1,12 @@
-import React, { useEffect } from 'react';
-import Lenis from 'lenis';
+import type React from "react";
+import { useEffect } from "react";
+import Lenis from "lenis";
 
 export const SmoothScroll: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      easing: t => Math.min(1, 1.001 - 2 ** (-10 * t)),
       smoothWheel: true,
       touchMultiplier: 2,
     });

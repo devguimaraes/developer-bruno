@@ -10,16 +10,27 @@ vi.mock("@/hooks/use-mobile", () => ({
 
 // Mock do componente StaggeredMenu
 vi.mock("@/components/ui/StaggeredMenu", () => ({
-  default: ({ isOpen, onClose, items }: { isOpen: boolean; onClose: () => void; items: Array<{ label: string; href: string }> }) => (
+  default: ({
+    isOpen,
+    onClose,
+    items,
+  }: {
+    isOpen: boolean;
+    onClose: () => void;
+    items: Array<{ label: string; href: string }>;
+  }) =>
     isOpen ? (
       <div data-testid="mobile-menu">
-        <button onClick={onClose}>Close</button>
-        {items.map((item) => (
-          <a key={item.label} href={item.href} onClick={onClose}>{item.label}</a>
+        <button type="button" onClick={onClose}>
+          Close
+        </button>
+        {items.map(item => (
+          <a key={item.label} href={item.href} onClick={onClose}>
+            {item.label}
+          </a>
         ))}
       </div>
-    ) : null
-  ),
+    ) : null,
 }));
 
 // Mock do componente Magnetic
@@ -61,28 +72,30 @@ describe("Navigation Component - Brutalist Glass", () => {
 
   it("deve abrir o menu mobile ao clicar no botão de toggle", () => {
     vi.mocked(useIsMobile).mockReturnValue(true);
-    
+
     renderNav();
-    
+
     const toggleButton = screen.getByLabelText(/Abrir menu/i);
     fireEvent.click(toggleButton);
 
     expect(screen.getByTestId("mobile-menu")).toBeInTheDocument();
-    // No mobile menu, os links são renderizados. 
+    // No mobile menu, os links são renderizados.
     // Como getByText falha com múltiplos, usamos getAllByText e pegamos o do menu ou verificamos a existência.
     const projectsLinks = screen.getAllByText("PROJETOS");
     expect(projectsLinks.length).toBeGreaterThan(0);
-    expect(screen.getByText("SOBRE", { selector: "#mobile-menu a, [data-testid='mobile-menu'] a" })).toBeInTheDocument();
+    expect(
+      screen.getByText("SOBRE", { selector: "#mobile-menu a, [data-testid='mobile-menu'] a" })
+    ).toBeInTheDocument();
   });
 
   it("deve fechar o menu mobile ao clicar em um link", () => {
     vi.mocked(useIsMobile).mockReturnValue(true);
-    
+
     renderNav();
-    
+
     // Abre o menu
     fireEvent.click(screen.getByLabelText(/Abrir menu/i));
-    
+
     // Pega o link no menu mobile especificamente
     const mobileLink = screen.getByText("SOBRE", { selector: "[data-testid='mobile-menu'] a" });
     fireEvent.click(mobileLink);

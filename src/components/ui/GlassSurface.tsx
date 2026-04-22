@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState, useId } from 'react';
-import './GlassSurface.css';
+import type React from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
+import "./GlassSurface.css";
 
 export interface GlassSurfaceProps {
   children?: React.ReactNode;
@@ -17,13 +18,27 @@ export interface GlassSurfaceProps {
   redOffset?: number;
   greenOffset?: number;
   blueOffset?: number;
-  xChannel?: 'R' | 'G' | 'B';
-  yChannel?: 'R' | 'G' | 'B';
+  xChannel?: "R" | "G" | "B";
+  yChannel?: "R" | "G" | "B";
   mixBlendMode?:
-    | 'normal' | 'multiply' | 'screen' | 'overlay' | 'darken' | 'lighten'
-    | 'color-dodge' | 'color-burn' | 'hard-light' | 'soft-light'
-    | 'difference' | 'exclusion' | 'hue' | 'saturation' | 'color'
-    | 'luminosity' | 'plus-darker' | 'plus-lighter';
+    | "normal"
+    | "multiply"
+    | "screen"
+    | "overlay"
+    | "darken"
+    | "lighten"
+    | "color-dodge"
+    | "color-burn"
+    | "hard-light"
+    | "soft-light"
+    | "difference"
+    | "exclusion"
+    | "hue"
+    | "saturation"
+    | "color"
+    | "luminosity"
+    | "plus-darker"
+    | "plus-lighter";
   className?: string;
   style?: React.CSSProperties;
 }
@@ -44,11 +59,11 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
   redOffset = 0,
   greenOffset = 5,
   blueOffset = 10,
-  xChannel = 'R',
-  yChannel = 'G',
-  mixBlendMode = 'difference',
-  className = '',
-  style = {}
+  xChannel = "R",
+  yChannel = "G",
+  mixBlendMode = "difference",
+  className = "",
+  style = {},
 }) => {
   const id = useId();
   const filterId = `glass-filter-${id.replace(/:/g, "")}`;
@@ -64,7 +79,7 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
   const blueChannelRef = useRef<SVGFEDisplacementMapElement>(null);
   const gaussianBlurRef = useRef<SVGFEGaussianBlurElement>(null);
 
-  const updateDisplacementMap = React.useCallback(() => {
+  const updateDisplacementMap = useCallback(() => {
     const rect = containerRef.current?.getBoundingClientRect();
     const actualWidth = rect?.width || 400;
     const actualHeight = rect?.height || 80;
@@ -90,7 +105,7 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
     `;
 
     const dataUri = `data:image/svg+xml,${encodeURIComponent(svgContent)}`;
-    feImageRef.current?.setAttribute('href', dataUri);
+    feImageRef.current?.setAttribute("href", dataUri);
   }, [borderWidth, borderRadius, brightness, opacity, blur, mixBlendMode, redGradId, blueGradId]);
 
   useEffect(() => {
@@ -98,20 +113,25 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
     [
       { ref: redChannelRef, offset: redOffset },
       { ref: greenChannelRef, offset: greenOffset },
-      { ref: blueChannelRef, offset: blueOffset }
+      { ref: blueChannelRef, offset: blueOffset },
     ].forEach(({ ref, offset }) => {
       if (ref.current) {
-        ref.current.setAttribute('scale', (distortionScale + offset).toString());
-        ref.current.setAttribute('xChannelSelector', xChannel);
-        ref.current.setAttribute('yChannelSelector', yChannel);
+        ref.current.setAttribute("scale", (distortionScale + offset).toString());
+        ref.current.setAttribute("xChannelSelector", xChannel);
+        ref.current.setAttribute("yChannelSelector", yChannel);
       }
     });
 
-    gaussianBlurRef.current?.setAttribute('stdDeviation', displace.toString());
+    gaussianBlurRef.current?.setAttribute("stdDeviation", displace.toString());
   }, [
     updateDisplacementMap,
-    width, height, borderRadius, borderWidth, brightness, opacity, blur, displace, 
-    distortionScale, redOffset, greenOffset, blueOffset, xChannel, yChannel, mixBlendMode
+    displace,
+    distortionScale,
+    redOffset,
+    greenOffset,
+    blueOffset,
+    xChannel,
+    yChannel,
   ]);
 
   useEffect(() => {
@@ -129,33 +149,79 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
 
   const containerStyle: React.CSSProperties = {
     ...style,
-    width: typeof width === 'number' ? `${width}px` : width,
-    height: typeof height === 'number' ? `${height}px` : height,
+    width: typeof width === "number" ? `${width}px` : width,
+    height: typeof height === "number" ? `${height}px` : height,
     borderRadius: `${borderRadius}px`,
     // @ts-expect-error - Custom CSS properties are not in React.CSSProperties
-    '--glass-frost': backgroundOpacity,
+    "--glass-frost": backgroundOpacity,
     // @ts-expect-error - Custom CSS properties are not in React.CSSProperties
-    '--glass-saturation': saturation,
+    "--glass-saturation": saturation,
     // @ts-expect-error - Custom CSS properties are not in React.CSSProperties
-    '--filter-id': `url(#${filterId})`
+    "--filter-id": `url(#${filterId})`,
   };
 
   return (
     <div
       ref={containerRef}
-      className={`glass-surface ${svgSupported ? 'glass-surface--svg' : 'glass-surface--fallback'} ${className}`}
+      className={`glass-surface ${svgSupported ? "glass-surface--svg" : "glass-surface--fallback"} ${className}`}
       style={containerStyle}
     >
-      <svg className="glass-surface__filter" xmlns="http://www.w3.org/2000/svg">
+      <svg
+        className="glass-surface__filter"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <title>Glass surface filter</title>
         <defs>
-          <filter id={filterId} colorInterpolationFilters="sRGB" x="0%" y="0%" width="100%" height="100%">
-            <feImage ref={feImageRef} x="0" y="0" width="100%" height="100%" preserveAspectRatio="none" result="map" />
+          <filter
+            id={filterId}
+            colorInterpolationFilters="sRGB"
+            x="0%"
+            y="0%"
+            width="100%"
+            height="100%"
+          >
+            <feImage
+              ref={feImageRef}
+              x="0"
+              y="0"
+              width="100%"
+              height="100%"
+              preserveAspectRatio="none"
+              result="map"
+            />
             <feDisplacementMap ref={redChannelRef} in="SourceGraphic" in2="map" result="dispRed" />
-            <feColorMatrix in="dispRed" type="matrix" values="1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0" result="red" />
-            <feDisplacementMap ref={greenChannelRef} in="SourceGraphic" in2="map" result="dispGreen" />
-            <feColorMatrix in="dispGreen" type="matrix" values="0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0" result="green" />
-            <feDisplacementMap ref={blueChannelRef} in="SourceGraphic" in2="map" result="dispBlue" />
-            <feColorMatrix in="dispBlue" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 0" result="blue" />
+            <feColorMatrix
+              in="dispRed"
+              type="matrix"
+              values="1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0"
+              result="red"
+            />
+            <feDisplacementMap
+              ref={greenChannelRef}
+              in="SourceGraphic"
+              in2="map"
+              result="dispGreen"
+            />
+            <feColorMatrix
+              in="dispGreen"
+              type="matrix"
+              values="0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0"
+              result="green"
+            />
+            <feDisplacementMap
+              ref={blueChannelRef}
+              in="SourceGraphic"
+              in2="map"
+              result="dispBlue"
+            />
+            <feColorMatrix
+              in="dispBlue"
+              type="matrix"
+              values="0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 0"
+              result="blue"
+            />
             <feBlend in="red" in2="green" mode="screen" result="rg" />
             <feBlend in="rg" in2="blue" mode="screen" result="output" />
             <feGaussianBlur ref={gaussianBlurRef} in="output" stdDeviation="0.7" />

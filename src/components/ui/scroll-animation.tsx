@@ -1,5 +1,5 @@
-import React from "react";
-import { motion, HTMLMotionProps, Variants } from "framer-motion";
+import type React from "react";
+import { motion, type HTMLMotionProps, type Variants } from "framer-motion";
 
 interface ScrollAnimationProps extends HTMLMotionProps<"div"> {
   children: React.ReactNode;

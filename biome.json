@@ -7,7 +7,7 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": ["src", "scripts"]
+    "includes": ["src/**", "scripts/**"]
   },
   "linter": {
     "enabled": true,
@@ -22,7 +22,8 @@
         "useAsConstAssertion": "warn"
       },
       "suspicious": {
-        "noExplicitAny": "warn"
+        "noExplicitAny": "warn",
+        "noUnknownAtRules": "off"
       }
     }
   },
@@ -45,6 +46,24 @@
       "trailingCommas": "es5"
     }
   },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["**/*.astro"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUnusedImports": "off",
+            "noUnusedVariables": "off"
+          }
+        }
+      }
+    }
+  ],
   "json": {
     "parser": {
       "allowComments": true,
