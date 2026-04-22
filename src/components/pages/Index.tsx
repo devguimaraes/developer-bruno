@@ -4,6 +4,7 @@ import Projects from "@/components/Projects";
 import About from "@/components/About";
 import LatestPosts from "@/components/pages/LatestPosts";
 import SectionEntrance from "@/components/ui/SectionEntrance";
+import { contactData } from "@/config/site";
 import type { BlogPost } from "@/types/blog";
 
 interface IndexProps {
@@ -42,7 +43,7 @@ const Index: React.FC<IndexProps> = ({ latestPosts = [] }) => {
       >
         <div className="type-mono mb-8">Ready to start a project?</div>
         <a
-          href="mailto:dev@bruno.com"
+          href={`mailto:${contactData.email}`}
           className="type-raster-section text-[12vw] hover:text-accent transition-colors cursor-pointer block"
         >
           LET&apos;S_TALK

@@ -2,6 +2,7 @@ import type React from "react";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { Github, Instagram, Linkedin, Mail, X } from "lucide-react";
+import { contactData } from "@/config/site";
 import GlassSurface from "./GlassSurface";
 
 interface StaggeredMenuItem {
@@ -159,7 +160,7 @@ const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
                 <Instagram size={28} />
               </a>
               <a
-                href="mailto:bc.guimaraes@outlook.com"
+                href={`mailto:${contactData.email}`}
                 className="text-white/60 hover:text-white transition-colors"
               >
                 <Mail size={28} />
