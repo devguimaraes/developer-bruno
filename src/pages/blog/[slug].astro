@@ -52,6 +52,11 @@ export async function getStaticPaths() {
 }
 
 const { post, previous, next, Content } = Astro.props;
+const structuredDataImage = post.image
+  ? (post.image.startsWith('http://') || post.image.startsWith('https://')
+      ? post.image
+      : `https://devguimaraes.com.br${post.image}`)
+  : 'https://devguimaraes.com.br/og-image.webp';
 ---
 
 <Layout
@@ -84,7 +89,7 @@ const { post, previous, next, Content } = Astro.props;
       '@type': 'WebPage',
       '@id': `https://devguimaraes.com.br/blog/${post.slug}`,
     },
-    image: post.image ? `https://devguimaraes.com.br${post.image}` : 'https://devguimaraes.com.br/og-image.webp',
+    image: structuredDataImage,
     inLanguage: 'pt-BR',
     articleSection: post.tags?.[0] || 'Desenvolvimento Web',
     keywords: post.tags?.join(', '),
