@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import type React from "react";
+import { useState, useEffect } from "react";
 import GlassSurface from "@/components/ui/GlassSurface";
 import StaggeredMenu from "@/components/ui/StaggeredMenu";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -24,12 +25,10 @@ const Navigation: React.FC = () => {
 
   return (
     <>
-      <nav 
-        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
-      >
-        <GlassSurface 
+      <nav className="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <GlassSurface
           className={`w-full transition-all duration-500`}
-          height={scrolled ? (isMobile ? 64 : 80) : (isMobile ? 72 : 90)}
+          height={scrolled ? (isMobile ? 64 : 80) : isMobile ? 72 : 90}
           backgroundOpacity={scrolled ? 0.3 : 0.05}
           blur={scrolled ? 20 : 0}
           brightness={scrolled ? 30 : 50}
@@ -41,9 +40,9 @@ const Navigation: React.FC = () => {
             <Magnetic>
               <a href="/" className="flex items-center gap-2 sm:gap-4 group py-2">
                 <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-white/20 group-hover:border-accent transition-all duration-300">
-                  <img 
-                    src="/avatar-bruno-bg.jpg" 
-                    alt="Bruno Guimarães" 
+                  <img
+                    src="/avatar-bruno-bg.jpg"
+                    alt="Bruno Guimarães"
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -56,9 +55,9 @@ const Navigation: React.FC = () => {
             </Magnetic>
 
             <div className="hidden md:flex items-center gap-12">
-              {navLinks.map((link) => (
+              {navLinks.map(link => (
                 <Magnetic key={link.name}>
-                  <a 
+                  <a
                     href={link.href}
                     className="type-mono text-[10px] tracking-[0.2em] hover:text-accent transition-colors text-white/80 hover:text-white uppercase font-bold"
                   >
@@ -68,7 +67,8 @@ const Navigation: React.FC = () => {
               ))}
             </div>
 
-            <button 
+            <button
+              type="button"
               className="md:hidden flex flex-col items-end gap-1.5 p-2"
               onClick={() => setIsOpen(true)}
               aria-label="Abrir menu"
@@ -82,8 +82,8 @@ const Navigation: React.FC = () => {
       </nav>
 
       {/* Mobile Staggered Menu */}
-      <StaggeredMenu 
-        isOpen={isOpen} 
+      <StaggeredMenu
+        isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         items={navLinks.map(link => ({ label: link.name, href: link.href }))}
       />

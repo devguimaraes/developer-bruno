@@ -1,5 +1,5 @@
-import React from "react";
-import { motion, HTMLMotionProps } from "framer-motion";
+import type React from "react";
+import { motion, type HTMLMotionProps } from "framer-motion";
 
 // --- FadeInStagger ---
 // Context for staggered animations of children
@@ -39,11 +39,7 @@ export const FadeInStagger: React.FC<FadeInStaggerProps> = ({
 
 // --- FadeInItem ---
 // Child item that fades in (upwards by default)
-export const FadeInItem: React.FC<HTMLMotionProps<"div">> = ({
-  children,
-  className,
-  ...props
-}) => {
+export const FadeInItem: React.FC<HTMLMotionProps<"div">> = ({ children, className, ...props }) => {
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
@@ -82,6 +78,17 @@ export const TextReveal: React.FC<TextRevealProps> = ({
   delay = 0,
 }) => {
   const segments = mode === "word" ? text.split(" ") : Array.from(text);
+  const segmentCounts = new Map<string, number>();
+  const keyedSegments = segments.map(segment => {
+    const normalizedSegment = segment === " " ? "space" : segment;
+    const occurrence = (segmentCounts.get(normalizedSegment) ?? 0) + 1;
+    segmentCounts.set(normalizedSegment, occurrence);
+
+    return {
+      key: `${mode}-${normalizedSegment}-${occurrence}`,
+      value: segment,
+    };
+  });
 
   const containerVariants = {
     hidden: {},
@@ -114,19 +121,16 @@ export const TextReveal: React.FC<TextRevealProps> = ({
       viewport={{ once: true }}
       style={{ display: "inline-block", overflow: "hidden" }} // Overflow hidden for clean "slide up" effect
     >
-      {segments.map((segment, i) => (
+      {keyedSegments.map(({ key, value }) => (
         <span
-          key={i}
+          key={key}
           style={{
             display: "inline-block",
             marginRight: mode === "word" ? "0.25em" : "0",
           }}
         >
-          <motion.span
-            variants={itemVariants}
-            style={{ display: "inline-block" }}
-          >
-            {segment}
+          <motion.span variants={itemVariants} style={{ display: "inline-block" }}>
+            {value}
           </motion.span>
         </span>
       ))}

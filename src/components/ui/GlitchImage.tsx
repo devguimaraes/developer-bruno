@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import type React from "react";
 import { cn } from "@/lib/utils";
 import "./GlitchImage.css";
 
@@ -39,12 +39,11 @@ const GlitchMedia: React.FC<MediaProps> = ({
   className,
   loadingLazy = false,
 }) => {
-  const sources =
-    videoSources?.length ?
-      videoSources
-    : videoSrc ?
-      [{ src: videoSrc, type: "video/mp4" }]
-    : [];
+  const sources = videoSources?.length
+    ? videoSources
+    : videoSrc
+      ? [{ src: videoSrc, type: "video/mp4" }]
+      : [];
 
   if (sources.length > 0) {
     return (
@@ -91,17 +90,10 @@ export function GlitchImage({
   className,
   loadingLazy = false,
 }: GlitchImageProps) {
-  const [isHovered, setIsHovered] = useState(false);
-  const shouldGlitch = active || isHovered;
-
   const layerMediaClass = "filter contrast-125 saturate-200";
 
   return (
-    <div
-      className="relative w-full h-full overflow-hidden bg-black"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
+    <div className="glitch-container relative w-full h-full overflow-hidden bg-black">
       <GlitchMedia
         src={src}
         videoSrc={videoSrc}
@@ -115,7 +107,7 @@ export function GlitchImage({
       <div
         className={cn(
           "glitch-layer-1 absolute inset-0 mix-blend-screen opacity-0",
-          shouldGlitch && "is-active",
+          active && "is-active"
         )}
       >
         <div className="h-full w-full" style={{ transform: "translateX(-4px)" }}>
@@ -134,7 +126,7 @@ export function GlitchImage({
       <div
         className={cn(
           "glitch-layer-2 absolute inset-0 mix-blend-screen opacity-0",
-          shouldGlitch && "is-active",
+          active && "is-active"
         )}
       >
         <div className="h-full w-full" style={{ transform: "translateX(4px)" }}>
@@ -153,7 +145,7 @@ export function GlitchImage({
       <div
         className={cn(
           "glitch-layer-3 absolute inset-0 mix-blend-overlay opacity-0",
-          shouldGlitch && "is-active",
+          active && "is-active"
         )}
       >
         <div className="h-full w-full" style={{ transform: "translateY(-2px)" }}>
@@ -172,13 +164,13 @@ export function GlitchImage({
       <div
         className={cn(
           "glitch-block glitch-block-magenta pointer-events-none",
-          shouldGlitch && "is-active",
+          active && "is-active"
         )}
       />
       <div
         className={cn(
           "glitch-block glitch-block-screen pointer-events-none",
-          shouldGlitch && "is-active",
+          active && "is-active"
         )}
       />
     </div>

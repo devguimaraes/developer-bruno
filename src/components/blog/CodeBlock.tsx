@@ -1,16 +1,16 @@
-import { useEffect, useRef, useState } from 'react';
-import { Check, Copy } from 'lucide-react';
+import { useEffect, useRef, useState } from "react";
+import { Check, Copy } from "lucide-react";
 
 interface CodeBlockProps {
   children: React.ReactNode;
   className?: string;
-  ['data-language']?: string;
+  "data-language"?: string;
 }
 
-export function CodeBlock({ children, className, 'data-language': language }: CodeBlockProps) {
+export function CodeBlock({ children, className, "data-language": language }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
   const preRef = useRef<HTMLPreElement>(null);
-  const isCodeBlock = className?.includes('astro-code') || language;
+  const isCodeBlock = className?.includes("astro-code") || language;
 
   useEffect(() => {
     let timeout: NodeJS.Timeout;
@@ -25,12 +25,12 @@ export function CodeBlock({ children, className, 'data-language': language }: Co
   const handleCopy = async () => {
     if (!preRef.current) return;
 
-    const code = preRef.current.textContent || '';
+    const code = preRef.current.textContent || "";
     try {
       await navigator.clipboard.writeText(code);
       setCopied(true);
     } catch (err) {
-      console.error('Failed to copy code:', err);
+      console.error("Failed to copy code:", err);
     }
   };
 
@@ -49,10 +49,11 @@ export function CodeBlock({ children, className, 'data-language': language }: Co
 
       {/* Copy button */}
       <button
+        type="button"
         onClick={handleCopy}
         className="absolute -top-3 right-4 p-1.5 bg-black/80 border border-white/10 rounded hover:border-accent/50 transition-colors opacity-0 group-hover:opacity-100"
-        aria-label={copied ? 'Copiado!' : 'Copiar código'}
-        title={copied ? 'Copiado!' : 'Copiar código'}
+        aria-label={copied ? "Copiado!" : "Copiar código"}
+        title={copied ? "Copiado!" : "Copiar código"}
       >
         {copied ? (
           <Check className="w-3.5 h-3.5 text-accent" />

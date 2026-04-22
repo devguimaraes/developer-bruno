@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import type React from "react";
+import { useState } from "react";
 import ShuffleText from "@/components/ui/ShuffleText";
 import { ArrowUpRight, Mail } from "lucide-react";
 import { contactData } from "@/config/site";
@@ -9,7 +10,10 @@ const Contact: React.FC = () => {
   const [showEmail, setShowEmail] = useState(false);
 
   return (
-    <section id="contact" className="min-h-screen py-16 sm:py-20 md:py-24 px-4 sm:px-6 md:px-16 text-black relative overflow-hidden flex flex-col justify-center">
+    <section
+      id="contact"
+      className="min-h-screen py-16 sm:py-20 md:py-24 px-4 sm:px-6 md:px-16 text-black relative overflow-hidden flex flex-col justify-center"
+    >
       <div className="w-full max-w-6xl mx-auto space-y-12 sm:space-y-16 md:space-y-32">
         <ScrollReveal direction="down">
           <div className="space-y-3 sm:space-y-4">
@@ -21,11 +25,7 @@ const Contact: React.FC = () => {
                 <ShuffleText text="LET'S" duration={1.2} />
               </span>
               <span className="text-transparent block" style={{ WebkitTextStroke: "2px black" }}>
-                <ShuffleText 
-                  text="CONNECT_" 
-                  duration={1.2} 
-                  delay={0.4} 
-                />
+                <ShuffleText text="CONNECT_" duration={1.2} delay={0.4} />
               </span>
             </h2>
           </div>
@@ -36,33 +36,35 @@ const Contact: React.FC = () => {
             <ScrollReveal direction="up" delay={0.3}>
               <div className="relative group">
                 <div className="absolute -top-4 -left-4 w-8 h-8 border-t-4 border-l-4 border-brutal-orange transition-all group-hover:-top-6 group-hover:-left-6" />
-                <BorderGlow 
-                  glowColor="162 100% 27%" 
-                  borderRadius={0} 
+                <BorderGlow
+                  glowColor="162 100% 27%"
+                  borderRadius={0}
                   className="inline-block w-full"
                 >
-                  <div 
-                    onClick={() => setShowEmail(true)}
-                    className={`block p-6 sm:p-8 md:p-10 bg-white/5 backdrop-blur-md border-4 border-black shadow-brutal transition-all duration-500 overflow-hidden relative cursor-pointer ${showEmail ? 'bg-black text-white' : 'hover:bg-stone-100'}`}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(event) => {
-                      if (event.key === "Enter" || event.key === " ") {
-                        event.preventDefault();
-                        setShowEmail(true);
-                      }
-                    }}
-                  >
-                    {!showEmail ? (
+                  {!showEmail ? (
+                    <button
+                      type="button"
+                      onClick={() => setShowEmail(true)}
+                      className="block w-full p-6 sm:p-8 md:p-10 bg-white/5 backdrop-blur-md border-4 border-black shadow-brutal transition-all duration-500 overflow-hidden relative cursor-pointer hover:bg-stone-100"
+                    >
                       <div className="flex flex-col items-center justify-center py-2 sm:py-4 gap-3 sm:gap-4 animate-in fade-in duration-700">
                         <Mail size={44} className="text-brutal-orange animate-pulse" />
                         <span className="type-display-card text-lg sm:text-xl font-black text-center">
                           [ ACCESS_SIGNAL_PORT ]
                         </span>
-                        <span className="type-body text-sm opacity-80 text-center">Click to decrypt contact address</span>
+                        <span className="type-body text-sm opacity-80 text-center">
+                          Click to decrypt contact address
+                        </span>
                       </div>
-                    ) : (
-                      <a 
+
+                      {/* Background Text Decor */}
+                      <div className="absolute -bottom-4 -right-4 font-pixel text-5xl sm:text-6xl tracking-[0.04em] opacity-5 select-none pointer-events-none font-black italic">
+                        ENCRYPTED
+                      </div>
+                    </button>
+                  ) : (
+                    <div className="block p-6 sm:p-8 md:p-10 bg-black text-white border-4 border-black shadow-brutal transition-all duration-500 overflow-hidden relative">
+                      <a
                         href={`mailto:${contactData.email}`}
                         className="animate-in slide-in-from-bottom-4 duration-500 block"
                       >
@@ -70,13 +72,13 @@ const Contact: React.FC = () => {
                           {contactData.email}
                         </span>
                       </a>
-                    )}
-                    
-                    {/* Background Text Decor */}
-                    <div className="absolute -bottom-4 -right-4 font-pixel text-5xl sm:text-6xl tracking-[0.04em] opacity-5 select-none pointer-events-none font-black italic">
-                      {showEmail ? 'DECRYPTED' : 'ENCRYPTED'}
+
+                      {/* Background Text Decor */}
+                      <div className="absolute -bottom-4 -right-4 font-pixel text-5xl sm:text-6xl tracking-[0.04em] opacity-5 select-none pointer-events-none font-black italic">
+                        DECRYPTED
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </BorderGlow>
               </div>
             </ScrollReveal>
@@ -89,8 +91,8 @@ const Contact: React.FC = () => {
               </p>
               <div className="flex flex-col gap-3 sm:gap-4">
                 {contactData.socialLinks.map((link, idx) => (
-                  <ScrollReveal key={link.id} direction="left" delay={0.4 + (idx * 0.1)}>
-                    <a 
+                  <ScrollReveal key={link.id} direction="left" delay={0.4 + idx * 0.1}>
+                    <a
                       href={link.href}
                       target="_blank"
                       rel="noreferrer"
@@ -102,15 +104,19 @@ const Contact: React.FC = () => {
                           {link.label}
                         </span>
                       </div>
-                      <ArrowUpRight size={24} className="opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0 text-brutal-orange" />
+                      <ArrowUpRight
+                        size={24}
+                        className="opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0 text-brutal-orange"
+                      />
                     </a>
                   </ScrollReveal>
                 ))}
               </div>
             </div>
-            
+
             <div className="pt-3 sm:pt-6 opacity-40 type-body text-xs sm:text-sm uppercase text-black">
-              DISCLAIMER: ESTE PORTFÓLIO É UMA DEMONSTRAÇÃO DE ENGENHARIA E DESIGN SYSTEM DE ALTA PERFORMANCE.
+              DISCLAIMER: ESTE PORTFÓLIO É UMA DEMONSTRAÇÃO DE ENGENHARIA E DESIGN SYSTEM DE ALTA
+              PERFORMANCE.
             </div>
           </div>
         </div>
