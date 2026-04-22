@@ -1,6 +1,6 @@
-import { motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import type { BlogPost } from '@/types/blog';
+import { motion } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import type { BlogPost } from "@/types/blog";
 
 interface BlogPostNavigationProps {
   previous: BlogPost | null;
@@ -25,7 +25,7 @@ export function BlogPostNavigation({ previous, next }: BlogPostNavigationProps) 
           >
             <div className="type-mono text-[10px] text-white/40 uppercase tracking-widest flex items-center gap-1">
               <ChevronLeft className="w-3 h-3" />
-              // PREVIOUS
+              {"// PREVIOUS"}
             </div>
             <h3 className="font-bold text-white group-hover:text-accent transition-colors">
               {previous.title}
@@ -38,7 +38,7 @@ export function BlogPostNavigation({ previous, next }: BlogPostNavigationProps) 
             className="group flex flex-col gap-3 p-5 border border-white/10 hover:border-accent/50 transition-colors text-left md:text-right md:ml-auto"
           >
             <div className="type-mono text-[10px] text-white/40 uppercase tracking-widest flex items-center md:justify-end gap-1">
-              // NEXT
+              {"// NEXT"}
               <ChevronRight className="w-3 h-3" />
             </div>
             <h3 className="font-bold text-white group-hover:text-accent transition-colors">

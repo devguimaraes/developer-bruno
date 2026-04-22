@@ -1,5 +1,5 @@
-import React from "react";
-import './GrainOverlay.css';
+import type React from "react";
+import "./GrainOverlay.css";
 
 const GrainOverlay: React.FC = () => {
   return (

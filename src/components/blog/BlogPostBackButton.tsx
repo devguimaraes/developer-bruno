@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
-import { ArrowLeft } from 'lucide-react';
+import { motion } from "framer-motion";
+import { ArrowLeft } from "lucide-react";
 
 export function BlogPostBackButton() {
   return (
@@ -14,7 +14,7 @@ export function BlogPostBackButton() {
         className="inline-flex items-center gap-2 type-mono text-[10px] text-white/40 hover:text-accent transition-colors uppercase tracking-widest py-1"
       >
         <ArrowLeft className="w-3 h-3" />
-        // BACK_TO_BLOG
+        {"// BACK_TO_BLOG"}
       </a>
     </motion.div>
   );

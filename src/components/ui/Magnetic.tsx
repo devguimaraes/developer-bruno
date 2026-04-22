@@ -1,5 +1,6 @@
-import React, { useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import type React from "react";
+import { useRef, useState } from "react";
+import { motion } from "framer-motion";
 
 export const Magnetic: React.FC<{ children: React.ReactElement }> = ({ children }) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -24,7 +25,7 @@ export const Magnetic: React.FC<{ children: React.ReactElement }> = ({ children 
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       animate={{ x: position.x, y: position.y }}
-      transition={{ type: 'spring', damping: 15, stiffness: 150, mass: 0.1 }}
+      transition={{ type: "spring", damping: 15, stiffness: 150, mass: 0.1 }}
     >
       {children}
     </motion.div>

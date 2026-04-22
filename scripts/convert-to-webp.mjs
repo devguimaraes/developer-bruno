@@ -1,6 +1,6 @@
 import sharp from "sharp";
-import { readdir, stat, unlink } from "fs/promises";
-import { join, parse } from "path";
+import { readdir, stat } from "node:fs/promises";
+import { join, parse } from "node:path";
 
 const ASSETS_DIR = "./src/assets";
 const PUBLIC_DIR = "./public";
@@ -35,7 +35,7 @@ async function processDirectory(dir) {
     const ext = parse(file).ext.toLowerCase();
     if (ext === ".png" || ext === ".jpg" || ext === ".jpeg") {
       const inputPath = join(dir, file);
-      const outputPath = join(dir, parse(file).name + ".webp");
+      const outputPath = join(dir, `${parse(file).name}.webp`);
 
       try {
         const { original, converted } = await convertToWebP(
@@ -64,10 +64,9 @@ async function main() {
 
   const totalOriginal = assets.totalOriginal + pub.totalOriginal;
   const totalConverted = assets.totalConverted + pub.totalConverted;
-  const totalSavings = (
-    ((totalOriginal - totalConverted) / totalOriginal) *
-    100
-  ).toFixed(1);
+  const totalSavings = totalOriginal > 0
+    ? (((totalOriginal - totalConverted) / totalOriginal) * 100).toFixed(1)
+    : "0.0";
 
   console.log("\n========================================");
   console.log(

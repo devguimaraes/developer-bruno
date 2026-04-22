@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import { gsap } from "gsap";
+import type React from "react";
 
 interface ShuffleTextProps {
   text: string;
@@ -55,12 +56,29 @@ const ShuffleText = ({
   const [hasTriggered, setHasTriggered] = useState(false);
 
   const chars = useMemo(() => text.split(""), [text]);
+  const keyedChars = useMemo(() => {
+    const counts = new Map<string, number>();
+
+    return chars.map(char => {
+      const normalizedChar = char === " " ? "space" : char === "\n" ? "newline" : char;
+      const occurrence = (counts.get(normalizedChar) ?? 0) + 1;
+      counts.set(normalizedChar, occurrence);
+
+      return {
+        char,
+        key: `${normalizedChar}-${occurrence}`,
+      };
+    });
+  }, [chars]);
   const charset = scrambleCharset;
-  const getRandomChar = useCallback(() => charset[Math.floor(Math.random() * charset.length)], [charset]);
+  const getRandomChar = useCallback(
+    () => charset[Math.floor(Math.random() * charset.length)],
+    [charset]
+  );
 
   const startAnimation = useCallback(() => {
     if (isAnimating || (triggerOnce && hasTriggered)) return;
-    
+
     setIsAnimating(true);
     setHasTriggered(true);
 
@@ -74,7 +92,8 @@ const ShuffleText = ({
         return;
       }
 
-      const charDelay = delay + (animationMode === "random" ? Math.random() * maxDelay : i * stagger);
+      const charDelay =
+        delay + (animationMode === "random" ? Math.random() * maxDelay : i * stagger);
 
       const tl = gsap.timeline({
         delay: charDelay,
@@ -86,7 +105,7 @@ const ShuffleText = ({
               gsap.delayedCall(loopDelay, startAnimation);
             }
           }
-        }
+        },
       });
 
       // Shuffle Effect
@@ -96,7 +115,7 @@ const ShuffleText = ({
           onStart: () => {
             el.textContent = getRandomChar();
             if (colorFrom) gsap.set(el, { color: colorFrom });
-          }
+          },
         });
       }
 
@@ -107,10 +126,28 @@ const ShuffleText = ({
         ease: ease,
         onStart: () => {
           el.textContent = targetChar;
-        }
+        },
       });
     });
-  }, [isAnimating, triggerOnce, hasTriggered, chars, delay, animationMode, maxDelay, stagger, duration, shuffleTimes, getRandomChar, colorFrom, onShuffleComplete, loop, loopDelay, colorTo, ease]);
+  }, [
+    isAnimating,
+    triggerOnce,
+    hasTriggered,
+    chars,
+    delay,
+    animationMode,
+    maxDelay,
+    stagger,
+    duration,
+    shuffleTimes,
+    getRandomChar,
+    colorFrom,
+    onShuffleComplete,
+    loop,
+    loopDelay,
+    colorTo,
+    ease,
+  ]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -124,7 +161,7 @@ const ShuffleText = ({
 
     if (containerRef.current) observer.observe(containerRef.current);
     return () => observer.disconnect();
-  }, [text, hasTriggered, rootMargin, threshold, startAnimation]);
+  }, [rootMargin, threshold, startAnimation]);
 
   return (
     // @ts-expect-error - Tag is dynamic and Ref type is complex
@@ -134,11 +171,8 @@ const ShuffleText = ({
       style={{ ...style, textAlign }}
       onMouseEnter={() => triggerOnHover && !isAnimating && startAnimation()}
     >
-      {chars.map((char, i) => (
-        <span
-          key={i}
-          className="shuffle-char inline-block whitespace-pre"
-        >
+      {keyedChars.map(({ char, key }) => (
+        <span key={key} className="shuffle-char inline-block whitespace-pre">
           {char === " " ? "\u00A0" : char === "\n" ? <br /> : char}
         </span>
       ))}

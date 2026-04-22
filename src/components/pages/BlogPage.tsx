@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Calendar, Clock, ArrowRight } from 'lucide-react';
-import type { BlogPost } from '@/types/blog';
+import type React from "react";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { ArrowRight, Calendar, Clock } from "lucide-react";
+import type { BlogPost } from "@/types/blog";
 
 const POSTS_PER_PAGE = 6;
 
@@ -27,10 +28,12 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
         <div className="container mx-auto px-4">
           <div className="mb-10 sm:mb-16">
             <p className="type-mono text-[10px] text-white/40 uppercase tracking-widest mb-4">
-              // LATEST_POSTS &middot; TOTAL: {blogPosts.length}
+              {"// LATEST_POSTS"} &middot; TOTAL: {blogPosts.length}
             </p>
             <h1 className="type-raster-section text-[14vw] sm:text-5xl md:text-7xl text-white uppercase tracking-tighter leading-[0.92]">
-              TODOS OS<br />INSIGHTS
+              TODOS OS
+              <br />
+              INSIGHTS
             </h1>
             <div className="border-t border-white/10 mt-6 pt-4 max-w-md">
               <p className="type-mono text-xs text-white/40">
@@ -64,27 +67,36 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
 
               <div className="p-5 flex-grow flex flex-col">
                 <div className="flex gap-4 type-mono text-[10px] text-white/40 uppercase tracking-widest mb-4">
-                  <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{post.date}</span>
-                  <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{post.readTime}</span>
+                  <span className="flex items-center gap-1">
+                    <Calendar className="w-3 h-3" />
+                    {post.date}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Clock className="w-3 h-3" />
+                    {post.readTime}
+                  </span>
                 </div>
 
                 <h2 className="text-lg sm:text-xl font-bold text-white leading-tight mb-3 group-hover:text-accent transition-colors">
                   {post.title}
                 </h2>
 
-                <p className="text-white/50 text-sm mb-6 line-clamp-3 flex-grow">
-                  {post.excerpt}
-                </p>
+                <p className="text-white/50 text-sm mb-6 line-clamp-3 flex-grow">{post.excerpt}</p>
 
                 <div className="mt-auto pt-4 border-t border-white/10 flex justify-between items-center gap-3">
                   <div className="flex flex-wrap gap-2">
-                    {post.tags.slice(0, 3).map((tag) => (
-                      <span key={tag} className="border border-white/20 text-white/60 px-2.5 py-1 rounded-full type-mono text-[9px] uppercase tracking-widest">
+                    {post.tags.slice(0, 3).map(tag => (
+                      <span
+                        key={tag}
+                        className="border border-white/20 text-white/60 px-2.5 py-1 rounded-full type-mono text-[9px] uppercase tracking-widest"
+                      >
                         {tag}
                       </span>
                     ))}
                     {post.tags.length > 3 && (
-                      <span className="type-mono text-[9px] text-white/30">+{post.tags.length - 3}</span>
+                      <span className="type-mono text-[9px] text-white/30">
+                        +{post.tags.length - 3}
+                      </span>
                     )}
                   </div>
                   <a
@@ -102,7 +114,8 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
         {hasMore && (
           <div className="flex justify-center mt-12">
             <button
-              onClick={() => setVisibleCount((prev) => prev + POSTS_PER_PAGE)}
+              type="button"
+              onClick={() => setVisibleCount(prev => prev + POSTS_PER_PAGE)}
               className="border border-white/20 text-white hover:border-accent hover:text-accent px-8 py-3 type-mono text-[10px] uppercase tracking-widest transition-colors"
             >
               Carregar mais ({blogPosts.length - visibleCount} restantes)
@@ -112,7 +125,9 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
 
         {blogPosts.length === 0 && (
           <div className="text-center py-16">
-            <p className="type-mono text-white/40 uppercase tracking-widest">Nenhum post encontrado</p>
+            <p className="type-mono text-white/40 uppercase tracking-widest">
+              Nenhum post encontrado
+            </p>
           </div>
         )}
       </div>

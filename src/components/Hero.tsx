@@ -1,4 +1,5 @@
-import React, { useRef } from "react";
+import type React from "react";
+import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useVideoLoading } from "@/hooks/useVideoLoading";
 
@@ -13,12 +14,12 @@ const Hero: React.FC = () => {
   const videoOpacity = useTransform(scrollY, [0, 500], [0.7, 0.4]);
 
   return (
-    <section 
+    <section
       ref={containerRef}
       className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-black w-full"
     >
       {/* Background Video Section - Full Edge-to-Edge */}
-      <motion.div 
+      <motion.div
         style={{ scale: videoScale, opacity: isVisible ? videoOpacity : 0 }}
         className="absolute inset-0 z-0 pointer-events-none w-full h-full"
       >
@@ -51,12 +52,8 @@ const Hero: React.FC = () => {
             className="type-raster-hero text-[15vw] lg:text-[11vw] leading-[0.8] mb-8 select-none"
           >
             <div className="flex flex-col items-center">
-              <span className="block opacity-100 text-white leading-[0.8]">
-                FRONT END
-              </span>
-              <span className="block opacity-100 text-white leading-[0.8]">
-                DEVELOPER
-              </span>
+              <span className="block opacity-100 text-white leading-[0.8]">FRONT END</span>
+              <span className="block opacity-100 text-white leading-[0.8]">DEVELOPER</span>
             </div>
           </motion.h1>
 
@@ -76,18 +73,16 @@ const Hero: React.FC = () => {
           >
             <div className="text-left max-w-[320px]">
               <p className="type-mono text-[10px] mb-4 opacity-40 uppercase">
-                // ESTABLISHED_IN_RJ
+                {"// ESTABLISHED_IN_RJ"}
               </p>
               <p className="text-white/60 text-sm leading-relaxed">
-                Transformando complexidade em simplicidade através de design
-                editorial e tecnologia de ponta.
+                Transformando complexidade em simplicidade através de design editorial e tecnologia
+                de ponta.
               </p>
             </div>
 
             <div className="flex flex-col items-end">
-              <div className="type-mono text-[10px] opacity-40 mb-2">
-                SCROLL_FOR_MORE
-              </div>
+              <div className="type-mono text-[10px] opacity-40 mb-2">SCROLL_FOR_MORE</div>
               <div className="w-px h-12 bg-white/20 animate-pulse mx-auto md:mr-0" />
             </div>
           </motion.div>

@@ -81,11 +81,29 @@
   opacity: 1;
   animation: glitch-anim-3 2.5s infinite steps(1) alternate-reverse;
 }
+.glitch-container:hover .glitch-layer-1 {
+  opacity: 1;
+  animation: glitch-anim-1 3s infinite steps(1) alternate-reverse;
+}
+.glitch-container:hover .glitch-layer-2 {
+  opacity: 1;
+  animation: glitch-anim-2 4s infinite steps(1) alternate-reverse;
+}
+.glitch-container:hover .glitch-layer-3 {
+  opacity: 1;
+  animation: glitch-anim-3 2.5s infinite steps(1) alternate-reverse;
+}
 
 .glitch-block-magenta.is-active {
   animation: glitch-block-anim-1 4.5s infinite steps(1);
 }
 .glitch-block-screen.is-active {
+  animation: glitch-block-anim-2 5.5s infinite steps(1);
+}
+.glitch-container:hover .glitch-block-magenta {
+  animation: glitch-block-anim-1 4.5s infinite steps(1);
+}
+.glitch-container:hover .glitch-block-screen {
   animation: glitch-block-anim-2 5.5s infinite steps(1);
 }
 
