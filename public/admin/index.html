@@ -8,6 +8,45 @@
     <title>Admin | Bruno Guimarães</title>
   </head>
   <body>
+    <script>
+      window.CMS_MANUAL_INIT = true;
+    </script>
     <script src="https://unpkg.com/decap-cms@3.0.0/dist/decap-cms.js"></script>
+    <script>
+      CMS.init({
+        config: {
+          backend: {
+            name: "github",
+            repo: "devguimaraes/developer-bruno",
+            branch: "main",
+            base_url: window.location.origin,
+            auth_endpoint: "/api/auth",
+          },
+          media_folder: "public/uploads",
+          public_folder: "/uploads",
+          locale: "pt-BR",
+          collections: [
+            {
+              name: "blog",
+              label: "Blog",
+              folder: "src/content/blog",
+              create: true,
+              slug: "{{slug}}",
+              preview_path: "blog/{{slug}}",
+              fields: [
+                { label: "Título", name: "title", widget: "string" },
+                { label: "Data", name: "date", widget: "datetime", format: "YYYY-MM-DD" },
+                { label: "Tags", name: "tags", widget: "list", allow_add: true },
+                { label: "Resumo", name: "excerpt", widget: "text" },
+                { label: "Destacado", name: "featured", widget: "boolean", default: false },
+                { label: "Imagem", name: "image", widget: "image", required: false },
+                { label: "Autor", name: "author", widget: "string", default: "Bruno Guimarães" },
+                { label: "Conteúdo", name: "body", widget: "markdown" },
+              ],
+            },
+          ],
+        },
+      });
+    </script>
   </body>
 </html>
