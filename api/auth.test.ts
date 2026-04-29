@@ -54,6 +54,7 @@ async function importHandler() {
   vi.stubEnv("GITHUB_CLIENT_ID", "test-client-id");
   vi.stubEnv("GITHUB_CLIENT_SECRET", "test-client-secret");
   vi.stubEnv("ALLOWED_GITHUB_USER", "devguimaraes");
+  vi.stubEnv("GITHUB_REPOSITORY_ID", "123456789");
   const mod = await import("./auth");
   return mod.default;
 }
@@ -78,10 +79,59 @@ describe("api/auth handler", () => {
     expect(redirectUrl).toContain("https://github.com/login/oauth/authorize");
     expect(redirectUrl).toContain("client_id=test-client-id");
     expect(redirectUrl).toContain("state=test-state-uuid");
-    expect(redirectUrl).toContain("scope=repo%2Cuser%3Aemail");
+    expect(redirectUrl).not.toContain("scope=");
     expect(res.setHeader).toHaveBeenCalledWith(
       "Set-Cookie",
       expect.stringContaining("oauth_state:test-state-uuid="),
+    );
+    expect(res.setHeader).toHaveBeenCalledWith(
+      "Set-Cookie",
+      expect.stringContaining("Domain=.devguimaraes.com.br"),
+    );
+  });
+
+  it("sets Domain for www subdomain host", async () => {
+    const req = mockReq({
+      query: { provider: "github" },
+      headers: { host: "www.devguimaraes.com.br", origin: "https://www.devguimaraes.com.br" },
+    });
+    const res = mockRes();
+
+    await handler(req, res);
+
+    expect(res.setHeader).toHaveBeenCalledWith(
+      "Set-Cookie",
+      expect.stringContaining("Domain=.devguimaraes.com.br"),
+    );
+  });
+
+  it("sets Domain for staging subdomain host", async () => {
+    const req = mockReq({
+      query: { provider: "github" },
+      headers: { host: "staging.devguimaraes.com.br", origin: "https://staging.devguimaraes.com.br" },
+    });
+    const res = mockRes();
+
+    await handler(req, res);
+
+    expect(res.setHeader).toHaveBeenCalledWith(
+      "Set-Cookie",
+      expect.stringContaining("Domain=.staging.devguimaraes.com.br"),
+    );
+  });
+
+  it("sets Domain for apex host", async () => {
+    const req = mockReq({
+      query: { provider: "github" },
+      headers: { host: "devguimaraes.com.br", origin: "https://devguimaraes.com.br" },
+    });
+    const res = mockRes();
+
+    await handler(req, res);
+
+    expect(res.setHeader).toHaveBeenCalledWith(
+      "Set-Cookie",
+      expect.stringContaining("Domain=.devguimaraes.com.br"),
     );
   });
 
@@ -136,6 +186,19 @@ describe("api/auth handler", () => {
 
     await handler(req, res);
 
+    expect(mockFetch).toHaveBeenNthCalledWith(
+      1,
+      "https://github.com/login/oauth/access_token",
+      expect.objectContaining({
+        body: JSON.stringify({
+          client_id: "test-client-id",
+          client_secret: "test-client-secret",
+          code: "abc123",
+          redirect_uri: "https://www.devguimaraes.com.br/api/auth/callback",
+          repository_id: "123456789",
+        }),
+      }),
+    );
     expect(res.status).toHaveBeenCalledWith(403);
     expect(res.send).toHaveBeenCalledWith("Access denied");
   });
@@ -174,6 +237,45 @@ describe("api/auth handler", () => {
     expect(html).toContain('"login":"devguimaraes"');
     expect(html).toContain("window.addEventListener");
     expect(html).toContain("window.close");
+  });
+
+  it("escapes callback auth data before embedding it in script HTML", async () => {
+    mockFetch
+      .mockResolvedValueOnce({
+        json: () =>
+          Promise.resolve({
+            access_token: "tok</script><script>alert(1)</script>",
+            token_type: "bearer",
+            scope: "",
+          }),
+      })
+      .mockResolvedValueOnce({
+        json: () =>
+          Promise.resolve({
+            login: "devguimaraes",
+            name: "Bruno </script>",
+            avatar_url: "https://example.com/avatar.png?a=<x>&b=>",
+            bio: "bio & test",
+          }),
+      });
+
+    const req = mockReq({
+      query: { code: "valid-code", state: "test-state-uuid" },
+      headers: {
+        host: "devguimaraes.com.br",
+        origin: "https://devguimaraes.com.br",
+        cookie: "oauth_state:test-state-uuid=1",
+      },
+    });
+    const res = mockRes();
+
+    await handler(req, res);
+
+    const html = (res.send as ReturnType<typeof vi.fn>).mock.calls[0][0] as string;
+    const scriptBody = html.match(/<script>([\s\S]*)<\/script>/)?.[1] ?? "";
+    expect(scriptBody).not.toContain("</script>");
+    expect(scriptBody).toContain("\\u003c/script\\u003e");
+    expect(scriptBody).toContain("\\u0026");
   });
 
   it("returns 404 for unknown routes", async () => {

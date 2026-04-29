@@ -2,9 +2,39 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 
 const CLIENT_ID = process.env.GITHUB_CLIENT_ID ?? "";
 const CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET ?? "";
+const REPOSITORY_ID = process.env.GITHUB_REPOSITORY_ID ?? "";
 const ALLOWED_USER = process.env.ALLOWED_GITHUB_USER ?? "";
 const CSRF_STATE_PREFIX = "oauth_state:";
 const REDIRECT_URI = process.env.OAUTH_REDIRECT_URI ?? "https://www.devguimaraes.com.br/api/auth/callback";
+
+function getDomain(host: string): string {
+  // Strip www. prefix so cookie is shared between apex and www
+  if (host.startsWith("www.")) {
+    return `.${host.slice(4)}`;
+  }
+  return `.${host}`;
+}
+
+function getStateCookie(oauthState: string, host: string): string {
+  const cookieParts = [
+    `${CSRF_STATE_PREFIX}${oauthState}=1`,
+    "Path=/",
+    "HttpOnly",
+    "Secure",
+    "SameSite=Lax",
+    "Max-Age=600",
+    `Domain=${getDomain(host)}`,
+  ];
+
+  return cookieParts.join("; ");
+}
+
+function escapeForScript(value: string): string {
+  return value
+    .replace(/</g, "\\u003c")
+    .replace(/>/g, "\\u003e")
+    .replace(/&/g, "\\u0026");
+}
 
 export default async function handler(
   req: VercelRequest,
@@ -22,11 +52,10 @@ export default async function handler(
     }
 
     const oauthState = crypto.randomUUID();
-    res.setHeader("Set-Cookie", `${CSRF_STATE_PREFIX}${oauthState}=1; Path=/; Domain=devguimaraes.com.br; HttpOnly; Secure; SameSite=Lax; Max-Age=600`);
+    res.setHeader("Set-Cookie", getStateCookie(oauthState, req.headers.host ?? ""));
     const params = new URLSearchParams({
       client_id: CLIENT_ID,
       redirect_uri: REDIRECT_URI,
-      scope: "repo,user:email",
       state: oauthState,
     });
     res.redirect(`https://github.com/login/oauth/authorize?${params}`);
@@ -43,18 +72,23 @@ export default async function handler(
     }
 
     // Exchange code for access token
+    const tokenRequestBody: Record<string, string> = {
+      client_id: CLIENT_ID,
+      client_secret: CLIENT_SECRET,
+      code,
+      redirect_uri: REDIRECT_URI,
+    };
+    if (REPOSITORY_ID) {
+      tokenRequestBody.repository_id = REPOSITORY_ID;
+    }
+
     const tokenRes = await fetch("https://github.com/login/oauth/access_token", {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        client_id: CLIENT_ID,
-        client_secret: CLIENT_SECRET,
-        code,
-        redirect_uri: REDIRECT_URI,
-      }),
+      body: JSON.stringify(tokenRequestBody),
     });
 
     const tokenData = (await tokenRes.json()) as {
@@ -87,7 +121,7 @@ export default async function handler(
     // Return HTML that uses the NetlifyAuthenticator protocol:
     // 1. Listen for "authorizing:github" from parent, respond to handshake
     // 2. Then send "authorization:github:success:{JSON}" with token data
-    const authData = JSON.stringify({
+    const authData = escapeForScript(JSON.stringify({
       token: tokenData.access_token,
       provider: "github",
       scope: tokenData.scope,
@@ -95,7 +129,7 @@ export default async function handler(
       name: userData.name || userData.login,
       avatar_url: userData.avatar_url || "",
       bio: userData.bio || "",
-    });
+    }));
     res.status(200).setHeader("Content-Type", "text/html; charset=utf-8").send(`<!DOCTYPE html>
 <html><body><script>
   function receiveMessage(e) {
