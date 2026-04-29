@@ -86,7 +86,52 @@ describe("api/auth handler", () => {
     );
     expect(res.setHeader).toHaveBeenCalledWith(
       "Set-Cookie",
-      expect.not.stringContaining("Domain=devguimaraes.com.br"),
+      expect.stringContaining("Domain=.devguimaraes.com.br"),
+    );
+  });
+
+  it("sets Domain for www subdomain host", async () => {
+    const req = mockReq({
+      query: { provider: "github" },
+      headers: { host: "www.devguimaraes.com.br", origin: "https://www.devguimaraes.com.br" },
+    });
+    const res = mockRes();
+
+    await handler(req, res);
+
+    expect(res.setHeader).toHaveBeenCalledWith(
+      "Set-Cookie",
+      expect.stringContaining("Domain=.devguimaraes.com.br"),
+    );
+  });
+
+  it("sets Domain for staging subdomain host", async () => {
+    const req = mockReq({
+      query: { provider: "github" },
+      headers: { host: "staging.devguimaraes.com.br", origin: "https://staging.devguimaraes.com.br" },
+    });
+    const res = mockRes();
+
+    await handler(req, res);
+
+    expect(res.setHeader).toHaveBeenCalledWith(
+      "Set-Cookie",
+      expect.stringContaining("Domain=.staging.devguimaraes.com.br"),
+    );
+  });
+
+  it("sets Domain for apex host", async () => {
+    const req = mockReq({
+      query: { provider: "github" },
+      headers: { host: "devguimaraes.com.br", origin: "https://devguimaraes.com.br" },
+    });
+    const res = mockRes();
+
+    await handler(req, res);
+
+    expect(res.setHeader).toHaveBeenCalledWith(
+      "Set-Cookie",
+      expect.stringContaining("Domain=.devguimaraes.com.br"),
     );
   });
 

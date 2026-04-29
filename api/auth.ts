@@ -7,7 +7,15 @@ const ALLOWED_USER = process.env.ALLOWED_GITHUB_USER ?? "";
 const CSRF_STATE_PREFIX = "oauth_state:";
 const REDIRECT_URI = process.env.OAUTH_REDIRECT_URI ?? "https://www.devguimaraes.com.br/api/auth/callback";
 
-function getStateCookie(oauthState: string): string {
+function getDomain(host: string): string {
+  // Strip www. prefix so cookie is shared between apex and www
+  if (host.startsWith("www.")) {
+    return `.${host.slice(4)}`;
+  }
+  return `.${host}`;
+}
+
+function getStateCookie(oauthState: string, host: string): string {
   const cookieParts = [
     `${CSRF_STATE_PREFIX}${oauthState}=1`,
     "Path=/",
@@ -15,6 +23,7 @@ function getStateCookie(oauthState: string): string {
     "Secure",
     "SameSite=Lax",
     "Max-Age=600",
+    `Domain=${getDomain(host)}`,
   ];
 
   return cookieParts.join("; ");
@@ -43,7 +52,7 @@ export default async function handler(
     }
 
     const oauthState = crypto.randomUUID();
-    res.setHeader("Set-Cookie", getStateCookie(oauthState));
+    res.setHeader("Set-Cookie", getStateCookie(oauthState, req.headers.host ?? ""));
     const params = new URLSearchParams({
       client_id: CLIENT_ID,
       redirect_uri: REDIRECT_URI,
