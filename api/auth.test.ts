@@ -84,6 +84,10 @@ describe("api/auth handler", () => {
       "Set-Cookie",
       expect.stringContaining("oauth_state:test-state-uuid="),
     );
+    expect(res.setHeader).toHaveBeenCalledWith(
+      "Set-Cookie",
+      expect.not.stringContaining("Domain=devguimaraes.com.br"),
+    );
   });
 
   it("returns 400 for unsupported provider", async () => {

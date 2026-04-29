@@ -7,6 +7,19 @@ const ALLOWED_USER = process.env.ALLOWED_GITHUB_USER ?? "";
 const CSRF_STATE_PREFIX = "oauth_state:";
 const REDIRECT_URI = process.env.OAUTH_REDIRECT_URI ?? "https://www.devguimaraes.com.br/api/auth/callback";
 
+function getStateCookie(oauthState: string): string {
+  const cookieParts = [
+    `${CSRF_STATE_PREFIX}${oauthState}=1`,
+    "Path=/",
+    "HttpOnly",
+    "Secure",
+    "SameSite=Lax",
+    "Max-Age=600",
+  ];
+
+  return cookieParts.join("; ");
+}
+
 function escapeForScript(value: string): string {
   return value
     .replace(/</g, "\\u003c")
@@ -30,7 +43,7 @@ export default async function handler(
     }
 
     const oauthState = crypto.randomUUID();
-    res.setHeader("Set-Cookie", `${CSRF_STATE_PREFIX}${oauthState}=1; Path=/; Domain=devguimaraes.com.br; HttpOnly; Secure; SameSite=Lax; Max-Age=600`);
+    res.setHeader("Set-Cookie", getStateCookie(oauthState));
     const params = new URLSearchParams({
       client_id: CLIENT_ID,
       redirect_uri: REDIRECT_URI,
