@@ -31,6 +31,8 @@ export interface Project {
   impact?: string;
   /** DEV-84: Slug for case study routing */
   slug?: string;
+  /** DEV-82: Related blog post slugs for cross-linking */
+  relatedPosts?: readonly string[];
 }
 
 // Work experience interface

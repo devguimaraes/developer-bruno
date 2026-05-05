@@ -85,6 +85,24 @@ export const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
         ))}
       </motion.div>
 
+      {/* Related Blog Post Link */}
+      {project.relatedPosts && project.relatedPosts.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, margin: "-10%" }}
+          transition={{ duration: 0.4, delay: 0.25 }}
+          className="absolute -bottom-16 md:-bottom-20 left-0 z-20"
+        >
+          <a
+            href={`/blog/${project.relatedPosts[0]}`}
+            className="type-mono text-[9px] text-white/40 hover:text-accent transition-colors uppercase tracking-widest flex items-center gap-1"
+          >
+            Leia como aplico isso →
+          </a>
+        </motion.div>
+      )}
+
       {/* Badge de Acesso Global (Canto Inferior Direito) Magnético */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
