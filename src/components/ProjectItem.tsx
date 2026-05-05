@@ -1,19 +1,11 @@
 import type React from "react";
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import type { Project } from "@/types";
 import GlitchImage from "@/components/ui/GlitchImage";
 import TextReveal from "@/components/ui/TextReveal";
 import Magnetic from "@/components/ui/Magnetic";
-
-interface Project {
-  id: string;
-  title: string;
-  category: string;
-  image: string;
-  link: string;
-  aspectClass: string;
-  technologies: string[];
-}
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 interface ProjectItemProps {
   project: Project;
@@ -21,6 +13,7 @@ interface ProjectItemProps {
 
 export const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
   const containerRef = useRef(null);
+  const reducedMotion = useReducedMotion();
 
   // Rastreia o scroll relativo a este container específico
   const { scrollYProgress } = useScroll({
@@ -33,18 +26,24 @@ export const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
   // Parallax Oposta para o texto: O texto "flutua" na direção oposta ou velocidade diferente
   const textY = useTransform(scrollYProgress, [0, 1], [30, -30]);
 
+  // Use bannerImage if available, otherwise fall back to image
+  const displayImage = project.bannerImage ?? project.image;
+
   return (
     <div ref={containerRef} className="relative w-full group">
       <a
-        href={project.link}
+        href={project.live}
         target="_blank"
         rel="noreferrer"
-        className={`relative block w-full ${project.aspectClass} overflow-hidden bg-zinc-900 shadow-2xl`}
+        className="relative block w-full aspect-[4/5] md:aspect-video overflow-hidden bg-zinc-900 shadow-2xl"
       >
         {/* Parallax Image Container */}
-        <motion.div style={{ y, scale: 1.1 }} className="absolute inset-0 w-full h-full">
+        <motion.div
+          style={{ y: reducedMotion ? 0 : y, scale: 1.1 }}
+          className="absolute inset-0 w-full h-full"
+        >
           <GlitchImage
-            src={project.image}
+            src={displayImage}
             alt={project.title}
             active={true}
             loadingLazy
@@ -54,7 +53,7 @@ export const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
 
         {/* Camada de Texto Sobreposta com Parallax e Scramble */}
         <motion.div
-          style={{ y: textY }}
+          style={{ y: reducedMotion ? 0 : textY }}
           className="absolute inset-0 p-6 md:p-12 bg-black/20 flex flex-col justify-center items-center text-center pointer-events-none z-20"
         >
           <p className="type-mono text-xs md:text-sm text-accent mb-2 tracking-[0.2em] uppercase font-bold">
@@ -78,7 +77,7 @@ export const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
         transition={{ duration: 0.4, delay: 0.2 }}
         className="absolute -bottom-10 md:-bottom-12 left-0 flex flex-wrap gap-2 z-20 pointer-events-none"
       >
-        {project.technologies.map((tech: string) => (
+        {project.tech.map((tech: string) => (
           <span
             key={tech}
             className="border border-white text-white px-3 py-1.5 rounded-full type-mono text-[9px] md:text-[10px] uppercase tracking-widest"
@@ -98,7 +97,7 @@ export const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
       >
         <Magnetic>
           <a
-            href={project.link}
+            href={project.live}
             target="_blank"
             rel="noreferrer"
             className="bg-white text-black hover:bg-zinc-200 transition-colors px-4 py-1.5 rounded-full type-mono text-[10px] font-bold uppercase tracking-widest flex items-center justify-center h-10"

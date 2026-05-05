@@ -1,23 +1,36 @@
-import type { LucideIcon } from 'lucide-react';
+import type { LucideIcon } from "lucide-react";
 /**
  * Type definitions for all portfolio data structures
  */
 
-export * from './blog';
+export * from "./blog";
 
 // Base project interface
 export interface Project {
   id: string;
   title: string;
   description: string;
+  /** Display category (e.g. "Event Platform", "Agency Website") */
+  category: string;
   tech: readonly string[];
   github: string;
   live: string;
   color: string;
   featured?: boolean;
   tags?: readonly string[];
-  image?: string;
-  previewAnimation?: 'pixel-blast' | 'grid-scan' | 'letter-glitch' | 'faulty-terminal';
+  /** Main project thumbnail/screenshot */
+  image: string;
+  /** Banner image for project card display (falls back to image if not set) */
+  bannerImage?: string;
+  previewAnimation?: "pixel-blast" | "grid-scan" | "letter-glitch" | "faulty-terminal";
+  /** DEV-76: Role played in the project */
+  role?: string;
+  /** DEV-75: Problem/context of the project */
+  context?: string;
+  /** DEV-75: Measurable impact/result */
+  impact?: string;
+  /** DEV-84: Slug for case study routing */
+  slug?: string;
 }
 
 // Work experience interface
@@ -30,7 +43,7 @@ export interface Experience {
   achievements: readonly string[];
   tech: readonly string[];
   location?: string;
-  type?: 'full-time' | 'part-time' | 'freelance' | 'contract';
+  type?: "full-time" | "part-time" | "freelance" | "contract";
 }
 
 // Skill/technology interface
@@ -40,7 +53,7 @@ export interface Skill {
   title: string;
   description: string;
   color: string;
-  category: 'development' | 'design' | 'performance' | 'deployment';
+  category: "development" | "design" | "performance" | "deployment";
   technologies?: readonly string[];
 }
 
@@ -127,7 +140,7 @@ export interface ContactData {
 }
 
 // Portfolio navigation sections
-export type Section = 'hero' | 'about' | 'experience' | 'projects' | 'contact';
+export type Section = "hero" | "about" | "experience" | "projects" | "contact";
 
 // Content validation helpers
 export interface ContentValidation {
