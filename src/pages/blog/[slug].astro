@@ -2,7 +2,7 @@
 import Layout from '@/layouts/Layout.astro';
 import BlogPostPageClient from '@/components/pages/BlogPostPage';
 import { getCollection, render } from 'astro:content';
-import { generateSlug } from '@/lib/blog';
+import { generateSlug, toISODate } from '@/lib/blog';
 import type { BlogPost } from '@/types/blog';
 
 export async function getStaticPaths() {
@@ -63,7 +63,7 @@ const structuredDataImage = post.image
   title={post.title}
   description={post.excerpt}
   ogType="article"
-  articlePublishedTime={post.date}
+  articlePublishedTime={toISODate(post.date)}
   structuredData={{
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
@@ -83,8 +83,8 @@ const structuredDataImage = post.image
         url: 'https://devguimaraes.com.br/logo.webp',
       },
     },
-    datePublished: post.date,
-    dateModified: post.date,
+    datePublished: toISODate(post.date),
+    dateModified: toISODate(post.date),
     mainEntityOfPage: {
       '@type': 'WebPage',
       '@id': `https://devguimaraes.com.br/blog/${post.slug}`,

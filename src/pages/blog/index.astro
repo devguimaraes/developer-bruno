@@ -3,7 +3,7 @@ import Layout from '@/layouts/Layout.astro';
 import BlogPageClient from '@/components/pages/BlogPage';
 import { getCollection } from 'astro:content';
 import { parseReadingTime } from '@/lib/blog/content';
-import { generateSlug } from '@/lib/blog';
+import { generateSlug, toISODate } from '@/lib/blog';
 import type { BlogPost } from '@/types/blog';
 
 const entries = await getCollection('blog');
@@ -63,7 +63,7 @@ posts.sort((a, b) => {
       '@type': 'BlogPosting',
       headline: post.title,
       url: `https://devguimaraes.com.br/blog/${post.slug}`,
-      datePublished: post.date,
+      datePublished: toISODate(post.date),
       description: post.excerpt,
       author: {
         '@type': 'Person',
