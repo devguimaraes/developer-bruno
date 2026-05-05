@@ -10,11 +10,11 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-06b6d4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com/)
 
-**[ESTÉTICA BRUTALISTA] [PERFORMANCE EXTREMA] [SEO BRASILEIRO]**
+**[BRUTALISMO DIGITAL] [PERFORMANCE] [BLOG EDITORIAL]**
 
-Um ecossistema digital de alta performance focado no mercado brasileiro, construído com uma arquitetura "Data-First" e design neo-brutalista.
+Portfólio autoral de alta performance com identidade visual dark-first, linguagem de sistema e blog editorial integrado.
 
-[Visualizar Demo](https://devguimaraes.com.br) • [Guia de Estilo](docs/DESIGN_SYSTEM_GUIDELINE.md)
+[Visualizar Demo](https://devguimaraes.com.br) • [Guia de Design Atual](docs/guia-de-design-atual.md) • [Identidade Visual](docs/identidade-visual-atual.md) • [Branding Guide](docs/branding-guide-atual.md)
 
 </div>
 
@@ -22,19 +22,14 @@ Um ecossistema digital de alta performance focado no mercado brasileiro, constru
 
 ## 🏗️ Arquitetura & Engenharia
 
-Este não é apenas um site estático, mas uma aplicação React robusta com foco em escalabilidade e manutenção simplificada.
+O projeto combina renderização estática com ilhas interativas em React, mantendo uma base enxuta e direcionada à experiência visual.
 
 ### 🧩 Core Stack
 - **Engine**: Astro 5 (SSG) + React 18.3 + TypeScript para compilação ultra-rápida.
-- **Design System**: Tailwind CSS 3.4 com estética brutalista customizada.
-- **Animações**: Framer Motion para transições de UI e **Rive** para animações vetoriais interativas de baixo consumo.
-- **Data Layer**: 100% do conteúdo externalizado em `src/data/`, validado em tempo de execução com **Zod**.
-- **Performance**: **React Query 5** para cache inteligente e gerenciamento de estado assíncrono.
-
-### 🌀 Scroll Stacking System (Proprietário)
-Implementamos um sistema avançado de camadas baseado em scroll (`useStackingSections.ts`).
-- **Depth Effect**: Seções que se empilham dinamicamente conforme o usuário navega.
-- **Intersection Optimization**: Monitoramento de 101 thresholds para garantir 60fps durante as transições.
+- **UI Layer**: Tailwind CSS 3.4 + componentes próprios para glass, glitch, grain e motion.
+- **Animações**: Framer Motion, GSAP e smooth scroll com Lenis.
+- **Conteúdo**: Astro Content Collections para blog e dados tipados em `src/data/`.
+- **SEO & Analytics**: metadados em `Layout.astro`, JSON-LD e Plausible em produção.
 
 ---
 
@@ -44,7 +39,7 @@ Desenvolvido para entregar a melhor experiência possível sob as condições de
 
 - **Performance Budget**: Limites rigorosos de 300KB JS e 1MB total, garantindo carregamento rápido em redes 3G/4G instáveis.
 - **Local SEO**: Metadados em `pt_BR`, Schema.org (JSON-LD) em português e geração automática de sitemap para o Google Brasil.
-- **Typography**: Uso estratégico das fontes Satoshi e JetBrains Mono para legibilidade superior em qualquer densidade de tela.
+- **Typography**: combinação de Jersey 15, Silkscreen, Newsreader, Inter e JetBrains Mono para equilibrar assinatura visual e legibilidade.
 - **Privacy**: Implementação do Plausible Analytics, totalmente aderente à LGPD (sem cookies).
 
 ---
@@ -80,23 +75,30 @@ O servidor local sobe em `http://127.0.0.1:4321/`, e esse é o endereço esperad
 
 ```bash
 src/
-├── components/       # UI Primitives (shadcn) e Seções (Hero, Projects, etc)
-├── data/             # A ÚNICA fonte de verdade (JSON/TS Objects)
-├── hooks/            # Lógica reutilizável (Stacking, WebVitals, Analytics)
+├── components/       # Componentes de UI e seções da experiência
+├── data/             # Dados tipados usados pelo app
+├── hooks/            # Lógica reutilizável (video loading, mobile, web vitals)
 ├── lib/              # Utilitários, Validação Zod e Configuração de Sitemap
 ├── types/            # Definições estritas de TypeScript
-└── config/           # Metadados de SEO e Budgets de Performance
+├── config/           # Metadados de SEO e Budgets de Performance
+├── layouts/          # Shell global Astro
+└── pages/            # Rotas Astro do site e do blog
 ```
 
 ---
 
-## 📐 Design Tokens (Brutalismo Neo)
+## 📐 Direção Visual Atual
 
-O projeto segue princípios estritos de design brutalista:
-- **Bordas**: `border-4` para contraste máximo.
-- **Radius**: `rounded-none` (0rem) para uma estética crua e técnica.
-- **Sombras**: `shadow-brutal` (offset duro sem blur).
-- **Cores**: HSL adaptativo (Parakeet Green, Royal Lilac, Freesia Gold).
+O projeto hoje segue uma direção visual dark-first:
+- **Base**: fundo preto e texto branco.
+- **Acento**: dourado para hover, links e resposta visual.
+- **Tipo**: Jersey 15, Silkscreen, Newsreader, Inter e JetBrains Mono.
+- **Materialidade**: vídeo, granulado, glitch e superfícies translúcidas.
+
+Para decisões de design, use:
+- [Guia de Design Atual](docs/guia-de-design-atual.md)
+- [Identidade Visual Atual](docs/identidade-visual-atual.md)
+- [Branding Guide Atual](docs/branding-guide-atual.md)
 
 ---
 
@@ -116,7 +118,7 @@ Este projeto é de código aberto sob a licença MIT. Siga o padrão de **Conven
 ```bash
 feat: implementa nova seção de depoimentos
 fix: corrige overflow no mobile do Hero
-perf: otimiza assets Rive para 48kb
+perf: otimiza mídia do hero e imagens WebP
 ```
 
 ---
