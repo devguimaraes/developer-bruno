@@ -1,94 +1,46 @@
-# 🎨 Identidade Visual do Projeto
+# Identidade Visual do Projeto
 
-## **Conceito de Design**
+## Status deste arquivo
 
-**Neo-Brutalismo Técnico** - Combina brutalismo com estética tecnológica moderna
+Este arquivo foi mantido apenas por compatibilidade com referências antigas do repositório.
 
-## **Paleta de Cores - "Techno Brutalist Prism"**
+O conteúdo anterior descrevia uma fotografia antiga do design e já não correspondia ao estado visual real do site. A referência correta agora é:
 
-### 🌈 Cores Principais (Light Mode)
+- [Identidade Visual Atual](./identidade-visual-atual.md)
 
-- **Background:** `hsl(0 0% 98%)` - Branco quase puro
-- **Foreground:** `hsl(0 0% 8%)` - Preto profundo
-- **Primary (Parakeet):** `hsl(162 100% 27%)` - Verde esmeralda vibrante
-- **Secondary (Royal Lilac):** `hsl(282 32% 42%)` - Roxo royal
-- **Accent (Freesia):** `hsl(45 87% 57%)` - Amarelo dourado
-- **Muted (Aqua Glass):** `hsl(159 31% 85%)` - Verde aqua claro
-- **Border (Icy Morn):** `hsl(172 29% 76%)` - Azul gelo
+Documentos complementares:
 
-### 🌙 Cores Dark Mode
+- [Guia de Design Atual](./guia-de-design-atual.md)
+- [Branding Guide Atual](./branding-guide-atual.md)
 
-- **Background:** `hsl(0 0% 8%)` - Preto profundo
-- **Foreground:** `hsl(0 0% 98%)` - Branco quase puro
-- **Primary:** `hsl(162 100% 35%)` - Verde esmeralda mais claro
-- **Secondary:** `hsl(282 32% 50%)` - Roxo royal mais claro
-- **Accent:** `hsl(45 87% 60%)` - Amarelo dourado ajustado
-- **Muted:** `hsl(159 20% 25%)` - Verde aqua escuro
-- **Border:** `hsl(159 15% 20%)` - Borda escura
+## Resumo curto da identidade atual
 
----
+A identidade vigente do site é:
 
-## **Tipografia**
+`dark-first, brutalista no contraste, editorial na composição e técnica na linguagem de interface`
 
-### 📝 Fontes
+Elementos centrais:
 
-- **Títulos (H1-H6):** `JetBrains Mono` - Monospace técnica
-- **Corpo de texto:** `Satoshi` - Sans-serif moderna
-- **Fallbacks:** `system-ui`, `sans-serif`, `monospace`
+- fundo preto
+- texto branco
+- acento dourado
+- tipografia display pixelada
+- labels de sistema
+- vídeo, granulado, glitch e vidro como materialidade
 
----
+## O que ficou para trás
 
-## **Efeitos Brutalist**
+As diretrizes abaixo pertencem a fases anteriores e não devem mais ser reutilizadas como verdade do projeto:
 
-### 💎 Sombras
+- light mode como base principal
+- verde e roxo como paleta dominante
+- `Satoshi` como principal fonte da experiência
+- transição de tema como requisito central
 
-- **Small:** `4px 4px 0px` - Light mode (preto) / Dark mode (amarelo accent)
-- **Default:** `6px 6px 0px` - Light mode (preto) / Dark mode (amarelo accent)
-- **Large:** `8px 8px 0px` - Light mode (preto) / Dark mode (amarelo accent)
+## Uso recomendado
 
-### 🎨 Gradientes
+Se a intenção for:
 
-- **Aqua:** `linear-gradient(135deg, Aqua Glass → Icy Morn)`
-- **Primary:** `linear-gradient(135deg, Parakeet dark → Parakeet light)`
-- **Accent:** `linear-gradient(135deg, Freesia dark → Freesia light)`
-
----
-
-## **Características Brutalist**
-
-- ✅ **Border Radius:** `0rem` (sem arredondamento)
-- ✅ **Bordas:** `4px solid` (grossas e definidas)
-- ✅ **Contraste:** Alto contraste entre elementos
-- ✅ **Sombras:** Sólidas e offset (não blur)
-
----
-
-## **Animações**
-
-### Disponíveis no Tailwind Config
-
-- `slide-up` - Entrada de baixo para cima
-- `slide-right` - Entrada da esquerda para direita
-- `fade-in` - Fade suave
-- `scale-in` - Escala com fade
-- `accordion-down/up` - Para acordeões
-
----
-
-## **Uso Correto**
-
-✅ **Sempre use tokens semânticos:**
-
-```tsx
-// Correto
-className="bg-primary text-primary-foreground"
-className="shadow-brutal border-4 border-foreground"
-
-// Errado
-className="bg-green-500 text-white"
-className="shadow-lg rounded-lg"
-```
-
-Adicionar animações ao scroll
-Criar guia de estilo visual
-Melhorar transição de tema
+- entender a expressão visual atual, use [Identidade Visual Atual](./identidade-visual-atual.md)
+- orientar UI e layout, use [Guia de Design Atual](./guia-de-design-atual.md)
+- orientar narrativa, tom e consistência de marca, use [Branding Guide Atual](./branding-guide-atual.md)
