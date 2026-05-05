@@ -1,5 +1,6 @@
 import type React from "react";
 import { cn } from "@/lib/utils";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import "./GlitchImage.css";
 
 export interface VideoSource {
@@ -90,7 +91,9 @@ export function GlitchImage({
   className,
   loadingLazy = false,
 }: GlitchImageProps) {
+  const reducedMotion = useReducedMotion();
   const layerMediaClass = "filter contrast-125 saturate-200";
+  const shouldActivateGlitch = active && !reducedMotion;
 
   return (
     <div className="glitch-container relative w-full h-full overflow-hidden bg-black">
@@ -107,7 +110,7 @@ export function GlitchImage({
       <div
         className={cn(
           "glitch-layer-1 absolute inset-0 mix-blend-screen opacity-0",
-          active && "is-active"
+          shouldActivateGlitch && "is-active"
         )}
       >
         <div className="h-full w-full" style={{ transform: "translateX(-4px)" }}>
@@ -126,7 +129,7 @@ export function GlitchImage({
       <div
         className={cn(
           "glitch-layer-2 absolute inset-0 mix-blend-screen opacity-0",
-          active && "is-active"
+          shouldActivateGlitch && "is-active"
         )}
       >
         <div className="h-full w-full" style={{ transform: "translateX(4px)" }}>
@@ -145,7 +148,7 @@ export function GlitchImage({
       <div
         className={cn(
           "glitch-layer-3 absolute inset-0 mix-blend-overlay opacity-0",
-          active && "is-active"
+          shouldActivateGlitch && "is-active"
         )}
       >
         <div className="h-full w-full" style={{ transform: "translateY(-2px)" }}>
@@ -164,13 +167,13 @@ export function GlitchImage({
       <div
         className={cn(
           "glitch-block glitch-block-magenta pointer-events-none",
-          active && "is-active"
+          shouldActivateGlitch && "is-active"
         )}
       />
       <div
         className={cn(
           "glitch-block glitch-block-screen pointer-events-none",
-          active && "is-active"
+          shouldActivateGlitch && "is-active"
         )}
       />
     </div>

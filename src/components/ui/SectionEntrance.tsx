@@ -1,5 +1,6 @@
 import type React from "react";
 import { motion } from "framer-motion";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 interface SectionEntranceProps {
   children: React.ReactNode;
@@ -8,6 +9,16 @@ interface SectionEntranceProps {
 }
 
 export const SectionEntrance: React.FC<SectionEntranceProps> = ({ children, className, id }) => {
+  const reducedMotion = useReducedMotion();
+
+  if (reducedMotion) {
+    return (
+      <div id={id} className={className}>
+        {children}
+      </div>
+    );
+  }
+
   return (
     <motion.div
       id={id}

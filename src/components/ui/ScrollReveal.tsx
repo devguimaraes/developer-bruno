@@ -1,6 +1,7 @@
 import type React from "react";
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 interface ScrollRevealProps {
   children: React.ReactNode;
@@ -23,8 +24,11 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
 }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once, amount: threshold });
+  const reducedMotion = useReducedMotion();
 
   const getInitialProps = () => {
+    if (reducedMotion) return { opacity: 1 };
+
     switch (direction) {
       case "up":
         return { opacity: 0, y: 30 };
@@ -42,6 +46,8 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
   };
 
   const getAnimateProps = () => {
+    if (reducedMotion) return { opacity: 1 };
+
     return {
       opacity: isInView ? 1 : 0,
       y: isInView ? 0 : getInitialProps().y,

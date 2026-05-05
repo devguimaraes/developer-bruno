@@ -1,10 +1,12 @@
 import type React from "react";
 import { useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 export const Magnetic: React.FC<{ children: React.ReactElement }> = ({ children }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
+  const reducedMotion = useReducedMotion();
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!ref.current) return;
@@ -18,6 +20,10 @@ export const Magnetic: React.FC<{ children: React.ReactElement }> = ({ children 
   const handleMouseLeave = () => {
     setPosition({ x: 0, y: 0 });
   };
+
+  if (reducedMotion) {
+    return <>{children}</>;
+  }
 
   return (
     <motion.div

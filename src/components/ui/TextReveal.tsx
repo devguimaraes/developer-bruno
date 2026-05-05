@@ -1,28 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import { motion, useInView } from 'framer-motion';
+import React, { useState, useEffect } from "react";
+import { motion, useInView } from "framer-motion";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
-const CHARSET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+';
+const CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
 
 export const TextReveal: React.FC<{ text: string; className?: string }> = ({ text, className }) => {
   const [displayText, setDisplayText] = useState(text);
   const ref = React.useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.5 });
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
     if (!isInView) return;
+
+    if (reducedMotion) {
+      setDisplayText(text);
+      return;
+    }
 
     let iteration = 0;
     const interval = setInterval(() => {
       setDisplayText(() =>
         text
-          .split('')
+          .split("")
           .map((char, index) => {
-            if (index < iteration || char === ' ') {
+            if (index < iteration || char === " ") {
               return text[index];
             }
             return CHARSET[Math.floor(Math.random() * CHARSET.length)];
           })
-          .join('')
+          .join("")
       );
 
       if (iteration >= text.length) {
@@ -33,7 +40,7 @@ export const TextReveal: React.FC<{ text: string; className?: string }> = ({ tex
     }, 30);
 
     return () => clearInterval(interval);
-  }, [isInView, text]);
+  }, [isInView, text, reducedMotion]);
 
   return (
     <motion.div ref={ref} className={className}>

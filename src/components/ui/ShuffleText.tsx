@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import { gsap } from "gsap";
 import type React from "react";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 interface ShuffleTextProps {
   text: string;
@@ -54,6 +55,7 @@ const ShuffleText = ({
   const containerRef = useRef<HTMLElement>(null);
   const [isAnimating, setIsAnimating] = useState(false);
   const [hasTriggered, setHasTriggered] = useState(false);
+  const reducedMotion = useReducedMotion();
 
   const chars = useMemo(() => text.split(""), [text]);
   const keyedChars = useMemo(() => {
@@ -78,6 +80,13 @@ const ShuffleText = ({
 
   const startAnimation = useCallback(() => {
     if (isAnimating || (triggerOnce && hasTriggered)) return;
+
+    if (reducedMotion) {
+      setHasTriggered(true);
+      setIsAnimating(false);
+      onShuffleComplete?.();
+      return;
+    }
 
     setIsAnimating(true);
     setHasTriggered(true);
@@ -133,6 +142,7 @@ const ShuffleText = ({
     isAnimating,
     triggerOnce,
     hasTriggered,
+    reducedMotion,
     chars,
     delay,
     animationMode,

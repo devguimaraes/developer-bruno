@@ -162,3 +162,19 @@
   92% { opacity: 0; }
   100% { opacity: 0; }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .glitch-layer-1.is-active,
+  .glitch-layer-2.is-active,
+  .glitch-layer-3.is-active,
+  .glitch-block-magenta.is-active,
+  .glitch-block-screen.is-active,
+  .glitch-container:hover .glitch-layer-1,
+  .glitch-container:hover .glitch-layer-2,
+  .glitch-container:hover .glitch-layer-3,
+  .glitch-container:hover .glitch-block-magenta,
+  .glitch-container:hover .glitch-block-screen {
+    animation: none;
+    opacity: 0;
+  }
+}
