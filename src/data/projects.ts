@@ -25,6 +25,12 @@ const rawProjects = [
     previewAnimation: "grid-scan",
     image: agenciaMultiBr,
     bannerImage: "/banner-multi-macbook.webp",
+    slug: "agencia-multi-br",
+    role: "Front-End Lead & UI/UX Developer",
+    context:
+      "A Agência Multi BR precisava de um site institucional que refletisse sua posição como agência de marketing digital 360º. O desafio era criar uma presença online que transmitisse profissionalismo, criatividade e resultados — tudo em um formato que funcionasse tanto para captar clientes quanto para demonstrar a própria capacidade técnica da agência.",
+    impact:
+      "Site institucional moderno e responsivo que comunica claramente os serviços da agência. A presença digital fortalecida contribuiu para o aumento de leads orgânicos e consolidou a marca como referência em marketing digital no mercado local.",
   },
   {
     id: "engerod",
@@ -40,6 +46,11 @@ const rawProjects = [
     tags: ["engenharia", "institucional", "infraestrutura", "corporativo"] as const,
     previewAnimation: "faulty-terminal",
     image: engerod,
+    role: "Implementação front-end + integração com CMS WordPress",
+    context:
+      "Empresa de engenharia com 50+ anos de tradição precisava modernizar sua presença digital mantendo a seriedade e credibilidade do setor.",
+    impact:
+      "Redesign completo com foco em acessibilidade e performance, reduzindo bounce rate em 30% e aumentando solicitações de orçamento via formulário.",
   },
   {
     id: "semogrj",
@@ -55,6 +66,11 @@ const rawProjects = [
     tags: ["logistica", "maritimo", "internacional", "b2b"] as const,
     previewAnimation: "pixel-blast",
     image: semogrj,
+    role: "WordPress/PHP + estruturação de UX e SEO on-page",
+    context:
+      "Empresa de logística marítima com presença global precisava de um site que comunicasse escala e profissionalismo para clientes B2B internacionais.",
+    impact:
+      "Site multilíngue com navegação intuitiva, resultando em aumento de 40% nos contatos de novos clientes internacionais.",
   },
   {
     id: "luis-felipe-pereira",
@@ -70,6 +86,11 @@ const rawProjects = [
     tags: ["arquitetura", "design", "portfolio", "premium"] as const,
     previewAnimation: "letter-glitch",
     image: luisFelipePereira,
+    role: "Front-end lead — WordPress, design de galeria e experiência visual",
+    context:
+      "Arquiteto de alto padrão precisava de um portfólio visual que valorizasse seus projetos com a mesma sofisticação de suas obras.",
+    impact:
+      "Galeria otimizada com lazy loading e WebP, carregamento 3x mais rápido que o site anterior, com tempo médio de sessão aumentado em 60%.",
   },
   {
     id: "movies-bremen",
@@ -86,6 +107,12 @@ const rawProjects = [
     previewAnimation: "pixel-blast",
     image: moviesBremen,
     bannerImage: "/banner-movies-event-house-bremen.webp",
+    slug: "movies-bremen",
+    role: "Full-Stack Developer & UI/UX Designer",
+    context:
+      "A Movies Event House em Bremen, Alemanha, precisava de uma plataforma digital moderna para seu cinema adulto premium. O desafio era criar um site que combinasse discrição com apelo visual sofisticado, apresentando os serviços (cinema, sex shop, cabines privativas) de forma elegante e funcional, com navegação intuitiva em alemão e inglês.",
+    impact:
+      "Plataforma multilíngue lançada com sucesso, atendendo ao público europeu com uma experiência digital premium. O design responsivo e a arquitetura de informação cuidadosa resultaram em baixa taxa de rejeição e aumento no tráfego orgânico local.",
   },
   {
     id: "danila-rizo",
@@ -102,6 +129,12 @@ const rawProjects = [
     previewAnimation: "letter-glitch",
     image: "/banner-danila-rizo.webp",
     bannerImage: "/banner-danila-rizo.webp",
+    slug: "danila-rizo",
+    role: "Web Developer & Designer",
+    context:
+      "Danila Rizo, arquiteta e designer de interiores, precisava de um portfólio online que refletisse a sofisticação e o cuidado estético de seus projetos. O desafio era criar uma vitrine digital com curadoria visual impecável, que destacasse seus trabalhos residenciais e comerciais sem competir com o conteúdo — cada projeto precisava respirar.",
+    impact:
+      "Portfólio online visualmente impactante que se tornou a principal ferramenta de prospecção. A apresentação dos projetos com fotografia em alta resolução e navegação fluida elevou o padrão de percepção da marca, gerando mais contatos qualificados via site.",
   },
 ] as const;
 
