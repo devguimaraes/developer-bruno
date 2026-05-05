@@ -1,11 +1,19 @@
 import type React from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ProjectItem } from "./ProjectItem";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { selectedWorks } from "@/data/projects";
+import { t, getLocale, subscribeToLocale } from "@/lib/i18n";
+import type { Locale } from "@/lib/i18n";
 
 const Projects: React.FC = () => {
   const reducedMotion = useReducedMotion();
+  const [locale, setLocale] = useState<Locale>(getLocale());
+
+  useEffect(() => {
+    return subscribeToLocale(l => setLocale(l));
+  }, []);
 
   return (
     <section id="projetos" className="relative py-20 bg-black">
@@ -21,11 +29,16 @@ const Projects: React.FC = () => {
       )}
 
       <div className="mb-20 px-6 md:px-12">
-        <h2 className="type-raster-section text-[10vw] md:text-[8vw] text-white">SELECTED_WORKS</h2>
+        <h2
+          className="type-raster-section text-[10vw] md:text-[8vw] text-white"
+          title="Curated selection of my best projects"
+        >
+          {t(locale, "projects.heading")}
+        </h2>
         <div className="flex justify-between items-end border-t border-white/10 pt-4 mt-4">
-          <p className="type-mono">Explorando fronteiras da interação digital</p>
+          <p className="type-mono">{t(locale, "projects.subtitle")}</p>
           <p className="type-mono hidden md:block">
-            {String(selectedWorks.length).padStart(2, "0")} TOTAL
+            {String(selectedWorks.length).padStart(2, "0")} {t(locale, "projects.total")}
           </p>
         </div>
       </div>

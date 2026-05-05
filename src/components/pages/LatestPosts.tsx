@@ -1,26 +1,37 @@
 import type React from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Calendar, Clock, ArrowRight } from "lucide-react";
 import type { BlogPost } from "@/types/blog";
+import { t, getLocale, subscribeToLocale } from "@/lib/i18n";
+import type { Locale } from "@/lib/i18n";
 
 interface LatestPostsProps {
   posts: BlogPost[];
 }
 
 const LatestPosts: React.FC<LatestPostsProps> = ({ posts }) => {
+  const [locale, setLocale] = useState<Locale>(getLocale());
+
+  useEffect(() => {
+    return subscribeToLocale(l => setLocale(l));
+  }, []);
+
   if (posts.length === 0) return null;
 
   return (
     <section className="relative py-20 bg-black">
       <div className="px-6 md:px-12 mb-16">
-        <h2 className="type-raster-section text-[10vw] md:text-[8vw] text-white">LATEST_POSTS</h2>
+        <h2 className="type-raster-section text-[10vw] md:text-[8vw] text-white">
+          {t(locale, "blog.heading")}
+        </h2>
         <div className="flex justify-between items-end border-t border-white/10 pt-4 mt-4">
-          <p className="type-mono text-white/40">Artigos e reflexoes sobre front-end</p>
+          <p className="type-mono text-white/40">{t(locale, "blog.subtitle")}</p>
           <a
             href="/blog"
             className="type-mono text-[10px] text-white/60 hover:text-accent transition-colors uppercase tracking-widest flex items-center gap-1"
           >
-            Ver todos <ArrowRight className="w-3 h-3" />
+            {t(locale, "blog.view_all")} <ArrowRight className="w-3 h-3" />
           </a>
         </div>
       </div>

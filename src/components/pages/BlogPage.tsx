@@ -27,7 +27,10 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
       <div className="pt-6 sm:pt-8 pb-10 sm:pb-16">
         <div className="container mx-auto px-4">
           <div className="mb-10 sm:mb-16">
-            <p className="type-mono text-[10px] text-white/40 uppercase tracking-widest mb-4">
+            <p
+              className="type-mono text-[10px] text-white/40 uppercase tracking-widest mb-4"
+              title="Latest published blog posts"
+            >
               {"// LATEST_POSTS"} &middot; TOTAL: {blogPosts.length}
             </p>
             <h1 className="type-raster-section text-[14vw] sm:text-5xl md:text-7xl text-white uppercase tracking-tighter leading-[0.92]">

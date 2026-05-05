@@ -6,6 +6,7 @@ import { siteConfig } from '@/config/site';
 
 import Navigation from '@/components/Navigation.tsx';
 import Footer from '@/components/Footer.tsx';
+import LanguageSwitcher from '@/components/LanguageSwitcher.tsx';
 import { Toaster } from '@/components/ui/sonner.tsx';
 import GrainOverlay from '@/components/ui/GrainOverlay';
 import PixelLoader from '@/components/ui/PixelLoader';
@@ -85,10 +86,23 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     {structuredData && (
       <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
     )}
+
+    <!-- Client-side locale detection for lang/og attributes -->
+    <script>
+      (function() {
+        try {
+          var locale = localStorage.getItem('locale') || 'pt';
+          document.documentElement.lang = locale === 'en' ? 'en' : 'pt-BR';
+          var ogLocale = document.querySelector('meta[property="og:locale"]');
+          if (ogLocale) ogLocale.content = locale === 'en' ? 'en_US' : 'pt_BR';
+        } catch(e) {}
+      })();
+    </script>
   </head>
   <body class="bg-black">
     <PixelLoader client:load />
     <CustomCursor client:load />
+    <LanguageSwitcher client:load />
     
     <SmoothScroll client:load>
       <Navigation client:load />

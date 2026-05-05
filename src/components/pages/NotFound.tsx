@@ -26,7 +26,10 @@ const NotFound = () => {
           transition={{ delay: 0.1 }}
           className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-4"
         >
-          <div className="type-mono text-[10px] text-white/40 uppercase tracking-[0.24em]">
+          <div
+            className="type-mono text-[10px] text-white/40 uppercase tracking-[0.24em]"
+            title="Page not found — this route does not exist"
+          >
             {"// ERROR_404"}
           </div>
           <div className="type-mono text-[10px] text-white/30 uppercase tracking-[0.24em]">
@@ -42,6 +45,7 @@ const NotFound = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
                 className="type-mono text-[10px] text-white/40 uppercase tracking-[0.24em]"
+                title="Connection lost — the requested page could not be found"
               >
                 {"// PAGE_STATUS"} &middot; LOST_SIGNAL
               </motion.p>
@@ -90,7 +94,10 @@ const NotFound = () => {
               transition={{ delay: 0.5 }}
               className="space-y-6 border-t border-white/10 pt-8 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0"
             >
-              <div className="type-mono text-[10px] text-white/35 uppercase tracking-[0.24em]">
+              <div
+                className="type-mono text-[10px] text-white/35 uppercase tracking-[0.24em]"
+                title="Navigation options to recover from this error"
+              >
                 {"// RECOVERY_OPTIONS"}
               </div>
 
@@ -135,10 +142,16 @@ const NotFound = () => {
           transition={{ delay: 0.6 }}
           className="flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-4"
         >
-          <div className="type-mono text-[10px] text-white/30 uppercase tracking-[0.2em]">
+          <div
+            className="type-mono text-[10px] text-white/30 uppercase tracking-[0.2em]"
+            title="Geographic coordinates: Rio de Janeiro, Brazil"
+          >
             POS: 22.9068 S / 43.1729 W
           </div>
-          <div className="type-mono text-[10px] text-white/20 uppercase tracking-[0.2em]">
+          <div
+            className="type-mono text-[10px] text-white/20 uppercase tracking-[0.2em]"
+            title="Current page version"
+          >
             VER: 4.0.4_NOT_FOUND
           </div>
         </motion.div>

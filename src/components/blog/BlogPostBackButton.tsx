@@ -12,6 +12,7 @@ export function BlogPostBackButton() {
       <a
         href="/blog"
         className="inline-flex items-center gap-2 type-mono text-[10px] text-white/40 hover:text-accent transition-colors uppercase tracking-widest py-1"
+        title="Return to the blog listing"
       >
         <ArrowLeft className="w-3 h-3" />
         {"// BACK_TO_BLOG"}

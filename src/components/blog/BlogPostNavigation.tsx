@@ -23,7 +23,10 @@ export function BlogPostNavigation({ previous, next }: BlogPostNavigationProps) 
             href={`/blog/${previous.slug}`}
             className="group flex flex-col gap-3 p-5 border border-white/10 hover:border-accent/50 transition-colors"
           >
-            <div className="type-mono text-[10px] text-white/40 uppercase tracking-widest flex items-center gap-1">
+            <div
+              className="type-mono text-[10px] text-white/40 uppercase tracking-widest flex items-center gap-1"
+              title="Previous blog post"
+            >
               <ChevronLeft className="w-3 h-3" />
               {"// PREVIOUS"}
             </div>
@@ -37,7 +40,10 @@ export function BlogPostNavigation({ previous, next }: BlogPostNavigationProps) 
             href={`/blog/${next.slug}`}
             className="group flex flex-col gap-3 p-5 border border-white/10 hover:border-accent/50 transition-colors text-left md:text-right md:ml-auto"
           >
-            <div className="type-mono text-[10px] text-white/40 uppercase tracking-widest flex items-center md:justify-end gap-1">
+            <div
+              className="type-mono text-[10px] text-white/40 uppercase tracking-widest flex items-center md:justify-end gap-1"
+              title="Next blog post"
+            >
               {"// NEXT"}
               <ChevronRight className="w-3 h-3" />
             </div>

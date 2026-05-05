@@ -2,6 +2,8 @@ import type React from "react";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import GlitchImage from "./ui/GlitchImage";
+import { t, getLocale, subscribeToLocale } from "@/lib/i18n";
+import type { Locale } from "@/lib/i18n";
 import {
   SiInstagram,
   SiX,
@@ -21,6 +23,11 @@ import { Linkedin, MousePointer2 } from "lucide-react";
 
 const About: React.FC = () => {
   const [time, setTime] = useState("");
+  const [locale, setLocale] = useState<Locale>(getLocale());
+
+  useEffect(() => {
+    return subscribeToLocale(l => setLocale(l));
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -92,7 +99,7 @@ const About: React.FC = () => {
         </div>
 
         <div className="text-white hover:text-accent transition-colors cursor-default tracking-[0.3em] font-bold">
-          Built by Bruno Guimarães
+          {t(locale, "about.built_by")}
         </div>
       </div>
 
@@ -114,7 +121,10 @@ const About: React.FC = () => {
               />
             </div>
             {/* Overlay Minimalista */}
-            <div className="absolute -bottom-4 -left-4 bg-white text-black px-3 py-1 type-mono text-[9px] font-bold uppercase tracking-widest">
+            <div
+              className="absolute -bottom-4 -left-4 bg-white text-black px-3 py-1 type-mono text-[9px] font-bold uppercase tracking-widest"
+              title="Bio stream — personal introduction"
+            >
               STREAM_BIO_03
             </div>
           </div>
@@ -134,12 +144,15 @@ const About: React.FC = () => {
 
             <div className="max-w-xl border-l border-white/10 pl-8 ml-2">
               <p className="text-2xl md:text-3xl leading-snug font-serif italic text-white/90">
-                Com 5 anos de experiência, crio landing pages de alta conversão e sites
-                institucionais que combinam engenharia robusta com design intencional. Especializado
-                em performance, SEO técnico e Core Web Vitals — interfaces que carregam rápido,
-                rankeiam bem e convertem visitantes em clientes.
+                {t(locale, "about.bio")}
               </p>
               <p className="type-mono text-[10px] opacity-30 mt-8 uppercase tracking-[0.3em]">
+                {t(locale, "about.based")}
+              </p>
+              <p
+                className="type-mono text-[10px] opacity-30 mt-8 uppercase tracking-[0.3em]"
+                title="Location: Rio de Janeiro, Brazil"
+              >
                 {"// BASED_IN_RIO_DE_JANEIRO"}
               </p>
             </div>

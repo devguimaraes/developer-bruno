@@ -55,6 +55,7 @@ const Index: React.FC<IndexProps> = ({ latestPosts = [] }) => {
         <a
           href={`mailto:${contactData.email}`}
           className="type-raster-section text-[12vw] hover:text-accent transition-colors cursor-pointer block"
+          title="Get in touch to start a project"
         >
           LET&apos;S_TALK
         </a>

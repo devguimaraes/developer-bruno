@@ -4,7 +4,10 @@ export function BlogPostNotFound() {
   return (
     <div className="bg-black min-h-screen pt-24 flex items-center justify-center">
       <div className="text-center">
-        <p className="type-mono text-[10px] text-white/40 uppercase tracking-widest mb-4">
+        <p
+          className="type-mono text-[10px] text-white/40 uppercase tracking-widest mb-4"
+          title="Blog post not found — it may have been removed or never existed"
+        >
           {"// ERROR_404"}
         </p>
         <h1 className="type-raster-section text-6xl text-white mb-6">NAO ENCONTRADO</h1>

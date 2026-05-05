@@ -1,8 +1,11 @@
 import type React from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowUpRight, ExternalLink, Calendar } from "lucide-react";
 import type { Project } from "@/types";
 import type { BlogPost } from "@/types/blog";
+import { t, getLocale, subscribeToLocale } from "@/lib/i18n";
+import type { Locale } from "@/lib/i18n";
 
 interface CaseStudyProps {
   project: Project;
@@ -10,6 +13,11 @@ interface CaseStudyProps {
 }
 
 const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
+  const [locale, setLocale] = useState<Locale>(getLocale());
+
+  useEffect(() => {
+    return subscribeToLocale(l => setLocale(l));
+  }, []);
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -27,9 +35,10 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
           <a
             href="/#projetos"
             className="inline-flex items-center gap-2 type-mono text-[10px] text-white/40 hover:text-accent transition-colors uppercase tracking-widest py-2"
+            title="Return to the projects section"
           >
             <ArrowLeft className="w-3 h-3" />
-            {"// BACK_TO_PROJECTS"}
+            {t(locale, "case.back")}
           </a>
         </motion.div>
       </div>
@@ -74,11 +83,16 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
             transition={{ duration: 0.5 }}
             className="border-t border-white/10 pt-8"
           >
-            <div className="type-mono text-[10px] text-white/40 uppercase tracking-widest mb-6">
-              {"// CONTEXT"}
+            <div
+              className="type-mono text-[10px] text-white/40 uppercase tracking-widest mb-6"
+              title="Project background and problem statement"
+            >
+              {t(locale, "case.context")}
             </div>
             <div className="grid md:grid-cols-[1fr_2fr] gap-8">
-              <h2 className="type-raster-section text-2xl md:text-3xl text-white">O PROBLEMA</h2>
+              <h2 className="type-raster-section text-2xl md:text-3xl text-white">
+                {t(locale, "case.problem")}
+              </h2>
               <div>
                 <p className="text-base sm:text-lg text-white/70 leading-relaxed">
                   {project.context}
@@ -98,11 +112,16 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
           transition={{ duration: 0.5 }}
           className="border-t border-white/10 pt-8"
         >
-          <div className="type-mono text-[10px] text-white/40 uppercase tracking-widest mb-6">
-            {"// STACK"}
+          <div
+            className="type-mono text-[10px] text-white/40 uppercase tracking-widest mb-6"
+            title="Technologies and tools used"
+          >
+            {t(locale, "case.stack")}
           </div>
           <div className="grid md:grid-cols-[1fr_2fr] gap-8">
-            <h2 className="type-raster-section text-2xl md:text-3xl text-white">TECNOLOGIAS</h2>
+            <h2 className="type-raster-section text-2xl md:text-3xl text-white">
+              {t(locale, "case.technologies")}
+            </h2>
             <div className="flex flex-wrap gap-3">
               {project.tech.map(tech => (
                 <span
@@ -127,11 +146,16 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
             transition={{ duration: 0.5 }}
             className="border-t border-white/10 pt-8"
           >
-            <div className="type-mono text-[10px] text-white/40 uppercase tracking-widest mb-6">
-              {"// IMPACT"}
+            <div
+              className="type-mono text-[10px] text-white/40 uppercase tracking-widest mb-6"
+              title="Results and measurable outcomes"
+            >
+              {t(locale, "case.impact")}
             </div>
             <div className="grid md:grid-cols-[1fr_2fr] gap-8">
-              <h2 className="type-raster-section text-2xl md:text-3xl text-white">RESULTADOS</h2>
+              <h2 className="type-raster-section text-2xl md:text-3xl text-white">
+                {t(locale, "case.results")}
+              </h2>
               <div>
                 <p className="text-base sm:text-lg text-white/70 leading-relaxed">
                   {project.impact}
@@ -152,11 +176,16 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
             transition={{ duration: 0.5 }}
             className="border-t border-white/10 pt-8"
           >
-            <div className="type-mono text-[10px] text-white/40 uppercase tracking-widest mb-6">
-              {"// RELATED_POSTS"}
+            <div
+              className="type-mono text-[10px] text-white/40 uppercase tracking-widest mb-6"
+              title="Blog posts related to this project"
+            >
+              {t(locale, "case.related")}
             </div>
             <div className="grid md:grid-cols-[1fr_2fr] gap-8">
-              <h2 className="type-raster-section text-2xl md:text-3xl text-white">LEIA MAIS</h2>
+              <h2 className="type-raster-section text-2xl md:text-3xl text-white">
+                {t(locale, "case.read_more")}
+              </h2>
               <div className="flex flex-col gap-6">
                 {relatedPosts.map(post => (
                   <a
@@ -199,8 +228,11 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
           transition={{ duration: 0.5 }}
           className="border-t border-white/10 pt-8"
         >
-          <div className="type-mono text-[10px] text-white/40 uppercase tracking-widest mb-6">
-            {"// NEXT_STEPS"}
+          <div
+            className="type-mono text-[10px] text-white/40 uppercase tracking-widest mb-6"
+            title="Get in touch or visit the live site"
+          >
+            {t(locale, "case.next")}
           </div>
           <div className="flex flex-col sm:flex-row gap-4">
             <a
@@ -209,14 +241,14 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
               rel="noreferrer"
               className="inline-flex items-center justify-between gap-4 bg-white px-6 py-4 text-black hover:bg-[#f3c65a] transition-colors type-mono text-[10px] uppercase tracking-widest font-bold"
             >
-              <span>Visitar site ao vivo</span>
+              <span>{t(locale, "case.visit_live")}</span>
               <ExternalLink className="w-4 h-4" />
             </a>
             <a
               href="mailto:bc.guimaraes@outlook.com"
               className="inline-flex items-center justify-between gap-4 border border-white/15 px-6 py-4 text-white hover:border-accent/60 hover:text-accent transition-colors type-mono text-[10px] uppercase tracking-widest"
             >
-              <span>Vamos trabalhar juntos</span>
+              <span>{t(locale, "case.work_together")}</span>
               <ArrowUpRight className="w-4 h-4" />
             </a>
           </div>

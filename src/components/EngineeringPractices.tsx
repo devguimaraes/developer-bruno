@@ -1,4 +1,7 @@
 import type React from "react";
+import { useState, useEffect } from "react";
+import { t, getLocale, subscribeToLocale } from "@/lib/i18n";
+import type { Locale } from "@/lib/i18n";
 
 const practices = [
   "Code Review",
@@ -11,13 +14,19 @@ const practices = [
 ];
 
 const EngineeringPractices: React.FC = () => {
+  const [locale, setLocale] = useState<Locale>(getLocale());
+
+  useEffect(() => {
+    return subscribeToLocale(l => setLocale(l));
+  }, []);
+
   return (
     <section className="w-full bg-black text-white overflow-hidden">
       <div className="w-full py-8 md:py-10 border-y border-white/10 bg-white/[0.02]">
         <div className="px-6 md:px-12">
           {/* Label */}
           <div className="type-mono text-[10px] mb-6 tracking-[0.3em] opacity-30">
-            {"// HOW_I_WORK"}
+            {t(locale, "practices.heading")}
           </div>
 
           {/* Practices List */}

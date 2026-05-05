@@ -17,7 +17,10 @@ const Contact: React.FC = () => {
       <div className="w-full max-w-6xl mx-auto space-y-12 sm:space-y-16 md:space-y-32">
         <ScrollReveal direction="down">
           <div className="space-y-3 sm:space-y-4">
-            <div className="type-ui-label text-[10px] md:text-xs opacity-40 mb-4">
+            <div
+              className="type-ui-label text-[10px] md:text-xs opacity-40 mb-4"
+              title="Contact channel is open — ready to receive messages"
+            >
               <ShuffleText text="// COMMUNICATION_PORT_OPEN" stagger={0.02} duration={0.8} />
             </div>
             <h2 className="type-display-section text-[16vw] leading-[0.9] sm:text-8xl md:text-[110px] font-black flex flex-col text-black">

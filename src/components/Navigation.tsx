@@ -4,11 +4,18 @@ import GlassSurface from "@/components/ui/GlassSurface";
 import StaggeredMenu from "@/components/ui/StaggeredMenu";
 import { useIsMobile } from "@/hooks/use-mobile";
 import Magnetic from "@/components/ui/Magnetic";
+import { t, getLocale, subscribeToLocale } from "@/lib/i18n";
+import type { Locale } from "@/lib/i18n";
 
 const Navigation: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const isMobile = useIsMobile();
+  const [locale, setLocaleState] = useState<Locale>(getLocale());
+
+  useEffect(() => {
+    return subscribeToLocale(l => setLocaleState(l));
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -17,10 +24,10 @@ const Navigation: React.FC = () => {
   }, []);
 
   const navLinks = [
-    { name: "PROJETOS", href: "/#projetos" },
-    { name: "POSTS", href: "/blog" },
-    { name: "SOBRE", href: "/#about" },
-    { name: "CONTATO", href: "/#contact" },
+    { name: t(locale, "nav.projetos"), href: "/#projetos" },
+    { name: t(locale, "nav.posts"), href: "/blog" },
+    { name: t(locale, "nav.sobre"), href: "/#about" },
+    { name: t(locale, "nav.contato"), href: "/#contact" },
   ];
 
   return (
@@ -71,7 +78,7 @@ const Navigation: React.FC = () => {
               type="button"
               className="md:hidden flex flex-col items-end gap-1.5 p-2"
               onClick={() => setIsOpen(true)}
-              aria-label="Abrir menu"
+              aria-label={t(locale, "nav.menu_open")}
             >
               <div className="w-8 h-0.5 bg-white" />
               <div className="w-5 h-0.5 bg-white" />

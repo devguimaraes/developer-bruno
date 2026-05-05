@@ -1,13 +1,20 @@
 import type React from "react";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useVideoLoading } from "@/hooks/useVideoLoading";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { t, getLocale, subscribeToLocale } from "@/lib/i18n";
+import type { Locale } from "@/lib/i18n";
 
 const Hero: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { videoRef, isVisible } = useVideoLoading();
   const { scrollY } = useScroll();
+  const [locale, setLocale] = useState<Locale>(getLocale());
+
+  useEffect(() => {
+    return subscribeToLocale(l => setLocale(l));
+  }, []);
 
   const reducedMotion = useReducedMotion();
 
@@ -79,17 +86,24 @@ const Hero: React.FC = () => {
             className="flex flex-col md:flex-row items-center gap-12 sm:gap-24 w-full justify-between mt-12 border-t border-white/10 pt-8"
           >
             <div className="text-left max-w-[320px]">
-              <p className="type-mono text-[10px] mb-4 opacity-40 uppercase">
-                {"// ESTABLISHED_IN_RJ"}
+              <p
+                className="type-mono text-[10px] mb-4 opacity-40 uppercase"
+                title="Based in Rio de Janeiro, Brazil"
+              >
+                {t(locale, "hero.established")}
               </p>
               <p className="text-white/60 text-sm leading-relaxed">
-                Transformando complexidade em simplicidade através de design editorial e tecnologia
-                de ponta.
+                {t(locale, "hero.description")}
               </p>
             </div>
 
             <div className="flex flex-col items-end">
-              <div className="type-mono text-[10px] opacity-40 mb-2">SCROLL_FOR_MORE</div>
+              <div
+                className="type-mono text-[10px] opacity-40 mb-2"
+                title="Scroll down to see more content"
+              >
+                {t(locale, "hero.scroll")}
+              </div>
               <div className="w-px h-12 bg-white/20 animate-pulse mx-auto md:mr-0" />
             </div>
           </motion.div>
@@ -97,10 +111,16 @@ const Hero: React.FC = () => {
       </div>
 
       {/* Decorative Matrix/Coordinate Elements */}
-      <div className="absolute top-28 left-4 sm:left-10 type-mono text-[8px] opacity-40 hidden md:block">
+      <div
+        className="absolute top-28 left-4 sm:left-10 type-mono text-[8px] opacity-40 hidden md:block"
+        title="Geographic coordinates: Rio de Janeiro, Brazil"
+      >
         POS: 22.9068 S / 43.1729 W
       </div>
-      <div className="absolute bottom-1/4 right-10 type-mono text-[8px] opacity-20 hidden md:block vertical-text">
+      <div
+        className="absolute bottom-1/4 right-10 type-mono text-[8px] opacity-20 hidden md:block vertical-text"
+        title="Current portfolio version"
+      >
         VER: 4.0.0_STABLE
       </div>
     </section>
