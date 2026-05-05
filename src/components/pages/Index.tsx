@@ -2,7 +2,9 @@ import type React from "react";
 import Hero from "@/components/Hero";
 import Projects from "@/components/Projects";
 import About from "@/components/About";
+import EngineeringPractices from "@/components/EngineeringPractices";
 import LatestPosts from "@/components/pages/LatestPosts";
+import CompactCTA from "@/components/CompactCTA";
 import SectionEntrance from "@/components/ui/SectionEntrance";
 import { contactData } from "@/config/site";
 import type { BlogPost } from "@/types/blog";
@@ -24,6 +26,9 @@ const Index: React.FC<IndexProps> = ({ latestPosts = [] }) => {
         <Projects />
       </SectionEntrance>
 
+      {/* Compact CTA after projects */}
+      <CompactCTA />
+
       {/* Latest Posts Section */}
       {latestPosts.length > 0 && (
         <SectionEntrance id="blog">
@@ -34,6 +39,11 @@ const Index: React.FC<IndexProps> = ({ latestPosts = [] }) => {
       {/* About Section */}
       <SectionEntrance id="about">
         <About />
+      </SectionEntrance>
+
+      {/* Engineering Practices Section */}
+      <SectionEntrance id="practices">
+        <EngineeringPractices />
       </SectionEntrance>
 
       {/* Footer Info / Showreel Placeholder */}
