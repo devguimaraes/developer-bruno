@@ -24,7 +24,9 @@ const Projects: React.FC = () => {
         <h2 className="type-raster-section text-[10vw] md:text-[8vw] text-white">SELECTED_WORKS</h2>
         <div className="flex justify-between items-end border-t border-white/10 pt-4 mt-4">
           <p className="type-mono">Explorando fronteiras da interação digital</p>
-          <p className="type-mono hidden md:block">03 TOTAL</p>
+          <p className="type-mono hidden md:block">
+            {String(selectedWorks.length).padStart(2, "0")} TOTAL
+          </p>
         </div>
       </div>
 

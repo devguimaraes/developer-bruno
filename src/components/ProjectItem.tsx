@@ -32,10 +32,8 @@ export const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
   return (
     <div ref={containerRef} className="relative w-full group">
       <a
-        href={project.live}
-        target="_blank"
-        rel="noreferrer"
-        className="relative block w-full aspect-[4/5] md:aspect-video overflow-hidden bg-zinc-900 shadow-2xl"
+        href={`/projetos/${project.slug ?? project.id}`}
+        className="relative block w-full aspect-[4/5] md:aspect-video overflow-hidden bg-zinc-900 shadow-2xl cursor-pointer"
       >
         {/* Parallax Image Container */}
         <motion.div
@@ -62,15 +60,10 @@ export const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
           <h3 className="type-raster-section text-3xl sm:text-5xl md:text-6xl text-white tracking-[0.1em] leading-none drop-shadow-2xl mt-1">
             <TextReveal text={project.title} />
           </h3>
-          {project.role && (
-            <p className="type-mono text-[8px] md:text-[10px] text-white/60 mt-2 max-w-xs leading-relaxed">
-              {project.role}
-            </p>
-          )}
         </motion.div>
 
         <div className="absolute top-6 md:top-8 right-6 md:right-8 type-mono text-[10px] text-white/0 group-hover:text-white/80 transition-colors uppercase tracking-widest z-30 select-none pointer-events-none">
-          [ OPEN LIVE SITE ]
+          [ VIEW CASE ]
         </div>
       </a>
 
