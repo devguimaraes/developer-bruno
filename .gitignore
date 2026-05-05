@@ -34,6 +34,8 @@ dist-ssr
 .worktrees/
 .superpowers/
 
+sessions/
+
 coverage/
 
 # Test reports and results
@@ -42,3 +44,5 @@ test-results/
 
 gha-creds-*.json
 .gemini/settings.json
+
+.pi/
