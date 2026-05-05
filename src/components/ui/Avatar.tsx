@@ -28,6 +28,8 @@ export const Avatar: React.FC<AvatarProps> = ({
       <img
         src={avatarUrl}
         alt="Bruno Guimarães"
+        width={400}
+        height={400}
         loading="eager"
         fetchpriority="high"
         className={cn(

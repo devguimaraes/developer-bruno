@@ -19,7 +19,8 @@
     "test:coverage:watch": "vitest --coverage",
     "test:coverage:ui": "vitest --coverage --ui",
     "test:coverage:open": "npm run test:coverage && open-cli coverage/index.html",
-    "optimize:media": "node scripts/optimize-media.mjs"
+    "optimize:media": "node scripts/optimize-media.mjs",
+    "check:media-budget": "bun run scripts/check-media-budget.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^4.4.2",

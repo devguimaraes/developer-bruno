@@ -2,11 +2,14 @@ import type React from "react";
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useVideoLoading } from "@/hooks/useVideoLoading";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 const Hero: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { videoRef, isVisible } = useVideoLoading();
   const { scrollY } = useScroll();
+
+  const reducedMotion = useReducedMotion();
 
   // Efeito de movimento sutil para as camadas
   const textY = useTransform(scrollY, [0, 500], [0, 100]);
@@ -20,7 +23,10 @@ const Hero: React.FC = () => {
     >
       {/* Background Video Section - Full Edge-to-Edge */}
       <motion.div
-        style={{ scale: videoScale, opacity: isVisible ? videoOpacity : 0 }}
+        style={{
+          scale: reducedMotion ? 1 : videoScale,
+          opacity: isVisible ? (reducedMotion ? 0.7 : videoOpacity) : 0,
+        }}
         className="absolute inset-0 z-0 pointer-events-none w-full h-full"
       >
         <video
@@ -29,6 +35,7 @@ const Hero: React.FC = () => {
           muted
           loop
           playsInline
+          preload="metadata"
           poster="/hero-render-1.webp"
           className="w-full h-full object-cover"
         >
@@ -48,7 +55,7 @@ const Hero: React.FC = () => {
         <div className="flex flex-col items-center text-center">
           {/* Massive Raster Headline */}
           <motion.h1
-            style={{ y: textY }}
+            style={{ y: reducedMotion ? 0 : textY }}
             className="type-raster-hero text-[15vw] lg:text-[11vw] leading-[0.8] mb-8 select-none"
           >
             <div className="flex flex-col items-center">
@@ -58,7 +65,7 @@ const Hero: React.FC = () => {
           </motion.h1>
 
           <motion.div
-            style={{ y: textY }}
+            style={{ y: reducedMotion ? 0 : textY }}
             className="mb-12 type-mono tracking-[0.12em] text-[8px] sm:text-[10px] md:text-xs opacity-100 uppercase text-white"
           >
             React, Next.js & TypeScript | SEO & DX
