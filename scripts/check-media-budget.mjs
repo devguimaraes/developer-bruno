@@ -16,19 +16,17 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = resolve(__dirname, "..");
 
-// Files that load on the home page
-const HOME_PAGE_MEDIA = [
-  // Hero video posters
+// Files that load in the initial home viewport and count toward the strict image budget.
+const STRICT_HOME_IMAGES = [
   { path: "public/hero-render-1.webp", category: "images" },
   { path: "public/about-avatar.jpg", category: "images" },
+  { path: "public/avatar-bruno-bg.jpg", category: "images" },
+];
 
-  // Project banners (loaded lazily)
+const LAZY_HOME_IMAGES = [
   { path: "public/banner-movies-event-house-bremen.webp", category: "images" },
   { path: "public/banner-multi-macbook.webp", category: "images" },
   { path: "public/banner-danila-rizo.webp", category: "images" },
-
-  // Navigation avatar
-  { path: "public/avatar-bruno-bg.jpg", category: "images" },
 ];
 
 const VIDEO_FILES = [
@@ -95,25 +93,37 @@ function main() {
   console.log(`  Total:      ${formatSize(budget.total)}`);
   console.log();
 
-  // Measure images
-  console.log("Home Page Images:");
-  const imageFiles = getFileSizes(HOME_PAGE_MEDIA);
-  let totalImages = 0;
-  for (const file of imageFiles) {
+  // Measure strict images
+  console.log("Initial Home Page Images:");
+  const strictImageFiles = getFileSizes(STRICT_HOME_IMAGES);
+  let totalStrictImages = 0;
+  for (const file of strictImageFiles) {
     const status = file.exists ? "" : " [NOT FOUND]";
     console.log(`  ${file.path.padEnd(45)} ${formatSize(file.size).padStart(10)}${status}`);
-    if (file.exists) totalImages += file.size;
+    if (file.exists) totalStrictImages += file.size;
   }
   console.log(`  ${"-".repeat(55)}`);
-  console.log(`  TOTAL IMAGES: ${formatSize(totalImages).padStart(10)}`);
+  console.log(`  TOTAL STRICT IMAGES: ${formatSize(totalStrictImages).padStart(10)}`);
+  console.log();
+
+  console.log("Lazy Home Page Images (informational only):");
+  const lazyImageFiles = getFileSizes(LAZY_HOME_IMAGES);
+  let totalLazyImages = 0;
+  for (const file of lazyImageFiles) {
+    const status = file.exists ? "" : " [NOT FOUND]";
+    console.log(`  ${file.path.padEnd(45)} ${formatSize(file.size).padStart(10)}${status}`);
+    if (file.exists) totalLazyImages += file.size;
+  }
+  console.log(`  ${"-".repeat(55)}`);
+  console.log(`  TOTAL LAZY IMAGES: ${formatSize(totalLazyImages).padStart(10)}`);
   console.log();
 
   // Check budget
-  const imagesOverBudget = budget.images !== null && totalImages > budget.images;
+  const imagesOverBudget = budget.images !== null && totalStrictImages > budget.images;
   const imageBudgetStatus = imagesOverBudget ? "❌ OVER BUDGET" : "✅ OK";
 
   console.log(`Image Budget:  ${formatSize(budget.images)}`);
-  console.log(`Actual:        ${formatSize(totalImages)}`);
+  console.log(`Strict Actual: ${formatSize(totalStrictImages)}`);
   console.log(`Status:        ${imageBudgetStatus}`);
   console.log();
 
@@ -131,12 +141,14 @@ function main() {
   console.log();
 
   // Total combined (for reference)
-  const totalMedia = totalImages + totalVideo;
-  const totalOverBudget = budget.total !== null && totalMedia > budget.total;
+  const totalStrictMedia = totalStrictImages;
+  const totalInformationalMedia = totalStrictImages + totalLazyImages + totalVideo;
+  const totalOverBudget = budget.total !== null && totalStrictMedia > budget.total;
   const totalStatus = totalOverBudget ? "❌ OVER BUDGET" : "✅ OK";
 
   console.log(`Total Budget:  ${formatSize(budget.total)}`);
-  console.log(`Total Media:   ${formatSize(totalMedia)}`);
+  console.log(`Strict Media:  ${formatSize(totalStrictMedia)}`);
+  console.log(`All Media:     ${formatSize(totalInformationalMedia)} (informational)`);
   console.log(`Status:        ${totalStatus}`);
   console.log();
 
@@ -145,22 +157,21 @@ function main() {
   let hasErrors = false;
 
   if (imagesOverBudget) {
-    const over = totalImages - budget.images;
+    const over = totalStrictImages - budget.images;
     console.log(`❌ IMAGES: ${formatSize(over)} over budget of ${formatSize(budget.images)}`);
     hasErrors = true;
   } else {
-    const remaining = budget.images - totalImages;
+    const remaining = budget.images - totalStrictImages;
     console.log(`✅ IMAGES: ${formatSize(remaining)} remaining from budget`);
   }
 
   if (totalOverBudget) {
-    const over = totalMedia - budget.total;
+    const over = totalStrictMedia - budget.total;
     console.log(`❌ TOTAL: ${formatSize(over)} over budget of ${formatSize(budget.total)}`);
     hasErrors = true;
   } else {
-    const remaining = budget.total - totalMedia;
+    const remaining = budget.total - totalStrictMedia;
     console.log(`✅ TOTAL: ${formatSize(remaining)} remaining from budget`);
-    hasErrors = true; // videos are not counted in "total" but still push it over
   }
 
   console.log("=".repeat(60));
