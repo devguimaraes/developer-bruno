@@ -128,6 +128,25 @@ export function t(locale: Locale, key: TranslationKey): string {
   return dictionary[locale]?.[key] ?? dictionary.pt[key] ?? key;
 }
 
+export function getHtmlLang(locale: Locale): string {
+  return locale === "en" ? "en" : "pt-BR";
+}
+
+export function getOgLocale(locale: Locale): string {
+  return locale === "en" ? "en_US" : "pt_BR";
+}
+
+export function applyLocaleDocumentMetadata(locale: Locale): void {
+  if (typeof document === "undefined") return;
+
+  document.documentElement.lang = getHtmlLang(locale);
+
+  const ogLocale = document.querySelector<HTMLMetaElement>('meta[property="og:locale"]');
+  if (ogLocale) {
+    ogLocale.content = getOgLocale(locale);
+  }
+}
+
 // ─── Reactive locale store (works across React roots) ───
 
 type Listener = (locale: Locale) => void;
@@ -145,6 +164,7 @@ const listeners = new Set<Listener>();
 // Only run on client
 if (typeof window !== "undefined") {
   currentLocale = getInitialLocale();
+  applyLocaleDocumentMetadata(currentLocale);
 }
 
 export function getLocale(): Locale {
@@ -152,10 +172,14 @@ export function getLocale(): Locale {
 }
 
 export function setLocale(locale: Locale): void {
-  if (locale === currentLocale) return;
+  if (locale === currentLocale) {
+    applyLocaleDocumentMetadata(locale);
+    return;
+  }
   currentLocale = locale;
   if (typeof window !== "undefined") {
     localStorage.setItem("locale", locale);
+    applyLocaleDocumentMetadata(locale);
   }
   listeners.forEach(fn => {
     fn(locale);

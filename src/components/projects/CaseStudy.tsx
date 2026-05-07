@@ -6,6 +6,7 @@ import type { Project } from "@/types";
 import type { BlogPost } from "@/types/blog";
 import { t, getLocale, subscribeToLocale } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 interface CaseStudyProps {
   project: Project;
@@ -14,24 +15,45 @@ interface CaseStudyProps {
 
 const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
   const [locale, setLocale] = useState<Locale>(getLocale());
+  const prefersReducedMotion = useReducedMotion();
+  const pageMotion = prefersReducedMotion
+    ? {}
+    : {
+        initial: { opacity: 0 },
+        animate: { opacity: 1 },
+        transition: { duration: 0.5 },
+      };
+  const backMotion = prefersReducedMotion
+    ? {}
+    : {
+        initial: { opacity: 0, x: -20 },
+        animate: { opacity: 1, x: 0 },
+        transition: { delay: 0.2 },
+      };
+  const heroMotion = prefersReducedMotion
+    ? {}
+    : {
+        initial: { opacity: 0, y: 20 },
+        animate: { opacity: 1, y: 0 },
+        transition: { delay: 0.3 },
+      };
+  const sectionMotion = prefersReducedMotion
+    ? {}
+    : {
+        initial: { opacity: 0, y: 20 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true, margin: "-10%" },
+        transition: { duration: 0.5 },
+      };
 
   useEffect(() => {
     return subscribeToLocale(l => setLocale(l));
   }, []);
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      className="w-full bg-black text-white"
-    >
+    <motion.div {...pageMotion} className="w-full bg-black text-white">
       {/* Back Button */}
       <div className="container mx-auto px-6 pt-20 sm:pt-24 md:pt-28 max-w-5xl">
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.2 }}
-        >
+        <motion.div {...backMotion}>
           <a
             href="/#projetos"
             className="inline-flex items-center gap-2 type-mono text-[10px] text-white/40 hover:text-accent transition-colors uppercase tracking-widest py-2"
@@ -45,12 +67,7 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
 
       {/* Hero Section */}
       <section className="container mx-auto px-6 pt-12 pb-16 md:pb-24 max-w-5xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="border-t border-white/10 pt-8"
-        >
+        <motion.div {...heroMotion} className="border-t border-white/10 pt-8">
           <div className="flex flex-wrap items-center gap-4 type-mono text-[10px] text-accent uppercase tracking-widest mb-6">
             <span>{project.category}</span>
             {project.role && (
@@ -76,13 +93,7 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
       {/* Context Section */}
       {project.context && (
         <section className="container mx-auto px-6 py-16 md:py-20 max-w-5xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-10%" }}
-            transition={{ duration: 0.5 }}
-            className="border-t border-white/10 pt-8"
-          >
+          <motion.div {...sectionMotion} className="border-t border-white/10 pt-8">
             <div
               className="type-mono text-[10px] text-white/40 uppercase tracking-widest mb-6"
               title="Project background and problem statement"
@@ -105,13 +116,7 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
 
       {/* Stack Section */}
       <section className="container mx-auto px-6 py-16 md:py-20 max-w-5xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-10%" }}
-          transition={{ duration: 0.5 }}
-          className="border-t border-white/10 pt-8"
-        >
+        <motion.div {...sectionMotion} className="border-t border-white/10 pt-8">
           <div
             className="type-mono text-[10px] text-white/40 uppercase tracking-widest mb-6"
             title="Technologies and tools used"
@@ -139,13 +144,7 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
       {/* Impact Section */}
       {project.impact && (
         <section className="container mx-auto px-6 py-16 md:py-20 max-w-5xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-10%" }}
-            transition={{ duration: 0.5 }}
-            className="border-t border-white/10 pt-8"
-          >
+          <motion.div {...sectionMotion} className="border-t border-white/10 pt-8">
             <div
               className="type-mono text-[10px] text-white/40 uppercase tracking-widest mb-6"
               title="Results and measurable outcomes"
@@ -169,13 +168,7 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
       {/* Related Blog Posts */}
       {relatedPosts.length > 0 && (
         <section className="container mx-auto px-6 py-16 md:py-20 max-w-5xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-10%" }}
-            transition={{ duration: 0.5 }}
-            className="border-t border-white/10 pt-8"
-          >
+          <motion.div {...sectionMotion} className="border-t border-white/10 pt-8">
             <div
               className="type-mono text-[10px] text-white/40 uppercase tracking-widest mb-6"
               title="Blog posts related to this project"
@@ -221,13 +214,7 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
 
       {/* CTA Section */}
       <section className="container mx-auto px-6 py-20 md:py-28 max-w-5xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-10%" }}
-          transition={{ duration: 0.5 }}
-          className="border-t border-white/10 pt-8"
-        >
+        <motion.div {...sectionMotion} className="border-t border-white/10 pt-8">
           <div
             className="type-mono text-[10px] text-white/40 uppercase tracking-widest mb-6"
             title="Get in touch or visit the live site"

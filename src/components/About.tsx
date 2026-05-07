@@ -149,12 +149,6 @@ const About: React.FC = () => {
               <p className="type-mono text-[10px] opacity-30 mt-8 uppercase tracking-[0.3em]">
                 {t(locale, "about.based")}
               </p>
-              <p
-                className="type-mono text-[10px] opacity-30 mt-8 uppercase tracking-[0.3em]"
-                title="Location: Rio de Janeiro, Brazil"
-              >
-                {"// BASED_IN_RIO_DE_JANEIRO"}
-              </p>
             </div>
           </div>
         </div>
