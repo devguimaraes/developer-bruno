@@ -17,10 +17,12 @@ vi.mock("@/components/ui/ScrollReveal", () => ({
 }));
 
 describe("About Component - Editorial Biography", () => {
-  it("deve renderizar a biografia atualizada com 5 anos de experiência e SENAC-RJ", () => {
+  it("deve renderizar a biografia atualizada com posicionamento e especialização", () => {
     render(<About />);
     expect(screen.getByText(/5 anos de experiência/i)).toBeInTheDocument();
-    expect(screen.getByText(/SENAC-RJ/i)).toBeInTheDocument();
+    expect(screen.getByText(/landing pages de alta conversão/i)).toBeInTheDocument();
+    expect(screen.getByText(/SEO técnico/i)).toBeInTheDocument();
+    expect(screen.getByText(/Core Web Vitals/i)).toBeInTheDocument();
   });
 
   it("deve renderizar os links sociais corretos", () => {

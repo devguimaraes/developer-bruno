@@ -25,7 +25,7 @@
     "Set-Cookie",
     expect.not.stringContaining("Domain=devguimaraes.com.br"),
   );
-  
+
   // With:
   expect(res.setHeader).toHaveBeenCalledWith(
     "Set-Cookie",

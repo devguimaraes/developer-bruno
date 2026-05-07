@@ -8,7 +8,7 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: "./src/test/setup.ts",
     css: true,
-    exclude: ["**/src/test/e2e/**", "node_modules/**"],
+    exclude: ["**/src/test/e2e/**", "**/.worktrees/**", "node_modules/**"],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'lcov', 'json'],
@@ -19,6 +19,7 @@ export default defineConfig({
         'src/**/*.spec.{ts,tsx}',
         'src/types/**',
         'node_modules/**',
+        '**/.worktrees/**',
         '**/*.config.{ts,js}',
         '**/*.astro',
       ],
