@@ -5,6 +5,7 @@ import About from "@/components/About";
 import EngineeringPractices from "@/components/EngineeringPractices";
 import LatestPosts from "@/components/pages/LatestPosts";
 import CompactCTA from "@/components/CompactCTA";
+import SocialIcons from "@/components/SocialIcons";
 import SectionEntrance from "@/components/ui/SectionEntrance";
 import { contactData } from "@/config/site";
 import type { BlogPost } from "@/types/blog";
@@ -59,6 +60,7 @@ const Index: React.FC<IndexProps> = ({ latestPosts = [] }) => {
         >
           LET&apos;S_TALK
         </a>
+        <SocialIcons />
         <div className="mt-20 type-mono opacity-50">
           © 2026 BRUNO GUIMARÃES / ALL RIGHTS RESERVED
         </div>
