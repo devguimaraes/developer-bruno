@@ -1,60 +1,61 @@
-import type { SiteConfig, HeroData, ContactData } from '@/types';
+import type { SiteConfig, HeroData, ContactData } from "@/types";
 
 /**
  * Site configuration and metadata
  */
 export const siteConfig: SiteConfig = {
-  title: 'Bruno Guimarães',
-  
-  description: 'Desenvolvedor Front-End especializado em React, TypeScript e interfaces modernas. Criação de Sites e Softwares de alta performance.',
-  author: 'Bruno Guimarães',
-  email: 'bc.guimaraes@outlook.com',
-  location: 'Rio de Janeiro, Brasil',
-  domain: 'https://devguimaraes.com.br',
-  github: 'https://github.com/devguimaraes',
-  linkedin: 'https://www.linkedin.com/in/bcguimaraes/',
-  avatar: '/avatar.webp',
+  title: "Bruno Guimarães",
+
+  description:
+    "Desenvolvedor Front-End especializado em React, TypeScript e interfaces modernas. Criação de Sites e Softwares de alta performance.",
+  author: "Bruno Guimarães",
+  email: "bc.guimaraes@outlook.com",
+  location: "Rio de Janeiro, Brasil",
+  domain: "https://devguimaraes.com.br",
+  github: "https://github.com/devguimaraes",
+  linkedin: "https://www.linkedin.com/in/bcguimaraes/",
+  avatar: "/avatar.webp",
   cv: {
-    url: '/cv-bruno-guimaraes.pdf',
-    filename: 'Bruno-Guimaraes-CV.pdf',
+    url: "/cv-bruno-guimaraes.pdf",
+    filename: "Bruno-Guimaraes-CV.pdf",
   },
   seo: {
     keywords: [
       // Brazilian Market Keywords
-      'desenvolvedor Web',
-      'programador React',
-      'desenvolvedor Web Rio de Janeiro',
-      'desenvolvedor TypeScript',
-      'portfolio desenvolvedor web',
-      'Bruno Guimarães front-end',
-      'Bruno Guimarães Desenvolvedor Web',
-      'desenvolvedor web São Paulo',
-      'programador JavaScript ',
-      'front-end developer',
-      'desenvolvedor React ',
-      'portfolio desenvolvimento web',
+      "desenvolvedor Web",
+      "programador React",
+      "desenvolvedor Web Rio de Janeiro",
+      "desenvolvedor TypeScript",
+      "portfolio desenvolvedor web",
+      "Bruno Guimarães front-end",
+      "Bruno Guimarães Desenvolvedor Web",
+      "desenvolvedor web São Paulo",
+      "programador JavaScript ",
+      "front-end developer",
+      "desenvolvedor React ",
+      "portfolio desenvolvimento web",
 
       // Technical Keywords
-      'desenvolvedor front-end',
-      'react developer',
-      'typescript',
-      'next.js',
-      'ui developer',
-      'web development',
-      'bruno guimarães',
-      'front-end rio de janeiro',
+      "desenvolvedor front-end",
+      "react developer",
+      "typescript",
+      "next.js",
+      "ui developer",
+      "web development",
+      "bruno guimarães",
+      "front-end rio de janeiro",
 
       // Location-specific
-      'desenvolvedor Rio de Janeiro',
-      'programador Brasil',
-      'front-end developer Brasil',
-      'web developer Rio de Janeiro',
-      'desenvolvedor web Brasil',
+      "desenvolvedor Rio de Janeiro",
+      "programador Brasil",
+      "front-end developer Brasil",
+      "web developer Rio de Janeiro",
+      "desenvolvedor web Brasil",
     ],
-    image: '/og-image.webp',
-    siteName: 'Bruno Guimarães Portfolio',
-    locale: 'pt_BR',
-    region: 'BR',
+    image: "/og-image.webp",
+    siteName: "Bruno Guimarães Portfolio",
+    locale: "pt_BR",
+    region: "BR",
   },
 
   // Performance Budget Configuration for Brazilian Market
@@ -67,22 +68,22 @@ export const siteConfig: SiteConfig = {
 
   // Brazilian Market Configuration
   brazilianMarket: {
-    country: 'Brasil',
-    language: 'Português',
-    currency: 'BRL',
-    locale: 'pt_BR',
-    region: 'BR',
-    timezone: 'America/Sao_Paulo',
-    phoneNumber: '+55 21 99999-9999',
+    country: "Brasil",
+    language: "Português",
+    currency: "BRL",
+    locale: "pt_BR",
+    region: "BR",
+    timezone: "America/Sao_Paulo",
+    phoneNumber: "+55 21 99999-9999",
     serviceAreas: [
-      'Rio de Janeiro',
-      'São Paulo',
-      'Brasília',
-      'Belo Horizonte',
-      'Porto Alegre',
-      'Salvador',
-      'Recife',
-      'Fortaleza',
+      "Rio de Janeiro",
+      "São Paulo",
+      "Brasília",
+      "Belo Horizonte",
+      "Porto Alegre",
+      "Salvador",
+      "Recife",
+      "Fortaleza",
     ],
   },
 };
@@ -91,40 +92,41 @@ export const siteConfig: SiteConfig = {
  * Hero section specific configuration
  */
 export const heroData: HeroData = {
-  title: 'BRUNO',
-  subtitle: 'GUIMARÃES',
-  description: 'Transformo visão estratégica em software e sites de alta performance. Crio interfaces que unem engenharia robusta e design intencional para maximizar resultados.',
-  badge: 'DESENVOLVEDOR FRONT END',
+  title: "BRUNO",
+  subtitle: "GUIMARÃES",
+  description:
+    "Transformo visão estratégica em software e sites de alta performance. Crio interfaces que unem engenharia robusta e design intencional para maximizar resultados.",
+  badge: "DESENVOLVEDOR FRONT END",
   cta: {
     primary: {
-      text: 'Ver Projetos',
-      href: '#projects',
+      text: "Ver Projetos",
+      href: "#projects",
     },
     secondary: {
-      text: 'Fale Comigo',
-      href: 'https://www.linkedin.com/in/bcguimaraes/',
+      text: "Fale Comigo",
+      href: "https://www.linkedin.com/in/bcguimaraes/",
     },
   },
   technologies: [
     {
-      name: 'React',
-      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg',
-      alt: 'React',
+      name: "React",
+      icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+      alt: "React",
     },
     {
-      name: 'Next.js',
-      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg',
-      alt: 'Next.js',
+      name: "Next.js",
+      icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg",
+      alt: "Next.js",
     },
     {
-      name: 'TypeScript',
-      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
-      alt: 'TypeScript',
+      name: "TypeScript",
+      icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
+      alt: "TypeScript",
     },
     {
-      name: 'Tailwind',
-      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg',
-      alt: 'Tailwind CSS',
+      name: "Tailwind",
+      icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg",
+      alt: "Tailwind CSS",
     },
   ],
 };
@@ -133,30 +135,38 @@ export const heroData: HeroData = {
  * Contact section configuration
  */
 export const contactData: ContactData = {
-  title: 'Vamos Conversar',
-  description: 'Estou sempre aberto a discutir novos projetos, ideias criativas ou oportunidades de fazer parte da sua visão. Entre em contato!',
-  email: 'bc.guimaraes@outlook.com',
+  title: "Vamos Conversar",
+  description:
+    "Estou sempre aberto a discutir novos projetos, ideias criativas ou oportunidades de fazer parte da sua visão. Entre em contato!",
+  email: "bc.guimaraes@outlook.com",
   socialLinks: [
     {
-      id: 'linkedin',
-      icon: 'Linkedin', // Will be imported dynamically
-      href: 'https://www.linkedin.com/in/bcguimaraes/',
-      label: 'LinkedIn',
-      username: 'bcguimaraes',
+      id: "linkedin",
+      icon: "Linkedin", // Will be imported dynamically
+      href: "https://www.linkedin.com/in/bcguimaraes/",
+      label: "LinkedIn",
+      username: "bcguimaraes",
     },
     {
-      id: 'github',
-      icon: 'Github', // Will be imported dynamically
-      href: 'https://github.com/devguimaraes',
-      label: 'GitHub',
-      username: 'devguimaraes',
+      id: "github",
+      icon: "Github", // Will be imported dynamically
+      href: "https://github.com/devguimaraes",
+      label: "GitHub",
+      username: "devguimaraes",
     },
     {
-      id: 'instagram',
-      icon: 'Instagram',
-      href: 'https://www.instagram.com/brunoguimraes/',
-      label: 'Instagram',
-      username: 'dev.guimaraes',
+      id: "instagram",
+      icon: "Instagram",
+      href: "https://www.instagram.com/brunoguimraes/",
+      label: "Instagram",
+      username: "dev.guimaraes",
+    },
+    {
+      id: "x",
+      icon: "X",
+      href: "https://x.com/devguimraes/",
+      label: "X",
+      username: "devguimraes",
     },
   ],
 };
@@ -166,19 +176,19 @@ export const contactData: ContactData = {
  */
 export const socialLinks = [
   {
-    id: 'github',
-    href: 'https://github.com/devguimaraes',
-    label: 'GitHub',
+    id: "github",
+    href: "https://github.com/devguimaraes",
+    label: "GitHub",
   },
   {
-    id: 'linkedin',
-    href: 'https://www.linkedin.com/in/bcguimaraes/',
-    label: 'LinkedIn',
+    id: "linkedin",
+    href: "https://www.linkedin.com/in/bcguimaraes/",
+    label: "LinkedIn",
   },
   {
-    id: 'email',
-    href: 'mailto:bc.guimaraes@outlook.com',
-    label: 'Email',
+    id: "email",
+    href: "mailto:bc.guimaraes@outlook.com",
+    label: "Email",
   },
 ] as const;
 
@@ -186,11 +196,11 @@ export const socialLinks = [
  * Navigation sections configuration
  */
 export const navigationSections = [
-  { id: 'hero', label: 'Início', href: '#hero' },
-  { id: 'about', label: 'Sobre', href: '#about' },
-  { id: 'skills', label: 'Skills', href: '#skills' },
-  { id: 'projects', label: 'Projetos', href: '#projects' },
-  { id: 'contact', label: 'Contato', href: '#contact' },
+  { id: "hero", label: "Início", href: "#hero" },
+  { id: "about", label: "Sobre", href: "#about" },
+  { id: "skills", label: "Skills", href: "#skills" },
+  { id: "projects", label: "Projetos", href: "#projects" },
+  { id: "contact", label: "Contato", href: "#contact" },
 ] as const;
 
 /**
@@ -199,10 +209,10 @@ export const navigationSections = [
 export const footerData = {
   copyright: `© ${new Date().getFullYear()} ${siteConfig.author}. Todos os direitos reservados.`,
   builtWith: [
-    { name: 'Astro', url: 'https://astro.build' },
-    { name: 'React', url: 'https://react.dev' },
-    { name: 'TypeScript', url: 'https://typescriptlang.org' },
-    { name: 'Tailwind CSS', url: 'https://tailwindcss.com' },
+    { name: "Astro", url: "https://astro.build" },
+    { name: "React", url: "https://react.dev" },
+    { name: "TypeScript", url: "https://typescriptlang.org" },
+    { name: "Tailwind CSS", url: "https://tailwindcss.com" },
   ],
 };
 
@@ -210,7 +220,6 @@ export const footerData = {
  * Theme configuration
  */
 export const themeConfig = {
-  defaultTheme: 'dark' as const,
-  themes: ['light', 'dark'] as const,
+  defaultTheme: "dark" as const,
+  themes: ["light", "dark"] as const,
 };
-
