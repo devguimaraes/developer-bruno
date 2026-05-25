@@ -21,17 +21,13 @@ describe("NotFound page", () => {
     expect(screen.getByText(/PATH: \/rota-inexistente/i)).toBeInTheDocument();
   });
 
-  it("deve registrar o erro 404 no console", () => {
+  it("não deve vazar pathname no console", () => {
     window.history.pushState({}, "", "/rota-inexistente");
-
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    const consoleSpy = vi.spyOn(console, "error");
 
     render(<NotFound />);
 
-    expect(consoleSpy).toHaveBeenCalledWith(
-      "404 Error: User attempted to access non-existent route:",
-      "/rota-inexistente"
-    );
+    expect(consoleSpy).not.toHaveBeenCalled();
 
     consoleSpy.mockRestore();
   });

@@ -6,9 +6,7 @@ const NotFound = () => {
   const [pathname, setPathname] = useState("");
 
   useEffect(() => {
-    const currentPath = typeof window !== "undefined" ? window.location.pathname : "unknown";
-
-    console.error("404 Error: User attempted to access non-existent route:", currentPath);
+    const currentPath = typeof window !== "undefined" ? window.location.pathname : "";
     setPathname(currentPath);
   }, []);
 
