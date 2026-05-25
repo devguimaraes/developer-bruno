@@ -109,11 +109,7 @@ const About: React.FC = () => {
           <div className="relative group grayscale hover:grayscale-0 transition-all duration-700 w-full max-w-[320px] lg:max-w-[400px] shrink-0">
             <div className="aspect-[9/16] w-full overflow-hidden">
               <GlitchImage
-                videoSources={[
-                  { src: "/avatar-bio3.webm", type: "video/webm" },
-                  { src: "/avatar-bio3.mp4", type: "video/mp4" },
-                ]}
-                posterSrc="/about-avatar.jpg"
+                src="/brunoGuimaraes.png"
                 alt="Bruno Guimarães"
                 className="w-full h-full object-cover"
                 active={true}
