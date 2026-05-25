@@ -11,7 +11,7 @@ export const dictionary = {
     "hero.badge": "DESENVOLVEDOR FRONT END",
     "hero.established": "// ESTABLISHED_IN_RJ",
     "hero.description":
-      "Transformando complexidade em simplicidade através de design editorial e tecnologia de ponta.",
+      "Desenvolvimento front-end com foco em performance, arquitetura e experiência do usuário.",
     "hero.scroll": "SCROLL_FOR_MORE",
     "hero.version": "VER: 4.0.0_STABLE",
 
@@ -22,7 +22,7 @@ export const dictionary = {
 
     // About
     "about.bio":
-      "Com 5 anos de experiência, crio landing pages de alta conversão e sites institucionais que combinam engenharia robusta com design intencional. Especializado em performance, SEO técnico e Core Web Vitals — interfaces que carregam rápido, rankeiam bem e convertem visitantes em clientes.",
+      "Formado em Desenvolvimento de Sistemas Web pelo Senac, atuo há 5 anos com desenvolvimento de software voltado ao front-end. Meu trabalho combina React, TypeScript e arquitetura server-side com princípios de engenharia de software e design intencional. Tenho experiência prática com otimização de performance e Core Web Vitals em projetos com tráfego real, além de manter testes automatizados e pipelines de CI/CD. Código bem estruturado, entregas consistentes e compromisso com qualidade.",
     "about.based": "// BASED_IN_RIO_DE_JANEIRO",
     "about.built_by": "Built by Bruno Guimarães",
 
@@ -68,7 +68,7 @@ export const dictionary = {
     "hero.badge": "FRONT END DEVELOPER",
     "hero.established": "// ESTABLISHED_IN_RJ",
     "hero.description":
-      "Transforming complexity into simplicity through editorial design and cutting-edge technology.",
+      "Front-end development focused on performance, architecture, and user experience.",
     "hero.scroll": "SCROLL_FOR_MORE",
     "hero.version": "VER: 4.0.0_STABLE",
 
@@ -79,7 +79,7 @@ export const dictionary = {
 
     // About
     "about.bio":
-      "With 5 years of experience, I build high-conversion landing pages and institutional sites that combine robust engineering with intentional design. Specialized in performance, technical SEO, and Core Web Vitals — interfaces that load fast, rank well, and convert visitors into clients.",
+      "Graduated in Web Systems Development from Senac, I have 5 years of experience in front-end software development. My work combines React, TypeScript, and server-side architecture with software engineering principles and intentional design. I have hands-on experience optimizing performance and Core Web Vitals on production traffic, along with maintaining automated tests and CI/CD pipelines. Well-structured code, consistent delivery, and a commitment to quality.",
     "about.based": "// BASED_IN_RIO_DE_JANEIRO",
     "about.built_by": "Built by Bruno Guimarães",
 
