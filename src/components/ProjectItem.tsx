@@ -6,6 +6,8 @@ import GlitchImage from "@/components/ui/GlitchImage";
 import TextReveal from "@/components/ui/TextReveal";
 import Magnetic from "@/components/ui/Magnetic";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { useLocale } from "@/hooks/useLocale";
+import { t } from "@/lib/i18n";
 
 interface ProjectItemProps {
   project: Project;
@@ -14,6 +16,7 @@ interface ProjectItemProps {
 export const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
   const containerRef = useRef(null);
   const reducedMotion = useReducedMotion();
+  const locale = useLocale();
 
   // Rastreia o scroll relativo a este container específico
   const { scrollYProgress } = useScroll({
@@ -98,7 +101,7 @@ export const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
             href={`/blog/${project.relatedPosts[0]}`}
             className="type-mono text-[9px] text-white/40 hover:text-accent transition-colors uppercase tracking-widest flex items-center gap-1"
           >
-            Leia como aplico isso →
+            {t(locale, "projects.read_more")}
           </a>
         </motion.div>
       )}

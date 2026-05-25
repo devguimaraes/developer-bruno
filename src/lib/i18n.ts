@@ -32,6 +32,12 @@ export const dictionary = {
     // CTA
     "cta.compact_question": "Gostou do que viu?",
     "cta.compact_action": "VAMOS_CONVERSAR",
+    "cta.ready": "Pronto para iniciar um projeto?",
+    "cta.lets_talk": "LET'S_TALK",
+    "cta.copyright": "© 2026 BRUNO GUIMARÃES / ALL RIGHTS RESERVED",
+
+    // Projects
+    "projects.read_more": "Leia como aplico isso →",
 
     // Navigation
     "nav.projetos": "PROJETOS",
@@ -89,6 +95,12 @@ export const dictionary = {
     // CTA
     "cta.compact_question": "Liked what you saw?",
     "cta.compact_action": "LET'S_TALK",
+    "cta.ready": "Ready to start a project?",
+    "cta.lets_talk": "LET'S_TALK",
+    "cta.copyright": "© 2026 BRUNO GUIMARÃES / ALL RIGHTS RESERVED",
+
+    // Projects
+    "projects.read_more": "Read how I apply this →",
 
     // Navigation
     "nav.projetos": "PROJECTS",
