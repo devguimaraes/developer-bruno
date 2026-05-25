@@ -1,4 +1,4 @@
-import type React from "react";
+import { memo } from "react";
 import { cn } from "@/lib/utils";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import "./GlitchImage.css";
@@ -31,7 +31,7 @@ interface MediaProps {
   loadingLazy?: boolean;
 }
 
-const GlitchMedia: React.FC<MediaProps> = ({
+const GlitchMedia = memo(function GlitchMedia({
   src,
   videoSrc,
   videoSources,
@@ -39,7 +39,7 @@ const GlitchMedia: React.FC<MediaProps> = ({
   alt,
   className,
   loadingLazy = false,
-}) => {
+}: MediaProps) {
   const sources = videoSources?.length
     ? videoSources
     : videoSrc
@@ -79,7 +79,47 @@ const GlitchMedia: React.FC<MediaProps> = ({
       className={cn("object-cover w-full h-full", className)}
     />
   );
-};
+});
+
+interface GlitchLayerProps {
+  src?: string;
+  videoSrc?: string;
+  videoSources?: VideoSource[];
+  posterSrc?: string;
+  alt: string;
+  className?: string;
+  loadingLazy?: boolean;
+  layerClass: string;
+  transform: string;
+}
+
+const GlitchLayer = memo(function GlitchLayer({
+  src,
+  videoSrc,
+  videoSources,
+  posterSrc,
+  alt,
+  className,
+  loadingLazy,
+  layerClass,
+  transform,
+}: GlitchLayerProps) {
+  return (
+    <div className={cn(layerClass, "absolute inset-0 mix-blend-screen opacity-0 is-active")}>
+      <div className="h-full w-full" style={{ transform }}>
+        <GlitchMedia
+          src={src}
+          videoSrc={videoSrc}
+          videoSources={videoSources}
+          posterSrc={posterSrc}
+          alt={alt}
+          loadingLazy={loadingLazy}
+          className={cn("filter contrast-125 saturate-200", className)}
+        />
+      </div>
+    </div>
+  );
+});
 
 export function GlitchImage({
   src,
@@ -92,7 +132,6 @@ export function GlitchImage({
   loadingLazy = false,
 }: GlitchImageProps) {
   const reducedMotion = useReducedMotion();
-  const layerMediaClass = "filter contrast-125 saturate-200";
   const shouldActivateGlitch = active && !reducedMotion;
 
   return (
@@ -107,62 +146,45 @@ export function GlitchImage({
         className={cn("glitch-base-img", className)}
       />
 
-      <div
-        className={cn(
-          "glitch-layer-1 absolute inset-0 mix-blend-screen opacity-0",
-          shouldActivateGlitch && "is-active"
-        )}
-      >
-        <div className="h-full w-full" style={{ transform: "translateX(-4px)" }}>
-          <GlitchMedia
+      {shouldActivateGlitch && (
+        <>
+          <GlitchLayer
             src={src}
             videoSrc={videoSrc}
             videoSources={videoSources}
             posterSrc={posterSrc}
             alt={alt}
             loadingLazy={loadingLazy}
-            className={cn(layerMediaClass, className)}
+            className={className}
+            layerClass="glitch-layer-1"
+            transform="translateX(-4px)"
           />
-        </div>
-      </div>
 
-      <div
-        className={cn(
-          "glitch-layer-2 absolute inset-0 mix-blend-screen opacity-0",
-          shouldActivateGlitch && "is-active"
-        )}
-      >
-        <div className="h-full w-full" style={{ transform: "translateX(4px)" }}>
-          <GlitchMedia
+          <GlitchLayer
             src={src}
             videoSrc={videoSrc}
             videoSources={videoSources}
             posterSrc={posterSrc}
             alt={alt}
             loadingLazy={loadingLazy}
-            className={cn(layerMediaClass, className)}
+            className={className}
+            layerClass="glitch-layer-2"
+            transform="translateX(4px)"
           />
-        </div>
-      </div>
 
-      <div
-        className={cn(
-          "glitch-layer-3 absolute inset-0 mix-blend-overlay opacity-0",
-          shouldActivateGlitch && "is-active"
-        )}
-      >
-        <div className="h-full w-full" style={{ transform: "translateY(-2px)" }}>
-          <GlitchMedia
+          <GlitchLayer
             src={src}
             videoSrc={videoSrc}
             videoSources={videoSources}
             posterSrc={posterSrc}
             alt={alt}
             loadingLazy={loadingLazy}
-            className={cn(layerMediaClass, className)}
+            className={className}
+            layerClass="glitch-layer-3 mix-blend-overlay"
+            transform="translateY(-2px)"
           />
-        </div>
-      </div>
+        </>
+      )}
 
       <div
         className={cn(
