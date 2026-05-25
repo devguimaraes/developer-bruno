@@ -4,7 +4,7 @@ import Projects from "@/components/Projects";
 import About from "@/components/About";
 import EngineeringPractices from "@/components/EngineeringPractices";
 import LatestPosts from "@/components/pages/LatestPosts";
-import CompactCTA from "@/components/CompactCTA";
+import InfoBar from "@/components/InfoBar";
 import SocialIcons from "@/components/SocialIcons";
 import SectionEntrance from "@/components/ui/SectionEntrance";
 import { contactData } from "@/config/site";
@@ -27,8 +27,8 @@ const Index: React.FC<IndexProps> = ({ latestPosts = [] }) => {
         <Projects />
       </SectionEntrance>
 
-      {/* Compact CTA after projects */}
-      <CompactCTA />
+      {/* Info Bar: marca, localização e redes sociais */}
+      <InfoBar />
 
       {/* Latest Posts Section */}
       {latestPosts.length > 0 && (

@@ -16,7 +16,7 @@ const Projects: React.FC = () => {
   }, []);
 
   return (
-    <section id="projetos" className="relative py-20 bg-black">
+    <section id="projetos" className="relative pt-20 pb-40 bg-black">
       {/* Inversion Flash Trigger: Pisca branco quando a seção entra em vista */}
       {!reducedMotion && (
         <motion.div
