@@ -1,11 +1,5 @@
-import type { LucideIcon } from "lucide-react";
-/**
- * Type definitions for all portfolio data structures
- */
-
 export * from "./blog";
 
-// Base project interface
 export interface Project {
   id: string;
   title: string;
@@ -48,10 +42,9 @@ export interface Experience {
   type?: "full-time" | "part-time" | "freelance" | "contract";
 }
 
-// Skill/technology interface
 export interface Skill {
   id: string;
-  icon: LucideIcon; // Lucide icon component
+  icon: string;
   title: string;
   description: string;
   color: string;
@@ -59,10 +52,8 @@ export interface Skill {
   technologies?: readonly string[];
 }
 
-// Social link interface
 export interface SocialLink {
   id: string;
-  icon: LucideIcon; // Lucide icon component
   href: string;
   label: string;
   username?: string;
@@ -75,7 +66,6 @@ export interface SiteConfig {
   description: string;
   author: string;
   email: string;
-  phone?: string;
   location: string;
   domain: string;
   github: string;
@@ -105,35 +95,10 @@ export interface SiteConfig {
     locale: string;
     region: string;
     timezone: string;
-    phoneNumber: string;
     serviceAreas: string[];
   };
 }
 
-// Hero section specific data
-export interface HeroData {
-  title: string;
-  subtitle: string;
-  description: string;
-  cta: {
-    primary: {
-      text: string;
-      href: string;
-    };
-    secondary: {
-      text: string;
-      href: string;
-    };
-  };
-  badge: string;
-  technologies: readonly {
-    name: string;
-    icon: string;
-    alt: string;
-  }[];
-}
-
-// Contact section data
 export interface ContactData {
   title: string;
   description: string;

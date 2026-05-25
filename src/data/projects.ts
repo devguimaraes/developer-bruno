@@ -151,65 +151,8 @@ export const projects = (
   image: typeof project.image === "string" ? project.image : project.image?.src,
 })) as readonly Project[];
 
-/**
- * Get featured projects
- */
-export const featuredProjects = projects.filter(project => project.featured);
-
-/**
- * Projects selected for the home page display (Selected Works section)
- * These appear on the main page as curated highlights.
- */
 const selectedProjectIds = ["movies-bremen", "agencia-multi-br", "danila-rizo"];
 
 export const selectedWorks = projects.filter(project => selectedProjectIds.includes(project.id));
 
-/**
- * Get projects by technology
- */
-export const getProjectsByTech = (tech: string): readonly Project[] => {
-  return projects.filter(project => project.tech.includes(tech));
-};
-
-/**
- * Get projects by tag
- */
-export const getProjectsByTag = (tag: string): readonly Project[] => {
-  return projects.filter(project => project.tags?.includes(tag));
-};
-
-/**
- * Get project by ID
- */
-export const getProjectById = (id: string): Project | undefined => {
-  return projects.find(project => project.id === id);
-};
-
-/**
- * Get all unique technologies used across projects
- */
-export const getAllTechnologies = (): readonly string[] => {
-  const allTech = projects.flatMap(project => project.tech);
-  return [...new Set(allTech)];
-};
-
-/**
- * Get all unique tags across projects
- */
-export const getAllTags = (): readonly string[] => {
-  const allTags = projects.flatMap(project => project.tags || []);
-  return [...new Set(allTags)];
-};
-
-/**
- * Get project statistics
- */
-export const getProjectStats = () => ({
-  total: projects.length,
-  featured: featuredProjects.length,
-  technologies: getAllTechnologies().length,
-  tags: getAllTags().length,
-});
-
-// Export default projects array for convenience
 export default projects;

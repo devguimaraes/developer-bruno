@@ -1,4 +1,4 @@
-import type { SiteConfig, HeroData, ContactData } from "@/types";
+import type { SiteConfig, ContactData } from "@/types";
 
 /**
  * Site configuration and metadata
@@ -74,7 +74,6 @@ export const siteConfig: SiteConfig = {
     locale: "pt_BR",
     region: "BR",
     timezone: "America/Sao_Paulo",
-    phoneNumber: "+55 21 99999-9999",
     serviceAreas: [
       "Rio de Janeiro",
       "São Paulo",
@@ -89,49 +88,6 @@ export const siteConfig: SiteConfig = {
 };
 
 /**
- * Hero section specific configuration
- */
-export const heroData: HeroData = {
-  title: "BRUNO",
-  subtitle: "GUIMARÃES",
-  description:
-    "Transformo visão estratégica em software e sites de alta performance. Crio interfaces que unem engenharia robusta e design intencional para maximizar resultados.",
-  badge: "DESENVOLVEDOR FRONT END",
-  cta: {
-    primary: {
-      text: "Ver Projetos",
-      href: "#projects",
-    },
-    secondary: {
-      text: "Fale Comigo",
-      href: "https://www.linkedin.com/in/bcguimaraes/",
-    },
-  },
-  technologies: [
-    {
-      name: "React",
-      icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
-      alt: "React",
-    },
-    {
-      name: "Next.js",
-      icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg",
-      alt: "Next.js",
-    },
-    {
-      name: "TypeScript",
-      icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
-      alt: "TypeScript",
-    },
-    {
-      name: "Tailwind",
-      icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg",
-      alt: "Tailwind CSS",
-    },
-  ],
-};
-
-/**
  * Contact section configuration
  */
 export const contactData: ContactData = {
@@ -142,66 +98,36 @@ export const contactData: ContactData = {
   socialLinks: [
     {
       id: "linkedin",
-      icon: "Linkedin", // Will be imported dynamically
       href: "https://www.linkedin.com/in/bcguimaraes/",
       label: "LinkedIn",
       username: "bcguimaraes",
     },
     {
       id: "github",
-      icon: "Github", // Will be imported dynamically
       href: "https://github.com/devguimaraes",
       label: "GitHub",
       username: "devguimaraes",
     },
     {
       id: "instagram",
-      icon: "Instagram",
       href: "https://www.instagram.com/brunoguimraes/",
       label: "Instagram",
       username: "dev.guimaraes",
     },
     {
       id: "x",
-      icon: "X",
       href: "https://x.com/devguimraes/",
       label: "X",
       username: "devguimraes",
     },
+    {
+      id: "whatsapp",
+      href: "https://wa.me/5521969715247?text=Ol%C3%A1%20Bruno%2C%20vi%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar!",
+      label: "WhatsApp",
+      username: "+5521969715247",
+    },
   ],
 };
-
-/**
- * Social links configuration
- */
-export const socialLinks = [
-  {
-    id: "github",
-    href: "https://github.com/devguimaraes",
-    label: "GitHub",
-  },
-  {
-    id: "linkedin",
-    href: "https://www.linkedin.com/in/bcguimaraes/",
-    label: "LinkedIn",
-  },
-  {
-    id: "email",
-    href: "mailto:bc.guimaraes@outlook.com",
-    label: "Email",
-  },
-] as const;
-
-/**
- * Navigation sections configuration
- */
-export const navigationSections = [
-  { id: "hero", label: "Início", href: "#hero" },
-  { id: "about", label: "Sobre", href: "#about" },
-  { id: "skills", label: "Skills", href: "#skills" },
-  { id: "projects", label: "Projetos", href: "#projects" },
-  { id: "contact", label: "Contato", href: "#contact" },
-] as const;
 
 /**
  * Footer configuration
@@ -214,12 +140,4 @@ export const footerData = {
     { name: "TypeScript", url: "https://typescriptlang.org" },
     { name: "Tailwind CSS", url: "https://tailwindcss.com" },
   ],
-};
-
-/**
- * Theme configuration
- */
-export const themeConfig = {
-  defaultTheme: "dark" as const,
-  themes: ["light", "dark"] as const,
 };
