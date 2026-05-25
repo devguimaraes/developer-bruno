@@ -1,8 +1,9 @@
 import type React from "react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { Github, Instagram, Linkedin, Mail, X } from "lucide-react";
 import { contactData } from "@/config/site";
+import { getLocale, setLocale, subscribeToLocale, type Locale } from "@/lib/i18n";
 import GlassSurface from "./GlassSurface";
 
 interface StaggeredMenuItem {
@@ -27,6 +28,11 @@ const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
   const layersRef = useRef<HTMLDivElement[]>([]);
   const contentRef = useRef<HTMLDivElement>(null);
   const timeline = useRef<gsap.core.Timeline | null>(null);
+  const [locale, setLocalLocale] = useState<Locale>(getLocale());
+
+  useEffect(() => {
+    return subscribeToLocale(l => setLocalLocale(l));
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -134,7 +140,22 @@ const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
               ))}
             </nav>
 
-            <div className="mt-8 flex gap-8 menu-item border-t border-white/10 pt-8 pb-8">
+            <div className="mt-8 flex gap-8 menu-item border-t border-white/10 pt-8">
+              {(["pt", "en"] as Locale[]).map(l => (
+                <button
+                  key={l}
+                  type="button"
+                  onClick={() => setLocale(l)}
+                  className={`font-pixel text-xl uppercase tracking-widest transition-colors ${
+                    l === locale ? "text-accent" : "text-white/40 hover:text-white/70"
+                  }`}
+                >
+                  {l}
+                </button>
+              ))}
+            </div>
+
+            <div className="mt-4 flex gap-8 menu-item pb-8">
               <a
                 href="https://github.com/devguimaraes"
                 target="_blank"

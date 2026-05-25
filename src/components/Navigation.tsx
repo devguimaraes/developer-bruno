@@ -4,7 +4,7 @@ import GlassSurface from "@/components/ui/GlassSurface";
 import StaggeredMenu from "@/components/ui/StaggeredMenu";
 import { useIsMobile } from "@/hooks/use-mobile";
 import Magnetic from "@/components/ui/Magnetic";
-import { t, getLocale, subscribeToLocale } from "@/lib/i18n";
+import { t, getLocale, setLocale, subscribeToLocale } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
 
 const Navigation: React.FC = () => {
@@ -72,6 +72,20 @@ const Navigation: React.FC = () => {
                   </a>
                 </Magnetic>
               ))}
+              <div className="flex gap-3 ml-4 pl-4 border-l border-white/10">
+                {(["pt", "en"] as Locale[]).map(l => (
+                  <button
+                    key={l}
+                    type="button"
+                    onClick={() => setLocale(l)}
+                    className={`type-mono text-[10px] tracking-[0.2em] uppercase transition-colors ${
+                      l === locale ? "text-accent font-bold" : "text-white/40 hover:text-white/70"
+                    }`}
+                  >
+                    {l}
+                  </button>
+                ))}
+              </div>
             </div>
 
             <button
