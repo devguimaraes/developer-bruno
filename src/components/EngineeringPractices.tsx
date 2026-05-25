@@ -1,7 +1,6 @@
 import type React from "react";
-import { useState, useEffect } from "react";
-import { t, getLocale, subscribeToLocale } from "@/lib/i18n";
-import type { Locale } from "@/lib/i18n";
+import { t } from "@/lib/i18n";
+import { useLocale } from "@/hooks/useLocale";
 
 const practices = [
   "Code Review",
@@ -14,11 +13,7 @@ const practices = [
 ];
 
 const EngineeringPractices: React.FC = () => {
-  const [locale, setLocale] = useState<Locale>(getLocale());
-
-  useEffect(() => {
-    return subscribeToLocale(l => setLocale(l));
-  }, []);
+  const locale = useLocale();
 
   return (
     <section className="w-full bg-black text-white overflow-hidden">

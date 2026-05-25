@@ -1,19 +1,14 @@
 import type React from "react";
-import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ProjectItem } from "./ProjectItem";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { selectedWorks } from "@/data/projects";
-import { t, getLocale, subscribeToLocale } from "@/lib/i18n";
-import type { Locale } from "@/lib/i18n";
+import { t } from "@/lib/i18n";
+import { useLocale } from "@/hooks/useLocale";
 
 const Projects: React.FC = () => {
   const reducedMotion = useReducedMotion();
-  const [locale, setLocale] = useState<Locale>(getLocale());
-
-  useEffect(() => {
-    return subscribeToLocale(l => setLocale(l));
-  }, []);
+  const locale = useLocale();
 
   return (
     <section id="projetos" className="relative pt-20 pb-40 bg-black">

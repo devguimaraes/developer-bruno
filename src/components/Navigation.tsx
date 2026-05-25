@@ -4,18 +4,15 @@ import GlassSurface from "@/components/ui/GlassSurface";
 import StaggeredMenu from "@/components/ui/StaggeredMenu";
 import { useIsMobile } from "@/hooks/use-mobile";
 import Magnetic from "@/components/ui/Magnetic";
-import { t, getLocale, setLocale, subscribeToLocale } from "@/lib/i18n";
+import { t, setLocale } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
+import { useLocale } from "@/hooks/useLocale";
 
 const Navigation: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const isMobile = useIsMobile();
-  const [locale, setLocaleState] = useState<Locale>(getLocale());
-
-  useEffect(() => {
-    return subscribeToLocale(l => setLocaleState(l));
-  }, []);
+  const locale = useLocale();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);

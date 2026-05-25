@@ -1,21 +1,16 @@
 import type React from "react";
-import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Calendar, Clock, ArrowRight } from "lucide-react";
 import type { BlogPost } from "@/types/blog";
-import { t, getLocale, subscribeToLocale } from "@/lib/i18n";
-import type { Locale } from "@/lib/i18n";
+import { t } from "@/lib/i18n";
+import { useLocale } from "@/hooks/useLocale";
 
 interface LatestPostsProps {
   posts: BlogPost[];
 }
 
 const LatestPosts: React.FC<LatestPostsProps> = ({ posts }) => {
-  const [locale, setLocale] = useState<Locale>(getLocale());
-
-  useEffect(() => {
-    return subscribeToLocale(l => setLocale(l));
-  }, []);
+  const locale = useLocale();
 
   if (posts.length === 0) return null;
 

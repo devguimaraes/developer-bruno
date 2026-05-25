@@ -1,12 +1,12 @@
 import type React from "react";
-import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowUpRight, ExternalLink, Calendar } from "lucide-react";
 import type { Project } from "@/types";
 import type { BlogPost } from "@/types/blog";
-import { t, getLocale, subscribeToLocale } from "@/lib/i18n";
-import type { Locale } from "@/lib/i18n";
+import { t } from "@/lib/i18n";
+import { useLocale } from "@/hooks/useLocale";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { contactData } from "@/config/site";
 
 interface CaseStudyProps {
   project: Project;
@@ -14,7 +14,7 @@ interface CaseStudyProps {
 }
 
 const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
-  const [locale, setLocale] = useState<Locale>(getLocale());
+  const locale = useLocale();
   const prefersReducedMotion = useReducedMotion();
   const pageMotion = prefersReducedMotion
     ? {}
@@ -46,9 +46,6 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
         transition: { duration: 0.5 },
       };
 
-  useEffect(() => {
-    return subscribeToLocale(l => setLocale(l));
-  }, []);
   return (
     <motion.div {...pageMotion} className="w-full bg-black text-white">
       {/* Back Button */}
@@ -232,7 +229,7 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
               <ExternalLink className="w-4 h-4" />
             </a>
             <a
-              href="mailto:bc.guimaraes@outlook.com"
+              href={`mailto:${contactData.email}`}
               className="inline-flex items-center justify-between gap-4 border border-white/15 px-6 py-4 text-white hover:border-accent/60 hover:text-accent transition-colors type-mono text-[10px] uppercase tracking-widest"
             >
               <span>{t(locale, "case.work_together")}</span>

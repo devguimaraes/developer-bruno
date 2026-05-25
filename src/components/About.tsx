@@ -1,9 +1,8 @@
 import type React from "react";
-import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import GlitchImage from "./ui/GlitchImage";
-import { t, getLocale, subscribeToLocale } from "@/lib/i18n";
-import type { Locale } from "@/lib/i18n";
+import { t } from "@/lib/i18n";
+import { useLocale } from "@/hooks/useLocale";
 import {
   SiSupabase,
   SiFramer,
@@ -19,11 +18,7 @@ import {
 import { MousePointer2 } from "lucide-react";
 
 const About: React.FC = () => {
-  const [locale, setLocale] = useState<Locale>(getLocale());
-
-  useEffect(() => {
-    return subscribeToLocale(l => setLocale(l));
-  }, []);
+  const locale = useLocale();
 
   const techs = [
     { name: "Next.js", icon: SiNextdotjs },

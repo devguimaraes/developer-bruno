@@ -1,20 +1,16 @@
 import type React from "react";
-import { useRef, useState, useEffect } from "react";
+import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useVideoLoading } from "@/hooks/useVideoLoading";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { t, getLocale, subscribeToLocale } from "@/lib/i18n";
-import type { Locale } from "@/lib/i18n";
+import { t } from "@/lib/i18n";
+import { useLocale } from "@/hooks/useLocale";
 
 const Hero: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { videoRef, isVisible } = useVideoLoading();
   const { scrollY } = useScroll();
-  const [locale, setLocale] = useState<Locale>(getLocale());
-
-  useEffect(() => {
-    return subscribeToLocale(l => setLocale(l));
-  }, []);
+  const locale = useLocale();
 
   const reducedMotion = useReducedMotion();
 

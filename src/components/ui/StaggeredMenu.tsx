@@ -1,9 +1,12 @@
 import type React from "react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { Github, Instagram, Linkedin, Mail, X } from "lucide-react";
+import { X } from "lucide-react";
 import { contactData } from "@/config/site";
-import { getLocale, setLocale, subscribeToLocale, type Locale } from "@/lib/i18n";
+import { socialIconMap } from "@/lib/socialIcons";
+import { setLocale } from "@/lib/i18n";
+import type { Locale } from "@/lib/i18n";
+import { useLocale } from "@/hooks/useLocale";
 import GlassSurface from "./GlassSurface";
 
 interface StaggeredMenuItem {
@@ -28,11 +31,7 @@ const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
   const layersRef = useRef<HTMLDivElement[]>([]);
   const contentRef = useRef<HTMLDivElement>(null);
   const timeline = useRef<gsap.core.Timeline | null>(null);
-  const [locale, setLocalLocale] = useState<Locale>(getLocale());
-
-  useEffect(() => {
-    return subscribeToLocale(l => setLocalLocale(l));
-  }, []);
+  const locale = useLocale();
 
   useEffect(() => {
     if (isOpen) {
@@ -156,36 +155,21 @@ const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
             </div>
 
             <div className="mt-4 flex gap-8 menu-item pb-8">
-              <a
-                href="https://github.com/devguimaraes"
-                target="_blank"
-                rel="noreferrer"
-                className="text-white/60 hover:text-white transition-colors"
-              >
-                <Github size={28} />
-              </a>
-              <a
-                href="https://linkedin.com/in/bcguimaraes"
-                target="_blank"
-                rel="noreferrer"
-                className="text-white/60 hover:text-white transition-colors"
-              >
-                <Linkedin size={28} />
-              </a>
-              <a
-                href="https://instagram.com/devguimaraes"
-                target="_blank"
-                rel="noreferrer"
-                className="text-white/60 hover:text-white transition-colors"
-              >
-                <Instagram size={28} />
-              </a>
-              <a
-                href={`mailto:${contactData.email}`}
-                className="text-white/60 hover:text-white transition-colors"
-              >
-                <Mail size={28} />
-              </a>
+              {contactData.socialLinks.map(link => {
+                const Icon = socialIconMap[link.id];
+                if (!Icon) return null;
+                return (
+                  <a
+                    key={link.id}
+                    href={link.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-white/60 hover:text-white transition-colors"
+                  >
+                    <Icon size={28} />
+                  </a>
+                );
+              })}
             </div>
           </div>
         </GlassSurface>
