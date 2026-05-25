@@ -10,8 +10,8 @@ export function BlogPostNotFound() {
         >
           {"// ERROR_404"}
         </p>
-        <h1 className="type-raster-section text-6xl text-white mb-6">NAO ENCONTRADO</h1>
-        <p className="text-white/50 mb-8">Este post nao existe ou foi removido.</p>
+        <h1 className="type-raster-section text-6xl text-white mb-6">NÃO ENCONTRADO</h1>
+        <p className="text-white/50 mb-8">Este post não existe ou foi removido.</p>
         <a
           href="/blog"
           className="inline-flex items-center gap-2 border border-white/20 text-white hover:border-accent hover:text-accent px-6 py-3 type-mono text-[10px] uppercase tracking-widest transition-colors"
