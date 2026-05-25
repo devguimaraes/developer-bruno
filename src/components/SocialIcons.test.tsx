@@ -3,17 +3,16 @@ import { render, screen } from "@testing-library/react";
 import SocialIcons from "./SocialIcons";
 import { contactData } from "@/config/site";
 
-// Mock ScrollReveal para renderizar children diretamente
 vi.mock("@/components/ui/ScrollReveal", () => ({
   default: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
 describe("SocialIcons", () => {
-  it("renders all 4 social links", () => {
+  it("renders all social links from contactData", () => {
     render(<SocialIcons />);
 
     const links = screen.getAllByRole("link");
-    expect(links).toHaveLength(4);
+    expect(links).toHaveLength(contactData.socialLinks.length);
 
     contactData.socialLinks.forEach(social => {
       const link = screen.getByRole("link", { name: new RegExp(social.label, "i") });
@@ -23,20 +22,18 @@ describe("SocialIcons", () => {
     });
   });
 
-  it("renders index numbers 01-04", () => {
+  it("renders index numbers for each link", () => {
     render(<SocialIcons />);
 
-    expect(screen.getByText("01")).toBeInTheDocument();
-    expect(screen.getByText("02")).toBeInTheDocument();
-    expect(screen.getByText("03")).toBeInTheDocument();
-    expect(screen.getByText("04")).toBeInTheDocument();
+    contactData.socialLinks.forEach((_, idx) => {
+      expect(screen.getByText(`0${idx + 1}`)).toBeInTheDocument();
+    });
   });
 
   it("renders brand SVG icons", () => {
     render(<SocialIcons />);
 
     const svgs = document.querySelectorAll("svg");
-    // Um SVG por link + 4 ArrowUpRight SVGs = 8 SVGs
-    expect(svgs.length).toBeGreaterThanOrEqual(4);
+    expect(svgs.length).toBeGreaterThanOrEqual(contactData.socialLinks.length);
   });
 });
