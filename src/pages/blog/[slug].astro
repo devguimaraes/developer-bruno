@@ -40,18 +40,19 @@ export async function getStaticPaths() {
     featured: entry.data.featured,
   });
 
-  return renderedEntries.map(({ entry, rendered: { Content } }, index) => ({
+  return renderedEntries.map(({ entry, rendered: { Content, headings } }, index) => ({
     params: { slug: generateSlug(entry.id) },
     props: {
       post: toBlogPost(entry),
       previous: index > 0 ? toBlogPost(sortedEntries[index - 1]) : null,
       next: index < sortedEntries.length - 1 ? toBlogPost(sortedEntries[index + 1]) : null,
       Content,
+      headings,
     },
   }));
 }
 
-const { post, previous, next, Content } = Astro.props;
+const { post, previous, next, Content, headings } = Astro.props;
 const structuredDataImage = post.image
   ? (post.image.startsWith('http://') || post.image.startsWith('https://')
       ? post.image
@@ -99,6 +100,7 @@ const structuredDataImage = post.image
     post={post}
     previous={previous}
     next={next}
+    headings={headings}
     client:load
   >
     <Content />
