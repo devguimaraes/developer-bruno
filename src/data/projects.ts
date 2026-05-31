@@ -117,27 +117,27 @@ const rawProjects = [
       "Plataforma multilíngue lançada com sucesso, atendendo ao público europeu com uma experiência digital premium. O design responsivo e a arquitetura de informação cuidadosa resultaram em baixa taxa de rejeição e aumento no tráfego orgânico local.",
   },
   {
-    id: "danila-rizo",
-    title: "Danila Rizo",
-    category: "Portfolio / Architecture",
+    id: "danila-rizo-palmieri",
+    title: "Danila Rizo Palmieri",
+    category: "Corporate / HR & International Business",
     description:
-      "Portfólio de arquitetura e design de interiores com curadoria visual sofisticada. Projetos residenciais e comerciais que combinam estética contemporânea e funcionalidade.",
-    tech: ["Wordpress", "PHP", "Elementor"] as const,
+      "Plataforma de consultoria em RH e internacionalização de negócios para o mercado americano. Foco em gestão de pessoas transfronteiriça e expansão global.",
+    tech: ["Wordpress", "PHP", "SEO", "UI/UX"] as const,
     github: "#",
     live: "https://www.danilapalmieri.com/",
     color: "bg-muted",
     featured: true,
-    tags: ["arquitetura", "design", "portfolio", "premium"] as const,
+    tags: ["rh", "internacionalização", "business", "premium"] as const,
     relatedPosts: ["engenharia-interface-2026"] as const,
     previewAnimation: "letter-glitch",
     image: "/banner-danila-rizo.webp",
     bannerImage: "/banner-danila-rizo.webp",
-    slug: "danila-rizo",
+    slug: "danila-rizo-palmieri",
     role: "Web Developer & Designer",
     context:
-      "Danila Rizo, arquiteta e designer de interiores, precisava de um portfólio online que refletisse a sofisticação e o cuidado estético de seus projetos. O desafio era criar uma vitrine digital com curadoria visual impecável, que destacasse seus trabalhos residenciais e comerciais sem competir com o conteúdo — cada projeto precisava respirar.",
+      "Danila Rizo Palmieri, CEO da Connect Solutions, precisava de um posicionamento digital que refletisse sua autoridade em RH e internacionalização de empresas (Brasil > USA). O desafio era criar uma vitrine que comunicasse sofisticação e confiança para o mercado executivo, facilitando a prospecção de clientes que buscam expandir suas operações para o território americano.",
     impact:
-      "Portfólio online visualmente impactante que se tornou a principal ferramenta de prospecção. A apresentação dos projetos com fotografia em alta resolução e navegação fluida elevou o padrão de percepção da marca, gerando mais contatos qualificados via site.",
+      "Portfólio online visualmente impactante que se tornou a principal ferramenta de autoridade e prospecção. A nova estrutura de informação focada em consultoria e expertise técnica elevou o padrão de percepção da marca, gerando leads mais qualificados para o mercado global.",
   },
 ] as const;
 
@@ -151,7 +151,7 @@ export const projects = (
   image: typeof project.image === "string" ? project.image : project.image?.src,
 })) as readonly Project[];
 
-const selectedProjectIds = ["movies-bremen", "agencia-multi-br", "danila-rizo"];
+const selectedProjectIds = ["movies-bremen", "agencia-multi-br", "danila-rizo-palmieri"];
 
 export const selectedWorks = projects.filter(project => selectedProjectIds.includes(project.id));
 
