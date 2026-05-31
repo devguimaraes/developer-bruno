@@ -16,7 +16,7 @@ export const BlogFilters: React.FC<BlogFiltersProps> = ({
       <div className="group">
         <div className="flex items-center gap-2 mb-6">
           <div className="w-2 h-2 bg-accent shadow-[2px_2px_0px_#000]" />
-          <h3 className="text-xs font-pixel uppercase tracking-[0.2em] text-stone-500 group-hover:text-white transition-colors">
+          <h3 className="text-xs font-pixel uppercase tracking-[0.2em] text-stone-400 group-hover:text-white transition-colors">
             Categorias
           </h3>
         </div>
@@ -28,7 +28,7 @@ export const BlogFilters: React.FC<BlogFiltersProps> = ({
             className={`group relative text-[10px] uppercase tracking-[0.2em] font-mono transition-all duration-300 ${
               activeCategory === "all"
                 ? "text-accent font-bold translate-x-2"
-                : "text-stone-500 hover:text-stone-300"
+                : "text-stone-400 hover:text-white"
             }`}
           >
             {activeCategory === "all" && (
@@ -45,7 +45,7 @@ export const BlogFilters: React.FC<BlogFiltersProps> = ({
               className={`group relative text-[10px] uppercase tracking-[0.2em] font-mono transition-all duration-300 ${
                 activeCategory === cat
                   ? "text-accent font-bold translate-x-2"
-                  : "text-stone-500 hover:text-stone-300"
+                  : "text-stone-400 hover:text-white"
               }`}
             >
               {activeCategory === cat && (
@@ -59,12 +59,12 @@ export const BlogFilters: React.FC<BlogFiltersProps> = ({
 
       <div className="border-t border-white/5 pt-8">
         <div className="flex items-center gap-2 mb-4">
-          <div className="w-1.5 h-1.5 border border-stone-700" />
-          <h4 className="text-[10px] font-pixel uppercase tracking-widest text-stone-600">
+          <div className="w-1.5 h-1.5 border border-stone-600" />
+          <h4 className="text-[10px] font-pixel uppercase tracking-widest text-stone-400">
             Cronologia
           </h4>
         </div>
-        <p className="text-[9px] font-mono text-stone-700 uppercase tracking-tighter">
+        <p className="text-[9px] font-mono text-stone-500 uppercase tracking-tighter">
           Arquivo completo (2024 - 2026)
         </p>
       </div>
