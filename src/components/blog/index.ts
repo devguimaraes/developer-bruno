@@ -7,3 +7,4 @@ export { BlogPostBackButton } from "./BlogPostBackButton";
 export { BlogPostCardSkeleton } from "./BlogPostCardSkeleton";
 export { BlogPostLoadingSkeleton } from "./BlogPostLoadingSkeleton";
 export { TableOfContents } from "./TableOfContents";
+export { BlogPostMetadata } from "./BlogPostMetadata";
