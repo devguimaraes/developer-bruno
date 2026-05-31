@@ -1,8 +1,9 @@
 import type React from "react";
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { ArrowRight, Calendar, Clock } from "lucide-react";
+import { useEffect, useState, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight, Calendar, Clock, Terminal } from "lucide-react";
 import type { BlogPost } from "@/types/blog";
+import { SearchBar, BlogFilters, BlogSidebar } from "../blog";
 
 const POSTS_PER_PAGE = 6;
 
@@ -12,127 +13,169 @@ interface BlogPageProps {
 
 const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
   const [visibleCount, setVisibleCount] = useState(POSTS_PER_PAGE);
-  const blogPosts = initialPosts;
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeCategory, setActiveCategory] = useState("all");
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const visiblePosts = blogPosts.slice(0, visibleCount);
-  const hasMore = visibleCount < blogPosts.length;
+  // Extrair todas as categorias únicas
+  const categories = useMemo(() => {
+    const allTags = initialPosts.flatMap(post => post.tags || []);
+    return Array.from(new Set(allTags)).sort();
+  }, [initialPosts]);
+
+  // Lógica de filtragem e busca
+  const filteredPosts = useMemo(() => {
+    return initialPosts.filter(post => {
+      const matchesSearch =
+        post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        post.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesCategory = activeCategory === "all" || post.tags?.includes(activeCategory);
+      return matchesSearch && matchesCategory;
+    });
+  }, [initialPosts, searchQuery, activeCategory]);
+
+  const visiblePosts = filteredPosts.slice(0, visibleCount);
+  const hasMore = visibleCount < filteredPosts.length;
 
   return (
     <div className="bg-black min-h-screen pt-20 sm:pt-24 overflow-x-clip">
-      {/* Header */}
-      <div className="pt-6 sm:pt-8 pb-10 sm:pb-16">
-        <div className="container mx-auto px-4">
-          <div className="mb-10 sm:mb-16">
-            <p
-              className="type-mono text-[10px] text-white/40 uppercase tracking-widest mb-4"
-              title="Latest published blog posts"
-            >
-              {"// LATEST_POSTS"} &middot; TOTAL: {blogPosts.length}
-            </p>
-            <h1 className="type-raster-section text-[14vw] sm:text-5xl md:text-7xl text-white uppercase tracking-tighter leading-[0.92]">
-              TODOS OS
-              <br />
-              INSIGHTS
-            </h1>
-            <div className="border-t border-white/10 mt-6 pt-4 max-w-md">
-              <p className="type-mono text-xs text-white/40">
-                Biblioteca completa de conhecimentos tecnicos e reflexoes sobre desenvolvimento web.
-              </p>
+      <div className="container mx-auto px-4 sm:px-6">
+        <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr_250px] gap-12 xl:gap-20 max-w-7xl mx-auto py-12">
+          {/* Column 1: Filters (Desktop) */}
+          <aside className="hidden lg:block">
+            <div className="sticky top-32">
+              <BlogFilters
+                categories={categories}
+                activeCategory={activeCategory}
+                onCategoryChange={cat => {
+                  setActiveCategory(cat);
+                  setVisibleCount(POSTS_PER_PAGE);
+                }}
+              />
             </div>
-          </div>
-        </div>
-      </div>
+          </aside>
 
-      {/* Posts Grid */}
-      <div className="container mx-auto px-4 pb-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {visiblePosts.map((post, index) => (
-            <motion.article
-              key={post.slug}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index < POSTS_PER_PAGE ? index * 0.1 : 0 }}
-              className="group flex flex-col h-full border border-white/10 hover:border-accent/30 transition-colors"
-            >
-              <div className="p-4 border-b border-white/10 flex justify-between items-center">
-                <span className="type-mono text-[10px] text-white/40 uppercase tracking-widest truncate max-w-[200px]">
-                  {post.slug}.md
-                </span>
-                <div className="flex gap-1.5">
-                  <div className="w-1.5 h-1.5 rounded-full bg-white/40" />
-                  <div className="w-1.5 h-1.5 rounded-full border border-white/20" />
-                </div>
+          {/* Column 2: Main Feed */}
+          <main className="min-w-0">
+            {/* Header Section */}
+            <header className="mb-16">
+              <div className="flex items-center gap-3 mb-6">
+                <Terminal className="w-5 h-5 text-accent" />
+                <p className="type-mono text-[10px] text-white/40 uppercase tracking-[0.3em]">
+                  {"// BIBLIOTECA_DE_INSIGHTS"}
+                </p>
               </div>
+              <h1 className="type-raster-section text-[12vw] sm:text-6xl md:text-7xl text-white uppercase tracking-tighter leading-[0.9] mb-8">
+                ÍNDICE DE
+                <br />
+                CONHECIMENTO
+              </h1>
 
-              <div className="p-5 flex-grow flex flex-col">
-                <div className="flex gap-4 type-mono text-[10px] text-white/40 uppercase tracking-widest mb-4">
-                  <span className="flex items-center gap-1">
-                    <Calendar className="w-3 h-3" />
-                    {post.date}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Clock className="w-3 h-3" />
-                    {post.readTime}
-                  </span>
-                </div>
+              {/* Mobile Search/Filter could go here */}
+              <div className="lg:hidden space-y-4 mb-8">
+                <SearchBar value={searchQuery} onChange={setSearchQuery} />
+              </div>
+            </header>
 
-                <h2 className="text-lg sm:text-xl font-bold text-white leading-tight mb-3 group-hover:text-accent transition-colors">
-                  {post.title}
-                </h2>
-
-                <p className="text-white/50 text-sm mb-6 line-clamp-3 flex-grow">{post.excerpt}</p>
-
-                <div className="mt-auto pt-4 border-t border-white/10 flex justify-between items-center gap-3">
-                  <div className="flex flex-wrap gap-2">
-                    {post.tags.slice(0, 3).map(tag => (
-                      <span
-                        key={tag}
-                        className="border border-white/20 text-white/60 px-2.5 py-1 rounded-full type-mono text-[9px] uppercase tracking-widest"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                    {post.tags.length > 3 && (
-                      <span className="type-mono text-[9px] text-white/30">
-                        +{post.tags.length - 3}
-                      </span>
-                    )}
-                  </div>
-                  <a
-                    href={`/blog/${post.slug}`}
-                    className="inline-flex items-center gap-1 type-mono text-[10px] text-white/60 hover:text-accent transition-colors uppercase tracking-widest shrink-0"
+            {/* Posts Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+              <AnimatePresence mode="popLayout">
+                {visiblePosts.map((post, index) => (
+                  <motion.article
+                    key={post.slug}
+                    layout
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.2, delay: index * 0.05 }}
+                    className="group flex flex-col h-full border-2 border-white/5 hover:border-accent/40 transition-all bg-stone-950/20 shadow-none hover:shadow-brutal"
                   >
-                    Ler <ArrowRight className="w-3 h-3" />
-                  </a>
-                </div>
+                    <div className="p-3 border-b border-white/5 flex justify-between items-center bg-stone-950/40">
+                      <span className="type-mono text-[9px] text-stone-500 uppercase tracking-widest truncate">
+                        {post.slug}.md
+                      </span>
+                      <div className="flex gap-1">
+                        <div className="w-1.5 h-1.5 bg-accent/20" />
+                        <div className="w-1.5 h-1.5 bg-accent/40" />
+                      </div>
+                    </div>
+
+                    <div className="p-5 flex-grow flex flex-col">
+                      <div className="flex gap-4 type-mono text-[9px] text-stone-500 uppercase tracking-widest mb-4">
+                        <span className="flex items-center gap-1">
+                          <Calendar className="w-3 h-3" />
+                          {post.date}
+                        </span>
+                        <span className="flex items-center gap-1 text-accent/60">
+                          <Clock className="w-3 h-3" />
+                          {post.readTime}
+                        </span>
+                      </div>
+
+                      <h2 className="text-lg font-bold text-white leading-tight mb-3 group-hover:text-accent transition-colors">
+                        {post.title}
+                      </h2>
+
+                      <p className="text-stone-400 text-xs mb-6 line-clamp-3 flex-grow leading-relaxed">
+                        {post.excerpt}
+                      </p>
+
+                      <div className="mt-auto pt-4 border-t border-white/5 flex justify-between items-center gap-3">
+                        <div className="flex flex-wrap gap-1.5">
+                          {post.tags.slice(0, 2).map(tag => (
+                            <span
+                              key={tag}
+                              className="border border-white/10 text-stone-500 px-2 py-0.5 type-mono text-[8px] uppercase tracking-widest"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                        <a
+                          href={`/blog/${post.slug}`}
+                          className="inline-flex items-center gap-1 type-mono text-[10px] text-accent/80 hover:text-accent transition-colors uppercase tracking-widest shrink-0"
+                        >
+                          Acessar <ArrowRight className="w-3 h-3" />
+                        </a>
+                      </div>
+                    </div>
+                  </motion.article>
+                ))}
+              </AnimatePresence>
+            </div>
+
+            {filteredPosts.length === 0 && (
+              <div className="text-center py-24 border-2 border-dashed border-white/5">
+                <p className="type-mono text-stone-600 uppercase tracking-[0.2em] text-xs">
+                  Nenhum registro encontrado para a busca
+                </p>
               </div>
-            </motion.article>
-          ))}
+            )}
+
+            {hasMore && (
+              <div className="flex justify-center mt-12">
+                <button
+                  type="button"
+                  onClick={() => setVisibleCount(prev => prev + POSTS_PER_PAGE)}
+                  className="border-2 border-white/20 text-white hover:border-accent hover:text-accent hover:shadow-brutal px-10 py-4 type-mono text-[10px] uppercase tracking-widest transition-all bg-black"
+                >
+                  Carregar mais ({filteredPosts.length - visibleCount} restantes)
+                </button>
+              </div>
+            )}
+          </main>
+
+          {/* Column 3: Search & Utilities (Desktop) */}
+          <aside className="hidden lg:block">
+            <div className="sticky top-32 space-y-10">
+              <SearchBar value={searchQuery} onChange={setSearchQuery} />
+              <BlogSidebar posts={initialPosts} />
+            </div>
+          </aside>
         </div>
-
-        {hasMore && (
-          <div className="flex justify-center mt-12">
-            <button
-              type="button"
-              onClick={() => setVisibleCount(prev => prev + POSTS_PER_PAGE)}
-              className="border border-white/20 text-white hover:border-accent hover:text-accent px-8 py-3 type-mono text-[10px] uppercase tracking-widest transition-colors"
-            >
-              Carregar mais ({blogPosts.length - visibleCount} restantes)
-            </button>
-          </div>
-        )}
-
-        {blogPosts.length === 0 && (
-          <div className="text-center py-16">
-            <p className="type-mono text-white/40 uppercase tracking-widest">
-              Nenhum post encontrado
-            </p>
-          </div>
-        )}
       </div>
     </div>
   );
