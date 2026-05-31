@@ -43,11 +43,11 @@ const About: React.FC = () => {
 
   return (
     <section id="about" className="min-h-screen pb-16 bg-black text-white overflow-hidden relative">
-      <div className="w-full px-6 md:px-12 pt-16 md:pt-40">
-        <div className="flex flex-col md:flex-row gap-16 lg:gap-40 items-center md:items-start">
-          {/* Lado Esquerdo: loop em vídeo (WebM + MP4) — muito menor que GIF para a CDN */}
-          <div className="relative group grayscale hover:grayscale-0 transition-all duration-700 w-full max-w-[360px] lg:max-w-[480px] shrink-0">
-            <div className="aspect-[9/16] w-full overflow-hidden">
+      <div className="container mx-auto px-6 md:px-12 pt-24 md:pt-48">
+        <div className="relative">
+          {/* Lado Esquerdo/Fundo: Imagem Editorial com Glitch */}
+          <div className="md:absolute md:top-0 md:right-0 w-full md:w-[55%] aspect-[3/4] md:aspect-[4/5] z-0 grayscale opacity-40 md:opacity-100 group">
+            <div className="w-full h-full overflow-hidden border-2 border-white/5 shadow-2xl transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-[1.02]">
               <GlitchImage
                 src="/brunoGuimaraes.png"
                 alt="Bruno Guimarães"
@@ -56,42 +56,54 @@ const About: React.FC = () => {
                 loadingLazy
               />
             </div>
-            {/* Overlay Minimalista */}
-            <div
-              className="absolute -bottom-4 -left-4 bg-white text-black px-3 py-1 type-mono text-[9px] font-bold uppercase tracking-widest"
-              title="Bio stream — personal introduction"
-            >
-              STREAM_BIO_03
+            {/* Technical Tag */}
+            <div className="absolute -bottom-4 right-4 bg-accent text-black px-4 py-1.5 type-mono text-[10px] font-black uppercase tracking-widest z-10 shadow-brutal">
+              IDENT_STREAM_03
             </div>
           </div>
 
-          {/* Lado Direito: Bio Tipográfica Massiva */}
-          <div className="flex flex-col justify-center flex-1">
+          {/* Lado Direito/Sobreposto: Conteúdo Editorial */}
+          <div className="relative z-10 pt-12 md:pt-20 md:w-[60%] pointer-events-none">
             <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="type-raster-section text-[12vw] md:text-[8vw] leading-[0.8] opacity-100 uppercase tracking-tighter mb-8"
+              transition={{ duration: 0.8, ease: "circOut" }}
+              className="type-raster-section text-[14vw] md:text-[10vw] leading-[0.75] uppercase tracking-tighter mb-12 mix-blend-difference"
             >
               BRUNO
               <br />
               GUIMARÃES
             </motion.h2>
 
-            <div className="max-w-xl border-l border-white/10 pl-10 ml-4">
-              <p className="text-xl md:text-2xl leading-relaxed font-serif italic text-white/90 text-justify">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="max-w-lg md:ml-12 border-l-2 border-accent pl-12 py-4 pointer-events-auto"
+            >
+              <p className="text-2xl md:text-3xl leading-[1.4] font-serif italic text-white/95 text-left mb-10 drop-shadow-sm">
                 {t(locale, "about.bio")}
               </p>
-              <p className="type-mono text-[10px] opacity-30 mt-10 uppercase tracking-[0.3em]">
-                {t(locale, "about.based")}
-              </p>
-            </div>
+
+              <div className="flex flex-col gap-2">
+                <p className="type-mono text-[10px] text-accent uppercase tracking-[0.4em] font-bold">
+                  {t(locale, "about.based")}
+                </p>
+                <div className="flex gap-2">
+                  <div className="w-2 h-2 bg-white" />
+                  <div className="w-2 h-2 bg-white/40" />
+                  <div className="w-2 h-2 bg-white/10" />
+                </div>
+              </div>
+            </motion.div>
           </div>
         </div>
       </div>
 
-      {/* Stack Ticker - 100% real de largura (Edge-to-Edge) */}
-      <div className="w-full relative mt-24 py-16 border-y border-white/10 overflow-hidden bg-white/[0.02]">
+      {/* Stack Ticker - Full Width */}
+      <div className="w-full relative mt-40 md:mt-64 py-20 border-y border-white/5 overflow-hidden bg-white/[0.01] backdrop-blur-[2px]">
         <div className="flex animate-marquee whitespace-nowrap">
           <div className="flex items-center gap-12">
             {marqueeTechs.map(tech => (

@@ -11,7 +11,7 @@ const Skills: React.FC = () => {
     >
       <div className="w-full max-w-6xl mx-auto relative z-10">
         <div className="mb-12 sm:mb-16 md:mb-32 space-y-3 sm:space-y-4">
-          <div className="type-ui-label text-[10px] md:text-xs opacity-40 mb-4">
+          <div className="type-ui-label text-[10px] md:text-xs opacity-60 mb-4">
             <ShuffleText text="// MODULE_ENGINE_CORE" stagger={0.02} duration={0.8} />
           </div>
           <h2 className="type-display-section text-[16vw] leading-[0.9] sm:text-8xl md:text-[110px] font-black flex flex-col text-black">
@@ -50,7 +50,7 @@ const Skills: React.FC = () => {
                 </div>
 
                 {/* Technical Decor */}
-                <div className="absolute bottom-2 right-2 opacity-20 type-ui-label text-[8px] text-white font-bold">
+                <div className="absolute bottom-2 right-2 opacity-40 type-ui-label text-[8px] text-white font-bold tracking-widest">
                   SYS_LIB_LOADED
                 </div>
               </div>

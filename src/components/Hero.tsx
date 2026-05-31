@@ -83,19 +83,19 @@ const Hero: React.FC = () => {
           >
             <div className="text-left max-w-[320px]">
               <p
-                className="type-mono text-[10px] mb-4 opacity-40 uppercase"
+                className="type-mono text-[10px] mb-4 opacity-60 uppercase text-accent"
                 title="Based in Rio de Janeiro, Brazil"
               >
                 {t(locale, "hero.established")}
               </p>
-              <p className="text-white/60 text-sm leading-relaxed">
+              <p className="text-stone-200 text-sm leading-relaxed">
                 {t(locale, "hero.description")}
               </p>
             </div>
 
             <div className="flex flex-col items-end">
               <div
-                className="type-mono text-[10px] opacity-40 mb-2"
+                className="type-mono text-[10px] opacity-60 mb-2 text-white"
                 title="Scroll down to see more content"
               >
                 {t(locale, "hero.scroll")}

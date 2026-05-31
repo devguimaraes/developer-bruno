@@ -18,113 +18,105 @@ export const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
   const reducedMotion = useReducedMotion();
   const locale = useLocale();
 
-  // Rastreia o scroll relativo a este container específico
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"],
   });
 
-  // Parallax: Move a imagem internamente de -50px a 50px
-  const y = useTransform(scrollYProgress, [0, 1], [-50, 50]);
-  // Parallax Oposta para o texto: O texto "flutua" na direção oposta ou velocidade diferente
-  const textY = useTransform(scrollYProgress, [0, 1], [30, -30]);
+  const imageY = useTransform(scrollYProgress, [0, 1], [-40, 40]);
+  const contentY = useTransform(scrollYProgress, [0, 1], [20, -20]);
 
-  // Use bannerImage if available, otherwise fall back to image
   const displayImage = project.bannerImage ?? project.image;
 
   return (
-    <div ref={containerRef} className="relative w-full group">
-      <a
-        href={`/projetos/${project.slug ?? project.id}`}
-        className="relative block w-full aspect-[4/5] md:aspect-video overflow-hidden bg-zinc-900 shadow-2xl cursor-pointer"
-      >
-        {/* Parallax Image Container */}
-        <motion.div
-          style={{ y: reducedMotion ? 0 : y, scale: 1.1 }}
-          className="absolute inset-0 w-full h-full"
-        >
-          <GlitchImage
-            src={displayImage}
-            alt={project.title}
-            active={true}
-            loadingLazy
-            className="w-full h-full grayscale group-hover:grayscale-0 transition-all duration-700 opacity-60"
-          />
-        </motion.div>
+    <div
+      ref={containerRef}
+      className="relative w-full group py-12 md:py-24 border-t border-white/5 first:border-t-0"
+    >
+      <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center">
+        {/* Coluna da Imagem: Layout Editorial Assimétrico */}
+        <div className="w-full lg:w-[60%] order-1 lg:order-2">
+          <a
+            href={`/projetos/${project.slug ?? project.id}`}
+            className="relative block w-full aspect-video overflow-hidden bg-zinc-900 shadow-2xl cursor-pointer"
+          >
+            <motion.div
+              style={{ y: reducedMotion ? 0 : imageY, scale: 1.05 }}
+              className="absolute inset-0 w-full h-full"
+            >
+              <GlitchImage
+                src={displayImage}
+                alt={project.title}
+                active={true}
+                loadingLazy
+                className="w-full h-full grayscale group-hover:grayscale-0 transition-all duration-1000 opacity-80 group-hover:opacity-100"
+              />
+            </motion.div>
 
-        {/* Camada de Texto Sobreposta com Parallax e Scramble */}
+            {/* View Case Overlay (Sutil) */}
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+              <span className="type-mono text-[10px] text-white uppercase tracking-[0.3em] border border-white/20 px-4 py-2 bg-black/60 backdrop-blur-sm">
+                [ OPEN_PROJECT_CASE ]
+              </span>
+            </div>
+          </a>
+        </div>
+
+        {/* Coluna de Texto: Autoridade Editorial */}
         <motion.div
-          style={{ y: reducedMotion ? 0 : textY }}
-          className="absolute inset-0 p-6 md:p-12 bg-black/20 flex flex-col justify-center items-center text-center pointer-events-none z-20"
+          style={{ y: reducedMotion ? 0 : contentY }}
+          className="w-full lg:w-[40%] flex flex-col items-start text-left order-2 lg:order-1"
         >
-          <p className="type-mono text-xs md:text-sm text-accent mb-2 tracking-[0.2em] uppercase font-bold">
-            {project.category}
-          </p>
-          <h3 className="type-raster-section text-3xl sm:text-5xl md:text-6xl text-white tracking-[0.1em] leading-none drop-shadow-2xl mt-1">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-8 h-px bg-accent" />
+            <p className="type-mono text-[10px] text-accent tracking-[0.2em] uppercase font-bold">
+              {project.category}
+            </p>
+          </div>
+
+          <h3 className="type-raster-section text-4xl sm:text-5xl xl:text-6xl text-white tracking-tighter leading-[0.85] mb-8 group-hover:text-accent transition-colors duration-500">
             <TextReveal text={project.title} />
           </h3>
+
+          <p className="font-serif italic text-lg md:text-xl text-stone-300 leading-relaxed mb-10 max-w-md">
+            "{project.description}"
+          </p>
+
+          <div className="flex flex-wrap gap-2 mb-12">
+            {project.tech.map((tech: string) => (
+              <span
+                key={tech}
+                className="text-[9px] text-stone-500 font-mono border border-white/10 px-2 py-0.5 uppercase tracking-widest"
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-8">
+            <Magnetic>
+              <a
+                href={`/projetos/${project.slug ?? project.id}`}
+                className="group/btn flex items-center gap-3 type-mono text-[10px] text-white uppercase tracking-[0.2em] hover:text-accent transition-colors"
+              >
+                Detalhes do Caso{" "}
+                <div className="w-2 h-2 bg-accent rotate-45 group-hover/btn:scale-125 transition-transform" />
+              </a>
+            </Magnetic>
+
+            {project.live && (
+              <a
+                href={project.live}
+                target="_blank"
+                rel="noreferrer"
+                className="type-mono text-[9px] text-stone-500 hover:text-white transition-colors uppercase tracking-widest underline underline-offset-4 decoration-stone-800"
+              >
+                Live Site
+              </a>
+            )}
+          </div>
         </motion.div>
-
-        <div className="absolute top-6 md:top-8 right-6 md:right-8 type-mono text-[10px] text-white/0 group-hover:text-white/80 transition-colors uppercase tracking-widest z-30 select-none pointer-events-none">
-          [ VIEW CASE ]
-        </div>
-      </a>
-
-      {/* Elementos Externos à Imagem (Gaps) */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false, margin: "-10%" }}
-        transition={{ duration: 0.4, delay: 0.2 }}
-        className="absolute -bottom-10 md:-bottom-12 left-0 flex flex-wrap gap-2 z-20 pointer-events-none"
-      >
-        {project.tech.map((tech: string) => (
-          <span
-            key={tech}
-            className="border border-white text-white px-3 py-1.5 rounded-full type-mono text-[9px] md:text-[10px] uppercase tracking-widest"
-          >
-            {tech}
-          </span>
-        ))}
-      </motion.div>
-
-      {/* Related Blog Post Link */}
-      {project.relatedPosts && project.relatedPosts.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, margin: "-10%" }}
-          transition={{ duration: 0.4, delay: 0.25 }}
-          className="absolute -bottom-16 md:-bottom-20 left-0 z-20"
-        >
-          <a
-            href={`/blog/${project.relatedPosts[0]}`}
-            className="type-mono text-[9px] text-white/40 hover:text-accent transition-colors uppercase tracking-widest flex items-center gap-1"
-          >
-            {t(locale, "projects.read_more")}
-          </a>
-        </motion.div>
-      )}
-
-      {/* Badge de Acesso Global (Canto Inferior Direito) Magnético */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false, margin: "-10%" }}
-        transition={{ duration: 0.4, delay: 0.3 }}
-        className="absolute -bottom-10 md:-bottom-12 right-0 hidden sm:block z-20"
-      >
-        <Magnetic>
-          <a
-            href={project.live}
-            target="_blank"
-            rel="noreferrer"
-            className="bg-white text-black hover:bg-zinc-200 transition-colors px-4 py-1.5 rounded-full type-mono text-[10px] font-bold uppercase tracking-widest flex items-center justify-center h-10"
-          >
-            View Project
-          </a>
-        </Magnetic>
-      </motion.div>
+      </div>
     </div>
   );
 };

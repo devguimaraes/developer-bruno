@@ -13,12 +13,12 @@ const Footer: React.FC = () => {
                 {footerData.copyright.toUpperCase()}
               </span>
             </div>
-            <span className="type-ui-label text-xs sm:text-sm text-stone-500">
+            <span className="type-ui-label text-xs sm:text-sm text-stone-400">
               Built with precision
             </span>
           </div>
 
-          <div className="flex items-center justify-center sm:justify-end gap-6 sm:gap-10 md:gap-12 type-ui-label text-sm sm:text-base md:text-lg text-stone-500 w-full md:w-auto">
+          <div className="flex items-center justify-center sm:justify-end gap-6 sm:gap-10 md:gap-12 type-ui-label text-sm sm:text-base md:text-lg text-stone-400 w-full md:w-auto">
             <div className="flex flex-col items-end">
               <span>LAT: 22.9068° S</span>
               <span>LON: 43.1729° W</span>

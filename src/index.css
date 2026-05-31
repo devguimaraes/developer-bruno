@@ -54,7 +54,7 @@
   }
 
   .type-mono {
-    @apply font-silkscreen text-[10px] tracking-[0.2em] opacity-50 uppercase;
+    @apply font-silkscreen text-[10px] tracking-[0.2em] opacity-70 uppercase;
   }
 
   .type-display-hero {

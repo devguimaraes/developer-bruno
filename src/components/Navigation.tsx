@@ -76,7 +76,7 @@ const Navigation: React.FC = () => {
                     type="button"
                     onClick={() => setLocale(l)}
                     className={`type-mono text-[10px] tracking-[0.2em] uppercase transition-colors ${
-                      l === locale ? "text-accent font-bold" : "text-white/40 hover:text-white/70"
+                      l === locale ? "text-accent font-bold" : "text-white/60 hover:text-white"
                     }`}
                   >
                     {l}

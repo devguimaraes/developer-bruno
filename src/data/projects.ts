@@ -15,7 +15,7 @@ const rawProjects = [
     title: "Agência Multi BR",
     category: "Corporate / Agency",
     description:
-      "Agência de marketing digital 360º especializada em tráfego pago, conteúdo, redes sociais, web design e identidade visual. Estratégia personalizada com atendimento local.",
+      "Engenharia de performance para uma agência digital 360º. Desenvolvemos um ecossistema focado em conversão, onde a estética vanguarda encontra uma arquitetura Next.js otimizada para Core Web Vitals e SEO agressivo.",
     tech: ["React", "NextJS", "Tailwind", "UI/UX"] as const,
     github: "#",
     live: "https://www.agenciamultibr.com/",
@@ -98,7 +98,7 @@ const rawProjects = [
     title: "Movies Bremen",
     category: "Event House / Cinema",
     description:
-      "Plataforma oficial da Movies Event House em Bremen (Alemanha), dedicada ao entretenimento adulto premium com cinema erótico, sex shop, cabines privativas e áreas de cruising em ambiente inclusivo.",
+      "Engenharia de interface para uma plataforma de entretenimento premium na Alemanha. Um desafio de UI que equilibra a sofisticação visual com regras de negócio complexas e acessibilidade internacional.",
     tech: ["Next.js", "React", "Tailwind CSS", "UI/UX"] as const,
     github: "#",
     live: "https://www.moviesbremen.com/",
@@ -121,7 +121,7 @@ const rawProjects = [
     title: "Danila Rizo Palmieri",
     category: "Corporate / HR & International Business",
     description:
-      "Plataforma de consultoria em RH e internacionalização de negócios para o mercado americano. Foco em gestão de pessoas transfronteiriça e expansão global.",
+      "Liderança técnica e posicionamento digital para Danila Rizo Palmieri, autoridade em RH e Internacionalização. O projeto projeta a sofisticação executiva necessária para o mercado global de expansão de negócios (Brasil > USA).",
     tech: ["Wordpress", "PHP", "SEO", "UI/UX"] as const,
     github: "#",
     live: "https://www.danilapalmieri.com/",

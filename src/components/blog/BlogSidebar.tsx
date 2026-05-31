@@ -12,8 +12,10 @@ export const BlogSidebar: React.FC<BlogSidebarProps> = ({ posts }) => {
     return acc + time;
   }, 0);
 
-  // Pegar os 3 posts mais recentes como "Recomendados" por simplicidade técnica
-  const recommendedPosts = posts.slice(0, 3);
+  // Priorizar posts em destaque (featured) para as recomendações
+  const recommendedPosts = posts
+    .sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0))
+    .slice(0, 3);
 
   return (
     <div className="space-y-12">
@@ -52,7 +54,7 @@ export const BlogSidebar: React.FC<BlogSidebarProps> = ({ posts }) => {
         <div className="flex items-center gap-2">
           <TrendingUp className="w-3.5 h-3.5 text-accent" />
           <h3 className="text-xs font-pixel uppercase tracking-[0.2em] text-stone-500">
-            Destaques
+            Leituras Recomendadas
           </h3>
         </div>
 
