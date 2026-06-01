@@ -23,84 +23,95 @@ export const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
     offset: ["start end", "end start"],
   });
 
-  const imageY = useTransform(scrollYProgress, [0, 1], [-40, 40]);
-  const contentY = useTransform(scrollYProgress, [0, 1], [20, -20]);
-
+  const imageY = useTransform(scrollYProgress, [0, 1], [-60, 60]);
   const displayImage = project.bannerImage ?? project.image;
 
   return (
-    <div
-      ref={containerRef}
-      className="relative w-full group py-12 md:py-24 border-t border-white/5 first:border-t-0"
-    >
-      <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center">
-        {/* Coluna da Imagem: Layout Editorial Assimétrico */}
-        <div className="w-full lg:w-[60%] order-1 lg:order-2">
-          <a
-            href={`/projetos/${project.slug ?? project.id}`}
-            className="relative block w-full aspect-video overflow-hidden bg-zinc-900 shadow-2xl cursor-pointer"
-          >
-            <motion.div
-              style={{ y: reducedMotion ? 0 : imageY, scale: 1.05 }}
-              className="absolute inset-0 w-full h-full"
-            >
-              <GlitchImage
-                src={displayImage}
-                alt={project.title}
-                active={true}
-                loadingLazy
-                className="w-full h-full grayscale group-hover:grayscale-0 transition-all duration-1000 opacity-80 group-hover:opacity-100"
-              />
-            </motion.div>
+    <div ref={containerRef} className="relative w-full py-12 md:py-20 group">
+      {/* 1. Camada de Fundo: Identificador Técnico (Sutil) */}
+      <div className="absolute top-1/2 left-0 -translate-y-1/2 w-full flex justify-between px-8 pointer-events-none opacity-[0.03]">
+        <span className="type-mono text-[8vw] leading-none select-none tracking-[-0.05em] font-black uppercase">
+          {project.id.slice(0, 3)}
+        </span>
+        <span className="type-mono text-[8vw] leading-none select-none tracking-[-0.05em] font-black uppercase">
+          /26
+        </span>
+      </div>
 
-            {/* View Case Overlay (Sutil) */}
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
-              <span className="type-mono text-[10px] text-white uppercase tracking-[0.3em] border border-white/20 px-4 py-2 bg-black/60 backdrop-blur-sm">
-                [ OPEN_PROJECT_CASE ]
-              </span>
-            </div>
-          </a>
-        </div>
-
-        {/* Coluna de Texto: Autoridade Editorial */}
-        <motion.div
-          style={{ y: reducedMotion ? 0 : contentY }}
-          className="w-full lg:w-[40%] flex flex-col items-start text-left order-2 lg:order-1"
+      {/* 2. Composição Principal: Imagem Hero + Título Rasgado */}
+      <div className="relative z-10 w-full max-w-6xl mx-auto">
+        {/* Container de Imagem: Título Centralizado sobre a Imagem */}
+        <a
+          href={`/projetos/${project.slug ?? project.id}`}
+          className="relative block w-full aspect-video md:aspect-[16/9] overflow-hidden bg-zinc-950 border-x-2 border-white/5 shadow-[0_40px_100px_rgba(0,0,0,0.9)]"
         >
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-8 h-px bg-accent" />
-            <p className="type-mono text-[10px] text-accent tracking-[0.2em] uppercase font-bold">
-              {project.category}
-            </p>
+          {/* Scanlines & Grid Overlay */}
+          <div className="absolute inset-0 z-20 pointer-events-none opacity-20 group-hover:opacity-40 transition-opacity duration-700 scanlines" />
+          <div className="absolute inset-0 z-20 pointer-events-none grid-technical opacity-10" />
+
+          <motion.div
+            style={{ y: reducedMotion ? 0 : imageY, scale: 1.15 }}
+            className="absolute inset-0 w-full h-full"
+          >
+            <GlitchImage
+              src={displayImage}
+              alt={project.title}
+              active={true}
+              loadingLazy
+              className="w-full h-full grayscale-[0.3] group-hover:grayscale-0 transition-all duration-1000 opacity-90 group-hover:opacity-100 contrast-125"
+            />
+          </motion.div>
+
+          {/* Título Centralizado sobre a Imagem */}
+          <div className="absolute inset-0 z-25 flex items-center justify-center pointer-events-none">
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_25%,rgba(0,0,0,0.65)_100%)]" />
+            <h3 className="relative type-raster-section text-5xl sm:text-7xl md:text-8xl text-white leading-none tracking-tighter mix-blend-difference drop-shadow-[0_0_40px_rgba(0,0,0,0.8)] px-6 text-center">
+              <TextReveal text={project.title} />
+            </h3>
           </div>
 
-          <h3 className="type-raster-section text-4xl sm:text-5xl xl:text-6xl text-white tracking-tighter leading-[0.85] mb-8 group-hover:text-accent transition-colors duration-500">
-            <TextReveal text={project.title} />
-          </h3>
+          {/* Label Técnico Flutuante */}
+          <div className="absolute bottom-6 right-6 z-30 flex flex-col items-end gap-2">
+            <div className="bg-accent text-black px-3 py-1 type-mono text-[9px] font-black uppercase shadow-brutal">
+              {project.category}
+            </div>
+            <div className="bg-white text-black px-2 py-0.5 type-mono text-[8px] font-bold">
+              CORE_ENGINE_V4.0
+            </div>
+          </div>
+        </a>
+      </div>
 
-          <p className="font-serif italic text-lg md:text-xl text-stone-300 leading-relaxed mb-10 max-w-md">
+      {/* 3. Rodapé Editorial: Legenda de Autoridade */}
+      <div className="relative z-20 mt-10 md:mt-12 w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 px-4 md:px-0">
+        <div className="md:col-span-8 lg:col-span-7">
+          <p className="font-serif italic text-lg md:text-xl text-stone-200 leading-relaxed max-w-2xl">
             "{project.description}"
           </p>
+        </div>
 
-          <div className="flex flex-wrap gap-2 mb-12">
+        <div className="md:col-span-5 flex flex-col items-start md:items-end justify-end gap-8">
+          <div className="flex flex-wrap justify-start md:justify-end gap-2">
             {project.tech.map((tech: string) => (
               <span
                 key={tech}
-                className="text-[9px] text-stone-500 font-mono border border-white/10 px-2 py-0.5 uppercase tracking-widest"
+                className="text-[9px] text-white font-mono border border-white/20 px-2.5 py-1 uppercase tracking-[0.2em] bg-white/5 backdrop-blur-sm"
               >
                 {tech}
               </span>
             ))}
           </div>
 
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-10">
             <Magnetic>
               <a
                 href={`/projetos/${project.slug ?? project.id}`}
-                className="group/btn flex items-center gap-3 type-mono text-[10px] text-white uppercase tracking-[0.2em] hover:text-accent transition-colors"
+                className="group/btn flex items-center gap-4 type-mono text-[10px] text-white uppercase tracking-[0.3em] hover:text-accent transition-all"
               >
-                Detalhes do Caso{" "}
-                <div className="w-2 h-2 bg-accent rotate-45 group-hover/btn:scale-125 transition-transform" />
+                <span className="border-b border-white/20 pb-1 group-hover/btn:border-accent">
+                  Visualizar Caso
+                </span>
+                <div className="w-8 h-px bg-white/40 group-hover/btn:w-12 group-hover/btn:bg-accent transition-all" />
               </a>
             </Magnetic>
 
@@ -109,13 +120,14 @@ export const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
                 href={project.live}
                 target="_blank"
                 rel="noreferrer"
-                className="type-mono text-[9px] text-stone-500 hover:text-white transition-colors uppercase tracking-widest underline underline-offset-4 decoration-stone-800"
+                className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all duration-500"
+                title="Visitar Site Ao Vivo"
               >
-                Live Site
+                <div className="w-1.5 h-1.5 bg-accent rotate-45" />
               </a>
             )}
           </div>
-        </motion.div>
+        </div>
       </div>
     </div>
   );

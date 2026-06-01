@@ -23,7 +23,7 @@ const Projects: React.FC = () => {
         />
       )}
 
-      <div className="mb-20 px-6 md:px-12">
+      <div className="mb-32 md:mb-48 px-6 md:px-12">
         <h2
           className="type-raster-section text-[10vw] md:text-[8vw] text-white"
           title="Curated selection of my best projects"
@@ -38,8 +38,8 @@ const Projects: React.FC = () => {
         </div>
       </div>
 
-      {/* Container com Mais Respiro Vertical e Horizontal */}
-      <div className="flex flex-col gap-24 sm:gap-32 md:gap-40 w-full max-w-5xl mx-auto px-8 sm:px-16 md:px-24">
+      {/* Container com Foco Total na Imagem e Ritmo Vertical Recalibrado */}
+      <div className="flex flex-col gap-16 sm:gap-24 md:gap-32 w-full max-w-7xl mx-auto px-6 sm:px-10 md:px-16">
         {selectedWorks.map(project => (
           <ProjectItem key={project.id} project={project} />
         ))}

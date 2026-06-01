@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft, ArrowUpRight, ExternalLink, Calendar } from "lucide-react";
 import type { Project } from "@/types";
 import type { BlogPost } from "@/types/blog";
+import GlitchImage from "@/components/ui/GlitchImage";
 import { t } from "@/lib/i18n";
 import { useLocale } from "@/hooks/useLocale";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
@@ -16,27 +17,9 @@ interface CaseStudyProps {
 const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
   const locale = useLocale();
   const prefersReducedMotion = useReducedMotion();
-  const pageMotion = prefersReducedMotion
-    ? {}
-    : {
-        initial: { opacity: 0 },
-        animate: { opacity: 1 },
-        transition: { duration: 0.5 },
-      };
-  const backMotion = prefersReducedMotion
-    ? {}
-    : {
-        initial: { opacity: 0, x: -20 },
-        animate: { opacity: 1, x: 0 },
-        transition: { delay: 0.2 },
-      };
-  const heroMotion = prefersReducedMotion
-    ? {}
-    : {
-        initial: { opacity: 0, y: 20 },
-        animate: { opacity: 1, y: 0 },
-        transition: { delay: 0.3 },
-      };
+
+  const heroBanner = project.bannerImage ?? project.image;
+
   const sectionMotion = prefersReducedMotion
     ? {}
     : {
@@ -47,113 +30,225 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
       };
 
   return (
-    <motion.div {...pageMotion} className="w-full bg-black text-white">
-      {/* Back Button */}
-      <div className="container mx-auto px-6 pt-20 sm:pt-24 md:pt-28 max-w-5xl">
-        <motion.div {...backMotion}>
-          <a
-            href="/#projetos"
-            className="inline-flex items-center gap-2 type-mono text-[10px] text-white/40 hover:text-accent transition-colors uppercase tracking-widest py-2"
-            title="Return to the projects section"
-          >
-            <ArrowLeft className="w-3 h-3" />
-            {t(locale, "case.back")}
-          </a>
-        </motion.div>
-      </div>
-
-      {/* Hero Section */}
-      <section className="container mx-auto px-6 pt-12 pb-16 md:pb-24 max-w-5xl">
-        <motion.div {...heroMotion} className="border-t border-white/10 pt-8">
-          <div className="flex flex-wrap items-center gap-4 type-mono text-[10px] text-accent uppercase tracking-widest mb-6">
-            <span>{project.category}</span>
-            {project.role && (
-              <>
-                <span className="text-white/20">/</span>
-                <span className="text-white/60">{project.role}</span>
-              </>
-            )}
+    <div className="w-full bg-black text-white">
+      {/* ================================================================ */}
+      {/*  HERO — Banner Full-Width com Overlays Técnicos                  */}
+      {/* ================================================================ */}
+      <section className="relative min-h-[85vh] flex flex-col overflow-hidden bg-[#050505]">
+        {/* Camada de fundo: imagem + efeitos */}
+        <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 w-full h-full scale-110">
+            <GlitchImage
+              src={heroBanner}
+              alt={project.title}
+              active={true}
+              className="w-full h-full object-cover grayscale-[0.3] opacity-90 contrast-125"
+            />
           </div>
 
-          <h1 className="type-raster-section text-[clamp(2.5rem,10vw,5rem)] md:text-6xl lg:text-7xl text-white leading-tight">
-            {project.title}
-          </h1>
+          {/* Vignette radial */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_15%,rgba(0,0,0,0.4)_50%,rgba(0,0,0,0.8)_100%)]" />
 
-          {project.description && (
-            <p className="mt-6 text-base sm:text-lg text-white/60 max-w-2xl leading-relaxed">
-              {project.description}
-            </p>
+          {/* Scanlines + Grid sobrepostos */}
+          <div className="absolute inset-0 scanlines opacity-25" />
+          <div className="absolute inset-0 grid-technical opacity-[0.06]" />
+        </div>
+
+        {/* Conteúdo centralizado sobre a imagem */}
+        <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 pt-20 pb-16 text-center">
+          {/* Back button — canto superior esquerdo */}
+          <div className="absolute top-6 left-6 md:top-8 md:left-8">
+            <motion.a
+              href="/#projetos"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+              className="inline-flex items-center gap-2 type-mono text-[10px] text-white/40 hover:text-accent transition-colors uppercase tracking-widest"
+            >
+              <ArrowLeft className="w-3 h-3" />
+              {t(locale, "case.back")}
+            </motion.a>
+          </div>
+
+          {/* Badge da categoria */}
+          <motion.span
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="inline-block bg-accent text-black type-mono text-[10px] font-black uppercase tracking-[0.15em] px-4 py-1.5 mb-4 shadow-[4px_4px_0_rgba(0,0,0,0.5)]"
+          >
+            {project.category}
+          </motion.span>
+
+          {/* Título gigante com mix-blend-difference */}
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="type-raster-section text-[clamp(3rem,10vw,7rem)] md:text-7xl lg:text-8xl text-white leading-[0.85] mix-blend-difference drop-shadow-[0_0_40px_rgba(0,0,0,0.8)] mb-4 max-w-[90vw]"
+          >
+            {project.title}
+          </motion.h1>
+
+          {/* Role — subtítulo técnico */}
+          {project.role && (
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="type-mono text-xs text-white/50 uppercase tracking-[0.1em] mb-6"
+            >
+              {project.role}
+            </motion.p>
           )}
+        </div>
+
+        {/* Scroll Indicator */}
+        <div className="relative z-10 flex flex-col items-center pb-6 gap-2">
+          <motion.div
+            animate={{ opacity: [0.3, 1, 0.3] }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className="w-px h-12 bg-gradient-to-b from-accent to-transparent"
+          />
+          <span className="type-mono text-[8px] text-white/25 uppercase tracking-[0.3em]">
+            SCROLL
+          </span>
+        </div>
+      </section>
+
+      {/* ================================================================ */}
+      {/*  QUICK CTA — Botões de ação logo após o hero                     */}
+      {/* ================================================================ */}
+      <section className="relative z-20">
+        <div className="container mx-auto px-6 max-w-5xl">
+          <motion.div
+            {...sectionMotion}
+            className="flex flex-col sm:flex-row gap-3 py-4 border-b border-white/10"
+          >
+            <a
+              href={project.live}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center justify-center gap-3 bg-white text-black hover:bg-accent transition-colors px-6 py-3.5 type-mono text-[10px] uppercase tracking-widest font-bold"
+            >
+              <span>{t(locale, "case.visit_live")}</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+            <a
+              href={`mailto:${contactData.email}`}
+              className="inline-flex items-center justify-center gap-3 border border-white/10 text-white hover:border-accent/50 hover:text-accent transition-colors px-6 py-3.5 type-mono text-[10px] uppercase tracking-widest"
+            >
+              <span>{t(locale, "case.work_together")}</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </a>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ================================================================ */}
+      {/*  CONTEXT — Editorial: descrição + problema                       */}
+      {/* ================================================================ */}
+      <section className="container mx-auto px-6 py-14 md:py-20 max-w-5xl">
+        <motion.div {...sectionMotion}>
+          {/* Label mono */}
+          <div className="type-mono text-[10px] text-white/30 uppercase tracking-widest mb-8">
+            {t(locale, "case.context")}
+          </div>
+
+          {/* Layout assimétrico: heading grande à esquerda, texto à direita */}
+          <div className="grid md:grid-cols-[1fr_1.6fr] gap-6 md:gap-12">
+            {/* Coluna esquerda: heading que sangra */}
+            <div>
+              <h2 className="type-raster-section text-4xl md:text-5xl lg:text-6xl text-white leading-[0.9] border-l-2 border-accent pl-5 md:pl-8">
+                {t(locale, "case.problem")}
+              </h2>
+            </div>
+
+            {/* Coluna direita: texto editorial */}
+            <div className="flex flex-col gap-6">
+              {/* Descrição — lead-in itálico */}
+              {project.description && (
+                <p className="font-serif italic text-lg md:text-xl text-white/50 leading-relaxed">
+                  {project.description}
+                </p>
+              )}
+
+              {/* Context — o problema em si */}
+              {project.context && (
+                <div className="relative">
+                  <div className="absolute -left-4 top-0 bottom-0 w-px bg-white/10 hidden md:block" />
+                  <p className="text-base md:text-lg text-white/80 leading-relaxed">
+                    {project.context}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
         </motion.div>
       </section>
 
-      {/* Context Section */}
-      {project.context && (
-        <section className="container mx-auto px-6 py-16 md:py-20 max-w-5xl">
-          <motion.div {...sectionMotion} className="border-t border-white/10 pt-8">
-            <div
-              className="type-mono text-[10px] text-white/40 uppercase tracking-widest mb-6"
-              title="Project background and problem statement"
-            >
-              {t(locale, "case.context")}
-            </div>
-            <div className="grid md:grid-cols-[1fr_2fr] gap-8">
-              <h2 className="type-raster-section text-2xl md:text-3xl text-white">
-                {t(locale, "case.problem")}
-              </h2>
-              <div>
-                <p className="text-base sm:text-lg text-white/70 leading-relaxed">
-                  {project.context}
-                </p>
-              </div>
-            </div>
-          </motion.div>
-        </section>
-      )}
-
-      {/* Stack Section */}
-      <section className="container mx-auto px-6 py-16 md:py-20 max-w-5xl">
-        <motion.div {...sectionMotion} className="border-t border-white/10 pt-8">
-          <div
-            className="type-mono text-[10px] text-white/40 uppercase tracking-widest mb-6"
-            title="Technologies and tools used"
-          >
+      {/* ================================================================ */}
+      {/*  STACK — Grid visual de tecnologias                              */}
+      {/* ================================================================ */}
+      <section className="container mx-auto px-6 py-14 md:py-20 max-w-5xl">
+        <motion.div {...sectionMotion}>
+          {/* Label mono */}
+          <div className="type-mono text-[10px] text-white/30 uppercase tracking-widest mb-8">
             {t(locale, "case.stack")}
           </div>
-          <div className="grid md:grid-cols-[1fr_2fr] gap-8">
-            <h2 className="type-raster-section text-2xl md:text-3xl text-white">
+
+          {/* Layout: heading à esquerda, grid de cards à direita */}
+          <div className="grid md:grid-cols-[1fr_1.6fr] gap-6 md:gap-12">
+            <h2 className="type-raster-section text-4xl md:text-5xl lg:text-6xl text-white leading-[0.9]">
               {t(locale, "case.technologies")}
             </h2>
-            <div className="flex flex-wrap gap-3">
-              {project.tech.map(tech => (
-                <span
+
+            {/* Grid de cards de tecnologia */}
+            <div className="grid grid-cols-2 gap-2">
+              {project.tech.map((tech, i) => (
+                <motion.div
                   key={tech}
-                  className="border border-white/30 text-white px-4 py-2 rounded-full type-mono text-[10px] uppercase tracking-widest hover:border-accent hover:text-accent transition-colors"
+                  initial={prefersReducedMotion ? {} : { opacity: 0, y: 10 }}
+                  whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.06 }}
+                  className="group relative border border-white/10 bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/20 transition-all duration-300 p-5 md:p-6 flex flex-col gap-3"
                 >
-                  {tech}
-                </span>
+                  {/* Índice numerado */}
+                  <span className="type-mono text-[9px] text-white/20 group-hover:text-accent/60 transition-colors">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+
+                  {/* Nome da tecnologia */}
+                  <span className="type-mono text-xs md:text-sm text-white/80 group-hover:text-white transition-colors uppercase tracking-wider leading-tight">
+                    {tech}
+                  </span>
+
+                  {/* Linha decorativa no hover */}
+                  <div className="w-0 group-hover:w-full h-px bg-accent/30 transition-all duration-500" />
+                </motion.div>
               ))}
             </div>
           </div>
         </motion.div>
       </section>
 
-      {/* Impact Section */}
+      {/* ================================================================ */}
+      {/*  IMPACT — Resultados mensuráveis (condicional)                   */}
+      {/* ================================================================ */}
       {project.impact && (
-        <section className="container mx-auto px-6 py-16 md:py-20 max-w-5xl">
-          <motion.div {...sectionMotion} className="border-t border-white/10 pt-8">
-            <div
-              className="type-mono text-[10px] text-white/40 uppercase tracking-widest mb-6"
-              title="Results and measurable outcomes"
-            >
+        <section className="container mx-auto px-6 py-14 md:py-20 max-w-5xl">
+          <motion.div {...sectionMotion}>
+            <div className="type-mono text-[10px] text-white/30 uppercase tracking-widest mb-8">
               {t(locale, "case.impact")}
             </div>
-            <div className="grid md:grid-cols-[1fr_2fr] gap-8">
-              <h2 className="type-raster-section text-2xl md:text-3xl text-white">
+
+            <div className="grid md:grid-cols-[1fr_1.6fr] gap-6 md:gap-12">
+              <h2 className="type-raster-section text-4xl md:text-5xl lg:text-6xl text-white leading-[0.9] border-l-2 border-accent pl-5 md:pl-8">
                 {t(locale, "case.results")}
               </h2>
-              <div>
-                <p className="text-base sm:text-lg text-white/70 leading-relaxed">
+              <div className="relative">
+                <p className="text-base md:text-lg text-white/80 leading-relaxed">
                   {project.impact}
                 </p>
               </div>
@@ -162,43 +257,44 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
         </section>
       )}
 
-      {/* Related Blog Posts */}
+      {/* ================================================================ */}
+      {/*  RELATED POSTS — Artigos do blog (condicional)                   */}
+      {/* ================================================================ */}
       {relatedPosts.length > 0 && (
-        <section className="container mx-auto px-6 py-16 md:py-20 max-w-5xl">
-          <motion.div {...sectionMotion} className="border-t border-white/10 pt-8">
-            <div
-              className="type-mono text-[10px] text-white/40 uppercase tracking-widest mb-6"
-              title="Blog posts related to this project"
-            >
+        <section className="container mx-auto px-6 py-14 md:py-20 max-w-5xl">
+          <motion.div {...sectionMotion}>
+            <div className="type-mono text-[10px] text-white/30 uppercase tracking-widest mb-8">
               {t(locale, "case.related")}
             </div>
-            <div className="grid md:grid-cols-[1fr_2fr] gap-8">
-              <h2 className="type-raster-section text-2xl md:text-3xl text-white">
+
+            <div className="grid md:grid-cols-[1fr_1.6fr] gap-6 md:gap-12">
+              <h2 className="type-raster-section text-4xl md:text-5xl lg:text-6xl text-white leading-[0.9]">
                 {t(locale, "case.read_more")}
               </h2>
-              <div className="flex flex-col gap-6">
+
+              <div className="flex flex-col gap-3">
                 {relatedPosts.map(post => (
                   <a
                     key={post.slug}
                     href={`/blog/${post.slug}`}
-                    className="group block border border-white/10 hover:border-accent/50 transition-colors p-5"
+                    className="group block border border-white/10 hover:border-accent/30 transition-colors p-6"
                   >
-                    <div className="flex items-center gap-3 type-mono text-[9px] text-white/40 uppercase tracking-widest mb-2">
-                      <span className="flex items-center gap-1">
+                    <div className="flex items-center gap-3 type-mono text-[9px] text-white/30 uppercase tracking-widest mb-3">
+                      <span className="flex items-center gap-1.5">
                         <Calendar className="w-3 h-3" />
                         {post.date}
                       </span>
                       {post.readTime && (
                         <>
-                          <span className="text-white/20">/</span>
+                          <span className="text-white/10">/</span>
                           <span>{post.readTime}</span>
                         </>
                       )}
                     </div>
-                    <h3 className="type-raster-section text-lg md:text-xl text-white group-hover:text-accent transition-colors">
+                    <h3 className="type-raster-section text-xl md:text-2xl text-white group-hover:text-accent transition-colors leading-tight">
                       {post.title}
                     </h3>
-                    <p className="text-white/50 text-sm mt-2 line-clamp-2 leading-relaxed">
+                    <p className="text-white/40 text-sm mt-3 line-clamp-2 leading-relaxed">
                       {post.excerpt}
                     </p>
                   </a>
@@ -209,36 +305,26 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
         </section>
       )}
 
-      {/* CTA Section */}
-      <section className="container mx-auto px-6 py-20 md:py-28 max-w-5xl">
-        <motion.div {...sectionMotion} className="border-t border-white/10 pt-8">
-          <div
-            className="type-mono text-[10px] text-white/40 uppercase tracking-widest mb-6"
-            title="Get in touch or visit the live site"
-          >
+      {/* ================================================================ */}
+      {/*  FINAL CTA — Fechamento com email                                */}
+      {/* ================================================================ */}
+      <section className="container mx-auto px-6 py-16 md:py-24 max-w-5xl">
+        <motion.div {...sectionMotion} className="text-center">
+          <div className="type-mono text-[10px] text-white/30 uppercase tracking-widest mb-6">
             {t(locale, "case.next")}
           </div>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <a
-              href={project.live}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center justify-between gap-4 bg-white px-6 py-4 text-black hover:bg-[#f3c65a] transition-colors type-mono text-[10px] uppercase tracking-widest font-bold"
-            >
-              <span>{t(locale, "case.visit_live")}</span>
-              <ExternalLink className="w-4 h-4" />
-            </a>
-            <a
-              href={`mailto:${contactData.email}`}
-              className="inline-flex items-center justify-between gap-4 border border-white/15 px-6 py-4 text-white hover:border-accent/60 hover:text-accent transition-colors type-mono text-[10px] uppercase tracking-widest"
-            >
-              <span>{t(locale, "case.work_together")}</span>
-              <ArrowUpRight className="w-4 h-4" />
-            </a>
-          </div>
+
+          <p className="type-mono text-sm text-white/40 mb-8">{t(locale, "cta.ready")}</p>
+
+          <a
+            href={`mailto:${contactData.email}`}
+            className="inline-block type-raster-section text-[clamp(2.5rem,8vw,5rem)] text-white hover:text-accent transition-colors leading-none"
+          >
+            {t(locale, "cta.lets_talk")}
+          </a>
         </motion.div>
       </section>
-    </motion.div>
+    </div>
   );
 };
 

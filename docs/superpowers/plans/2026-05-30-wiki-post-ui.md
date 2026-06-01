@@ -187,7 +187,7 @@ git commit -m "feat(wiki): refactor layout to 3-column grid"
 
 ---
 
-### Task 4: Ajustes Finais e Mobile
+### Task 6: Ajustes Finais e Mobile
 
 **Files:**
 - Modify: `src/components/pages/BlogPostPage.tsx`

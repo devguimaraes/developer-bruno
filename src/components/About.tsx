@@ -69,7 +69,7 @@ const About: React.FC = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, ease: "circOut" }}
-              className="type-raster-section text-[14vw] md:text-[10vw] leading-[0.75] uppercase tracking-tighter mb-12 mix-blend-difference"
+              className="type-raster-section text-[12vw] md:text-[7.5vw] leading-[0.75] uppercase tracking-tighter mb-10 mix-blend-difference"
             >
               BRUNO
               <br />
@@ -81,9 +81,9 @@ const About: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="max-w-lg md:ml-12 border-l-2 border-accent pl-12 py-4 pointer-events-auto"
+              className="max-w-lg md:ml-12 border-l-2 border-accent pl-10 py-2 pointer-events-auto"
             >
-              <p className="text-2xl md:text-3xl leading-[1.4] font-serif italic text-white/95 text-left mb-10 drop-shadow-sm">
+              <p className="text-xl md:text-2xl leading-[1.5] font-serif italic text-white/95 text-left mb-8 drop-shadow-sm">
                 {t(locale, "about.bio")}
               </p>
 
