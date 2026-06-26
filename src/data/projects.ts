@@ -1,8 +1,8 @@
 import type { Project } from "@/types";
-import agenciaMultiBr from "@/assets/agencia-multi-br.png";
-import engerod from "@/assets/engerod.png";
-import semogrj from "@/assets/semogrj.png";
-import luisFelipePereira from "@/assets/luis-felipe-pereira.png";
+import agenciaMultiBr from "@/assets/agencia-multi-br.webp";
+import engerod from "@/assets/engerod.webp";
+import semogrj from "@/assets/semogrj.webp";
+import luisFelipePereira from "@/assets/luis-felipe-pereira.webp";
 import moviesBremen from "@/assets/movies-bremen.png";
 
 /**

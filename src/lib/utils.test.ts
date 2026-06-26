@@ -1,24 +1,20 @@
-import { describe, it, expect } from 'vitest';
-import { serializeJSONForScript } from './utils';
+import { describe, it, expect } from "vitest";
+import { cn } from "./utils";
 
-describe('serializeJSONForScript', () => {
-  it('should serialize a simple object', () => {
-    const data = { key: 'value' };
-    expect(serializeJSONForScript(data)).toBe('{"key":"value"}');
+describe("cn", () => {
+  it("should merge Tailwind classes", () => {
+    expect(cn("px-4", "py-2")).toBe("px-4 py-2");
   });
 
-  it('should escape script tags', () => {
-    const data = { content: '</script><script>alert(1)</script>' };
-    const serialized = serializeJSONForScript(data);
-    expect(serialized).not.toContain('<script');
-    expect(serialized).not.toContain('</script');
-    expect(serialized).toContain('\\u003c/script\\u003e\\u003cscript\\u003e');
+  it("should resolve conflicting Tailwind classes", () => {
+    expect(cn("px-4", "px-2")).toBe("px-2");
   });
 
-  it('should escape unicode line separators', () => {
-    const data = { content: 'Line 1\u2028Line 2' };
-    const serialized = serializeJSONForScript(data);
-    expect(serialized).toContain('\\u2028');
-    expect(serialized).not.toContain('\u2028');
+  it("should handle conditional classes", () => {
+    expect(cn("base", false && "hidden", "extra")).toBe("base extra");
+  });
+
+  it("should handle empty input", () => {
+    expect(cn()).toBe("");
   });
 });
