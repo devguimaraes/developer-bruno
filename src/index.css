@@ -16,7 +16,8 @@
     --font-serif: "Newsreader", serif;
   }
 
-  html, body {
+  html,
+  body {
     margin: 0;
     padding: 0;
     background-color: #000;
@@ -35,7 +36,7 @@
   .font-pixel {
     font-family: var(--font-pixel-display);
   }
-  
+
   .font-silkscreen {
     font-family: var(--font-pixel-tech);
   }
@@ -102,13 +103,6 @@
   scrollbar-width: none;
 }
 
-/* 60fps animations */
-.gpu-accel {
-  transform: translate3d(0, 0, 0);
-  backface-visibility: hidden;
-  perspective: 1000px;
-}
-
 @layer components {
   .pixel-border {
     @apply shadow-[4px_0_0_0_#000,-4px_0_0_0_#000,0_4px_0_0_0_#000,0_-4px_0_0_0_#000];
@@ -119,7 +113,7 @@
   }
 
   .grid-technical {
-    background-image: 
+    background-image:
       linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
       linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
     background-size: 80px 80px;
@@ -141,10 +135,6 @@
     background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.05) 50%);
     background-size: 100% 4px;
   }
-}
-
-.pixelated {
-  image-rendering: pixelated;
 }
 
 /* Custom Scrollbar */
@@ -206,26 +196,10 @@
   }
 }
 
-@layer utilities {
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-}
-
-/* Marquee Animation */
-@keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
+/* Marquee Animation — complemento ao animate-marquee do Tailwind */
 .animate-marquee {
   display: flex;
   width: max-content;
-  animation: marquee 30s linear infinite;
 }
 
 .animate-marquee:hover {
