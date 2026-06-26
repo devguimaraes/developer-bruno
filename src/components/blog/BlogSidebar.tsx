@@ -25,7 +25,7 @@ export const BlogSidebar: React.FC<BlogSidebarProps> = ({ posts }) => {
       <div className="border-2 border-white p-5 shadow-brutal bg-black group hover:-translate-x-1 hover:-translate-y-1 transition-transform">
         <div className="flex items-center gap-2 mb-6 pb-2 border-b border-white/10">
           <div className="w-2 h-2 bg-accent shadow-[2px_2px_0px_#000]" />
-          <h3 className="text-[10px] font-pixel uppercase tracking-[0.2em] text-white">
+          <h3 className="text-xs lg:text-sm font-pixel uppercase tracking-[0.2em] text-white">
             Status da Biblioteca
           </h3>
         </div>
@@ -34,7 +34,7 @@ export const BlogSidebar: React.FC<BlogSidebarProps> = ({ posts }) => {
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2 text-stone-500">
               <BookOpen className="w-3 h-3" />
-              <span className="text-[9px] font-mono uppercase tracking-tighter">Artigos</span>
+              <span className="text-[11px] font-mono uppercase tracking-tighter">Artigos</span>
             </div>
             <span className="text-xs font-bold text-accent">{posts.length}</span>
           </div>
@@ -42,7 +42,7 @@ export const BlogSidebar: React.FC<BlogSidebarProps> = ({ posts }) => {
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2 text-stone-500">
               <Hash className="w-3 h-3" />
-              <span className="text-[9px] font-mono uppercase tracking-tighter">Conhecimento</span>
+              <span className="text-[11px] font-mono uppercase tracking-tighter">Conhecimento</span>
             </div>
             <span className="text-xs font-bold text-accent">~{totalReadTime} MIN</span>
           </div>
@@ -64,7 +64,7 @@ export const BlogSidebar: React.FC<BlogSidebarProps> = ({ posts }) => {
               <h4 className="text-xs font-bold text-stone-300 group-hover:text-accent transition-colors line-clamp-2 leading-tight">
                 {post.title}
               </h4>
-              <div className="flex items-center gap-2 text-[9px] font-mono text-stone-600 uppercase">
+              <div className="flex items-center gap-2 text-[11px] font-mono text-stone-600 uppercase">
                 <span>{post.date}</span>
                 <span>&middot;</span>
                 <span>{post.readTime}</span>
@@ -76,7 +76,7 @@ export const BlogSidebar: React.FC<BlogSidebarProps> = ({ posts }) => {
 
       {/* Tech Stack Indicator */}
       <div className="pt-8 border-t border-white/5">
-        <p className="text-[8px] font-mono text-stone-800 uppercase tracking-[0.3em] leading-relaxed">
+        <p className="text-[10px] font-mono text-stone-800 uppercase tracking-[0.3em] leading-relaxed">
           Indexado via Astro Content Collections v5.0
           <br />
           Renderizado em React 18.3

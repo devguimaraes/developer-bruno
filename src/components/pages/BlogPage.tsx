@@ -1,9 +1,9 @@
 import type React from "react";
 import { useEffect, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Calendar, Clock, Terminal } from "lucide-react";
+import { ArrowRight, Calendar, Clock, Filter, Terminal } from "lucide-react";
 import type { BlogPost } from "@/types/blog";
-import { SearchBar, BlogFilters, BlogSidebar } from "../blog";
+import { SearchBar, BlogFilters, BlogFiltersDrawer, BlogSidebar } from "../blog";
 
 const POSTS_PER_PAGE = 6;
 
@@ -15,6 +15,7 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
   const [visibleCount, setVisibleCount] = useState(POSTS_PER_PAGE);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -41,9 +42,9 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
   const hasMore = visibleCount < filteredPosts.length;
 
   return (
-    <div className="bg-black min-h-screen pt-20 sm:pt-24 overflow-x-clip">
+    <div className="bg-black min-h-screen pt-[72px] sm:pt-[88px] overflow-x-clip">
       <div className="container mx-auto px-4 sm:px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr_250px] gap-12 xl:gap-20 max-w-7xl mx-auto py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr_280px] gap-12 xl:gap-20 max-w-7xl mx-auto py-12">
           {/* Column 1: Filters (Desktop) */}
           <aside className="hidden lg:block">
             <div className="sticky top-32">
@@ -64,7 +65,7 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
             <header className="mb-16">
               <div className="flex items-center gap-3 mb-6">
                 <Terminal className="w-5 h-5 text-accent" />
-                <p className="type-mono text-[10px] text-white/40 uppercase tracking-[0.3em]">
+                <p className="type-mono text-[11px] text-white/40 uppercase tracking-[0.3em]">
                   {"// BIBLIOTECA_DE_INSIGHTS"}
                 </p>
               </div>
@@ -74,9 +75,21 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
                 CONHECIMENTO
               </h1>
 
-              {/* Mobile Search/Filter could go here */}
+              {/* Mobile Search + Filter */}
               <div className="lg:hidden space-y-4 mb-8">
-                <SearchBar value={searchQuery} onChange={setSearchQuery} />
+                <div className="flex gap-2">
+                  <div className="flex-1">
+                    <SearchBar value={searchQuery} onChange={setSearchQuery} />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setFiltersOpen(true)}
+                    className="flex items-center gap-2 px-4 min-h-[48px] border-2 border-white/10 text-white hover:border-accent/40 transition-colors pressable"
+                  >
+                    <Filter size={16} />
+                    <span className="type-mono text-[11px]">Filtrar</span>
+                  </button>
+                </div>
               </div>
             </header>
 
@@ -94,7 +107,7 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
                     className="group flex flex-col h-full border-2 border-white/5 hover:border-accent/40 transition-all bg-stone-950/20 shadow-none hover:shadow-brutal"
                   >
                     <div className="p-3 border-b border-white/5 flex justify-between items-center bg-stone-950/40">
-                      <span className="type-mono text-[9px] text-stone-500 uppercase tracking-widest truncate">
+                      <span className="type-mono text-[11px] text-stone-500 uppercase tracking-widest truncate">
                         {post.slug}.md
                       </span>
                       <div className="flex gap-1">
@@ -104,7 +117,7 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
                     </div>
 
                     <div className="p-5 flex-grow flex flex-col">
-                      <div className="flex gap-4 type-mono text-[9px] text-stone-500 uppercase tracking-widest mb-4">
+                      <div className="flex gap-4 type-mono text-[11px] text-stone-500 uppercase tracking-widest mb-4">
                         <span className="flex items-center gap-1">
                           <Calendar className="w-3 h-3" />
                           {post.date}
@@ -115,11 +128,11 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
                         </span>
                       </div>
 
-                      <h2 className="text-lg font-bold text-white leading-tight mb-3 group-hover:text-accent transition-colors">
+                      <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-white leading-tight mb-3 group-hover:text-accent transition-colors">
                         {post.title}
                       </h2>
 
-                      <p className="text-stone-400 text-xs mb-6 line-clamp-3 flex-grow leading-relaxed">
+                      <p className="text-stone-400 text-xs md:text-sm mb-6 line-clamp-3 flex-grow leading-relaxed">
                         {post.excerpt}
                       </p>
 
@@ -128,7 +141,7 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
                           {post.tags.slice(0, 2).map(tag => (
                             <span
                               key={tag}
-                              className="border border-white/10 text-stone-500 px-2 py-0.5 type-mono text-[8px] uppercase tracking-widest"
+                              className="border border-white/10 text-stone-500 px-2 py-0.5 type-mono text-[11px] uppercase tracking-widest"
                             >
                               {tag}
                             </span>
@@ -136,7 +149,7 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
                         </div>
                         <a
                           href={`/blog/${post.slug}`}
-                          className="inline-flex items-center gap-1 type-mono text-[10px] text-accent/80 hover:text-accent transition-colors uppercase tracking-widest shrink-0"
+                          className="inline-flex items-center gap-1 type-mono text-accent/80 hover:text-accent transition-colors uppercase tracking-widest shrink-0 px-2 py-1 min-h-[44px]"
                         >
                           Acessar <ArrowRight className="w-3 h-3" />
                         </a>
@@ -160,7 +173,7 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
                 <button
                   type="button"
                   onClick={() => setVisibleCount(prev => prev + POSTS_PER_PAGE)}
-                  className="border-2 border-white/20 text-white hover:border-accent hover:text-accent hover:shadow-brutal px-10 py-4 type-mono text-[10px] uppercase tracking-widest transition-all bg-black"
+                  className="border-2 border-white/20 text-white hover:border-accent hover:text-accent hover:shadow-brutal px-10 py-4 type-mono uppercase tracking-widest transition-all bg-black pressable"
                 >
                   Carregar mais ({filteredPosts.length - visibleCount} restantes)
                 </button>
@@ -177,6 +190,18 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
           </aside>
         </div>
       </div>
+
+      {/* Mobile Filters Drawer */}
+      <BlogFiltersDrawer
+        categories={categories}
+        activeCategory={activeCategory}
+        onCategoryChange={cat => {
+          setActiveCategory(cat);
+          setVisibleCount(POSTS_PER_PAGE);
+        }}
+        isOpen={filtersOpen}
+        onClose={() => setFiltersOpen(false)}
+      />
     </div>
   );
 };

@@ -24,14 +24,14 @@ const LatestPosts: React.FC<LatestPostsProps> = ({ posts }) => {
           <p className="type-mono text-white/40">{t(locale, "blog.subtitle")}</p>
           <a
             href="/blog"
-            className="type-mono text-[10px] text-white/60 hover:text-accent transition-colors uppercase tracking-widest flex items-center gap-1"
+            className="type-mono text-white/60 hover:text-accent transition-colors uppercase tracking-widest flex items-center gap-1"
           >
             {t(locale, "blog.view_all")} <ArrowRight className="w-3 h-3" />
           </a>
         </div>
       </div>
 
-      <div className="flex flex-col gap-16 sm:gap-20 md:gap-24 w-full max-w-5xl mx-auto px-8 sm:px-16 md:px-24">
+      <div className="flex flex-col gap-16 sm:gap-20 md:gap-24 w-full max-w-5xl xl:max-w-7xl mx-auto px-8 sm:px-16 md:px-24">
         {posts.map(post => (
           <motion.a
             key={post.slug}
@@ -43,7 +43,7 @@ const LatestPosts: React.FC<LatestPostsProps> = ({ posts }) => {
             className="group block"
           >
             <div className="flex flex-col gap-4">
-              <div className="flex items-center gap-4 type-mono text-[10px] text-white/40 uppercase tracking-widest">
+              <div className="flex items-center gap-4 type-mono text-white/40 uppercase tracking-widest">
                 <span className="flex items-center gap-1">
                   <Calendar className="w-3 h-3" />
                   {post.date}
@@ -61,7 +61,7 @@ const LatestPosts: React.FC<LatestPostsProps> = ({ posts }) => {
                 {post.tags.slice(0, 3).map(tag => (
                   <span
                     key={tag}
-                    className="border border-white/20 text-white/60 px-3 py-1 rounded-full type-mono text-[9px] uppercase tracking-widest"
+                    className="border border-white/20 text-white/60 px-3 py-1 rounded-full type-mono text-[11px] md:text-xs uppercase tracking-widest"
                   >
                     {tag}
                   </span>

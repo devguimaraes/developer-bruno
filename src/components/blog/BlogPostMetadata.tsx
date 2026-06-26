@@ -18,7 +18,7 @@ export const BlogPostMetadata: React.FC<BlogPostMetadataProps> = ({ post }) => {
         <div className="space-y-1">
           <div className="flex items-center gap-2 text-stone-500">
             <Calendar className="w-3.5 h-3.5" />
-            <span className="text-[10px] uppercase font-mono tracking-tighter">Data</span>
+            <span className="text-[11px] uppercase font-mono tracking-tighter">Data</span>
           </div>
           <p className="font-bold text-stone-200">{post.date}</p>
         </div>
@@ -26,7 +26,7 @@ export const BlogPostMetadata: React.FC<BlogPostMetadataProps> = ({ post }) => {
         <div className="space-y-1">
           <div className="flex items-center gap-2 text-stone-500">
             <Clock className="w-3.5 h-3.5" />
-            <span className="text-[10px] uppercase font-mono tracking-tighter">Leitura</span>
+            <span className="text-[11px] uppercase font-mono tracking-tighter">Leitura</span>
           </div>
           <p className="font-bold text-stone-200">{post.readTime}</p>
         </div>
@@ -34,7 +34,7 @@ export const BlogPostMetadata: React.FC<BlogPostMetadataProps> = ({ post }) => {
         <div className="space-y-1">
           <div className="flex items-center gap-2 text-stone-500">
             <User className="w-3.5 h-3.5" />
-            <span className="text-[10px] uppercase font-mono tracking-tighter">Autor</span>
+            <span className="text-[11px] uppercase font-mono tracking-tighter">Autor</span>
           </div>
           <p className="font-bold text-stone-200">{post.author}</p>
         </div>
@@ -42,13 +42,13 @@ export const BlogPostMetadata: React.FC<BlogPostMetadataProps> = ({ post }) => {
         <div className="space-y-2">
           <div className="flex items-center gap-2 text-stone-500">
             <TagIcon className="w-3.5 h-3.5" />
-            <span className="text-[10px] uppercase font-mono tracking-tighter">Tags</span>
+            <span className="text-[11px] uppercase font-mono tracking-tighter">Tags</span>
           </div>
           <div className="flex flex-wrap gap-2">
             {post.tags?.map(tag => (
               <span
                 key={tag}
-                className="text-[10px] font-bold border border-white/20 px-2 py-0.5 hover:border-accent hover:text-accent cursor-pointer transition-colors uppercase tracking-wider"
+                className="text-[11px] font-bold border border-white/20 px-2 py-0.5 hover:border-accent hover:text-accent cursor-pointer transition-colors uppercase tracking-wider"
               >
                 {tag}
               </span>

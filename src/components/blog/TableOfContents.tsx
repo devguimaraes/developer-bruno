@@ -29,7 +29,7 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({ headings }) =>
           <li key={heading.id} style={{ paddingLeft: `${(heading.depth - 2) * 12}px` }}>
             <a
               href={`#${heading.id}`}
-              className={`group relative flex items-start text-sm transition-all duration-300 ${
+              className={`group relative flex items-start text-sm lg:text-base transition-all duration-300 ${
                 activeId === heading.id
                   ? "text-accent font-bold translate-x-1"
                   : "text-stone-500 hover:text-stone-300"

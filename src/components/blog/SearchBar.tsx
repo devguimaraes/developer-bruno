@@ -14,7 +14,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ value, onChange }) => (
       value={value}
       onChange={e => onChange(e.target.value)}
       placeholder="BUSCAR INSIGHTS..."
-      className="w-full bg-black border-2 border-white/20 p-3 pl-10 text-[10px] font-mono uppercase tracking-widest focus:border-accent outline-none transition-colors placeholder:text-stone-700"
+      className="w-full bg-black border-2 border-white/20 p-3 pl-10 text-[12px] font-mono uppercase tracking-widest focus:border-accent outline-none transition-colors placeholder:text-stone-700 min-h-[48px]"
     />
     <div className="absolute right-3 top-1/2 -translate-y-1/2 flex gap-1 opacity-0 group-focus-within:opacity-100 transition-opacity">
       <div className="w-1 h-1 bg-accent" />

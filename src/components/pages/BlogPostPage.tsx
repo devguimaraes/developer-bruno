@@ -9,6 +9,7 @@ import {
   BlogPostNavigation,
   BlogPostBackButton,
   TableOfContents,
+  TableOfContentsAccordion,
   BlogPostMetadata,
 } from "../blog";
 
@@ -61,8 +62,8 @@ const BlogPostPage: React.FC<BlogPostPageClientProps> = ({
         style={{ scaleX }}
       />
 
-      <div className="container mx-auto px-4 sm:px-6 py-20 sm:py-24 md:py-28">
-        <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr_250px] gap-12 xl:gap-20 max-w-7xl mx-auto">
+      <div className="container mx-auto px-4 sm:px-6 pt-[72px] pb-20 sm:pt-[88px] sm:pb-24 md:pb-28">
+        <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr_280px] gap-12 xl:gap-20 max-w-7xl mx-auto">
           {/* Column 1: Navigation (Desktop Only) */}
           <aside className="hidden lg:block">
             <div className="sticky top-32">
@@ -77,6 +78,9 @@ const BlogPostPage: React.FC<BlogPostPageClientProps> = ({
             </div>
 
             <BlogPostHeader post={post} />
+
+            {/* Mobile Table of Contents Accordion */}
+            <TableOfContentsAccordion headings={headings} />
 
             {/* Mobile Metadata */}
             <div className="lg:hidden">
