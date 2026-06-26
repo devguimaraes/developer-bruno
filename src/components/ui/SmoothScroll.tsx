@@ -8,7 +8,7 @@ export const SmoothScroll: React.FC<{ children: React.ReactNode }> = ({ children
       duration: 1.2,
       easing: t => Math.min(1, 1.001 - 2 ** (-10 * t)),
       smoothWheel: true,
-      touchMultiplier: 2,
+      touchMultiplier: 1.2,
     });
 
     let rafId: number;

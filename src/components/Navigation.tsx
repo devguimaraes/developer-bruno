@@ -32,7 +32,7 @@ const Navigation: React.FC = () => {
       <nav className="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
         <GlassSurface
           className={`w-full transition-all duration-500`}
-          height={scrolled ? (isMobile ? 64 : 80) : isMobile ? 72 : 90}
+          height={isMobile ? 64 : 80}
           backgroundOpacity={scrolled ? 0.3 : 0.05}
           blur={scrolled ? 20 : 0}
           brightness={scrolled ? 30 : 50}
@@ -43,7 +43,7 @@ const Navigation: React.FC = () => {
           <div className="flex justify-between items-center w-full h-full px-4 sm:px-6 md:px-8 max-w-[1800px] mx-auto">
             <Magnetic>
               <a href="/" className="flex items-center gap-2 sm:gap-4 group py-2">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-white/20 group-hover:border-accent transition-all duration-300">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full overflow-hidden border-2 border-white/20 group-hover:border-accent transition-all duration-300">
                   <img
                     src="/avatar-bruno-bg.jpg"
                     alt="Bruno Guimarães"
@@ -63,7 +63,7 @@ const Navigation: React.FC = () => {
                 <Magnetic key={link.name}>
                   <a
                     href={link.href}
-                    className="type-mono text-[10px] tracking-[0.2em] hover:text-accent transition-colors text-white/80 hover:text-white uppercase font-bold"
+                    className="type-mono tracking-[0.2em] hover:text-accent transition-colors text-white/80 hover:text-white uppercase font-bold"
                   >
                     {link.name}
                   </a>
@@ -75,7 +75,7 @@ const Navigation: React.FC = () => {
                     key={l}
                     type="button"
                     onClick={() => setLocale(l)}
-                    className={`type-mono text-[10px] tracking-[0.2em] uppercase transition-colors ${
+                    className={`type-mono tracking-[0.2em] uppercase transition-colors ${
                       l === locale ? "text-accent font-bold" : "text-white/60 hover:text-white"
                     }`}
                   >
@@ -87,7 +87,7 @@ const Navigation: React.FC = () => {
 
             <button
               type="button"
-              className="md:hidden flex flex-col items-end gap-1.5 p-2"
+              className="md:hidden flex flex-col items-end justify-center gap-1.5 p-2 min-h-[44px] min-w-[44px] pressable"
               onClick={() => setIsOpen(true)}
               aria-label={t(locale, "nav.menu_open")}
             >

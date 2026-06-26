@@ -154,7 +154,7 @@ const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
               ))}
             </div>
 
-            <div className="mt-4 flex gap-8 menu-item pb-8">
+            <div className="mt-4 flex gap-4 menu-item pb-8">
               {contactData.socialLinks.map(link => {
                 const Icon = socialIconMap[link.id];
                 if (!Icon) return null;
@@ -164,9 +164,9 @@ const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
                     href={link.href}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-white/60 hover:text-white transition-colors"
+                    className="text-white/60 hover:text-white transition-colors p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center pressable"
                   >
-                    <Icon size={28} />
+                    <Icon size={24} />
                   </a>
                 );
               })}
