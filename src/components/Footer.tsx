@@ -18,13 +18,13 @@ const Footer: React.FC = () => {
             </span>
           </div>
 
-          <div className="flex items-center justify-center sm:justify-end gap-6 sm:gap-10 md:gap-12 type-ui-label text-sm sm:text-base md:text-lg text-stone-400 w-full md:w-auto">
+          <div className="flex items-center justify-center sm:justify-end gap-6 sm:gap-10 md:gap-12 type-ui-label text-sm sm:text-base md:text-lg lg:text-xl text-stone-400 w-full md:w-auto">
             <div className="flex flex-col items-end">
               <span>LAT: 22.9068° S</span>
               <span>LON: 43.1729° W</span>
             </div>
-            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white pixel-border-sm flex items-center justify-center text-black shrink-0">
-              <span className="font-pixel text-lg">BG</span>
+            <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-white pixel-border-sm flex items-center justify-center text-black shrink-0">
+              <span className="font-pixel text-sm sm:text-lg">BG</span>
             </div>
           </div>
         </div>

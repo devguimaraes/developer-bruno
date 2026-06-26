@@ -25,13 +25,13 @@ const InfoBar: React.FC = () => {
 
   return (
     <section className="py-12 border-y border-white/10 bg-black text-white overflow-hidden">
-      <div className="w-full flex flex-col md:flex-row justify-between items-center gap-6 px-6 md:px-12 text-[10px] type-mono uppercase tracking-[0.2em]">
+      <div className="w-full flex flex-col md:flex-row justify-between items-center gap-4 px-6 md:px-12 type-mono uppercase tracking-[0.2em]">
         <div className="flex flex-wrap items-center gap-8 justify-center md:justify-start">
           <span className="font-bold">&copy; {new Date().getFullYear()}</span>
           <LiveClock />
           <span className="font-bold">Rio de Janeiro, BR</span>
 
-          <div className="flex items-center gap-5 ml-2 border-l border-white/10 pl-8">
+          <div className="flex items-center gap-3 ml-2 border-l border-white/10 pl-6">
             {contactData.socialLinks.map(link => {
               const Icon = socialIconMap[link.id];
               if (!Icon) return null;
@@ -41,10 +41,10 @@ const InfoBar: React.FC = () => {
                   href={link.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="hover:text-accent transition-colors duration-300 transform hover:scale-110"
+                  className="hover:text-accent transition-colors duration-300 p-2 min-h-[44px] min-w-[44px] flex items-center justify-center pressable"
                   title={link.label}
                 >
-                  <Icon size={16} />
+                  <Icon size={20} />
                 </a>
               );
             })}
