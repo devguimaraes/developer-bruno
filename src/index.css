@@ -25,6 +25,15 @@
     overflow-x: hidden;
   }
 
+  html {
+    touch-action: manipulation;
+    font-size: 16px;
+  }
+
+  main {
+    overflow-x: hidden;
+  }
+
   body {
     @apply font-sans;
     text-rendering: optimizeLegibility;
@@ -55,7 +64,7 @@
   }
 
   .type-mono {
-    @apply font-silkscreen text-[10px] tracking-[0.2em] opacity-70 uppercase;
+    @apply font-silkscreen text-[12px] md:text-[13px] lg:text-sm tracking-[0.2em] opacity-70 uppercase;
   }
 
   .type-display-hero {
@@ -134,6 +143,14 @@
     @apply pointer-events-none absolute inset-0 z-10;
     background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.05) 50%);
     background-size: 100% 4px;
+  }
+
+  .pressable {
+    transition: transform 160ms ease-out;
+  }
+
+  .pressable:active {
+    transform: scale(0.97);
   }
 }
 
