@@ -6,8 +6,6 @@ import GlitchImage from "@/components/ui/GlitchImage";
 import TextReveal from "@/components/ui/TextReveal";
 import Magnetic from "@/components/ui/Magnetic";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { useLocale } from "@/hooks/useLocale";
-import { t } from "@/lib/i18n";
 
 interface ProjectItemProps {
   project: Project;
@@ -16,7 +14,6 @@ interface ProjectItemProps {
 export const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
   const containerRef = useRef(null);
   const reducedMotion = useReducedMotion();
-  const locale = useLocale();
 
   const { scrollYProgress } = useScroll({
     target: containerRef,

@@ -1,17 +1,17 @@
 ---
 // src/layouts/Layout.astro
-import '@/index.css';
-import '@/styles/markdown.css';
-import { siteConfig } from '@/config/site';
+import "@/index.css";
+import "@/styles/markdown.css";
+import { siteConfig } from "@/config/site";
 
-import Navigation from '@/components/Navigation.tsx';
-import Footer from '@/components/Footer.tsx';
+import Navigation from "@/components/Navigation.tsx";
+import Footer from "@/components/Footer.tsx";
 
-import { Toaster } from '@/components/ui/sonner.tsx';
-import GrainOverlay from '@/components/ui/GrainOverlay';
-import PixelLoader from '@/components/ui/PixelLoader';
-import CustomCursor from '@/components/ui/CustomCursor';
-import SmoothScroll from '@/components/ui/SmoothScroll';
+import { Toaster } from "@/components/ui/sonner.tsx";
+import GrainOverlay from "@/components/ui/GrainOverlay";
+import PixelLoader from "@/components/ui/PixelLoader";
+import CustomCursor from "@/components/ui/CustomCursor";
+import SmoothScroll from "@/components/ui/SmoothScroll";
 
 interface Props {
   title?: string;
@@ -23,10 +23,20 @@ interface Props {
   articlePublishedTime?: string;
 }
 
-const { title, description, image, structuredData, ogType, noindex = false, articlePublishedTime } = Astro.props;
+const {
+  title,
+  description,
+  image,
+  structuredData,
+  ogType,
+  noindex = false,
+  articlePublishedTime,
+} = Astro.props;
 
 // Meta values with fallbacks
-const finalTitle = title ? `${title} | ${siteConfig.title}` : `${siteConfig.title} | Desenvolvedor Web RJ`;
+const finalTitle = title
+  ? `${title} | ${siteConfig.title}`
+  : `${siteConfig.title} | Desenvolvedor Web RJ`;
 const finalDesc = description || siteConfig.description;
 const finalImage = image ? new URL(image, Astro.url) : new URL(siteConfig.seo.image, Astro.url);
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -95,7 +105,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
           document.documentElement.lang = locale === 'en' ? 'en' : 'pt-BR';
           var ogLocale = document.querySelector('meta[property="og:locale"]');
           if (ogLocale) ogLocale.content = locale === 'en' ? 'en_US' : 'pt_BR';
-        } catch(e) {}
+        } catch(e) { /* localStorage pode não estar disponível (ambientes restritivos, SSR) */ }
       })();
     </script>
   </head>

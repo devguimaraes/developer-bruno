@@ -8,7 +8,7 @@ interface BlogSidebarProps {
 
 export const BlogSidebar: React.FC<BlogSidebarProps> = ({ posts }) => {
   const totalReadTime = posts.reduce((acc, p) => {
-    const time = parseInt(p.readTime) || 5;
+    const time = parseInt(p.readTime, 10) || 5;
     return acc + time;
   }, 0);
 

@@ -16,6 +16,7 @@ export default defineConfig({
         defaultLocale: 'pt-br',
         locales: {
           'pt-br': 'pt-BR',
+          'en': 'en-US',
         }
       }
     }),
