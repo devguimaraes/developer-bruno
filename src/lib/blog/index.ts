@@ -14,7 +14,7 @@ export function generateSlug(filename: string): string {
     .replace(/(^-|-$)/g, "");
 }
 
-function convertBrazilianDate(dateStr: string): Date {
+export function convertBrazilianDate(dateStr: string): Date {
   const months: Record<string, number> = {
     JAN: 0,
     FEV: 1,

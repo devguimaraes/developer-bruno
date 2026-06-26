@@ -1,41 +1,35 @@
 ---
-import Layout from '@/layouts/Layout.astro';
-import BlogPostPageClient from '@/components/pages/BlogPostPage';
-import { getCollection, render } from 'astro:content';
-import { generateSlug, toISODate } from '@/lib/blog';
-import type { BlogPost } from '@/types/blog';
+import Layout from "@/layouts/Layout.astro";
+import BlogPostPageClient from "@/components/pages/BlogPostPage";
+import { getCollection, render } from "astro:content";
+import { generateSlug, toISODate, convertBrazilianDate } from "@/lib/blog";
+import type { BlogPost } from "@/types/blog";
 
 export async function getStaticPaths() {
-  const entries = await getCollection('blog');
-  const months: Record<string, number> = {
-    JAN: 0, FEV: 1, MAR: 2, ABR: 3, MAI: 4, JUN: 5,
-    JUL: 6, AGO: 7, SET: 8, OUT: 9, NOV: 10, DEZ: 11,
-  };
-  const parseDate = (d: string) => {
-    const parts = d.split(' ');
-    if (parts.length === 3) return new Date(Number(parts[2]), months[parts[1].toUpperCase()] ?? 0, Number(parts[0]));
-    return new Date(d);
-  };
-  const sortedEntries = [...entries].sort((a, b) => parseDate(b.data.date).getTime() - parseDate(a.data.date).getTime());
+  const entries = await getCollection("blog");
+  const sortedEntries = [...entries].sort(
+    (a, b) =>
+      convertBrazilianDate(b.data.date).getTime() - convertBrazilianDate(a.data.date).getTime()
+  );
 
   // Render all entries in parallel first
   const renderedEntries = await Promise.all(
-    sortedEntries.map(async (entry) => ({
+    sortedEntries.map(async entry => ({
       entry,
-      rendered: await render(entry)
+      rendered: await render(entry),
     }))
   );
 
-  const toBlogPost = (entry: typeof entries[number]): BlogPost => ({
+  const toBlogPost = (entry: (typeof entries)[number]): BlogPost => ({
     id: entry.id,
     slug: generateSlug(entry.id),
     title: entry.data.title,
     date: entry.data.date,
-    readTime: entry.data.readTime || '5 min',
+    readTime: entry.data.readTime || "5 min",
     tags: entry.data.tags,
     author: entry.data.author,
     excerpt: entry.data.excerpt,
-    content: entry.body || '',
+    content: entry.body || "",
     image: entry.data.image,
     featured: entry.data.featured,
   });
@@ -54,10 +48,10 @@ export async function getStaticPaths() {
 
 const { post, previous, next, Content, headings } = Astro.props;
 const structuredDataImage = post.image
-  ? (post.image.startsWith('http://') || post.image.startsWith('https://')
-      ? post.image
-      : `https://devguimaraes.com.br${post.image}`)
-  : 'https://devguimaraes.com.br/og-image.webp';
+  ? post.image.startsWith("http://") || post.image.startsWith("https://")
+    ? post.image
+    : `https://devguimaraes.com.br${post.image}`
+  : "https://devguimaraes.com.br/og-image.webp";
 ---
 
 <Layout
