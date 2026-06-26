@@ -59,7 +59,7 @@ const Hero: React.FC = () => {
           {/* Massive Raster Headline */}
           <motion.h1
             style={{ y: reducedMotion ? 0 : textY }}
-            className="type-raster-hero text-[15vw] lg:text-[11vw] leading-[0.8] mb-8 select-none"
+            className="type-raster-hero text-[15vw] md:text-[13vw] lg:text-[11vw] leading-[0.8] mb-8 select-none"
           >
             <div className="flex flex-col items-center">
               <span className="block opacity-100 text-white leading-[0.8]">FRONT END</span>
@@ -69,7 +69,7 @@ const Hero: React.FC = () => {
 
           <motion.div
             style={{ y: reducedMotion ? 0 : textY }}
-            className="mb-12 type-mono tracking-[0.12em] text-[8px] sm:text-[10px] md:text-xs opacity-100 uppercase text-white"
+            className="mb-12 type-mono tracking-[0.12em] opacity-100 uppercase text-white"
           >
             React, Next.js & TypeScript | SEO & DX
           </motion.div>
@@ -79,23 +79,23 @@ const Hero: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8 }}
-            className="flex flex-col md:flex-row items-center gap-12 sm:gap-24 w-full justify-between mt-12 border-t border-white/10 pt-8"
+            className="flex flex-col md:flex-row items-center gap-12 sm:gap-24 md:gap-48 w-full justify-between mt-12 border-t border-white/10 pt-8"
           >
-            <div className="text-left max-w-[320px]">
+            <div className="text-left max-w-[320px] md:max-w-md">
               <p
-                className="type-mono text-[10px] mb-4 opacity-60 uppercase text-accent"
+                className="type-mono text-[11px] mb-4 opacity-60 uppercase text-accent"
                 title="Based in Rio de Janeiro, Brazil"
               >
                 {t(locale, "hero.established")}
               </p>
-              <p className="text-stone-200 text-sm leading-relaxed">
+              <p className="text-stone-200 text-sm md:text-base leading-relaxed">
                 {t(locale, "hero.description")}
               </p>
             </div>
 
             <div className="flex flex-col items-end">
               <div
-                className="type-mono text-[10px] opacity-60 mb-2 text-white"
+                className="type-mono text-[11px] opacity-60 mb-2 text-white"
                 title="Scroll down to see more content"
               >
                 {t(locale, "hero.scroll")}
@@ -108,13 +108,13 @@ const Hero: React.FC = () => {
 
       {/* Decorative Matrix/Coordinate Elements */}
       <div
-        className="absolute top-28 left-4 sm:left-10 type-mono text-[8px] opacity-40 hidden md:block"
+        className="absolute top-28 left-4 sm:left-10 type-mono text-[10px] md:text-[11px] lg:text-xs opacity-30 md:opacity-40"
         title="Geographic coordinates: Rio de Janeiro, Brazil"
       >
         POS: 22.9068 S / 43.1729 W
       </div>
       <div
-        className="absolute bottom-1/4 right-10 type-mono text-[8px] opacity-20 hidden md:block vertical-text"
+        className="absolute bottom-1/4 right-4 sm:right-10 type-mono text-[10px] md:text-[11px] lg:text-xs opacity-15 md:opacity-20 vertical-text"
         title="Current portfolio version"
       >
         VER: 4.0.0_STABLE

@@ -25,14 +25,14 @@ const Projects: React.FC = () => {
 
       <div className="mb-32 md:mb-48 px-6 md:px-12">
         <h2
-          className="type-raster-section text-[10vw] md:text-[8vw] text-white"
+          className="type-raster-section text-[10vw] md:text-[8vw] lg:text-[7vw] text-white"
           title="Curated selection of my best projects"
         >
           {t(locale, "projects.heading")}
         </h2>
         <div className="flex justify-between items-end border-t border-white/10 pt-4 mt-4">
           <p className="type-mono">{t(locale, "projects.subtitle")}</p>
-          <p className="type-mono hidden md:block">
+          <p className="type-mono">
             {String(selectedWorks.length).padStart(2, "0")} {t(locale, "projects.total")}
           </p>
         </div>

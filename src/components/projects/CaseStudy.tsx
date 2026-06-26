@@ -63,7 +63,7 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 type-mono text-[10px] text-white/40 hover:text-accent transition-colors uppercase tracking-widest"
+              className="inline-flex items-center gap-2 type-mono text-white/40 hover:text-accent transition-colors uppercase tracking-widest py-2 px-1 min-h-[44px] pressable"
             >
               <ArrowLeft className="w-3 h-3" />
               {t(locale, "case.back")}
@@ -75,7 +75,7 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="inline-block bg-accent text-black type-mono text-[10px] font-black uppercase tracking-[0.15em] px-4 py-1.5 mb-4 shadow-[4px_4px_0_rgba(0,0,0,0.5)]"
+            className="inline-block bg-accent text-black type-mono text-[11px] font-black uppercase tracking-[0.15em] px-4 py-1.5 mb-4 shadow-[4px_4px_0_rgba(0,0,0,0.5)]"
           >
             {project.category}
           </motion.span>
@@ -85,7 +85,7 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="type-raster-section text-[clamp(3rem,10vw,7rem)] md:text-7xl lg:text-8xl text-white leading-[0.85] mix-blend-difference drop-shadow-[0_0_40px_rgba(0,0,0,0.8)] mb-4 max-w-[90vw]"
+            className="type-raster-section text-[clamp(3rem,10vw,7rem)] text-white leading-[0.85] mix-blend-difference drop-shadow-[0_0_40px_rgba(0,0,0,0.8)] mb-4 max-w-[90vw]"
           >
             {project.title}
           </motion.h1>
@@ -110,7 +110,7 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
             transition={{ duration: 2, repeat: Infinity }}
             className="w-px h-12 bg-gradient-to-b from-accent to-transparent"
           />
-          <span className="type-mono text-[8px] text-white/25 uppercase tracking-[0.3em]">
+          <span className="type-mono text-[10px] text-white/25 uppercase tracking-[0.3em]">
             SCROLL
           </span>
         </div>
@@ -120,7 +120,7 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
       {/*  QUICK CTA — Botões de ação logo após o hero                     */}
       {/* ================================================================ */}
       <section className="relative z-20">
-        <div className="container mx-auto px-6 max-w-5xl">
+        <div className="container mx-auto px-6 max-w-5xl xl:max-w-7xl">
           <motion.div
             {...sectionMotion}
             className="flex flex-col sm:flex-row gap-3 py-4 border-b border-white/10"
@@ -129,14 +129,14 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
               href={project.live}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center justify-center gap-3 bg-white text-black hover:bg-accent transition-colors px-6 py-3.5 type-mono text-[10px] uppercase tracking-widest font-bold"
+              className="inline-flex items-center justify-center gap-3 bg-white text-black hover:bg-accent transition-colors px-6 py-3.5 type-mono uppercase tracking-widest font-bold min-h-[48px] pressable"
             >
               <span>{t(locale, "case.visit_live")}</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </a>
             <a
               href={`mailto:${contactData.email}`}
-              className="inline-flex items-center justify-center gap-3 border border-white/10 text-white hover:border-accent/50 hover:text-accent transition-colors px-6 py-3.5 type-mono text-[10px] uppercase tracking-widest"
+              className="inline-flex items-center justify-center gap-3 border border-white/10 text-white hover:border-accent/50 hover:text-accent transition-colors px-6 py-3.5 type-mono uppercase tracking-widest min-h-[48px] pressable"
             >
               <span>{t(locale, "case.work_together")}</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
@@ -148,7 +148,7 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
       {/* ================================================================ */}
       {/*  CONTEXT — Editorial: descrição + problema                       */}
       {/* ================================================================ */}
-      <section className="container mx-auto px-6 py-14 md:py-20 max-w-5xl">
+      <section className="container mx-auto px-6 py-14 md:py-20 max-w-5xl xl:max-w-7xl">
         <motion.div {...sectionMotion}>
           {/* Label mono */}
           <div className="type-mono text-[10px] text-white/30 uppercase tracking-widest mb-8">
@@ -190,7 +190,7 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
       {/* ================================================================ */}
       {/*  STACK — Grid visual de tecnologias                              */}
       {/* ================================================================ */}
-      <section className="container mx-auto px-6 py-14 md:py-20 max-w-5xl">
+      <section className="container mx-auto px-6 py-14 md:py-20 max-w-5xl xl:max-w-7xl">
         <motion.div {...sectionMotion}>
           {/* Label mono */}
           <div className="type-mono text-[10px] text-white/30 uppercase tracking-widest mb-8">
@@ -204,7 +204,7 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
             </h2>
 
             {/* Grid de cards de tecnologia */}
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
               {project.tech.map((tech, i) => (
                 <motion.div
                   key={tech}
@@ -237,7 +237,7 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
       {/*  IMPACT — Resultados mensuráveis (condicional)                   */}
       {/* ================================================================ */}
       {project.impact && (
-        <section className="container mx-auto px-6 py-14 md:py-20 max-w-5xl">
+        <section className="container mx-auto px-6 py-14 md:py-20 max-w-5xl xl:max-w-7xl">
           <motion.div {...sectionMotion}>
             <div className="type-mono text-[10px] text-white/30 uppercase tracking-widest mb-8">
               {t(locale, "case.impact")}
@@ -261,7 +261,7 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
       {/*  RELATED POSTS — Artigos do blog (condicional)                   */}
       {/* ================================================================ */}
       {relatedPosts.length > 0 && (
-        <section className="container mx-auto px-6 py-14 md:py-20 max-w-5xl">
+        <section className="container mx-auto px-6 py-14 md:py-20 max-w-5xl xl:max-w-7xl">
           <motion.div {...sectionMotion}>
             <div className="type-mono text-[10px] text-white/30 uppercase tracking-widest mb-8">
               {t(locale, "case.related")}
@@ -308,9 +308,9 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
       {/* ================================================================ */}
       {/*  FINAL CTA — Fechamento com email                                */}
       {/* ================================================================ */}
-      <section className="container mx-auto px-6 py-16 md:py-24 max-w-5xl">
+      <section className="container mx-auto px-6 py-16 md:py-24 max-w-5xl xl:max-w-7xl">
         <motion.div {...sectionMotion} className="text-center">
-          <div className="type-mono text-[10px] text-white/30 uppercase tracking-widest mb-6">
+          <div className="type-mono text-[11px] text-white/30 uppercase tracking-widest mb-6">
             {t(locale, "case.next")}
           </div>
 

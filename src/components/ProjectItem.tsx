@@ -62,17 +62,17 @@ export const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
           {/* Título Centralizado sobre a Imagem */}
           <div className="absolute inset-0 z-25 flex items-center justify-center pointer-events-none">
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_25%,rgba(0,0,0,0.65)_100%)]" />
-            <h3 className="relative type-raster-section text-5xl sm:text-7xl md:text-8xl text-white leading-none tracking-tighter mix-blend-difference drop-shadow-[0_0_40px_rgba(0,0,0,0.8)] px-6 text-center">
+            <h3 className="relative type-raster-section text-[clamp(2rem,8vw,3.5rem)] sm:text-7xl md:text-8xl lg:text-9xl text-white leading-none tracking-tighter mix-blend-difference drop-shadow-[0_0_40px_rgba(0,0,0,0.8)] px-6 text-center">
               <TextReveal text={project.title} />
             </h3>
           </div>
 
           {/* Label Técnico Flutuante */}
-          <div className="absolute bottom-6 right-6 z-30 flex flex-col items-end gap-2">
-            <div className="bg-accent text-black px-3 py-1 type-mono text-[9px] font-black uppercase shadow-brutal">
+          <div className="absolute bottom-4 right-4 md:bottom-6 md:right-6 z-30 flex flex-col items-end gap-2">
+            <div className="bg-accent text-black px-2 py-0.5 md:px-3 md:py-1 type-mono text-[9px] md:text-[11px] font-black uppercase shadow-brutal">
               {project.category}
             </div>
-            <div className="bg-white text-black px-2 py-0.5 type-mono text-[8px] font-bold">
+            <div className="hidden md:flex bg-white text-black px-2 py-0.5 type-mono text-[11px] font-bold">
               CORE_ENGINE_V4.0
             </div>
           </div>
@@ -92,7 +92,7 @@ export const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
             {project.tech.map((tech: string) => (
               <span
                 key={tech}
-                className="text-[9px] text-white font-mono border border-white/20 px-2.5 py-1 uppercase tracking-[0.2em] bg-white/5 backdrop-blur-sm"
+                className="text-[11px] md:text-xs text-white font-mono border border-white/10 px-2.5 py-1 uppercase tracking-[0.2em] bg-white/5 backdrop-blur-sm"
               >
                 {tech}
               </span>
@@ -103,7 +103,7 @@ export const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
             <Magnetic>
               <a
                 href={`/projetos/${project.slug ?? project.id}`}
-                className="group/btn flex items-center gap-4 type-mono text-[10px] text-white uppercase tracking-[0.3em] hover:text-accent transition-all"
+                className="group/btn flex items-center gap-4 type-mono text-white uppercase tracking-[0.3em] hover:text-accent transition-all pressable"
               >
                 <span className="border-b border-white/20 pb-1 group-hover/btn:border-accent">
                   Visualizar Caso

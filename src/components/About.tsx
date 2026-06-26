@@ -57,7 +57,7 @@ const About: React.FC = () => {
               />
             </div>
             {/* Technical Tag */}
-            <div className="absolute -bottom-4 right-4 bg-accent text-black px-4 py-1.5 type-mono text-[10px] font-black uppercase tracking-widest z-10 shadow-brutal">
+            <div className="absolute -bottom-4 right-4 bg-accent text-black px-4 py-1.5 type-mono font-black uppercase tracking-widest z-10 shadow-brutal">
               IDENT_STREAM_03
             </div>
           </div>
@@ -69,7 +69,7 @@ const About: React.FC = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, ease: "circOut" }}
-              className="type-raster-section text-[12vw] md:text-[7.5vw] leading-[0.75] uppercase tracking-tighter mb-10 mix-blend-difference"
+              className="type-raster-section text-[12vw] md:text-[8vw] lg:text-[7vw] leading-[0.75] uppercase tracking-tighter mb-10 mix-blend-difference"
             >
               BRUNO
               <br />
@@ -81,14 +81,14 @@ const About: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="max-w-lg md:ml-12 border-l-2 border-accent pl-10 py-2 pointer-events-auto"
+              className="max-w-lg md:max-w-xl lg:max-w-2xl md:ml-12 border-l-2 border-accent pl-10 py-2 pointer-events-auto"
             >
               <p className="text-xl md:text-2xl leading-[1.5] font-serif italic text-white/95 text-left mb-8 drop-shadow-sm">
                 {t(locale, "about.bio")}
               </p>
 
               <div className="flex flex-col gap-2">
-                <p className="type-mono text-[10px] text-accent uppercase tracking-[0.4em] font-bold">
+                <p className="type-mono text-[11px] text-accent uppercase tracking-[0.4em] font-bold">
                   {t(locale, "about.based")}
                 </p>
                 <div className="flex gap-2">
@@ -112,7 +112,7 @@ const About: React.FC = () => {
                   size={28}
                   className="text-white group-hover:text-accent transition-colors"
                 />
-                <span className="type-mono text-[10px] md:text-sm opacity-50 group-hover:opacity-100 transition-opacity uppercase tracking-[0.2em]">
+                <span className="type-mono text-[11px] md:text-sm opacity-50 group-hover:opacity-100 transition-opacity uppercase tracking-[0.2em]">
                   {tech.name}
                 </span>
                 <span className="text-white/10 text-xl font-black mx-4 select-none">/</span>
