@@ -177,7 +177,9 @@ function main() {
   console.log("=".repeat(60));
 
   if (hasErrors) {
-    console.log("\n⚠️  Some budgets are exceeded. See docs/audit/media-performance-2026-05-05.md for recommendations.");
+    console.log(
+      "\n⚠️  Some budgets are exceeded. See docs/audit/media-performance-2026-05-05.md for recommendations."
+    );
   } else {
     console.log("\n✅ All budgets are within limits.");
   }

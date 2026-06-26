@@ -10,9 +10,9 @@ export function parseReadingTime(readTime?: string): number | undefined {
 
 export function countWords(markdown: string): number {
   return markdown
-    .replace(/```[\s\S]*?```/g, ' ')
-    .replace(/`[^`]*`/g, ' ')
-    .replace(/[#>*_~-]+/g, ' ')
+    .replace(/```[\s\S]*?```/g, " ")
+    .replace(/`[^`]*`/g, " ")
+    .replace(/[#>*_~-]+/g, " ")
     .trim()
     .split(/\s+/)
     .filter(Boolean).length;

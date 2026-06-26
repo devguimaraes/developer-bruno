@@ -111,56 +111,152 @@
 
 /* Camada 1: Deslocamento para a esquerda das cores e recorte instável */
 @keyframes glitch-anim-1 {
-  0% { clip-path: inset(20% 0 80% 0); transform: translate(-8px, 0); }
-  5% { clip-path: inset(10% 0 60% 0); transform: translate(5px, 0); }
-  10% { clip-path: inset(80% 0 5% 0); transform: translate(-10px, 0); }
-  15% { clip-path: inset(40% 0 40% 0); transform: translate(8px, 0); }
-  20% { clip-path: inset(0 0 0 0); transform: translate(0, 0); opacity: 0; }
-  100% { clip-path: inset(0 0 0 0); transform: translate(0, 0); opacity: 0; }
+  0% {
+    clip-path: inset(20% 0 80% 0);
+    transform: translate(-8px, 0);
+  }
+  5% {
+    clip-path: inset(10% 0 60% 0);
+    transform: translate(5px, 0);
+  }
+  10% {
+    clip-path: inset(80% 0 5% 0);
+    transform: translate(-10px, 0);
+  }
+  15% {
+    clip-path: inset(40% 0 40% 0);
+    transform: translate(8px, 0);
+  }
+  20% {
+    clip-path: inset(0 0 0 0);
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    transform: translate(0, 0);
+    opacity: 0;
+  }
 }
 
 /* Camada 2: Deslocamento p/ direita (distorção base) */
 @keyframes glitch-anim-2 {
-  0% { clip-path: inset(10% 0 30% 0); transform: translate(8px, 0); }
-  5% { clip-path: inset(50% 0 10% 0); transform: translate(-6px, 0); }
-  10% { clip-path: inset(0 0 0 0); transform: translate(0, 0); opacity: 0; }
-  100% { clip-path: inset(0 0 0 0); transform: translate(0, 0); opacity: 0; }
+  0% {
+    clip-path: inset(10% 0 30% 0);
+    transform: translate(8px, 0);
+  }
+  5% {
+    clip-path: inset(50% 0 10% 0);
+    transform: translate(-6px, 0);
+  }
+  10% {
+    clip-path: inset(0 0 0 0);
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    transform: translate(0, 0);
+    opacity: 0;
+  }
 }
 
 /* Camada 3: Imagem Pura com cortes crus */
 @keyframes glitch-anim-3 {
-  0% { clip-path: inset(30% 0 50% 0); transform: translate(15px, 0); }
-  4% { clip-path: inset(60% 0 20% 0); transform: translate(-15px, 0); }
-  8% { clip-path: inset(0 0 0 0); transform: translate(0, 0); opacity: 0; }
-  100% { clip-path: inset(0 0 0 0); transform: translate(0, 0); opacity: 0; }
+  0% {
+    clip-path: inset(30% 0 50% 0);
+    transform: translate(15px, 0);
+  }
+  4% {
+    clip-path: inset(60% 0 20% 0);
+    transform: translate(-15px, 0);
+  }
+  8% {
+    clip-path: inset(0 0 0 0);
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    transform: translate(0, 0);
+    opacity: 0;
+  }
 }
 
 /* Células Corrompidas 1: Magenta / Pink */
 @keyframes glitch-block-anim-1 {
-  0% { clip-path: inset(10% 80% 50% 10%); opacity: 0.8; }
-  2% { clip-path: inset(70% 10% 10% 60%); opacity: 0.6; }
-  4% { opacity: 0; }
-  50% { opacity: 0; }
-  51% { clip-path: inset(20% 60% 60% 10%); opacity: 0.7; }
-  53% { opacity: 0; }
-  78% { opacity: 0; }
-  79% { clip-path: inset(80% 30% 5% 40%); opacity: 0.9; }
-  81% { opacity: 0; }
-  100% { opacity: 0; }
+  0% {
+    clip-path: inset(10% 80% 50% 10%);
+    opacity: 0.8;
+  }
+  2% {
+    clip-path: inset(70% 10% 10% 60%);
+    opacity: 0.6;
+  }
+  4% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  51% {
+    clip-path: inset(20% 60% 60% 10%);
+    opacity: 0.7;
+  }
+  53% {
+    opacity: 0;
+  }
+  78% {
+    opacity: 0;
+  }
+  79% {
+    clip-path: inset(80% 30% 5% 40%);
+    opacity: 0.9;
+  }
+  81% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 /* Células Corrompidas 2: Branco de flash de tela */
 @keyframes glitch-block-anim-2 {
-  0% { clip-path: inset(40% 20% 40% 20%); opacity: 0.4; }
-  1% { clip-path: inset(80% 50% 10% 10%); opacity: 0.2; }
-  2% { opacity: 0; }
-  45% { opacity: 0; }
-  46% { clip-path: inset(10% 70% 80% 5%); opacity: 0.5; }
-  47% { opacity: 0; }
-  90% { opacity: 0; }
-  91% { clip-path: inset(30% 10% 30% 80%); opacity: 0.3; }
-  92% { opacity: 0; }
-  100% { opacity: 0; }
+  0% {
+    clip-path: inset(40% 20% 40% 20%);
+    opacity: 0.4;
+  }
+  1% {
+    clip-path: inset(80% 50% 10% 10%);
+    opacity: 0.2;
+  }
+  2% {
+    opacity: 0;
+  }
+  45% {
+    opacity: 0;
+  }
+  46% {
+    clip-path: inset(10% 70% 80% 5%);
+    opacity: 0.5;
+  }
+  47% {
+    opacity: 0;
+  }
+  90% {
+    opacity: 0;
+  }
+  91% {
+    clip-path: inset(30% 10% 30% 80%);
+    opacity: 0.3;
+  }
+  92% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

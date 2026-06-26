@@ -8,7 +8,7 @@ import { siteConfig } from "@/config/site";
 type BlogEntry = CollectionEntry<"blog">;
 
 export function getStaticPaths() {
-  return selectedWorks.map((project) => ({
+  return selectedWorks.map(project => ({
     params: { slug: project.slug },
     props: { project },
   }));
@@ -28,16 +28,14 @@ if (project.relatedPosts && project.relatedPosts.length > 0) {
     .filter(Boolean);
 } else {
   // Fall back to tag-matching algorithm
-  const projectKeywords = [...project.tech, ...(project.tags || [])].map((k) =>
-    k.toLowerCase(),
-  );
+  const projectKeywords = [...project.tech, ...(project.tags || [])].map(k => k.toLowerCase());
 
   // Score posts by how many tags overlap with project keywords
   const scoredPosts = blogEntries
-    .map((entry) => {
-      const blogTags = entry.data.tags.map((t) => t.toLowerCase());
-      const score = blogTags.filter((tag) =>
-        projectKeywords.some((kw) => tag.includes(kw) || kw.includes(tag)),
+    .map(entry => {
+      const blogTags = entry.data.tags.map(t => t.toLowerCase());
+      const score = blogTags.filter(tag =>
+        projectKeywords.some(kw => tag.includes(kw) || kw.includes(tag))
       ).length;
       return { entry, score };
     })
@@ -48,7 +46,7 @@ if (project.relatedPosts && project.relatedPosts.length > 0) {
   relatedBlogEntries = scoredPosts.map(({ entry }) => entry);
 }
 
-const relatedPosts = relatedBlogEntries.map((entry) => ({
+const relatedPosts = relatedBlogEntries.map(entry => ({
   id: entry.id,
   slug: entry.id,
   title: entry.data.title,

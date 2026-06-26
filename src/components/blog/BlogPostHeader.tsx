@@ -1,6 +1,6 @@
-import { motion } from 'framer-motion';
-import { Calendar, Clock } from 'lucide-react';
-import type { BlogPost } from '@/types/blog';
+import { motion } from "framer-motion";
+import { Calendar, Clock } from "lucide-react";
+import type { BlogPost } from "@/types/blog";
 
 interface BlogPostHeaderProps {
   post: BlogPost;
@@ -31,7 +31,7 @@ export function BlogPostHeader({ post }: BlogPostHeaderProps) {
 
       {post.tags.length > 0 && (
         <div className="flex flex-wrap gap-2">
-          {post.tags.map((tag) => (
+          {post.tags.map(tag => (
             <span
               key={tag}
               className="border border-white text-white px-3 py-1.5 rounded-full type-mono text-[10px] uppercase tracking-widest"

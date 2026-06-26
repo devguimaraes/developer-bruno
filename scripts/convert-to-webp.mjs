@@ -38,10 +38,7 @@ async function processDirectory(dir) {
       const outputPath = join(dir, `${parse(file).name}.webp`);
 
       try {
-        const { original, converted } = await convertToWebP(
-          inputPath,
-          outputPath
-        );
+        const { original, converted } = await convertToWebP(inputPath, outputPath);
         totalOriginal += original;
         totalConverted += converted;
       } catch (err) {
@@ -64,16 +61,15 @@ async function main() {
 
   const totalOriginal = assets.totalOriginal + pub.totalOriginal;
   const totalConverted = assets.totalConverted + pub.totalConverted;
-  const totalSavings = totalOriginal > 0
-    ? (((totalOriginal - totalConverted) / totalOriginal) * 100).toFixed(1)
-    : "0.0";
+  const totalSavings =
+    totalOriginal > 0
+      ? (((totalOriginal - totalConverted) / totalOriginal) * 100).toFixed(1)
+      : "0.0";
 
   console.log("\n========================================");
   console.log(
     `📊 Total: ${(totalOriginal / 1024 / 1024).toFixed(2)}MB -> ${(
-      totalConverted /
-      1024 /
-      1024
+      totalConverted / 1024 / 1024
     ).toFixed(2)}MB`
   );
   console.log(

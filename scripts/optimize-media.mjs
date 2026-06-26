@@ -32,18 +32,16 @@ async function main() {
     }
     const base = name.replace(/\.(png|jpe?g)$/i, "");
     const output = path.join(publicDir, `${base}.webp`);
-    await sharp(input)
-      .webp({ quality: 82, effort: 6, smartSubsample: true })
-      .toFile(output);
+    await sharp(input).webp({ quality: 82, effort: 6, smartSubsample: true }).toFile(output);
     const inStat = fs.statSync(input);
     const outStat = fs.statSync(output);
     console.log(
-      `${name} → ${base}.webp (${(inStat.size / 1024).toFixed(0)} KB → ${(outStat.size / 1024).toFixed(0)} KB)`,
+      `${name} → ${base}.webp (${(inStat.size / 1024).toFixed(0)} KB → ${(outStat.size / 1024).toFixed(0)} KB)`
     );
   }
 }
 
-main().catch((e) => {
+main().catch(e => {
   console.error(e);
   process.exit(1);
 });

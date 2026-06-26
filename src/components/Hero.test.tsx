@@ -5,7 +5,9 @@ import Hero from "./Hero";
 // Mock do GlassSurface
 vi.mock("@/components/ui/GlassSurface", () => ({
   default: ({ children, className }: { children: React.ReactNode; className?: string }) => (
-    <div data-testid="glass-surface" className={className}>{children}</div>
+    <div data-testid="glass-surface" className={className}>
+      {children}
+    </div>
   ),
 }));
 
