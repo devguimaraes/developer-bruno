@@ -3,20 +3,14 @@ import Hero from "@/components/Hero";
 import Projects from "@/components/Projects";
 import About from "@/components/About";
 import EngineeringPractices from "@/components/EngineeringPractices";
-import LatestPosts from "@/components/pages/LatestPosts";
 import InfoBar from "@/components/InfoBar";
 import SocialIcons from "@/components/SocialIcons";
 import SectionEntrance from "@/components/ui/SectionEntrance";
 import { contactData } from "@/config/site";
 import { useLocale } from "@/hooks/useLocale";
 import { t } from "@/lib/i18n";
-import type { BlogPost } from "@/types/blog";
 
-interface IndexProps {
-  latestPosts?: BlogPost[];
-}
-
-const Index: React.FC<IndexProps> = ({ latestPosts = [] }) => {
+const Index: React.FC = () => {
   const locale = useLocale();
 
   return (
@@ -30,12 +24,6 @@ const Index: React.FC<IndexProps> = ({ latestPosts = [] }) => {
       </SectionEntrance>
 
       <InfoBar />
-
-      {latestPosts.length > 0 && (
-        <SectionEntrance id="blog">
-          <LatestPosts posts={latestPosts} />
-        </SectionEntrance>
-      )}
 
       <SectionEntrance id="about">
         <About />

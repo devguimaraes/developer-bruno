@@ -1,31 +1,8 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import Index from "@/components/pages/Index";
-import { getCollection } from "astro:content";
-import { generateSlug, convertBrazilianDate } from "@/lib/blog";
-import type { BlogPost } from "@/types/blog";
 import { siteConfig } from "@/config/site";
 import { getAllTechnologies } from "@/data/skills";
-
-const entries = await getCollection("blog");
-
-const posts: BlogPost[] = entries.map(entry => ({
-  id: entry.id,
-  slug: generateSlug(entry.id),
-  title: entry.data.title,
-  date: entry.data.date,
-  readTime: entry.data.readTime || "5 min",
-  tags: entry.data.tags,
-  author: entry.data.author,
-  excerpt: entry.data.excerpt,
-  content: "",
-}));
-
-posts.sort((a, b) => {
-  return convertBrazilianDate(b.date).getTime() - convertBrazilianDate(a.date).getTime();
-});
-
-const latestPosts = posts.slice(0, 3);
 
 // Schema.org structured data
 const personSchema = {
@@ -74,5 +51,5 @@ const structuredData = [personSchema, webSiteSchema];
   description="Desenvolvedor Front-End especializado em React, TypeScript e interfaces modernas. Criação de sites e softwares de alta performance no Rio de Janeiro e em todo o Brasil."
   structuredData={structuredData}
 >
-  <Index latestPosts={latestPosts} client:load />
+  <Index client:load />
 </Layout>
