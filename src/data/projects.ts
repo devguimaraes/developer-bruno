@@ -1,9 +1,4 @@
 import type { Project } from "@/types";
-import agenciaMultiBr from "@/assets/agencia-multi-br.webp";
-import engerod from "@/assets/engerod.webp";
-import semogrj from "@/assets/semogrj.webp";
-import luisFelipePereira from "@/assets/luis-felipe-pereira.webp";
-import moviesBremen from "@/assets/movies-bremen.png";
 
 /**
  * Projects data with external links and proper categorization
@@ -24,7 +19,7 @@ const rawProjects = [
     tags: ["marketing", "web-design", "seo", "branding"] as const,
     relatedPosts: ["engenharia-interface-2026", "react-server-components"] as const,
     previewAnimation: "grid-scan",
-    image: agenciaMultiBr,
+    image: "/agencia-multi-br.webp",
     bannerImage: "/banner-multi-macbook.webp",
     slug: "agencia-multi-br",
     role: "Front-End Lead & UI/UX Developer",
@@ -46,7 +41,7 @@ const rawProjects = [
     featured: true,
     tags: ["engenharia", "institucional", "infraestrutura", "corporativo"] as const,
     previewAnimation: "faulty-terminal",
-    image: engerod,
+    image: "/engerod.webp",
     role: "Implementação front-end + integração com CMS WordPress",
     context:
       "Empresa de engenharia com 50+ anos de tradição precisava modernizar sua presença digital mantendo a seriedade e credibilidade do setor.",
@@ -66,7 +61,7 @@ const rawProjects = [
     featured: true,
     tags: ["logistica", "maritimo", "internacional", "b2b"] as const,
     previewAnimation: "pixel-blast",
-    image: semogrj,
+    image: "/semogrj.webp",
     role: "WordPress/PHP + estruturação de UX e SEO on-page",
     context:
       "Empresa de logística marítima com presença global precisava de um site que comunicasse escala e profissionalismo para clientes B2B internacionais.",
@@ -86,7 +81,7 @@ const rawProjects = [
     featured: true,
     tags: ["arquitetura", "design", "portfolio", "premium"] as const,
     previewAnimation: "letter-glitch",
-    image: luisFelipePereira,
+    image: "/luis-felipe-pereira.webp",
     role: "Front-end lead — WordPress, design de galeria e experiência visual",
     context:
       "Arquiteto de alto padrão precisava de um portfólio visual que valorizasse seus projetos com a mesma sofisticação de suas obras.",
@@ -107,7 +102,7 @@ const rawProjects = [
     tags: ["entretenimento", "premium", "internacional", "adult"] as const,
     relatedPosts: ["react-19-server-components", "typescript-performance"] as const,
     previewAnimation: "pixel-blast",
-    image: moviesBremen,
+    image: "/movies-bremen.png",
     bannerImage: "/banner-movies-event-house-bremen.webp",
     slug: "movies-bremen",
     role: "Full-Stack Developer & UI/UX Designer",

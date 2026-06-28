@@ -47,3 +47,7 @@ gha-creds-*.json
 .gemini/settings.json
 
 .pi/
+
+# Design sync build artifacts
+.design-sync/compiled.css
+ds-bundle/

@@ -1,0 +1,21 @@
+{
+  "projectId": "5cb37a44-1b21-441a-9d27-e33fd0f7e570",
+  "pkg": "@dev-bruno/portfolio",
+  "globalName": "DevBrunoDS",
+  "shape": "package",
+  "srcDir": "src",
+  "buildCmd": "node_modules/.bin/tailwindcss -c tailwind.config.ts -i src/index.css -o .design-sync/compiled.css",
+  "entry": "src/design-system.ts",
+  "cssEntry": ".design-sync/compiled.css",
+  "componentSrcMap": {
+    "Navigation": "src/components/Navigation.tsx",
+    "Hero": "src/components/Hero.tsx",
+    "Projects": "src/components/Projects.tsx",
+    "About": "src/components/About.tsx",
+    "Footer": "src/components/Footer.tsx",
+    "InfoBar": "src/components/InfoBar.tsx",
+    "SocialIcons": "src/components/SocialIcons.tsx"
+  },
+  "readmeHeader": ".design-sync/conventions.md",
+  "runtimeFontPrefixes": ["Satoshi", "JetBrains Mono", "Jersey 15", "Cambria", "Silkscreen", "Newsreader"]
+}
