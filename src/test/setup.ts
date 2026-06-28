@@ -107,3 +107,8 @@ vi.mock("framer-motion", async () => {
     }),
   };
 });
+
+// Mock de Dither (React Three Fiber — WebGL não disponível em jsdom)
+vi.mock("@/components/backgrounds/Dither", () => ({
+  default: () => null,
+}));
