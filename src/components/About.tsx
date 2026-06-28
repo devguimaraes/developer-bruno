@@ -1,6 +1,6 @@
 import type React from "react";
 import { motion } from "framer-motion";
-import GlitchImage from "./ui/GlitchImage";
+import LiquidGlitchImage from "./ui/LiquidGlitchImage";
 import { t } from "@/lib/i18n";
 import { useLocale } from "@/hooks/useLocale";
 import {
@@ -48,7 +48,7 @@ const About: React.FC = () => {
           {/* Lado Esquerdo/Fundo: Imagem Editorial com Glitch */}
           <div className="md:absolute md:top-0 md:right-0 w-full md:w-[55%] aspect-[3/4] md:aspect-[4/5] z-0 grayscale opacity-40 md:opacity-100 group">
             <div className="w-full h-full overflow-hidden border-2 border-white/5 shadow-2xl transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-[1.02]">
-              <GlitchImage
+              <LiquidGlitchImage
                 src="/brunoGuimaraes.png"
                 alt="Bruno Guimarães"
                 className="w-full h-full object-cover"

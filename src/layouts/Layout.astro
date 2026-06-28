@@ -12,6 +12,7 @@ import GrainOverlay from "@/components/ui/GrainOverlay";
 import PixelLoader from "@/components/ui/PixelLoader";
 import CustomCursor from "@/components/ui/CustomCursor";
 import SmoothScroll from "@/components/ui/SmoothScroll";
+import { LiquidGlassProvider } from "@/components/ui/LiquidGlassProvider";
 
 interface Props {
   title?: string;
@@ -114,11 +115,13 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <CustomCursor client:load />
 
     <SmoothScroll client:load>
-      <Navigation client:load />
-      <main class="w-full relative">
-        <slot />
-      </main>
-      <Footer client:visible />
+      <LiquidGlassProvider client:load>
+        <Navigation client:load />
+        <main class="w-full relative">
+          <slot />
+        </main>
+        <Footer client:visible />
+      </LiquidGlassProvider>
     </SmoothScroll>
 
     <Toaster client:load />

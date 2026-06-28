@@ -7,7 +7,7 @@ import { socialIconMap } from "@/lib/socialIcons";
 import { setLocale } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
 import { useLocale } from "@/hooks/useLocale";
-import GlassSurface from "./GlassSurface";
+import { LiquidGlassLens } from "./LiquidGlassLens";
 
 interface StaggeredMenuItem {
   label: string;
@@ -102,13 +102,17 @@ const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
         ref={menuRef}
         className={`fixed inset-0 z-[90] flex flex-col ${isOpen ? "visible" : "invisible"}`}
       >
-        <GlassSurface
+        <LiquidGlassLens
           className="w-full h-full"
           height="100vh"
-          backgroundOpacity={0.8}
           blur={30}
-          brightness={20}
-          distortionScale={-200}
+          saturation={1.8}
+          frost={5}
+          refraction={0.04}
+          bevelDepth={0.15}
+          bevelWidth={0.08}
+          specular={true}
+          shadow={true}
         >
           <div
             ref={contentRef}
@@ -172,7 +176,7 @@ const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
               })}
             </div>
           </div>
-        </GlassSurface>
+        </LiquidGlassLens>
       </div>
     </div>
   );

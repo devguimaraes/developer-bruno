@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft, ArrowUpRight, ExternalLink, Calendar } from "lucide-react";
 import type { Project } from "@/types";
 import type { BlogPost } from "@/types/blog";
-import GlitchImage from "@/components/ui/GlitchImage";
+import LiquidGlitchImage from "@/components/ui/LiquidGlitchImage";
 import { t } from "@/lib/i18n";
 import { useLocale } from "@/hooks/useLocale";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
@@ -38,7 +38,7 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
         {/* Camada de fundo: imagem + efeitos */}
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 w-full h-full scale-110">
-            <GlitchImage
+            <LiquidGlitchImage
               src={heroBanner}
               alt={project.title}
               active={true}

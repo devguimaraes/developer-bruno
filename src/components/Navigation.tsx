@@ -1,6 +1,6 @@
 import type React from "react";
 import { useState, useEffect } from "react";
-import GlassSurface from "@/components/ui/GlassSurface";
+import { LiquidGlassLens } from "@/components/ui/LiquidGlassLens";
 import StaggeredMenu from "@/components/ui/StaggeredMenu";
 import { useIsMobile } from "@/hooks/use-mobile";
 import Magnetic from "@/components/ui/Magnetic";
@@ -30,15 +30,19 @@ const Navigation: React.FC = () => {
   return (
     <>
       <nav className="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
-        <GlassSurface
-          className={`w-full transition-all duration-500`}
+        <LiquidGlassLens
+          className="w-full transition-all duration-500"
           height={isMobile ? 64 : 80}
           backgroundOpacity={scrolled ? 0.3 : 0.05}
           blur={scrolled ? 20 : 0}
-          brightness={scrolled ? 30 : 50}
           saturation={1.8}
-          distortionScale={scrolled ? -150 : 0}
-          borderRadius={0}
+          // Props do liquidGL — transição via scroll
+          frost={scrolled ? 3 : 0.5}
+          refraction={scrolled ? 0.02 : 0.01}
+          bevelDepth={scrolled ? 0.08 : 0.04}
+          bevelWidth={0.15}
+          specular={true}
+          shadow={true}
         >
           <div className="flex justify-between items-center w-full h-full px-4 sm:px-6 md:px-8 max-w-[1800px] mx-auto">
             <Magnetic>
@@ -96,7 +100,7 @@ const Navigation: React.FC = () => {
               <div className="w-8 h-0.5 bg-white" />
             </button>
           </div>
-        </GlassSurface>
+        </LiquidGlassLens>
       </nav>
 
       {/* Mobile Staggered Menu */}

@@ -2,7 +2,7 @@ import type React from "react";
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import type { Project } from "@/types";
-import GlitchImage from "@/components/ui/GlitchImage";
+import LiquidGlitchImage from "@/components/ui/LiquidGlitchImage";
 import TextReveal from "@/components/ui/TextReveal";
 import Magnetic from "@/components/ui/Magnetic";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
@@ -50,7 +50,7 @@ export const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
             style={{ y: reducedMotion ? 0 : imageY, scale: 1.15 }}
             className="absolute inset-0 w-full h-full"
           >
-            <GlitchImage
+            <LiquidGlitchImage
               src={displayImage}
               alt={project.title}
               active={true}
