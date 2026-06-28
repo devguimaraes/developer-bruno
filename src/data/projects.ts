@@ -134,6 +134,28 @@ const rawProjects = [
     impact:
       "Portfólio online visualmente impactante que se tornou a principal ferramenta de autoridade e prospecção. A nova estrutura de informação focada em consultoria e expertise técnica elevou o padrão de percepção da marca, gerando leads mais qualificados para o mercado global.",
   },
+  {
+    id: "estudio-entre",
+    title: "Estúdio Entre",
+    category: "Hub Cultural / Independente",
+    description:
+      "A arte do encontro em código. Plataforma cultural completa que une programação de eventos, e-commerce, acervo literário e produção de conteúdo — um ecossistema digital gerenciado por CMS headless, onde a estética analógica encontra engenharia de performance.",
+    tech: ["Astro", "React", "Sanity CMS", "Tailwind CSS", "GSAP"] as const,
+    github: "https://github.com/devguimaraes/estudio-entre",
+    live: "https://www.estudioentre.com.br/",
+    color: "bg-[#3d1020]",
+    featured: true,
+    tags: ["cultura", "hub", "independente", "e-commerce", "cms"] as const,
+    previewAnimation: "letter-glitch",
+    image: "/capa-estudio-entre.webp",
+    bannerImage: "/capa-estudio-entre.webp",
+    slug: "estudio-entre",
+    role: "Full-Stack Developer & UI/UX Designer",
+    context:
+      "O Estúdio Entre nasceu do sonho de mãe e filha: criar um hub cultural independente no Méier, Rio de Janeiro, onde a palavra vira encontro. O desafio era traduzir essa essência — que une biblioterapia, oficinas, palestras, estúdio de produção audiovisual e um sebo literário — em uma plataforma digital coesa, onde cada pilar tivesse presença própria mas conversasse com o todo. O site precisava ser autogerido pela equipe, com agendamento de eventos, catálogo de produtos e integração com WhatsApp.",
+    impact:
+      "Plataforma digital completa com Sanity CMS headless permitindo gestão autônoma de eventos, exposições, galeria de fotos e produtos. O site combina performance de build estático (Astro SSG) com ilhas interativas (React), resultando em uma experiência fluida que reflete a atmosfera analógico-moderna do espaço físico. A presença digital fortaleceu o posicionamento do hub como referência cultural na Zona Norte carioca.",
+  },
 ] as const;
 
 /**
@@ -146,8 +168,15 @@ export const projects = (
   image: typeof project.image === "string" ? project.image : project.image?.src,
 })) as readonly Project[];
 
-const selectedProjectIds = ["movies-bremen", "agencia-multi-br", "danila-rizo-palmieri"];
+const selectedProjectIds = [
+  "estudio-entre",
+  "movies-bremen",
+  "agencia-multi-br",
+  "danila-rizo-palmieri",
+];
 
-export const selectedWorks = projects.filter(project => selectedProjectIds.includes(project.id));
+export const selectedWorks = selectedProjectIds
+  .map(id => projects.find(p => p.id === id))
+  .filter((p): p is Project => p !== undefined);
 
 export default projects;
