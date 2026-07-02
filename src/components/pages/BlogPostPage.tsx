@@ -6,28 +6,18 @@ import { initializeCodeBlocks } from "@/lib/blog/code-blocks";
 import {
   BlogPostHeader,
   BlogPostContent,
+  BlogPostTags,
   BlogPostNavigation,
   BlogPostBackButton,
-  TableOfContents,
-  TableOfContentsAccordion,
-  BlogPostMetadata,
 } from "../blog";
 
 interface BlogPostPageClientProps {
   post: BlogPost;
-  previous: BlogPost | null;
   next: BlogPost | null;
-  headings?: { id: string; text: string; depth: number }[];
   children?: React.ReactNode;
 }
 
-const BlogPostPage: React.FC<BlogPostPageClientProps> = ({
-  post,
-  previous,
-  next,
-  headings = [],
-  children,
-}) => {
+const BlogPostPage: React.FC<BlogPostPageClientProps> = ({ post, next, children }) => {
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -58,48 +48,18 @@ const BlogPostPage: React.FC<BlogPostPageClientProps> = ({
       className="w-full overflow-x-clip bg-black"
     >
       <motion.div
-        className="fixed top-0 left-0 right-0 h-1 bg-accent origin-left z-50 shadow-[0_2px_10px_rgba(251,191,36,0.3)]"
+        className="fixed top-0 left-0 right-0 h-[2px] bg-accent origin-left z-50 shadow-[0_2px_10px_rgba(251,191,36,0.3)]"
         style={{ scaleX }}
       />
 
-      <div className="container mx-auto px-4 sm:px-6 pt-[72px] pb-20 sm:pt-[88px] sm:pb-24 md:pb-28">
-        <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr_280px] gap-12 xl:gap-20 max-w-7xl mx-auto">
-          {/* Column 1: Navigation (Desktop Only) */}
-          <aside className="hidden lg:block">
-            <div className="sticky top-32">
-              <BlogPostBackButton />
-            </div>
-          </aside>
-
-          {/* Column 2: Main Content */}
-          <article className="min-w-0">
-            <div className="lg:hidden mb-8">
-              <BlogPostBackButton />
-            </div>
-
-            <BlogPostHeader post={post} />
-
-            {/* Mobile Table of Contents Accordion */}
-            <TableOfContentsAccordion headings={headings} />
-
-            {/* Mobile Metadata */}
-            <div className="lg:hidden">
-              <BlogPostMetadata post={post} />
-            </div>
-
-            <BlogPostContent>{children}</BlogPostContent>
-
-            <BlogPostNavigation previous={previous} next={next} />
-          </article>
-
-          {/* Column 3: Utilities (Desktop Only) */}
-          <aside className="hidden lg:block">
-            <div className="space-y-8">
-              <BlogPostMetadata post={post} />
-              <TableOfContents headings={headings} />
-            </div>
-          </aside>
-        </div>
+      <div className="pt-[72px] sm:pt-[88px]">
+        <article className="max-w-[720px] mx-auto px-6 sm:px-8 pt-8 sm:pt-12 lg:pt-16 pb-24">
+          <BlogPostBackButton />
+          <BlogPostHeader post={post} />
+          <BlogPostContent>{children}</BlogPostContent>
+          <BlogPostTags tags={post.tags} />
+          <BlogPostNavigation next={next} />
+        </article>
       </div>
     </motion.div>
   );

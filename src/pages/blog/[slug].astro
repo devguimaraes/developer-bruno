@@ -34,19 +34,17 @@ export async function getStaticPaths() {
     featured: entry.data.featured,
   });
 
-  return renderedEntries.map(({ entry, rendered: { Content, headings } }, index) => ({
+  return renderedEntries.map(({ entry, rendered: { Content } }, index) => ({
     params: { slug: generateSlug(entry.id) },
     props: {
       post: toBlogPost(entry),
-      previous: index > 0 ? toBlogPost(sortedEntries[index - 1]) : null,
       next: index < sortedEntries.length - 1 ? toBlogPost(sortedEntries[index + 1]) : null,
       Content,
-      headings,
     },
   }));
 }
 
-const { post, previous, next, Content, headings } = Astro.props;
+const { post, next, Content } = Astro.props;
 const structuredDataImage = post.image
   ? post.image.startsWith("http://") || post.image.startsWith("https://")
     ? post.image
@@ -90,13 +88,7 @@ const structuredDataImage = post.image
     keywords: post.tags?.join(', '),
   }}
 >
-  <BlogPostPageClient
-    post={post}
-    previous={previous}
-    next={next}
-    headings={headings}
-    client:load
-  >
+  <BlogPostPageClient post={post} next={next} client:load>
     <Content />
   </BlogPostPageClient>
 </Layout>

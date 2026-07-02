@@ -1,44 +1,84 @@
 import { motion } from "framer-motion";
-import { Calendar, Clock } from "lucide-react";
 import type { BlogPost } from "@/types/blog";
+import { BlogPostByline } from "./BlogPostByline";
 
 interface BlogPostHeaderProps {
   post: BlogPost;
 }
 
 export function BlogPostHeader({ post }: BlogPostHeaderProps) {
+  const category = post.tags[0] || "POST";
+
   return (
     <motion.header
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3 }}
-      className="mb-8 sm:mb-12"
     >
-      <h1 className="type-raster-section text-[clamp(1.9rem,8vw,3rem)] md:text-4xl lg:text-5xl text-white leading-tight mb-6">
+      {/* Meta row */}
+      <div className="flex flex-wrap items-center gap-3 mb-7">
+        <span
+          className="font-silkscreen uppercase bg-accent text-black"
+          style={{
+            fontSize: "9px",
+            fontWeight: 700,
+            letterSpacing: "0.20em",
+            padding: "3px 10px 2px",
+            lineHeight: 1,
+          }}
+        >
+          {category}
+        </span>
+        <span
+          className="font-silkscreen uppercase"
+          style={{ fontSize: "9px", letterSpacing: "0.18em", color: "rgba(255,255,255,0.32)" }}
+        >
+          {post.date}
+        </span>
+        <span style={{ fontSize: "9px", color: "rgba(255,255,255,0.18)" }}>·</span>
+        <span
+          className="font-silkscreen uppercase"
+          style={{ fontSize: "9px", letterSpacing: "0.18em", color: "rgba(255,255,255,0.32)" }}
+        >
+          {post.readTime} de leitura
+        </span>
+      </div>
+
+      {/* Título */}
+      <h1
+        className="font-pixel uppercase text-white"
+        style={{
+          fontSize: "clamp(38px, 8vw, 74px)",
+          lineHeight: 0.9,
+          letterSpacing: "-0.03em",
+          margin: "0 0 32px",
+        }}
+      >
         {post.title}
       </h1>
 
-      <div className="flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-b border-white/10 py-4 mb-6">
-        <div className="flex items-center gap-2 type-mono text-[10px] text-white/60 uppercase tracking-widest">
-          <Calendar className="w-3 h-3" />
-          <span>{post.date}</span>
-        </div>
-        <div className="flex items-center gap-2 type-mono text-[10px] text-white/60 uppercase tracking-widest">
-          <Clock className="w-3 h-3" />
-          <span>{post.readTime}</span>
-        </div>
-      </div>
+      {/* Lede */}
+      <p
+        style={{
+          fontFamily: "var(--font-serif)",
+          fontStyle: "italic",
+          fontSize: "22px",
+          lineHeight: 1.55,
+          color: "rgba(255,255,255,0.62)",
+          margin: "0 0 44px",
+        }}
+      >
+        {post.excerpt}
+      </p>
 
-      {post.tags.length > 0 && (
-        <div className="flex flex-wrap gap-2">
-          {post.tags.map(tag => (
-            <span
-              key={tag}
-              className="border border-white text-white px-3 py-1.5 rounded-full type-mono text-[10px] uppercase tracking-widest"
-            >
-              {tag}
-            </span>
-          ))}
+      <BlogPostByline post={post} />
+
+      {post.image && (
+        <div
+          className="w-full overflow-hidden mb-14"
+          style={{ aspectRatio: "16 / 9", border: "1px solid rgba(255,255,255,0.10)" }}
+        >
+          <img src={post.image} alt={post.title} className="w-full h-full object-cover" />
         </div>
       )}
     </motion.header>
