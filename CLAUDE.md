@@ -72,12 +72,12 @@ Single global layout at `src/layouts/Layout.astro`:
 
 Astro pages are thin wrappers. The real UI lives in React components:
 - `src/components/pages/Index.tsx` — Home with Hero, Projects, InfoBar, About, EngineeringPractices, LatestPosts, CTA
-- `src/components/pages/BlogPage.tsx` — Blog listing with SearchBar, BlogFilters, BlogSidebar, scroll spy
-- `src/components/pages/BlogPostPage.tsx` — Blog post with TableOfContents, progress bar, prev/next nav
+- `src/components/pages/BlogPage.tsx` — Blog listing with hero, sticky category filter bar (derived from `tags[0]`), post list, load-more pagination
+- `src/components/pages/BlogPostPage.tsx` — Single-column editorial reading page: back link, meta row, title, lede, byline, optional cover, markdown content, tags, next-post nav, reading progress bar
 - `src/components/pages/LatestPosts.tsx` — Latest posts section for homepage
 - `src/components/pages/NotFound.tsx` — 404 page
 - `src/components/projects/CaseStudy.tsx` — Case study page (hero, CTA, context, stack grid, impact, related posts)
-- `src/components/blog/` — Reusable blog sub-components (SearchBar, BlogFilters, BlogSidebar, TableOfContents, BlogPostMetadata, BlogPostHeader, BlogPostContent, BlogPostNavigation, skeletons, etc.)
+- `src/components/blog/` — Reusable blog post sub-components (`BlogPostHeader`, `BlogPostByline`, `BlogPostContent`, `BlogPostTags`, `BlogPostNavigation`, `BlogPostBackButton`)
 
 ### Content Layer
 
@@ -94,7 +94,6 @@ Astro pages are thin wrappers. The real UI lives in React components:
 **Hooks** (in `src/hooks/`):
 - `useLocale` — reactive pt/en locale switching (pub/sub store in `src/lib/i18n.ts`)
 - `useReducedMotion` — cross-cutting accessibility: animated components check this to reduce/disable motion
-- `useScrollSpy` — IntersectionObserver-based heading tracking for Table of Contents
 - `useMobile` — responsive breakpoint detection (768px)
 - `useWebVitals` — Core Web Vitals monitoring (LCP, CLS, INP, FCP, TTFB) with Brazilian market thresholds
 - `useVideoLoading` — lazy video loading on scroll intersection

@@ -221,12 +221,17 @@ Esse bloco funciona porque é simples. Evitar transformá-lo em formulário comp
 
 ### Estrutura
 
-- botão de retorno em linguagem de sistema
-- heading forte
-- metadata entre bordas
-- tags em cápsulas
+Layout editorial de coluna única (`max-w-720px`), sem sidebar e sem table of contents. Ordem vertical, em `src/components/pages/BlogPostPage.tsx`:
+
+- botão de retorno em linguagem de sistema (`← VOLTAR AO BLOG`)
+- meta row: badge de categoria (`tags[0]`, fundo dourado) + data + tempo de leitura
+- título gigante em `font-pixel`
+- lede itálica serifada (`excerpt` do post)
+- byline: avatar quadrado com iniciais, nome do autor e cargo fixo
+- cover opcional (só renderiza se o post tiver `image`; sem placeholder quando ausente)
 - conteúdo markdown em tema escuro editorial
-- navegação anterior/próximo com cards mínimos
+- tags em cápsulas de canto reto no rodapé do artigo
+- navegação apenas para o próximo post, como card único (`PRÓXIMO POST →` + título grande) — não há link para o post anterior
 
 ### Regras tipográficas do conteúdo
 
@@ -234,10 +239,11 @@ Baseadas em `src/styles/markdown.css`:
 
 - largura máxima confortável
 - entrelinha longa
-- headings brancos
+- headings brancos, `h2` em uppercase
 - acento dourado em links e detalhes
 - blocos de código com borda leve
 - blockquotes com filete à esquerda
+- listas não ordenadas com marcador customizado (seta `→` em vez de bullet)
 
 ## Footer
 
