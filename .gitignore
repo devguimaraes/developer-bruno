@@ -12,6 +12,8 @@ node_modules
 dist
 dist-ssr
 *.local
+.env
+.env.*
 
 # Editor directories and files
 .vscode/*
@@ -51,3 +53,4 @@ gha-creds-*.json
 # Design sync build artifacts
 .design-sync/compiled.css
 ds-bundle/
+brand-kit/
