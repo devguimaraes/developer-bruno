@@ -11,7 +11,7 @@ const Projects: React.FC = () => {
   const locale = useLocale();
 
   return (
-    <section id="projetos" className="relative pt-20 pb-40 bg-black">
+    <section id="projetos" className="relative py-20 md:py-32 lg:py-40 bg-black">
       {/* Inversion Flash Trigger: Pisca branco quando a seção entra em vista */}
       {!reducedMotion && (
         <motion.div
@@ -23,7 +23,7 @@ const Projects: React.FC = () => {
         />
       )}
 
-      <div className="mb-32 md:mb-48 px-6 md:px-12">
+      <div className="mb-16 md:mb-32 px-6 md:px-12">
         <h2
           className="type-raster-section text-[10vw] md:text-[8vw] lg:text-[7vw] text-white"
           title="Curated selection of my best projects"
@@ -39,7 +39,7 @@ const Projects: React.FC = () => {
       </div>
 
       {/* Container com Foco Total na Imagem e Ritmo Vertical Recalibrado */}
-      <div className="flex flex-col gap-16 sm:gap-24 md:gap-32 w-full max-w-7xl mx-auto px-6 sm:px-10 md:px-16">
+      <div className="flex flex-col gap-12 sm:gap-20 md:gap-28 w-full max-w-7xl mx-auto px-0 sm:px-10 md:px-16">
         {selectedWorks.map(project => (
           <ProjectItem key={project.id} project={project} />
         ))}

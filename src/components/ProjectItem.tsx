@@ -4,8 +4,9 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import type { Project } from "@/types";
 import LiquidGlitchImage from "@/components/ui/LiquidGlitchImage";
 import TextReveal from "@/components/ui/TextReveal";
-import Magnetic from "@/components/ui/Magnetic";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { t } from "@/lib/i18n";
+import { useLocale } from "@/hooks/useLocale";
 
 interface ProjectItemProps {
   project: Project;
@@ -14,6 +15,7 @@ interface ProjectItemProps {
 export const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
   const containerRef = useRef(null);
   const reducedMotion = useReducedMotion();
+  const locale = useLocale();
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -35,15 +37,26 @@ export const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
         </span>
       </div>
 
-      {/* 2. Composição Principal: Imagem Hero + Título Rasgado */}
+      {/* 2. Header: Categoria + Título (fora da imagem) */}
+      <div className="relative z-10 w-full max-w-6xl mx-auto mb-6 md:mb-8 px-4 md:px-0">
+        <div className="flex items-center gap-3 mb-3">
+          <span className="bg-accent text-black px-2 py-0.5 md:px-3 md:py-1 type-mono text-[9px] md:text-[11px] font-black uppercase shadow-brutal">
+            {project.category}
+          </span>
+        </div>
+        <h3 className="type-raster-section text-[clamp(2rem,8vw,3.5rem)] sm:text-7xl md:text-8xl lg:text-9xl text-white leading-none tracking-tighter">
+          <TextReveal text={project.title} />
+        </h3>
+      </div>
+
+      {/* 3. Imagem Limpa */}
       <div className="relative z-10 w-full max-w-6xl mx-auto">
-        {/* Container de Imagem: Título Centralizado sobre a Imagem */}
         <a
           href={`/projetos/${project.slug ?? project.id}`}
-          className="relative block w-full aspect-video md:aspect-[16/9] overflow-hidden bg-zinc-950 border-x-2 border-white/5 shadow-[0_40px_100px_rgba(0,0,0,0.9)]"
+          className="relative block w-full aspect-[4/3] md:aspect-[16/9] overflow-hidden bg-zinc-950 border border-white/[0.08] shadow-[0_40px_100px_rgba(0,0,0,0.9)] group/img"
         >
           {/* Scanlines & Grid Overlay */}
-          <div className="absolute inset-0 z-20 pointer-events-none opacity-20 group-hover:opacity-40 transition-opacity duration-700 scanlines" />
+          <div className="absolute inset-0 z-20 pointer-events-none opacity-20 group-hover/img:opacity-40 transition-opacity duration-600 ease-out scanlines" />
           <div className="absolute inset-0 z-20 pointer-events-none grid-technical opacity-10" />
 
           <motion.div
@@ -55,34 +68,19 @@ export const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
               alt={project.title}
               active={true}
               loadingLazy
-              className="w-full h-full grayscale-[0.3] group-hover:grayscale-0 transition-all duration-1000 opacity-90 group-hover:opacity-100 contrast-125"
+              className="w-full h-full contrast-125"
             />
           </motion.div>
 
-          {/* Título Centralizado sobre a Imagem */}
-          <div className="absolute inset-0 z-25 flex items-center justify-center pointer-events-none">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_25%,rgba(0,0,0,0.65)_100%)]" />
-            <h3 className="relative type-raster-section text-[clamp(2rem,8vw,3.5rem)] sm:text-7xl md:text-8xl lg:text-9xl text-white leading-none tracking-tighter mix-blend-difference drop-shadow-[0_0_40px_rgba(0,0,0,0.8)] px-6 text-center">
-              <TextReveal text={project.title} />
-            </h3>
-          </div>
-
-          {/* Label Técnico Flutuante */}
-          <div className="absolute bottom-4 right-4 md:bottom-6 md:right-6 z-30 flex flex-col items-end gap-2">
-            <div className="bg-accent text-black px-2 py-0.5 md:px-3 md:py-1 type-mono text-[9px] md:text-[11px] font-black uppercase shadow-brutal">
-              {project.category}
-            </div>
-            <div className="hidden md:flex bg-white text-black px-2 py-0.5 type-mono text-[11px] font-bold">
-              CORE_ENGINE_V4.0
-            </div>
-          </div>
+          {/* Hover: scale sutil */}
+          <div className="absolute inset-0 z-10 transition-transform duration-700 ease-out group-hover/img:scale-[1.02]" />
         </a>
       </div>
 
-      {/* 3. Rodapé Editorial: Legenda de Autoridade */}
+      {/* 4. Rodapé Editorial: Legenda de Autoridade */}
       <div className="relative z-20 mt-10 md:mt-12 w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 px-4 md:px-0">
         <div className="md:col-span-8 lg:col-span-7">
-          <p className="font-serif italic text-lg md:text-xl text-stone-200 leading-relaxed max-w-2xl">
+          <p className="font-serif italic text-lg md:text-xl text-white/70 leading-relaxed max-w-2xl">
             "{project.description}"
           </p>
         </div>
@@ -92,7 +90,7 @@ export const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
             {project.tech.map((tech: string) => (
               <span
                 key={tech}
-                className="text-[11px] md:text-xs text-white font-mono border border-white/10 px-2.5 py-1 uppercase tracking-[0.2em] bg-white/5 backdrop-blur-sm"
+                className="text-[11px] md:text-xs text-white font-mono border border-white/[0.08] px-2.5 py-1 uppercase tracking-[0.2em] bg-white/5 backdrop-blur-sm"
               >
                 {tech}
               </span>
@@ -100,25 +98,23 @@ export const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
           </div>
 
           <div className="flex items-center gap-10">
-            <Magnetic>
-              <a
-                href={`/projetos/${project.slug ?? project.id}`}
-                className="group/btn flex items-center gap-4 type-mono text-white uppercase tracking-[0.3em] hover:text-accent transition-all pressable"
-              >
-                <span className="border-b border-white/20 pb-1 group-hover/btn:border-accent">
-                  Visualizar Caso
-                </span>
-                <div className="w-8 h-px bg-white/40 group-hover/btn:w-12 group-hover/btn:bg-accent transition-all" />
-              </a>
-            </Magnetic>
+            <a
+              href={`/projetos/${project.slug ?? project.id}`}
+              className="group/btn flex items-center gap-4 type-mono text-white uppercase tracking-[0.3em] hover:text-accent transition-all pressable"
+            >
+              <span className="border-b border-white/20 pb-1 group-hover/btn:border-accent">
+                {t(locale, "projects.view_case")}
+              </span>
+              <div className="w-8 h-px bg-white/40 group-hover/btn:w-12 group-hover/btn:bg-accent transition-all" />
+            </a>
 
             {project.live && (
               <a
                 href={project.live}
                 target="_blank"
                 rel="noreferrer"
-                className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all duration-500"
-                title="Visitar Site Ao Vivo"
+                className="w-10 h-10 rounded-full border border-white/[0.08] flex items-center justify-center hover:bg-white hover:text-black transition-all duration-500 pressable"
+                title={t(locale, "projects.visit_live")}
               >
                 <div className="w-1.5 h-1.5 bg-accent rotate-45" />
               </a>

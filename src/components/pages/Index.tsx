@@ -2,8 +2,6 @@ import type React from "react";
 import Hero from "@/components/Hero";
 import Projects from "@/components/Projects";
 import About from "@/components/About";
-import EngineeringPractices from "@/components/EngineeringPractices";
-import InfoBar from "@/components/InfoBar";
 import SocialIcons from "@/components/SocialIcons";
 import SectionEntrance from "@/components/ui/SectionEntrance";
 import { contactData } from "@/config/site";
@@ -23,30 +21,24 @@ const Index: React.FC = () => {
         <Projects />
       </SectionEntrance>
 
-      <InfoBar />
-
       <SectionEntrance id="about">
         <About />
       </SectionEntrance>
 
-      <SectionEntrance id="practices">
-        <EngineeringPractices />
-      </SectionEntrance>
-
       <SectionEntrance
         id="contact"
-        className="py-40 flex flex-col items-center justify-center text-center"
+        className="pt-8 md:pt-16 lg:pt-24 pb-20 md:pb-32 lg:pb-40 flex flex-col items-center justify-center text-center"
       >
         <div className="type-mono mb-8">{t(locale, "cta.ready")}</div>
         <a
           href={`mailto:${contactData.email}`}
-          className="type-raster-section text-[12vw] hover:text-accent transition-colors cursor-pointer block"
-          title={t(locale, "cta.work_together")}
+          className="type-raster-section text-[12vw] hover:text-accent transition-colors cursor-pointer block pressable"
+          title={t(locale, "cta.lets_talk")}
         >
           {t(locale, "cta.lets_talk")}
         </a>
         <SocialIcons />
-        <div className="mt-20 type-mono opacity-50">{t(locale, "cta.copyright")}</div>
+        <div className="mt-20 type-mono text-white/40">{t(locale, "cta.copyright")}</div>
       </SectionEntrance>
     </div>
   );

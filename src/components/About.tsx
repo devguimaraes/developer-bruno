@@ -42,8 +42,11 @@ const About: React.FC = () => {
   // Badges removidas para layout editorial minimalista
 
   return (
-    <section id="about" className="min-h-screen pb-16 bg-black text-white overflow-hidden relative">
-      <div className="container mx-auto px-6 md:px-12 pt-24 md:pt-48">
+    <section
+      id="about"
+      className="relative pt-20 md:pt-32 lg:pt-40 pb-8 md:pb-12 lg:pb-16 bg-black text-white overflow-hidden"
+    >
+      <div className="container mx-auto px-6 md:px-12">
         <div className="relative">
           {/* Lado Esquerdo/Fundo: Imagem Editorial com Glitch */}
           <div className="md:absolute md:top-0 md:right-0 w-full md:w-[55%] aspect-[3/4] md:aspect-[4/5] z-0 grayscale opacity-40 md:opacity-100 group">
@@ -103,7 +106,7 @@ const About: React.FC = () => {
       </div>
 
       {/* Stack Ticker - Full Width */}
-      <div className="w-full relative mt-40 md:mt-64 py-20 border-y border-white/5 overflow-hidden bg-white/[0.01] backdrop-blur-[2px]">
+      <div className="w-full relative mt-28 md:mt-40 py-10 border-y border-white/[0.08] overflow-hidden bg-white/[0.01] backdrop-blur-[2px]">
         <div className="flex animate-marquee whitespace-nowrap">
           <div className="flex items-center gap-12">
             {marqueeTechs.map(tech => (

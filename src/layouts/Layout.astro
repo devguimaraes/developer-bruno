@@ -9,7 +9,6 @@ import Footer from "@/components/Footer.tsx";
 
 import { Toaster } from "@/components/ui/sonner.tsx";
 import GrainOverlay from "@/components/ui/GrainOverlay";
-import PixelLoader from "@/components/ui/PixelLoader";
 import CustomCursor from "@/components/ui/CustomCursor";
 import SmoothScroll from "@/components/ui/SmoothScroll";
 import { LiquidGlassProvider } from "@/components/ui/LiquidGlassProvider";
@@ -111,7 +110,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     </script>
   </head>
   <body class="bg-black">
-    <PixelLoader client:load />
     <CustomCursor client:load />
 
     <SmoothScroll client:load>
