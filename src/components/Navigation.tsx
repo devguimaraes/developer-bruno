@@ -3,9 +3,8 @@ import { useState, useEffect } from "react";
 import { LiquidGlassLens } from "@/components/ui/LiquidGlassLens";
 import StaggeredMenu from "@/components/ui/StaggeredMenu";
 import { useIsMobile } from "@/hooks/use-mobile";
-import Magnetic from "@/components/ui/Magnetic";
+import { Languages } from "lucide-react";
 import { t, setLocale } from "@/lib/i18n";
-import type { Locale } from "@/lib/i18n";
 import { useLocale } from "@/hooks/useLocale";
 
 const Navigation: React.FC = () => {
@@ -21,9 +20,9 @@ const Navigation: React.FC = () => {
   }, []);
 
   const navLinks = [
+    { name: t(locale, "nav.sobre"), href: "/#about" },
     { name: t(locale, "nav.projetos"), href: "/#projetos" },
     { name: t(locale, "nav.posts"), href: "/blog" },
-    { name: t(locale, "nav.sobre"), href: "/#about" },
     { name: t(locale, "nav.contato"), href: "/#contact" },
   ];
 
@@ -45,47 +44,41 @@ const Navigation: React.FC = () => {
           shadow={true}
         >
           <div className="flex justify-between items-center w-full h-full px-4 sm:px-6 md:px-8 max-w-[1800px] mx-auto">
-            <Magnetic>
-              <a href="/" className="flex items-center gap-2 sm:gap-4 group py-2">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full overflow-hidden border-2 border-white/20 group-hover:border-accent transition-all duration-300">
-                  <img
-                    src="/avatar-bruno-bg.jpg"
-                    alt="Bruno Guimarães"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <span className="type-mono text-sm sm:text-base font-black text-white tracking-widest uppercase items-center flex gap-3">
-                  BRUNO
-                  <span className="opacity-40 font-thin">/</span>
-                  GUIMARÃES
-                </span>
-              </a>
-            </Magnetic>
+            <a href="/" className="flex items-center gap-2 sm:gap-4 group py-2 pressable">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full overflow-hidden border-2 border-white/20 group-hover:border-accent transition-all duration-300">
+                <img
+                  src="/avatar-bruno-bg.jpg"
+                  alt="Bruno Guimarães"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <span className="type-mono text-sm sm:text-base font-black text-white tracking-widest uppercase items-center flex gap-3">
+                BRUNO
+                <span className="opacity-40 font-thin">/</span>
+                GUIMARÃES
+              </span>
+            </a>
 
             <div className="hidden md:flex items-center gap-12">
               {navLinks.map(link => (
-                <Magnetic key={link.name}>
-                  <a
-                    href={link.href}
-                    className="type-mono tracking-[0.2em] hover:text-accent transition-colors text-white/80 hover:text-white uppercase font-bold"
-                  >
-                    {link.name}
-                  </a>
-                </Magnetic>
+                <a
+                  key={link.name}
+                  href={link.href}
+                  className="type-mono tracking-[0.2em] hover:text-accent transition-colors text-white/80 hover:text-white uppercase font-bold pressable"
+                >
+                  {link.name}
+                </a>
               ))}
-              <div className="flex gap-3 ml-4 pl-4 border-l border-white/10">
-                {(["pt", "en"] as Locale[]).map(l => (
-                  <button
-                    key={l}
-                    type="button"
-                    onClick={() => setLocale(l)}
-                    className={`type-mono tracking-[0.2em] uppercase transition-colors ${
-                      l === locale ? "text-accent font-bold" : "text-white/60 hover:text-white"
-                    }`}
-                  >
-                    {l}
-                  </button>
-                ))}
+              <div className="ml-4 pl-4 border-l border-white/10">
+                <button
+                  type="button"
+                  onClick={() => setLocale(locale === "pt" ? "en" : "pt")}
+                  className="flex items-center gap-1.5 type-mono tracking-[0.2em] uppercase text-white/60 hover:text-accent transition-colors font-bold pressable"
+                  aria-label={locale === "pt" ? "Switch to English" : "Mudar para português"}
+                >
+                  <Languages size={16} className="text-accent" />
+                  <span className="w-5 text-center">{locale === "pt" ? "PT" : "EN"}</span>
+                </button>
               </div>
             </div>
 
