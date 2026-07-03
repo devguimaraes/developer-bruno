@@ -21,6 +21,7 @@ interface BrandIconProps {
   size?: number;
   variant?: IconVariant;
   className?: string;
+  decorative?: boolean;
 }
 
 /** Paths extraídos dos SVGs do brand-kit/icons/svg/.
@@ -434,19 +435,24 @@ export const BrandIcon: React.FC<BrandIconProps> = ({
   size = 24,
   variant = "line",
   className,
+  decorative = false,
 }) => {
   const data = ICON_PATHS[name];
+  const a11y = decorative
+    ? ({ "aria-hidden": true, focusable: "false" } as const)
+    : ({ role: "img", "aria-label": `Ícone ${name}` } as const);
 
   return (
+    // biome-ignore lint: aria-label is conditionally set based on decorative prop
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width={size}
       height={size}
       viewBox="0 0 32 32"
       className={className}
-      aria-label={`Ícone ${name}`}
-      role="img"
+      data-icon={name}
       style={{ minWidth: size, minHeight: size }}
+      {...a11y}
     >
       {data.elements.map((el, idx) => renderElement(el, variant, idx))}
     </svg>
