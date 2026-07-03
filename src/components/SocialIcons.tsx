@@ -6,7 +6,7 @@ import ScrollReveal from "@/components/ui/ScrollReveal";
 
 const SocialIcons: React.FC = () => {
   return (
-    <div className="flex items-center justify-center gap-2 mt-12 mb-8">
+    <div className="flex flex-wrap items-center justify-center gap-2 mt-12 mb-8">
       {contactData.socialLinks.map((link, idx) => {
         const Icon = socialIconMap[link.id];
         if (!Icon) return null;
