@@ -1,5 +1,6 @@
 import type React from "react";
 import { useEffect, useMemo, useState } from "react";
+import { BrandMascot } from "@/components/brand/BrandMascot";
 import "./PixelLoader.css";
 
 interface PixelLoaderProps {
@@ -62,6 +63,16 @@ export const PixelLoader: React.FC<PixelLoaderProps> = ({ onComplete }) => {
           />
         );
       })}
+
+      {/* BLOCO ao centro — aparece quando a dissolucao comeca */}
+      <div
+        className={`fixed inset-0 flex items-center justify-center pointer-events-none z-[10000] transition-opacity duration-500 ${
+          isExiting ? "opacity-100" : "opacity-0"
+        }`}
+        style={{ transitionDelay: "0.3s" }}
+      >
+        <BrandMascot variant="cor" size={48} state="focused" />
+      </div>
     </div>
   );
 };
