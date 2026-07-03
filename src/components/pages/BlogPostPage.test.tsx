@@ -62,23 +62,23 @@ describe("BlogPostPage — Byline", () => {
     expect(screen.getByText("Engenheiro Front-End")).toBeInTheDocument();
   });
 
-  it("exibe as iniciais BG no avatar", () => {
+  it("exibe o mascote BLOCO no avatar do autor", () => {
     render(<BlogPostPage post={mockPost} next={null} />);
-    expect(screen.getByText("BG")).toBeInTheDocument();
+    expect(screen.getByLabelText(/Mascote BLOCO/i)).toBeInTheDocument();
   });
 });
 
 describe("BlogPostPage — Cover", () => {
   it("exibe a imagem de capa quando post.image existe", () => {
     render(<BlogPostPage post={mockPost} next={null} />);
-    const img = screen.getByRole("img");
+    const img = screen.getByRole("img", { name: mockPost.title });
     expect(img).toHaveAttribute("src", mockPost.image);
     expect(img).toHaveAttribute("alt", mockPost.title);
   });
 
-  it("não exibe nenhuma imagem quando post.image está ausente", () => {
+  it("não exibe imagem de capa quando post.image está ausente", () => {
     render(<BlogPostPage post={mockPostSemImagem} next={null} />);
-    expect(screen.queryByRole("img")).not.toBeInTheDocument();
+    expect(screen.queryByRole("img", { name: mockPostSemImagem.title })).not.toBeInTheDocument();
   });
 });
 
