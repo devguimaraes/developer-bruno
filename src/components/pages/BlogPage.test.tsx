@@ -45,13 +45,13 @@ describe("BlogPage — Hero Section", () => {
     expect(screen.getByText("// BLOG")).toBeInTheDocument();
   });
 
-  it("exibe o heading POSTS em fonte pixel", () => {
+  it("exibe o heading POSTS em fonte raster", () => {
     render(<BlogPage initialPosts={mockPosts} />);
     const heading = screen.getByText("POSTS");
     expect(heading).toBeInTheDocument();
     expect(heading.tagName).toBe("H1");
-    // Deve usar a classe font-pixel
-    expect(heading.className).toContain("font-pixel");
+    // Deve usar a classe type-raster-hero
+    expect(heading.className).toContain("type-raster-hero");
   });
 
   it("exibe o subtítulo descritivo", () => {

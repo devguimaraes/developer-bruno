@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { t } from "@/lib/i18n";
+import { useLocale } from "@/hooks/useLocale";
 
 const NotFound = () => {
+  const locale = useLocale();
   const [pathname, setPathname] = useState("");
 
   useEffect(() => {
@@ -22,16 +25,16 @@ const NotFound = () => {
           initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-4"
+          className="flex flex-wrap items-center justify-between gap-4 border-b border-white/[0.08] pb-4"
         >
           <div
             className="type-mono text-[10px] text-white/40 uppercase tracking-[0.24em]"
             title="Page not found — this route does not exist"
           >
-            {"// ERROR_404"}
+            {t(locale, "notfound.error_code")}
           </div>
           <div className="type-mono text-[10px] text-white/30 uppercase tracking-[0.24em]">
-            Route not found
+            {t(locale, "notfound.route_status")}
           </div>
         </motion.div>
 
@@ -45,7 +48,7 @@ const NotFound = () => {
                 className="type-mono text-[10px] text-white/40 uppercase tracking-[0.24em]"
                 title="Connection lost — the requested page could not be found"
               >
-                {"// PAGE_STATUS"} &middot; LOST_SIGNAL
+                {t(locale, "notfound.page_status")} &middot; {t(locale, "notfound.lost_signal")}
               </motion.p>
 
               <motion.h1
@@ -64,22 +67,21 @@ const NotFound = () => {
                 className="max-w-2xl space-y-6"
               >
                 <h2 className="type-raster-section text-[2rem] leading-[0.9] text-white sm:text-[3rem]">
-                  PAGE
+                  {t(locale, "notfound.heading_line1")}
                   <br />
-                  NOT_FOUND
+                  {t(locale, "notfound.heading_line2")}
                 </h2>
 
-                <div className="max-w-xl border-t border-white/10 pt-6">
+                <div className="max-w-xl border-t border-white/[0.08] pt-6">
                   <p className="text-sm leading-relaxed text-white/60 sm:text-base">
-                    A rota que você tentou abrir não existe ou foi movida. Você pode voltar para a
-                    home, explorar os projetos selecionados ou seguir direto para o blog.
+                    {t(locale, "notfound.description")}
                   </p>
                 </div>
 
                 {pathname && (
-                  <div className="inline-flex border border-white/10 px-4 py-2">
+                  <div className="inline-flex border border-white/[0.08] px-4 py-2">
                     <span className="type-mono break-all text-[10px] text-white/40 uppercase tracking-[0.2em]">
-                      PATH: {pathname}
+                      {t(locale, "notfound.path_label")} {pathname}
                     </span>
                   </div>
                 )}
@@ -90,44 +92,44 @@ const NotFound = () => {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="space-y-6 border-t border-white/10 pt-8 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0"
+              className="space-y-6 border-t border-white/[0.08] pt-8 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0"
             >
               <div
                 className="type-mono text-[10px] text-white/35 uppercase tracking-[0.24em]"
                 title="Navigation options to recover from this error"
               >
-                {"// RECOVERY_OPTIONS"}
+                {t(locale, "notfound.recovery_label")}
               </div>
 
               <div className="flex flex-col gap-4">
                 <a
                   href="/"
-                  className="group inline-flex items-center justify-between gap-4 bg-white px-5 py-4 text-black transition-colors hover:bg-[#f3c65a]"
+                  className="group inline-flex items-center justify-between gap-4 bg-white px-5 py-4 text-black transition-colors hover:bg-accent pressable"
                 >
                   <span className="type-mono text-[10px] uppercase tracking-[0.24em]">
-                    Voltar ao início
+                    {t(locale, "notfound.back_home")}
                   </span>
                   <ArrowLeft className="h-4 w-4" />
                 </a>
 
                 <a
                   href="/blog"
-                  className="group inline-flex items-center justify-between gap-4 border border-white/15 px-5 py-4 text-white transition-colors hover:border-accent/60 hover:text-accent"
+                  className="group inline-flex items-center justify-between gap-4 border border-white/[0.08] px-5 py-4 text-white transition-colors hover:border-accent/60 hover:text-accent pressable"
                 >
                   <span className="type-mono text-[10px] uppercase tracking-[0.24em]">
-                    Ir para o blog
+                    {t(locale, "notfound.go_blog")}
                   </span>
                   <ArrowRight className="h-4 w-4" />
                 </a>
               </div>
 
-              <div className="border-t border-white/10 pt-6">
+              <div className="border-t border-white/[0.08] pt-6">
                 <p className="type-mono text-[10px] leading-6 text-white/30 uppercase tracking-[0.22em]">
-                  Bruno Guimarães
+                  {t(locale, "notfound.author")}
                   <br />
-                  Front-end systems
+                  {t(locale, "notfound.author_role")}
                   <br />
-                  Rio de Janeiro, BR
+                  {t(locale, "notfound.location")}
                 </p>
               </div>
             </motion.div>
@@ -138,19 +140,19 @@ const NotFound = () => {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-4"
+          className="flex flex-wrap items-center justify-between gap-4 border-t border-white/[0.08] pt-4"
         >
           <div
             className="type-mono text-[10px] text-white/30 uppercase tracking-[0.2em]"
             title="Geographic coordinates: Rio de Janeiro, Brazil"
           >
-            POS: 22.9068 S / 43.1729 W
+            {t(locale, "notfound.coords")}
           </div>
           <div
             className="type-mono text-[10px] text-white/20 uppercase tracking-[0.2em]"
             title="Current page version"
           >
-            VER: 4.0.4_NOT_FOUND
+            {t(locale, "notfound.version")}
           </div>
         </motion.div>
       </div>

@@ -57,7 +57,7 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
         {/* Conteúdo centralizado sobre a imagem */}
         <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 pt-20 pb-16 text-center">
           {/* Back button — canto superior esquerdo */}
-          <div className="absolute top-6 left-6 md:top-8 md:left-8">
+          <div className="absolute top-[88px] left-6 md:top-[104px] md:left-8">
             <motion.a
               href="/#projetos"
               initial={{ opacity: 0, x: -20 }}
@@ -111,7 +111,7 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
             className="w-px h-12 bg-gradient-to-b from-accent to-transparent"
           />
           <span className="type-mono text-[10px] text-white/25 uppercase tracking-[0.3em]">
-            SCROLL
+            {t(locale, "case.scroll")}
           </span>
         </div>
       </section>
@@ -123,7 +123,7 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
         <div className="container mx-auto px-6 max-w-5xl xl:max-w-7xl">
           <motion.div
             {...sectionMotion}
-            className="flex flex-col sm:flex-row gap-3 py-4 border-b border-white/10"
+            className="flex flex-col sm:flex-row gap-3 py-4 border-b border-white/[0.08]"
           >
             <a
               href={project.live}
@@ -136,7 +136,7 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
             </a>
             <a
               href={`mailto:${contactData.email}`}
-              className="inline-flex items-center justify-center gap-3 border border-white/10 text-white hover:border-accent/50 hover:text-accent transition-colors px-6 py-3.5 type-mono uppercase tracking-widest min-h-[48px] pressable"
+              className="inline-flex items-center justify-center gap-3 border border-white/[0.08] text-white hover:border-accent/50 hover:text-accent transition-colors px-6 py-3.5 type-mono uppercase tracking-widest min-h-[48px] pressable"
             >
               <span>{t(locale, "case.work_together")}</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
@@ -212,7 +212,7 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
                   whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.06 }}
-                  className="group relative border border-white/10 bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/20 transition-all duration-300 p-5 md:p-6 flex flex-col gap-3"
+                  className="group relative border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/20 transition-all duration-300 p-5 md:p-6 flex flex-col gap-3"
                 >
                   {/* Índice numerado */}
                   <span className="type-mono text-[9px] text-white/20 group-hover:text-accent/60 transition-colors">
@@ -277,7 +277,7 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
                   <a
                     key={post.slug}
                     href={`/blog/${post.slug}`}
-                    className="group block border border-white/10 hover:border-accent/30 transition-colors p-6"
+                    className="group block border border-white/[0.08] hover:border-accent/30 transition-colors p-6"
                   >
                     <div className="flex items-center gap-3 type-mono text-[9px] text-white/30 uppercase tracking-widest mb-3">
                       <span className="flex items-center gap-1.5">

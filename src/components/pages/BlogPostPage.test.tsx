@@ -27,11 +27,11 @@ const mockNext: BlogPost = {
 };
 
 describe("BlogPostPage — Header", () => {
-  it("exibe o título do post em fonte pixel", () => {
+  it("exibe o título do post em fonte raster", () => {
     render(<BlogPostPage post={mockPost} next={null} />);
     const heading = screen.getByText("Design System Dark-First");
     expect(heading.tagName).toBe("H1");
-    expect(heading.className).toContain("font-pixel");
+    expect(heading.className).toContain("type-raster-section");
   });
 
   it("exibe a meta row com badge de categoria, data e tempo de leitura", () => {

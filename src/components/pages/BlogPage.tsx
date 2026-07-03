@@ -2,6 +2,8 @@ import type React from "react";
 import { useEffect, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { BlogPost } from "@/types/blog";
+import { t } from "@/lib/i18n";
+import { useLocale } from "@/hooks/useLocale";
 
 const POSTS_PER_PAGE = 6;
 
@@ -10,8 +12,9 @@ interface BlogPageProps {
 }
 
 const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
+  const locale = useLocale();
   const [visibleCount, setVisibleCount] = useState(POSTS_PER_PAGE);
-  const [activeCategory, setActiveCategory] = useState("Todos");
+  const [activeCategory, setActiveCategory] = useState(t(locale, "blog.all_categories"));
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -26,11 +29,11 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
     return Array.from(seen);
   }, [initialPosts]);
 
-  // Lógica de filtragem por categoria (sem busca)
+  // Lógica de filtragem por categoria
   const filteredPosts = useMemo(() => {
-    if (activeCategory === "Todos") return initialPosts;
+    if (activeCategory === t(locale, "blog.all_categories")) return initialPosts;
     return initialPosts.filter(post => post.tags[0] === activeCategory);
-  }, [initialPosts, activeCategory]);
+  }, [initialPosts, activeCategory, locale]);
 
   const visiblePosts = filteredPosts.slice(0, visibleCount);
   const hasMore = visibleCount < filteredPosts.length;
@@ -38,122 +41,50 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
   return (
     <div className="bg-black min-h-screen pt-[72px] sm:pt-[88px] overflow-x-clip">
       {/* ── Hero Section ──────────────────────────── */}
-      <div
-        style={{
-          padding: "160px 48px 72px",
-          borderBottom: "1px solid rgba(255,255,255,0.08)",
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
+      <div className="relative overflow-hidden border-b border-white/[0.08] pt-32 sm:pt-40 pb-16 sm:pb-20 px-6 sm:px-8 md:px-12">
         {/* Gradient overlay for text readability */}
         <div className="absolute inset-0 z-[1] pointer-events-none bg-gradient-to-b from-black/60 via-transparent to-black" />
 
-        <div
-          className="max-w-[1152px] mx-auto relative z-10"
-          style={{
-            display: "flex",
-            alignItems: "flex-end",
-            justifyContent: "space-between",
-            gap: "40px",
-            flexWrap: "wrap",
-          }}
-        >
+        <div className="max-w-6xl mx-auto relative z-10 flex items-end justify-between gap-10 flex-wrap">
           <div>
-            <span
-              className="type-mono"
-              style={{
-                fontSize: "10px",
-                letterSpacing: "0.38em",
-                textTransform: "uppercase",
-                color: "hsl(var(--accent))",
-                display: "block",
-                marginBottom: "24px",
-                fontWeight: 700,
-              }}
-            >
-              {"// BLOG"}
+            <span className="type-mono text-[10px] tracking-[0.38em] text-accent block mb-6 font-bold">
+              {t(locale, "blog.label")}
             </span>
             <h1
-              className="font-pixel text-white uppercase"
-              style={{
-                fontSize: "clamp(72px, 11vw, 140px)",
-                lineHeight: 0.8,
-                letterSpacing: "-0.04em",
-                margin: "0 0 32px 0",
-              }}
+              className="type-raster-hero text-white leading-[0.8] tracking-[-0.04em] mb-8"
+              style={{ fontSize: "clamp(72px, 11vw, 140px)" }}
             >
-              POSTS
+              {t(locale, "blog.heading")}
             </h1>
             <p
-              style={{
-                fontFamily: "var(--font-serif)",
-                fontStyle: "italic",
-                fontSize: "19px",
-                lineHeight: 1.55,
-                color: "rgba(255,255,255,0.68)",
-                margin: 0,
-                maxWidth: "500px",
-              }}
+              className="font-serif italic text-[19px] leading-[1.55] text-white/70 max-w-[500px]"
+              style={{ fontFamily: "var(--font-serif)" }}
             >
-              Artigos técnicos e reflexões sobre programação, engenharia de software e tecnologia.
+              {t(locale, "blog.description")}
             </p>
           </div>
 
-          <div style={{ textAlign: "right", alignSelf: "flex-end" }}>
+          <div className="text-right self-end">
             <span
-              className="font-pixel"
-              style={{
-                fontSize: "clamp(52px, 7vw, 80px)",
-                color: "rgba(255,255,255,0.06)",
-                lineHeight: 1,
-                display: "block",
-                letterSpacing: "-0.04em",
-              }}
+              className="type-raster-section text-white/[0.06] block leading-none tracking-[-0.04em]"
+              style={{ fontSize: "clamp(52px, 7vw, 80px)" }}
             >
               {initialPosts.length}
             </span>
-            <span
-              className="type-mono"
-              style={{
-                fontSize: "9px",
-                letterSpacing: "0.22em",
-                textTransform: "uppercase",
-                color: "rgba(255,255,255,0.20)",
-              }}
-            >
-              TOTAL_POSTS
+            <span className="type-mono text-[9px] tracking-[0.22em] text-white/20">
+              {t(locale, "blog.total_label")}
             </span>
           </div>
         </div>
       </div>
 
       {/* ── Sticky Category Filter ────────────────── */}
-      <div
-        style={{
-          background: "rgba(0,0,0,0.92)",
-          position: "sticky",
-          top: "80px",
-          zIndex: 40,
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
-          borderBottom: "1px solid rgba(255,255,255,0.07)",
-        }}
-      >
-        <div
-          className="max-w-[1152px] mx-auto"
-          style={{
-            padding: "0 48px",
-            overflowX: "auto",
-            display: "flex",
-            gap: 0,
-            scrollbarWidth: "none",
-          }}
-        >
-          {["Todos", ...categories].map(cat => {
+      <div className="sticky top-[72px] sm:top-[88px] z-40 bg-black/90 backdrop-blur-xl border-b border-white/[0.08]">
+        <div className="max-w-6xl mx-auto px-6 sm:px-8 md:px-12 flex gap-0 overflow-x-auto scrollbar-hide">
+          {[t(locale, "blog.all_categories"), ...categories].map(cat => {
             const isActive = cat === activeCategory;
             const count =
-              cat === "Todos"
+              cat === t(locale, "blog.all_categories")
                 ? initialPosts.length
                 : initialPosts.filter(p => p.tags[0] === cat).length;
             return (
@@ -164,22 +95,8 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
                   setActiveCategory(cat);
                   setVisibleCount(POSTS_PER_PAGE);
                 }}
-                className="type-mono"
+                className="type-mono text-[10px] tracking-[0.20em] py-[18px] px-5 border-none cursor-pointer flex items-center gap-2 whitespace-nowrap transition-all duration-200 outline-none select-none leading-none pressable"
                 style={{
-                  fontSize: "10px",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.20em",
-                  padding: "18px 20px 16px",
-                  border: "none",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  whiteSpace: "nowrap",
-                  transition: "all 200ms ease",
-                  outline: "none",
-                  userSelect: "none",
-                  lineHeight: 1,
                   background: isActive ? "hsl(45,87%,57%)" : "transparent",
                   color: isActive ? "#000" : "rgba(255,255,255,0.55)",
                   borderBottom: isActive ? "2px solid hsl(45,87%,57%)" : "2px solid transparent",
@@ -187,15 +104,7 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
               >
                 {cat}
                 <span
-                  style={{
-                    fontFamily: "'JetBrains Mono', monospace",
-                    fontSize: "9px",
-                    background: isActive ? "rgba(0,0,0,0.18)" : "rgba(255,255,255,0.08)",
-                    color: isActive ? "rgba(0,0,0,0.70)" : "rgba(255,255,255,0.40)",
-                    padding: "1px 6px",
-                    lineHeight: 1.4,
-                    fontWeight: 700,
-                  }}
+                  className={`type-mono text-[9px] px-1.5 py-px leading-[1.4] font-bold ${isActive ? "bg-black/20 text-black/70" : "bg-white/[0.08] text-white/40"}`}
                 >
                   {count}
                 </span>
@@ -206,22 +115,14 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
       </div>
 
       {/* ── Filtered Count Label ──────────────────── */}
-      <div className="max-w-[1152px] mx-auto" style={{ padding: "24px 48px 0" }}>
-        <span
-          className="type-mono"
-          style={{
-            fontSize: "9px",
-            letterSpacing: "0.22em",
-            textTransform: "uppercase",
-            color: "rgba(255,255,255,0.22)",
-          }}
-        >
-          {filteredPosts.length} POSTS
+      <div className="max-w-6xl mx-auto px-6 sm:px-8 md:px-12 pt-6 pb-0">
+        <span className="type-mono text-[9px] tracking-[0.22em] text-white/20">
+          {filteredPosts.length} {t(locale, "blog.heading")}
         </span>
       </div>
 
       {/* ── Posts List ────────────────────────────── */}
-      <main className="max-w-[1152px] mx-auto" style={{ padding: "8px 48px 160px" }}>
+      <main className="max-w-6xl mx-auto px-6 sm:px-8 md:px-12 pt-2 pb-40">
         <AnimatePresence mode="popLayout">
           {visiblePosts.map((post, index) => (
             <motion.a
@@ -232,130 +133,39 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.25, delay: index * 0.04 }}
-              style={{
-                display: "block",
-                padding: "40px 0",
-                borderBottom: "1px solid rgba(255,255,255,0.07)",
-                textDecoration: "none",
-                color: "#fff",
-                cursor: "pointer",
-                transition:
-                  "background 160ms ease, padding-left 160ms ease, padding-right 160ms ease",
-              }}
-              className="group hover:bg-white/[0.018]"
+              className="group block py-10 border-b border-white/[0.08] text-white cursor-pointer transition-[background,padding] duration-160 hover:bg-white/[0.018] pressable"
             >
               {/* Meta row: badge + date + readtime + CTA */}
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  gap: "24px",
-                  marginBottom: "16px",
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "12px",
-                    flexWrap: "wrap",
-                  }}
-                >
-                  <span
-                    className="type-mono"
-                    style={{
-                      fontSize: "9px",
-                      fontWeight: 700,
-                      textTransform: "uppercase",
-                      letterSpacing: "0.20em",
-                      background: "hsl(var(--accent))",
-                      color: "#000",
-                      padding: "3px 10px 2px",
-                      lineHeight: 1,
-                      whiteSpace: "nowrap",
-                    }}
-                  >
+              <div className="flex items-center justify-between gap-6 mb-4">
+                <div className="flex items-center gap-3 flex-wrap">
+                  <span className="type-mono text-[9px] font-bold tracking-[0.20em] bg-accent text-black px-3 py-[3px] leading-none whitespace-nowrap">
                     {post.tags[0] || "POST"}
                   </span>
-                  <span
-                    className="type-mono"
-                    style={{
-                      fontSize: "9px",
-                      textTransform: "uppercase",
-                      letterSpacing: "0.18em",
-                      color: "rgba(255,255,255,0.28)",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
+                  <span className="type-mono text-[9px] tracking-[0.18em] text-white/30 whitespace-nowrap">
                     {post.date}
                   </span>
-                  <span
-                    className="type-mono"
-                    style={{
-                      fontSize: "9px",
-                      color: "rgba(255,255,255,0.16)",
-                      padding: "0 2px",
-                    }}
-                  >
-                    ·
-                  </span>
-                  <span
-                    className="type-mono"
-                    style={{
-                      fontSize: "9px",
-                      textTransform: "uppercase",
-                      letterSpacing: "0.18em",
-                      color: "rgba(255,255,255,0.28)",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
+                  <span className="text-[9px] text-white/20">·</span>
+                  <span className="type-mono text-[9px] tracking-[0.18em] text-white/30 whitespace-nowrap">
                     {post.readTime}
                   </span>
                 </div>
-                <span
-                  className="type-mono"
-                  style={{
-                    fontSize: "10px",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.28em",
-                    color: "rgba(255,255,255,0.30)",
-                    whiteSpace: "nowrap",
-                    flexShrink: 0,
-                    paddingBottom: "3px",
-                    borderBottom: "1px solid rgba(255,255,255,0.12)",
-                  }}
-                >
-                  Ler →
+                <span className="type-mono text-[10px] tracking-[0.28em] text-white/30 whitespace-nowrap shrink-0 pb-[3px] border-b border-white/10 group-hover:text-accent group-hover:border-accent transition-colors">
+                  {t(locale, "blog.read_label")}
                 </span>
               </div>
 
               {/* Title */}
               <h2
-                className="font-pixel text-white uppercase group-hover:text-accent transition-colors"
-                style={{
-                  fontSize: "clamp(22px, 3.8vw, 46px)",
-                  lineHeight: 0.88,
-                  letterSpacing: "-0.02em",
-                  color: "rgba(255,255,255,0.92)",
-                  margin: "0 0 16px 0",
-                  maxWidth: "880px",
-                }}
+                className="type-raster-section text-white/90 group-hover:text-accent transition-colors leading-[0.88] tracking-[-0.02em] mb-4 max-w-3xl"
+                style={{ fontSize: "clamp(22px, 3.8vw, 46px)" }}
               >
                 {post.title}
               </h2>
 
               {/* Summary */}
               <p
-                style={{
-                  fontFamily: "var(--font-serif)",
-                  fontStyle: "italic",
-                  fontSize: "16px",
-                  lineHeight: 1.62,
-                  color: "rgba(255,255,255,0.48)",
-                  margin: 0,
-                  maxWidth: "680px",
-                }}
+                className="font-serif italic text-base leading-[1.62] text-white/50 max-w-2xl"
+                style={{ fontFamily: "var(--font-serif)" }}
               >
                 {post.excerpt}
               </p>
@@ -364,12 +174,9 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
         </AnimatePresence>
 
         {filteredPosts.length === 0 && (
-          <div
-            className="text-center py-24"
-            style={{ border: "2px dashed rgba(255,255,255,0.05)" }}
-          >
-            <p className="type-mono text-stone-600 uppercase tracking-[0.2em] text-xs">
-              Nenhum post encontrado para esta categoria
+          <div className="text-center py-24 border-2 border-dashed border-white/[0.05]">
+            <p className="type-mono text-white/40 tracking-[0.2em] text-xs">
+              {t(locale, "blog.empty")}
             </p>
           </div>
         )}
@@ -381,7 +188,8 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
               onClick={() => setVisibleCount(prev => prev + POSTS_PER_PAGE)}
               className="border-2 border-white/20 text-white hover:border-accent hover:text-accent hover:shadow-brutal px-10 py-4 type-mono uppercase tracking-widest transition-all bg-black pressable"
             >
-              Carregar mais ({filteredPosts.length - visibleCount} restantes)
+              {t(locale, "blog.load_more")} ({filteredPosts.length - visibleCount}{" "}
+              {t(locale, "blog.remaining")})
             </button>
           </div>
         )}
