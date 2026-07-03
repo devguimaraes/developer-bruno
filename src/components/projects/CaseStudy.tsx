@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowUpRight, ExternalLink, Calendar } from "lucide-react";
 import type { Project } from "@/types";
 import type { BlogPost } from "@/types/blog";
 import LiquidGlitchImage from "@/components/ui/LiquidGlitchImage";
+import { BrandIcon } from "@/components/brand";
 import { t } from "@/lib/i18n";
 import { useLocale } from "@/hooks/useLocale";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
@@ -151,7 +152,8 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
       <section className="container mx-auto px-6 py-14 md:py-20 max-w-5xl xl:max-w-7xl">
         <motion.div {...sectionMotion}>
           {/* Label mono */}
-          <div className="type-mono text-[10px] text-white/30 uppercase tracking-widest mb-8">
+          <div className="type-mono text-[10px] text-white/30 uppercase tracking-widest mb-8 flex items-center gap-2">
+            <BrandIcon name="terminal" size={14} decorative />
             {t(locale, "case.context")}
           </div>
 
@@ -193,7 +195,8 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
       <section className="container mx-auto px-6 py-14 md:py-20 max-w-5xl xl:max-w-7xl">
         <motion.div {...sectionMotion}>
           {/* Label mono */}
-          <div className="type-mono text-[10px] text-white/30 uppercase tracking-widest mb-8">
+          <div className="type-mono text-[10px] text-white/30 uppercase tracking-widest mb-8 flex items-center gap-2">
+            <BrandIcon name="codigo" size={14} decorative />
             {t(locale, "case.stack")}
           </div>
 
