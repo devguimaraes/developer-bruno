@@ -53,6 +53,11 @@ describe("BlogPostPage — Header", () => {
       screen.getByText("Construindo sistemas de design com paleta escura.")
     ).toBeInTheDocument();
   });
+
+  it("exibe o ícone documentacao na meta row", () => {
+    const { container } = render(<BlogPostPage post={mockPost} next={null} />);
+    expect(container.querySelector('[data-icon="documentacao"]')).not.toBeNull();
+  });
 });
 
 describe("BlogPostPage — Byline", () => {

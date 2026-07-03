@@ -3,6 +3,7 @@ import type { BlogPost } from "@/types/blog";
 import { BlogPostByline } from "./BlogPostByline";
 import { t } from "@/lib/i18n";
 import { useLocale } from "@/hooks/useLocale";
+import { BrandIcon } from "@/components/brand";
 
 interface BlogPostHeaderProps {
   post: BlogPost;
@@ -20,6 +21,7 @@ export function BlogPostHeader({ post }: BlogPostHeaderProps) {
     >
       {/* Meta row */}
       <div className="flex flex-wrap items-center gap-3 mb-7">
+        <BrandIcon name="documentacao" size={16} decorative />
         <span className="type-mono text-[9px] font-bold tracking-[0.20em] bg-accent text-black px-3 py-[3px] leading-none">
           {category}
         </span>

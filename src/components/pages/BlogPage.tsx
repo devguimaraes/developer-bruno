@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import type { BlogPost } from "@/types/blog";
 import { t } from "@/lib/i18n";
 import { useLocale } from "@/hooks/useLocale";
+import { BrandIcon } from "@/components/brand";
 
 const POSTS_PER_PAGE = 6;
 
@@ -47,7 +48,8 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
 
         <div className="max-w-6xl mx-auto relative z-10 flex items-end justify-between gap-10 flex-wrap">
           <div>
-            <span className="type-mono text-[10px] tracking-[0.38em] text-accent block mb-6 font-bold">
+            <span className="type-mono text-[10px] tracking-[0.38em] text-accent flex items-center gap-2 mb-6 font-bold">
+              <BrandIcon name="documentacao" size={16} decorative />
               {t(locale, "blog.label")}
             </span>
             <h1

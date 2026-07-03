@@ -67,6 +67,11 @@ describe("BlogPage — Hero Section", () => {
     // Label TOTAL_POSTS
     expect(screen.getByText("TOTAL_POSTS")).toBeInTheDocument();
   });
+
+  it("exibe o ícone documentacao ao lado do label // BLOG", () => {
+    const { container } = render(<BlogPage initialPosts={mockPosts} />);
+    expect(container.querySelector('[data-icon="documentacao"]')).not.toBeNull();
+  });
 });
 
 describe("BlogPage — Filtro por Categoria", () => {
