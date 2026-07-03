@@ -2,15 +2,6 @@ import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 import Hero from "./Hero";
 
-// Mock do GlassSurface
-vi.mock("@/components/ui/GlassSurface", () => ({
-  default: ({ children, className }: { children: React.ReactNode; className?: string }) => (
-    <div data-testid="glass-surface" className={className}>
-      {children}
-    </div>
-  ),
-}));
-
 // Mock do Marquee
 vi.mock("@/components/ui/Marquee", () => ({
   default: ({ children }: { children: React.ReactNode }) => (

@@ -33,11 +33,6 @@ vi.mock("@/components/ui/StaggeredMenu", () => ({
     ) : null,
 }));
 
-// Mock do componente Magnetic
-vi.mock("@/components/ui/Magnetic", () => ({
-  default: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-}));
-
 describe("Navigation Component - Brutalist Glass", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -49,7 +44,7 @@ describe("Navigation Component - Brutalist Glass", () => {
 
   it("deve renderizar o logo com o nome BRUNO / GUIMARÃES", () => {
     renderNav();
-    // Verificar que o componente existe (o texto pode estar dentro do mock do GlassSurface)
+    // Verificar que o componente de navegação existe
     const nav = screen.getByRole("navigation");
     expect(nav).toBeInTheDocument();
     // Verificar o mascote BLOCO que está no logo
