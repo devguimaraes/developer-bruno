@@ -52,9 +52,9 @@ describe("Navigation Component - Brutalist Glass", () => {
     // Verificar que o componente existe (o texto pode estar dentro do mock do GlassSurface)
     const nav = screen.getByRole("navigation");
     expect(nav).toBeInTheDocument();
-    // Verificar a imagem do avatar que está no logo
-    const avatar = screen.getByAltText(/Bruno Guimarães/i);
-    expect(avatar).toBeInTheDocument();
+    // Verificar o mascote BLOCO que está no logo
+    const mascot = screen.getByLabelText(/Mascote BLOCO/i);
+    expect(mascot).toBeInTheDocument();
   });
 
   it("deve renderizar os links de navegação corretos no desktop", () => {

@@ -6,6 +6,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { Languages } from "lucide-react";
 import { t, setLocale } from "@/lib/i18n";
 import { useLocale } from "@/hooks/useLocale";
+import { BrandMascot } from "@/components/brand/BrandMascot";
 
 const Navigation: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,12 +46,8 @@ const Navigation: React.FC = () => {
         >
           <div className="flex justify-between items-center w-full h-full px-4 sm:px-6 md:px-8 max-w-[1800px] mx-auto">
             <a href="/" className="flex items-center gap-2 sm:gap-4 group py-2 pressable">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full overflow-hidden border-2 border-white/20 group-hover:border-accent transition-all duration-300">
-                <img
-                  src="/avatar-bruno-bg.jpg"
-                  alt="Bruno Guimarães"
-                  className="w-full h-full object-cover"
-                />
+              <div className="rounded-lg overflow-hidden border-2 border-white/20 group-hover:border-accent transition-all duration-300 flex items-center justify-center p-1">
+                <BrandMascot variant="cor" size={40} />
               </div>
               <span className="type-mono text-sm sm:text-base font-black text-white tracking-widest uppercase items-center flex gap-3">
                 BRUNO
