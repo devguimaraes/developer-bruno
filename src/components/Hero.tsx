@@ -1,10 +1,11 @@
 import type React from "react";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useVideoLoading } from "@/hooks/useVideoLoading";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { t } from "@/lib/i18n";
 import { useLocale } from "@/hooks/useLocale";
+import { BrandMascot } from "@/components/brand/BrandMascot";
 
 const Hero: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -13,6 +14,12 @@ const Hero: React.FC = () => {
   const locale = useLocale();
 
   const reducedMotion = useReducedMotion();
+  const [heroMascotState, setHeroMascotState] = useState<"focused" | "curious">("focused");
+
+  useEffect(() => {
+    const timer = setTimeout(() => setHeroMascotState("curious"), 3000);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Efeito de movimento sutil para as camadas
   const textY = useTransform(scrollY, [0, 500], [0, 100]);
@@ -123,6 +130,17 @@ const Hero: React.FC = () => {
       >
         VER: 4.0.0_STABLE
       </div>
+
+      {/* Decorative BLOCO Mascot */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.3 }}
+        whileHover={{ opacity: 0.6 }}
+        className="absolute bottom-8 right-4 sm:right-10 z-10 pointer-events-auto cursor-default"
+        title="BLOCO — Developer Bruno mascot"
+      >
+        <BrandMascot variant="cor" size={32} state={heroMascotState} />
+      </motion.div>
     </section>
   );
 };
