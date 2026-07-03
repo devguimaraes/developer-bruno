@@ -443,7 +443,7 @@ export const BrandIcon: React.FC<BrandIconProps> = ({
     : ({ role: "img", "aria-label": `Ícone ${name}` } as const);
 
   return (
-    // biome-ignore lint: aria-label is conditionally set based on decorative prop
+    // biome-ignore lint/a11y/noSvgWithoutTitle: aria-label é definido condicionalmente via spread a11y
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width={size}
