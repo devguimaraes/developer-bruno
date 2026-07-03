@@ -1,4 +1,5 @@
 import { Toaster as Sonner } from "sonner";
+import { BrandIcon } from "@/components/brand";
 
 type ToasterProps = React.ComponentProps<typeof Sonner>;
 
@@ -15,6 +16,11 @@ const Toaster = ({ ...props }: ToasterProps) => {
           actionButton: "group-[.toast]:bg-primary group-[.toast]:text-primary-foreground",
           cancelButton: "group-[.toast]:bg-muted group-[.toast]:text-muted-foreground",
         },
+      }}
+      icons={{
+        error: <BrandIcon name="erro" size={20} />,
+        success: <BrandIcon name="sucesso" size={20} />,
+        warning: <BrandIcon name="alerta" size={20} />,
       }}
       {...props}
     />
