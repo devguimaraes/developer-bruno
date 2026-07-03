@@ -70,37 +70,63 @@ export const CustomCursor: React.FC = () => {
   if (!isEnabled || !isVisible) return null;
 
   return (
-    <>
+    <motion.div
+      className="fixed top-0 left-0 pointer-events-none z-[10000]"
+      style={{ x: cursorX, y: cursorY }}
+    >
+      {/* Linha horizontal da cruz */}
       <motion.div
-        className="fixed top-0 left-0 w-10 h-10 border border-white rounded-full pointer-events-none z-[10000] mix-blend-difference"
+        className="absolute bg-white/70"
         style={{
-          x: cursorX,
-          y: cursorY,
+          width: 10,
+          height: 1,
+          left: "50%",
+          top: "50%",
           translateX: "-50%",
           translateY: "-50%",
         }}
         animate={{
-          scale: isHovering ? 2.5 : 1,
-          opacity: 1,
-          rotate: isHovering ? 90 : 0,
+          width: isClicking ? 6 : isHovering ? 16 : 10,
+          opacity: isHovering ? 0.9 : 0.6,
         }}
-        transition={{ type: "spring", ...springConfig }}
+        transition={{ type: "spring", stiffness: 350, damping: 22 }}
       />
 
+      {/* Linha vertical da cruz */}
       <motion.div
-        className="fixed top-0 left-0 w-1.5 h-1.5 bg-accent rounded-full pointer-events-none z-[10001]"
+        className="absolute bg-white/70"
         style={{
-          x: cursorX,
-          y: cursorY,
+          width: 1,
+          height: 10,
+          left: "50%",
+          top: "50%",
           translateX: "-50%",
           translateY: "-50%",
         }}
         animate={{
-          scale: isClicking ? 0.5 : 1,
-          backgroundColor: isHovering ? "#fff" : "#c084fc",
+          height: isClicking ? 6 : isHovering ? 16 : 10,
+          opacity: isHovering ? 0.9 : 0.6,
         }}
+        transition={{ type: "spring", stiffness: 350, damping: 22 }}
       />
-    </>
+
+      {/* Ponto central — accent gold */}
+      <motion.div
+        className="absolute bg-accent"
+        style={{
+          width: 2,
+          height: 2,
+          left: "50%",
+          top: "50%",
+          translateX: "-50%",
+          translateY: "-50%",
+        }}
+        animate={{
+          scale: isClicking ? 0.4 : 1,
+        }}
+        transition={{ type: "spring", stiffness: 400, damping: 20 }}
+      />
+    </motion.div>
   );
 };
 
