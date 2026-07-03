@@ -25,9 +25,7 @@ interface BrandIconProps {
 }
 
 /** Paths extraídos dos SVGs do brand-kit/icons/svg/.
- *  stroke="#fff" / stroke="#F1C232" — trocados para "currentColor" e "var(--icon-accent)"
- *  para que o CSS controle as cores, permitindo variant solid.
- *  Usamos placeholders que são substituídos na renderização. */
+ *  Cores são resolvidas em runtime via resolveColor(). */
 const ICON_PATHS: Record<
   IconName,
   { elements: Array<{ type: string; key: string; props: Record<string, unknown> }> }
@@ -405,11 +403,9 @@ const ICON_PATHS: Record<
   },
 };
 
-/** Resolve "white" → #FFFFFF, "accent" → #F1C232, "currentColor" → herdado */
-function resolveColor(color: string, variant: IconVariant): string {
-  if (color === "currentColor") {
-    return variant === "solid" ? "#F1C232" : "#F1C232";
-  }
+/** Resolve "white" → #FFFFFF, "accent" → #F1C232, "currentColor" → herdado do CSS */
+function resolveColor(color: string, _variant: IconVariant): string {
+  if (color === "currentColor") return "currentColor";
   if (color === "accent") return "#F1C232";
   if (color === "white") return "#FFFFFF";
   return color;
