@@ -33,6 +33,13 @@ interface AnimConfig {
 }
 
 const spring = { type: "spring" as const, stiffness: 200, damping: 20 };
+const loopSpring = {
+  type: "spring" as const,
+  stiffness: 200,
+  damping: 20,
+  repeat: Infinity,
+  repeatType: "reverse" as const,
+};
 
 const STATE_ANIM: Record<MascotState, AnimConfig> = {
   idle: {
@@ -45,20 +52,20 @@ const STATE_ANIM: Record<MascotState, AnimConfig> = {
   focused: {
     leftEye: { scaleX: 0.6 },
     rightEye: { scaleX: 0.6 },
-    leftFoot: { translateY: [0, -1, 1, 0] },
-    rightFoot: { translateY: [0, 1, -1, 0] },
+    leftFoot: { translateY: [0, -1] },
+    rightFoot: { translateY: [0, 1] },
     blinkEnabled: true,
   },
   happy: {
     leftEye: { translateY: -2 },
     rightEye: { translateY: -2 },
-    leftFoot: { rotate: [0, -5, 5, 0] },
-    rightFoot: { rotate: [0, 5, -5, 0] },
+    leftFoot: { rotate: [0, -5] },
+    rightFoot: { rotate: [0, 5] },
     blinkEnabled: true,
   },
   confused: {
-    leftEye: { translateX: [-1.5, 1.5, -1] },
-    rightEye: { translateX: [1.5, -1.5, 1] },
+    leftEye: { translateX: [-1.5, 1.5] },
+    rightEye: { translateX: [1.5, -1.5] },
     leftFoot: { translateY: -3, rotate: -5 },
     rightFoot: {},
     blinkEnabled: true,
@@ -66,8 +73,8 @@ const STATE_ANIM: Record<MascotState, AnimConfig> = {
   curious: {
     leftEye: {},
     rightEye: {},
-    leftFoot: { scaleY: [1, 0.85, 1] },
-    rightFoot: { scaleY: [1, 0.85, 1] },
+    leftFoot: { scaleY: [1, 0.85] },
+    rightFoot: { scaleY: [1, 0.85] },
     blinkEnabled: true,
   },
 };
@@ -106,6 +113,14 @@ export const BrandMascot: React.FC<BrandMascotProps> = ({
   // Olhos: quando piscando, scaleY -> 0
   const eyeScaleY = blink ? 0.1 : 1;
 
+  /** Se qualquer valor do objeto for array, precisa de loopSpring (2-keyframe repeat) */
+  const pickTransition = (values: Record<string, unknown>) => {
+    return Object.values(values).some(v => Array.isArray(v)) ? loopSpring : spring;
+  };
+
+  const leftEyeValues = { ...anim.leftEye, scaleY: eyeScaleY, originY: 15.5 };
+  const rightEyeValues = { ...anim.rightEye, scaleY: eyeScaleY, originY: 15.5 };
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -128,12 +143,8 @@ export const BrandMascot: React.FC<BrandMascotProps> = ({
         height="7"
         rx="1.8"
         fill={c.eyes}
-        animate={{
-          ...anim.leftEye,
-          scaleY: eyeScaleY,
-          originY: 15.5,
-        }}
-        transition={spring}
+        animate={leftEyeValues}
+        transition={pickTransition(anim.leftEye)}
         style={{ transformOrigin: "12.8px 15.5px" }}
       />
 
@@ -145,12 +156,8 @@ export const BrandMascot: React.FC<BrandMascotProps> = ({
         height="7"
         rx="1.8"
         fill={c.eyes}
-        animate={{
-          ...anim.rightEye,
-          scaleY: eyeScaleY,
-          originY: 15.5,
-        }}
-        transition={spring}
+        animate={rightEyeValues}
+        transition={pickTransition(anim.rightEye)}
         style={{ transformOrigin: "19.2px 15.5px" }}
       />
 
@@ -163,7 +170,7 @@ export const BrandMascot: React.FC<BrandMascotProps> = ({
         rx="1.5"
         fill={c.feet}
         animate={anim.leftFoot}
-        transition={spring}
+        transition={pickTransition(anim.leftFoot)}
         style={{ transformOrigin: "11.5px 26.75px" }}
       />
 
@@ -176,7 +183,7 @@ export const BrandMascot: React.FC<BrandMascotProps> = ({
         rx="1.5"
         fill={c.feet}
         animate={anim.rightFoot}
-        transition={spring}
+        transition={pickTransition(anim.rightFoot)}
         style={{ transformOrigin: "20.5px 26.75px" }}
       />
     </svg>
