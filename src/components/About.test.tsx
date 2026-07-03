@@ -55,3 +55,27 @@ describe("About Component - Editorial Biography", () => {
     expect(tailwindElements.length).toBeGreaterThan(0);
   });
 });
+
+describe("About — Lista de Capacidades", () => {
+  it("renderiza a label da seção de capacidades", () => {
+    render(<About />);
+    expect(screen.getByText("// O_QUE_EU_FAÇO")).toBeInTheDocument();
+  });
+
+  it("renderiza os 6 rótulos de capacidade (pt)", () => {
+    render(<About />);
+    expect(screen.getByText("Desenvolvimento Front-End")).toBeInTheDocument();
+    expect(screen.getByText("Backend & APIs")).toBeInTheDocument();
+    expect(screen.getByText("Deploy & CI/CD")).toBeInTheDocument();
+    expect(screen.getByText("Acessibilidade & UX")).toBeInTheDocument();
+    expect(screen.getByText("Boas Práticas & Processo")).toBeInTheDocument();
+    expect(screen.getByText("Colaboração com Produto")).toBeInTheDocument();
+  });
+
+  it("renderiza um BrandIcon decorativo por capacidade", () => {
+    const { container } = render(<About />);
+    for (const name of ["codigo", "api", "deploy", "usuario", "settings", "comunidade"]) {
+      expect(container.querySelector(`[data-icon="${name}"]`)).not.toBeNull();
+    }
+  });
+});

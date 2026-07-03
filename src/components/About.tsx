@@ -16,9 +16,23 @@ import {
   SiAnthropic,
 } from "@icons-pack/react-simple-icons";
 import { MousePointer2 } from "lucide-react";
+import { BrandIcon } from "@/components/brand";
+import type { IconName } from "@/components/brand";
+import type { TranslationKey } from "@/lib/i18n";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+
+const capabilities: { icon: IconName; key: TranslationKey }[] = [
+  { icon: "codigo", key: "about.cap.development" },
+  { icon: "api", key: "about.cap.backend" },
+  { icon: "deploy", key: "about.cap.deploy" },
+  { icon: "usuario", key: "about.cap.a11y" },
+  { icon: "settings", key: "about.cap.practices" },
+  { icon: "comunidade", key: "about.cap.collaboration" },
+];
 
 const About: React.FC = () => {
   const locale = useLocale();
+  const prefersReducedMotion = useReducedMotion();
 
   const techs = [
     { name: "Next.js", icon: SiNextdotjs },
@@ -101,6 +115,30 @@ const About: React.FC = () => {
                 </div>
               </div>
             </motion.div>
+
+            {/* Lista editorial de capacidades */}
+            <div className="mt-14 md:ml-12 max-w-md pointer-events-auto">
+              <p className="type-mono text-[11px] text-accent uppercase tracking-[0.4em] font-bold mb-2">
+                {t(locale, "about.capabilities_label")}
+              </p>
+              <ul>
+                {capabilities.map((cap, i) => (
+                  <motion.li
+                    key={cap.icon}
+                    initial={prefersReducedMotion ? false : { opacity: 0, x: -16 }}
+                    whileInView={prefersReducedMotion ? undefined : { opacity: 1, x: 0 }}
+                    viewport={{ once: true, margin: "-10%" }}
+                    transition={{ delay: i * 0.08, duration: 0.5 }}
+                    className="flex items-center gap-4 py-4 border-t border-white/10 first:border-t-0"
+                  >
+                    <BrandIcon name={cap.icon} size={22} decorative />
+                    <span className="type-mono text-xs md:text-sm uppercase tracking-[0.15em] text-white/80">
+                      {t(locale, cap.key)}
+                    </span>
+                  </motion.li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </div>
