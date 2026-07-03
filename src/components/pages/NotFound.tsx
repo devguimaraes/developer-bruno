@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { t } from "@/lib/i18n";
 import { useLocale } from "@/hooks/useLocale";
+import { BrandMascot } from "@/components/brand/BrandMascot";
+import type { MascotState } from "@/components/brand/BrandMascot";
 
 const NotFound = () => {
   const locale = useLocale();
@@ -12,6 +14,8 @@ const NotFound = () => {
     const currentPath = typeof window !== "undefined" ? window.location.pathname : "";
     setPathname(currentPath);
   }, []);
+
+  const [hoverState, setHoverState] = useState<MascotState>("confused");
 
   return (
     <section className="relative min-h-screen overflow-hidden bg-black text-white">
@@ -41,6 +45,15 @@ const NotFound = () => {
         <div className="mx-auto flex w-full max-w-6xl flex-1 items-center py-16">
           <div className="grid w-full gap-14 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
             <div className="space-y-8">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.25, type: "spring", stiffness: 150 }}
+                className="flex justify-center mb-6"
+              >
+                <BrandMascot variant="cor" size={64} state={hoverState} />
+              </motion.div>
+
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -105,6 +118,8 @@ const NotFound = () => {
                 <a
                   href="/"
                   className="group inline-flex items-center justify-between gap-4 bg-white px-5 py-4 text-black transition-colors hover:bg-accent pressable"
+                  onMouseEnter={() => setHoverState("happy")}
+                  onMouseLeave={() => setHoverState("confused")}
                 >
                   <span className="type-mono text-[10px] uppercase tracking-[0.24em]">
                     {t(locale, "notfound.back_home")}
