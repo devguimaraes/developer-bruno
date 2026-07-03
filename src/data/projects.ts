@@ -102,7 +102,7 @@ const rawProjects = [
     tags: ["entretenimento", "premium", "internacional", "adult"] as const,
     relatedPosts: ["react-19-server-components", "typescript-performance"] as const,
     previewAnimation: "pixel-blast",
-    image: "/movies-bremen.png",
+    image: "/movies-bremen.webp",
     bannerImage: "/banner-movies-event-house-bremen.webp",
     slug: "movies-bremen",
     role: "Full-Stack Developer & UI/UX Designer",

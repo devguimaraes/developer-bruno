@@ -66,7 +66,7 @@ const About: React.FC = () => {
           <div className="md:absolute md:top-0 md:right-0 w-full md:w-[55%] aspect-[3/4] md:aspect-[4/5] z-0 grayscale opacity-40 md:opacity-100 group">
             <div className="w-full h-full overflow-hidden border-2 border-white/5 shadow-2xl transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-[1.02]">
               <LiquidGlitchImage
-                src="/brunoGuimaraes.png"
+                src="/brunoGuimaraes.webp"
                 alt="Bruno Guimarães"
                 className="w-full h-full object-cover"
                 active={true}
