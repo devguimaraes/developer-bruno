@@ -71,7 +71,7 @@ Single global layout at `src/layouts/Layout.astro`:
 ### Page Structure
 
 Astro pages are thin wrappers. The real UI lives in React components:
-- `src/components/pages/Index.tsx` — Home with Hero, Projects, InfoBar, About, EngineeringPractices, LatestPosts, CTA
+- `src/components/pages/Index.tsx` — Home with Hero, Projects, About, CTA
 - `src/components/pages/BlogPage.tsx` — Blog listing with hero, sticky category filter bar (derived from `tags[0]`), post list, load-more pagination
 - `src/components/pages/BlogPostPage.tsx` — Single-column editorial reading page: back link, meta row, title, lede, byline, optional cover, markdown content, tags, next-post nav, reading progress bar
 - `src/components/pages/LatestPosts.tsx` — Latest posts section for homepage
@@ -100,9 +100,9 @@ Astro pages are thin wrappers. The real UI lives in React components:
 
 **i18n:** Full pt/en system via `src/lib/i18n.ts` (dictionary, pub/sub reactive store, `setLocale`, metadata helpers) + `useLocale` hook + language switcher in Navigation.
 
-**Animations:** Framer Motion (primary — scroll effects, spring physics, layout animations). GSAP (only `StaggeredMenu` and `ShuffleText`). Lenis (smooth scrolling via `SmoothScroll` wrapper).
+**Animations:** Framer Motion (primary — scroll effects, spring physics, layout animations). GSAP (only `StaggeredMenu`). Lenis (smooth scrolling via `SmoothScroll` wrapper).
 
-**Key dependencies:** Radix UI primitives (dialog, label, separator, slot, toast, tooltip), sonner (toast), lucide-react (icons), date-fns, react-markdown, caniuse-lite, class-variance-authority, clsx, tailwind-merge.
+**Key dependencies:** sonner (toast), lucide-react (icons), framer-motion (animations), gsap (StaggeredMenu), lenis (smooth scroll), clsx, tailwind-merge, @icons-pack/react-simple-icons.
 
 ## Design System
 
@@ -113,7 +113,7 @@ Neo-brutalist/pixel aesthetic with dark background (`#000`):
 - **Shadows:** `shadow-brutal`, `shadow-brutal-sm`, `shadow-brutal-lg` (CSS vars). `shadow-neo`, `shadow-neo-sm`, `shadow-neo-lg` (hard offset, no blur). `shadow-pixel` (4-direction black outline).
 - **Borders:** `border-4`, `rounded-none`
 - **Animations:** `animate-float`/`float-slow`/`float-medium`/`float-fast` (vertical bob), `animate-typing` (cursor blink), `animate-glitch` (micro-offset), `animate-marquee` (30s infinite scroll)
-- **Effects:** `GrainOverlay` (noise texture), `CustomCursor` (spring physics), `BorderGlow` (radial hover), `GlassSurface` (SVG chromatic displacement), `GlitchImage` (multi-layer glitch), `Magnetic` (mouse-follow), `PixelLoader` (dissolving pixel grid), `ScrollReveal`, `StaggeredMenu` (GSAP panels), `TextReveal`, `ShuffleText`
+- **Effects:** `GrainOverlay` (noise texture), `CustomCursor` (spring physics), `BrandIcon` (custom icon set), `BrandMascot` (animated mascot), `LiquidGlassLens` (glass morphism), `LiquidGlitchImage` (image with glass overlay), `ScrollReveal`, `StaggeredMenu` (GSAP panels), `TextReveal`
 
 ## Testing
 

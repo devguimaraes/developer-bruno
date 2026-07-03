@@ -1,3 +1,4 @@
+> **Nota:** Este documento é histórico. Os componentes PixelLoader, GlassSurface, Magnetic, LatestPosts, InfoBar, EngineeringPractices, ShuffleText e BorderGlow foram removidos na limpeza de Jul/2026.
 # BLOCO Icons — Uso no Site (Integração Híbrida) — Design Spec
 
 **Data:** 2026-07-03

@@ -8,10 +8,9 @@ This repository is an Astro 5 + React + TypeScript portfolio app.
 - `src/pages/`: route-level pages (mostly `.astro` and nested directories).
 - `src/hooks/`, `src/lib/`, `src/types/`, `src/data/`, `src/content/`: shared logic, utilities, types, and content data.
 - `src/test/`: test setup and E2E tests (`src/test/e2e`).
-- `public/`: static assets served as-is (images, Rive files).
-- `supabase/functions/`: edge/serverless functions.
+- `public/`: static assets served as-is (images, video, fonts).
 - `docs/`: architecture, design, and implementation notes.
-- `scripts/`: automation scripts (e.g., sitemap generation).
+- `scripts/`: automation scripts (optimize:media, check:media-budget).
 
 ## Build, Test, and Development Commands
 - `bun run dev`: start local dev server (Astro at `http://127.0.0.1:4321/`).

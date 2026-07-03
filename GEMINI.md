@@ -26,17 +26,17 @@ bun run preview      # Preview production build locally
 
 - **Core:** Astro 5 (SSG Mode)
 - **Frontend:** React 18.3 + TypeScript + Tailwind CSS 3.4
-- **UI System:** shadcn/ui (36 components) + Radix UI + Framer Motion
-- **Interactivity:** Framer Motion (animations), Embla Carousel, Sonner
-- **Backend/Integrations:** Supabase (Edge Functions), Mercado Pago (PIX flow)
-- **Monitoring:** Vercel Analytics, Speed Insights, Plausible (Privacy-first)
+- **UI System:** Custom neo-brutalist components + Framer Motion
+- **Interactivity:** Framer Motion (animations), GSAP (StaggeredMenu), Sonner (toasts)
+- **Monitoring:** Plausible (privacy-first analytics)
 
 **Project Structure:**
 
 ```
 src/
 ├── components/
-│   ├── ui/             # shadcn/ui component library
+│   ├── ui/             # Custom UI component library (neo-brutalist)
+│   ├── brand/          # BrandIcon, BrandMascot
 │   ├── Navigation.tsx  # Interactive nav with mobile toggle
 │   └── ...             # Feature components (Hero, About, etc.)
 ├── layouts/
@@ -46,11 +46,9 @@ src/
 │   └── blog/           # Blog listing & dynamic posts
 ├── content/
 │   └── blog/           # Blog posts content (Markdown)
-├── hooks/              # Custom React hooks (useStackingSections, etc.)
+├── hooks/              # Custom React hooks (useLocale, useReducedMotion, etc.)
 ├── data/               # Static data (projects, skills, experience)
 └── lib/                # Shared utilities & validation
-supabase/               # Supabase Edge Functions & Migrations
-antigravity-pack/       # Antigravity product assets & docs
 ```
 
 ## 🎯 Development & Testing Strategy
@@ -91,7 +89,7 @@ antigravity-pack/       # Antigravity product assets & docs
 **Animations:**
 
 - **Framer Motion:** Component transitions and scroll effects.
-- **Scroll Stacking:** `useStackingSections.ts` for layered navigation.
+- **GSAP:** StaggeredMenu animation.
 
 ## 👨‍💻 Guidelines for AI Agents
 
@@ -106,5 +104,3 @@ antigravity-pack/       # Antigravity product assets & docs
 **Optimized for Vercel:**
 
 - SSG deployment for maximum speed.
-- Middleware for redirects and performance monitoring.
-- Serverless Edge Functions (via Supabase) for transactional flows.
