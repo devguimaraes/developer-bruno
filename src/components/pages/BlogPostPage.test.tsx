@@ -85,6 +85,49 @@ describe("BlogPostPage — Cover", () => {
     render(<BlogPostPage post={mockPostSemImagem} next={null} />);
     expect(screen.queryByRole("img", { name: mockPostSemImagem.title })).not.toBeInTheDocument();
   });
+
+  it("renderiza a capa como full-bleed fora do container do artigo", () => {
+    const { container } = render(<BlogPostPage post={mockPost} next={null} />);
+    // A capa full-bleed deve estar fora do <article>
+    const article = container.querySelector("article");
+    expect(article).not.toBeNull();
+    // O container da capa deve ter data-testid="cover-fullbleed"
+    const cover = container.querySelector('[data-testid="cover-fullbleed"]');
+    expect(cover).not.toBeNull();
+    // A capa NÃO deve estar dentro do article
+    expect(article?.contains(cover)).toBe(false);
+  });
+
+  it("renderiza gradiente de transição sobre a capa full-bleed", () => {
+    const { container } = render(<BlogPostPage post={mockPost} next={null} />);
+    const gradient = container.querySelector('[data-testid="cover-gradient"]');
+    expect(gradient).not.toBeNull();
+  });
+});
+
+describe("BlogPostPage — Table of Contents", () => {
+  it("renderiza o componente TableOfContents", () => {
+    const { container } = render(<BlogPostPage post={mockPost} next={null} />);
+    const toc = container.querySelector('[data-testid="toc"]');
+    expect(toc).not.toBeNull();
+  });
+
+  it("o TOC fica oculto por padrão (não visível sem scroll-up)", () => {
+    const { container } = render(<BlogPostPage post={mockPost} next={null} />);
+    const toc = container.querySelector('[data-testid="toc"]');
+    // Deve existir mas estar visualmente oculto com opacity-0
+    const classes = toc?.className || "";
+    expect(classes).toMatch(/opacity-0/);
+  });
+});
+
+describe("BlogPostPage — Código Wide", () => {
+  it("artigo usa classe que permite código quebrar 720px", () => {
+    const { container } = render(<BlogPostPage post={mockPost} next={null} />);
+    const article = container.querySelector("article");
+    // O artigo deve ter uma classe que permita conteúdo wide
+    expect(article?.className).toMatch(/blog-article/);
+  });
 });
 
 describe("BlogPostPage — Conteúdo e tags", () => {

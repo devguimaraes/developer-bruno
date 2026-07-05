@@ -21,7 +21,7 @@ export function BlogPostHeader({ post }: BlogPostHeaderProps) {
     >
       {/* Meta row */}
       <div className="flex flex-wrap items-center gap-3 mb-7">
-        <BrandIcon name="documentacao" size={16} decorative />
+        <BrandIcon name="documentacao" size={20} decorative />
         <span className="type-mono text-[9px] font-bold tracking-[0.20em] bg-accent text-black px-3 py-[3px] leading-none">
           {category}
         </span>
@@ -49,12 +49,6 @@ export function BlogPostHeader({ post }: BlogPostHeaderProps) {
       </p>
 
       <BlogPostByline post={post} />
-
-      {post.image && (
-        <div className="w-full aspect-[16/9] overflow-hidden mb-14 border border-white/[0.08]">
-          <img src={post.image} alt={post.title} className="w-full h-full object-cover" />
-        </div>
-      )}
     </motion.header>
   );
 }
