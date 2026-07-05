@@ -30,9 +30,10 @@ export const dictionary = {
     "about.bio":
       "Formado em Desenvolvimento de Sistemas Web pelo Senac, atuo há 5 anos com desenvolvimento de software voltado ao front-end. Meu trabalho combina React, TypeScript e arquitetura server-side com princípios de engenharia de software e design intencional. Tenho experiência prática com otimização de performance e Core Web Vitals em projetos com tráfego real, além de manter testes automatizados e pipelines de CI/CD. Código bem estruturado, entregas consistentes e compromisso com qualidade.",
     "about.based": "// RIO_DE_JANEIRO",
+    "about.tagline": "Front-End Developer · AI-Native Development",
     "about.capabilities_label": "// O_QUE_EU_FAÇO",
     "about.cap.development": "Desenvolvimento Front-End",
-    "about.cap.backend": "Backend & APIs",
+    "about.cap.backend": "APIs",
     "about.cap.deploy": "Deploy & CI/CD",
     "about.cap.a11y": "Acessibilidade & UX",
     "about.cap.practices": "Boas Práticas & Processo",
@@ -140,9 +141,10 @@ export const dictionary = {
     "about.bio":
       "Graduated in Web Systems Development from Senac, I have 5 years of experience in front-end software development. My work combines React, TypeScript, and server-side architecture with software engineering principles and intentional design. I have hands-on experience optimizing performance and Core Web Vitals on production traffic, along with maintaining automated tests and CI/CD pipelines. Well-structured code, consistent delivery, and a commitment to quality.",
     "about.based": "// RIO_DE_JANEIRO",
+    "about.tagline": "Front-End Developer · AI-Native Development",
     "about.capabilities_label": "// WHAT_I_DO",
     "about.cap.development": "Front-End Development",
-    "about.cap.backend": "Backend & APIs",
+    "about.cap.backend": "APIs",
     "about.cap.deploy": "Deploy & CI/CD",
     "about.cap.a11y": "Accessibility & UX",
     "about.cap.practices": "Engineering Practices",
