@@ -34,7 +34,7 @@ Object.defineProperty(window, "matchMedia", {
   })),
 });
 
-// Mock de ResizeObserver (necessário para GlassSurface e outros componentes dinâmicos)
+// Mock de ResizeObserver (necessário para componentes com resize observers)
 class ResizeObserverMock {
   observe = vi.fn();
   unobserve = vi.fn();

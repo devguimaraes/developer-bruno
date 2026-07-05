@@ -1,5 +1,11 @@
-import { Code2, Palette, Zap, Rocket, Database, Globe, Smartphone, Shield } from "lucide-react";
+import type { IconName } from "@/components/brand";
 import type { Skill } from "@/types";
+
+// Ícones sem equivalente no BLOCO Line — mantidos como string para referência futura
+const Palette = "palette" as const;
+const Zap = "zap" as const;
+const Smartphone = "smartphone" as const;
+const Shield = "shield" as const;
 
 /**
  * Skills and technical competencies data
@@ -7,7 +13,7 @@ import type { Skill } from "@/types";
 export const skills: readonly Skill[] = [
   {
     id: "development",
-    icon: Code2,
+    icon: "codigo" as IconName,
     title: "Desenvolvimento",
     description:
       "React, Next.js, TypeScript, Astro. Código limpo, performático e escalável seguindo as melhores práticas.",
@@ -64,7 +70,7 @@ export const skills: readonly Skill[] = [
   },
   {
     id: "deployment-cicd",
-    icon: Rocket,
+    icon: "deploy" as IconName,
     title: "Deploy & CI/CD",
     description:
       "Vercel, GitHub Actions, Docker. Pipelines automatizados, deployments seguros e monitoramento contínuo.",
@@ -83,7 +89,7 @@ export const skills: readonly Skill[] = [
   },
   {
     id: "backend-database",
-    icon: Database,
+    icon: "api" as IconName,
     title: "Backend & Database",
     description:
       "Node.js, Express, PostgreSQL, MongoDB. APIs RESTful, GraphQL e gerenciamento de dados eficiente.",
@@ -102,7 +108,7 @@ export const skills: readonly Skill[] = [
   },
   {
     id: "web-seo",
-    icon: Globe,
+    icon: "comunidade" as IconName,
     title: "Web & SEO",
     description:
       "SEO técnico, acessibilidade (WCAG), HTML semântico. Sites otimizados para buscadores e usuários.",

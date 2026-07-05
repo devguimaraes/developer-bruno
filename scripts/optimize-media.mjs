@@ -1,5 +1,6 @@
 /**
- * Gera WebP a partir de PNG/JPEG em public/ (qualidade visual ~82).
+ * Converte PNG/JPEG em public/ para WebP (qualidade visual ~82).
+ * Processa todos os arquivos automaticamente — sem lista hardcoded.
  * Uso: node scripts/optimize-media.mjs
  */
 import fs from "node:fs";
@@ -11,33 +12,45 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
 const publicDir = path.join(root, "public");
 
-const files = [
-  "banner-movies-event-house-bremen.png",
-  "banner-danila-rizo.png",
-  "banner-multi-macbook.png",
-  "hero-render-1.png",
-  "project-render-1.png",
-  "project-render-2.png",
-  "movies-event-house.png",
-  "agencia-multi-br-banner.png",
-  "kqrh-banner.jpg",
-];
+const QUALITY = 82;
+
+async function convertToWebP(inputPath, outputPath) {
+  const inStat = fs.statSync(inputPath);
+  await sharp(inputPath)
+    .webp({ quality: QUALITY, effort: 6, smartSubsample: true })
+    .toFile(outputPath);
+  const outStat = fs.statSync(outputPath);
+  console.log(
+    `${path.basename(inputPath)} → ${path.basename(outputPath)} (${(inStat.size / 1024).toFixed(0)} KB → ${(outStat.size / 1024).toFixed(0)} KB)`
+  );
+}
 
 async function main() {
-  for (const name of files) {
-    const input = path.join(publicDir, name);
-    if (!fs.existsSync(input)) {
-      console.warn(`skip (missing): ${name}`);
+  const entries = fs.readdirSync(publicDir, { recursive: true });
+  let converted = 0;
+
+  for (const entry of entries) {
+    const fullPath = path.join(publicDir, entry);
+    const stat = fs.statSync(fullPath);
+    if (!stat.isFile()) continue;
+
+    const ext = path.extname(entry).toLowerCase();
+    if (ext !== ".png" && ext !== ".jpg" && ext !== ".jpeg") continue;
+
+    const webpPath = fullPath.replace(/\.(png|jpe?g)$/i, ".webp");
+    if (fs.existsSync(webpPath)) {
+      console.log(`skip (webp exists): ${entry}`);
       continue;
     }
-    const base = name.replace(/\.(png|jpe?g)$/i, "");
-    const output = path.join(publicDir, `${base}.webp`);
-    await sharp(input).webp({ quality: 82, effort: 6, smartSubsample: true }).toFile(output);
-    const inStat = fs.statSync(input);
-    const outStat = fs.statSync(output);
-    console.log(
-      `${name} → ${base}.webp (${(inStat.size / 1024).toFixed(0)} KB → ${(outStat.size / 1024).toFixed(0)} KB)`
-    );
+
+    await convertToWebP(fullPath, webpPath);
+    converted++;
+  }
+
+  if (converted === 0) {
+    console.log("Nenhum PNG/JPEG pendente para conversão.");
+  } else {
+    console.log(`${converted} arquivo(s) convertido(s).`);
   }
 }
 

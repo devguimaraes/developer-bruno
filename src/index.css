@@ -14,6 +14,8 @@
     --font-pixel-display: "Jersey 15", monospace;
     --font-pixel-tech: "Silkscreen", monospace;
     --font-serif: "Newsreader", serif;
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
   }
 
   html,
@@ -39,15 +41,16 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
   }
+
+  *:focus-visible {
+    outline: 2px solid hsl(var(--accent));
+    outline-offset: 2px;
+  }
 }
 
 @layer utilities {
   .font-pixel {
     font-family: var(--font-pixel-display);
-  }
-
-  .font-silkscreen {
-    font-family: var(--font-pixel-tech);
   }
 
   .font-hero-pixel,
@@ -64,7 +67,7 @@
   }
 
   .type-mono {
-    @apply font-silkscreen text-[12px] md:text-[13px] lg:text-sm tracking-[0.2em] opacity-70 uppercase;
+    @apply font-mono text-[12px] md:text-[13px] lg:text-sm tracking-[0.2em] opacity-70 uppercase;
   }
 
   .type-display-hero {

@@ -1,43 +1,40 @@
 import type React from "react";
-import { footerData } from "@/config/site";
+import { useState, useEffect, memo } from "react";
+import { t } from "@/lib/i18n";
+import { useLocale } from "@/hooks/useLocale";
+
+const LiveClock = memo(function LiveClock() {
+  const [time, setTime] = useState("");
+
+  useEffect(() => {
+    const update = () => {
+      setTime(new Date().toLocaleTimeString("pt-BR", { hour12: false }));
+    };
+    update();
+    const timer = setInterval(update, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return <span className="tabular-nums font-bold">{time || "--:--:--"}</span>;
+});
 
 const Footer: React.FC = () => {
-  return (
-    <footer className="bg-black border-t border-white/10 py-10 sm:py-12 px-4 sm:px-6 md:px-8 relative overflow-hidden">
-      <div className="container mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-7 sm:gap-8 relative z-10">
-          <div className="flex flex-col items-center md:items-start gap-2 text-center md:text-left">
-            <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
-              <div className="bg-white text-black px-3 py-1 type-ui-label text-xs">V4.0_FINAL</div>
-              <span className="type-body text-xs sm:text-sm uppercase text-white/60">
-                {footerData.copyright.toUpperCase()}
-              </span>
-            </div>
-            <span className="type-ui-label text-xs sm:text-sm text-stone-400">
-              Built with precision
-            </span>
-          </div>
+  const locale = useLocale();
+  const year = new Date().getFullYear();
 
-          <div className="flex items-center justify-center sm:justify-end gap-6 sm:gap-10 md:gap-12 type-ui-label text-sm sm:text-base md:text-lg lg:text-xl text-stone-400 w-full md:w-auto">
-            <div className="flex flex-col items-end">
-              <span>LAT: 22.9068° S</span>
-              <span>LON: 43.1729° W</span>
-            </div>
-            <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-white pixel-border-sm flex items-center justify-center text-black shrink-0">
-              <span className="font-pixel text-sm sm:text-lg">BG</span>
-            </div>
-          </div>
+  return (
+    <footer className="bg-black border-t border-white/[0.08] py-10 sm:py-12 overflow-hidden">
+      <div className="w-full flex flex-col md:flex-row justify-between items-center gap-4 px-6 md:px-12 type-mono uppercase tracking-[0.2em]">
+        <div className="flex flex-wrap items-center gap-6 justify-center md:justify-start">
+          <span className="font-bold">&copy; {year}</span>
+          <LiveClock />
+          <span className="font-bold">{t(locale, "footer.location")}</span>
+        </div>
+
+        <div className="text-white/40 hover:text-accent transition-colors cursor-default tracking-[0.3em] font-bold">
+          {t(locale, "footer.built_by")}
         </div>
       </div>
-
-      {/* Decorative dots */}
-      <div
-        className="absolute bottom-0 right-0 w-32 h-32 opacity-10 pointer-events-none"
-        style={{
-          backgroundImage: "radial-gradient(#fff 2px, transparent 2px)",
-          backgroundSize: "16px 16px",
-        }}
-      ></div>
     </footer>
   );
 };

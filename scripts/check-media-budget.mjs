@@ -3,10 +3,10 @@
 /**
  * Media Budget Check Script
  *
- * Reads the performanceBudget from src/config/site.ts and compares
- * the total size of all media files loaded on the home page against the budget.
+ * Verifica o tamanho total dos assets da home page contra o orçamento
+ * de performance definido em src/config/site.ts.
  *
- * Usage: bun run scripts/check-media-budget.mjs
+ * Usage: node scripts/check-media-budget.mjs
  */
 
 import { readFileSync, statSync } from "node:fs";
@@ -16,11 +16,11 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = resolve(__dirname, "..");
 
-// Files that load in the initial home viewport and count toward the strict image budget.
+// Imagens carregadas no viewport inicial da home (contam para o budget)
 const STRICT_HOME_IMAGES = [
   { path: "public/hero-render-1.webp", category: "images" },
-  { path: "public/about-avatar.jpg", category: "images" },
-  { path: "public/avatar-bruno-bg.jpg", category: "images" },
+  { path: "public/brunoGuimaraes.webp", category: "images" },
+  { path: "public/avatar.webp", category: "images" },
 ];
 
 const LAZY_HOME_IMAGES = [
@@ -30,13 +30,8 @@ const LAZY_HOME_IMAGES = [
 ];
 
 const VIDEO_FILES = [
-  // Hero background (browser downloads one of these)
   { path: "public/backgroundvideo.webm", category: "video" },
   { path: "public/backgroundvideo.mp4", category: "video" },
-
-  // About avatar (browser downloads one of these)
-  { path: "public/avatar-bio3.webm", category: "video" },
-  { path: "public/avatar-bio3.mp4", category: "video" },
 ];
 
 // Parse budget from site.ts
@@ -44,7 +39,6 @@ function parseBudget() {
   const configPath = resolve(rootDir, "src/config/site.ts");
   const content = readFileSync(configPath, "utf-8");
 
-  // Extract performanceBudget values via regex
   const jsMatch = content.match(/javascript:\s*(\d+)/);
   const imgMatch = content.match(/images:\s*(\d+)/);
   const cssMatch = content.match(/css:\s*(\d+)/);
@@ -58,7 +52,6 @@ function parseBudget() {
   };
 }
 
-// Get file sizes
 function getFileSizes(files) {
   return files.map(({ path, category }) => {
     const fullPath = resolve(rootDir, path);
@@ -85,7 +78,6 @@ function main() {
   console.log("=".repeat(60));
   console.log();
 
-  // Budget summary
   console.log("Performance Budget:");
   console.log(`  JavaScript: ${formatSize(budget.javascript)}`);
   console.log(`  Images:     ${formatSize(budget.images)}`);
@@ -93,7 +85,6 @@ function main() {
   console.log(`  Total:      ${formatSize(budget.total)}`);
   console.log();
 
-  // Measure strict images
   console.log("Initial Home Page Images:");
   const strictImageFiles = getFileSizes(STRICT_HOME_IMAGES);
   let totalStrictImages = 0;
@@ -118,7 +109,6 @@ function main() {
   console.log(`  TOTAL LAZY IMAGES: ${formatSize(totalLazyImages).padStart(10)}`);
   console.log();
 
-  // Check budget
   const imagesOverBudget = budget.images !== null && totalStrictImages > budget.images;
   const imageBudgetStatus = imagesOverBudget ? "❌ OVER BUDGET" : "✅ OK";
 
@@ -127,7 +117,6 @@ function main() {
   console.log(`Status:        ${imageBudgetStatus}`);
   console.log();
 
-  // Measure videos (informational - videos are loaded lazily)
   console.log("Home Page Videos (lazy loaded, informational only):");
   const videoFiles = getFileSizes(VIDEO_FILES);
   let totalVideo = 0;
@@ -140,7 +129,6 @@ function main() {
   console.log(`  TOTAL VIDEO: ${formatSize(totalVideo).padStart(10)}`);
   console.log();
 
-  // Total combined (for reference)
   const totalStrictMedia = totalStrictImages;
   const totalInformationalMedia = totalStrictImages + totalLazyImages + totalVideo;
   const totalOverBudget = budget.total !== null && totalStrictMedia > budget.total;
@@ -152,7 +140,6 @@ function main() {
   console.log(`Status:        ${totalStatus}`);
   console.log();
 
-  // Summary
   console.log("=".repeat(60));
   let hasErrors = false;
 
@@ -177,14 +164,11 @@ function main() {
   console.log("=".repeat(60));
 
   if (hasErrors) {
-    console.log(
-      "\n⚠️  Some budgets are exceeded. See docs/audit/media-performance-2026-05-05.md for recommendations."
-    );
+    console.log("\n⚠️  Some budgets are exceeded. Run optimize:media to convert remaining images.");
   } else {
     console.log("\n✅ All budgets are within limits.");
   }
 
-  // Exit with non-zero if images budget exceeded (videos are lazy, exempt from strict check)
   process.exit(imagesOverBudget ? 1 : 0);
 }
 

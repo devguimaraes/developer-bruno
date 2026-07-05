@@ -26,8 +26,8 @@ export const SectionEntrance: React.FC<SectionEntranceProps> = ({ children, clas
       whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
       viewport={{ once: true, amount: 0.1 }}
       transition={{
-        duration: 0.8,
-        ease: [0.215, 0.61, 0.355, 1], // Cubic-bezier luxuoso
+        duration: 0.5,
+        ease: [0.23, 1, 0.32, 1],
       }}
       className={className}
     >

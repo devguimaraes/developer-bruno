@@ -1,6 +1,10 @@
 import { motion } from "framer-motion";
+import { t } from "@/lib/i18n";
+import { useLocale } from "@/hooks/useLocale";
 
 export function BlogPostBackButton() {
+  const locale = useLocale();
+
   return (
     <motion.div
       initial={{ opacity: 0, x: -20 }}
@@ -10,11 +14,10 @@ export function BlogPostBackButton() {
     >
       <a
         href="/blog"
-        className="inline-flex items-center gap-2 font-silkscreen uppercase py-2 min-h-[44px] pressable text-white/40 hover:text-white/85 transition-colors"
-        style={{ letterSpacing: "0.24em", fontSize: "10px" }}
-        title="Voltar para a listagem do blog"
+        className="inline-flex items-center gap-2 type-mono py-2 min-h-[44px] pressable text-white/40 hover:text-white/85 transition-colors text-[10px]"
+        title={t(locale, "blog.back_title")}
       >
-        {"← VOLTAR AO BLOG"}
+        {t(locale, "blog.back_to_blog")}
       </a>
     </motion.div>
   );

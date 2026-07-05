@@ -45,13 +45,13 @@ describe("BlogPage — Hero Section", () => {
     expect(screen.getByText("// BLOG")).toBeInTheDocument();
   });
 
-  it("exibe o heading POSTS em fonte pixel", () => {
+  it("exibe o heading POSTS em fonte raster", () => {
     render(<BlogPage initialPosts={mockPosts} />);
     const heading = screen.getByText("POSTS");
     expect(heading).toBeInTheDocument();
     expect(heading.tagName).toBe("H1");
-    // Deve usar a classe font-pixel
-    expect(heading.className).toContain("font-pixel");
+    // Deve usar a classe type-raster-hero
+    expect(heading.className).toContain("type-raster-hero");
   });
 
   it("exibe o subtítulo descritivo", () => {
@@ -66,6 +66,11 @@ describe("BlogPage — Hero Section", () => {
     expect(threes.length).toBeGreaterThanOrEqual(1);
     // Label TOTAL_POSTS
     expect(screen.getByText("TOTAL_POSTS")).toBeInTheDocument();
+  });
+
+  it("exibe o ícone documentacao ao lado do label // BLOG", () => {
+    const { container } = render(<BlogPage initialPosts={mockPosts} />);
+    expect(container.querySelector('[data-icon="documentacao"]')).not.toBeNull();
   });
 });
 

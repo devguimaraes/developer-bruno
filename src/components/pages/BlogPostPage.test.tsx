@@ -27,11 +27,11 @@ const mockNext: BlogPost = {
 };
 
 describe("BlogPostPage — Header", () => {
-  it("exibe o título do post em fonte pixel", () => {
+  it("exibe o título do post em fonte raster", () => {
     render(<BlogPostPage post={mockPost} next={null} />);
     const heading = screen.getByText("Design System Dark-First");
     expect(heading.tagName).toBe("H1");
-    expect(heading.className).toContain("font-pixel");
+    expect(heading.className).toContain("type-raster-section");
   });
 
   it("exibe a meta row com badge de categoria, data e tempo de leitura", () => {
@@ -53,6 +53,11 @@ describe("BlogPostPage — Header", () => {
       screen.getByText("Construindo sistemas de design com paleta escura.")
     ).toBeInTheDocument();
   });
+
+  it("exibe o ícone documentacao na meta row", () => {
+    const { container } = render(<BlogPostPage post={mockPost} next={null} />);
+    expect(container.querySelector('[data-icon="documentacao"]')).not.toBeNull();
+  });
 });
 
 describe("BlogPostPage — Byline", () => {
@@ -62,23 +67,66 @@ describe("BlogPostPage — Byline", () => {
     expect(screen.getByText("Engenheiro Front-End")).toBeInTheDocument();
   });
 
-  it("exibe as iniciais BG no avatar", () => {
+  it("exibe o mascote BLOCO no avatar do autor", () => {
     render(<BlogPostPage post={mockPost} next={null} />);
-    expect(screen.getByText("BG")).toBeInTheDocument();
+    expect(screen.getByLabelText(/Mascote BLOCO/i)).toBeInTheDocument();
   });
 });
 
 describe("BlogPostPage — Cover", () => {
   it("exibe a imagem de capa quando post.image existe", () => {
     render(<BlogPostPage post={mockPost} next={null} />);
-    const img = screen.getByRole("img");
+    const img = screen.getByRole("img", { name: mockPost.title });
     expect(img).toHaveAttribute("src", mockPost.image);
     expect(img).toHaveAttribute("alt", mockPost.title);
   });
 
-  it("não exibe nenhuma imagem quando post.image está ausente", () => {
+  it("não exibe imagem de capa quando post.image está ausente", () => {
     render(<BlogPostPage post={mockPostSemImagem} next={null} />);
-    expect(screen.queryByRole("img")).not.toBeInTheDocument();
+    expect(screen.queryByRole("img", { name: mockPostSemImagem.title })).not.toBeInTheDocument();
+  });
+
+  it("renderiza a capa como full-bleed fora do container do artigo", () => {
+    const { container } = render(<BlogPostPage post={mockPost} next={null} />);
+    // A capa full-bleed deve estar fora do <article>
+    const article = container.querySelector("article");
+    expect(article).not.toBeNull();
+    // O container da capa deve ter data-testid="cover-fullbleed"
+    const cover = container.querySelector('[data-testid="cover-fullbleed"]');
+    expect(cover).not.toBeNull();
+    // A capa NÃO deve estar dentro do article
+    expect(article?.contains(cover)).toBe(false);
+  });
+
+  it("renderiza gradiente de transição sobre a capa full-bleed", () => {
+    const { container } = render(<BlogPostPage post={mockPost} next={null} />);
+    const gradient = container.querySelector('[data-testid="cover-gradient"]');
+    expect(gradient).not.toBeNull();
+  });
+});
+
+describe("BlogPostPage — Table of Contents", () => {
+  it("renderiza o componente TableOfContents", () => {
+    const { container } = render(<BlogPostPage post={mockPost} next={null} />);
+    const toc = container.querySelector('[data-testid="toc"]');
+    expect(toc).not.toBeNull();
+  });
+
+  it("o TOC fica oculto por padrão (não visível sem scroll-up)", () => {
+    const { container } = render(<BlogPostPage post={mockPost} next={null} />);
+    const toc = container.querySelector('[data-testid="toc"]');
+    // Deve existir mas estar visualmente oculto com opacity-0
+    const classes = toc?.className || "";
+    expect(classes).toMatch(/opacity-0/);
+  });
+});
+
+describe("BlogPostPage — Código Wide", () => {
+  it("artigo usa classe que permite código quebrar 720px", () => {
+    const { container } = render(<BlogPostPage post={mockPost} next={null} />);
+    const article = container.querySelector("article");
+    // O artigo deve ter uma classe que permita conteúdo wide
+    expect(article?.className).toMatch(/blog-article/);
   });
 });
 

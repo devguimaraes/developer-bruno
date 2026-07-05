@@ -16,9 +16,23 @@ import {
   SiAnthropic,
 } from "@icons-pack/react-simple-icons";
 import { MousePointer2 } from "lucide-react";
+import { BrandIcon } from "@/components/brand";
+import type { IconName } from "@/components/brand";
+import type { TranslationKey } from "@/lib/i18n";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+
+const capabilities: { icon: IconName; key: TranslationKey }[] = [
+  { icon: "codigo", key: "about.cap.development" },
+  { icon: "api", key: "about.cap.backend" },
+  { icon: "deploy", key: "about.cap.deploy" },
+  { icon: "usuario", key: "about.cap.a11y" },
+  { icon: "settings", key: "about.cap.practices" },
+  { icon: "comunidade", key: "about.cap.collaboration" },
+];
 
 const About: React.FC = () => {
   const locale = useLocale();
+  const prefersReducedMotion = useReducedMotion();
 
   const techs = [
     { name: "Next.js", icon: SiNextdotjs },
@@ -34,92 +48,120 @@ const About: React.FC = () => {
     { name: "Framer", icon: SiFramer },
   ];
 
-  const marqueeTechs = [
-    ...techs.map(tech => ({ ...tech, key: `primary-${tech.name}` })),
-    ...techs.map(tech => ({ ...tech, key: `secondary-${tech.name}` })),
-  ];
-
-  // Badges removidas para layout editorial minimalista
-
   return (
-    <section id="about" className="min-h-screen pb-16 bg-black text-white overflow-hidden relative">
-      <div className="container mx-auto px-6 md:px-12 pt-24 md:pt-48">
-        <div className="relative">
-          {/* Lado Esquerdo/Fundo: Imagem Editorial com Glitch */}
-          <div className="md:absolute md:top-0 md:right-0 w-full md:w-[55%] aspect-[3/4] md:aspect-[4/5] z-0 grayscale opacity-40 md:opacity-100 group">
-            <div className="w-full h-full overflow-hidden border-2 border-white/5 shadow-2xl transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-[1.02]">
+    <section
+      id="about"
+      className="relative min-h-screen flex flex-col justify-center bg-black text-white py-16 md:py-20"
+    >
+      <div className="container mx-auto px-6 md:px-12">
+        {/* ─── Header: Nome + Tagline ─── */}
+        <motion.div
+          initial={prefersReducedMotion ? false : { opacity: 0, x: -30 }}
+          whileInView={prefersReducedMotion ? undefined : { opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, ease: "circOut" }}
+          className="mb-8"
+        >
+          <h2 className="type-raster-section text-[7vw] md:text-[5vw] leading-[0.85] text-white mb-2">
+            BRUNO
+            <br />
+            GUIMARÃES
+          </h2>
+          <p className="type-mono text-[11px] text-accent uppercase tracking-[0.2em]">
+            {t(locale, "about.tagline" as TranslationKey)}
+          </p>
+        </motion.div>
+
+        {/* ─── Bloco Foto + Bio ─── */}
+        <div className="flex flex-col md:flex-row gap-6 md:gap-8 mb-8">
+          {/* Foto — 30% width, aspecto editorial */}
+          <motion.div
+            data-testid="about-photo"
+            initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.95 }}
+            whileInView={prefersReducedMotion ? undefined : { opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.15 }}
+            className="w-full sm:w-[60%] sm:max-w-[240px] md:w-[30%] md:min-w-[220px] aspect-[3/4] flex-shrink-0 group"
+          >
+            <div className="w-full h-full overflow-hidden border-2 border-white/[0.08] transition-all duration-700 group-hover:border-white/[0.15]">
               <LiquidGlitchImage
-                src="/brunoGuimaraes.png"
+                src="/brunoGuimaraes.webp"
                 alt="Bruno Guimarães"
-                className="w-full h-full object-cover"
-                active={true}
+                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                active
                 loadingLazy
               />
             </div>
-            {/* Technical Tag */}
-            <div className="absolute -bottom-4 right-4 bg-accent text-black px-4 py-1.5 type-mono font-black uppercase tracking-widest z-10 shadow-brutal">
-              IDENT_STREAM_03
-            </div>
-          </div>
+          </motion.div>
 
-          {/* Lado Direito/Sobreposto: Conteúdo Editorial */}
-          <div className="relative z-10 pt-12 md:pt-20 md:w-[60%] pointer-events-none">
-            <motion.h2
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, ease: "circOut" }}
-              className="type-raster-section text-[12vw] md:text-[8vw] lg:text-[7vw] leading-[0.75] uppercase tracking-tighter mb-10 mix-blend-difference"
-            >
-              BRUNO
-              <br />
-              GUIMARÃES
-            </motion.h2>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="max-w-lg md:max-w-xl lg:max-w-2xl md:ml-12 border-l-2 border-accent pl-10 py-2 pointer-events-auto"
-            >
-              <p className="text-xl md:text-2xl leading-[1.5] font-serif italic text-white/95 text-left mb-8 drop-shadow-sm">
-                {t(locale, "about.bio")}
-              </p>
-
-              <div className="flex flex-col gap-2">
-                <p className="type-mono text-[11px] text-accent uppercase tracking-[0.4em] font-bold">
-                  {t(locale, "about.based")}
-                </p>
-                <div className="flex gap-2">
-                  <div className="w-2 h-2 bg-white" />
-                  <div className="w-2 h-2 bg-white/40" />
-                  <div className="w-2 h-2 bg-white/10" />
-                </div>
-              </div>
-            </motion.div>
-          </div>
+          {/* Bio — editorial com border accent */}
+          <motion.div
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+            whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.25 }}
+            className="flex-1 border-l-2 border-accent pl-6 md:pl-8 flex items-center"
+          >
+            <p className="font-serif italic text-base md:text-lg leading-[1.6] text-white/80">
+              {t(locale, "about.bio")}
+            </p>
+          </motion.div>
         </div>
-      </div>
 
-      {/* Stack Ticker - Full Width */}
-      <div className="w-full relative mt-40 md:mt-64 py-20 border-y border-white/5 overflow-hidden bg-white/[0.01] backdrop-blur-[2px]">
-        <div className="flex animate-marquee whitespace-nowrap">
-          <div className="flex items-center gap-12">
-            {marqueeTechs.map(tech => (
-              <div key={tech.key} className="flex items-center gap-4 group px-6">
-                <tech.icon
-                  size={28}
-                  className="text-white group-hover:text-accent transition-colors"
-                />
-                <span className="type-mono text-[11px] md:text-sm opacity-50 group-hover:opacity-100 transition-opacity uppercase tracking-[0.2em]">
-                  {tech.name}
+        {/* ─── Capabilities — Grid 3×2 ─── */}
+        <div className="mb-6">
+          <p className="type-mono text-[11px] text-accent uppercase tracking-[0.4em] font-bold mb-6">
+            {t(locale, "about.capabilities_label")}
+          </p>
+
+          <ul
+            data-testid="about-capabilities"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+          >
+            {capabilities.map((cap, i) => (
+              <motion.li
+                key={cap.icon}
+                initial={prefersReducedMotion ? false : { opacity: 0, x: -16 }}
+                whileInView={prefersReducedMotion ? undefined : { opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-10%" }}
+                transition={{ delay: i * 0.08, duration: 0.4 }}
+                className="flex flex-col items-center text-center gap-3 p-5 border border-white/[0.06] hover:border-white/[0.15] transition-colors"
+              >
+                <BrandIcon name={cap.icon} size={32} decorative />
+                <span className="type-mono text-sm uppercase tracking-[0.12em] text-white/70">
+                  {t(locale, cap.key)}
                 </span>
-                <span className="text-white/10 text-xl font-black mx-4 select-none">/</span>
-              </div>
+              </motion.li>
             ))}
-          </div>
+          </ul>
         </div>
+
+        {/* ─── Tech Strip — Ícones apenas ─── */}
+        <motion.div
+          data-testid="about-tech-strip"
+          initial={prefersReducedMotion ? false : { opacity: 0 }}
+          whileInView={prefersReducedMotion ? undefined : { opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4, delay: 0.5 }}
+          className="flex flex-wrap justify-center gap-5 pt-8 border-t border-white/[0.06]"
+        >
+          {techs.map((tech, i) => (
+            <motion.div
+              key={tech.name}
+              initial={prefersReducedMotion ? false : { opacity: 0 }}
+              whileInView={prefersReducedMotion ? undefined : { opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.5 + i * 0.05, duration: 0.3 }}
+              className="group"
+              title={tech.name}
+            >
+              <tech.icon
+                size={22}
+                className="text-white/40 group-hover:text-accent transition-colors duration-200"
+              />
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );

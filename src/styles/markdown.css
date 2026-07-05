@@ -38,13 +38,14 @@
   letter-spacing: -0.015em;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
 }
 
 [data-markdown-content] h3 {
   color: #fff;
   font-family: "Inter", sans-serif;
   font-weight: 700;
-  font-size: 1.375rem;
+  font-size: 1.5rem;
   line-height: 1.35;
   margin-top: 2.5rem;
   margin-bottom: 0.875rem;
@@ -117,6 +118,17 @@
   line-height: 1.7;
 }
 
+/* ---- Wide code blocks — quebra o max-w-[720px] do artigo ---- */
+@media (min-width: 1024px) {
+  .blog-article [data-markdown-content] pre {
+    max-width: 1100px;
+    margin-inline: calc((720px - 1100px) / 2);
+    background: rgba(255, 255, 255, 0.02);
+    border-color: rgba(255, 255, 255, 0.08);
+    padding: 1.5rem 2rem;
+  }
+}
+
 /* Language label */
 [data-markdown-content] pre[data-language]::before {
   content: attr(data-language);
@@ -183,21 +195,91 @@
   height: 14px;
 }
 
-/* ---- Blockquotes ---- */
+/* ---- Blockquotes (Pull Quotes) ---- */
 
-[data-markdown-content] blockquote {
+[data-markdown-content] blockquote:not([data-callout]) {
   color: rgba(255, 255, 255, 0.65);
-  border-left: 2px solid var(--accent, #fbbf24);
+  border-left: 4px solid var(--accent, #fbbf24);
   font-size: 1.3125rem; /* 21px */
-  padding: 1rem 1.25rem;
-  margin: 2rem 0;
+  padding: 1.25rem 1.5rem;
+  margin: 2.5rem 0;
   font-style: italic;
   background: rgba(255, 255, 255, 0.02);
   border-radius: 0 6px 6px 0;
+  box-shadow: 4px 4px 0 0 rgba(255, 255, 255, 0.05);
 }
 
-[data-markdown-content] blockquote p {
+[data-markdown-content] blockquote:not([data-callout]) p {
   margin-bottom: 0;
+}
+
+/* ---- Callouts (data-callout) ---- */
+
+[data-markdown-content] blockquote[data-callout] {
+  position: relative;
+  border-left-width: 4px;
+  border-left-style: solid;
+  border-radius: 0 6px 6px 0;
+  padding: 1rem 1.5rem;
+  margin: 2rem 0;
+  font-style: normal;
+  font-size: 1.0625rem;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+[data-markdown-content] blockquote[data-callout]::before {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 0.375rem;
+  font-weight: 700;
+  font-family: "Inter", sans-serif;
+  font-style: normal;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+[data-markdown-content] blockquote[data-callout] p {
+  margin-bottom: 0;
+}
+
+/* info — gold/accent */
+[data-markdown-content] blockquote[data-callout="info"] {
+  border-left-color: var(--accent, #fbbf24);
+  background: rgba(251, 191, 36, 0.06);
+}
+[data-markdown-content] blockquote[data-callout="info"]::before {
+  content: "ℹ️ INFO";
+  color: var(--accent, #fbbf24);
+}
+
+/* tip — green */
+[data-markdown-content] blockquote[data-callout="tip"] {
+  border-left-color: #22c55e;
+  background: rgba(34, 197, 94, 0.06);
+}
+[data-markdown-content] blockquote[data-callout="tip"]::before {
+  content: "💡 TIP";
+  color: #22c55e;
+}
+
+/* warning — orange */
+[data-markdown-content] blockquote[data-callout="warning"] {
+  border-left-color: #f97316;
+  background: rgba(249, 115, 22, 0.06);
+}
+[data-markdown-content] blockquote[data-callout="warning"]::before {
+  content: "⚠️ WARNING";
+  color: #f97316;
+}
+
+/* error — red */
+[data-markdown-content] blockquote[data-callout="error"] {
+  border-left-color: #ef4444;
+  background: rgba(239, 68, 68, 0.06);
+}
+[data-markdown-content] blockquote[data-callout="error"]::before {
+  content: "🚫 ERROR";
+  color: #ef4444;
 }
 
 /* ---- Lists ---- */
@@ -217,7 +299,7 @@
 }
 
 [data-markdown-content] li {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   line-height: 1.75;
 }
 
@@ -249,7 +331,7 @@
 
 [data-markdown-content] hr {
   border: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 2px solid rgba(251, 191, 36, 0.3);
   margin: 3rem 0;
 }
 
@@ -262,6 +344,8 @@
   height: auto;
   border-radius: 8px;
   margin: 2rem 0;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 6px 6px 0 0 rgba(255, 255, 255, 0.06);
 }
 
 /* ---- Tables ---- */
