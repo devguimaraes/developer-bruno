@@ -73,7 +73,7 @@ const Navigation: React.FC = () => {
                   className="flex items-center gap-1.5 type-mono tracking-[0.2em] uppercase text-white/60 hover:text-accent transition-colors font-bold pressable"
                   aria-label={locale === "pt" ? "Switch to English" : "Mudar para português"}
                 >
-                  <Languages size={16} className="text-accent" />
+                  <Languages size={20} className="text-accent" />
                   <span className="w-5 text-center">{locale === "pt" ? "PT" : "EN"}</span>
                 </button>
               </div>

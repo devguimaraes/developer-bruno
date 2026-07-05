@@ -66,7 +66,7 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
               transition={{ delay: 0.2 }}
               className="inline-flex items-center gap-2 type-mono text-white/40 hover:text-accent transition-colors uppercase tracking-widest py-2 px-1 min-h-[44px] pressable"
             >
-              <ArrowLeft className="w-3 h-3" />
+              <ArrowLeft className="w-5 h-5" />
               {t(locale, "case.back")}
             </motion.a>
           </div>
@@ -133,14 +133,14 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
               className="inline-flex items-center justify-center gap-3 bg-white text-black hover:bg-accent transition-colors px-6 py-3.5 type-mono uppercase tracking-widest font-bold min-h-[48px] pressable"
             >
               <span>{t(locale, "case.visit_live")}</span>
-              <ExternalLink className="w-3.5 h-3.5" />
+              <ExternalLink className="w-5 h-5" />
             </a>
             <a
               href={`mailto:${contactData.email}`}
               className="inline-flex items-center justify-center gap-3 border border-white/[0.08] text-white hover:border-accent/50 hover:text-accent transition-colors px-6 py-3.5 type-mono uppercase tracking-widest min-h-[48px] pressable"
             >
               <span>{t(locale, "case.work_together")}</span>
-              <ArrowUpRight className="w-3.5 h-3.5" />
+              <ArrowUpRight className="w-5 h-5" />
             </a>
           </motion.div>
         </div>
@@ -153,7 +153,7 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
         <motion.div {...sectionMotion}>
           {/* Label mono */}
           <div className="type-mono text-[10px] text-white/30 uppercase tracking-widest mb-8 flex items-center gap-2">
-            <BrandIcon name="terminal" size={14} decorative />
+            <BrandIcon name="terminal" size={20} decorative />
             {t(locale, "case.context")}
           </div>
 
@@ -196,7 +196,7 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
         <motion.div {...sectionMotion}>
           {/* Label mono */}
           <div className="type-mono text-[10px] text-white/30 uppercase tracking-widest mb-8 flex items-center gap-2">
-            <BrandIcon name="codigo" size={14} decorative />
+            <BrandIcon name="codigo" size={20} decorative />
             {t(locale, "case.stack")}
           </div>
 
@@ -284,7 +284,7 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
                   >
                     <div className="flex items-center gap-3 type-mono text-[9px] text-white/30 uppercase tracking-widest mb-3">
                       <span className="flex items-center gap-1.5">
-                        <Calendar className="w-3 h-3" />
+                        <Calendar className="w-5 h-5" />
                         {post.date}
                       </span>
                       {post.readTime && (

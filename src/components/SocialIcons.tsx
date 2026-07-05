@@ -21,9 +21,9 @@ const SocialIcons: React.FC = () => {
               className="group flex items-center gap-2 border-b-2 border-white/10 hover:border-accent py-2 px-1 transition-all min-h-12"
             >
               <span className="type-ui-label text-[10px] opacity-20 text-white">0{idx + 1}</span>
-              <Icon size={22} className="text-white/60 group-hover:text-accent transition-colors" />
+              <Icon size={28} className="text-white/60 group-hover:text-accent transition-colors" />
               <ArrowUpRight
-                size={18}
+                size={20}
                 className="opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0 text-accent"
               />
             </a>

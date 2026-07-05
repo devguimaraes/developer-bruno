@@ -124,7 +124,7 @@ const NotFound = () => {
                   <span className="type-mono text-[10px] uppercase tracking-[0.24em]">
                     {t(locale, "notfound.back_home")}
                   </span>
-                  <ArrowLeft className="h-4 w-4" />
+                  <ArrowLeft className="h-5 w-5" />
                 </a>
 
                 <a
@@ -134,7 +134,7 @@ const NotFound = () => {
                   <span className="type-mono text-[10px] uppercase tracking-[0.24em]">
                     {t(locale, "notfound.go_blog")}
                   </span>
-                  <ArrowRight className="h-4 w-4" />
+                  <ArrowRight className="h-5 w-5" />
                 </a>
               </div>
 

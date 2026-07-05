@@ -170,7 +170,7 @@ const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
                     rel="noreferrer"
                     className="text-white/60 hover:text-white transition-colors p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center pressable"
                   >
-                    <Icon size={24} />
+                    <Icon size={28} />
                   </a>
                 );
               })}
