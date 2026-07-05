@@ -8,11 +8,11 @@ test.describe("Fluxo do Blog", () => {
   test("Deve listar os posts do blog e permitir navegação para um post específico", async ({
     page,
   }) => {
-    // Verifica título da página
-    await expect(page.locator("h1").first()).toContainText(/INSIGHTS/i);
+    // O h1 da página de blog é "POSTS" (i18n blog.heading)
+    await expect(page.locator("h1").first()).toContainText(/POSTS/i);
 
-    // Espera os posts carregarem (lazy loading)
-    const blogCards = page.locator("article");
+    // Os cards de post são links <a> com href /blog/{slug}
+    const blogCards = page.locator("a[href^='/blog/']");
     await blogCards.first().waitFor({ state: "visible", timeout: 15000 });
     await expect(blogCards.first()).toBeVisible();
 
@@ -22,8 +22,7 @@ test.describe("Fluxo do Blog", () => {
     // Pega o título do primeiro post para comparar depois
     const firstPostTitle = await blogCards.first().locator("h2").textContent();
 
-    const postLink = blogCards.first().getByRole("link", { name: /Ler/i });
-    const postHref = await postLink.getAttribute("href");
+    const postHref = await blogCards.first().getAttribute("href");
     expect(postHref).toMatch(/^\/blog\/.+/);
     if (!postHref) {
       throw new Error("O link do post nao foi encontrado");
@@ -44,13 +43,14 @@ test.describe("Fluxo do Blog", () => {
   });
 
   test("Deve permitir voltar da página do post para a listagem", async ({ page }) => {
-    const blogCard = page.locator("article").first();
+    // Cards são links <a>, não <article>
+    const blogCard = page.locator("a[href^='/blog/']").first();
     await blogCard.click();
 
-    // Botão de voltar (deve existir na página de post)
+    // Botão de voltar (na página de post)
     const backButton = page
-      .getByRole("link", { name: /Voltar para o blog/i })
-      .or(page.getByRole("link", { name: /posts/i }));
+      .getByRole("link", { name: /VOLTAR AO BLOG/i })
+      .or(page.getByRole("link", { name: /back to blog/i }));
     await backButton.first().click();
 
     await expect(page).toHaveURL(/.*blog$/);
@@ -58,6 +58,7 @@ test.describe("Fluxo do Blog", () => {
 
   test("Deve exibir erro 404 para posts inexistentes", async ({ page }) => {
     await page.goto("/blog/post-que-nao-existe");
-    await expect(page.getByText(/404/i).or(page.getByText(/Página não encontrada/i))).toBeVisible();
+    // Usa first() para evitar strict mode (há múltiplos elementos com "404")
+    await expect(page.getByText(/404/i).first()).toBeVisible();
   });
 });
