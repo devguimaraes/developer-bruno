@@ -14,7 +14,7 @@
 
 Portfólio autoral de alta performance com identidade visual dark-first, linguagem de sistema e blog editorial integrado.
 
-[Visualizar Demo](https://devguimaraes.com.br) • [Guia de Design Atual](docs/guia-de-design-atual.md) • [Identidade Visual](docs/identidade-visual-atual.md) • [Branding Guide](docs/branding-guide-atual.md)
+[Visualizar Demo](https://devguimaraes.com.br) • [Guia de Design Atual](docs/guia-de-design-atual.md) • [Identidade Visual](docs/identidade-visual-atual.md)
 
 </div>
 
@@ -98,7 +98,6 @@ O projeto hoje segue uma direção visual dark-first:
 Para decisões de design, use:
 - [Guia de Design Atual](docs/guia-de-design-atual.md)
 - [Identidade Visual Atual](docs/identidade-visual-atual.md)
-- [Branding Guide Atual](docs/branding-guide-atual.md)
 
 ---
 

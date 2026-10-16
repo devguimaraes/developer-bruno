@@ -36,7 +36,7 @@ bunx playwright test --project=chromium home.spec.ts  # single e2e file/browser
 
 **Worktrees:** don't leave git worktrees inside the repo (e.g. `.claude/worktrees/`) while running `bun run lint` or `test:unit`. Each has its own `biome.json` (Biome fails with "nested root configuration") and its tests are picked up by Vitest.
 
-Biome is the linter/formatter (2 spaces, 100 cols, double quotes). `eslint.config.js` exists but is not wired into any script or CI step.
+Biome is the only linter/formatter (2 spaces, 100 cols, double quotes); there is no ESLint. React hooks rules (`useExhaustiveDependencies`, `useHookAtTopLevel`) and the fast-refresh rule (`useComponentExportOnlyModules`, off for `*.test.*`) are configured in `biome.json`. The 2 remaining fast-refresh warnings (`LiquidGlassProvider.tsx`, `LenisContext.tsx`, hook exported next to the provider) are known.
 
 Workflow, branching (Gitflow: `feature/*` from `develop`, `hotfix/*` from `main`) and commit conventions are in `AGENTS.md` and `GIT_WORKFLOW.md`. Vercel deploys `main` only (`vercel.json` disables `develop`).
 
@@ -71,7 +71,7 @@ Unit tests alias `astro:content` to `src/test/__mocks__/astro-content.ts` (`vite
 
 ### Design system
 
-Neo-brutalist/pixel, black background (`--background: 0 0% 0%`), white `--primary`, gold `--accent: 45 87% 57%`, all HSL CSS variables in `src/index.css`. Docs: `docs/guia-de-design-atual.md`, `docs/identidade-visual-atual.md`, `docs/branding-guide-atual.md`.
+Neo-brutalist/pixel, black background (`--background: 0 0% 0%`), white `--primary`, gold `--accent: 45 87% 57%`, all HSL CSS variables in `src/index.css`. Docs: `docs/guia-de-design-atual.md`, `docs/identidade-visual-atual.md`.
 
 Tailwind `fontFamily` defines only `sans` (Satoshi), `mono` (JetBrains Mono) and `pixel` (Jersey 15). Silkscreen and Newsreader are CSS variables (`--font-pixel-tech`, `--font-serif`) consumed by utility classes such as `.type-mono` and `.type-body`. The `brutal` palette has only `bg`, `dark`, `orange`, `blue`. Shadows `shadow-brutal`, `-sm`, `-lg` come from CSS vars. Check `tailwind.config.ts` and `index.css` before using a token; older docs list classes that do not exist.
 

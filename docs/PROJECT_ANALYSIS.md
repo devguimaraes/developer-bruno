@@ -50,7 +50,6 @@ Documentos canônicos para essa camada:
 
 - [Identidade Visual Atual](./identidade-visual-atual.md)
 - [Guia de Design Atual](./guia-de-design-atual.md)
-- [Branding Guide Atual](./branding-guide-atual.md)
 
 ## 4. Estrutura Atual da Experiência
 

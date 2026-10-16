@@ -21,7 +21,6 @@ Fontes principais:
 Fontes secundárias, úteis mas parcialmente desatualizadas:
 
 - `docs/DESIGN_SYSTEM_GUIDELINE.md`
-- `docs/id-visual`
 - `docs/PROJECT_ANALYSIS.md`
 
 ## Resumo executivo
