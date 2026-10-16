@@ -73,7 +73,7 @@
     "src/**/*.{ts,tsx}": [
       "biome lint --fix",
       "biome format --write",
-      "bash -c 'tsc --noEmit'"
+      "bash -c 'tsc -p tsconfig.app.json --noEmit'"
     ]
   },
   "overrides": {
