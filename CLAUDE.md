@@ -151,3 +151,13 @@ Neo-brutalist/pixel aesthetic with dark background (`#000`):
 - `AGENTS.md` — Git workflow, commit conventions, pre-PR checklist
 - `GEMINI.md` — Deeper architecture details, deployment, product directory (antigravity-pack)
 - `docs/` — Design guides (`guia-de-design-atual.md`, `identidade-visual-atual.md`), branding (`branding-guide-atual.md`), audits, implementation plans
+
+## Agent skills
+
+### Issue tracker
+
+Issues vivem no GitHub Issues de `devguimaraes/developer-bruno`, via CLI `gh`. See `docs/agents/issue-tracker.md`.
+
+### Domain docs
+
+Single-context: um `GLOSSARY.md` e `docs/adr/` na raiz. See `docs/agents/domain.md`.
