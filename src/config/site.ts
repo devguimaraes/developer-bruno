@@ -128,16 +128,3 @@ export const contactData: ContactData = {
     },
   ],
 };
-
-/**
- * Footer configuration
- */
-export const footerData = {
-  copyright: `© ${new Date().getFullYear()} ${siteConfig.author}. Todos os direitos reservados.`,
-  builtWith: [
-    { name: "Astro", url: "https://astro.build" },
-    { name: "React", url: "https://react.dev" },
-    { name: "TypeScript", url: "https://typescriptlang.org" },
-    { name: "Tailwind CSS", url: "https://tailwindcss.com" },
-  ],
-};

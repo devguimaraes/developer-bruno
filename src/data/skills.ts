@@ -10,7 +10,7 @@ const Shield = "shield" as const;
 /**
  * Skills and technical competencies data
  */
-export const skills: readonly Skill[] = [
+const skills: readonly Skill[] = [
   {
     id: "development",
     icon: "codigo" as IconName,
@@ -166,57 +166,9 @@ export const skills: readonly Skill[] = [
 ] as const;
 
 /**
- * Get skills by category
- */
-export const getSkillsByCategory = (category: Skill["category"]): readonly Skill[] => {
-  return skills.filter(skill => skill.category === category);
-};
-
-/**
- * Get skill by ID
- */
-export const getSkillById = (id: string): Skill | undefined => {
-  return skills.find(skill => skill.id === id);
-};
-
-/**
  * Get all unique technologies across skills
  */
 export const getAllTechnologies = (): readonly string[] => {
   const allTech = skills.flatMap(skill => skill.technologies || []);
   return [...new Set(allTech)].sort();
 };
-
-/**
- * Get skills statistics
- */
-export const getSkillsStats = () => ({
-  total: skills.length,
-  byCategory: {
-    development: getSkillsByCategory("development").length,
-    design: getSkillsByCategory("design").length,
-    performance: getSkillsByCategory("performance").length,
-    deployment: getSkillsByCategory("deployment").length,
-  },
-  technologies: getAllTechnologies().length,
-});
-
-/**
- * Get featured skills (first 4 for display)
- */
-export const featuredSkills = skills.slice(0, 4) as readonly Skill[];
-
-/**
- * Search skills by technology name
- */
-export const searchSkillsByTech = (tech: string): readonly Skill[] => {
-  const searchTerm = tech.toLowerCase();
-  return skills.filter(
-    skill =>
-      skill.technologies?.some(technology => technology.toLowerCase().includes(searchTerm)) ||
-      skill.title.toLowerCase().includes(searchTerm)
-  );
-};
-
-// Export default skills array for convenience
-export default skills;

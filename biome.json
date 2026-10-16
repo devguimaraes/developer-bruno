@@ -15,11 +15,17 @@
       "recommended": true,
       "correctness": {
         "noUnusedVariables": "warn",
-        "noUnusedImports": "warn"
+        "noUnusedImports": "warn",
+        "useExhaustiveDependencies": "error",
+        "useHookAtTopLevel": "error"
       },
       "style": {
         "noNonNullAssertion": "warn",
-        "useAsConstAssertion": "warn"
+        "useAsConstAssertion": "warn",
+        "useComponentExportOnlyModules": {
+          "level": "warn",
+          "options": { "allowConstantExport": true, "allowExportNames": ["toast"] }
+        }
       },
       "suspicious": {
         "noExplicitAny": "warn",
@@ -52,6 +58,16 @@
     }
   },
   "overrides": [
+    {
+      "includes": ["**/*.test.ts", "**/*.test.tsx"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useComponentExportOnlyModules": "off"
+          }
+        }
+      }
+    },
     {
       "includes": ["**/*.astro"],
       "linter": {

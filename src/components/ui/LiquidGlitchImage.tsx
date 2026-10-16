@@ -77,5 +77,3 @@ export function LiquidGlitchImage({
     </div>
   );
 }
-
-export default LiquidGlitchImage;

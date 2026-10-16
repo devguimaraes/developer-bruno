@@ -29,19 +29,6 @@ export interface Project {
   relatedPosts?: readonly string[];
 }
 
-// Work experience interface
-export interface Experience {
-  id: string;
-  year: string;
-  role: string;
-  company: string;
-  description: string;
-  achievements: readonly string[];
-  tech: readonly string[];
-  location?: string;
-  type?: "full-time" | "part-time" | "freelance" | "contract";
-}
-
 export interface Skill {
   id: string;
   icon: string;
@@ -104,27 +91,4 @@ export interface ContactData {
   description: string;
   email: string;
   socialLinks: readonly SocialLink[];
-}
-
-// Portfolio navigation sections
-export type Section = "hero" | "about" | "experience" | "projects" | "contact";
-
-// Content validation helpers
-export interface ContentValidation {
-  isValid: boolean;
-  errors: string[];
-  warnings: string[];
-}
-
-// Analytics Event Interface
-export interface AnalyticsEvent {
-  name: string;
-  properties?: Record<string, string | number | boolean>;
-}
-
-// Error Boundary State
-export interface ErrorBoundaryState {
-  hasError: boolean;
-  error?: Error;
-  errorInfo?: React.ErrorInfo;
 }

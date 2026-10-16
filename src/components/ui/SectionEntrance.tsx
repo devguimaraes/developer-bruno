@@ -8,7 +8,7 @@ interface SectionEntranceProps {
   id?: string;
 }
 
-export const SectionEntrance: React.FC<SectionEntranceProps> = ({ children, className, id }) => {
+const SectionEntrance: React.FC<SectionEntranceProps> = ({ children, className, id }) => {
   const reducedMotion = useReducedMotion();
 
   if (reducedMotion) {

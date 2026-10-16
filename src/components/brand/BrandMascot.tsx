@@ -189,5 +189,3 @@ export const BrandMascot: React.FC<BrandMascotProps> = ({
     </svg>
   );
 };
-
-export default BrandMascot;

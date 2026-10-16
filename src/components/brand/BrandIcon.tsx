@@ -454,5 +454,3 @@ export const BrandIcon: React.FC<BrandIconProps> = ({
     </svg>
   );
 };
-
-export default BrandIcon;

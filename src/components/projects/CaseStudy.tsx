@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft, ArrowUpRight, ExternalLink, Calendar } from "lucide-react";
 import type { Project } from "@/types";
 import type { BlogPost } from "@/types/blog";
-import LiquidGlitchImage from "@/components/ui/LiquidGlitchImage";
+import { LiquidGlitchImage } from "@/components/ui/LiquidGlitchImage";
 import { BrandIcon } from "@/components/brand";
 import { t } from "@/lib/i18n";
 import { useLocale } from "@/hooks/useLocale";

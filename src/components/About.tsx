@@ -1,6 +1,6 @@
 import type React from "react";
 import { motion } from "framer-motion";
-import LiquidGlitchImage from "./ui/LiquidGlitchImage";
+import { LiquidGlitchImage } from "./ui/LiquidGlitchImage";
 import { t } from "@/lib/i18n";
 import { useLocale } from "@/hooks/useLocale";
 import {

@@ -201,5 +201,3 @@ export function GlitchImage({
     </div>
   );
 }
-
-export default GlitchImage;

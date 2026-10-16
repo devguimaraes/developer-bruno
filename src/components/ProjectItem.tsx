@@ -2,7 +2,7 @@ import type React from "react";
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import type { Project } from "@/types";
-import LiquidGlitchImage from "@/components/ui/LiquidGlitchImage";
+import { LiquidGlitchImage } from "@/components/ui/LiquidGlitchImage";
 import TextReveal from "@/components/ui/TextReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { t } from "@/lib/i18n";

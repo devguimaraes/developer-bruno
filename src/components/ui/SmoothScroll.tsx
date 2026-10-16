@@ -36,7 +36,7 @@ const LenisController: React.FC<{ children: React.ReactNode }> = ({ children }) 
   return <>{children}</>;
 };
 
-export const SmoothScroll: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const SmoothScroll: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <LenisProvider>
       <LenisController>{children}</LenisController>
