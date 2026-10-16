@@ -94,16 +94,13 @@ export const LiquidGlassLens: React.FC<LiquidGlassLensProps> = ({
     };
   }, [isSupported, lensId, registerLens, unregisterLens]);
 
-  const containerStyle: React.CSSProperties = {
+  const containerStyle: React.CSSProperties & Record<`--${string}`, string | number> = {
     ...style,
     width: typeof width === "number" ? `${width}px` : width,
     height: typeof height === "number" ? `${height}px` : height,
     // CSS custom properties para fallback
-    // @ts-expect-error Custom properties
     "--glass-frost": backgroundOpacity,
-    // @ts-expect-error Custom properties
     "--glass-saturation": saturation,
-    // @ts-expect-error Custom properties
     "--glass-blur": `${blur}px`,
   };
 

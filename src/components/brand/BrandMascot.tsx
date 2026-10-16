@@ -1,7 +1,7 @@
 // src/components/brand/BrandMascot.tsx
 import type React from "react";
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, type TargetAndTransition } from "framer-motion";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 export type MascotVariant = "cor" | "negativo" | "mono-preto" | "mono-branco" | "mono-dourado";
@@ -25,10 +25,10 @@ const FILLS: Record<MascotVariant, { body: string; eyes: string; feet: string }>
 
 /** Configuracoes de animacao por estado */
 interface AnimConfig {
-  leftEye: Record<string, unknown>;
-  rightEye: Record<string, unknown>;
-  leftFoot: Record<string, unknown>;
-  rightFoot: Record<string, unknown>;
+  leftEye: TargetAndTransition;
+  rightEye: TargetAndTransition;
+  leftFoot: TargetAndTransition;
+  rightFoot: TargetAndTransition;
   blinkEnabled: boolean;
 }
 
@@ -114,7 +114,7 @@ export const BrandMascot: React.FC<BrandMascotProps> = ({
   const eyeScaleY = blink ? 0.1 : 1;
 
   /** Se qualquer valor do objeto for array, precisa de loopSpring (2-keyframe repeat) */
-  const pickTransition = (values: Record<string, unknown>) => {
+  const pickTransition = (values: TargetAndTransition) => {
     return Object.values(values).some(v => Array.isArray(v)) ? loopSpring : spring;
   };
 

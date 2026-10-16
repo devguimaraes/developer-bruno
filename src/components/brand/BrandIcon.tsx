@@ -412,7 +412,7 @@ function resolveColor(color: string, _variant: IconVariant): string {
 }
 
 function renderElement(
-  el: ICON_PATHS[string]["elements"][number],
+  el: (typeof ICON_PATHS)[IconName]["elements"][number],
   variant: IconVariant,
   idx: number
 ) {
