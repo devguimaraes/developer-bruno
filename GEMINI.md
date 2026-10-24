@@ -47,7 +47,7 @@ src/
 ├── content/
 │   └── blog/           # Blog posts content (Markdown)
 ├── hooks/              # Custom React hooks (useLocale, useReducedMotion, etc.)
-├── data/               # Static data (projects, skills, experience)
+├── data/               # Static data (projects, skills)
 └── lib/                # Shared utilities & validation
 ```
 
@@ -83,7 +83,7 @@ src/
 **Core Principles:**
 
 - Heavy borders (`border-4`) with no border radius (`--radius: 0rem`)
-- High contrast shadows: `shadow-brutal` / `shadow-neo`
+- High contrast shadows: `shadow-brutal`, `shadow-brutal-sm`, `shadow-brutal-lg`
 - Neo-brutalist color palette (Parakeet, Royal Lilac, Freesia)
 
 **Animations:**

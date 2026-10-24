@@ -2,7 +2,7 @@ import type React from "react";
 import { SiGithub, SiInstagram, SiX, SiWhatsapp } from "@icons-pack/react-simple-icons";
 import { Mail } from "lucide-react";
 
-const LinkedInIcon: React.FC<{ size?: number; className?: string }> = ({
+const LinkedInIcon: React.FC<{ size?: string | number; className?: string }> = ({
   size = 24,
   className,
 }) => (
@@ -21,7 +21,7 @@ const LinkedInIcon: React.FC<{ size?: number; className?: string }> = ({
 
 export const socialIconMap: Record<
   string,
-  React.ComponentType<{ size?: number; className?: string }>
+  React.ComponentType<{ size?: string | number; className?: string }>
 > = {
   github: SiGithub,
   linkedin: LinkedInIcon,

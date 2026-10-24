@@ -4,7 +4,7 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 const CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
 
-export const TextReveal: React.FC<{ text: string; className?: string }> = ({ text, className }) => {
+const TextReveal: React.FC<{ text: string; className?: string }> = ({ text, className }) => {
   const [displayText, setDisplayText] = useState(text);
   const ref = React.useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.5 });

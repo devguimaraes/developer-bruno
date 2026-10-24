@@ -16,7 +16,6 @@ export const dictionary = {
     "hero.description":
       "Desenvolvimento front-end com foco em performance, arquitetura e experiência do usuário.",
     "hero.scroll": "// EXPLORE",
-    "hero.version": "VER: 4.0.0_STABLE",
 
     // Projects
     "projects.heading": "PROJETOS",
@@ -24,12 +23,10 @@ export const dictionary = {
     "projects.total": "PROJETOS",
     "projects.view_case": "Visualizar Caso",
     "projects.visit_live": "Ver site no ar",
-    "projects.read_more": "Leia como aplico isso →",
 
     // About
     "about.bio":
       "Formado em Desenvolvimento de Sistemas Web pelo Senac, atuo há 5 anos com desenvolvimento de software voltado ao front-end. Meu trabalho combina React, TypeScript e arquitetura server-side com princípios de engenharia de software e design intencional. Tenho experiência prática com otimização de performance e Core Web Vitals em projetos com tráfego real, além de manter testes automatizados e pipelines de CI/CD. Código bem estruturado, entregas consistentes e compromisso com qualidade.",
-    "about.based": "// RIO_DE_JANEIRO",
     "about.tagline": "Front-End Developer · AI-Native Development",
     "about.capabilities_label": "// O_QUE_EU_FAÇO",
     "about.cap.development": "Desenvolvimento Front-End",
@@ -38,18 +35,14 @@ export const dictionary = {
     "about.cap.a11y": "Acessibilidade & UX",
     "about.cap.practices": "Boas Práticas & Processo",
     "about.cap.collaboration": "Colaboração com Produto",
-    "about.built_by": "Feito por Bruno Guimarães",
 
     // Engineering Practices
-    "practices.heading": "// PROCESSO",
 
     // Footer
     "footer.location": "Rio de Janeiro, BR",
     "footer.built_by": "Feito por Bruno Guimarães",
 
     // CTA
-    "cta.compact_question": "Gostou do que viu?",
-    "cta.compact_action": "VAMOS_CONVERSAR",
     "cta.ready": "Tem um projeto em mente?",
     "cta.lets_talk": "BORA CONVERSAR",
     "cta.copyright": "© 2026 BRUNO GUIMARÃES. Todos os direitos reservados.",
@@ -66,14 +59,12 @@ export const dictionary = {
     "blog.heading": "POSTS",
     "blog.description":
       "Artigos técnicos e reflexões sobre programação, engenharia de software e tecnologia.",
-    "blog.subtitle": "Artigos e reflexões sobre front-end",
     "blog.total_label": "TOTAL_POSTS",
     "blog.read_label": "Ler →",
     "blog.empty": "Nenhum post encontrado para esta categoria.",
     "blog.load_more": "Carregar mais",
     "blog.remaining": "restantes",
     "blog.all_categories": "Todos",
-    "blog.view_all": "Ver todos",
     "blog.back_to_blog": "← VOLTAR AO BLOG",
     "blog.back_title": "Voltar para a listagem do blog",
     "blog.next_post": "PRÓXIMO POST →",
@@ -114,8 +105,6 @@ export const dictionary = {
     "case.scroll": "SCROLL",
 
     // Language switcher
-    "lang.pt": "PT",
-    "lang.en": "EN",
   },
   en: {
     // Hero
@@ -127,7 +116,6 @@ export const dictionary = {
     "hero.description":
       "Front-end development focused on performance, architecture, and user experience.",
     "hero.scroll": "// EXPLORE",
-    "hero.version": "VER: 4.0.0_STABLE",
 
     // Projects
     "projects.heading": "PROJECTS",
@@ -135,12 +123,10 @@ export const dictionary = {
     "projects.total": "PROJECTS",
     "projects.view_case": "View Case",
     "projects.visit_live": "Visit live site",
-    "projects.read_more": "Read how I apply this →",
 
     // About
     "about.bio":
       "Graduated in Web Systems Development from Senac, I have 5 years of experience in front-end software development. My work combines React, TypeScript, and server-side architecture with software engineering principles and intentional design. I have hands-on experience optimizing performance and Core Web Vitals on production traffic, along with maintaining automated tests and CI/CD pipelines. Well-structured code, consistent delivery, and a commitment to quality.",
-    "about.based": "// RIO_DE_JANEIRO",
     "about.tagline": "Front-End Developer · AI-Native Development",
     "about.capabilities_label": "// WHAT_I_DO",
     "about.cap.development": "Front-End Development",
@@ -149,18 +135,14 @@ export const dictionary = {
     "about.cap.a11y": "Accessibility & UX",
     "about.cap.practices": "Engineering Practices",
     "about.cap.collaboration": "Product Collaboration",
-    "about.built_by": "Built by Bruno Guimarães",
 
     // Engineering Practices
-    "practices.heading": "// PROCESS",
 
     // Footer
     "footer.location": "Rio de Janeiro, BR",
     "footer.built_by": "Built by Bruno Guimarães",
 
     // CTA
-    "cta.compact_question": "Liked what you saw?",
-    "cta.compact_action": "LET'S_TALK",
     "cta.ready": "Have a project in mind?",
     "cta.lets_talk": "LET'S TALK",
     "cta.copyright": "© 2026 BRUNO GUIMARÃES. All rights reserved.",
@@ -177,14 +159,12 @@ export const dictionary = {
     "blog.heading": "POSTS",
     "blog.description":
       "Technical articles and reflections on programming, software engineering, and technology.",
-    "blog.subtitle": "Articles and reflections on front-end",
     "blog.total_label": "TOTAL_POSTS",
     "blog.read_label": "Read →",
     "blog.empty": "No posts found for this category.",
     "blog.load_more": "Load more",
     "blog.remaining": "remaining",
     "blog.all_categories": "All",
-    "blog.view_all": "View all",
     "blog.back_to_blog": "← BACK TO BLOG",
     "blog.back_title": "Back to blog listing",
     "blog.next_post": "NEXT POST →",
@@ -225,8 +205,6 @@ export const dictionary = {
     "case.scroll": "SCROLL",
 
     // Language switcher
-    "lang.pt": "PT",
-    "lang.en": "EN",
   },
 } as const;
 

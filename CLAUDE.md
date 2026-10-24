@@ -4,150 +4,97 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Commands
 
+Package manager is Bun (CI pins 1.3.12).
+
 ```bash
-bun install                    # Install dependencies
-bun run dev                    # Astro dev server (port 4321)
-bun run build                  # Production build (static SSG)
-bun run preview                # Preview production build
-bun run lint                   # Biome lint
-bun run lint:fix               # Biome lint with auto-fix
+bun install
+bun run dev                    # Astro dev server, http://127.0.0.1:4321
+bun run build                  # Static build (astro build)
+bun run preview
+bun run lint                   # Biome lint (scope: src/** and scripts/** only)
+bun run lint:fix
 bun run format                 # Biome format check
-bun run format:fix             # Biome format with write
-bun run test                   # Vitest (watch mode)
+bun run format:fix
+bun run test                   # Vitest watch
 bun run test:unit              # Vitest single run
-bun run test:coverage          # Vitest with coverage report (v8)
-bun run test:e2e               # Playwright e2e tests
-bun run optimize:media         # Optimize media assets via scripts/optimize-media.mjs
-bun run check:media-budget     # Check media sizes against performance budget
+bun run test:coverage          # v8 coverage, enforces thresholds (~30% statements/lines, 25% branches/functions)
+bun run test:e2e               # Playwright (starts its own dev server on 4321 unless one is running)
+bun run optimize:media         # scripts/optimize-media.mjs
+bun run check:media-budget     # scripts/check-media-budget.mjs
 ```
 
-**Run a single test file:**
 ```bash
-bunx vitest run src/lib/utils.test.ts
+bunx vitest run src/lib/utils.test.ts                 # single unit test file
+bunx playwright test --project=chromium home.spec.ts  # single e2e file/browser
 ```
 
-**Pre-commit hook:** Husky runs lint-staged — Biome lint + format + `tsc --noEmit` on staged `.ts/.tsx` files.
+**CI** (`.github/workflows/ci.yml`): lint, unit and build in parallel, then e2e on **chromium only**. The 5-browser Playwright matrix (chromium, firefox, webkit, Pixel 5, iPhone 12) only runs locally.
+
+**Pre-commit** (Husky + lint-staged, `src/**/*.{ts,tsx}`): `biome lint --fix`, `biome format --write`, `tsc -p tsconfig.app.json --noEmit`.
+
+**Typecheck:** use `bunx tsc -p tsconfig.app.json --noEmit` (strict). Root `tsconfig.json` has `"files": []` and only `references`, so a plain `tsc --noEmit` checks nothing and exits 0. The baseline is 0 errors, so any error is new.
+
+**Worktrees:** don't leave git worktrees inside the repo (e.g. `.claude/worktrees/`) while running `bun run lint` or `test:unit`. Each has its own `biome.json` (Biome fails with "nested root configuration") and its tests are picked up by Vitest.
+
+Biome is the only linter/formatter (2 spaces, 100 cols, double quotes); there is no ESLint. React hooks rules (`useExhaustiveDependencies`, `useHookAtTopLevel`) and the fast-refresh rule (`useComponentExportOnlyModules`, off for `*.test.*`) are configured in `biome.json`. The 2 remaining fast-refresh warnings (`LiquidGlassProvider.tsx`, `LenisContext.tsx`, hook exported next to the provider) are known.
+
+Workflow, branching (Gitflow: `feature/*` from `develop`, `hotfix/*` from `main`) and commit conventions are in `AGENTS.md` and `GIT_WORKFLOW.md`. Vercel deploys `main` only (`vercel.json` disables `develop`).
 
 ## Architecture
 
-**Stack:** Astro 5 (static SSG) + React 18 islands + TypeScript + Tailwind CSS
+Astro 5 static site (`output: 'static'`, `build.format: 'directory'`) with React 18 islands, TypeScript and Tailwind 3. Portfolio of a Brazilian front-end developer at `devguimaraes.com.br`. No SSR, no API routes.
 
-The project is a portfolio site for a Brazilian front-end developer, deployed at `devguimaraes.com.br` on Vercel. Output is fully static (no SSR).
+### Astro shell, React content
 
-### Astro + React Integration
+Astro pages in `src/pages/` are thin wrappers that hydrate one React component from `src/components/pages/` (or `src/components/projects/CaseStudy.tsx`) via `client:load`. Routes: `index`, `blog/index`, `blog/[slug]`, `projetos/[slug]`, `404`.
 
-Astro handles routing and layout. React components are hydrated via `client:*` directives:
+`src/layouts/Layout.astro` is the only layout. Besides SEO (OG, Twitter, JSON-LD, canonical, `noindex` on Vercel previews) and Plausible (prod only), it mounts the global islands: `CustomCursor`, `SmoothScroll` (Lenis) wrapping `LiquidGlassProvider`, `Navigation`, `Footer` (`client:visible`), `Toaster` (sonner) and `GrainOverlay`. Home sections are wrapped in `SectionEntrance` in `components/pages/Index.tsx`; the anchors `#hero`, `#projetos`, `#about`, `#contact` are used by Navigation and e2e tests.
 
-```astro
----
-import Layout from '@/layouts/Layout.astro';
-import HomeClient from '@/components/pages/Index';
----
-<Layout title="...">
-  <HomeClient client:load />
-</Layout>
-```
+`<slot />` (the page's island) sits inside `SmoothScroll` > `LiquidGlassProvider` in `Layout.astro`, alongside `Navigation` and `Footer`. Each `client:*` component is its own island, so state shared across islands that must not depend on context nesting goes through module-level stores (see i18n below).
 
-- `client:load` — interactive from page load (Navigation, PixelLoader, main page content)
-- `client:visible` — hydrate when visible (Footer)
+### i18n without a framework
 
-### Routing
+`src/lib/i18n.ts` holds a flat `dictionary` (pt, en), `t(locale, key)` with `TranslationKey` derived from `dictionary.pt`, and a pub/sub store (`getLocale`/`setLocale`/`subscribeToLocale`). `useLocale()` subscribes React components to it. The locale is persisted in `localStorage('locale')`, and an inline script in `Layout.astro` sets `<html lang>` and `og:locale` before hydration. A new UI string needs both languages in the dictionary or the key type breaks.
 
-File-based routing under `src/pages/`:
-- `index.astro` — Home
-- `blog/index.astro` — Blog listing (wiki-style 3-column layout)
-- `blog/[slug].astro` — Individual blog post (dynamic route)
-- `projetos/[slug].astro` — Case study page (dynamic route)
-- `404.astro` — Not found
+### Blog content
 
-### Layout
+Markdown in `src/content/blog/*.md`, collection defined in `src/content.config.ts` (Zod: `title`, `date` as string, `excerpt` required; `readTime`, `tags`, `author`, `image`, `featured` optional or defaulted). Pages render with Astro's `render(entry)` and `<Content />`. `src/lib/blog/` has the helpers (reading time, word count, code blocks, content fetching). Blog category filter is derived from `tags[0]`. Markdown styles live in `src/styles/markdown.css` (`data-markdown-content`).
 
-Single global layout at `src/layouts/Layout.astro`:
-- SEO meta tags (Open Graph, Twitter Cards, canonical URL, Schema.org structured data)
-- Google Fonts preconnect (Jersey 15, Silkscreen, Newsreader, JetBrains Mono, Inter)
-- Plausible Analytics (production only)
-- Global UI: PixelLoader, CustomCursor, GrainOverlay, SmoothScroll (Lenis), Toaster (sonner), Navigation, Footer
+Unit tests alias `astro:content` to `src/test/__mocks__/astro-content.ts` (`vitest.config.ts`), so code importing it can be tested without Astro.
 
-### Page Structure
+### Other data and config
 
-Astro pages are thin wrappers. The real UI lives in React components:
-- `src/components/pages/Index.tsx` — Home with Hero, Projects, About, CTA
-- `src/components/pages/BlogPage.tsx` — Blog listing with hero, sticky category filter bar (derived from `tags[0]`), post list, load-more pagination
-- `src/components/pages/BlogPostPage.tsx` — Single-column editorial reading page: back link, meta row, title, lede, byline, optional cover, markdown content, tags, next-post nav, reading progress bar
-- `src/components/pages/LatestPosts.tsx` — Latest posts section for homepage
-- `src/components/pages/NotFound.tsx` — 404 page
-- `src/components/projects/CaseStudy.tsx` — Case study page (hero, CTA, context, stack grid, impact, related posts)
-- `src/components/blog/` — Reusable blog post sub-components (`BlogPostHeader`, `BlogPostByline`, `BlogPostContent`, `BlogPostTags`, `BlogPostNavigation`, `BlogPostBackButton`)
+- `src/data/projects.ts`, `skills.ts`: typed static data feeding Projects and case study pages.
+- `src/config/site.ts`: SEO config, Brazilian market keywords, contact data, performance budgets (300KB JS, 500KB images, 50KB CSS, 1MB total, enforced for media by `check:media-budget`).
+- `src/hooks/useLiquidGlass.ts` + `LiquidGlassProvider`/`LiquidGlassLens`: glass effect with an SSR-safe default context (`isSupported: false`, no-ops) and type shim in `src/types/liquidGL.d.ts`.
+- Motion: Framer Motion is the default. GSAP is used only by `StaggeredMenu`. Lenis lives in `SmoothScroll` and is exposed through `LenisContext`. Animated components should honor `useReducedMotion`.
 
-### Content Layer
+### Design system
 
-- `src/content/blog/` — Markdown files with frontmatter (title, date, readTime, tags, excerpt, image)
-- `src/content.config.ts` — Astro v5 content collections with Zod schema
-- `src/data/` — Static data: `projects.ts`, `experience.ts`, `skills.ts`
-- `src/lib/blog/` — Blog utilities: content fetching, slug generation, reading time, date parsing
-- `src/config/site.ts` — SEO config, Brazilian market keywords, performance budgets
+Neo-brutalist/pixel, black background (`--background: 0 0% 0%`), white `--primary`, gold `--accent: 45 87% 57%`, all HSL CSS variables in `src/index.css`. Docs: `docs/guia-de-design-atual.md`, `docs/identidade-visual-atual.md`.
 
-### Key React Patterns
-
-**Section Entrance:** `SectionEntrance` wraps each page section with scroll-based blur + y animations, aware of `prefers-reduced-motion`.
-
-**Hooks** (in `src/hooks/`):
-- `useLocale` — reactive pt/en locale switching (pub/sub store in `src/lib/i18n.ts`)
-- `useReducedMotion` — cross-cutting accessibility: animated components check this to reduce/disable motion
-- `useMobile` — responsive breakpoint detection (768px)
-- `useWebVitals` — Core Web Vitals monitoring (LCP, CLS, INP, FCP, TTFB) with Brazilian market thresholds
-- `useVideoLoading` — lazy video loading on scroll intersection
-
-**i18n:** Full pt/en system via `src/lib/i18n.ts` (dictionary, pub/sub reactive store, `setLocale`, metadata helpers) + `useLocale` hook + language switcher in Navigation.
-
-**Animations:** Framer Motion (primary — scroll effects, spring physics, layout animations). GSAP (only `StaggeredMenu`). Lenis (smooth scrolling via `SmoothScroll` wrapper).
-
-**Key dependencies:** sonner (toast), lucide-react (icons), framer-motion (animations), gsap (StaggeredMenu), lenis (smooth scroll), clsx, tailwind-merge, @icons-pack/react-simple-icons.
-
-## Design System
-
-Neo-brutalist/pixel aesthetic with dark background (`#000`):
-
-- **Fonts (Tailwind):** `font-sans` = Satoshi, `font-pixel` = Jersey 15, `font-vt` = VT323, `font-mono` = JetBrains Mono. Silkscreen and Newsreader are loaded as CSS custom properties (`--font-pixel-tech`, `--font-serif`) for utility classes (`.type-mono`, `.type-body`), not in Tailwind `fontFamily`.
-- **Colors (HSL via CSS vars):** `--primary: 0 0% 100%` (white), `--accent: 45 87% 57%` (gold). Extended `brutal` palette: `brutal-bg`, `brutal-dark`, `brutal-orange`, `brutal-yellow`, `brutal-purple`, `brutal-blue`, `brutal-green`, `brutal-red`.
-- **Shadows:** `shadow-brutal`, `shadow-brutal-sm`, `shadow-brutal-lg` (CSS vars). `shadow-neo`, `shadow-neo-sm`, `shadow-neo-lg` (hard offset, no blur). `shadow-pixel` (4-direction black outline).
-- **Borders:** `border-4`, `rounded-none`
-- **Animations:** `animate-float`/`float-slow`/`float-medium`/`float-fast` (vertical bob), `animate-typing` (cursor blink), `animate-glitch` (micro-offset), `animate-marquee` (30s infinite scroll)
-- **Effects:** `GrainOverlay` (noise texture), `CustomCursor` (spring physics), `BrandIcon` (custom icon set), `BrandMascot` (animated mascot), `LiquidGlassLens` (glass morphism), `LiquidGlitchImage` (image with glass overlay), `ScrollReveal`, `StaggeredMenu` (GSAP panels), `TextReveal`
+Tailwind `fontFamily` defines only `sans` (Satoshi), `mono` (JetBrains Mono) and `pixel` (Jersey 15). Silkscreen and Newsreader are CSS variables (`--font-pixel-tech`, `--font-serif`) consumed by utility classes such as `.type-mono` and `.type-body`. The `brutal` palette has only `bg`, `dark`, `orange`, `blue`. Shadows `shadow-brutal`, `-sm`, `-lg` come from CSS vars. Check `tailwind.config.ts` and `index.css` before using a token; older docs list classes that do not exist.
 
 ## Testing
 
-- **Unit:** Vitest with jsdom, setup at `src/test/setup.ts` (mocks IntersectionObserver, ResizeObserver, Framer Motion)
-- **E2E:** Playwright with chromium, firefox, webkit, Mobile Chrome, Mobile Safari — tests in `src/test/e2e/`
-- **Coverage:** `bun run test:coverage` (v8 provider); `bun run test:coverage:ui` for interactive exploration
-- **Path alias:** `@/` → `./src/` (configured in `tsconfig.app.json`, `tsconfig.json`, and `vitest.config.ts`)
-- **Pre-PR checklist:** see `AGENTS.md`
+- **Unit:** Vitest + jsdom + Testing Library, tests colocated as `*.test.ts(x)`. `src/test/setup.ts` mocks IntersectionObserver, ResizeObserver, matchMedia and Framer Motion.
+- **E2E:** Playwright, specs in `src/test/e2e/*.spec.ts`, `baseURL` `http://127.0.0.1:4321`.
+- Vitest excludes `src/test/e2e` and `.worktrees`.
+- Pre-PR checklist: `bun run lint && bun run test:unit && bun run test:e2e`, plus a build for visual or content changes.
+- Path alias `@/` maps to `src/` (set in `tsconfig.json`, `tsconfig.app.json` and `vitest.config.ts`).
 
-## Brazilian Market
+## Related documentation
 
-- Locale: pt-BR (default); English supported via i18n system
-- Performance budgets for Brazilian mobile networks (3G/4G): 300KB JS, 500KB images, 50KB CSS, 1MB total
-- LGPD-compliant analytics (Plausible, no cookies)
-- SEO keywords targeting "desenvolvedor front-end Brasil", "programador React Rio de Janeiro"
-- Service areas: Rio de Janeiro, São Paulo, Brasília, Belo Horizonte, Porto Alegre, Salvador, Recife, Fortaleza
+- `AGENTS.md`: structure, naming, Gitflow, commit and PR rules
+- `GEMINI.md`, `TESTING.md`, `CONTRIBUTING.md`: overlap with this file; GEMINI.md is a copy-style overview for another tool
+- `docs/`: design guides, branding, audits, plans. Many are historical, so verify against code.
 
-## Configuration Files
+## Agent skills
 
-- `astro.config.mjs` — Astro config with React, Tailwind, Sitemap integrations
-- `biome.json` — Linting (recommended rules) and formatting (2-space indent, 100px line width, double quotes)
-- `vitest.config.ts` — Unit test config with jsdom and `@/` alias
-- `playwright.config.ts` — E2E test config (baseURL: http://127.0.0.1:4321)
-- `tailwind.config.ts` — Design tokens, animations, neo-brutalist variants
-- `tsconfig.json` — Composite project referencing `tsconfig.app.json` (strict) + `tsconfig.node.json`
-- `vercel.json` — Deployment config with rewrites, security headers (CSP, HSTS)
-- `components.json` — shadcn/ui component registry
-- `postcss.config.js` — PostCSS with Tailwind and autoprefixer
-- `eslint.config.js` — ESLint flat config (React hooks rules alongside Biome)
-- `.env.example` — Environment variable template (GitHub OAuth)
-- `src/config/site.ts` — SEO metadata, performance budgets, contact/footer data
+### Issue tracker
 
-## Related Documentation
+Issues vivem no GitHub Issues de `devguimaraes/developer-bruno`, via CLI `gh`. See `docs/agents/issue-tracker.md`.
 
-- `AGENTS.md` — Git workflow, commit conventions, pre-PR checklist
-- `GEMINI.md` — Deeper architecture details, deployment, product directory (antigravity-pack)
-- `docs/` — Design guides (`guia-de-design-atual.md`, `identidade-visual-atual.md`), branding (`branding-guide-atual.md`), audits, implementation plans
+### Domain docs
+
+Single-context: um `GLOSSARY.md` e `docs/adr/` na raiz. See `docs/agents/domain.md`.

@@ -11,7 +11,6 @@ Grande parte do conteúdo que antes existia aqui descrevia fases anteriores do s
 
 - [Identidade Visual Atual](./identidade-visual-atual.md)
 - [Guia de Design Atual](./guia-de-design-atual.md)
-- [Branding Guide Atual](./branding-guide-atual.md)
 
 ## Como usar esta documentação
 
@@ -49,7 +48,7 @@ Esse documento cobre:
 
 Leia primeiro:
 
-- [Branding Guide Atual](./branding-guide-atual.md)
+- [Guia de Design Atual](./guia-de-design-atual.md)
 
 Esse documento cobre:
 

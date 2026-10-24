@@ -1,9 +1,3 @@
-import { getCollection } from "astro:content";
-import { countWords, parseReadingTime } from "./content";
-import type { BlogPost } from "@/types/blog";
-
-export type { BlogPost } from "@/types/blog";
-
 export function generateSlug(filename: string): string {
   return filename
     .replace(/\.md$/, "")
@@ -88,46 +82,4 @@ export function toISODate(dateStr: string): string {
 
   // Last resort: return original (will be invalid in schema, but at least we tried)
   return dateStr;
-}
-
-export async function getAllBlogPosts(): Promise<BlogPost[]> {
-  const entries = await getCollection("blog");
-  const posts: BlogPost[] = [];
-
-  for (const entry of entries) {
-    const rawContent = entry.body ?? "";
-    const wordCount = countWords(rawContent);
-    const readTime = entry.data.readTime || `${Math.ceil(wordCount / 200)} min`;
-
-    posts.push({
-      id: entry.id,
-      slug: entry.id,
-      title: entry.data.title,
-      date: entry.data.date,
-      readTime,
-      readingTime: parseReadingTime(readTime),
-      wordCount,
-      tags: entry.data.tags,
-      author: entry.data.author,
-      excerpt: entry.data.excerpt,
-      content: "",
-      image: entry.data.image,
-      featured: entry.data.featured,
-    });
-  }
-
-  posts.sort(
-    (a, b) => convertBrazilianDate(b.date).getTime() - convertBrazilianDate(a.date).getTime()
-  );
-  return posts;
-}
-
-export async function getRecentPosts(limit: number = 3): Promise<BlogPost[]> {
-  const posts = await getAllBlogPosts();
-  return posts.slice(0, limit);
-}
-
-export async function getBlogPost(slug: string): Promise<BlogPost | null> {
-  const posts = await getAllBlogPosts();
-  return posts.find(post => post.slug === slug) || null;
 }
