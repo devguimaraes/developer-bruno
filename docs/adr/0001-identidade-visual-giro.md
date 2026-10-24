@@ -12,5 +12,6 @@ Seis rotas foram desenhadas. Três editoriais em creme e serifa (Prumo, Bem-te-v
 
 - Saem o efeito de vidro (LiquidGlass), o granulado, o cursor customizado, o vídeo do hero, a rolagem suave com Lenis, o menu em GSAP, o mascote BLOCO e as fontes Satoshi, JetBrains Mono, Jersey 15, Silkscreen e Newsreader. As dependências `gsap` e `lenis` deixam de ser usadas. Não reintroduza esses efeitos sem rever este ADR.
 - O mascote é SVG animado com Framer Motion, com uma variante por estado. Não use Rive nem Lottie: o runtime pesa de 100 a 200 KB e o Giro tem só um arco e dois olhos.
+- Os diagramas (o processo na home e a arquitetura de cada case) também são SVG desenhado à mão com Framer Motion. A React Flow foi descartada porque mostra a marca dela no canto de todo diagrama, e tirar a marca exige assinatura paga.
 - O site deixa de ser só escuro: alterna superfícies de marca (azul) e de leitura (papel). Não existe modo escuro no lançamento.
 - O redesign sai inteiro de uma vez, pela branch `feature/identidade-giro`, como `v2.0.0`. Nenhuma rota fica com a identidade antiga em produção.

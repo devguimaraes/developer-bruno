@@ -33,3 +33,31 @@ _Avoid_: seção azul, bloco colorido
 **Superfície de leitura**:
 Trecho da página em papel, feito para leitura longa, como cases, blog e posts.
 _Avoid_: seção clara, fundo branco
+
+## Navegação
+
+**Tela de carregamento**:
+A tela com o Giro carregando que aparece na primeira visita e termina com ele indo para o título da home.
+_Avoid_: splash, loader, preloader
+
+**Ilha de rolagem**:
+A pílula fixa no topo da tela, centralizada, que aparece depois do hero com o Giro, o nome da seção atual e o menu. O arco do Giro mostra quanto da página já foi lido.
+_Avoid_: header, navbar, barra de progresso
+
+**Barra de abas**:
+A navegação fixa embaixo da tela no celular, com Início, Projetos, Blog e Contato.
+_Avoid_: menu, tab bar, rodapé
+
+## Trabalho
+
+**Projeto**:
+Um trabalho entregue a um cliente, com contexto, problema, solução e resultado.
+_Avoid_: job, trabalho, portfólio
+
+**Case**:
+A página que conta um projeto seguindo os estados do Giro, do contexto ao resultado.
+_Avoid_: estudo de caso, página do projeto
+
+**Processo**:
+O jeito como o Bruno trabalha, da conversa à entrega, mostrado na home como um diagrama com as ferramentas de cada etapa.
+_Avoid_: metodologia, workflow, stack
