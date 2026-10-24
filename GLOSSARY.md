@@ -37,15 +37,15 @@ _Avoid_: seção clara, fundo branco
 ## Navegação
 
 **Tela de carregamento**:
-A tela com o Giro carregando que aparece na primeira visita e termina com ele indo para o título da home.
+A tela com o Giro carregando que aparece na primeira visita e termina com ele pousando na assinatura do menu ou, no celular, no centro da barra de abas.
 _Avoid_: splash, loader, preloader
 
 **Ilha de rolagem**:
-A pílula fixa no topo da tela, centralizada, que aparece depois do hero com o Giro, o nome da seção atual e o menu. O arco do Giro mostra quanto da página já foi lido.
+A pílula fixa no topo da tela, centralizada, que aparece no computador depois do hero com o Giro, o nome da seção atual e o menu. O arco do Giro mostra quanto da página já foi lido.
 _Avoid_: header, navbar, barra de progresso
 
 **Barra de abas**:
-A navegação fixa embaixo da tela no celular, com Início, Projetos, Blog e Contato.
+A navegação fixa embaixo da tela no celular, com Início e Projetos de um lado, Blog e Contato do outro, e o Giro no centro mostrando a leitura e abrindo o menu.
 _Avoid_: menu, tab bar, rodapé
 
 ## Trabalho
