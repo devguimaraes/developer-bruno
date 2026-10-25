@@ -1,0 +1,370 @@
+/* Navegação da Giro: assinatura, header, ilha de rolagem, barra de abas e rodapé.
+   Vem do bundle do design system (components/bundle.css) com ajustes para o site:
+   a ilha e a barra de abas ficam fixas em docks, e o foco aparece nos itens novos. */
+
+/* ---------- Signature ---------- */
+
+.g-signature {
+  display: inline-flex;
+  align-items: baseline;
+  color: var(--s-fg);
+  font-family: var(--font-sans);
+  font-size: 26px;
+  line-height: 1;
+  font-weight: 800;
+  font-stretch: 115%;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.g-signature > * {
+  flex: none;
+}
+.g-signature__o {
+  position: relative;
+  top: 0.06em;
+  display: inline-block;
+  width: 0.74em;
+  height: 0.74em;
+  margin: 0 0.03em;
+}
+.g-signature__o .g-giro {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------- Site header (desktop) ---------- */
+
+.g-site-header {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  height: 88px;
+  padding: 0 64px;
+  border-bottom: 1px solid var(--s-line);
+}
+.g-site-header__end {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.g-site-header__nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.g-nav-link {
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 14px;
+  border-radius: var(--radius-pill);
+  color: var(--s-fg);
+  font: var(--text-nav);
+  font-stretch: 110%;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 8px;
+  text-decoration-color: transparent;
+  transition: text-decoration-color 200ms linear;
+}
+.g-nav-link:hover {
+  text-decoration-color: currentColor;
+}
+.g-nav-link[aria-current="true"] {
+  text-decoration-color: var(--s-signal);
+}
+
+/* ---------- Scroll island (desktop) ---------- */
+
+/* Dock fixo no topo, centralizado. Some sem o hero (data-visible) e não ocupa lugar no celular. */
+.g-island-dock {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  z-index: 40;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  translate: -50% 0;
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity var(--dur-resolve) var(--ease-resolve),
+    translate var(--dur-resolve) var(--ease-resolve),
+    visibility 0s linear 0s;
+}
+.g-island-dock[data-visible="false"] {
+  opacity: 0;
+  visibility: hidden;
+  translate: -50% -12px;
+  transition-delay: 0s, 0s, var(--dur-resolve);
+}
+@media (min-width: 768px) {
+  .g-island-dock {
+    display: flex;
+  }
+}
+
+.g-island {
+  --s-bg: var(--tinta);
+  --s-fg: var(--papel);
+  --s-muted: var(--nevoa-tinta);
+  --s-raised: var(--tinta-2);
+  --s-signal: var(--lima);
+  --s-focus: var(--lima);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 300px;
+  height: 56px;
+  padding: 0 6px 0 10px;
+  border-radius: var(--radius-pill);
+  background: var(--tinta);
+  box-shadow: 0 0 0 1px rgba(246, 245, 240, 0.12);
+  color: var(--papel);
+}
+.g-island .g-giro {
+  flex: none;
+}
+/* Rolagem rápida: um giro a mais. A animação recomeça a cada vez que data-fast liga. */
+.g-island[data-fast="true"] .g-giro__spin {
+  animation: g-spin var(--dur-spin) linear 1;
+}
+.g-island__label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font: var(--text-rotulo);
+}
+
+/* ---------- Menu (island panel and mobile sheet) ---------- */
+
+.g-menu {
+  --s-fg: var(--papel);
+  --s-muted: var(--nevoa-tinta);
+  --s-raised: rgba(246, 245, 240, 0.06);
+  --s-focus: var(--lima);
+  --s-signal: var(--lima);
+  --s-accent: var(--lima);
+  --s-on-accent: var(--tinta);
+  --s-line-strong: rgba(246, 245, 240, 0.4);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  border-radius: var(--radius-md);
+  background: var(--tinta-2);
+  box-shadow:
+    0 0 0 1px rgba(246, 245, 240, 0.12),
+    0 18px 40px rgba(11, 12, 31, 0.35);
+  color: var(--papel);
+  animation: g-resolve-in var(--dur-resolve) var(--ease-resolve) 1;
+}
+.g-island-dock .g-menu {
+  width: 300px;
+  margin-top: 10px;
+}
+.g-menu__item {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+  padding: 0 14px;
+  border-radius: 14px;
+  color: var(--papel);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  font-weight: 700;
+  font-stretch: 110%;
+  text-decoration: none;
+  transition: background-color 200ms linear;
+}
+.g-menu__item .g-icon {
+  color: var(--nevoa-tinta);
+}
+.g-menu__item:hover {
+  background: rgba(246, 245, 240, 0.06);
+}
+.g-menu__item[aria-current="true"] .g-icon {
+  color: var(--lima);
+}
+.g-menu__divider {
+  height: 1px;
+  margin: 6px 14px;
+  background: rgba(246, 245, 240, 0.12);
+}
+.g-menu__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 4px 4px 14px;
+  color: var(--nevoa-tinta);
+  font: var(--text-rotulo);
+}
+
+/* ---------- Tab bar (mobile) ---------- */
+
+/* Dock fixo embaixo da tela. O menu do Giro abre logo acima da barra. */
+.g-tabbar-dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+}
+.g-tabbar-menu {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: calc(100% + 8px);
+}
+.g-tabbar {
+  position: relative;
+  height: 84px;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.g-tabbar__bg {
+  position: absolute;
+  inset: 0;
+  background: var(--tinta);
+  -webkit-mask: radial-gradient(circle at 50% 2px, transparent 37px, #000 37.5px);
+  mask: radial-gradient(circle at 50% 2px, transparent 37px, #000 37.5px);
+}
+.g-tabbar__tabs {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr 84px 1fr 1fr;
+  height: 62px;
+  padding: 6px 8px 0;
+}
+.g-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 56px;
+  border-radius: 16px;
+  color: var(--nevoa-tinta);
+  font: 400 11px / 1.2 var(--font-mono);
+  text-decoration: none;
+  transition: color 200ms linear;
+}
+.g-tab__pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 30px;
+  border-radius: var(--radius-pill);
+  transition:
+    background-color 200ms linear,
+    color 200ms linear;
+}
+.g-tab[aria-current="page"] {
+  color: var(--papel);
+}
+.g-tab[aria-current="page"] .g-tab__pill {
+  background: var(--tinta-2);
+  color: var(--lima);
+}
+.g-tabbar__giro {
+  --s-signal: var(--lima);
+  --s-focus: var(--lima);
+  position: absolute;
+  left: 50%;
+  top: -28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  margin-left: -30px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--tinta);
+  color: var(--lima);
+  cursor: pointer;
+}
+.g-tabbar__giro .g-giro {
+  font-size: 40px;
+}
+
+/* ---------- Focus (itens de navegação que não estão em giro-actions.css) ---------- */
+
+.g-signature:focus-visible,
+.g-nav-link:focus-visible,
+.g-menu__item:focus-visible,
+.g-tab:focus-visible,
+.g-tabbar__giro:focus-visible {
+  outline: 2px solid var(--s-focus);
+  outline-offset: 3px;
+}
+
+/* ---------- Site footer ---------- */
+
+.g-site-footer {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 40px 64px;
+  padding: 72px 64px 40px;
+}
+.g-site-footer__main {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+}
+.g-site-footer .g-signature {
+  font-size: 72px;
+  font-weight: 900;
+  letter-spacing: -0.035em;
+}
+.g-site-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 24px;
+}
+.g-site-footer__base {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 24px;
+  border-top: 1px solid var(--s-line);
+  color: var(--s-muted);
+  font: var(--text-micro);
+}
+@media (max-width: 767px) {
+  .g-site-footer {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 48px 16px 120px;
+  }
+  /* O DS pede 48px, mas a assinatura inteira não cabe em 390px: o tamanho acompanha a tela. */
+  .g-site-footer .g-signature {
+    font-size: clamp(24px, 8vw, 48px);
+  }
+}
+
+/* ---------- Reduced motion ---------- */
+
+/* Progresso sem animação (decisão 20). O resto já zera pelas durações de giro.css. */
+@media (prefers-reduced-motion: reduce) {
+  .g-island .g-giro__arc,
+  .g-tabbar__giro .g-giro__arc {
+    transition: none;
+  }
+}

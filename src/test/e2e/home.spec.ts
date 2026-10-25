@@ -8,9 +8,11 @@ test.describe("Navegação Principal", () => {
     await expect(page).toHaveTitle(/Bruno Guimarães/i);
     await expect(page.locator("h1").first()).toBeVisible();
 
-    // Testa a transição para a página do Blog
-    const linkBlog = page.getByRole("link", { name: /POSTS/i }).first();
-    await linkBlog.click();
+    // No computador o item "Blog" do menu rola até a seção de blog da home (ainda não existe).
+    // Até ela entrar, a página do blog é aberta direto.
+    const linkBlog = page.getByRole("link", { name: /^Blog$/ }).first();
+    await expect(linkBlog).toHaveAttribute("href", "/#blog");
+    await page.goto("/blog");
 
     await expect(page).toHaveURL(/.*blog/);
     // O h1 da página de blog é "POSTS" (i18n blog.heading)
@@ -37,7 +39,7 @@ test.describe("Navegação Principal", () => {
 
     await page.mouse.wheel(0, 500);
 
-    const projectsLink = page.getByRole("link", { name: /PROJETOS/i }).first();
+    const projectsLink = page.getByRole("link", { name: /^Projetos$/ }).first();
     await expect(projectsLink).toHaveAttribute("href", /#projetos$/i);
 
     await projectsLink.click();

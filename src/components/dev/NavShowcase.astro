@@ -1,0 +1,93 @@
+---
+import "@/styles/giro-nav.css";
+import { Signature } from "@/components/nav/Signature";
+import { SiteHeader } from "@/components/nav/SiteHeader";
+import { ScrollIslandView } from "@/components/nav/ScrollIsland";
+import { TabBarView } from "@/components/nav/TabBar";
+import { SiteFooter } from "@/components/nav/SiteFooter";
+
+// Só para conferir a navegação nas três superfícies e nos estados. Não entra em nenhuma página
+// de produção. As ilhas fixas (ilha e barra) ficam dentro de um quadro com transform, para o
+// position fixed não sair da vitrine; a barra mostra no quadro de 390 px mesmo no computador.
+const surfaces = [
+  { name: "g-azul", label: "azul-sinal · marca" },
+  { name: "g-papel", label: "papel · leitura" },
+  { name: "g-tinta", label: "tinta · escura" },
+];
+---
+
+<div class="nav-showcase px-4 py-10 md:px-12">
+  {
+    surfaces.map((surface) => (
+      <section class={`${surface.name} mb-8 p-6`}>
+        <p class="rotulo text-s-muted">{`// assinatura · ${surface.label}`}</p>
+        <div class="mt-4 flex flex-wrap items-center gap-6">
+          <Signature client:load />
+          <Signature client:load size={64} />
+        </div>
+      </section>
+    ))
+  }
+
+  <section class="g-papel mb-8 p-6">
+    <p class="rotulo text-s-muted">// header do hero · computador</p>
+    <div class="g-azul mt-4 rounded-g-md">
+      <SiteHeader client:load />
+    </div>
+  </section>
+
+  <section class="g-papel mb-8 p-6">
+    <p class="rotulo text-s-muted">// ilha de rolagem · sem menu e com menu</p>
+    <div class="nav-frame relative mt-4 h-[120px]">
+      <ScrollIslandView client:load progress={62} label="// processo" direction={1} visible={true} />
+    </div>
+    <div class="nav-frame relative mt-4 h-[300px]">
+      <ScrollIslandView
+        client:load
+        progress={100}
+        label="// contato"
+        direction={0}
+        visible={true}
+        menuOpen={true}
+        activeId="processo"
+      />
+    </div>
+  </section>
+
+  <section class="g-papel mb-8 p-6">
+    <p class="rotulo text-s-muted">// barra de abas · 390 px</p>
+    <div class="nav-frame g-papel relative mt-4 h-[150px] max-w-[390px] overflow-hidden rounded-g-md">
+      <TabBarView client:load progress={40} activeTab="projects" activeId="processo" />
+    </div>
+    <div class="nav-frame g-papel relative mt-4 h-[300px] max-w-[390px] overflow-hidden rounded-g-md">
+      <TabBarView
+        client:load
+        progress={100}
+        activeTab="blog"
+        activeId="sobre"
+        menuOpen={true}
+      />
+    </div>
+  </section>
+
+  <section class="g-papel mb-8 p-6">
+    <p class="rotulo text-s-muted">// rodapé</p>
+    <div class="mt-4">
+      <SiteFooter client:load />
+    </div>
+  </section>
+</div>
+
+<style>
+  /* Fixa dentro do quadro: transform cria o bloco de contenção para position fixed. */
+  .nav-frame {
+    transform: translateZ(0);
+    overflow: hidden;
+  }
+  .nav-frame .g-island-dock {
+    display: flex;
+  }
+  .nav-frame .g-tabbar-dock {
+    display: block;
+  }
+</style>
