@@ -86,11 +86,13 @@ describe("homeCases", () => {
     expect(estudio.solution.text.pt).toContain("WhatsApp");
   });
 
-  it("Atlas marca problema, papel e resultado como pendentes da #48", () => {
+  it("Atlas tem papel, problema e resultado confirmados (#48)", () => {
     const atlas = homeCases[1];
     expect(atlas.id).toBe("atlas-marine-solutions");
-    expect([...atlas.pendingConfirmation]).toEqual(["problem", "role", "result"]);
-    expect(homeCases.filter(project => project.pendingConfirmation.length > 0)).toEqual([atlas]);
+    expect(atlas.role.pt).toBe("Desenvolvimento full-stack e DevOps");
+    expect(atlas.live).toBe("https://atlasmarinesolutions.com/");
+    expect(atlas.github).toBeNull();
+    expect(homeCases.filter(project => project.pendingConfirmation.length > 0)).toEqual([]);
   });
 
   it("não usa travessão (em dash ou en dash) em nenhum texto", () => {

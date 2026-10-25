@@ -6,7 +6,7 @@
 
 /**
  * Cases da home, na ordem em que aparecem.
- * Atlas Marine Solutions: problema, papel e resultado dependem da issue #48 (ver pendingConfirmation).
+ * pendingConfirmation lista os campos de um case ainda sem confirmação do dono (vazio = tudo confirmado).
  */
 export const homeCases = [
   {
@@ -162,19 +162,18 @@ export const homeCases = [
       pt: "// case · agência marítima · eua e brasil",
       en: "// case study · ship agency · usa and brazil",
     },
-    // Pendente (issue #48): papel, problema e resultado vieram da copy sem confirmação do dono.
     role: {
-      pt: "Desenvolvimento front-end",
-      en: "Front-end development",
+      pt: "Desenvolvimento full-stack e DevOps",
+      en: "Full-stack development and DevOps",
     },
     stack: ["Next.js", "React", "Tailwind CSS"],
-    live: null,
+    live: "https://atlasmarinesolutions.com/",
     github: null,
     image: "/atlas-marine-solutions.webp",
     bannerImage: null,
     tags: [],
     relatedPosts: [],
-    pendingConfirmation: ["problem", "role", "result"],
+    pendingConfirmation: [],
     context: {
       title: {
         pt: "Apoio portuário para navios de qualquer bandeira.",
@@ -185,15 +184,14 @@ export const homeCases = [
         en: "Atlas Marine Solutions is a ship agency with bases in Florida and Rio de Janeiro. It runs a vessel's port call from arrival to departure, with ten services, from ship agency and bunkering to crew change and customs clearance.",
       },
     },
-    // Pendente (issue #48): o texto do problema é rascunho a partir do que o site entrega.
     problem: {
       title: {
-        pt: "Um site para clientes de quatro continentes.",
-        en: "One site for clients on four continents.",
+        pt: "Um site institucional, editorial e minimalista.",
+        en: "An institutional site, editorial and minimal.",
       },
       text: {
-        pt: "O site precisava falar com armadores e operadores de vários países, mostrar os dez serviços e deixar claro onde a Atlas atende.",
-        en: "The site had to speak to shipowners and operators in many countries, show the ten services and make clear where Atlas operates.",
+        pt: "A Atlas pediu um site institucional com perfil editorial e minimalista. Ele precisava falar com armadores e operadores de vários países, mostrar os dez serviços e deixar claro onde a Atlas atende.",
+        en: "Atlas asked for an institutional site with an editorial, minimal feel. It had to speak to shipowners and operators in many countries, show the ten services and make clear where Atlas operates.",
       },
       needs: null,
     },
@@ -203,17 +201,17 @@ export const homeCases = [
         en: "Four languages and a coverage map.",
       },
       text: {
-        pt: "O site em Next.js e Tailwind CSS sai em inglês, português, espanhol e francês. Um mapa mostra os portos atendidos, e o contato leva à mesa de operações, que atende 24 horas.",
-        en: "The Next.js and Tailwind CSS site comes in English, Portuguese, Spanish and French. A map shows the ports covered, and contact goes to the operations desk, open 24/7.",
+        pt: "Cuidei do projeto do briefing ao ar: desenvolvimento, deploy e configuração de DNS. O site em Next.js e Tailwind CSS sai em inglês, português, espanhol e francês. Um mapa mostra os portos atendidos, e o contato leva à mesa de operações, que atende 24 horas.",
+        en: "I handled the project from brief to launch: development, deploy and DNS setup. The Next.js and Tailwind CSS site comes in English, Portuguese, Spanish and French. A map shows the ports covered, and contact goes to the operations desk, open 24/7.",
       },
       diagram: null,
     },
-    // Pendente (issue #48): não há número de resultado confirmado.
+    // Sem número de resultado: o site tem menos de um mês no ar.
     result: {
       title: null,
       text: {
-        pt: "Site no ar em quatro idiomas, com mais de 20 portos em 14 países.",
-        en: "Live in four languages, covering more than 20 ports in 14 countries.",
+        pt: "Site novo, no ar há menos de um mês, em quatro idiomas, com mais de 20 portos em 14 países.",
+        en: "A new site, live for less than a month, in four languages, covering more than 20 ports in 14 countries.",
       },
       items: null,
     },
