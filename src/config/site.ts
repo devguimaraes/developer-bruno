@@ -1,4 +1,5 @@
 import type { SiteConfig, ContactData } from "@/types";
+import { t } from "@/lib/i18n";
 
 /**
  * Site configuration and metadata
@@ -6,8 +7,7 @@ import type { SiteConfig, ContactData } from "@/types";
 export const siteConfig: SiteConfig = {
   title: "Bruno Guimarães",
 
-  description:
-    "Desenvolvedor Front-End especializado em React, TypeScript e interfaces modernas. Criação de Sites e Softwares de alta performance.",
+  description: t("pt", "meta.home_description"),
   author: "Bruno Guimarães",
   email: "bc.guimaraes@outlook.com",
   location: "Rio de Janeiro, Brasil",
@@ -20,7 +20,7 @@ export const siteConfig: SiteConfig = {
     filename: "Bruno-Guimaraes-CV.pdf",
   },
   seo: {
-    image: "/og-image.webp",
+    image: "/og-image.png",
     siteName: "Bruno Guimarães Portfolio",
     locale: "pt_BR",
     region: "BR",

@@ -3,6 +3,7 @@
 import "@/index.css";
 import "@/styles/markdown.css";
 import { siteConfig } from "@/config/site";
+import { t } from "@/lib/i18n";
 import { ClientRouter } from "astro:transitions";
 
 import { SiteHeader } from "@/components/nav/SiteHeader";
@@ -21,11 +22,10 @@ interface Props {
 
 const { title, description, image, ogType, noindex = false, articlePublishedTime } = Astro.props;
 
-// Meta values with fallbacks
-const finalTitle = title
-  ? `${title} | ${siteConfig.title}`
-  : `${siteConfig.title} | Desenvolvedor Web RJ`;
+// Meta values with fallbacks. A página passa o título completo, sem sufixo da marca.
+const finalTitle = title || t("pt", "meta.home_title");
 const finalDesc = description || siteConfig.description;
+const usesDefaultImage = !image;
 const finalImage = image ? new URL(image, Astro.url) : new URL(siteConfig.seo.image, Astro.url);
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
@@ -35,7 +35,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#2B2EFF" />
     <meta name="generator" content={Astro.generator} />
     <!-- Navegação sem recarregar a página (ADR 0002). Troca só o body; o head vem da página nova. -->
     <ClientRouter />
@@ -61,6 +65,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:title" content={finalTitle} />
     <meta property="og:description" content={finalDesc} />
     <meta property="og:image" content={finalImage} />
+    {usesDefaultImage && <meta property="og:image:width" content="1200" />}
+    {usesDefaultImage && <meta property="og:image:height" content="630" />}
+    {usesDefaultImage && <meta property="og:image:alt" content={finalTitle} />}
     <meta property="og:locale" content="pt_BR" />
     <meta property="og:site_name" content={siteConfig.seo.siteName} />
     {articlePublishedTime && <meta property="article:published_time" content={articlePublishedTime} />}

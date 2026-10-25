@@ -4,6 +4,7 @@ import BlogPostPageClient from "@/components/pages/BlogPostPage";
 import { getCollection, render } from "astro:content";
 import { generateSlug, toISODate, convertBrazilianDate } from "@/lib/blog";
 import type { BlogPost } from "@/types/blog";
+import { t } from "@/lib/i18n";
 
 export async function getStaticPaths() {
   const entries = await getCollection("blog");
@@ -48,7 +49,7 @@ const { post, next, Content } = Astro.props;
 ---
 
 <Layout
-  title={post.title}
+  title={t("pt", "meta.post_title", { title: post.title })}
   description={post.excerpt}
   ogType="article"
   articlePublishedTime={toISODate(post.date)}

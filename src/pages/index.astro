@@ -2,13 +2,7 @@
 import Layout from "@/layouts/Layout.astro";
 import Index from "@/components/pages/Index";
 ---
-import Layout from "@/layouts/Layout.astro";
-import Index from "@/components/pages/Index";
----
 
-<Layout
-  title="Bruno Guimarães | Desenvolvedor Front-End em Rio de Janeiro"
-  description="Desenvolvedor Front-End especializado em React, TypeScript e interfaces modernas. Criação de sites e softwares de alta performance no Rio de Janeiro e em todo o Brasil."
->
+<Layout>
   <Index client:load />
 </Layout>
