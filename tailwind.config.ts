@@ -67,11 +67,57 @@ export default {
           orange: "#f97316", // orange-500
           blue: "#3b82f6", // blue-500
         },
+        // Identidade Giro: paleta e papéis da superfície ativa (g-papel, g-azul, g-tinta).
+        "azul-sinal": "var(--azul-sinal)",
+        "azul-fundo": "var(--azul-fundo)",
+        lima: "var(--lima)",
+        papel: "var(--papel)",
+        tinta: "var(--tinta)",
+        "tinta-2": "var(--tinta-2)",
+        grafite: "var(--grafite)",
+        "nevoa-azul": "var(--nevoa-azul)",
+        "nevoa-tinta": "var(--nevoa-tinta)",
+        coral: "var(--coral)",
+        "linha-papel": "var(--linha-papel)",
+        "linha-azul": "var(--linha-azul)",
+        s: {
+          bg: "var(--s-bg)",
+          fg: "var(--s-fg)",
+          muted: "var(--s-muted)",
+          line: "var(--s-line)",
+          "line-strong": "var(--s-line-strong)",
+          raised: "var(--s-raised)",
+          signal: "var(--s-signal)",
+          link: "var(--s-link)",
+          accent: "var(--s-accent)",
+          "on-accent": "var(--s-on-accent)",
+          focus: "var(--s-focus)",
+          field: "var(--s-field)",
+        },
       },
       fontFamily: {
-        mono: ["JetBrains Mono", "monospace"],
-        sans: ["Satoshi", "system-ui", "sans-serif"],
+        mono: ["var(--font-mono)"],
+        sans: ["var(--font-sans)"],
         pixel: ["Jersey 15", "monospace"],
+      },
+      spacing: {
+        18: "var(--space-18)",
+      },
+      minHeight: {
+        touch: "var(--touch-min)",
+      },
+      minWidth: {
+        touch: "var(--touch-min)",
+      },
+      transitionTimingFunction: {
+        resolve: "var(--ease-resolve)",
+        hop: "var(--ease-hop)",
+      },
+      transitionDuration: {
+        resolve: "var(--dur-resolve)",
+        hop: "var(--dur-hop)",
+        shake: "var(--dur-shake)",
+        spin: "var(--dur-spin)",
       },
       boxShadow: {
         brutal: "var(--shadow-brutal)",
@@ -82,6 +128,10 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        "g-sm": "var(--radius-sm)",
+        "g-md": "var(--radius-md)",
+        "g-lg": "var(--radius-lg)",
+        pill: "var(--radius-pill)",
       },
       keyframes: {
         "accordion-down": {

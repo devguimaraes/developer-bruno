@@ -1,0 +1,44 @@
+---
+import "@/index.css";
+
+// Página interna para conferir a fundação da Giro contra o canvas ("Fase 4 · componentes").
+// Só existe no dev server: no build, getStaticPaths devolve vazio e a rota não é gerada.
+export function getStaticPaths() {
+  return import.meta.env.DEV ? [{ params: { page: "giro" } }] : [];
+}
+
+const surfaces = [
+  { name: "g-papel", label: "papel · leitura" },
+  { name: "g-azul", label: "azul-sinal · marca" },
+  { name: "g-tinta", label: "tinta · escura" },
+];
+---
+
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Giro · fundação</title>
+  </head>
+  <body class="bg-papel font-sans">
+    {
+      surfaces.map((surface) => (
+        <section class={`${surface.name} px-4 py-12 md:px-16 md:py-18`}>
+          <p class="rotulo text-s-muted">{`// ${surface.label}`}</p>
+          <h1 class="titulo-2 mt-3">Interfaces com vida.</h1>
+          <p class="corpo mt-4 max-w-[68ch] text-s-muted">
+            Cuido de cada estado da interface: o carregamento, o vazio, o erro e o momento em que
+            tudo funciona. Ação, é São João.
+          </p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a class="g-button" href="#projetos">Ver projetos</a>
+            <a class="g-button g-button--secondary" href="#contato">Falar comigo</a>
+            <button class="g-button" type="button" disabled>Desabilitado</button>
+          </div>
+          <p class="micro mt-8 text-s-muted">giro.svg · r 44</p>
+        </section>
+      ))
+    }
+  </body>
+</html>
