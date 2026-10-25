@@ -1,6 +1,5 @@
 import type React from "react";
 import { motion } from "framer-motion";
-import { LiquidGlitchImage } from "./ui/LiquidGlitchImage";
 import { t } from "@/lib/i18n";
 import { useLocale } from "@/hooks/useLocale";
 import {
@@ -84,12 +83,11 @@ const About: React.FC = () => {
             className="w-full sm:w-[60%] sm:max-w-[240px] md:w-[30%] md:min-w-[220px] aspect-[3/4] flex-shrink-0 group"
           >
             <div className="w-full h-full overflow-hidden border-2 border-white/[0.08] transition-all duration-700 group-hover:border-white/[0.15]">
-              <LiquidGlitchImage
+              <img
                 src="/brunoGuimaraes.webp"
                 alt="Bruno Guimarães"
+                loading="lazy"
                 className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
-                active
-                loadingLazy
               />
             </div>
           </motion.div>

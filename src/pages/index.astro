@@ -1,55 +1,14 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import Index from "@/components/pages/Index";
-import { siteConfig } from "@/config/site";
-import { getAllTechnologies } from "@/data/skills";
-
-// Schema.org structured data
-const personSchema = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  name: "Bruno Guimarães",
-  url: siteConfig.domain,
-  jobTitle: "Desenvolvedor Front-End",
-  description: siteConfig.description,
-  image: new URL(siteConfig.avatar, siteConfig.domain).href,
-  address: {
-    "@type": "PostalAddress",
-    addressLocality: "Rio de Janeiro",
-    addressRegion: "RJ",
-    addressCountry: "BR",
-  },
-  knowsAbout: [...getAllTechnologies()],
-  sameAs: [siteConfig.github, siteConfig.linkedin, "https://www.instagram.com/brunoguimraes/"],
-  email: siteConfig.email,
-};
-
-const webSiteSchema = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  name: siteConfig.seo.siteName,
-  url: siteConfig.domain,
-  description: siteConfig.description,
-  inLanguage: "pt-BR",
-  author: {
-    "@type": "Person",
-    name: siteConfig.author,
-  },
-  publisher: {
-    "@type": "Person",
-    name: siteConfig.author,
-    url: siteConfig.domain,
-  },
-};
-
-// Combine both schemas
-const structuredData = [personSchema, webSiteSchema];
+---
+import Layout from "@/layouts/Layout.astro";
+import Index from "@/components/pages/Index";
 ---
 
 <Layout
   title="Bruno Guimarães | Desenvolvedor Front-End em Rio de Janeiro"
   description="Desenvolvedor Front-End especializado em React, TypeScript e interfaces modernas. Criação de sites e softwares de alta performance no Rio de Janeiro e em todo o Brasil."
-  structuredData={structuredData}
 >
   <Index client:load />
 </Layout>

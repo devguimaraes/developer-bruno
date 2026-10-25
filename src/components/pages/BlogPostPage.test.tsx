@@ -66,11 +66,6 @@ describe("BlogPostPage — Byline", () => {
     expect(screen.getByText("Bruno Guimarães")).toBeInTheDocument();
     expect(screen.getByText("Engenheiro Front-End")).toBeInTheDocument();
   });
-
-  it("exibe o mascote BLOCO no avatar do autor", () => {
-    render(<BlogPostPage post={mockPost} next={null} />);
-    expect(screen.getByLabelText(/Mascote BLOCO/i)).toBeInTheDocument();
-  });
 });
 
 describe("BlogPostPage — Cover", () => {

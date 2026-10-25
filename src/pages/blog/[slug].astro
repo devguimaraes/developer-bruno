@@ -45,11 +45,6 @@ export async function getStaticPaths() {
 }
 
 const { post, next, Content } = Astro.props;
-const structuredDataImage = post.image
-  ? post.image.startsWith("http://") || post.image.startsWith("https://")
-    ? post.image
-    : `https://devguimaraes.com.br${post.image}`
-  : "https://devguimaraes.com.br/og-image.webp";
 ---
 
 <Layout
@@ -57,36 +52,6 @@ const structuredDataImage = post.image
   description={post.excerpt}
   ogType="article"
   articlePublishedTime={toISODate(post.date)}
-  structuredData={{
-    '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    headline: post.title,
-    description: post.excerpt,
-    author: {
-      '@type': 'Person',
-      name: post.author,
-      url: 'https://devguimaraes.com.br',
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'Bruno Guimarães',
-      url: 'https://devguimaraes.com.br',
-      logo: {
-        '@type': 'ImageObject',
-        url: 'https://devguimaraes.com.br/logo.webp',
-      },
-    },
-    datePublished: toISODate(post.date),
-    dateModified: toISODate(post.date),
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': `https://devguimaraes.com.br/blog/${post.slug}`,
-    },
-    image: structuredDataImage,
-    inLanguage: 'pt-BR',
-    articleSection: post.tags?.[0] || 'Desenvolvimento Web',
-    keywords: post.tags?.join(', '),
-  }}
 >
   <BlogPostPageClient post={post} next={next} client:load>
     <Content />

@@ -98,7 +98,6 @@ export default {
       fontFamily: {
         mono: ["var(--font-mono)"],
         sans: ["var(--font-sans)"],
-        pixel: ["Jersey 15", "monospace"],
       },
       spacing: {
         18: "var(--space-18)",

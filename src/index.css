@@ -13,9 +13,6 @@
     --border: 0 0% 100%;
     --radius: 0rem;
     --sidebar-width: 0px;
-    --font-pixel-display: "Jersey 15", monospace;
-    --font-pixel-tech: "Silkscreen", monospace;
-    --font-serif: "Newsreader", serif;
     --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
     --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
   }
@@ -55,11 +52,6 @@
     font-family: var(--font-pixel-display);
   }
 
-  .font-hero-pixel,
-  .font-vt {
-    font-family: var(--font-pixel-display);
-  }
-
   .type-raster-hero {
     @apply font-pixel uppercase tracking-[-0.05em] leading-[0.8];
   }
@@ -70,18 +62,6 @@
 
   .type-mono {
     @apply font-mono text-[12px] md:text-[13px] lg:text-sm tracking-[0.2em] opacity-70 uppercase;
-  }
-
-  .type-display-hero {
-    @apply font-hero-pixel uppercase tracking-[0.05em] leading-[0.92];
-  }
-
-  .type-display-section {
-    @apply font-pixel uppercase tracking-[0.06em] leading-[0.9];
-  }
-
-  .type-display-card {
-    @apply font-pixel uppercase tracking-[0.035em] leading-[0.98];
   }
 
   .type-ui-label {

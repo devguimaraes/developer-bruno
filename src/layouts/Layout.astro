@@ -7,31 +7,16 @@ import { siteConfig } from "@/config/site";
 import Navigation from "@/components/Navigation.tsx";
 import Footer from "@/components/Footer.tsx";
 
-import { Toaster } from "@/components/ui/sonner.tsx";
-import GrainOverlay from "@/components/ui/GrainOverlay";
-import CustomCursor from "@/components/ui/CustomCursor";
-import SmoothScroll from "@/components/ui/SmoothScroll";
-import { LiquidGlassProvider } from "@/components/ui/LiquidGlassProvider";
-
 interface Props {
   title?: string;
   description?: string;
   image?: string;
-  structuredData?: object;
   ogType?: string;
   noindex?: boolean;
   articlePublishedTime?: string;
 }
 
-const {
-  title,
-  description,
-  image,
-  structuredData,
-  ogType,
-  noindex = false,
-  articlePublishedTime,
-} = Astro.props;
+const { title, description, image, ogType, noindex = false, articlePublishedTime } = Astro.props;
 
 // Meta values with fallbacks
 const finalTitle = title
@@ -85,16 +70,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <!-- Preconnects -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Jersey+15&family=Silkscreen&family=Newsreader:ital,wght@0,400;1,400&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
 
     <!-- Performance/Analytics scripts base (como Plausible se houver) -->
     { import.meta.env.PROD && (
       <script defer data-domain="devguimaraes.com.br" src="https://plausible.io/js/script.js"></script>
-    )}
-
-    {structuredData && (
-      <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
     )}
 
     <!-- Client-side locale detection for lang/og attributes -->
@@ -110,21 +90,10 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     </script>
   </head>
   <body class="bg-black">
-    <CustomCursor client:load />
-
-    <SmoothScroll client:load>
-      <LiquidGlassProvider client:load>
-        <Navigation client:load />
-        <main class="w-full relative">
-          <slot />
-        </main>
-        <Footer client:visible />
-      </LiquidGlassProvider>
-    </SmoothScroll>
-
-    <Toaster client:load />
-    
-    {/* Global Assets for Sasha Aesthetic */}
-    <GrainOverlay client:load />
+    <Navigation client:load />
+    <main class="w-full relative">
+      <slot />
+    </main>
+    <Footer client:visible />
   </body>
 </html>

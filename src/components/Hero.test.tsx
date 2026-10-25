@@ -20,10 +20,4 @@ describe("Hero Component - Editorial Redesign", () => {
     render(<Hero />);
     expect(screen.getByText(/Especialista em TypeScript/)).toBeInTheDocument();
   });
-
-  it("deve renderizar o elemento de vídeo", () => {
-    render(<Hero />);
-    const video = document.querySelector("video");
-    expect(video).toBeInTheDocument();
-  });
 });

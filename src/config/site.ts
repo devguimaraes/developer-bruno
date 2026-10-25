@@ -20,38 +20,6 @@ export const siteConfig: SiteConfig = {
     filename: "Bruno-Guimaraes-CV.pdf",
   },
   seo: {
-    keywords: [
-      // Brazilian Market Keywords
-      "desenvolvedor Web",
-      "programador React",
-      "desenvolvedor Web Rio de Janeiro",
-      "desenvolvedor TypeScript",
-      "portfolio desenvolvedor web",
-      "Bruno Guimarães front-end",
-      "Bruno Guimarães Desenvolvedor Web",
-      "desenvolvedor web São Paulo",
-      "programador JavaScript ",
-      "front-end developer",
-      "desenvolvedor React ",
-      "portfolio desenvolvimento web",
-
-      // Technical Keywords
-      "desenvolvedor front-end",
-      "react developer",
-      "typescript",
-      "next.js",
-      "ui developer",
-      "web development",
-      "bruno guimarães",
-      "front-end rio de janeiro",
-
-      // Location-specific
-      "desenvolvedor Rio de Janeiro",
-      "programador Brasil",
-      "front-end developer Brasil",
-      "web developer Rio de Janeiro",
-      "desenvolvedor web Brasil",
-    ],
     image: "/og-image.webp",
     siteName: "Bruno Guimarães Portfolio",
     locale: "pt_BR",

@@ -1,65 +1,25 @@
 import type React from "react";
-import { useRef, useState, useEffect } from "react";
+import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useVideoLoading } from "@/hooks/useVideoLoading";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { t } from "@/lib/i18n";
 import { useLocale } from "@/hooks/useLocale";
-import { BrandMascot } from "@/components/brand/BrandMascot";
 
 const Hero: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { videoRef, isVisible } = useVideoLoading();
   const { scrollY } = useScroll();
   const locale = useLocale();
 
   const reducedMotion = useReducedMotion();
-  const [heroMascotState, setHeroMascotState] = useState<"focused" | "curious">("focused");
-
-  useEffect(() => {
-    const timer = setTimeout(() => setHeroMascotState("curious"), 3000);
-    return () => clearTimeout(timer);
-  }, []);
 
   // Efeito de movimento sutil para as camadas
   const textY = useTransform(scrollY, [0, 500], [0, 100]);
-  const videoScale = useTransform(scrollY, [0, 1000], [1, 1.2]);
-  const videoOpacity = useTransform(scrollY, [0, 500], [0.7, 0.4]);
 
   return (
     <section
       ref={containerRef}
       className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-black w-full"
     >
-      {/* Background Video Section - Full Edge-to-Edge */}
-      <motion.div
-        style={{
-          scale: reducedMotion ? 1 : videoScale,
-          opacity: isVisible ? (reducedMotion ? 0.7 : videoOpacity) : 0,
-        }}
-        className="absolute inset-0 z-0 pointer-events-none w-full h-full"
-      >
-        <video
-          ref={videoRef}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          poster="/hero-render-1.webp"
-          className="w-full h-full object-cover"
-        >
-          {isVisible && (
-            <>
-              <source src="/backgroundvideo.webm" type="video/webm" />
-              <source src="/backgroundvideo.mp4" type="video/mp4" />
-            </>
-          )}
-        </video>
-        {/* Adjusted gradient for zero-border feel */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80" />
-      </motion.div>
-
       {/* Content - No fixed container for full impact but keep text central */}
       <div className="relative z-10 w-full px-6 sm:px-12 pt-32 sm:pt-40">
         <div className="flex flex-col items-center text-center">
@@ -130,17 +90,6 @@ const Hero: React.FC = () => {
       >
         VER: 4.0.0_STABLE
       </div>
-
-      {/* Decorative BLOCO Mascot */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.3 }}
-        whileHover={{ opacity: 0.6 }}
-        className="absolute bottom-8 right-4 sm:right-10 z-10 pointer-events-auto cursor-default"
-        title="BLOCO — Developer Bruno mascot"
-      >
-        <BrandMascot variant="cor" size={32} state={heroMascotState} />
-      </motion.div>
     </section>
   );
 };

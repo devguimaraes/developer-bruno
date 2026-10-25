@@ -41,10 +41,7 @@ export function BlogPostHeader({ post }: BlogPostHeaderProps) {
       </h1>
 
       {/* Lede */}
-      <p
-        className="font-serif italic text-[22px] leading-[1.55] text-white/60 mb-11"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
+      <p className="font-serif italic text-[22px] leading-[1.55] text-white/60 mb-11">
         {post.excerpt}
       </p>
 

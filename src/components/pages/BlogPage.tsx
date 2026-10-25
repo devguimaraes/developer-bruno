@@ -58,10 +58,7 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
             >
               {t(locale, "blog.heading")}
             </h1>
-            <p
-              className="font-serif italic text-[19px] leading-[1.55] text-white/70 max-w-[500px]"
-              style={{ fontFamily: "var(--font-serif)" }}
-            >
+            <p className="font-serif italic text-[19px] leading-[1.55] text-white/70 max-w-[500px]">
               {t(locale, "blog.description")}
             </p>
           </div>
@@ -165,10 +162,7 @@ const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
               </h2>
 
               {/* Summary */}
-              <p
-                className="font-serif italic text-base leading-[1.62] text-white/50 max-w-2xl"
-                style={{ fontFamily: "var(--font-serif)" }}
-              >
+              <p className="font-serif italic text-base leading-[1.62] text-white/50 max-w-2xl">
                 {post.excerpt}
               </p>
             </motion.a>

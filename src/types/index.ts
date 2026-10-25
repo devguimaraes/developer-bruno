@@ -1,34 +1,5 @@
 export * from "./blog";
 
-export interface Project {
-  id: string;
-  title: string;
-  description: string;
-  /** Display category (e.g. "Event Platform", "Agency Website") */
-  category: string;
-  tech: readonly string[];
-  github: string;
-  live: string;
-  color: string;
-  featured?: boolean;
-  tags?: readonly string[];
-  /** Main project thumbnail/screenshot */
-  image: string;
-  /** Banner image for project card display (falls back to image if not set) */
-  bannerImage?: string;
-  previewAnimation?: "pixel-blast" | "grid-scan" | "letter-glitch" | "faulty-terminal";
-  /** DEV-76: Role played in the project */
-  role?: string;
-  /** DEV-75: Problem/context of the project */
-  context?: string;
-  /** DEV-75: Measurable impact/result */
-  impact?: string;
-  /** DEV-84: Slug for case study routing */
-  slug?: string;
-  /** DEV-82: Related blog post slugs for cross-linking */
-  relatedPosts?: readonly string[];
-}
-
 export interface Skill {
   id: string;
   icon: string;
@@ -63,7 +34,6 @@ export interface SiteConfig {
     filename: string;
   };
   seo: {
-    keywords: readonly string[];
     image: string;
     siteName: string;
     locale?: string;
