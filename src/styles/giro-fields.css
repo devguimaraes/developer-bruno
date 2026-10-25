@@ -77,33 +77,6 @@
   pointer-events: none;
 }
 
-/* ---------- Language switch ---------- */
-
-.g-lang {
-  display: inline-flex;
-  width: max-content;
-  gap: 2px;
-  padding: 4px;
-  border-radius: var(--radius-pill);
-  box-shadow: inset 0 0 0 1px var(--s-line-strong);
-}
-.g-lang__option {
-  box-sizing: border-box;
-  width: 48px;
-  height: 44px;
-  border: 0;
-  border-radius: var(--radius-pill);
-  background: transparent;
-  color: var(--s-muted);
-  font: var(--text-rotulo);
-  cursor: pointer;
-  transition: background-color 200ms linear, color 200ms linear;
-}
-.g-lang__option[aria-pressed="true"] {
-  background: var(--s-accent);
-  color: var(--s-on-accent);
-}
-
 /* ---------- Notices and empty state ---------- */
 
 .g-notice {
@@ -174,4 +147,3 @@
     transform: translateY(0);
   }
 }
-

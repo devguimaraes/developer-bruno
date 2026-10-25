@@ -25,9 +25,11 @@ export interface GiroProps {
   className?: string;
 }
 
-function sizeClass(size: number | undefined, signature: boolean): string {
+// Modificador de traço por tamanho. A classe base g-giro vai sempre junto: é ela que o CSS usa
+// nos estados e dentro de avisos e botões.
+function sizeClass(size: number | undefined, signature: boolean): string | undefined {
   if (signature) return "g-giro--signature";
-  if (size === undefined || size >= 60) return "g-giro";
+  if (size === undefined || size >= 60) return undefined;
   if (size >= 32) return "g-giro--md";
   if (size >= 24) return "g-giro--sm";
   return "g-giro--xs";
@@ -58,7 +60,9 @@ export function Giro({
     }
   }
 
-  const classes = [sizeClass(size, signature), hop && "is-hop", className].filter(Boolean);
+  const classes = ["g-giro", sizeClass(size, signature), hop && "is-hop", className].filter(
+    Boolean
+  );
 
   return (
     <svg

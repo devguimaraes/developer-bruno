@@ -55,7 +55,9 @@
   box-shadow: inset 0 0 0 1px var(--s-line);
   color: var(--s-fg);
   text-decoration: none;
-  transition: transform var(--dur-resolve) var(--ease-resolve), box-shadow 200ms linear;
+  transition:
+    transform var(--dur-resolve) var(--ease-resolve),
+    box-shadow 200ms linear;
 }
 .g-project-card__media {
   position: relative;
@@ -204,7 +206,9 @@
   color: var(--s-link);
   opacity: 0;
   translate: -6px 0;
-  transition: opacity 200ms linear, translate var(--dur-resolve) var(--ease-resolve);
+  transition:
+    opacity 200ms linear,
+    translate var(--dur-resolve) var(--ease-resolve);
 }
 .g-post-row:hover .g-post-row__title,
 .g-post-row.is-hover .g-post-row__title {
@@ -322,7 +326,10 @@
   color: var(--s-fg);
   text-align: left;
   cursor: grab;
-  transition: box-shadow 200ms linear, transform var(--dur-resolve) var(--ease-resolve), background-color 200ms linear;
+  transition:
+    box-shadow 200ms linear,
+    transform var(--dur-resolve) var(--ease-resolve),
+    background-color 200ms linear;
 }
 .g-node__icon {
   display: flex;
@@ -361,7 +368,9 @@
 .g-node.is-dragging {
   cursor: grabbing;
   transform: scale(1.03) rotate(-1.5deg);
-  box-shadow: inset 0 0 0 1.5px var(--s-fg), 0 14px 30px rgba(11, 12, 31, 0.18);
+  box-shadow:
+    inset 0 0 0 1.5px var(--s-fg),
+    0 14px 30px rgba(11, 12, 31, 0.18);
 }
 .g-edge {
   fill: none;
@@ -415,7 +424,9 @@
   background: currentColor;
   opacity: 0;
   scale: 0.4;
-  transition: opacity 200ms linear, scale var(--dur-resolve) var(--ease-hop);
+  transition:
+    opacity 200ms linear,
+    scale var(--dur-resolve) var(--ease-hop);
 }
 .g-toc__link:hover {
   color: var(--s-fg);
@@ -428,4 +439,3 @@
   opacity: 1;
   scale: 1;
 }
-

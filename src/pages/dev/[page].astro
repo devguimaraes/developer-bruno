@@ -2,6 +2,9 @@
 import "@/index.css";
 import { Giro } from "@/components/brand/Giro";
 import { GIRO_STATES } from "@/components/brand/giro-states";
+import ActionsShowcase from "@/components/dev/ActionsShowcase.astro";
+import FieldsShowcase from "@/components/dev/FieldsShowcase.astro";
+import ContentShowcase from "@/components/dev/ContentShowcase.astro";
 
 // Página interna para conferir a fundação da Giro contra o canvas ("Fase 4 · componentes").
 // Só existe no dev server: no build, getStaticPaths devolve vazio e a rota não é gerada.
@@ -57,5 +60,8 @@ const surfaces = [
         </section>
       ))
     }
+    <ActionsShowcase />
+    <FieldsShowcase />
+    <ContentShowcase />
   </body>
 </html>

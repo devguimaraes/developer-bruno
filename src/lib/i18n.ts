@@ -19,6 +19,7 @@ const ptDictionary = {
   "menu.close": "Fechar menu",
   "language.switcher": "idioma · pt · en",
   "language.options_label": "Português / English",
+  "language.group_label": "Idioma",
   "reading.progress_label": "Progresso da leitura",
   "tabs.label": "Navegação",
   "tabs.home": "Início",
@@ -155,6 +156,7 @@ const ptDictionary = {
   "contact.direct.copy": "Copiar e-mail",
   "contact.direct.copied": "Copiado",
   "contact.direct.copy_error": "Não deu para copiar. Selecione o e-mail acima.",
+  "contact.direct.copy_error_hint": "Selecione o e-mail acima.",
   "contact.social.github": "GitHub",
   "contact.social.linkedin": "LinkedIn",
 
@@ -307,6 +309,7 @@ const enDictionary: Record<TranslationKey, string> = {
   "menu.close": "Close menu",
   "language.switcher": "language · pt · en",
   "language.options_label": "Português / English",
+  "language.group_label": "Language",
   "reading.progress_label": "Reading progress",
   "tabs.label": "Navigation",
   "tabs.home": "Home",
@@ -443,6 +446,7 @@ const enDictionary: Record<TranslationKey, string> = {
   "contact.direct.copy": "Copy email",
   "contact.direct.copied": "Copied",
   "contact.direct.copy_error": "Couldn't copy. Select the email above.",
+  "contact.direct.copy_error_hint": "Select the email above.",
   "contact.social.github": "GitHub",
   "contact.social.linkedin": "LinkedIn",
 

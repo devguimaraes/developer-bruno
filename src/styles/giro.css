@@ -58,6 +58,13 @@
   --font-sans: "Anybody", "Arial Black", system-ui, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
+  --text-corpo-l: 450 20px / 1.5 var(--font-sans);
+  --text-corpo: 450 17px / 1.6 var(--font-sans);
+  --text-nav: 600 16px / 1.2 var(--font-sans);
+  --text-rotulo: 400 13px / 1.4 var(--font-mono);
+  --text-codigo: 400 15px / 1.6 var(--font-mono);
+  --text-micro: 400 12px / 1.4 var(--font-mono);
+
   /* Movimento (decisão 43: estados em CSS, Framer Motion só para voos). */
   --ease-resolve: cubic-bezier(0.2, 0.8, 0.2, 1);
   --ease-hop: cubic-bezier(0.34, 1.56, 0.64, 1);

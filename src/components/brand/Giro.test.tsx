@@ -70,6 +70,19 @@ describe("Giro — olhar e pulo", () => {
     expect(getSvg({ state: "curious" }).getAttribute("style") ?? "").not.toContain("--g-tilt");
   });
 
+  it("a classe base g-giro vai junto de qualquer modificador de tamanho", () => {
+    for (const props of [
+      {},
+      { size: 72 },
+      { size: 40 },
+      { size: 28 },
+      { size: 16 },
+      { signature: true },
+    ]) {
+      expect(getSvg(props).classList.contains("g-giro")).toBe(true);
+    }
+  });
+
   it("hop adiciona is-hop", () => {
     expect(getSvg({ hop: true }).classList.contains("is-hop")).toBe(true);
     expect(getSvg().classList.contains("is-hop")).toBe(false);
