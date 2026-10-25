@@ -105,6 +105,30 @@ Dentro da branch de integração, antes da verificação final (#61) e da releas
 3. Avaliar o upgrade do Astro e do adapter num commit à parte, com build, e2e e conferência da navegação sem recarregar no navegador. Se a compatibilidade com as integrações não fechar, registrar o bloqueio e decidir com o Bruno se a v2.0.0 sai com as advisories do Astro documentadas.
 4. Antes de criar a função do contato (#54), reavaliar a linha "função da Vercel" da tabela de exposição: é ali que as advisories de SSR passam a ter exposição real.
 
+## Andamento
+
+### 25/10/2026: `bun audit fix` e `sharp` (issue #63, etapas 1 e 2)
+
+- `bun audit fix` alterou só o `bun.lock` (62 linhas adicionadas, 46 removidas) e corrigiu **48 vulnerabilidades em 18 pacotes**, como a simulação previu. Nenhuma troca de major, nenhuma mudança no `package.json`.
+- `sharp` do projeto subiu de `^0.34.5` para `^0.35.5` (`bun add -d sharp@0.35.5`). `bun run optimize:media` rodou com a versão nova e converteu a imagem de teste sem erro, e `bun run check:media-budget` continua dentro do limite.
+- Total depois das duas etapas: **22 vulnerabilidades** (1 crítica, 7 altas, 10 moderadas, 4 baixas), em 8 pacotes: `astro` (11), `sharp` (3), `@vitest/mocker` (2), `postcss-selector-parser` (2), `@astrojs/vercel` (1), `esbuild` (1), `path-to-regexp` (1) e `zod` (1).
+- As 3 altas do `sharp` que sobraram não vêm do `sharp` do projeto. Vêm da cópia 0.34.5 que o Astro 5 traz como dependência opcional (`astro/sharp`). O projeto não usa `astro:assets`, então essa cópia não é carregada. Elas saem com o upgrade do Astro. Forçar a versão nova com `overrides` ficaria fora do intervalo que o Astro declara (`^0.34.0`), e não vale o risco por um caminho que não roda.
+- O `vitest` crítico saiu (subiu para 4.1.11). O que resta de crítica é a do `astro`.
+- Pendente: etapa 3 (avaliar Astro 6 ou 7 e `@astrojs/vercel` 10 ou mais) e a etapa 4 antes da função do contato (#54).
+
+### 25/10/2026: avaliação do Astro 6 e 7 (issue #63, etapa 3)
+
+Feita numa cópia do projeto fora do repositório. O repositório continua no Astro 5.18.1.
+
+- **Astro 6 não resolve a crítica.** A RCE na otimização de AVIF só é corrigida na 7.2.8. A 6.4.8 (última) com `@astrojs/vercel` 10.0.8 e `@astrojs/react` 7 ainda deixa 17 vulnerabilidades, 1 crítica.
+- **Astro 7 (7.4.2) com `@astrojs/vercel` 11.0.16 e `@astrojs/react` 7.1.1** deixou 6 vulnerabilidades (2 altas, 3 moderadas, 1 baixa), sem crítica: `path-to-regexp` (alta), `zod` 3.x (alta), `@vitest/mocker` (2 moderadas) e `postcss-selector-parser` (1 moderada e 1 baixa). As duas altas não são do Astro: `path-to-regexp` vem de `@vercel/routing-utils` e o `zod` 3 ainda é pedido por dependências.
+- **Bloqueios para adotar o Astro 7:**
+  1. Exige Node 22.23.4 ou mais. O Node local é o 22.22.2 e o Astro se recusa a rodar. Falta conferir o Node do CI (`.github/workflows/ci.yml`) e o da Vercel.
+  2. `@astrojs/tailwind` 6.0.2 só declara suporte a Astro 3 a 5. O Tailwind 3 já passa pelo PostCSS (`postcss.config.js`), então a integração pode sair, mas isso muda o `astro.config.mjs`.
+  3. O Astro 7 usa o Vite 8, e o `@astrojs/react` 7 também. Vitest, `@vitejs/plugin-react` e o build precisam ser revalidados juntos.
+  4. Os efeitos no `ClientRouter`, nas transições da #45 e na rota `/dev/giro` não foram testados, porque o build do Astro 7 não rodou neste Node.
+- **Decisão pendente com o Bruno:** subir o Node (local, CI, Vercel) e fazer o upgrade do Astro 7 como trabalho próprio, ou entregar a v2.0.0 no Astro 5 com a crítica documentada. A crítica não tem caminho de código hoje (sem `astro:assets`), mas a função do contato (#54) vai rodar o Astro em servidor.
+
 ## Critério de saída
 
 - `bun audit` sem críticas e sem altas em pacotes que rodam em produção ou na função do contato.
