@@ -1,5 +1,7 @@
 ---
 import "@/index.css";
+import { Giro } from "@/components/brand/Giro";
+import { GIRO_STATES } from "@/components/brand/giro-states";
 
 // Página interna para conferir a fundação da Giro contra o canvas ("Fase 4 · componentes").
 // Só existe no dev server: no build, getStaticPaths devolve vazio e a rota não é gerada.
@@ -37,6 +39,21 @@ const surfaces = [
             <button class="g-button" type="button" disabled>Desabilitado</button>
           </div>
           <p class="micro mt-8 text-s-muted">giro.svg · r 44</p>
+        </section>
+      ))
+    }
+    {
+      surfaces.map((surface) => (
+        <section class={`${surface.name} px-4 py-12 md:px-16`}>
+          <p class="rotulo text-s-muted">{`// giro · estados · ${surface.label}`}</p>
+          <ul class="mt-8 grid grid-cols-2 gap-6 md:grid-cols-5">
+            {GIRO_STATES.map((state) => (
+              <li class="flex flex-col items-start gap-3">
+                <Giro state={state} size={64} />
+                <span class="micro text-s-muted">{state}</span>
+              </li>
+            ))}
+          </ul>
         </section>
       ))
     }

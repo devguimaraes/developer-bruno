@@ -9,7 +9,8 @@
   font-weight: 100 900;
   font-stretch: 50% 150%;
   src: url("../assets/fonts/anybody-latin-wdth-wght.woff2") format("woff2-variations");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
     U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
@@ -19,7 +20,8 @@
   font-display: swap;
   font-weight: 100 900;
   src: url("../assets/fonts/geist-mono-latin-wght.woff2") format("woff2-variations");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
     U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
@@ -299,4 +301,349 @@
   opacity: var(--disabled-opacity);
   cursor: not-allowed;
   transform: none;
+}
+
+/* ---------- Giro ---------- */
+
+.g-giro {
+  --g-ink: var(--s-signal);
+  --g-stroke: 12px;
+  --g-face: 7px;
+  --g-eye: 1;
+  width: 1em;
+  height: 1em;
+  flex: none;
+  overflow: visible;
+  color: var(--g-ink);
+}
+.g-giro--md {
+  --g-stroke: 14px;
+  --g-face: 8px;
+  --g-eye: 1.15;
+}
+.g-giro--sm {
+  --g-stroke: 16px;
+  --g-face: 9px;
+  --g-eye: 1.15;
+}
+.g-giro--xs {
+  --g-stroke: 18px;
+  --g-face: 10px;
+  --g-eye: 1.2;
+}
+.g-giro--signature {
+  --g-stroke: 22px;
+  --g-face: 11px;
+  --g-eye: 1.28;
+}
+.g-giro__body,
+.g-giro__turn,
+.g-giro__spin {
+  transform-box: view-box;
+  transform-origin: 60px 60px;
+}
+.g-giro__body {
+  rotate: var(--g-tilt, 0deg);
+  transition: rotate var(--dur-resolve) var(--ease-resolve);
+}
+.g-giro__turn {
+  transform: rotate(-21.5deg);
+  transition: transform var(--dur-resolve) var(--ease-resolve);
+}
+.g-giro__arc,
+.g-giro__track {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--g-stroke);
+  stroke-linecap: round;
+}
+.g-giro__arc {
+  stroke-dasharray: 240 37;
+  transition:
+    stroke-dasharray var(--dur-resolve) var(--ease-resolve),
+    stroke var(--dur-resolve) linear;
+}
+.g-giro__track {
+  opacity: 0;
+  stroke-opacity: 0.22;
+}
+.g-giro__blink {
+  transform-box: view-box;
+  transform-origin: 60px 54px;
+  animation: g-blink 5s linear infinite;
+}
+.g-giro__eye {
+  fill: currentColor;
+  transform-box: fill-box;
+  transform-origin: center;
+  translate: var(--g-look-x, 0px) var(--g-look-y, 0px);
+  scale: var(--g-eye);
+  transition:
+    translate 250ms var(--ease-resolve),
+    scale 250ms var(--ease-resolve),
+    opacity 150ms linear;
+}
+.g-giro__face {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--g-face);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0;
+  transition: opacity 150ms linear;
+}
+.g-giro__z {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 6px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0;
+}
+
+/* states */
+.g-giro[data-state="loading"] .g-giro__arc {
+  stroke-dasharray: 100 177;
+}
+.g-giro[data-state="loading"] .g-giro__spin {
+  animation: g-spin var(--dur-spin) linear infinite;
+}
+.g-giro[data-state="loading"] .g-giro__eye {
+  translate: var(--g-look-x, 0px) 4px;
+  scale: var(--g-eye) calc(var(--g-eye) * 0.39);
+}
+.g-giro[data-state="done"] .g-giro__arc {
+  stroke-dasharray: 70 207;
+}
+.g-giro[data-state="done"] .g-giro__turn {
+  transform: rotate(44.5deg);
+}
+.g-giro[data-state="done"] .g-giro__eye,
+.g-giro[data-state="error"] .g-giro__eye,
+.g-giro[data-state="empty"] .g-giro__eye,
+.g-giro[data-state="sleeping"] .g-giro__eye {
+  opacity: 0;
+}
+.g-giro[data-state="done"] .g-giro__face--happy,
+.g-giro[data-state="error"] .g-giro__face--x,
+.g-giro[data-state="empty"] .g-giro__face--flat,
+.g-giro[data-state="sleeping"] .g-giro__face--sleep,
+.g-giro[data-state="sleeping"] .g-giro__z {
+  opacity: 1;
+}
+.g-giro[data-state="done"] .g-giro__face--happy {
+  transition-delay: 250ms;
+}
+.g-giro[data-state="error"] {
+  --g-ink: var(--coral);
+  background: var(--tinta);
+  border-radius: 50%;
+}
+.g-giro[data-state="error"] .g-giro__arc {
+  stroke-dasharray: 70 207;
+}
+.g-giro[data-state="error"] .g-giro__turn {
+  transform: rotate(224.5deg);
+}
+.g-giro[data-state="error"] .g-giro__body {
+  animation: g-shake var(--dur-shake) ease-in-out 1;
+}
+.g-giro[data-state="empty"] .g-giro__arc {
+  stroke-dasharray: 1 276;
+}
+.g-giro[data-state="empty"] .g-giro__turn {
+  transform: rotate(90deg);
+}
+.g-giro[data-state="thinking"] {
+  --g-tilt: 6deg;
+  --g-look-y: -3px;
+}
+.g-giro[data-state="thinking"] .g-giro__arc {
+  stroke-dasharray: 30 247;
+}
+.g-giro[data-state="thinking"] .g-giro__spin {
+  animation: g-spin 2.4s linear infinite;
+}
+.g-giro[data-state="lost"] .g-giro__arc {
+  stroke-dasharray: 50 227;
+}
+.g-giro[data-state="lost"] .g-giro__spin {
+  animation: g-sweep 2s ease-in-out infinite;
+}
+.g-giro[data-state="sleeping"] .g-giro__arc {
+  stroke-dasharray: 1 276;
+}
+.g-giro[data-state="sleeping"] .g-giro__turn {
+  transform: rotate(90deg);
+}
+.g-giro[data-state="sleeping"] .g-giro__z {
+  transform-box: fill-box;
+  animation: g-z 2.6s ease-out infinite;
+}
+.g-giro[data-state="celebrating"] .g-giro__face--happy {
+  opacity: 1;
+}
+.g-giro[data-state="celebrating"] .g-giro__eye {
+  opacity: 0;
+}
+.g-giro[data-state="celebrating"] .g-giro__arc {
+  stroke-dasharray: 70 207;
+}
+.g-giro[data-state="celebrating"] .g-giro__body {
+  transform-origin: 60px 104px;
+  animation: g-party 2.4s linear infinite;
+}
+.g-giro[data-progress] .g-giro__arc {
+  stroke-dasharray: var(--g-dash, 240 37);
+  transition: stroke-dasharray 120ms linear;
+}
+.g-giro[data-progress] .g-giro__turn {
+  transform: rotate(-90deg);
+}
+.g-giro[data-progress] .g-giro__track {
+  opacity: 1;
+}
+.g-giro:not([data-state]) .g-giro__body,
+.g-giro[data-state="idle"] .g-giro__body {
+  animation: g-breathe 3s ease-in-out infinite;
+}
+.g-giro[data-state="empty"] .g-giro__body {
+  animation: g-float 3s ease-in-out infinite;
+}
+.g-giro.is-hop .g-giro__body {
+  transform-origin: 60px 104px;
+  animation: g-hop var(--dur-hop) var(--ease-hop) 1;
+}
+
+@keyframes g-breathe {
+  0%,
+  100% {
+    scale: 1;
+  }
+  50% {
+    scale: 1.03;
+  }
+}
+@keyframes g-float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -6px;
+  }
+}
+@keyframes g-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes g-sweep {
+  0%,
+  100% {
+    transform: rotate(-70deg);
+  }
+  50% {
+    transform: rotate(70deg);
+  }
+}
+@keyframes g-blink {
+  0%,
+  94%,
+  100% {
+    transform: scaleY(1);
+  }
+  96.5% {
+    transform: scaleY(0.1);
+  }
+}
+@keyframes g-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-6px);
+  }
+  45% {
+    transform: translateX(6px);
+  }
+  70% {
+    transform: translateX(-4px);
+  }
+  88% {
+    transform: translateX(3px);
+  }
+}
+@keyframes g-hop {
+  0%,
+  100% {
+    transform: translateY(0) scale(1, 1);
+  }
+  20% {
+    transform: translateY(0) scale(1.1, 0.88);
+  }
+  55% {
+    transform: translateY(-16px) scale(0.95, 1.06);
+  }
+  80% {
+    transform: translateY(0) scale(1.05, 0.95);
+  }
+}
+@keyframes g-z {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(10px, -24px);
+  }
+}
+@keyframes g-party {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    animation-timing-function: cubic-bezier(0.45, 0, 0.2, 1);
+  }
+  25% {
+    transform: translateY(0) rotate(360deg);
+    animation-timing-function: ease-out;
+  }
+  33% {
+    transform: translateY(-16px) rotate(360deg);
+    animation-timing-function: ease-in;
+  }
+  41% {
+    transform: translateY(0) rotate(360deg);
+    animation-timing-function: ease-out;
+  }
+  48% {
+    transform: translateY(-10px) rotate(360deg);
+    animation-timing-function: ease-in;
+  }
+  55%,
+  100% {
+    transform: translateY(0) rotate(360deg);
+  }
+}
+
+/* Abaixo de 24px sobra só o anel (favicon). */
+.g-giro--xs .g-giro__eye,
+.g-giro--xs .g-giro__face {
+  display: none;
+}
+
+/* Movimento reduzido: troca de estado sem transição e só pisca. A classe repetida iguala a
+   especificidade das regras de estado (o bloco vem por último, então vence sem !important). */
+@media (prefers-reduced-motion: reduce) {
+  .g-giro.g-giro.g-giro * {
+    animation: none;
+    transition-duration: 0ms;
+  }
+  .g-giro.g-giro.g-giro .g-giro__blink {
+    animation: g-blink 5s linear infinite;
+  }
 }
