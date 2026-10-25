@@ -2,6 +2,7 @@
 @import "./styles/giro-actions.css";
 @import "./styles/giro-fields.css";
 @import "./styles/giro-content.css";
+@import "./styles/giro-process.css";
 
 @tailwind base;
 @tailwind components;

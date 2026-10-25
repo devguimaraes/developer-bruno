@@ -1,0 +1,421 @@
+/* Diagrama do processo em linha de metrô (DS: ProcessDiagram e bundle.css).
+   .g-node e .g-edge ficam em giro-content.css. A animação de entrada só roda quando o
+   contêiner tem data-motion="on" (movimento permitido) e, depois, a classe is-play (entrou na tela). */
+
+/* ---------- Process step detail ---------- */
+
+.g-step {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  padding: 28px;
+  border-radius: var(--radius-md);
+  background: var(--s-raised);
+  transition: box-shadow 200ms linear;
+}
+.g-step[hidden] {
+  display: none;
+}
+.g-step--open {
+  box-shadow: inset 0 0 0 2px var(--s-signal);
+}
+.g-step__head {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.g-step__title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 26px;
+  line-height: 1.15;
+  font-weight: 800;
+  font-stretch: 110%;
+  letter-spacing: -0.015em;
+}
+.g-step__text {
+  margin: 0;
+  max-width: 52ch;
+  color: var(--s-muted);
+  font: var(--text-corpo);
+}
+.g-step__deliverable {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 700;
+  font-stretch: 108%;
+}
+.g-step__deliverable span {
+  color: var(--s-muted);
+  font: var(--text-micro);
+}
+.g-step__tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.g-tool {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 14px 0 10px;
+  border-radius: var(--radius-pill);
+  background: var(--s-raised);
+  color: var(--s-fg);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  font-stretch: 105%;
+  line-height: 1;
+  white-space: nowrap;
+}
+.g-tool__logo {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  fill: currentColor;
+}
+
+/* ---------- Process diagram (metro line) ---------- */
+
+.g-metro {
+  position: relative;
+}
+.g-metro__hint {
+  margin: 24px 0 0;
+  color: var(--s-muted);
+  font: var(--text-micro);
+}
+.g-metro__frame {
+  position: relative;
+  width: 100%;
+}
+.g-metro__stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1120px;
+  height: 700px;
+  transform-origin: 0 0;
+}
+.g-metro__lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.g-metro__main {
+  fill: none;
+  stroke: var(--s-signal);
+  stroke-width: 4px;
+  stroke-linecap: round;
+}
+.g-metro__branch {
+  fill: none;
+  stroke: var(--s-line-strong);
+  stroke-width: 1.5px;
+  stroke-linecap: round;
+  transition:
+    stroke 200ms linear,
+    stroke-width 200ms linear;
+}
+.g-metro__branch.is-lit {
+  stroke: var(--s-signal);
+  stroke-width: 2.5px;
+}
+.g-metro__pulse {
+  fill: none;
+  stroke: var(--s-fg);
+  stroke-width: 4px;
+  stroke-linecap: round;
+  stroke-dasharray: 0.03 1;
+  stroke-dashoffset: 0.03;
+  opacity: 0;
+}
+.g-metro[data-motion="on"].is-play .g-metro__pulse {
+  animation: g-pulse 4s linear 3.2s infinite;
+}
+
+/* Traço que se desenha (pathLength = 1) e pop de entrada, presos à entrada. */
+.g-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+.g-metro[data-motion="on"]:not(.is-play) .g-draw {
+  stroke-dashoffset: 1;
+}
+.g-metro[data-motion="on"].is-play .g-draw {
+  animation: g-draw-on var(--t, 500ms) var(--ease-resolve) var(--d, 0ms) both;
+}
+.g-metro[data-motion="on"]:not(.is-play) .g-pop {
+  opacity: 0;
+  scale: 0.4;
+}
+.g-metro[data-motion="on"].is-play .g-pop {
+  animation: g-pop-in var(--dur-hop) var(--ease-hop) var(--d, 0ms) both;
+}
+
+.g-metro__station {
+  position: absolute;
+  z-index: 2;
+  translate: -50% -50%;
+  cursor: grab;
+}
+.g-metro__station .g-node {
+  background: var(--s-bg);
+}
+.g-metro__station .g-node[aria-expanded="true"] {
+  background: var(--s-bg);
+  box-shadow:
+    inset 0 0 0 2px var(--s-signal),
+    0 0 0 6px var(--s-bg);
+}
+.g-metro__station.is-dragging .g-node {
+  cursor: grabbing;
+  transform: scale(1.03) rotate(-1.5deg);
+  box-shadow:
+    inset 0 0 0 1.5px var(--s-fg),
+    0 14px 30px rgba(11, 12, 31, 0.18);
+}
+
+.g-metro__tools {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  pointer-events: none;
+}
+.g-metro__tool {
+  position: absolute;
+  z-index: 1;
+  width: 92px;
+  height: 56px;
+  margin: -28px 0 0 -46px;
+  color: var(--s-fg);
+  text-align: center;
+  pointer-events: auto;
+  cursor: default;
+}
+.g-metro__disc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: var(--s-bg);
+  box-shadow: inset 0 0 0 1.5px var(--s-line-strong);
+  transition:
+    box-shadow 200ms linear,
+    translate var(--dur-resolve) var(--ease-resolve);
+}
+.g-metro__disc svg {
+  width: 26px;
+  height: 26px;
+  fill: currentColor;
+}
+.g-metro__name {
+  position: absolute;
+  left: 50%;
+  top: 62px;
+  translate: -50% 0;
+  padding: 0 3px;
+  background: var(--s-bg);
+  color: var(--s-muted);
+  font: 400 11px / 1.25 var(--font-mono);
+  white-space: nowrap;
+  transition: color 200ms linear;
+}
+.g-metro__tool--up .g-metro__name {
+  top: auto;
+  bottom: 62px;
+}
+.g-metro__tool:hover .g-metro__disc,
+.g-metro__tool.is-lit .g-metro__disc {
+  box-shadow: inset 0 0 0 2.5px var(--s-signal);
+  translate: 0 -3px;
+}
+.g-metro__tool:hover .g-metro__name,
+.g-metro__tool.is-lit .g-metro__name {
+  color: var(--s-fg);
+}
+
+/* Giro que anda pela linha: loading vira done no fim do percurso. */
+.g-metro__rider {
+  position: absolute;
+  z-index: 3;
+  width: 44px;
+  height: 44px;
+  margin: -22px 0 0 -22px;
+  border-radius: 50%;
+  background: var(--s-fg);
+  --s-signal: var(--s-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.g-metro__rider .g-giro + .g-giro {
+  position: absolute;
+}
+.g-metro[data-motion="on"]:not(.is-play) .g-metro__rider {
+  opacity: 0;
+}
+.g-metro[data-motion="on"] .g-metro__rider-done {
+  opacity: 0;
+}
+.g-metro[data-motion="on"].is-play .g-metro__rider-loading {
+  animation: g-fade-out 150ms linear var(--d, 0ms) forwards;
+}
+.g-metro[data-motion="on"].is-play .g-metro__rider-done {
+  animation: g-fade-in 150ms linear var(--d, 0ms) forwards;
+}
+
+/* Celular: linha vertical à esquerda, ramais horizontais de até quatro ferramentas. */
+.g-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.g-stack::before {
+  content: "";
+  position: absolute;
+  top: 24px;
+  bottom: 24px;
+  left: 32px;
+  width: 4px;
+  border-radius: 4px;
+  background: var(--s-signal);
+}
+.g-stack__step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+}
+.g-stack__rows {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 0 0 0 34px;
+  padding: 0 0 0 18px;
+  list-style: none;
+}
+.g-stack__row {
+  position: relative;
+}
+.g-stack__row::before {
+  content: "";
+  position: absolute;
+  top: 23px;
+  left: 0;
+  width: 18px;
+  height: 1.5px;
+  background: var(--s-line-strong);
+}
+.g-stack__step.is-open .g-stack__row::before {
+  height: 2.5px;
+  background: var(--s-signal);
+}
+.g-stack__tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.g-stack .g-metro__tool {
+  position: relative;
+  z-index: auto;
+  width: 76px;
+  height: auto;
+  margin: 0;
+  left: auto;
+  top: auto;
+}
+.g-stack .g-metro__disc {
+  width: 48px;
+  height: 48px;
+}
+.g-stack .g-metro__disc svg {
+  width: 22px;
+  height: 22px;
+}
+.g-stack .g-metro__name {
+  position: static;
+  translate: none;
+  max-width: 76px;
+  padding: 0;
+  background: none;
+  font-size: 10px;
+  white-space: normal;
+}
+.g-stack__step.is-open .g-metro__disc {
+  box-shadow: inset 0 0 0 2px var(--s-signal);
+}
+.g-stack .g-metro__tool--sm .g-metro__disc {
+  margin: 0 auto;
+}
+
+@keyframes g-draw-on {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes g-pop-in {
+  0% {
+    opacity: 0;
+    scale: 0.4;
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    scale: 1;
+  }
+}
+@keyframes g-pulse {
+  0% {
+    opacity: 1;
+    stroke-dashoffset: 0.03;
+  }
+  70% {
+    opacity: 1;
+    stroke-dashoffset: -1;
+  }
+  71%,
+  100% {
+    opacity: 0;
+    stroke-dashoffset: -1;
+  }
+}
+@keyframes g-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes g-fade-in {
+  to {
+    opacity: 1;
+  }
+}
