@@ -1,14 +1,13 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import CaseStudy from "@/components/projects/CaseStudy";
-import { selectedWorks } from "@/data/projects";
+import { homeCases } from "@/data/projects";
 import { getCollection, type CollectionEntry } from "astro:content";
-import { siteConfig } from "@/config/site";
 
 type BlogEntry = CollectionEntry<"blog">;
 
 export function getStaticPaths() {
-  return selectedWorks.map(project => ({
+  return homeCases.map(project => ({
     params: { slug: project.slug },
     props: { project },
   }));
@@ -28,7 +27,7 @@ if (project.relatedPosts && project.relatedPosts.length > 0) {
     .filter(Boolean);
 } else {
   // Fall back to tag-matching algorithm
-  const projectKeywords = [...project.tech, ...(project.tags || [])].map(k => k.toLowerCase());
+  const projectKeywords = [...project.stack, ...project.tags].map(k => k.toLowerCase());
 
   // Score posts by how many tags overlap with project keywords
   const scoredPosts = blogEntries
@@ -59,43 +58,12 @@ const relatedPosts = relatedBlogEntries.map(entry => ({
   image: entry.data.image,
   featured: entry.data.featured,
 }));
-
-// Structured data for the case study
-const caseStudySchema = {
-  "@context": "https://schema.org",
-  "@type": "CreativeWork",
-  name: project.title,
-  description: project.description,
-  about: project.category,
-  keywords: [...project.tech, ...(project.tags || [])].join(", "),
-  author: {
-    "@type": "Person",
-    name: siteConfig.author,
-    url: siteConfig.domain,
-  },
-  ...(project.live && {
-    url: project.live,
-  }),
-  ...(project.role && {
-    contributor: {
-      "@type": "Person",
-      name: siteConfig.author,
-      roleName: project.role,
-    },
-  }),
-  mainEntityOfPage: {
-    "@type": "WebPage",
-    "@id": `${siteConfig.domain}/projetos/${project.slug}`,
-  },
-  inLanguage: "pt-BR",
-};
 ---
 
 <Layout
   title={`${project.title} — Case Study`}
-  description={project.description || `Estudo de caso do projeto ${project.title}`}
+  description={project.summary.pt}
   image={project.bannerImage ?? project.image}
-  structuredData={caseStudySchema}
   ogType="article"
 >
   <CaseStudy project={project} relatedPosts={relatedPosts} client:load />

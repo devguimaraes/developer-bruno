@@ -1,9 +1,8 @@
 import type React from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowUpRight, ExternalLink, Calendar } from "lucide-react";
-import type { Project } from "@/types";
+import type { Project } from "@/data/projects";
 import type { BlogPost } from "@/types/blog";
-import { LiquidGlitchImage } from "@/components/ui/LiquidGlitchImage";
 import { BrandIcon } from "@/components/brand";
 import { t } from "@/lib/i18n";
 import { useLocale } from "@/hooks/useLocale";
@@ -39,10 +38,9 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
         {/* Camada de fundo: imagem + efeitos */}
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 w-full h-full scale-110">
-            <LiquidGlitchImage
+            <img
               src={heroBanner}
               alt={project.title}
-              active={true}
               className="w-full h-full object-cover grayscale-[0.3] opacity-90 contrast-125"
             />
           </div>
@@ -78,7 +76,7 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
             transition={{ delay: 0.3 }}
             className="inline-block bg-accent text-black type-mono text-[11px] font-black uppercase tracking-[0.15em] px-4 py-1.5 mb-4 shadow-[4px_4px_0_rgba(0,0,0,0.5)]"
           >
-            {project.category}
+            {project.label[locale]}
           </motion.span>
 
           {/* Título gigante com mix-blend-difference */}
@@ -92,16 +90,14 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
           </motion.h1>
 
           {/* Role — subtítulo técnico */}
-          {project.role && (
-            <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="type-mono text-xs text-white/50 uppercase tracking-[0.1em] mb-6"
-            >
-              {project.role}
-            </motion.p>
-          )}
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="type-mono text-xs text-white/50 uppercase tracking-[0.1em] mb-6"
+          >
+            {project.role[locale]}
+          </motion.p>
         </div>
 
         {/* Scroll Indicator */}
@@ -126,15 +122,17 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
             {...sectionMotion}
             className="flex flex-col sm:flex-row gap-3 py-4 border-b border-white/[0.08]"
           >
-            <a
-              href={project.live}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center justify-center gap-3 bg-white text-black hover:bg-accent transition-colors px-6 py-3.5 type-mono uppercase tracking-widest font-bold min-h-[48px] pressable"
-            >
-              <span>{t(locale, "case.visit_live")}</span>
-              <ExternalLink className="w-5 h-5" />
-            </a>
+            {project.live && (
+              <a
+                href={project.live}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center gap-3 bg-white text-black hover:bg-accent transition-colors px-6 py-3.5 type-mono uppercase tracking-widest font-bold min-h-[48px] pressable"
+              >
+                <span>{t(locale, "case.visit_live")}</span>
+                <ExternalLink className="w-5 h-5" />
+              </a>
+            )}
             <a
               href={`mailto:${contactData.email}`}
               className="inline-flex items-center justify-center gap-3 border border-white/[0.08] text-white hover:border-accent/50 hover:text-accent transition-colors px-6 py-3.5 type-mono uppercase tracking-widest min-h-[48px] pressable"
@@ -162,27 +160,57 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
             {/* Coluna esquerda: heading que sangra */}
             <div>
               <h2 className="type-raster-section text-4xl md:text-5xl lg:text-6xl text-white leading-[0.9] border-l-2 border-accent pl-5 md:pl-8">
-                {t(locale, "case.problem")}
+                {project.context.title[locale]}
               </h2>
             </div>
 
             {/* Coluna direita: texto editorial */}
             <div className="flex flex-col gap-6">
-              {/* Descrição — lead-in itálico */}
-              {project.description && (
-                <p className="font-serif italic text-lg md:text-xl text-white/50 leading-relaxed">
-                  {project.description}
-                </p>
-              )}
+              {/* Resumo — lead-in itálico */}
+              <p className="font-serif italic text-lg md:text-xl text-white/50 leading-relaxed">
+                {project.summary[locale]}
+              </p>
 
-              {/* Context — o problema em si */}
-              {project.context && (
-                <div className="relative">
-                  <div className="absolute -left-4 top-0 bottom-0 w-px bg-white/10 hidden md:block" />
-                  <p className="text-base md:text-lg text-white/80 leading-relaxed">
-                    {project.context}
-                  </p>
-                </div>
+              {/* Contexto */}
+              <div className="relative">
+                <div className="absolute -left-4 top-0 bottom-0 w-px bg-white/10 hidden md:block" />
+                <p className="text-base md:text-lg text-white/80 leading-relaxed">
+                  {project.context.text[locale]}
+                </p>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* ================================================================ */}
+      {/*  PROBLEM — Desafio e o que o site precisava                      */}
+      {/* ================================================================ */}
+      <section className="container mx-auto px-6 py-14 md:py-20 max-w-5xl xl:max-w-7xl">
+        <motion.div {...sectionMotion}>
+          <div className="type-mono text-[10px] text-white/30 uppercase tracking-widest mb-8 flex items-center gap-2">
+            <BrandIcon name="terminal" size={20} decorative />
+            {t(locale, "case.problem")}
+          </div>
+
+          <div className="grid md:grid-cols-[1fr_1.6fr] gap-6 md:gap-12">
+            <h2 className="type-raster-section text-4xl md:text-5xl lg:text-6xl text-white leading-[0.9] border-l-2 border-accent pl-5 md:pl-8">
+              {project.problem.title[locale]}
+            </h2>
+
+            <div className="flex flex-col gap-6">
+              <p className="text-base md:text-lg text-white/80 leading-relaxed">
+                {project.problem.text[locale]}
+              </p>
+
+              {project.problem.needs && (
+                <ul className="flex flex-col gap-2">
+                  {project.problem.needs[locale].map(need => (
+                    <li key={need} className="text-base text-white/80 leading-relaxed">
+                      {need}
+                    </li>
+                  ))}
+                </ul>
               )}
             </div>
           </div>
@@ -208,7 +236,7 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
 
             {/* Grid de cards de tecnologia */}
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-              {project.tech.map((tech, i) => (
+              {project.stack.map((tech, i) => (
                 <motion.div
                   key={tech}
                   initial={prefersReducedMotion ? {} : { opacity: 0, y: 10 }}
@@ -239,7 +267,7 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
       {/* ================================================================ */}
       {/*  IMPACT — Resultados mensuráveis (condicional)                   */}
       {/* ================================================================ */}
-      {project.impact && (
+      {project.result && (
         <section className="container mx-auto px-6 py-14 md:py-20 max-w-5xl xl:max-w-7xl">
           <motion.div {...sectionMotion}>
             <div className="type-mono text-[10px] text-white/30 uppercase tracking-widest mb-8">
@@ -251,9 +279,29 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
                 {t(locale, "case.results")}
               </h2>
               <div className="relative">
-                <p className="text-base md:text-lg text-white/80 leading-relaxed">
-                  {project.impact}
-                </p>
+                {project.result.items ? (
+                  <div className="flex flex-col gap-4">
+                    {project.result.title && (
+                      <p className="type-raster-section text-xl md:text-2xl text-white">
+                        {project.result.title[locale]}
+                      </p>
+                    )}
+                    <ul className="flex flex-col gap-2">
+                      {project.result.items[locale].map(item => (
+                        <li
+                          key={item}
+                          className="text-base md:text-lg text-white/80 leading-relaxed"
+                        >
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : (
+                  <p className="text-base md:text-lg text-white/80 leading-relaxed">
+                    {project.result.text?.[locale]}
+                  </p>
+                )}
               </div>
             </div>
           </motion.div>

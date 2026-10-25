@@ -1,182 +1,473 @@
-import type { Project } from "@/types";
+/**
+ * Dados dos projetos (fonte única).
+ * Textos da "Copy da Giro" (fase 5). Todo texto de interface tem pt e en.
+ * Todos os cases têm as mesmas chaves (ausente = null ou []), e os tipos são inferidos daqui.
+ */
 
 /**
- * Projects data with external links and proper categorization
- * This is the SINGLE source of truth for all project data.
+ * Cases da home, na ordem em que aparecem.
+ * Atlas Marine Solutions: problema, papel e resultado dependem da issue #48 (ver pendingConfirmation).
  */
-const rawProjects = [
+export const homeCases = [
+  {
+    id: "estudio-entre",
+    slug: "estudio-entre",
+    title: "Estúdio Entre",
+    kicker: {
+      pt: "Hub cultural · Méier, RJ",
+      en: "Cultural hub · Méier, Rio de Janeiro",
+    },
+    summary: {
+      pt: "Plataforma cultural com eventos, loja, acervo e conteúdo, gerida no Sanity e integrada a um CRM.",
+      en: "A cultural platform with events, a shop, a book collection and content, managed in Sanity and connected to a CRM.",
+    },
+    label: {
+      pt: "// case · hub cultural · méier, rj",
+      en: "// case study · cultural hub · méier, rio de janeiro",
+    },
+    role: {
+      pt: "Desenvolvimento full-stack e UI/UX",
+      en: "Full-stack development and UI/UX",
+    },
+    stack: ["Astro", "React", "Sanity", "Tailwind CSS", "Vercel"],
+    live: "https://www.estudioentre.com.br/",
+    github: "https://github.com/devguimaraes/estudio-entre",
+    image: "/capa-estudio-entre.webp",
+    bannerImage: "/capa-estudio-entre.webp",
+    tags: ["cultura", "hub", "independente", "e-commerce", "cms"],
+    relatedPosts: [],
+    pendingConfirmation: [],
+    context: {
+      title: {
+        pt: "Uma mãe, uma filha e um sonho.",
+        en: "A mother, a daughter and a dream.",
+      },
+      text: {
+        pt: "O Estúdio Entre nasceu do sonho de mãe e filha: criar um hub cultural independente no Méier, Rio de Janeiro, onde a palavra vira encontro. O espaço une biblioterapia, oficinas, palestras, um estúdio de produção audiovisual e um sebo literário.",
+        en: "Estúdio Entre began as a mother and daughter's dream: an independent cultural hub in Méier, Rio de Janeiro, where words turn into gatherings. The space brings together bibliotherapy, workshops, talks, an audiovisual production studio and a used bookstore.",
+      },
+    },
+    problem: {
+      title: {
+        pt: "Cada pilar com presença própria, conversando com o todo.",
+        en: "Each pillar with a space of its own, all speaking as one.",
+      },
+      text: {
+        pt: "O desafio era traduzir essa essência numa plataforma coesa. E a equipe precisava mudar o site sem depender de um desenvolvedor.",
+        en: "The challenge was to turn that spirit into one coherent platform. And the team had to be able to change the site without a developer.",
+      },
+      needs: {
+        pt: [
+          "Ser gerido pela própria equipe",
+          "Agendar eventos",
+          "Vender pelo catálogo de produtos",
+          "Levar a conversa para o WhatsApp",
+        ],
+        en: [
+          "Be run by the team itself",
+          "Schedule events",
+          "Sell from a product catalog",
+          "Take the conversation to WhatsApp",
+        ],
+      },
+    },
+    solution: {
+      title: {
+        pt: "Conteúdo no Sanity, site estático em Astro.",
+        en: "Content in Sanity, a static site in Astro.",
+      },
+      text: {
+        pt: "A equipe publica eventos, exposições, galeria e produtos no Sanity, um CMS headless que também se integra a um CRM. O Astro gera o site com ilhas em React só onde há interação, a Vercel hospeda, e o contato segue pelo WhatsApp.",
+        en: "The team publishes events, exhibitions, the gallery and products in Sanity, a headless CMS that also connects to a CRM. Astro builds the site with React islands only where there is interaction, Vercel hosts it, and contact goes through WhatsApp.",
+      },
+      diagram: {
+        label: {
+          pt: "Arquitetura: a equipe edita no Sanity, que se integra a um CRM; o Astro gera o site com ilhas em React; a Vercel hospeda; quem visita fala pelo WhatsApp.",
+          en: "Architecture: the team edits in Sanity, which connects to a CRM; Astro builds the site with React islands; Vercel hosts it; visitors get in touch on WhatsApp.",
+        },
+        stations: [
+          { role: { pt: "quem edita", en: "who edits" }, name: { pt: "Equipe", en: "Team" } },
+          { role: { pt: "conteúdo", en: "content" }, name: { pt: "Sanity", en: "Sanity" } },
+          { role: { pt: "site estático", en: "static site" }, name: { pt: "Astro", en: "Astro" } },
+          { role: { pt: "hospedagem", en: "hosting" }, name: { pt: "Vercel", en: "Vercel" } },
+          {
+            role: { pt: "quem visita", en: "who visits" },
+            name: { pt: "Visitante", en: "Visitor" },
+          },
+        ],
+      },
+    },
+    result: {
+      title: {
+        pt: "A equipe cuida do site sozinha.",
+        en: "The team runs the site on its own.",
+      },
+      text: null,
+      items: {
+        pt: [
+          "Gestão autônoma de eventos, exposições, galeria de fotos e produtos.",
+          "Build estático em Astro, com ilhas interativas em React.",
+          "Integração com o WhatsApp e com um CRM.",
+          "Presença digital que fortaleceu o hub como referência cultural na Zona Norte carioca.",
+        ],
+        en: [
+          "The team manages events, exhibitions, the photo gallery and products.",
+          "Static build in Astro, with interactive React islands.",
+          "WhatsApp and CRM integration.",
+          "An online presence that made the hub a cultural reference in Rio's North Zone.",
+        ],
+      },
+    },
+    screenshots: [
+      {
+        src: "/estudio-entre-home.webp",
+        alt: { pt: "Página inicial do Estúdio Entre", en: "Estúdio Entre home page" },
+        caption: null,
+      },
+      {
+        src: "/estudio-entre-celular.webp",
+        alt: {
+          pt: "Página inicial do Estúdio Entre · no celular",
+          en: "Estúdio Entre home page · on a phone",
+        },
+        caption: { pt: "celular", en: "phone" },
+      },
+      {
+        src: "/estudio-entre-loja.webp",
+        alt: {
+          pt: "Loja do Estúdio Entre com livros e produtos",
+          en: "Estúdio Entre shop with books and products",
+        },
+        caption: {
+          pt: "a loja, gerida pela equipe no Sanity",
+          en: "the shop, run by the team in Sanity",
+        },
+      },
+    ],
+    nextCase: "atlas-marine-solutions",
+  },
+  {
+    id: "atlas-marine-solutions",
+    slug: "atlas-marine-solutions",
+    title: "Atlas Marine Solutions",
+    kicker: {
+      pt: "Agência marítima · EUA e Brasil",
+      en: "Ship agency · USA and Brazil",
+    },
+    summary: {
+      pt: "Site em quatro idiomas para serviços portuários em mais de 20 portos de 14 países.",
+      en: "A site in four languages for port services in more than 20 ports across 14 countries.",
+    },
+    label: {
+      pt: "// case · agência marítima · eua e brasil",
+      en: "// case study · ship agency · usa and brazil",
+    },
+    // Pendente (issue #48): papel, problema e resultado vieram da copy sem confirmação do dono.
+    role: {
+      pt: "Desenvolvimento front-end",
+      en: "Front-end development",
+    },
+    stack: ["Next.js", "React", "Tailwind CSS"],
+    live: null,
+    github: null,
+    image: "/atlas-marine-solutions.webp",
+    bannerImage: null,
+    tags: [],
+    relatedPosts: [],
+    pendingConfirmation: ["problem", "role", "result"],
+    context: {
+      title: {
+        pt: "Apoio portuário para navios de qualquer bandeira.",
+        en: "Port support for vessels of any flag.",
+      },
+      text: {
+        pt: "A Atlas Marine Solutions é uma agência marítima com bases na Flórida e no Rio de Janeiro. Ela coordena a escala de um navio da chegada à saída, com dez serviços, do agenciamento e abastecimento à troca de tripulação e ao despacho aduaneiro.",
+        en: "Atlas Marine Solutions is a ship agency with bases in Florida and Rio de Janeiro. It runs a vessel's port call from arrival to departure, with ten services, from ship agency and bunkering to crew change and customs clearance.",
+      },
+    },
+    // Pendente (issue #48): o texto do problema é rascunho a partir do que o site entrega.
+    problem: {
+      title: {
+        pt: "Um site para clientes de quatro continentes.",
+        en: "One site for clients on four continents.",
+      },
+      text: {
+        pt: "O site precisava falar com armadores e operadores de vários países, mostrar os dez serviços e deixar claro onde a Atlas atende.",
+        en: "The site had to speak to shipowners and operators in many countries, show the ten services and make clear where Atlas operates.",
+      },
+      needs: null,
+    },
+    solution: {
+      title: {
+        pt: "Quatro idiomas e um mapa de cobertura.",
+        en: "Four languages and a coverage map.",
+      },
+      text: {
+        pt: "O site em Next.js e Tailwind CSS sai em inglês, português, espanhol e francês. Um mapa mostra os portos atendidos, e o contato leva à mesa de operações, que atende 24 horas.",
+        en: "The Next.js and Tailwind CSS site comes in English, Portuguese, Spanish and French. A map shows the ports covered, and contact goes to the operations desk, open 24/7.",
+      },
+      diagram: null,
+    },
+    // Pendente (issue #48): não há número de resultado confirmado.
+    result: {
+      title: null,
+      text: {
+        pt: "Site no ar em quatro idiomas, com mais de 20 portos em 14 países.",
+        en: "Live in four languages, covering more than 20 ports in 14 countries.",
+      },
+      items: null,
+    },
+    screenshots: [],
+    nextCase: "movies-bremen",
+  },
+  {
+    id: "movies-bremen",
+    slug: "movies-bremen",
+    title: "Movies Bremen",
+    kicker: {
+      pt: "Cinema e casa de eventos · Bremen, Alemanha",
+      en: "Cinema and event house · Bremen, Germany",
+    },
+    summary: {
+      pt: "Plataforma em alemão e inglês para um cinema premium, com regras de negócio complexas.",
+      en: "A German and English platform for a premium cinema, with complex business rules.",
+    },
+    label: {
+      pt: "// case · cinema e casa de eventos · bremen, alemanha",
+      en: "// case study · cinema and event house · bremen, germany",
+    },
+    role: {
+      pt: "Desenvolvimento full-stack e UI/UX",
+      en: "Full-stack development and UI/UX",
+    },
+    stack: ["Next.js", "React", "Tailwind CSS"],
+    live: "https://www.moviesbremen.com/",
+    github: null,
+    image: "/movies-bremen.webp",
+    bannerImage: "/banner-movies-event-house-bremen.webp",
+    tags: ["entretenimento", "premium", "internacional", "adult"],
+    relatedPosts: ["react-19-server-components", "typescript-performance"],
+    pendingConfirmation: [],
+    context: {
+      title: {
+        pt: "Um cinema premium em Bremen.",
+        en: "A premium cinema in Bremen.",
+      },
+      text: {
+        pt: "A Movies Event House, em Bremen, na Alemanha, é um cinema adulto premium, com sex shop e cabines privativas. Ela precisava de uma plataforma digital moderna, em alemão e inglês.",
+        en: "Movies Event House, in Bremen, Germany, is a premium adult cinema with a sex shop and private booths. It needed a modern digital platform in German and English.",
+      },
+    },
+    problem: {
+      title: {
+        pt: "Discrição e apelo visual na mesma tela.",
+        en: "Discretion and visual appeal on the same screen.",
+      },
+      text: {
+        pt: "O site tinha que ser discreto e sofisticado ao mesmo tempo, apresentar cada serviço com clareza e dar conta de regras de negócio complexas.",
+        en: "The site had to be discreet and refined at once, present each service clearly and handle complex business rules.",
+      },
+      needs: null,
+    },
+    solution: {
+      title: {
+        pt: "Next.js com navegação em dois idiomas.",
+        en: "Next.js with navigation in two languages.",
+      },
+      text: {
+        pt: "Construí a plataforma em Next.js e Tailwind CSS, com navegação simples em alemão e inglês e uma arquitetura de informação que separa cada serviço.",
+        en: "I built the platform in Next.js and Tailwind CSS, with simple navigation in German and English and an information architecture that gives each service its own place.",
+      },
+      diagram: null,
+    },
+    result: {
+      title: null,
+      text: {
+        pt: "Plataforma multilíngue no ar para o público europeu, com baixa taxa de rejeição e mais tráfego orgânico local.",
+        en: "A multilingual platform live for a European audience, with a low bounce rate and more local organic traffic.",
+      },
+      items: null,
+    },
+    screenshots: [],
+    nextCase: "agencia-multi-br",
+  },
   {
     id: "agencia-multi-br",
-    title: "Agência Multi BR",
-    category: "Corporate / Agency",
-    description:
-      "Engenharia de performance para uma agência digital 360º. Desenvolvemos um ecossistema focado em conversão, onde a estética vanguarda encontra uma arquitetura Next.js otimizada para Core Web Vitals e SEO agressivo.",
-    tech: ["React", "NextJS", "Tailwind", "UI/UX"] as const,
-    github: "#",
-    live: "https://www.agenciamultibr.com/",
-    color: "bg-accent",
-    featured: true,
-    tags: ["marketing", "web-design", "seo", "branding"] as const,
-    relatedPosts: ["engenharia-interface-2026", "react-server-components"] as const,
-    previewAnimation: "grid-scan",
-    image: "/agencia-multi-br.webp",
-    bannerImage: "/banner-multi-macbook.webp",
     slug: "agencia-multi-br",
-    role: "Front-End Lead & UI/UX Developer",
-    context:
-      "A Agência Multi BR precisava de um site institucional que refletisse sua posição como agência de marketing digital 360º. O desafio era criar uma presença online que transmitisse profissionalismo, criatividade e resultados — tudo em um formato que funcionasse tanto para captar clientes quanto para demonstrar a própria capacidade técnica da agência.",
-    impact:
-      "Site institucional moderno e responsivo que comunica claramente os serviços da agência. A presença digital fortalecida contribuiu para o aumento de leads orgânicos e consolidou a marca como referência em marketing digital no mercado local.",
+    title: "Agência Multi BR",
+    kicker: {
+      pt: "Agência digital 360º",
+      en: "Full-service digital agency",
+    },
+    summary: {
+      pt: "Site institucional focado em conversão, com Next.js otimizado para Core Web Vitals.",
+      en: "A conversion-focused company site, with Next.js tuned for Core Web Vitals.",
+    },
+    label: {
+      pt: "// case · agência digital 360º",
+      en: "// case study · full-service digital agency",
+    },
+    role: {
+      pt: "Liderança de front-end e UI/UX",
+      en: "Front-end lead and UI/UX",
+    },
+    stack: ["React", "Next.js", "Tailwind CSS"],
+    live: "https://www.agenciamultibr.com/",
+    github: null,
+    image: "/agencia-multi-br.webp",
+    bannerImage: null,
+    tags: ["marketing", "web-design", "seo", "branding"],
+    relatedPosts: ["engenharia-interface-2026", "react-server-components"],
+    pendingConfirmation: [],
+    context: {
+      title: {
+        pt: "Uma agência que precisava se mostrar.",
+        en: "An agency that had to show what it does.",
+      },
+      text: {
+        pt: "A Agência Multi BR é uma agência de marketing digital 360º. Ela precisava de um site institucional à altura dessa posição.",
+        en: "Agência Multi BR is a full-service digital marketing agency. It needed a company site that matched that position.",
+      },
+    },
+    problem: {
+      title: {
+        pt: "Captar clientes e provar a técnica.",
+        en: "Win clients and prove the craft.",
+      },
+      text: {
+        pt: "O site tinha que passar profissionalismo, criatividade e resultados, captar clientes e mostrar a capacidade técnica da própria agência.",
+        en: "The site had to convey professionalism, creativity and results, win clients and show the agency's own technical skill.",
+      },
+      needs: null,
+    },
+    solution: {
+      title: {
+        pt: "Next.js otimizado para Core Web Vitals.",
+        en: "Next.js tuned for Core Web Vitals.",
+      },
+      text: {
+        pt: "Um site focado em conversão, em Next.js, otimizado para Core Web Vitals e SEO.",
+        en: "A conversion-focused site in Next.js, tuned for Core Web Vitals and SEO.",
+      },
+      diagram: null,
+    },
+    result: {
+      title: null,
+      text: {
+        pt: "Site responsivo que explica os serviços com clareza e trouxe mais leads orgânicos.",
+        en: "A responsive site that explains the services clearly and brought in more organic leads.",
+      },
+      items: null,
+    },
+    screenshots: [],
+    nextCase: "danila-rizo-palmieri",
   },
+  {
+    id: "danila-rizo-palmieri",
+    slug: "danila-rizo-palmieri",
+    title: "Danila Rizo Palmieri",
+    kicker: {
+      pt: "RH e internacionalização · Brasil e EUA",
+      en: "HR and international expansion · Brazil and USA",
+    },
+    summary: {
+      pt: "Site da consultoria de RH que leva empresas do Brasil para os EUA.",
+      en: "The site of an HR consultancy that takes Brazilian companies to the USA.",
+    },
+    label: {
+      pt: "// case · rh e internacionalização · brasil e eua",
+      en: "// case study · hr and international expansion · brazil and usa",
+    },
+    role: {
+      pt: "Desenvolvimento web e design",
+      en: "Web development and design",
+    },
+    stack: ["WordPress", "PHP", "SEO"],
+    live: "https://www.danilapalmieri.com/",
+    github: null,
+    image: "/banner-danila-rizo.webp",
+    bannerImage: "/banner-danila-rizo.webp",
+    tags: ["rh", "internacionalização", "business", "premium"],
+    relatedPosts: ["engenharia-interface-2026"],
+    pendingConfirmation: [],
+    context: {
+      title: {
+        pt: "Do Brasil para os EUA.",
+        en: "From Brazil to the USA.",
+      },
+      text: {
+        pt: "Danila Rizo Palmieri é CEO da Connect Solutions e trabalha com RH e internacionalização de empresas que querem sair do Brasil para os EUA.",
+        en: "Danila Rizo Palmieri is the CEO of Connect Solutions and works in HR and international expansion for companies moving from Brazil to the USA.",
+      },
+    },
+    problem: {
+      title: {
+        pt: "Confiança para o mercado executivo.",
+        en: "Trust for an executive audience.",
+      },
+      text: {
+        pt: "O site precisava passar sofisticação e confiança e ajudar a encontrar clientes que querem levar a operação para os EUA.",
+        en: "The site had to convey refinement and trust, and help find clients who want to take their business to the USA.",
+      },
+      needs: null,
+    },
+    solution: {
+      title: {
+        pt: "A consultoria no centro.",
+        en: "The consultancy at the center.",
+      },
+      text: {
+        pt: "Em WordPress, com uma estrutura de informação que coloca a consultoria e a experiência técnica na frente.",
+        en: "Built in WordPress, with an information structure that puts the consultancy and its expertise first.",
+      },
+      diagram: null,
+    },
+    result: {
+      title: null,
+      text: {
+        pt: "O site virou a principal ferramenta de prospecção e trouxe leads mais qualificados para o mercado global.",
+        en: "The site became the main prospecting tool and brought in better-qualified leads for the global market.",
+      },
+      items: null,
+    },
+    screenshots: [],
+    nextCase: "estudio-entre",
+  },
+] as const;
+
+export type Project = (typeof homeCases)[number];
+
+/**
+ * Sites no ar com número medido (fora dos cases).
+ */
+export const outcomeSites = [
   {
     id: "engerod",
     title: "Engerod Engenharia",
-    category: "Institutional / Engineering",
-    description:
-      "Empresa especializada em pontes, viadutos e projetos especiais. Referência nacional em obras de infraestrutura com tradição desde 1972.",
-    tech: ["Wordpress", "PHP", "CSS", "SEO"] as const,
-    github: "#",
     live: "https://engerod.com.br/",
-    color: "bg-secondary",
-    featured: true,
-    tags: ["engenharia", "institucional", "infraestrutura", "corporativo"] as const,
-    previewAnimation: "faulty-terminal",
-    image: "/engerod.webp",
-    role: "Implementação front-end + integração com CMS WordPress",
-    context:
-      "Empresa de engenharia com 50+ anos de tradição precisava modernizar sua presença digital mantendo a seriedade e credibilidade do setor.",
-    impact:
-      "Redesign completo com foco em acessibilidade e performance, reduzindo bounce rate em 30% e aumentando solicitações de orçamento via formulário.",
+    summary: {
+      pt: "−30% na taxa de rejeição depois do redesign · WordPress · acessibilidade e performance",
+      en: "−30% bounce rate after the redesign · WordPress · accessibility and performance",
+    },
   },
   {
     id: "semogrj",
     title: "SEMOGRJ",
-    category: "Logistics / B2B",
-    description:
-      "Abastecimento Marítimo e Logística Internacional. Empresa com presença global, frota própria e excelência operacional no setor marítimo.",
-    tech: ["Wordpress", "PHP", "Logística", "B2B"] as const,
-    github: "#",
     live: "https://semogrj.com.br/",
-    color: "bg-primary",
-    featured: true,
-    tags: ["logistica", "maritimo", "internacional", "b2b"] as const,
-    previewAnimation: "pixel-blast",
-    image: "/semogrj.webp",
-    role: "WordPress/PHP + estruturação de UX e SEO on-page",
-    context:
-      "Empresa de logística marítima com presença global precisava de um site que comunicasse escala e profissionalismo para clientes B2B internacionais.",
-    impact:
-      "Site multilíngue com navegação intuitiva, resultando em aumento de 40% nos contatos de novos clientes internacionais.",
+    summary: {
+      pt: "+40% de contatos de novos clientes internacionais · WordPress · site multilíngue",
+      en: "+40% contacts from new international clients · WordPress · multilingual site",
+    },
   },
   {
     id: "luis-felipe-pereira",
     title: "Luis Felipe Pereira",
-    category: "Portfolio / Architecture",
-    description:
-      "Arquitetura e Interiores de alto padrão. Portfólio visual e design sofisticado para projetos residenciais e comerciais no Rio de Janeiro.",
-    tech: ["WordPress", "Elementor", "Gallery", "UI/UX"] as const,
-    github: "#",
     live: "https://luisfelipepereira.com.br/",
-    color: "bg-muted",
-    featured: true,
-    tags: ["arquitetura", "design", "portfolio", "premium"] as const,
-    previewAnimation: "letter-glitch",
-    image: "/luis-felipe-pereira.webp",
-    role: "Front-end lead — WordPress, design de galeria e experiência visual",
-    context:
-      "Arquiteto de alto padrão precisava de um portfólio visual que valorizasse seus projetos com a mesma sofisticação de suas obras.",
-    impact:
-      "Galeria otimizada com lazy loading e WebP, carregamento 3x mais rápido que o site anterior, com tempo médio de sessão aumentado em 60%.",
-  },
-  {
-    id: "movies-bremen",
-    title: "Movies Bremen",
-    category: "Event House / Cinema",
-    description:
-      "Engenharia de interface para uma plataforma de entretenimento premium na Alemanha. Um desafio de UI que equilibra a sofisticação visual com regras de negócio complexas e acessibilidade internacional.",
-    tech: ["Next.js", "React", "Tailwind CSS", "UI/UX"] as const,
-    github: "#",
-    live: "https://www.moviesbremen.com/",
-    color: "bg-accent",
-    featured: true,
-    tags: ["entretenimento", "premium", "internacional", "adult"] as const,
-    relatedPosts: ["react-19-server-components", "typescript-performance"] as const,
-    previewAnimation: "pixel-blast",
-    image: "/movies-bremen.webp",
-    bannerImage: "/banner-movies-event-house-bremen.webp",
-    slug: "movies-bremen",
-    role: "Full-Stack Developer & UI/UX Designer",
-    context:
-      "A Movies Event House em Bremen, Alemanha, precisava de uma plataforma digital moderna para seu cinema adulto premium. O desafio era criar um site que combinasse discrição com apelo visual sofisticado, apresentando os serviços (cinema, sex shop, cabines privativas) de forma elegante e funcional, com navegação intuitiva em alemão e inglês.",
-    impact:
-      "Plataforma multilíngue lançada com sucesso, atendendo ao público europeu com uma experiência digital premium. O design responsivo e a arquitetura de informação cuidadosa resultaram em baixa taxa de rejeição e aumento no tráfego orgânico local.",
-  },
-  {
-    id: "danila-rizo-palmieri",
-    title: "Danila Rizo Palmieri",
-    category: "Corporate / HR & International Business",
-    description:
-      "Liderança técnica e posicionamento digital para Danila Rizo Palmieri, autoridade em RH e Internacionalização. O projeto projeta a sofisticação executiva necessária para o mercado global de expansão de negócios (Brasil > USA).",
-    tech: ["Wordpress", "PHP", "SEO", "UI/UX"] as const,
-    github: "#",
-    live: "https://www.danilapalmieri.com/",
-    color: "bg-muted",
-    featured: true,
-    tags: ["rh", "internacionalização", "business", "premium"] as const,
-    relatedPosts: ["engenharia-interface-2026"] as const,
-    previewAnimation: "letter-glitch",
-    image: "/banner-danila-rizo.webp",
-    bannerImage: "/banner-danila-rizo.webp",
-    slug: "danila-rizo-palmieri",
-    role: "Web Developer & Designer",
-    context:
-      "Danila Rizo Palmieri, CEO da Connect Solutions, precisava de um posicionamento digital que refletisse sua autoridade em RH e internacionalização de empresas (Brasil > USA). O desafio era criar uma vitrine que comunicasse sofisticação e confiança para o mercado executivo, facilitando a prospecção de clientes que buscam expandir suas operações para o território americano.",
-    impact:
-      "Portfólio online visualmente impactante que se tornou a principal ferramenta de autoridade e prospecção. A nova estrutura de informação focada em consultoria e expertise técnica elevou o padrão de percepção da marca, gerando leads mais qualificados para o mercado global.",
-  },
-  {
-    id: "estudio-entre",
-    title: "Estúdio Entre",
-    category: "Hub Cultural / Independente",
-    description:
-      "A arte do encontro em código. Plataforma cultural completa que une programação de eventos, e-commerce, acervo literário e produção de conteúdo — um ecossistema digital gerenciado por CMS headless, onde a estética analógica encontra engenharia de performance.",
-    tech: ["Astro", "React", "Sanity CMS", "Tailwind CSS", "GSAP"] as const,
-    github: "https://github.com/devguimaraes/estudio-entre",
-    live: "https://www.estudioentre.com.br/",
-    color: "bg-[#3d1020]",
-    featured: true,
-    tags: ["cultura", "hub", "independente", "e-commerce", "cms"] as const,
-    previewAnimation: "letter-glitch",
-    image: "/capa-estudio-entre.webp",
-    bannerImage: "/capa-estudio-entre.webp",
-    slug: "estudio-entre",
-    role: "Full-Stack Developer & UI/UX Designer",
-    context:
-      "O Estúdio Entre nasceu do sonho de mãe e filha: criar um hub cultural independente no Méier, Rio de Janeiro, onde a palavra vira encontro. O desafio era traduzir essa essência — que une biblioterapia, oficinas, palestras, estúdio de produção audiovisual e um sebo literário — em uma plataforma digital coesa, onde cada pilar tivesse presença própria mas conversasse com o todo. O site precisava ser autogerido pela equipe, com agendamento de eventos, catálogo de produtos e integração com WhatsApp.",
-    impact:
-      "Plataforma digital completa com Sanity CMS headless permitindo gestão autônoma de eventos, exposições, galeria de fotos e produtos. O site combina performance de build estático (Astro SSG) com ilhas interativas (React), resultando em uma experiência fluida que reflete a atmosfera analógico-moderna do espaço físico. A presença digital fortaleceu o posicionamento do hub como referência cultural na Zona Norte carioca.",
+    summary: {
+      pt: "3x mais rápido para carregar que o site anterior · WordPress · galeria em WebP com lazy loading",
+      en: "3x faster to load than the previous site · WordPress · WebP gallery with lazy loading",
+    },
   },
 ] as const;
 
-/**
- * Normalize projects to ensure image property is a string URL
- */
-export const projects = (
-  rawProjects as unknown as (Omit<Project, "image"> & { image: string | { src: string } })[]
-).map(project => ({
-  ...project,
-  image: typeof project.image === "string" ? project.image : project.image?.src,
-})) as readonly Project[];
-
-const selectedProjectIds = [
-  "estudio-entre",
-  "movies-bremen",
-  "agencia-multi-br",
-  "danila-rizo-palmieri",
-];
-
-export const selectedWorks = selectedProjectIds
-  .map(id => projects.find(p => p.id === id))
-  .filter((p): p is Project => p !== undefined);
-
-export default projects;
+export type OutcomeSite = (typeof outcomeSites)[number];

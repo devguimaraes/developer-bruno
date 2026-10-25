@@ -2,7 +2,7 @@ import type React from "react";
 import { motion } from "framer-motion";
 import { ProjectItem } from "./ProjectItem";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { selectedWorks } from "@/data/projects";
+import { homeCases } from "@/data/projects";
 import { t } from "@/lib/i18n";
 import { useLocale } from "@/hooks/useLocale";
 
@@ -33,14 +33,14 @@ const Projects: React.FC = () => {
         <div className="flex justify-between items-end border-t border-white/10 pt-4 mt-4">
           <p className="type-mono">{t(locale, "projects.subtitle")}</p>
           <p className="type-mono">
-            {String(selectedWorks.length).padStart(2, "0")} {t(locale, "projects.total")}
+            {String(homeCases.length).padStart(2, "0")} {t(locale, "projects.total")}
           </p>
         </div>
       </div>
 
       {/* Container com Foco Total na Imagem e Ritmo Vertical Recalibrado */}
       <div className="flex flex-col gap-12 sm:gap-20 md:gap-28 w-full max-w-7xl mx-auto px-0 sm:px-10 md:px-16">
-        {selectedWorks.map(project => (
+        {homeCases.map(project => (
           <ProjectItem key={project.id} project={project} />
         ))}
       </div>

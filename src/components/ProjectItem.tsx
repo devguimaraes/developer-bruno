@@ -1,8 +1,7 @@
 import type React from "react";
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import type { Project } from "@/types";
-import { LiquidGlitchImage } from "@/components/ui/LiquidGlitchImage";
+import type { Project } from "@/data/projects";
 import TextReveal from "@/components/ui/TextReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { t } from "@/lib/i18n";
@@ -41,7 +40,7 @@ export const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
       <div className="relative z-10 w-full max-w-6xl mx-auto mb-6 md:mb-8 px-4 md:px-0">
         <div className="flex items-center gap-3 mb-3">
           <span className="bg-accent text-black px-2 py-0.5 md:px-3 md:py-1 type-mono text-[9px] md:text-[11px] font-black uppercase shadow-brutal">
-            {project.category}
+            {project.kicker[locale]}
           </span>
         </div>
         <h3 className="type-raster-section text-[clamp(2rem,8vw,3.5rem)] sm:text-7xl md:text-8xl lg:text-9xl text-white leading-none tracking-tighter">
@@ -52,7 +51,7 @@ export const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
       {/* 3. Imagem Limpa */}
       <div className="relative z-10 w-full max-w-6xl mx-auto">
         <a
-          href={`/projetos/${project.slug ?? project.id}`}
+          href={`/projetos/${project.slug}`}
           className="relative block w-full aspect-[4/3] md:aspect-[16/9] overflow-hidden bg-zinc-950 border border-white/[0.08] shadow-[0_40px_100px_rgba(0,0,0,0.9)] group/img"
         >
           {/* Scanlines & Grid Overlay */}
@@ -63,12 +62,11 @@ export const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
             style={{ y: reducedMotion ? 0 : imageY, scale: 1.15 }}
             className="absolute inset-0 w-full h-full"
           >
-            <LiquidGlitchImage
+            <img
               src={displayImage}
               alt={project.title}
-              active={true}
-              loadingLazy
-              className="w-full h-full contrast-125"
+              loading="lazy"
+              className="object-cover w-full h-full contrast-125"
             />
           </motion.div>
 
@@ -81,13 +79,13 @@ export const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
       <div className="relative z-20 mt-10 md:mt-12 w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 px-4 md:px-0">
         <div className="md:col-span-8 lg:col-span-7">
           <p className="font-serif italic text-lg md:text-xl text-white/70 leading-relaxed max-w-2xl">
-            "{project.description}"
+            "{project.summary[locale]}"
           </p>
         </div>
 
         <div className="md:col-span-5 flex flex-col items-start md:items-end justify-end gap-8">
           <div className="flex flex-wrap justify-start md:justify-end gap-2">
-            {project.tech.map((tech: string) => (
+            {project.stack.map((tech: string) => (
               <span
                 key={tech}
                 className="text-[11px] md:text-xs text-white font-mono border border-white/[0.08] px-2.5 py-1 uppercase tracking-[0.2em] bg-white/5 backdrop-blur-sm"
@@ -99,7 +97,7 @@ export const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
 
           <div className="flex items-center gap-10">
             <a
-              href={`/projetos/${project.slug ?? project.id}`}
+              href={`/projetos/${project.slug}`}
               className="group/btn flex items-center gap-4 type-mono text-white uppercase tracking-[0.3em] hover:text-accent transition-all pressable"
             >
               <span className="border-b border-white/20 pb-1 group-hover/btn:border-accent">
