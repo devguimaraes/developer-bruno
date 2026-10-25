@@ -68,3 +68,26 @@ const relatedPosts = relatedBlogEntries.map(entry => ({
 >
   <CaseStudy project={project} relatedPosts={relatedPosts} client:load />
 </Layout>
+
+<!-- Entrada do case no celular: desliza da direita (decisão 30 do DS). Como o estilo só existe
+     nesta página, o slide vale quando o case é o destino. No desktop segue o fade padrão do
+     ClientRouter, e com reduced motion nenhuma das duas animações roda. -->
+<style is:global>
+  @media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
+    ::view-transition-new(root) {
+      animation: case-slide-in 360ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    }
+
+    @keyframes case-slide-in {
+      from { transform: translateX(100%); }
+      to { transform: translateX(0); }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation: none;
+    }
+  }
+</style>

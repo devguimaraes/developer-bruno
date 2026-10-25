@@ -1,0 +1,273 @@
+/* Ações da Giro: ícone, botões, link, chip, tag e seletor de idioma.
+   Fonte: Design System "Giro" (components/bundle.css). Depende de src/styles/giro.css
+   para os papéis --s-* e as variáveis de movimento. */
+
+/* Ícones de interface (Lucide). O traço 2,16 em viewBox 24 vira 1,8 px na tela a 20 px. */
+.g-icon {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.16;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.g-icon--24 {
+  width: 24px;
+  height: 24px;
+  stroke-width: 1.8;
+}
+.g-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+/* ---------- Buttons ---------- */
+
+.g-button {
+  --b-h: 56px;
+  --b-pad: 26px;
+  --b-font: 17px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: var(--b-h);
+  min-width: 44px;
+  padding: 0 var(--b-pad);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--s-accent);
+  color: var(--s-on-accent);
+  font-family: var(--font-sans);
+  font-size: var(--b-font);
+  font-weight: 700;
+  font-stretch: 110%;
+  line-height: 1;
+  letter-spacing: -0.005em;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform var(--dur-resolve) var(--ease-resolve), background-color 200ms linear, opacity 200ms linear;
+}
+.g-button--secondary {
+  background: transparent;
+  color: var(--s-link);
+  box-shadow: inset 0 0 0 1.5px currentColor;
+}
+.g-button--ghost {
+  background: transparent;
+  color: var(--s-fg);
+}
+.g-button--ghost:hover,
+.g-button--ghost.is-hover {
+  background: var(--s-raised);
+}
+.g-button--sm {
+  --b-h: 44px;
+  --b-pad: 18px;
+  --b-font: 15px;
+}
+.g-button--lead {
+  padding-left: 14px;
+}
+.g-button--sm.g-button--lead {
+  padding-left: 10px;
+}
+.g-button .g-giro {
+  font-size: 28px;
+  --g-ink: currentColor;
+}
+.g-button--sm .g-giro {
+  font-size: 24px;
+}
+.g-button__arrow {
+  transition: translate var(--dur-resolve) var(--ease-resolve);
+}
+.g-button:hover,
+.g-button.is-hover {
+  transform: translateY(-2px);
+}
+.g-button:hover .g-button__arrow,
+.g-button.is-hover .g-button__arrow {
+  translate: 3px 0;
+}
+.g-button:active,
+.g-button.is-active {
+  transform: translateY(0) scale(0.98);
+  transition-duration: 120ms;
+}
+.g-button:focus-visible,
+.g-button.is-focus,
+.g-icon-button:focus-visible,
+.g-icon-button.is-focus,
+.g-chip:focus-visible,
+.g-chip.is-focus,
+.g-link:focus-visible,
+.g-link.is-focus,
+.g-lang__option:focus-visible {
+  outline: 2px solid var(--s-focus);
+  outline-offset: 3px;
+}
+.g-button:disabled,
+.g-button[aria-disabled="true"],
+.g-button.is-disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+.g-button[aria-busy="true"] {
+  cursor: progress;
+  transform: none;
+}
+
+.g-icon-button {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--s-raised);
+  color: var(--s-fg);
+  cursor: pointer;
+  transition: transform var(--dur-resolve) var(--ease-resolve), background-color 200ms linear;
+}
+.g-icon-button:hover,
+.g-icon-button.is-hover {
+  transform: translateY(-2px);
+}
+.g-icon-button:active,
+.g-icon-button.is-active {
+  transform: scale(0.94);
+  transition-duration: 120ms;
+}
+
+.g-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  color: var(--s-link);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 700;
+  font-stretch: 110%;
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 6px;
+  text-decoration-color: transparent;
+  transition: text-decoration-color 200ms linear;
+  cursor: pointer;
+}
+.g-link:hover,
+.g-link.is-hover {
+  text-decoration-color: currentColor;
+}
+.g-link .g-icon {
+  transition: translate var(--dur-resolve) var(--ease-resolve);
+}
+.g-link:hover .g-icon,
+.g-link.is-hover .g-icon {
+  translate: 3px 0;
+}
+.g-link--back:hover .g-icon,
+.g-link--back.is-hover .g-icon {
+  translate: -3px 0;
+}
+.g-text-link {
+  color: var(--s-link);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+/* ---------- Chips and tags ---------- */
+
+.g-chip {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--s-line-strong);
+  color: var(--s-fg);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 600;
+  font-stretch: 108%;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 200ms linear, color 200ms linear, box-shadow 200ms linear, padding 250ms var(--ease-resolve);
+}
+.g-chip:hover,
+.g-chip.is-hover {
+  box-shadow: inset 0 0 0 1.5px var(--s-fg);
+}
+.g-chip__check {
+  display: none;
+  width: 16px;
+  height: 16px;
+}
+.g-chip[aria-pressed="true"] {
+  padding-left: 12px;
+  background: var(--s-accent);
+  color: var(--s-on-accent);
+  box-shadow: none;
+}
+.g-chip[aria-pressed="true"] .g-chip__check {
+  display: block;
+}
+
+.g-tag {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 12px;
+  border-radius: var(--radius-pill);
+  background: var(--s-raised);
+  color: var(--s-muted);
+  font: var(--text-micro);
+  white-space: nowrap;
+}
+
+/* ---------- Language switch ---------- */
+
+.g-lang {
+  display: inline-flex;
+  width: max-content;
+  gap: 2px;
+  padding: 4px;
+  border-radius: var(--radius-pill);
+  box-shadow: inset 0 0 0 1px var(--s-line-strong);
+}
+.g-lang__option {
+  box-sizing: border-box;
+  width: 48px;
+  height: 44px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--s-muted);
+  font: var(--text-rotulo);
+  cursor: pointer;
+  transition: background-color 200ms linear, color 200ms linear;
+}
+.g-lang__option[aria-pressed="true"] {
+  background: var(--s-accent);
+  color: var(--s-on-accent);
+}
+

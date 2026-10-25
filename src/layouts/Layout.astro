@@ -3,6 +3,7 @@
 import "@/index.css";
 import "@/styles/markdown.css";
 import { siteConfig } from "@/config/site";
+import { ClientRouter } from "astro:transitions";
 
 import Navigation from "@/components/Navigation.tsx";
 import Footer from "@/components/Footer.tsx";
@@ -34,7 +35,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="generator" content={Astro.generator} />
-    
+    <!-- Navegação sem recarregar a página (ADR 0002). Troca só o body; o head vem da página nova. -->
+    <ClientRouter />
+
     <!-- Primary Meta Tags -->
     <title>{finalTitle}</title>
     <meta name="title" content={finalTitle} />
@@ -77,16 +80,21 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       <script defer data-domain="devguimaraes.com.br" src="https://plausible.io/js/script.js"></script>
     )}
 
-    <!-- Client-side locale detection for lang/og attributes -->
+    <!-- Client-side locale detection for lang/og attributes.
+         O ClientRouter copia os atributos do <html> da página nova no swap (voltando para pt-BR),
+         então o locale é reaplicado depois de cada navegação, não só no primeiro carregamento. -->
     <script>
-      (function() {
+      function applyLocale() {
         try {
           var locale = localStorage.getItem('locale') || 'pt';
           document.documentElement.lang = locale === 'en' ? 'en' : 'pt-BR';
           var ogLocale = document.querySelector('meta[property="og:locale"]');
           if (ogLocale) ogLocale.content = locale === 'en' ? 'en_US' : 'pt_BR';
-        } catch(e) { /* localStorage pode não estar disponível (ambientes restritivos, SSR) */ }
-      })();
+        } catch(e) { /* localStorage pode não estar disponível (ambientes restritivos) */ }
+      }
+      applyLocale();
+      document.addEventListener('astro:after-swap', applyLocale);
+      document.addEventListener('astro:page-load', applyLocale);
     </script>
   </head>
   <body class="bg-black">
@@ -95,5 +103,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       <slot />
     </main>
     <Footer client:visible />
+    <!-- Ilhas que sobrevivem à navegação (ilha de rolagem, barra de abas) entram aqui com
+         transition:persist, para o ClientRouter manter a instância montada entre páginas. -->
   </body>
 </html>

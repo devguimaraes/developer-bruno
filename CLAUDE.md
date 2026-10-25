@@ -36,25 +36,27 @@ bunx playwright test --project=chromium home.spec.ts  # single e2e file/browser
 
 **Worktrees:** don't leave git worktrees inside the repo (e.g. `.claude/worktrees/`) while running `bun run lint` or `test:unit`. Each has its own `biome.json` (Biome fails with "nested root configuration") and its tests are picked up by Vitest.
 
-Biome is the only linter/formatter (2 spaces, 100 cols, double quotes); there is no ESLint. React hooks rules (`useExhaustiveDependencies`, `useHookAtTopLevel`) and the fast-refresh rule (`useComponentExportOnlyModules`, off for `*.test.*`) are configured in `biome.json`. The 2 remaining fast-refresh warnings (`LiquidGlassProvider.tsx`, `LenisContext.tsx`, hook exported next to the provider) are known.
+Biome is the only linter/formatter (2 spaces, 100 cols, double quotes); there is no ESLint. React hooks rules (`useExhaustiveDependencies`, `useHookAtTopLevel`) and the fast-refresh rule (`useComponentExportOnlyModules`, off for `*.test.*`) are configured in `biome.json`.
 
 Workflow, branching (Gitflow: `feature/*` from `develop`, `hotfix/*` from `main`) and commit conventions are in `AGENTS.md` and `GIT_WORKFLOW.md`. Vercel deploys `main` only (`vercel.json` disables `develop`).
 
 ## Architecture
 
-Astro 5 static site (`output: 'static'`, `build.format: 'directory'`) with React 18 islands, TypeScript and Tailwind 3. Portfolio of a Brazilian front-end developer at `devguimaraes.com.br`. No SSR, no API routes.
+Astro 5 site with React 18 islands, TypeScript and Tailwind 3. Portfolio of a Brazilian front-end developer at `devguimaraes.com.br`. Pages are prerendered (`output: 'static'`, `build.format: 'directory'`) with the `@astrojs/vercel` adapter. The only planned server code is one on-demand Vercel function for the contact form (ADR 0002, #54); a route that needs it sets `prerender = false`. There are no other API routes. Navigation between pages goes through Astro's `ClientRouter`, so the page does not reload.
 
 ### Astro shell, React content
 
-Astro pages in `src/pages/` are thin wrappers that hydrate one React component from `src/components/pages/` (or `src/components/projects/CaseStudy.tsx`) via `client:load`. Routes: `index`, `blog/index`, `blog/[slug]`, `projetos/[slug]`, `404`.
+Astro pages in `src/pages/` are thin wrappers that hydrate one React component from `src/components/pages/` (or `src/components/projects/CaseStudy.tsx`) via `client:load`. Routes: `index`, `blog/index`, `blog/[slug]`, `projetos/[slug]`, `404`. `dev/[page]` is generated only by the dev server.
 
-`src/layouts/Layout.astro` is the only layout. Besides SEO (OG, Twitter, JSON-LD, canonical, `noindex` on Vercel previews) and Plausible (prod only), it mounts the global islands: `CustomCursor`, `SmoothScroll` (Lenis) wrapping `LiquidGlassProvider`, `Navigation`, `Footer` (`client:visible`), `Toaster` (sonner) and `GrainOverlay`. Home sections are wrapped in `SectionEntrance` in `components/pages/Index.tsx`; the anchors `#hero`, `#projetos`, `#about`, `#contact` are used by Navigation and e2e tests.
+`src/layouts/Layout.astro` is the only layout. Besides SEO (OG, Twitter, canonical, `noindex` on Vercel previews), Plausible (prod only) and `<ClientRouter />` in the head, it mounts `Navigation`, `Footer` (`client:visible`) and the `<slot />` inside `<main>`. Home sections are wrapped in `SectionEntrance` (`src/components/ui/SectionEntrance.tsx`) in `components/pages/Index.tsx`; the anchors `#hero`, `#projetos`, `#about`, `#contact` are used by Navigation and e2e tests. The marked comment at the end of `<body>` is where the scroll island and the tab bar go, with `transition:persist` so they survive page changes (not built yet).
 
-`<slot />` (the page's island) sits inside `SmoothScroll` > `LiquidGlassProvider` in `Layout.astro`, alongside `Navigation` and `Footer`. Each `client:*` component is its own island, so state shared across islands that must not depend on context nesting goes through module-level stores (see i18n below).
+`<slot />` (the page's island) sits in `<main>`, alongside `Navigation` and `Footer`. Each `client:*` component is its own island, so state shared across islands goes through module-level stores (see i18n below). With `ClientRouter`, islands are remounted on each navigation unless they use `transition:persist`. Scripts in pages must also run again on `astro:page-load`, not only on first load.
+
+Transition for the case page: `src/pages/projetos/[slug].astro` has a global style where, on mobile only and without reduced motion, the case slides in from the right. The style exists only on that page, so the rule applies to `/projetos/*` destinations.
 
 ### i18n without a framework
 
-`src/lib/i18n.ts` holds a flat `dictionary` (pt, en), `t(locale, key)` with `TranslationKey` derived from `dictionary.pt`, and a pub/sub store (`getLocale`/`setLocale`/`subscribeToLocale`). `useLocale()` subscribes React components to it. The locale is persisted in `localStorage('locale')`, and an inline script in `Layout.astro` sets `<html lang>` and `og:locale` before hydration. A new UI string needs both languages in the dictionary or the key type breaks.
+`src/lib/i18n.ts` holds a flat `dictionary` (pt, en), `t(locale, key)` with `TranslationKey` derived from `dictionary.pt`, and a pub/sub store (`getLocale`/`setLocale`/`subscribeToLocale`). `useLocale()` subscribes React components to it. The locale is persisted in `localStorage('locale')`, and a script in `Layout.astro` sets `<html lang>` and `og:locale` on first load and again on `astro:after-swap` and `astro:page-load`, because `ClientRouter` copies the `<html>` attributes from the new page on each swap. A new UI string needs both languages in the dictionary or the key type breaks.
 
 ### Blog content
 
@@ -66,14 +68,14 @@ Unit tests alias `astro:content` to `src/test/__mocks__/astro-content.ts` (`vite
 
 - `src/data/projects.ts`, `skills.ts`: typed static data feeding Projects and case study pages.
 - `src/config/site.ts`: SEO config, Brazilian market keywords, contact data, performance budgets (300KB JS, 500KB images, 50KB CSS, 1MB total, enforced for media by `check:media-budget`).
-- `src/hooks/useLiquidGlass.ts` + `LiquidGlassProvider`/`LiquidGlassLens`: glass effect with an SSR-safe default context (`isSupported: false`, no-ops) and type shim in `src/types/liquidGL.d.ts`.
-- Motion: Framer Motion is the default. GSAP is used only by `StaggeredMenu`. Lenis lives in `SmoothScroll` and is exposed through `LenisContext`. Animated components should honor `useReducedMotion`.
+- Giro mascot and states (ADR 0001): components in `src/components/brand/` (`Giro.tsx`, states in `giro-states.ts`). It is animated SVG with Framer Motion, one variant per state. Do not add Rive or Lottie.
+- Motion: Framer Motion is the only animation library. GSAP, Lenis and the glass effect were removed, and ADR 0001 says not to bring them back without revisiting it. Animated components should honor `useReducedMotion`.
 
 ### Design system
 
-Neo-brutalist/pixel, black background (`--background: 0 0% 0%`), white `--primary`, gold `--accent: 45 87% 57%`, all HSL CSS variables in `src/index.css`. Docs: `docs/guia-de-design-atual.md`, `docs/identidade-visual-atual.md`.
+Identity Giro (ADR 0001) replaces the old dark, neo-brutalist theme. Source of truth: the "Giro" Design System artifact linked in the ADR. In code, tokens and surfaces live in `src/styles/giro.css`: `g-papel` (reading), `g-azul` (brand) and `g-tinta` (dark). Pages alternate brand and reading surfaces. There is no dark mode at launch.
 
-Tailwind `fontFamily` defines only `sans` (Satoshi), `mono` (JetBrains Mono) and `pixel` (Jersey 15). Silkscreen and Newsreader are CSS variables (`--font-pixel-tech`, `--font-serif`) consumed by utility classes such as `.type-mono` and `.type-body`. The `brutal` palette has only `bg`, `dark`, `orange`, `blue`. Shadows `shadow-brutal`, `-sm`, `-lg` come from CSS vars. Check `tailwind.config.ts` and `index.css` before using a token; older docs list classes that do not exist.
+Fonts are Anybody (`sans`) and Geist Mono (`mono`), bundled in `src/assets/fonts/` and set as CSS variables in `giro.css`. Tailwind `fontFamily` only maps those two. Check `tailwind.config.ts` and `giro.css` before using a token. The legacy `brutal` palette and `shadow-brutal*` classes still exist and a few components still use them, but do not use them in new code. The docs `docs/guia-de-design-atual.md` and `docs/identidade-visual-atual.md` describe the previous identity and are historical.
 
 ## Testing
 

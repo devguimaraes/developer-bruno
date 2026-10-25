@@ -1,0 +1,104 @@
+---
+import "@/styles/giro.css";
+import "@/styles/giro-content.css";
+import { homeCases } from "@/data/projects";
+import { ProjectCard } from "@/components/giro/ProjectCard";
+import { ResultStat } from "@/components/giro/ResultStat";
+import { PostRow } from "@/components/giro/PostRow";
+import { CodeBlock } from "@/components/giro/CodeBlock";
+import { PostToc } from "@/components/giro/PostToc";
+import { SectionHeaderDemo, ProcessNodeDemo } from "./ContentShowcaseIslands";
+
+// Vitrine só de dev: os componentes de conteúdo nas três superfícies do DS.
+// Os dados vêm de src/data/projects.ts; o sem-capa usa o último case com a capa removida.
+const [first, second, third] = homeCases;
+const withoutCover = { title: third.title, stack: third.stack, image: null };
+
+const tocItems = [
+  { id: "problema", title: "O problema: JavaScript demais no cliente" },
+  { id: "impacto", title: "Impacto real nos Core Web Vitals" },
+  { id: "deploy", title: "Considerações para deploy no Brasil" },
+];
+---
+
+<section class="g-papel px-4 py-12 md:px-16 md:py-18">
+  <p class="g-eyebrow">{"// superfície · papel"}</p>
+  <div class="mt-8">
+    <SectionHeaderDemo client:load />
+  </div>
+  <div class="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
+    <ProjectCard
+      client:load
+      project={{ title: first.title, stack: first.stack, image: first.image }}
+      kicker={first.kicker.pt}
+      summary={first.summary.pt}
+      ctaLabel="Ver case"
+      href="#"
+    />
+    <ProjectCard
+      client:load
+      project={{ title: second.title, stack: second.stack, image: second.image }}
+      kicker={second.kicker.pt}
+      summary={second.summary.pt}
+      ctaLabel="Ver case"
+      href="#"
+    />
+  </div>
+  <div class="mt-12 grid gap-12 md:grid-cols-[1fr_280px]">
+    <div>
+      <PostRow
+        href="#"
+        date="10 abr 2026"
+        dateTime="2026-04-10"
+        title="React 19 e Server Components"
+        category="React"
+        readTime="8 min de leitura"
+      />
+      <PostRow
+        href="#"
+        date="01 abr 2026"
+        dateTime="2026-04-01"
+        title="Engenharia de interface em 2026"
+        category="Arquitetura"
+        readTime="9 min de leitura"
+        excerpt="Como decidir o que vai para o cliente e o que fica no servidor."
+      />
+    </div>
+    <PostToc title="Neste post" items={tocItems} activeId="impacto" />
+  </div>
+  <div class="mt-12 max-w-[68ch]">
+    <CodeBlock lang="tsx">
+      <span class="tk-c">// the Giro follows the form state</span>
+      {"\n"}
+      <span class="tk-k">const</span> ok = <span class="tk-k">await</span> <span class="tk-f">sendContact</span>(form);
+      {"\n"}
+      <span class="tk-f">setState</span>(ok ? <span class="tk-s">"done"</span> : <span class="tk-s">"error"</span>);
+    </CodeBlock>
+  </div>
+</section>
+
+<section class="g-azul px-4 py-12 md:px-16 md:py-18">
+  <p class="g-eyebrow">{"// superfície · azul-sinal"}</p>
+  <div class="mt-8 grid gap-10 md:grid-cols-3">
+    <ResultStat client:load value="+40%" label="de contatos de novos clientes internacionais" source="SEMOGRJ · site multilíngue" />
+    <ResultStat client:load value="−30%" label="de taxa de rejeição depois do redesign" source="Engerod Engenharia" />
+    <ResultStat client:load value="3x" label="mais rápido para carregar que o site anterior" source="Luis Felipe Pereira" />
+  </div>
+</section>
+
+<section class="g-tinta px-4 py-12 md:px-16 md:py-18">
+  <p class="g-eyebrow">{"// superfície · tinta"}</p>
+  <div class="mt-8">
+    <ProcessNodeDemo client:load />
+  </div>
+  <div class="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
+    <ProjectCard
+      client:load
+      project={withoutCover}
+      kicker={third.kicker.pt}
+      summary={third.summary.pt}
+      ctaLabel="Ver case"
+      href="#"
+    />
+  </div>
+</section>

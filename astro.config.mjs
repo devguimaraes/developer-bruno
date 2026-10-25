@@ -2,10 +2,13 @@ import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
+import vercel from '@astrojs/vercel';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://devguimaraes.com.br',
+  // Páginas pré-geradas. A função da Vercel só entra quando houver rota com prerender = false (contato, #54).
+  adapter: vercel(),
   integrations: [
     react(),
     tailwind({

@@ -1,0 +1,77 @@
+---
+import "@/styles/giro-actions.css";
+import { Button, ButtonLink, IconButton, ArrowLink } from "@/components/giro/Button";
+import { Chip, Tag } from "@/components/giro/Chip";
+import { CopyButton } from "@/components/giro/CopyButton";
+import { LanguageSwitch } from "@/components/giro/LanguageSwitch";
+import { t } from "@/lib/i18n";
+
+// Só para conferir as ações nas três superfícies. Não entra em nenhuma página de produção.
+const surfaces = [
+  { name: "g-papel", label: "papel · leitura" },
+  { name: "g-azul", label: "azul-sinal · marca" },
+  { name: "g-tinta", label: "tinta · escura" },
+];
+const linkValue = "https://devguimaraes.com.br/blog";
+---
+
+{
+  surfaces.map((surface) => (
+    <section class={`${surface.name} px-4 py-10 md:px-12`}>
+      <p class="rotulo text-s-muted">{`// ações · ${surface.label}`}</p>
+
+      <div class="mt-6 flex flex-wrap items-center gap-4">
+        <Button arrow>Ver projetos</Button>
+        <Button variant="secondary">Ler o case</Button>
+        <Button variant="ghost">Ver todos</Button>
+        <Button size="sm">Enviar</Button>
+        <IconButton aria-label="Abrir menu">
+          <svg class="g-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 12h16" />
+            <path d="M4 6h16" />
+            <path d="M4 18h16" />
+          </svg>
+        </IconButton>
+        <ArrowLink href="#projetos">Ver case</ArrowLink>
+        <ArrowLink href="#projetos" back>
+          Voltar
+        </ArrowLink>
+        <ButtonLink href="#contato" variant="secondary">
+          Falar comigo
+        </ButtonLink>
+      </div>
+
+      <p class="micro mt-8 text-s-muted">estados</p>
+      <div class="mt-3 flex flex-wrap items-center gap-4">
+        <Button className="is-hover">Hover</Button>
+        <Button className="is-focus">Foco</Button>
+        <Button disabled>Desabilitado</Button>
+        <Button status="loading">Enviando</Button>
+        <Button status="done">Enviado</Button>
+        <Button variant="secondary" status="done" size="sm">
+          Copiado
+        </Button>
+      </div>
+
+      <p class="micro mt-8 text-s-muted">chips, tags e idioma</p>
+      <div class="mt-3 flex flex-wrap items-center gap-3" role="group" aria-label="Tipo de projeto">
+        <Chip selected>Site</Chip>
+        <Chip>App</Chip>
+        <Chip className="is-hover">Hover</Chip>
+        <Tag>React</Tag>
+        <Tag>TypeScript</Tag>
+      </div>
+      <div class="mt-4 flex flex-wrap items-center gap-6">
+        <LanguageSwitch client:load groupLabel="Idioma" />
+        <CopyButton
+          client:load
+          value={linkValue}
+          copyLabel={t("pt", "post.link.copy")}
+          copiedLabel={t("pt", "post.link.copied")}
+          errorLabel={t("pt", "post.link.copy_error")}
+          errorHint={t("pt", "post.link.copy_error_hint")}
+        />
+      </div>
+    </section>
+  ))
+}
