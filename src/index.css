@@ -4,6 +4,7 @@
 @import "./styles/giro-content.css";
 @import "./styles/giro-nav.css";
 @import "./styles/giro-process.css";
+@import "./styles/giro-loader.css";
 
 @tailwind base;
 @tailwind components;

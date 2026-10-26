@@ -42,6 +42,15 @@ describe("ScrollIslandView", () => {
     expect(giro?.classList.contains("is-hop")).toBe(true);
   });
 
+  it("durante a troca de página, o Giro gira em carregando sem pular", () => {
+    const { container } = render(
+      <ScrollIslandView progress={100} label="// sobre" direction={1} navigating />
+    );
+    const giro = container.querySelector("svg.g-giro");
+    expect(giro?.getAttribute("data-state")).toBe("loading");
+    expect(giro?.classList.contains("is-hop")).toBe(false);
+  });
+
   it("o botão do menu anuncia o estado e vira fechar quando aberto", () => {
     const { rerender } = render(
       <ScrollIslandView progress={10} label="// projetos" direction={0} />

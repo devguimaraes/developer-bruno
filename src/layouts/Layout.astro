@@ -10,6 +10,7 @@ import { SiteHeader } from "@/components/nav/SiteHeader";
 import { SiteFooter } from "@/components/nav/SiteFooter";
 import { ScrollIsland } from "@/components/nav/ScrollIsland";
 import { TabBar } from "@/components/nav/TabBar";
+import { LoadingScreen } from "@/components/loader/LoadingScreen";
 
 interface Props {
   title?: string;
@@ -35,6 +36,20 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Tela de carregamento: liga o overlay só na primeira visita da sessão, antes do primeiro paint.
+         is:inline para o Astro não empacotar nem adiar o script. Sem JS, nada é ligado. O backstop
+         tira o overlay se o React não montar em 8 s, para a página nunca ficar presa. -->
+    <script is:inline>
+      try {
+        if (sessionStorage.getItem("giro:loaded") === null) {
+          var html = document.documentElement;
+          html.setAttribute("data-loader", "on");
+          setTimeout(function () {
+            if (html.getAttribute("data-loader") === "on") html.removeAttribute("data-loader");
+          }, 8000);
+        }
+      } catch (e) { /* sessionStorage bloqueado: a página aparece direto */ }
+    </script>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -107,6 +122,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     </script>
   </head>
   <body class="bg-black">
+    <LoadingScreen client:load />
     <SiteHeader client:load />
     <main class="w-full relative">
       <slot />

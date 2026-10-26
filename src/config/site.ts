@@ -26,7 +26,8 @@ export const siteConfig: SiteConfig = {
     region: "BR",
   },
 
-  // Performance Budget Configuration for Brazilian Market
+  // Performance Budget Configuration for Brazilian Market.
+  // Vale para o que carrega antes da tela de carregamento terminar (ADR 0002). O resto carrega depois.
   performanceBudget: {
     javascript: 300000, // 300KB for Brazilian mobile networks
     images: 500000, // 500KB for images

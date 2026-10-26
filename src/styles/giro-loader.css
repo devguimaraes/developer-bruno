@@ -1,0 +1,29 @@
+/* Tela de carregamento da primeira visita (LoadingScreen). Fica escondida até o <html> ganhar
+   data-loader, que o script inline de Layout.astro põe antes do primeiro paint. Sem JS, nunca
+   ganha o atributo e a página não fica presa. cores vêm dos papéis --s-* da classe g-azul. */
+
+.g-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+html[data-loader] .g-loader {
+  display: flex;
+}
+
+/* Tamanhos do Giro na tela: 140 px no celular e 168 px no computador, como na prancha. */
+.g-loader__giro {
+  display: flex;
+  font-size: 140px;
+}
+
+@media (min-width: 768px) {
+  .g-loader__giro {
+    font-size: 168px;
+  }
+}

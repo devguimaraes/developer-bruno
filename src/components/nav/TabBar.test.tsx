@@ -36,6 +36,13 @@ describe("TabBarView", () => {
     expect(within(nav).getByRole("link", { name: "Blog" }).getAttribute("aria-current")).toBeNull();
   });
 
+  it("durante a troca de página, o Giro central gira em carregando", () => {
+    const { container } = render(<TabBarView progress={100} activeTab={null} navigating />);
+    const giro = container.querySelector(".g-tabbar__giro svg.g-giro");
+    expect(giro?.getAttribute("data-state")).toBe("loading");
+    expect(giro?.classList.contains("is-hop")).toBe(false);
+  });
+
   it("o Giro central diz quanto da leitura já foi feita", () => {
     render(<TabBarView progress={40} activeTab={null} />);
     expect(screen.getByRole("button", { name: "Abrir menu, 40% lido" })).toBeTruthy();

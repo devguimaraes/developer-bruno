@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 import { BookText, House, LayoutGrid, MessageCircle } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Giro } from "@/components/brand/Giro";
+import { useNavigating } from "@/components/loader/navigation-state";
 import { useLocale } from "@/hooks/useLocale";
 import { t } from "@/lib/i18n";
 import { SectionMenu } from "./SectionMenu";
@@ -28,6 +29,8 @@ export interface TabBarViewProps {
   activeTab: TabId | null;
   activeId?: string | null;
   menuOpen?: boolean;
+  /** Troca de página em curso: o Giro gira em carregando. */
+  navigating?: boolean;
   onToggleMenu?: () => void;
   onNavigate?: () => void;
 }
@@ -38,6 +41,7 @@ export function TabBarView({
   activeTab,
   activeId = null,
   menuOpen = false,
+  navigating = false,
   onToggleMenu,
   onNavigate,
 }: TabBarViewProps) {
@@ -92,8 +96,8 @@ export function TabBarView({
             size={40}
             progress={progress}
             look={{ x: 0, y: menuOpen ? LOOK_PX : 0 }}
-            state={atEnd ? "done" : "idle"}
-            hop={atEnd}
+            state={navigating ? "loading" : atEnd ? "done" : "idle"}
+            hop={atEnd && !navigating}
           />
         </button>
       </nav>
@@ -104,6 +108,7 @@ export function TabBarView({
 /** Barra de abas ligada à página: aba ativa pela rota e pela seção, Giro com a leitura. */
 export function TabBar() {
   const { progress, activeId, pathname } = useScrollState(SECTION_IDS);
+  const navigating = useNavigating();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const closeMenu = useCallback(() => setMenuOpen(false), []);
@@ -115,6 +120,7 @@ export function TabBar() {
       activeTab={tabForLocation(pathname, activeId)}
       activeId={activeId}
       menuOpen={menuOpen}
+      navigating={navigating}
       onToggleMenu={() => setMenuOpen(open => !open)}
       onNavigate={closeMenu}
     />

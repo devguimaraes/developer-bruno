@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Giro } from "@/components/brand/Giro";
 import { IconButton } from "@/components/giro/Button";
+import { useNavigating } from "@/components/loader/navigation-state";
 import { useLocale } from "@/hooks/useLocale";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { t } from "@/lib/i18n";
@@ -33,6 +34,8 @@ export interface ScrollIslandViewProps {
   visible?: boolean;
   menuOpen?: boolean;
   activeId?: string | null;
+  /** Troca de página em curso: o Giro gira em carregando. */
+  navigating?: boolean;
   onToggleMenu?: () => void;
   onNavigate?: () => void;
 }
@@ -46,6 +49,7 @@ export function ScrollIslandView({
   visible = true,
   menuOpen = false,
   activeId = null,
+  navigating = false,
   onToggleMenu,
   onNavigate,
 }: ScrollIslandViewProps) {
@@ -64,8 +68,8 @@ export function ScrollIslandView({
           size={40}
           progress={progress}
           look={{ x: 0, y: lookY }}
-          state={atEnd ? "done" : "idle"}
-          hop={atEnd}
+          state={navigating ? "loading" : atEnd ? "done" : "idle"}
+          hop={atEnd && !navigating}
         />
         <span className="g-island__label" aria-live="polite">
           {label}
@@ -102,6 +106,7 @@ export function ScrollIsland() {
   const reducedMotion = useReducedMotion();
   const [menuOpen, setMenuOpen] = useState(false);
   const scroll = useScrollState(SECTION_IDS);
+  const navigating = useNavigating();
 
   const closeMenu = useCallback(() => setMenuOpen(false), []);
   useEscapeToClose(menuOpen, closeMenu, TOGGLE_ID);
@@ -118,6 +123,7 @@ export function ScrollIsland() {
       visible={scroll.pastHero}
       menuOpen={menuOpen}
       activeId={scroll.activeId}
+      navigating={navigating}
       onToggleMenu={() => setMenuOpen(open => !open)}
       onNavigate={closeMenu}
     />
