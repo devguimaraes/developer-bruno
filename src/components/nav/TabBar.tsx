@@ -1,12 +1,15 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, useSyncExternalStore } from "react";
 import { BookText, House, LayoutGrid, MessageCircle } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Giro } from "@/components/brand/Giro";
+import type { GiroState } from "@/components/brand/giro-states";
 import { useNavigating } from "@/components/loader/navigation-state";
 import { useLocale } from "@/hooks/useLocale";
 import { t } from "@/lib/i18n";
+import { getPageGiro, subscribePageGiro } from "@/lib/page-giro";
 import { SectionMenu } from "./SectionMenu";
 import { useEscapeToClose } from "./useEscapeToClose";
+import { resolveNavGiro, useGiroEggs } from "./useGiroEggs";
 import { HOME_SECTIONS, SECTION_IDS, TABS, tabForLocation } from "./sections";
 import type { TabId, TabItem } from "./sections";
 import { LOOK_PX, useScrollState } from "./useScrollState";
@@ -31,6 +34,12 @@ export interface TabBarViewProps {
   menuOpen?: boolean;
   /** Troca de página em curso: o Giro gira em carregando. */
   navigating?: boolean;
+  /** Aba do navegador escondida: o Giro dorme. */
+  asleep?: boolean;
+  /** Atalho escondido: festa que roda uma vez. */
+  celebrating?: boolean;
+  /** Giro pedido pela página do case, quando houver. */
+  pageGiro?: GiroState | null;
   onToggleMenu?: () => void;
   onNavigate?: () => void;
 }
@@ -42,11 +51,14 @@ export function TabBarView({
   activeId = null,
   menuOpen = false,
   navigating = false,
+  asleep = false,
+  celebrating = false,
+  pageGiro = null,
   onToggleMenu,
   onNavigate,
 }: TabBarViewProps) {
   const locale = useLocale();
-  const atEnd = progress >= 100;
+  const giro = resolveNavGiro({ navigating, celebrating, asleep, progress, pageGiro });
 
   const renderTab = (tab: TabItem) => {
     const Icon = TAB_ICONS[tab.id];
@@ -96,8 +108,9 @@ export function TabBarView({
             size={40}
             progress={progress}
             look={{ x: 0, y: menuOpen ? LOOK_PX : 0 }}
-            state={navigating ? "loading" : atEnd ? "done" : "idle"}
-            hop={atEnd && !navigating}
+            state={giro.state}
+            hop={giro.hop}
+            className={giro.party ? "is-party" : undefined}
           />
         </button>
       </nav>
@@ -109,6 +122,8 @@ export function TabBarView({
 export function TabBar() {
   const { progress, activeId, pathname } = useScrollState(SECTION_IDS);
   const navigating = useNavigating();
+  const { asleep, celebrating } = useGiroEggs();
+  const pageGiro = useSyncExternalStore(subscribePageGiro, getPageGiro, () => null);
   const [menuOpen, setMenuOpen] = useState(false);
 
   const closeMenu = useCallback(() => setMenuOpen(false), []);
@@ -121,6 +136,9 @@ export function TabBar() {
       activeId={activeId}
       menuOpen={menuOpen}
       navigating={navigating}
+      asleep={asleep}
+      celebrating={celebrating}
+      pageGiro={pageGiro}
       onToggleMenu={() => setMenuOpen(open => !open)}
       onNavigate={closeMenu}
     />
