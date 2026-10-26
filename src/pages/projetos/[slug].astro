@@ -1,11 +1,9 @@
 ---
-import Layout from "@/layouts/Layout.astro";
 import CaseStudy from "@/components/projects/CaseStudy";
 import { homeCases } from "@/data/projects";
+import Layout from "@/layouts/Layout.astro";
 import { t } from "@/lib/i18n";
-import { getCollection, type CollectionEntry } from "astro:content";
-
-type BlogEntry = CollectionEntry<"blog">;
+import "@/styles/giro-case.css";
 
 export function getStaticPaths() {
   return homeCases.map(project => ({
@@ -15,50 +13,6 @@ export function getStaticPaths() {
 }
 
 const { project } = Astro.props;
-
-const blogEntries = await getCollection("blog");
-
-// Get related blog posts: first try data-driven relatedPosts, fall back to tag-matching
-let relatedBlogEntries: BlogEntry[] = [];
-
-if (project.relatedPosts && project.relatedPosts.length > 0) {
-  // Use data-driven related posts from project definition
-  relatedBlogEntries = project.relatedPosts
-    .map(slug => blogEntries.find(entry => entry.id === slug))
-    .filter(Boolean);
-} else {
-  // Fall back to tag-matching algorithm
-  const projectKeywords = [...project.stack, ...project.tags].map(k => k.toLowerCase());
-
-  // Score posts by how many tags overlap with project keywords
-  const scoredPosts = blogEntries
-    .map(entry => {
-      const blogTags = entry.data.tags.map(t => t.toLowerCase());
-      const score = blogTags.filter(tag =>
-        projectKeywords.some(kw => tag.includes(kw) || kw.includes(tag))
-      ).length;
-      return { entry, score };
-    })
-    .filter(({ score }) => score > 0)
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 2);
-
-  relatedBlogEntries = scoredPosts.map(({ entry }) => entry);
-}
-
-const relatedPosts = relatedBlogEntries.map(entry => ({
-  id: entry.id,
-  slug: entry.id,
-  title: entry.data.title,
-  date: entry.data.date,
-  readTime: entry.data.readTime || "5 min",
-  tags: entry.data.tags,
-  author: entry.data.author,
-  excerpt: entry.data.excerpt,
-  content: "",
-  image: entry.data.image,
-  featured: entry.data.featured,
-}));
 ---
 
 <Layout
@@ -67,7 +21,7 @@ const relatedPosts = relatedBlogEntries.map(entry => ({
   image={project.bannerImage ?? project.image}
   ogType="article"
 >
-  <CaseStudy project={project} relatedPosts={relatedPosts} client:load />
+  <CaseStudy project={project} client:load />
 </Layout>
 
 <!-- Entrada do case no celular: desliza da direita (decisão 30 do DS). Como o estilo só existe
