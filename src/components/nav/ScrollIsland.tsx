@@ -1,14 +1,17 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, useSyncExternalStore } from "react";
 import { Menu, X } from "lucide-react";
 import { Giro } from "@/components/brand/Giro";
+import type { GiroState } from "@/components/brand/giro-states";
 import { IconButton } from "@/components/giro/Button";
 import { useNavigating } from "@/components/loader/navigation-state";
 import { useLocale } from "@/hooks/useLocale";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { t } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
+import { getPageGiro, subscribePageGiro } from "@/lib/page-giro";
 import { SectionMenu } from "./SectionMenu";
 import { useEscapeToClose } from "./useEscapeToClose";
+import { resolveNavGiro, useGiroEggs } from "./useGiroEggs";
 import { HOME_SECTIONS, SECTION_IDS, TABS, tabForLocation } from "./sections";
 import { LOOK_PX, useScrollState } from "./useScrollState";
 
@@ -36,6 +39,12 @@ export interface ScrollIslandViewProps {
   activeId?: string | null;
   /** Troca de página em curso: o Giro gira em carregando. */
   navigating?: boolean;
+  /** Aba do navegador escondida: o Giro dorme. */
+  asleep?: boolean;
+  /** Atalho escondido: festa que roda uma vez. */
+  celebrating?: boolean;
+  /** Giro pedido pela página do case, quando houver. */
+  pageGiro?: GiroState | null;
   onToggleMenu?: () => void;
   onNavigate?: () => void;
 }
@@ -50,12 +59,15 @@ export function ScrollIslandView({
   menuOpen = false,
   activeId = null,
   navigating = false,
+  asleep = false,
+  celebrating = false,
+  pageGiro = null,
   onToggleMenu,
   onNavigate,
 }: ScrollIslandViewProps) {
   const locale = useLocale();
-  const atEnd = progress >= 100;
   const lookY = menuOpen ? LOOK_PX : direction * LOOK_PX;
+  const giro = resolveNavGiro({ navigating, celebrating, asleep, progress, pageGiro });
 
   return (
     <div className="g-island-dock" data-visible={visible ? "true" : "false"}>
@@ -68,8 +80,9 @@ export function ScrollIslandView({
           size={40}
           progress={progress}
           look={{ x: 0, y: lookY }}
-          state={navigating ? "loading" : atEnd ? "done" : "idle"}
-          hop={atEnd && !navigating}
+          state={giro.state}
+          hop={giro.hop}
+          className={giro.party ? "is-party" : undefined}
         />
         <span className="g-island__label" aria-live="polite">
           {label}
@@ -107,6 +120,8 @@ export function ScrollIsland() {
   const [menuOpen, setMenuOpen] = useState(false);
   const scroll = useScrollState(SECTION_IDS);
   const navigating = useNavigating();
+  const { asleep, celebrating } = useGiroEggs();
+  const pageGiro = useSyncExternalStore(subscribePageGiro, getPageGiro, () => null);
 
   const closeMenu = useCallback(() => setMenuOpen(false), []);
   useEscapeToClose(menuOpen, closeMenu, TOGGLE_ID);
@@ -124,6 +139,9 @@ export function ScrollIsland() {
       menuOpen={menuOpen}
       activeId={scroll.activeId}
       navigating={navigating}
+      asleep={asleep}
+      celebrating={celebrating}
+      pageGiro={pageGiro}
       onToggleMenu={() => setMenuOpen(open => !open)}
       onNavigate={closeMenu}
     />

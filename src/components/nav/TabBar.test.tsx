@@ -1,6 +1,8 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
+import { setPageGiro } from "@/lib/page-giro";
 import { TabBar, TabBarView } from "./TabBar";
+import { endGiroParty } from "./useGiroEggs";
 import { useScrollState } from "./useScrollState";
 import type { ScrollState } from "./useScrollState";
 
@@ -8,6 +10,33 @@ vi.mock("./useScrollState", () => ({
   LOOK_PX: 3,
   useScrollState: vi.fn(),
 }));
+
+function setDocumentHidden(hidden: boolean): void {
+  Object.defineProperty(document, "hidden", {
+    configurable: true,
+    get: () => hidden,
+  });
+}
+
+function restoreDocumentHidden(): void {
+  Reflect.deleteProperty(document, "hidden");
+}
+
+function typeGiro(): void {
+  act(() => {
+    for (const key of ["g", "i", "r", "o"]) {
+      document.dispatchEvent(new KeyboardEvent("keydown", { key, bubbles: true }));
+    }
+  });
+}
+
+function endPartyAnimation(target: Element): void {
+  const event = new Event("animationend", { bubbles: true });
+  Object.defineProperty(event, "animationName", { value: "g-party" });
+  act(() => {
+    target.dispatchEvent(event);
+  });
+}
 
 const SCROLL: ScrollState = {
   progress: 40,
@@ -20,6 +49,15 @@ const SCROLL: ScrollState = {
 
 beforeEach(() => {
   vi.mocked(useScrollState).mockReturnValue(SCROLL);
+});
+
+afterEach(() => {
+  restoreDocumentHidden();
+  act(() => {
+    document.dispatchEvent(new Event("visibilitychange"));
+    endGiroParty();
+    setPageGiro(null);
+  });
 });
 
 describe("TabBarView", () => {
@@ -71,6 +109,31 @@ describe("TabBarView", () => {
     const { container } = render(<TabBarView progress={100} activeTab="contact" />);
     expect(container.querySelector(".g-tabbar__giro svg")?.getAttribute("data-state")).toBe("done");
   });
+
+  it("dorme quando a prop asleep está ligada, mesmo no fim da página", () => {
+    const { container } = render(<TabBarView progress={100} activeTab="contact" asleep />);
+    const giro = container.querySelector(".g-tabbar__giro svg.g-giro");
+    expect(giro?.getAttribute("data-state")).toBe("sleeping");
+    expect(giro?.classList.contains("is-hop")).toBe(false);
+    expect(giro?.classList.contains("is-party")).toBe(false);
+  });
+
+  it("festeja com data-state celebrating e a classe is-party", () => {
+    const { container } = render(<TabBarView progress={100} activeTab="contact" celebrating />);
+    const giro = container.querySelector(".g-tabbar__giro svg.g-giro");
+    expect(giro?.getAttribute("data-state")).toBe("celebrating");
+    expect(giro?.classList.contains("is-party")).toBe(true);
+    expect(giro?.classList.contains("is-hop")).toBe(false);
+  });
+
+  it("no fim da página, o sorriso e o pulo vencem o Giro de erro da página", () => {
+    const { container } = render(
+      <TabBarView progress={100} activeTab="contact" pageGiro="error" />
+    );
+    const giro = container.querySelector(".g-tabbar__giro svg.g-giro");
+    expect(giro?.getAttribute("data-state")).toBe("done");
+    expect(giro?.classList.contains("is-hop")).toBe(true);
+  });
 });
 
 describe("TabBar", () => {
@@ -91,5 +154,40 @@ describe("TabBar", () => {
     vi.mocked(useScrollState).mockReturnValue({ ...SCROLL, activeId: "processo" });
     const { container } = render(<TabBar />);
     expect(container.querySelector('.g-tab[aria-current="page"]')).toBeNull();
+  });
+
+  it("mostra o Giro da página enquanto a leitura não acabou", () => {
+    setPageGiro("error");
+    const { container } = render(<TabBar />);
+    expect(container.querySelector(".g-tabbar__giro svg")?.getAttribute("data-state")).toBe(
+      "error"
+    );
+  });
+
+  it("dorme com a aba inativa e acorda quando ela volta", () => {
+    setDocumentHidden(true);
+    const { container } = render(<TabBar />);
+    const giro = () => container.querySelector(".g-tabbar__giro svg");
+    expect(giro()?.getAttribute("data-state")).toBe("sleeping");
+
+    setDocumentHidden(false);
+    act(() => {
+      document.dispatchEvent(new Event("visibilitychange"));
+    });
+    expect(giro()?.getAttribute("data-state")).toBeNull();
+  });
+
+  it("festeja ao digitar giro e encerra quando a animação acaba", () => {
+    const { container } = render(<TabBar />);
+    typeGiro();
+    const giro = () => container.querySelector(".g-tabbar__giro svg");
+    expect(giro()?.getAttribute("data-state")).toBe("celebrating");
+    expect(giro()?.classList.contains("is-party")).toBe(true);
+
+    const body = giro()?.querySelector(".g-giro__body");
+    expect(body).toBeTruthy();
+    if (body) endPartyAnimation(body);
+    expect(giro()?.getAttribute("data-state")).toBeNull();
+    expect(giro()?.classList.contains("is-party")).toBe(false);
   });
 });

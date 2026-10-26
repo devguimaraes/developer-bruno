@@ -1,6 +1,8 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
+import { setPageGiro } from "@/lib/page-giro";
 import { ScrollIsland, ScrollIslandView } from "./ScrollIsland";
+import { endGiroParty } from "./useGiroEggs";
 import { useScrollState } from "./useScrollState";
 import type { ScrollState } from "./useScrollState";
 
@@ -8,6 +10,33 @@ vi.mock("./useScrollState", () => ({
   LOOK_PX: 3,
   useScrollState: vi.fn(),
 }));
+
+function setDocumentHidden(hidden: boolean): void {
+  Object.defineProperty(document, "hidden", {
+    configurable: true,
+    get: () => hidden,
+  });
+}
+
+function restoreDocumentHidden(): void {
+  Reflect.deleteProperty(document, "hidden");
+}
+
+function typeGiro(): void {
+  act(() => {
+    for (const key of ["g", "i", "r", "o"]) {
+      document.dispatchEvent(new KeyboardEvent("keydown", { key, bubbles: true }));
+    }
+  });
+}
+
+function endPartyAnimation(target: Element): void {
+  const event = new Event("animationend", { bubbles: true });
+  Object.defineProperty(event, "animationName", { value: "g-party" });
+  act(() => {
+    target.dispatchEvent(event);
+  });
+}
 
 const SCROLL: ScrollState = {
   progress: 62,
@@ -20,6 +49,15 @@ const SCROLL: ScrollState = {
 
 beforeEach(() => {
   vi.mocked(useScrollState).mockReturnValue(SCROLL);
+});
+
+afterEach(() => {
+  restoreDocumentHidden();
+  act(() => {
+    document.dispatchEvent(new Event("visibilitychange"));
+    endGiroParty();
+    setPageGiro(null);
+  });
 });
 
 describe("ScrollIslandView", () => {
@@ -113,6 +151,35 @@ describe("ScrollIslandView", () => {
     );
     expect(container.querySelector(".g-island")?.getAttribute("data-fast")).toBe("true");
   });
+
+  it("dorme quando a prop asleep está ligada, mesmo no fim da página", () => {
+    const { container } = render(
+      <ScrollIslandView progress={100} label="// sobre" direction={1} asleep />
+    );
+    const giro = container.querySelector("svg.g-giro");
+    expect(giro?.getAttribute("data-state")).toBe("sleeping");
+    expect(giro?.classList.contains("is-hop")).toBe(false);
+    expect(giro?.classList.contains("is-party")).toBe(false);
+  });
+
+  it("festeja com data-state celebrating e a classe is-party", () => {
+    const { container } = render(
+      <ScrollIslandView progress={100} label="// sobre" direction={1} celebrating />
+    );
+    const giro = container.querySelector("svg.g-giro");
+    expect(giro?.getAttribute("data-state")).toBe("celebrating");
+    expect(giro?.classList.contains("is-party")).toBe(true);
+    expect(giro?.classList.contains("is-hop")).toBe(false);
+  });
+
+  it("no fim da página, o sorriso e o pulo vencem o Giro de erro da página", () => {
+    const { container } = render(
+      <ScrollIslandView progress={100} label="// sobre" direction={1} pageGiro="error" />
+    );
+    const giro = container.querySelector("svg.g-giro");
+    expect(giro?.getAttribute("data-state")).toBe("done");
+    expect(giro?.classList.contains("is-hop")).toBe(true);
+  });
 });
 
 describe("ScrollIsland", () => {
@@ -159,5 +226,37 @@ describe("ScrollIsland", () => {
     } finally {
       if (original) matchMedia.mockImplementation(original);
     }
+  });
+
+  it("mostra o Giro da página enquanto a leitura não acabou", () => {
+    setPageGiro("error");
+    const { container } = render(<ScrollIsland />);
+    expect(container.querySelector("svg.g-giro")?.getAttribute("data-state")).toBe("error");
+  });
+
+  it("dorme com a aba inativa e acorda quando ela volta", () => {
+    setDocumentHidden(true);
+    const { container } = render(<ScrollIsland />);
+    expect(container.querySelector("svg.g-giro")?.getAttribute("data-state")).toBe("sleeping");
+
+    setDocumentHidden(false);
+    act(() => {
+      document.dispatchEvent(new Event("visibilitychange"));
+    });
+    expect(container.querySelector("svg.g-giro")?.getAttribute("data-state")).toBeNull();
+  });
+
+  it("festeja ao digitar giro e encerra quando a animação acaba", () => {
+    const { container } = render(<ScrollIsland />);
+    typeGiro();
+    const giro = container.querySelector("svg.g-giro");
+    expect(giro?.getAttribute("data-state")).toBe("celebrating");
+    expect(giro?.classList.contains("is-party")).toBe(true);
+
+    const body = giro?.querySelector(".g-giro__body");
+    expect(body).toBeTruthy();
+    if (body) endPartyAnimation(body);
+    expect(container.querySelector("svg.g-giro")?.getAttribute("data-state")).toBeNull();
+    expect(container.querySelector("svg.g-giro")?.classList.contains("is-party")).toBe(false);
   });
 });
