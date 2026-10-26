@@ -1,382 +1,346 @@
-import type React from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowUpRight, ExternalLink, Calendar } from "lucide-react";
-import type { Project } from "@/data/projects";
-import type { BlogPost } from "@/types/blog";
-import { BrandIcon } from "@/components/brand";
-import { t } from "@/lib/i18n";
+import { useEffect, useRef, useState } from "react";
+import { Giro } from "@/components/brand/Giro";
+import { ArrowLink, ButtonLink } from "@/components/giro/Button";
+import { SectionHeader } from "@/components/giro/SectionHeader";
+import { homeCases, type Project } from "@/data/projects";
 import { useLocale } from "@/hooks/useLocale";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { contactData } from "@/config/site";
+import { type TranslationKey, t } from "@/lib/i18n";
+import { setPageGiro } from "@/lib/page-giro";
+
+const SECTIONS = ["contexto", "problema", "solucao", "resultado"] as const;
+type SectionId = (typeof SECTIONS)[number];
+
+const SECTION_STATE = {
+  contexto: "idle",
+  problema: "error",
+  solucao: "loading",
+  resultado: "done",
+} as const;
+
+const RAIL_KEY = {
+  contexto: "case.page.rail.context",
+  problema: "case.page.rail.problem",
+  solucao: "case.page.rail.solution",
+  resultado: "case.page.rail.result",
+} as const satisfies Record<SectionId, TranslationKey>;
+
+const FACT_KEY = {
+  role: "case.page.facts.role",
+  stack: "case.page.facts.stack",
+  live: "case.page.facts.live",
+  code: "case.page.facts.code",
+} as const satisfies Record<string, TranslationKey>;
+
+type FactKey = keyof typeof FACT_KEY;
+
+// Mesma curva de --ease-resolve (giro.css), igual ao SectionHeader.
+const RESOLVE_EASE: [number, number, number, number] = [0.2, 0.8, 0.2, 1];
+const RESOLVE = { duration: 0.4, ease: RESOLVE_EASE };
+
+function isSectionId(value: string): value is SectionId {
+  return (SECTIONS as readonly string[]).includes(value);
+}
+
+/** Host do site, ou dono/repo quando o link é do GitHub. */
+function linkFact(url: string): string {
+  try {
+    const parsed = new URL(url);
+    if (parsed.hostname === "github.com") return parsed.pathname.replace(/^\/|\/$/g, "");
+    return parsed.host.replace(/^www\./, "");
+  } catch {
+    return url;
+  }
+}
 
 interface CaseStudyProps {
   project: Project;
-  relatedPosts: BlogPost[];
 }
 
-const CaseStudy: React.FC<CaseStudyProps> = ({ project, relatedPosts }) => {
+export default function CaseStudy({ project }: CaseStudyProps) {
   const locale = useLocale();
-  const prefersReducedMotion = useReducedMotion();
+  const reducedMotion = useReducedMotion();
+  const [active, setActive] = useState<SectionId>("contexto");
+  const railRef = useRef<HTMLElement>(null);
+  const railWrapRef = useRef<HTMLDivElement>(null);
 
-  const heroBanner = project.bannerImage ?? project.image;
+  const caseIndex = homeCases.findIndex(item => item.slug === project.slug);
+  const nextCase =
+    caseIndex >= 0 && caseIndex < homeCases.length - 1 ? homeCases[caseIndex + 1] : null;
+  const photo = project.bannerImage ?? project.image;
+  const diagram = project.solution.diagram;
+  const needs = project.problem.needs;
+  const resultTitle = project.result.title;
+  const resultText = project.result.text;
+  const resultItems = project.result.items;
+  const liveUrl = project.live;
+  const githubUrl = project.github;
 
-  const sectionMotion = prefersReducedMotion
-    ? {}
-    : {
-        initial: { opacity: 0, y: 20 },
-        whileInView: { opacity: 1, y: 0 },
-        viewport: { once: true, margin: "-10%" },
-        transition: { duration: 0.5 },
-      };
+  const facts: { key: FactKey; value: string }[] = [
+    { key: "role", value: project.role[locale] },
+    { key: "stack", value: project.stack.join(" · ") },
+  ];
+  if (liveUrl) facts.push({ key: "live", value: linkFact(liveUrl) });
+  if (githubUrl) facts.push({ key: "code", value: linkFact(githubUrl) });
+
+  useEffect(() => {
+    setPageGiro(SECTION_STATE[active]);
+  }, [active]);
+
+  useEffect(() => {
+    return () => {
+      setPageGiro(null);
+    };
+  }, []);
+
+  useEffect(() => {
+    const tops = new Map<SectionId, number>();
+    let cancelled = false;
+    const observer = new IntersectionObserver(
+      entries => {
+        if (cancelled) return;
+        for (const entry of entries) {
+          const id = entry.target.id;
+          if (!isSectionId(id)) continue;
+          if (entry.isIntersecting) tops.set(id, entry.boundingClientRect.top);
+          else tops.delete(id);
+        }
+        const next = [...tops.entries()].sort((a, b) => a[1] - b[1])[0];
+        if (!next) return;
+        setActive(next[0]);
+      },
+      { rootMargin: "-15% 0px -50% 0px", threshold: [0, 0.25, 0.5, 1] }
+    );
+
+    for (const id of SECTIONS) {
+      const element = document.getElementById(id);
+      if (element) observer.observe(element);
+    }
+
+    return () => {
+      cancelled = true;
+      observer.disconnect();
+    };
+  }, []);
+
+  // O main tem overflow-x: hidden, então sticky não acompanha a rolagem.
+  // O trilho fica fixo na coluna enquanto o miolo do case está na tela.
+  useEffect(() => {
+    const rail = railRef.current;
+    const wrap = railWrapRef.current;
+    if (!rail || !wrap) return;
+
+    const place = () => {
+      const column = wrap.getBoundingClientRect();
+      const body = wrap.parentElement?.getBoundingClientRect();
+      if (!body || column.width === 0) {
+        rail.style.position = "";
+        rail.style.top = "";
+        rail.style.left = "";
+        rail.style.width = "";
+        rail.style.visibility = "";
+        rail.style.zIndex = "";
+        return;
+      }
+      const top = 96;
+      // Só fica visível quando o miolo encosta na linha do trilho, senão cobre a foto.
+      const inRange = body.top <= top && body.bottom > top + rail.offsetHeight + 24;
+      rail.style.position = "fixed";
+      rail.style.top = `${top}px`;
+      rail.style.left = `${column.left}px`;
+      rail.style.width = `${column.width}px`;
+      rail.style.zIndex = "2";
+      rail.style.visibility = inRange ? "visible" : "hidden";
+    };
+
+    place();
+    window.addEventListener("scroll", place, { passive: true });
+    window.addEventListener("resize", place);
+    const resize = new ResizeObserver(place);
+    resize.observe(wrap);
+    return () => {
+      window.removeEventListener("scroll", place);
+      window.removeEventListener("resize", place);
+      resize.disconnect();
+    };
+  }, []);
 
   return (
-    <div className="w-full bg-black text-white">
-      {/* ================================================================ */}
-      {/*  HERO — Banner Full-Width com Overlays Técnicos                  */}
-      {/* ================================================================ */}
-      <section className="relative min-h-[85vh] flex flex-col overflow-hidden bg-[#050505]">
-        {/* Camada de fundo: imagem + efeitos */}
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 w-full h-full scale-110">
-            <img
-              src={heroBanner}
-              alt={project.title}
-              className="w-full h-full object-cover grayscale-[0.3] opacity-90 contrast-125"
-            />
-          </div>
-
-          {/* Vignette radial */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_15%,rgba(0,0,0,0.4)_50%,rgba(0,0,0,0.8)_100%)]" />
-
-          {/* Scanlines + Grid sobrepostos */}
-          <div className="absolute inset-0 scanlines opacity-25" />
-          <div className="absolute inset-0 grid-technical opacity-[0.06]" />
-        </div>
-
-        {/* Conteúdo centralizado sobre a imagem */}
-        <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 pt-20 pb-16 text-center">
-          {/* Back button — canto superior esquerdo */}
-          <div className="absolute top-[88px] left-6 md:top-[104px] md:left-8">
-            <motion.a
-              href="/#projetos"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 type-mono text-white/40 hover:text-accent transition-colors uppercase tracking-widest py-2 px-1 min-h-[44px] pressable"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              {t(locale, "case.back")}
-            </motion.a>
-          </div>
-
-          {/* Badge da categoria */}
-          <motion.span
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="inline-block bg-accent text-black type-mono text-[11px] font-black uppercase tracking-[0.15em] px-4 py-1.5 mb-4 shadow-[4px_4px_0_rgba(0,0,0,0.5)]"
-          >
-            {project.label[locale]}
-          </motion.span>
-
-          {/* Título gigante com mix-blend-difference */}
+    <article className="case-page g-papel">
+      <div className="case-page__inner">
+        <header className="case-hero">
+          <ArrowLink href="/#projetos" back>
+            <span className="case-back__desktop">{t(locale, "case.page.back")}</span>
+            <span className="case-back__mobile">{t(locale, "case.page.back_mobile")}</span>
+          </ArrowLink>
+          <p className="g-eyebrow">{project.label[locale]}</p>
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="type-raster-section text-[clamp(3rem,10vw,7rem)] text-white leading-[0.85] mix-blend-difference drop-shadow-[0_0_40px_rgba(0,0,0,0.8)] mb-4 max-w-[90vw]"
+            className="case-hero__title"
+            initial={reducedMotion ? false : { fontStretch: "50%" }}
+            animate={reducedMotion ? undefined : { fontStretch: "115%" }}
+            transition={RESOLVE}
           >
             {project.title}
           </motion.h1>
-
-          {/* Role — subtítulo técnico */}
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="type-mono text-xs text-white/50 uppercase tracking-[0.1em] mb-6"
-          >
-            {project.role[locale]}
-          </motion.p>
-        </div>
-
-        {/* Scroll Indicator */}
-        <div className="relative z-10 flex flex-col items-center pb-6 gap-2">
-          <motion.div
-            animate={{ opacity: [0.3, 1, 0.3] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="w-px h-12 bg-gradient-to-b from-accent to-transparent"
-          />
-          <span className="type-mono text-[10px] text-white/25 uppercase tracking-[0.3em]">
-            {t(locale, "case.scroll")}
-          </span>
-        </div>
-      </section>
-
-      {/* ================================================================ */}
-      {/*  QUICK CTA — Botões de ação logo após o hero                     */}
-      {/* ================================================================ */}
-      <section className="relative z-20">
-        <div className="container mx-auto px-6 max-w-5xl xl:max-w-7xl">
-          <motion.div
-            {...sectionMotion}
-            className="flex flex-col sm:flex-row gap-3 py-4 border-b border-white/[0.08]"
-          >
-            {project.live && (
-              <a
-                href={project.live}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center justify-center gap-3 bg-white text-black hover:bg-accent transition-colors px-6 py-3.5 type-mono uppercase tracking-widest font-bold min-h-[48px] pressable"
-              >
-                <span>{t(locale, "case.visit_live")}</span>
-                <ExternalLink className="w-5 h-5" />
-              </a>
-            )}
-            <a
-              href={`mailto:${contactData.email}`}
-              className="inline-flex items-center justify-center gap-3 border border-white/[0.08] text-white hover:border-accent/50 hover:text-accent transition-colors px-6 py-3.5 type-mono uppercase tracking-widest min-h-[48px] pressable"
-            >
-              <span>{t(locale, "case.work_together")}</span>
-              <ArrowUpRight className="w-5 h-5" />
-            </a>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ================================================================ */}
-      {/*  CONTEXT — Editorial: descrição + problema                       */}
-      {/* ================================================================ */}
-      <section className="container mx-auto px-6 py-14 md:py-20 max-w-5xl xl:max-w-7xl">
-        <motion.div {...sectionMotion}>
-          {/* Label mono */}
-          <div className="type-mono text-[10px] text-white/30 uppercase tracking-widest mb-8 flex items-center gap-2">
-            <BrandIcon name="terminal" size={20} decorative />
-            {t(locale, "case.context")}
-          </div>
-
-          {/* Layout assimétrico: heading grande à esquerda, texto à direita */}
-          <div className="grid md:grid-cols-[1fr_1.6fr] gap-6 md:gap-12">
-            {/* Coluna esquerda: heading que sangra */}
-            <div>
-              <h2 className="type-raster-section text-4xl md:text-5xl lg:text-6xl text-white leading-[0.9] border-l-2 border-accent pl-5 md:pl-8">
-                {project.context.title[locale]}
-              </h2>
-            </div>
-
-            {/* Coluna direita: texto editorial */}
-            <div className="flex flex-col gap-6">
-              {/* Resumo — lead-in itálico */}
-              <p className="font-serif italic text-lg md:text-xl text-white/50 leading-relaxed">
-                {project.summary[locale]}
-              </p>
-
-              {/* Contexto */}
-              <div className="relative">
-                <div className="absolute -left-4 top-0 bottom-0 w-px bg-white/10 hidden md:block" />
-                <p className="text-base md:text-lg text-white/80 leading-relaxed">
-                  {project.context.text[locale]}
-                </p>
+          <p className="case-hero__summary">{project.summary[locale]}</p>
+          <dl className="case-facts">
+            {facts.map(fact => (
+              <div key={fact.key}>
+                <dt>{t(locale, FACT_KEY[fact.key])}</dt>
+                <dd>{fact.value}</dd>
               </div>
-            </div>
+            ))}
+          </dl>
+          <figure className="case-hero__photo">
+            <img src={photo} alt={project.title} fetchPriority="high" decoding="async" />
+          </figure>
+        </header>
+
+        <div className="case-body">
+          <div className="case-rail-wrap" ref={railWrapRef}>
+            <nav
+              className="case-rail"
+              aria-label={t(locale, "case.page.steps_label")}
+              ref={railRef}
+            >
+              <div className="case-rail__giro" aria-hidden="true">
+                <Giro state={SECTION_STATE[active]} size={56} />
+              </div>
+              <ol className="case-rail__list">
+                {SECTIONS.map(id => (
+                  <li key={id}>
+                    <a
+                      className="case-rail__link"
+                      href={`#${id}`}
+                      aria-current={active === id ? "true" : undefined}
+                    >
+                      <span className="case-rail__mark" aria-hidden="true" />
+                      {t(locale, RAIL_KEY[id])}
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </nav>
           </div>
-        </motion.div>
-      </section>
 
-      {/* ================================================================ */}
-      {/*  PROBLEM — Desafio e o que o site precisava                      */}
-      {/* ================================================================ */}
-      <section className="container mx-auto px-6 py-14 md:py-20 max-w-5xl xl:max-w-7xl">
-        <motion.div {...sectionMotion}>
-          <div className="type-mono text-[10px] text-white/30 uppercase tracking-widest mb-8 flex items-center gap-2">
-            <BrandIcon name="terminal" size={20} decorative />
-            {t(locale, "case.problem")}
-          </div>
+          <div className="case-main">
+            <section id="contexto" className="case-section">
+              <SectionHeader
+                label={t(locale, RAIL_KEY.contexto)}
+                title={project.context.title[locale]}
+              />
+              <p className="case-copy">{project.context.text[locale]}</p>
+            </section>
 
-          <div className="grid md:grid-cols-[1fr_1.6fr] gap-6 md:gap-12">
-            <h2 className="type-raster-section text-4xl md:text-5xl lg:text-6xl text-white leading-[0.9] border-l-2 border-accent pl-5 md:pl-8">
-              {project.problem.title[locale]}
-            </h2>
+            <section id="problema" className="case-section">
+              <SectionHeader
+                label={t(locale, RAIL_KEY.problema)}
+                title={project.problem.title[locale]}
+              />
+              <p className="case-copy">{project.problem.text[locale]}</p>
+              {needs && (
+                <div className="case-needs">
+                  <p className="case-needs__label">{t(locale, "case.page.problem_list_label")}</p>
+                  <ul className="case-list">
+                    {needs[locale].map(need => (
+                      <li key={need}>{need}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </section>
 
-            <div className="flex flex-col gap-6">
-              <p className="text-base md:text-lg text-white/80 leading-relaxed">
-                {project.problem.text[locale]}
-              </p>
-
-              {project.problem.needs && (
-                <ul className="flex flex-col gap-2">
-                  {project.problem.needs[locale].map(need => (
-                    <li key={need} className="text-base text-white/80 leading-relaxed">
-                      {need}
+            <section id="solucao" className="case-section">
+              <SectionHeader
+                label={t(locale, RAIL_KEY.solucao)}
+                title={project.solution.title[locale]}
+              />
+              <p className="case-copy">{project.solution.text[locale]}</p>
+              {diagram && (
+                <figure className="case-metro">
+                  {/* role + name, sem ícone. ProcessNode é um botão de etapa da home. */}
+                  <ol className="case-branch">
+                    {diagram.stations.map(station => (
+                      <li
+                        key={`${station.role.pt}-${station.name.pt}`}
+                        className="case-branch__station"
+                      >
+                        <span className="case-branch__role">{station.role[locale]}</span>
+                        <span className="case-branch__name">{station.name[locale]}</span>
+                      </li>
+                    ))}
+                  </ol>
+                  <figcaption className="case-metro__caption">{diagram.label[locale]}</figcaption>
+                </figure>
+              )}
+              {project.screenshots.length > 0 && (
+                <ul className="case-shots">
+                  {project.screenshots.map(shot => (
+                    <li key={shot.src}>
+                      <figure className="case-shot">
+                        <img
+                          src={shot.src}
+                          alt={shot.alt[locale]}
+                          loading="lazy"
+                          decoding="async"
+                        />
+                        {shot.caption ? <figcaption>{shot.caption[locale]}</figcaption> : null}
+                      </figure>
                     </li>
                   ))}
                 </ul>
               )}
+            </section>
+
+            <section id="resultado" className="case-section">
+              {resultTitle ? (
+                <SectionHeader label={t(locale, RAIL_KEY.resultado)} title={resultTitle[locale]} />
+              ) : (
+                <p className="g-eyebrow">{`// ${t(locale, RAIL_KEY.resultado)}`}</p>
+              )}
+              {resultText && <p className="case-copy">{resultText[locale]}</p>}
+              {resultItems && (
+                <ul className="case-list">
+                  {resultItems[locale].map(item => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              )}
+            </section>
+
+            <div className="case-end">
+              {(liveUrl || githubUrl) && (
+                <div className="case-actions">
+                  {liveUrl && (
+                    <ButtonLink href={liveUrl} target="_blank" rel="noreferrer" arrow>
+                      {t(locale, "case.page.cta_live")}
+                    </ButtonLink>
+                  )}
+                  {githubUrl && (
+                    <ButtonLink
+                      href={githubUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      variant="secondary"
+                      arrow
+                    >
+                      {t(locale, "case.page.cta_code")}
+                    </ButtonLink>
+                  )}
+                </div>
+              )}
+              {nextCase && (
+                <a className="case-next" href={`/projetos/${nextCase.slug}`}>
+                  <span className="g-eyebrow">{t(locale, "case.page.next_label")}</span>
+                  <span className="case-next__title">{nextCase.title}</span>
+                  <span className="case-next__kicker">{nextCase.kicker[locale]}</span>
+                </a>
+              )}
             </div>
           </div>
-        </motion.div>
-      </section>
-
-      {/* ================================================================ */}
-      {/*  STACK — Grid visual de tecnologias                              */}
-      {/* ================================================================ */}
-      <section className="container mx-auto px-6 py-14 md:py-20 max-w-5xl xl:max-w-7xl">
-        <motion.div {...sectionMotion}>
-          {/* Label mono */}
-          <div className="type-mono text-[10px] text-white/30 uppercase tracking-widest mb-8 flex items-center gap-2">
-            <BrandIcon name="codigo" size={20} decorative />
-            {t(locale, "case.stack")}
-          </div>
-
-          {/* Layout: heading à esquerda, grid de cards à direita */}
-          <div className="grid md:grid-cols-[1fr_1.6fr] gap-6 md:gap-12">
-            <h2 className="type-raster-section text-4xl md:text-5xl lg:text-6xl text-white leading-[0.9]">
-              {t(locale, "case.technologies")}
-            </h2>
-
-            {/* Grid de cards de tecnologia */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-              {project.stack.map((tech, i) => (
-                <motion.div
-                  key={tech}
-                  initial={prefersReducedMotion ? {} : { opacity: 0, y: 10 }}
-                  whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.06 }}
-                  className="group relative border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/20 transition-all duration-300 p-5 md:p-6 flex flex-col gap-3"
-                >
-                  {/* Índice numerado */}
-                  <span className="type-mono text-[9px] text-white/20 group-hover:text-accent/60 transition-colors">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-
-                  {/* Nome da tecnologia */}
-                  <span className="type-mono text-xs md:text-sm text-white/80 group-hover:text-white transition-colors uppercase tracking-wider leading-tight">
-                    {tech}
-                  </span>
-
-                  {/* Linha decorativa no hover */}
-                  <div className="w-0 group-hover:w-full h-px bg-accent/30 transition-all duration-500" />
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </motion.div>
-      </section>
-
-      {/* ================================================================ */}
-      {/*  IMPACT — Resultados mensuráveis (condicional)                   */}
-      {/* ================================================================ */}
-      {project.result && (
-        <section className="container mx-auto px-6 py-14 md:py-20 max-w-5xl xl:max-w-7xl">
-          <motion.div {...sectionMotion}>
-            <div className="type-mono text-[10px] text-white/30 uppercase tracking-widest mb-8">
-              {t(locale, "case.impact")}
-            </div>
-
-            <div className="grid md:grid-cols-[1fr_1.6fr] gap-6 md:gap-12">
-              <h2 className="type-raster-section text-4xl md:text-5xl lg:text-6xl text-white leading-[0.9] border-l-2 border-accent pl-5 md:pl-8">
-                {t(locale, "case.results")}
-              </h2>
-              <div className="relative">
-                {project.result.items ? (
-                  <div className="flex flex-col gap-4">
-                    {project.result.title && (
-                      <p className="type-raster-section text-xl md:text-2xl text-white">
-                        {project.result.title[locale]}
-                      </p>
-                    )}
-                    <ul className="flex flex-col gap-2">
-                      {project.result.items[locale].map(item => (
-                        <li
-                          key={item}
-                          className="text-base md:text-lg text-white/80 leading-relaxed"
-                        >
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ) : (
-                  <p className="text-base md:text-lg text-white/80 leading-relaxed">
-                    {project.result.text?.[locale]}
-                  </p>
-                )}
-              </div>
-            </div>
-          </motion.div>
-        </section>
-      )}
-
-      {/* ================================================================ */}
-      {/*  RELATED POSTS — Artigos do blog (condicional)                   */}
-      {/* ================================================================ */}
-      {relatedPosts.length > 0 && (
-        <section className="container mx-auto px-6 py-14 md:py-20 max-w-5xl xl:max-w-7xl">
-          <motion.div {...sectionMotion}>
-            <div className="type-mono text-[10px] text-white/30 uppercase tracking-widest mb-8">
-              {t(locale, "case.related")}
-            </div>
-
-            <div className="grid md:grid-cols-[1fr_1.6fr] gap-6 md:gap-12">
-              <h2 className="type-raster-section text-4xl md:text-5xl lg:text-6xl text-white leading-[0.9]">
-                {t(locale, "case.read_more")}
-              </h2>
-
-              <div className="flex flex-col gap-3">
-                {relatedPosts.map(post => (
-                  <a
-                    key={post.slug}
-                    href={`/blog/${post.slug}`}
-                    className="group block border border-white/[0.08] hover:border-accent/30 transition-colors p-6"
-                  >
-                    <div className="flex items-center gap-3 type-mono text-[9px] text-white/30 uppercase tracking-widest mb-3">
-                      <span className="flex items-center gap-1.5">
-                        <Calendar className="w-5 h-5" />
-                        {post.date}
-                      </span>
-                      {post.readTime && (
-                        <>
-                          <span className="text-white/10">/</span>
-                          <span>{post.readTime}</span>
-                        </>
-                      )}
-                    </div>
-                    <h3 className="type-raster-section text-xl md:text-2xl text-white group-hover:text-accent transition-colors leading-tight">
-                      {post.title}
-                    </h3>
-                    <p className="text-white/40 text-sm mt-3 line-clamp-2 leading-relaxed">
-                      {post.excerpt}
-                    </p>
-                  </a>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        </section>
-      )}
-
-      {/* ================================================================ */}
-      {/*  FINAL CTA — Fechamento com email                                */}
-      {/* ================================================================ */}
-      <section className="container mx-auto px-6 py-16 md:py-24 max-w-5xl xl:max-w-7xl">
-        <motion.div {...sectionMotion} className="text-center">
-          <div className="type-mono text-[11px] text-white/30 uppercase tracking-widest mb-6">
-            {t(locale, "case.next")}
-          </div>
-
-          <p className="type-mono text-sm text-white/40 mb-8">{t(locale, "cta.ready")}</p>
-
-          <a
-            href={`mailto:${contactData.email}`}
-            className="inline-block type-raster-section text-[clamp(2.5rem,8vw,5rem)] text-white hover:text-accent transition-colors leading-none"
-          >
-            {t(locale, "cta.lets_talk")}
-          </a>
-        </motion.div>
-      </section>
-    </div>
+        </div>
+      </div>
+    </article>
   );
-};
-
-export default CaseStudy;
+}
