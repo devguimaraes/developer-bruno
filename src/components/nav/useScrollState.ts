@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
-import { activeSectionAt, scrollPercent, subscribeFrames } from "./scroll";
 import type { SectionTop } from "./scroll";
+import {
+  activeSectionAt,
+  articleProgress,
+  readLineRatioOf,
+  scrollPercent,
+  subscribeFrames,
+} from "./scroll";
 
 /** Linha de leitura: a seção em leitura é a que já passou dela, a 35% do topo da janela. */
 const READ_LINE_RATIO = 0.35;
@@ -49,7 +55,13 @@ function readProgress(): number {
   const reading = document.querySelector<HTMLElement>("[data-reading-root]");
   if (reading) {
     const rect = reading.getBoundingClientRect();
-    return scrollPercent(-rect.top, rect.height - viewport);
+    // data-read-line muda a linha. Sem ela, o artigo continua medido do topo à base da janela.
+    return articleProgress(
+      rect.top,
+      rect.height,
+      viewport,
+      readLineRatioOf(reading.getAttribute("data-read-line"))
+    );
   }
   return scrollPercent(window.scrollY, document.documentElement.scrollHeight - viewport);
 }

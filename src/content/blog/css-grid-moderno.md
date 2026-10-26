@@ -76,7 +76,7 @@ Esta técnica cria um grid que:
 }
 ```
 
-## 🎨 Grid Areas Nomeadas
+## 🎨 Grid Áreas Nomeadas
 
 ```css
 .layout {

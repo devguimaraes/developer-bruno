@@ -3,6 +3,7 @@ import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 import vercel from '@astrojs/vercel';
+import { rehypePostContent } from './src/lib/blog/headings.ts';
 
 // https://astro.build/config
 export default defineConfig({
@@ -25,6 +26,9 @@ export default defineConfig({
     }),
   ],
   output: 'static',
+  markdown: {
+    rehypePlugins: [rehypePostContent],
+  },
   build: {
     format: 'directory' // Cria as rotas com pastinha no final pra evitar index.html direto nas urls
   }

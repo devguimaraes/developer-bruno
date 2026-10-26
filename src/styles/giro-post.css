@@ -1,0 +1,144 @@
+/* Página do post. Superfície de leitura, índice ao lado no computador.
+   O código rola dentro do bloco: a coluna não pode crescer com a linha. */
+
+.post-page {
+  overflow-x: clip;
+  min-height: 100vh;
+}
+
+.post-page__inner {
+  box-sizing: border-box;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 48px 64px 96px;
+}
+
+.post-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  max-width: 920px;
+  margin-bottom: 48px;
+}
+
+.post-title {
+  margin: 0;
+  text-wrap: balance;
+  overflow-wrap: break-word;
+}
+
+.post-language-note,
+.post-lead {
+  margin: 0;
+}
+
+.post-lead {
+  max-width: 36em;
+  color: var(--s-muted);
+  text-wrap: pretty;
+}
+
+.post-language-note {
+  color: var(--s-muted);
+}
+
+.post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+  color: var(--s-muted);
+}
+
+.post-progress {
+  margin: 0;
+  color: var(--s-fg);
+  font: var(--text-rotulo);
+}
+
+.post-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: 48px;
+}
+
+.post-main,
+.post-article,
+.post-code-mount,
+.post-table {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.post-article {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.post-end,
+.post-more__label {
+  margin: 0;
+}
+
+.post-more {
+  display: flex;
+  flex-direction: column;
+  margin-top: 64px;
+}
+
+.post-rail {
+  display: none;
+}
+
+.post-code-mount .g-code,
+.post-page .g-code {
+  max-width: 100%;
+}
+
+.post-page .g-code__body {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.post-table {
+  overflow-x: auto;
+}
+
+.post-back--mobile {
+  display: none;
+}
+
+@media (min-width: 1100px) {
+  .post-layout {
+    grid-template-columns: minmax(0, 1fr) 240px;
+    column-gap: 64px;
+  }
+
+  .post-rail {
+    display: block;
+    position: sticky;
+    top: 96px;
+  }
+}
+
+@media (max-width: 767px) {
+  .post-page__inner {
+    padding: 28px 16px 72px;
+  }
+
+  .post-header {
+    max-width: none;
+    margin-bottom: 32px;
+  }
+
+  .post-back--desktop {
+    display: none;
+  }
+
+  .post-back--mobile {
+    display: inline-flex;
+  }
+}

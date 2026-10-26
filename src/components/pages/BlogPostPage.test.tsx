@@ -1,180 +1,178 @@
-import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
-import BlogPostPage from "./BlogPostPage";
+import { cleanup, render, screen } from "@testing-library/react";
+import type { ReactNode } from "react";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { setLocale } from "@/lib/i18n";
 import type { BlogPost } from "@/types/blog";
+import BlogPostPage from "./BlogPostPage";
 
-const mockPost: BlogPost = {
-  id: "post-1",
-  slug: "design-system-dark",
-  title: "Design System Dark-First",
-  date: "JUN 2026",
+const post: BlogPost = {
+  id: "react-19",
+  slug: "react-19-server-components",
+  title: "React 19 e Server Components",
+  date: "10 ABR 2026",
   readTime: "8 min",
-  tags: ["FRONTEND", "DESIGN"],
+  tags: ["React"],
   author: "Bruno Guimarães",
-  excerpt: "Construindo sistemas de design com paleta escura.",
-  content: "# Design System\n\nConteúdo do post.",
-  image: "/uploads/blog/design-system.webp",
+  excerpt: "Como o React 19 reduz o JavaScript enviado ao cliente.",
+  content: "## Introdução\n\nTexto.\n\n## Fechamento\n\nFim.\n",
 };
 
-const mockPostSemImagem: BlogPost = { ...mockPost, image: undefined };
-const mockPostSemTags: BlogPost = { ...mockPost, tags: [] };
+function box(top: number, height: number): DOMRect {
+  return {
+    x: 0,
+    y: top,
+    top,
+    left: 0,
+    right: 0,
+    bottom: top + height,
+    width: 0,
+    height,
+    toJSON() {
+      return {};
+    },
+  } as DOMRect;
+}
 
-const mockNext: BlogPost = {
-  ...mockPost,
-  id: "post-2",
-  slug: "performance-frontend",
-  title: "Performance Front-End 2026",
-};
+function mockLayout(article: { top: number; height: number }, headings: Record<string, number>) {
+  vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function mockRect(
+    this: HTMLElement
+  ) {
+    if (this.hasAttribute("data-reading-root")) return box(article.top, article.height);
+    const top = this.id ? headings[this.id] : undefined;
+    if (top !== undefined) return box(top, 32);
+    return box(0, 0);
+  });
+  Object.defineProperty(window, "innerHeight", { configurable: true, writable: true, value: 1000 });
+}
 
-describe("BlogPostPage — Header", () => {
-  it("exibe o título do post em fonte raster", () => {
-    render(<BlogPostPage post={mockPost} next={null} />);
-    const heading = screen.getByText("Design System Dark-First");
-    expect(heading.tagName).toBe("H1");
-    expect(heading.className).toContain("type-raster-section");
+function renderPost(children?: ReactNode, following: readonly BlogPost[] = []) {
+  return render(
+    <BlogPostPage post={post} following={following}>
+      {children ?? (
+        <>
+          <h2 id="introducao">Introdução</h2>
+          <p>Texto.</p>
+          <h2 id="fechamento">Fechamento</h2>
+        </>
+      )}
+    </BlogPostPage>
+  );
+}
+
+afterEach(() => {
+  cleanup();
+  setLocale("pt");
+  vi.restoreAllMocks();
+  Object.defineProperty(window, "innerHeight", { configurable: true, writable: true, value: 768 });
+});
+
+describe("BlogPostPage — índice e progresso", () => {
+  it("marca o heading que já passou da linha de leitura", () => {
+    mockLayout({ top: 200, height: 4000 }, { introducao: 400, fechamento: 1200 });
+    const { container } = renderPost();
+
+    expect(container.querySelector("article")).toHaveAttribute("data-reading-root");
+    expect(container.querySelector("article")).toHaveAttribute("data-read-line", "0.7");
+    expect(screen.getByRole("link", { name: "Introdução" })).toHaveAttribute(
+      "aria-current",
+      "true"
+    );
+    expect(screen.getByRole("link", { name: "Fechamento" })).not.toHaveAttribute("aria-current");
+    expect(screen.getByText("13% lido")).toBeInTheDocument();
   });
 
-  it("exibe a meta row com badge de categoria, data e tempo de leitura", () => {
-    render(<BlogPostPage post={mockPost} next={null} />);
-    // "FRONTEND" também aparece na cápsula de tags no rodapé (tags[0] === categoria)
-    expect(screen.getAllByText("FRONTEND").length).toBeGreaterThanOrEqual(1);
-    expect(screen.getByText("JUN 2026")).toBeInTheDocument();
-    expect(screen.getByText("8 min de leitura")).toBeInTheDocument();
-  });
+  it("no fim do artigo o último item é o atual e o texto é o de concluído", () => {
+    mockLayout({ top: 1000 * 0.7 - 2000, height: 2000 }, { introducao: 100, fechamento: 900 });
+    renderPost();
 
-  it("usa 'POST' como fallback de categoria quando não há tags", () => {
-    render(<BlogPostPage post={mockPostSemTags} next={null} />);
-    expect(screen.getByText("POST")).toBeInTheDocument();
-  });
-
-  it("exibe a lede com o excerpt do post", () => {
-    render(<BlogPostPage post={mockPost} next={null} />);
-    expect(
-      screen.getByText("Construindo sistemas de design com paleta escura.")
-    ).toBeInTheDocument();
-  });
-
-  it("exibe o ícone documentacao na meta row", () => {
-    const { container } = render(<BlogPostPage post={mockPost} next={null} />);
-    expect(container.querySelector('[data-icon="documentacao"]')).not.toBeNull();
+    expect(screen.getByRole("link", { name: "Fechamento" })).toHaveAttribute(
+      "aria-current",
+      "true"
+    );
+    expect(screen.getByRole("link", { name: "Introdução" })).not.toHaveAttribute("aria-current");
+    expect(screen.getByText("lido até o fim")).toBeInTheDocument();
+    expect(screen.queryByText("100% lido")).not.toBeInTheDocument();
   });
 });
 
-describe("BlogPostPage — Byline", () => {
-  it("exibe o nome do autor e o cargo fixo", () => {
-    render(<BlogPostPage post={mockPost} next={null} />);
-    expect(screen.getByText("Bruno Guimarães")).toBeInTheDocument();
-    expect(screen.getByText("Engenheiro Front-End")).toBeInTheDocument();
+describe("BlogPostPage — idioma", () => {
+  it("não mostra o aviso em português", () => {
+    renderPost();
+    expect(screen.queryByText("This post is in Portuguese.")).not.toBeInTheDocument();
+  });
+
+  it("em inglês, o aviso fica embaixo do título", () => {
+    setLocale("en");
+    renderPost();
+    const title = screen.getByRole("heading", { level: 1, name: post.title });
+    expect(title.nextElementSibling).toHaveTextContent("This post is in Portuguese.");
   });
 });
 
-describe("BlogPostPage — Cover", () => {
-  it("exibe a imagem de capa quando post.image existe", () => {
-    render(<BlogPostPage post={mockPost} next={null} />);
-    const img = screen.getByRole("img", { name: mockPost.title });
-    expect(img).toHaveAttribute("src", mockPost.image);
-    expect(img).toHaveAttribute("alt", mockPost.title);
-  });
-
-  it("não exibe imagem de capa quando post.image está ausente", () => {
-    render(<BlogPostPage post={mockPostSemImagem} next={null} />);
-    expect(screen.queryByRole("img", { name: mockPostSemImagem.title })).not.toBeInTheDocument();
-  });
-
-  it("renderiza a capa como full-bleed fora do container do artigo", () => {
-    const { container } = render(<BlogPostPage post={mockPost} next={null} />);
-    // A capa full-bleed deve estar fora do <article>
-    const article = container.querySelector("article");
-    expect(article).not.toBeNull();
-    // O container da capa deve ter data-testid="cover-fullbleed"
-    const cover = container.querySelector('[data-testid="cover-fullbleed"]');
-    expect(cover).not.toBeNull();
-    // A capa NÃO deve estar dentro do article
-    expect(article?.contains(cover)).toBe(false);
-  });
-
-  it("renderiza gradiente de transição sobre a capa full-bleed", () => {
-    const { container } = render(<BlogPostPage post={mockPost} next={null} />);
-    const gradient = container.querySelector('[data-testid="cover-gradient"]');
-    expect(gradient).not.toBeNull();
-  });
-});
-
-describe("BlogPostPage — Table of Contents", () => {
-  it("renderiza o componente TableOfContents", () => {
-    const { container } = render(<BlogPostPage post={mockPost} next={null} />);
-    const toc = container.querySelector('[data-testid="toc"]');
-    expect(toc).not.toBeNull();
-  });
-
-  it("o TOC fica oculto por padrão (não visível sem scroll-up)", () => {
-    const { container } = render(<BlogPostPage post={mockPost} next={null} />);
-    const toc = container.querySelector('[data-testid="toc"]');
-    // Deve existir mas estar visualmente oculto com opacity-0
-    const classes = toc?.className || "";
-    expect(classes).toMatch(/opacity-0/);
-  });
-});
-
-describe("BlogPostPage — Código Wide", () => {
-  it("artigo usa classe que permite código quebrar 720px", () => {
-    const { container } = render(<BlogPostPage post={mockPost} next={null} />);
-    const article = container.querySelector("article");
-    // O artigo deve ter uma classe que permita conteúdo wide
-    expect(article?.className).toMatch(/blog-article/);
-  });
-});
-
-describe("BlogPostPage — Conteúdo e tags", () => {
-  it("renderiza children dentro do container de markdown", () => {
-    const { container } = render(
-      <BlogPostPage post={mockPost} next={null}>
-        <p>Conteúdo de teste</p>
+describe("BlogPostPage — código", () => {
+  it("mostra o rótulo da linguagem no bloco", () => {
+    render(
+      <BlogPostPage post={{ ...post, content: "Sem seções." }} following={[]}>
+        <pre data-language="tsx">
+          <code>const giro = true</code>
+        </pre>
       </BlogPostPage>
     );
-    const markdownContainer = container.querySelector("[data-markdown-content]");
-    expect(markdownContainer).toContainElement(screen.getByText("Conteúdo de teste"));
-  });
 
-  it("exibe cada tag como cápsula no rodapé do artigo", () => {
-    render(<BlogPostPage post={mockPost} next={null} />);
-    // "FRONTEND" também aparece no badge de categoria da meta row
-    expect(screen.getAllByText("FRONTEND").length).toBeGreaterThanOrEqual(1);
-    expect(screen.getByText("DESIGN")).toBeInTheDocument();
-  });
-
-  it("não renderiza a seção de tags quando post.tags está vazio", () => {
-    render(<BlogPostPage post={mockPostSemTags} next={null} />);
-    expect(screen.queryByText("DESIGN")).not.toBeInTheDocument();
+    expect(screen.getByText("// tsx")).toHaveClass("g-code__lang");
+    expect(screen.getByRole("button", { name: "Copiar o código de tsx" })).toBeInTheDocument();
   });
 });
 
-describe("BlogPostPage — Navegação para o próximo post", () => {
-  it("exibe o card de próximo post quando next existe", () => {
-    render(<BlogPostPage post={mockPost} next={mockNext} />);
-    expect(screen.getByText("PRÓXIMO POST →")).toBeInTheDocument();
-    const link = screen.getByRole("link", { name: /Performance Front-End 2026/ });
-    expect(link).toHaveAttribute("href", "/blog/performance-frontend");
+describe("BlogPostPage — voltar e continuar lendo", () => {
+  const later: BlogPost[] = [
+    {
+      ...post,
+      id: "css",
+      slug: "css-grid-moderno",
+      title: "CSS Grid moderno",
+      date: "01 ABR 2026",
+    },
+    {
+      ...post,
+      id: "ts",
+      slug: "typescript-performance",
+      title: "TypeScript na prática",
+      date: "22 MAR 2026",
+    },
+    {
+      ...post,
+      id: "extra",
+      slug: "extra",
+      title: "Não deve aparecer",
+      date: "01 MAR 2026",
+    },
+  ];
+
+  it("mostra o fim do post e no máximo dois posts seguintes", () => {
+    renderPost(undefined, later);
+
+    expect(screen.getByRole("link", { name: "Blog" })).toHaveAttribute("href", "/blog");
+    expect(screen.getByRole("link", { name: "Voltar para o blog" })).toHaveAttribute(
+      "href",
+      "/blog"
+    );
+    expect(screen.getByText("// fim do post")).toBeInTheDocument();
+    expect(screen.getByText("// continue lendo")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /CSS Grid moderno/ })).toHaveAttribute(
+      "href",
+      "/blog/css-grid-moderno"
+    );
+    expect(screen.getByRole("link", { name: /TypeScript na prática/ })).toHaveAttribute(
+      "href",
+      "/blog/typescript-performance"
+    );
+    expect(screen.queryByRole("link", { name: /Não deve aparecer/ })).not.toBeInTheDocument();
   });
 
-  it("não exibe nada quando next é null", () => {
-    render(<BlogPostPage post={mockPost} next={null} />);
-    expect(screen.queryByText(/PRÓXIMO POST/)).not.toBeInTheDocument();
-  });
-});
-
-describe("BlogPostPage — Back button", () => {
-  it("exibe o link de volta para a listagem do blog", () => {
-    render(<BlogPostPage post={mockPost} next={null} />);
-    const link = screen.getByRole("link", { name: /VOLTAR AO BLOG/ });
-    expect(link).toHaveAttribute("href", "/blog");
-  });
-});
-
-describe("BlogPostPage — Estado vazio", () => {
-  it("renderiza apenas o fallback quando post é nulo", () => {
-    const { container } = render(<BlogPostPage post={null as unknown as BlogPost} next={null} />);
-    expect(screen.queryByRole("heading")).not.toBeInTheDocument();
-    expect(container.querySelector(".bg-black")).toBeInTheDocument();
+  it("sem posts seguintes, não inventa a lista", () => {
+    renderPost();
+    expect(screen.getByText("// fim do post")).toBeInTheDocument();
+    expect(screen.queryByText("// continue lendo")).not.toBeInTheDocument();
   });
 });

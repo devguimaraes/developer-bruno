@@ -18,6 +18,35 @@ export function scrollPercent(scrolled: number, range: number): number {
 }
 
 /**
+ * Fração de `data-read-line`. Sem atributo, ou com valor inválido, a medida antiga vale:
+ * o progresso conta do topo da janela até a base.
+ */
+export function readLineRatioOf(value: string | null): number | null {
+  if (value == null) return null;
+  const trimmed = value.trim();
+  if (trimmed === "") return null;
+  const ratio = Number(trimmed);
+  return Number.isFinite(ratio) ? ratio : null;
+}
+
+/**
+ * Progresso de 0 a 100 de um artigo medido na janela.
+ * Sem linha, 0 quando o topo chega ao topo da janela e 100 quando a base chega à base.
+ * Com linha (fração da altura da janela), 0 quando o topo está nessa linha e 100 quando a base chega nela.
+ */
+export function articleProgress(
+  top: number,
+  height: number,
+  viewport: number,
+  readLineRatio: number | null
+): number {
+  if (readLineRatio == null) {
+    return scrollPercent(-top, height - viewport);
+  }
+  return scrollPercent(viewport * readLineRatio - top, height);
+}
+
+/**
  * Seção em leitura: a que começou mais perto da linha de leitura sem tê-la passado do outro lado.
  * Seções abaixo da linha ainda não foram alcançadas, então não contam.
  */

@@ -7,7 +7,7 @@
  * NOTA: jsdom NÃO suporta getComputedStyle com pseudo-elementos (::before, ::after).
  * Testes de ::content são feitos via leitura de regras CSS do stylesheet.
  */
-import { describe, it, expect, afterEach } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 import "../styles/markdown.css";
 
 /** Renderiza HTML dentro de um container [data-markdown-content] no DOM real */
@@ -118,11 +118,11 @@ describe("Pull Quotes (blockquote padrão)", () => {
 // Headings
 // ---------------------------------------------------------------------------
 describe("Headings (h2, h3)", () => {
-  it("h3 tem font-size de 1.5rem", () => {
+  it("h3 tem font-size do título 3 da Giro", () => {
     const container = renderMarkdown(`<h3>Subtítulo da seção</h3>`);
     const el = container.querySelector("h3") as HTMLElement;
     const style = getComputedStyle(el);
-    expect(style.fontSize).toBe("1.5rem");
+    expect(style.fontSize).toBe("26px");
   });
 });
 
