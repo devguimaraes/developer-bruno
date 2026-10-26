@@ -1,132 +1,141 @@
-import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
-import BlogPage from "./BlogPage";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, describe, expect, it } from "vitest";
+import { setLocale } from "@/lib/i18n";
 import type { BlogPost } from "@/types/blog";
+import BlogPage from "./BlogPage";
 
-const mockPosts: BlogPost[] = [
-  {
-    id: "post-1",
-    slug: "design-system-dark",
-    title: "Design System Dark-First",
-    date: "JUN 2026",
+function makePost(overrides: Partial<BlogPost> & Pick<BlogPost, "slug" | "title">): BlogPost {
+  return {
+    id: overrides.slug,
+    date: "22 ABR 2026",
     readTime: "8 min",
-    tags: ["FRONTEND"],
+    tags: ["Frontend"],
     author: "Bruno Guimarães",
-    excerpt: "Construindo sistemas de design com paleta escura.",
-    content: "# Design System\n\nConteúdo do post.",
-  },
-  {
-    id: "post-2",
-    slug: "performance-frontend",
+    excerpt: "Um resumo curto.",
+    content: "",
+    ...overrides,
+  };
+}
+
+const posts: BlogPost[] = [
+  makePost({
+    slug: "design-system",
+    title: "Design System Dark-First",
+    tags: ["Frontend"],
+    excerpt: "Construindo sistemas de design.",
+  }),
+  makePost({
+    slug: "performance",
     title: "Performance Front-End 2026",
-    date: "MAI 2026",
-    readTime: "6 min",
-    tags: ["PERFORMANCE"],
-    author: "Bruno Guimarães",
+    tags: ["Performance"],
     excerpt: "Budget de JS e Core Web Vitals.",
-    content: "# Performance\n\nConteúdo do post.",
-  },
-  {
-    id: "post-3",
-    slug: "astro-react-islands",
+  }),
+  makePost({
+    slug: "astro-islands",
     title: "Astro 5 + React Islands",
-    date: "ABR 2026",
-    readTime: "5 min",
-    tags: ["ARQUITETURA", "FRONTEND"],
-    author: "Bruno Guimarães",
-    excerpt: "Arquitetura de ilhas reativas com SSG.",
-    content: "# Astro\n\nConteúdo do post.",
-  },
+    tags: ["Arquitetura", "Frontend"],
+    excerpt: "Arquitetura de ilhas reativas.",
+  }),
 ];
 
-describe("BlogPage — Hero Section", () => {
-  it("exibe o label // BLOG no hero", () => {
-    render(<BlogPage initialPosts={mockPosts} />);
-    expect(screen.getByText("// BLOG")).toBeInTheDocument();
+describe("BlogPage", () => {
+  afterEach(() => {
+    setLocale("pt");
   });
 
-  it("exibe o heading POSTS em fonte raster", () => {
-    render(<BlogPage initialPosts={mockPosts} />);
-    const heading = screen.getByText("POSTS");
-    expect(heading).toBeInTheDocument();
-    expect(heading.tagName).toBe("H1");
-    // Deve usar a classe type-raster-hero
-    expect(heading.className).toContain("type-raster-hero");
-  });
+  it("mostra rótulo, título, descrição e o total de posts na superfície de leitura", () => {
+    const { container } = render(<BlogPage initialPosts={posts} />);
 
-  it("exibe o subtítulo descritivo", () => {
-    render(<BlogPage initialPosts={mockPosts} />);
-    expect(screen.getByText(/Artigos técnicos e reflexões/)).toBeInTheDocument();
-  });
-
-  it("exibe o contador decorativo com total de posts", () => {
-    render(<BlogPage initialPosts={mockPosts} />);
-    // O número 3 aparece no contador decorativo (há múltiplos "3" — badge counts também)
-    const threes = screen.getAllByText("3");
-    expect(threes.length).toBeGreaterThanOrEqual(1);
-    // Label TOTAL_POSTS
-    expect(screen.getByText("TOTAL_POSTS")).toBeInTheDocument();
-  });
-
-  it("exibe o ícone documentacao ao lado do label // BLOG", () => {
-    const { container } = render(<BlogPage initialPosts={mockPosts} />);
-    expect(container.querySelector('[data-icon="documentacao"]')).not.toBeNull();
-  });
-});
-
-describe("BlogPage — Filtro por Categoria", () => {
-  it("exibe o botão 'Todos' como padrão ativo na barra de filtro", () => {
-    render(<BlogPage initialPosts={mockPosts} />);
-    const todosButton = screen.getByText("Todos");
-    expect(todosButton).toBeInTheDocument();
-  });
-
-  it("exibe botões de categoria baseados em tags[0] dos posts", () => {
-    render(<BlogPage initialPosts={mockPosts} />);
-    // mockPosts têm tags[0]: FRONTEND, PERFORMANCE, ARQUITETURA
-    // Usa getAllByText pois os nomes aparecem nos botões de filtro E nos badges das rows
-    expect(screen.getAllByText("FRONTEND").length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText("PERFORMANCE").length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText("ARQUITETURA").length).toBeGreaterThanOrEqual(1);
-  });
-
-  it("filtra posts ao clicar em uma categoria", async () => {
-    const { rerender } = render(<BlogPage initialPosts={mockPosts} />);
-
-    // Com "Todos" ativo, deve mostrar todos os posts
-    expect(screen.getByText("Design System Dark-First")).toBeInTheDocument();
-    expect(screen.getByText("Performance Front-End 2026")).toBeInTheDocument();
-
-    // Clica na categoria FRONTEND (usa getAllByText pois aparece no filtro E nos badges)
-    const frontendButtons = screen.getAllByText("FRONTEND");
-    const filterButton = frontendButtons.find(btn => btn.tagName === "BUTTON");
-    expect(filterButton).toBeDefined();
-    filterButton?.click();
-
-    rerender(<BlogPage initialPosts={mockPosts} />);
-
-    // TODO: após implementação completa, verificar filtro via estado
-  });
-});
-
-describe("BlogPage — Lista de Posts", () => {
-  it("exibe cada post como um link para /blog/{slug}", () => {
-    render(<BlogPage initialPosts={mockPosts} />);
-    const links = screen.getAllByRole("link");
-    const postLinks = links.filter(link => link.getAttribute("href")?.startsWith("/blog/"));
-    expect(postLinks.length).toBeGreaterThanOrEqual(mockPosts.length);
-  });
-
-  it("exibe o título de cada post", () => {
-    render(<BlogPage initialPosts={mockPosts} />);
-    expect(screen.getByText("Design System Dark-First")).toBeInTheDocument();
-    expect(screen.getByText("Performance Front-End 2026")).toBeInTheDocument();
-  });
-
-  it("exibe o excerpt de cada post", () => {
-    render(<BlogPage initialPosts={mockPosts} />);
+    expect(container.querySelector(".blog-page")).toHaveClass("g-papel");
+    expect(container.querySelector(".bg-black")).toBeNull();
+    expect(screen.getByText("// blog")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1, name: "Blog" })).toBeInTheDocument();
     expect(
-      screen.getByText("Construindo sistemas de design com paleta escura.")
+      screen.getByText("Artigos sobre programação, engenharia de software e tecnologia.")
+    ).toBeInTheDocument();
+    expect(screen.getByText("3")).toBeInTheDocument();
+    expect(screen.getByText("posts")).toBeInTheDocument();
+  });
+
+  it("lista cada post com data formatada e sem o aviso de idioma em português", () => {
+    render(<BlogPage initialPosts={posts} />);
+
+    expect(screen.getByRole("link", { name: /Design System Dark-First/ })).toHaveAttribute(
+      "href",
+      "/blog/design-system"
+    );
+    expect(screen.getAllByText("22 abr 2026")).toHaveLength(3);
+    expect(screen.getAllByText("8 min de leitura")).toHaveLength(3);
+    expect(screen.queryByText(/In Portuguese/)).not.toBeInTheDocument();
+  });
+
+  it("escolher uma categoria esconde os outros posts", () => {
+    render(<BlogPage initialPosts={posts} />);
+
+    expect(screen.getByRole("button", { name: "Todos" })).toHaveAttribute("aria-pressed", "true");
+
+    fireEvent.click(screen.getByRole("button", { name: "Frontend" }));
+
+    expect(screen.getByRole("button", { name: "Frontend" })).toHaveAttribute(
+      "aria-pressed",
+      "true"
+    );
+    expect(screen.getByRole("button", { name: "Todos" })).toHaveAttribute("aria-pressed", "false");
+    expect(screen.getByRole("link", { name: /Design System Dark-First/ })).toBeInTheDocument();
+    expect(
+      screen.queryByRole("link", { name: /Performance Front-End 2026/ })
+    ).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /Astro 5/ })).not.toBeInTheDocument();
+    expect(screen.queryByText("Nenhum post nessa categoria ainda.")).not.toBeInTheDocument();
+  });
+
+  it("categoria sem posts mostra a frase vazia e Ver todos devolve a lista", () => {
+    const front = makePost({ slug: "front", title: "Post de front", tags: ["Frontend"] });
+    const back = makePost({ slug: "back", title: "Post de back", tags: ["Backend"] });
+    const { container, rerender } = render(<BlogPage initialPosts={[front, back]} />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Backend" }));
+    // A categoria continua selecionada quando os posts deixam de pertencer a ela.
+    rerender(<BlogPage initialPosts={[front, { ...back, tags: ["Frontend"] }]} />);
+
+    expect(screen.getByRole("status")).toHaveTextContent("Nenhum post nessa categoria ainda.");
+    expect(container.querySelector('[data-state="empty"]')).toHaveStyle({ fontSize: "72px" });
+    expect(screen.queryByRole("link", { name: "Ver todos" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /Post de front/ })).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Ver todos" }));
+
+    expect(screen.getByRole("link", { name: /Post de front/ })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Post de back/ })).toBeInTheDocument();
+    expect(screen.queryByText("Nenhum post nessa categoria ainda.")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Todos" })).toHaveAttribute("aria-pressed", "true");
+  });
+
+  it("Carregar mais revela o restante e some quando não sobra nada", () => {
+    const many = Array.from({ length: 7 }, (_, index) => {
+      const n = String(index + 1).padStart(2, "0");
+      return makePost({ slug: `nota-${n}`, title: `Nota ${n}`, tags: ["Notas"] });
+    });
+    render(<BlogPage initialPosts={many} />);
+
+    expect(screen.getByRole("link", { name: /Nota 06/ })).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /Nota 07/ })).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Carregar mais (1 restantes)" }));
+
+    expect(screen.getByRole("link", { name: /Nota 07/ })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Carregar mais/ })).not.toBeInTheDocument();
+  });
+
+  it("em inglês, cada post avisa que está em português", () => {
+    setLocale("en");
+    render(<BlogPage initialPosts={posts.slice(0, 1)} />);
+
+    expect(screen.getByText(/In Portuguese/)).toBeInTheDocument();
+    expect(screen.getByText("Apr 22, 2026")).toBeInTheDocument();
+    expect(screen.getByText("8 min read · In Portuguese")).toBeInTheDocument();
+    expect(
+      screen.getByText("Articles on programming, software engineering and technology.")
     ).toBeInTheDocument();
   });
 });

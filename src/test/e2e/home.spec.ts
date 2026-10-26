@@ -16,8 +16,8 @@ test.describe("Navegação Principal", () => {
     // "Ver o blog" dentro da seção leva para a página do blog
     await page.locator("#blog").getByRole("link", { name: "Ver o blog" }).click();
     await expect(page).toHaveURL(/.*blog/);
-    // O h1 da página de blog é "POSTS" (i18n blog.heading)
-    await expect(page.locator("h1").first()).toContainText(/POSTS/i);
+    // O h1 da página de blog é "Blog" (i18n blog.heading)
+    await expect(page.locator("h1").first()).toHaveText("Blog");
   });
 
   test("Deve exibir a seção de contato com formulário e links", async ({ page }) => {

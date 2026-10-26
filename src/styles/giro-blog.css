@@ -1,0 +1,128 @@
+/* Página do blog (issue #56). Superfície de leitura.
+   Tokens e componentes vêm de giro.css, giro-actions.css, giro-content.css e giro-fields.css. */
+
+.blog-page {
+  box-sizing: border-box;
+  min-height: 100svh;
+  overflow-x: clip;
+}
+.blog-page__inner {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 64px;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 96px 64px;
+}
+.blog-page__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 24px 48px;
+}
+.blog-page__intro {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
+}
+.blog-page__title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 136px;
+  line-height: 0.86;
+  font-weight: 900;
+  font-stretch: 115%;
+  letter-spacing: -0.04em;
+}
+.blog-page__description {
+  margin: 0;
+  max-width: 62ch;
+  color: var(--s-muted);
+  font: var(--text-corpo-l);
+  text-wrap: pretty;
+}
+.blog-page__count {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  margin: 0;
+}
+.blog-page__count-value {
+  font-family: var(--font-sans);
+  font-size: 72px;
+  line-height: 0.9;
+  font-weight: 900;
+  font-stretch: 115%;
+  letter-spacing: -0.03em;
+}
+.blog-page__count-label {
+  color: var(--s-muted);
+  font: var(--text-micro);
+}
+.blog-page__filters {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+/* legend não entra no flex: o nome acessível fica só para leitor de tela. */
+.blog-page__filters legend {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+.blog-page__list {
+  border-bottom: 1px solid var(--s-line);
+}
+.blog-page__more {
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 900px) {
+  .blog-page__head {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .blog-page__count {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .blog-page__count-value {
+    font-size: 40px;
+  }
+}
+
+@media (max-width: 640px) {
+  .blog-page__inner {
+    gap: 40px;
+    padding: 48px 16px 128px;
+  }
+  .blog-page__title {
+    font-size: 58px;
+  }
+  .blog-page__list .g-post-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px 16px;
+  }
+  .blog-page__list .g-post-row__date {
+    grid-column: 1 / -1;
+    padding-top: 0;
+  }
+  .blog-page__list .g-post-row__title {
+    font-size: 21px;
+  }
+}
