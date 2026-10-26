@@ -63,7 +63,6 @@ const ptDictionary = {
   "projects.title": "Projetos",
   "projects.intro": "Cinco cases reais, cada um com o problema, a solução e o resultado.",
   "projects.card_link": "Ver case",
-  "projects.other_sites_label": "// outros sites no ar · números medidos em cada projeto",
 
   // Home · processo
   "process.label": "// processo",
@@ -101,9 +100,6 @@ const ptDictionary = {
   "about.capability.a11y": "Acessibilidade e UX",
   "about.capability.practices": "Boas práticas e processo",
   "about.capability.collaboration": "Colaboração com produto",
-  "about.fact.experience": "5 anos de front-end",
-  "about.fact.education": "Senac, Desenvolvimento de Sistemas Web",
-  "about.fact.location": "Rio de Janeiro, Brasil",
 
   // Home · blog e página do blog
   "posts.label": "// blog",
@@ -222,26 +218,10 @@ const ptDictionary = {
   "hero.description":
     "Desenvolvimento front-end com foco em performance, arquitetura e experiência do usuário.",
   "hero.scroll": "// EXPLORE",
-  "projects.heading": "PROJETOS",
-  "projects.subtitle": "Quatro cases reais. Cada um com seu desafio, stack e resultado.",
-  "projects.total": "PROJETOS",
-  "projects.view_case": "Visualizar Caso",
-  "projects.visit_live": "Ver site no ar",
-  "about.bio":
-    "Formado em Desenvolvimento de Sistemas Web pelo Senac, atuo há 5 anos com desenvolvimento de software voltado ao front-end. Meu trabalho combina React, TypeScript e arquitetura server-side com princípios de engenharia de software e design intencional. Tenho experiência prática com otimização de performance e Core Web Vitals em projetos com tráfego real, além de manter testes automatizados e pipelines de CI/CD. Código bem estruturado, entregas consistentes e compromisso com qualidade.",
-  "about.tagline": "Front-End Developer · AI-Native Development",
-  "about.capabilities_label": "// O_QUE_EU_FAÇO",
-  "about.cap.development": "Desenvolvimento Front-End",
-  "about.cap.backend": "APIs",
-  "about.cap.deploy": "Deploy & CI/CD",
-  "about.cap.a11y": "Acessibilidade & UX",
-  "about.cap.practices": "Boas Práticas & Processo",
-  "about.cap.collaboration": "Colaboração com Produto",
   "footer.location": "Rio de Janeiro, BR",
   "footer.built_by": "Feito por Bruno Guimarães",
   "cta.ready": "Tem um projeto em mente?",
   "cta.lets_talk": "BORA CONVERSAR",
-  "cta.copyright": "© 2026 BRUNO GUIMARÃES. Todos os direitos reservados.",
   "nav.projetos": "PROJETOS",
   "nav.posts": "POSTS",
   "nav.sobre": "SOBRE",
@@ -291,6 +271,16 @@ const ptDictionary = {
   "case.visit_live": "Visitar site ao vivo",
   "case.work_together": "Vamos trabalhar juntos",
   "case.scroll": "SCROLL",
+
+  // Home · outros sites no ar e fatos do sobre (issue #52)
+  "outcomes.label": "// outros sites no ar",
+  "outcomes.measured": "números medidos em cada projeto",
+  "about.fact.experience_value": "5 anos",
+  "about.fact.experience_label": "de front-end",
+  "about.fact.education_value": "Senac",
+  "about.fact.education_label": "Desenvolvimento de Sistemas Web",
+  "about.fact.location_value": "Rio de Janeiro",
+  "about.fact.location_label": "Brasil",
 } as const;
 
 export type TranslationKey = keyof typeof ptDictionary;
@@ -353,7 +343,6 @@ const enDictionary: Record<TranslationKey, string> = {
   "projects.title": "Projects",
   "projects.intro": "Five real projects, each with the problem, the solution and the result.",
   "projects.card_link": "View case study",
-  "projects.other_sites_label": "// other live sites · numbers measured on each project",
 
   // Home · process
   "process.label": "// process",
@@ -391,9 +380,6 @@ const enDictionary: Record<TranslationKey, string> = {
   "about.capability.a11y": "Accessibility and UX",
   "about.capability.practices": "Engineering practices",
   "about.capability.collaboration": "Product collaboration",
-  "about.fact.experience": "5 years in front-end",
-  "about.fact.education": "Senac, Web Systems Development",
-  "about.fact.location": "Rio de Janeiro, Brazil",
 
   // Home · blog and blog page
   "posts.label": "// blog",
@@ -512,26 +498,10 @@ const enDictionary: Record<TranslationKey, string> = {
   "hero.description":
     "Front-end development focused on performance, architecture, and user experience.",
   "hero.scroll": "// EXPLORE",
-  "projects.heading": "PROJECTS",
-  "projects.subtitle": "Four real cases. Each with its challenge, stack, and result.",
-  "projects.total": "PROJECTS",
-  "projects.view_case": "View Case",
-  "projects.visit_live": "Visit live site",
-  "about.bio":
-    "Graduated in Web Systems Development from Senac, I have 5 years of experience in front-end software development. My work combines React, TypeScript, and server-side architecture with software engineering principles and intentional design. I have hands-on experience optimizing performance and Core Web Vitals on production traffic, along with maintaining automated tests and CI/CD pipelines. Well-structured code, consistent delivery, and a commitment to quality.",
-  "about.tagline": "Front-End Developer · AI-Native Development",
-  "about.capabilities_label": "// WHAT_I_DO",
-  "about.cap.development": "Front-End Development",
-  "about.cap.backend": "APIs",
-  "about.cap.deploy": "Deploy & CI/CD",
-  "about.cap.a11y": "Accessibility & UX",
-  "about.cap.practices": "Engineering Practices",
-  "about.cap.collaboration": "Product Collaboration",
   "footer.location": "Rio de Janeiro, BR",
   "footer.built_by": "Built by Bruno Guimarães",
   "cta.ready": "Have a project in mind?",
   "cta.lets_talk": "LET'S TALK",
-  "cta.copyright": "© 2026 BRUNO GUIMARÃES. All rights reserved.",
   "nav.projetos": "PROJECTS",
   "nav.posts": "POSTS",
   "nav.sobre": "ABOUT",
@@ -581,6 +551,16 @@ const enDictionary: Record<TranslationKey, string> = {
   "case.visit_live": "Visit live site",
   "case.work_together": "Let's work together",
   "case.scroll": "SCROLL",
+
+  // Home · outros sites no ar e fatos do sobre (issue #52)
+  "outcomes.label": "// other live sites",
+  "outcomes.measured": "numbers measured on each project",
+  "about.fact.experience_value": "5 years",
+  "about.fact.experience_label": "of front-end",
+  "about.fact.education_value": "Senac",
+  "about.fact.education_label": "Web Systems Development",
+  "about.fact.location_value": "Rio de Janeiro",
+  "about.fact.location_label": "Brazil",
 };
 
 export const dictionary = {

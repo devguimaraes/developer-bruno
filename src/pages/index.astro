@@ -1,8 +1,26 @@
 ---
-import Layout from "@/layouts/Layout.astro";
+import { getCollection } from "astro:content";
 import Index from "@/components/pages/Index";
+import Layout from "@/layouts/Layout.astro";
+import { convertBrazilianDate, generateSlug, toISODate } from "@/lib/blog";
+import { parseReadingTime } from "@/lib/blog/content";
+
+// Os três posts mais recentes para a seção do blog. Datas "DD MMM AAAA" viram ISO.
+const entries = await getCollection("blog");
+const posts = entries
+  .map(entry => ({ entry, time: convertBrazilianDate(entry.data.date).getTime() }))
+  .sort((a, b) => b.time - a.time)
+  .slice(0, 3)
+  .map(({ entry }) => ({
+    slug: generateSlug(entry.id),
+    title: entry.data.title,
+    date: toISODate(entry.data.date),
+    category: entry.data.tags[0] ?? "",
+    readTime: parseReadingTime(entry.data.readTime) ?? 5,
+    excerpt: entry.data.excerpt,
+  }));
 ---
 
 <Layout>
-  <Index client:load />
+  <Index posts={posts} client:load />
 </Layout>

@@ -1,37 +1,40 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test.describe("Navegação Principal", () => {
-  test("Deve carregar a página inicial corretamente e navegar para o blog", async ({ page }) => {
+  test("Deve carregar a home com as seções na ordem e abrir o blog", async ({ page }) => {
     await page.goto("/");
 
     // Verifica o título e se a Hero Section renderizou
     await expect(page).toHaveTitle(/Bruno Guimarães/i);
     await expect(page.locator("h1").first()).toBeVisible();
 
-    // No computador o item "Blog" do menu rola até a seção de blog da home (ainda não existe).
-    // Até ela entrar, a página do blog é aberta direto.
-    const linkBlog = page.getByRole("link", { name: /^Blog$/ }).first();
-    await expect(linkBlog).toHaveAttribute("href", "/#blog");
-    await page.goto("/blog");
+    // Âncoras das seções da home, usadas pela navegação
+    for (const id of ["projetos", "processo", "sobre", "blog", "contato"]) {
+      await expect(page.locator(`#${id}`)).toHaveCount(1);
+    }
 
+    // "Ver o blog" dentro da seção leva para a página do blog
+    await page.locator("#blog").getByRole("link", { name: "Ver o blog" }).click();
     await expect(page).toHaveURL(/.*blog/);
     // O h1 da página de blog é "POSTS" (i18n blog.heading)
     await expect(page.locator("h1").first()).toContainText(/POSTS/i);
   });
 
-  test("Deve exibir a seção de contato com os links sociais dinâmicos", async ({ page }) => {
-    await page.goto("/#contact");
+  test("Deve exibir a seção de contato com formulário e links", async ({ page }) => {
+    await page.goto("/#contato");
 
-    // Checa o CTA exibido — usa locale pt-BR como padrão
-    const contactSection = page.locator("#contact");
-    await expect(contactSection).toContainText(/Tem um projeto em mente\?/i);
-    await expect(contactSection).toContainText(/BORA CONVERSAR/i);
+    const contactSection = page.locator("#contato");
+    await expect(contactSection.getByRole("heading", { name: "Contato" })).toBeVisible();
+    await expect(contactSection.getByRole("form", { name: "Formulário de contato" })).toBeVisible();
+    await expect(contactSection.getByRole("button", { name: "Enviar mensagem" })).toBeVisible();
 
-    const contactLink = contactSection.getByRole("link", { name: /BORA CONVERSAR/i });
-    await expect(contactLink).toHaveAttribute("href", /mailto:/i);
+    await expect(contactSection.getByRole("link", { name: /GitHub/ })).toHaveAttribute(
+      "href",
+      /github\.com/
+    );
   });
 
-  test("Deve alterar o estado da navegação e seções ao fazer scroll", async ({ page }) => {
+  test("Deve levar o menu até a seção de projetos ao rolar", async ({ page }) => {
     await page.goto("/");
 
     const nav = page.locator("nav").first();
@@ -44,7 +47,8 @@ test.describe("Navegação Principal", () => {
 
     await projectsLink.click();
     await expect(page).toHaveURL(/#projetos$/i);
-    // A seção de projetos usa heading "PROJETOS" (i18n projects.heading)
-    await expect(page.getByText(/PROJETOS/i).first()).toBeVisible();
+    await expect(
+      page.locator("#projetos").getByRole("heading", { name: "Projetos", level: 2 })
+    ).toBeVisible();
   });
 });

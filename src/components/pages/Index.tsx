@@ -1,45 +1,66 @@
 import type React from "react";
-import Hero from "@/components/Hero";
-import Projects from "@/components/Projects";
-import About from "@/components/About";
-import SocialIcons from "@/components/SocialIcons";
+import { Hero } from "@/components/hero/Hero";
+import { HomeAbout } from "@/components/home/HomeAbout";
+import { HomeBlog, type HomePost } from "@/components/home/HomeBlog";
+import { HomeContact } from "@/components/home/HomeContact";
+import { HomeOtherSites } from "@/components/home/HomeOtherSites";
+import { HomeProcess } from "@/components/home/HomeProcess";
+import { HomeProjects } from "@/components/home/HomeProjects";
 import SectionEntrance from "@/components/ui/SectionEntrance";
-import { contactData } from "@/config/site";
-import { useLocale } from "@/hooks/useLocale";
-import { t } from "@/lib/i18n";
 
-const Index: React.FC = () => {
-  const locale = useLocale();
+interface IndexProps {
+  posts: HomePost[];
+}
 
+interface HomeSectionProps {
+  id: string;
+  /** Superfície da seção: g-papel (leitura) ou g-azul (marca). Alternadas como na prancha. */
+  surface: "g-papel" | "g-azul";
+  ruled?: boolean;
+  children: React.ReactNode;
+}
+
+// Cada seção entra uma vez ao aparecer (SectionEntrance) e as ids são as da navegação.
+function HomeSection({ id, surface, ruled = false, children }: HomeSectionProps) {
+  const className = [surface, "home-section", ruled && "home-section--ruled"]
+    .filter(Boolean)
+    .join(" ");
+  return (
+    <SectionEntrance id={id} className={className}>
+      <div className="home-section__inner">
+        <div className="home-section__body">{children}</div>
+      </div>
+    </SectionEntrance>
+  );
+}
+
+const Index: React.FC<IndexProps> = ({ posts }) => {
   return (
     <div className="flex flex-col">
       <SectionEntrance id="hero">
         <Hero />
       </SectionEntrance>
 
-      <SectionEntrance id="projetos">
-        <Projects />
-      </SectionEntrance>
+      <HomeSection id="projetos" surface="g-papel">
+        <HomeProjects />
+        <HomeOtherSites />
+      </HomeSection>
 
-      <SectionEntrance id="about">
-        <About />
-      </SectionEntrance>
+      <HomeSection id="processo" surface="g-papel" ruled>
+        <HomeProcess />
+      </HomeSection>
 
-      <SectionEntrance
-        id="contact"
-        className="pt-8 md:pt-16 lg:pt-24 pb-20 md:pb-32 lg:pb-40 flex flex-col items-center justify-center text-center"
-      >
-        <div className="type-mono mb-8">{t(locale, "cta.ready")}</div>
-        <a
-          href={`mailto:${contactData.email}`}
-          className="type-raster-section text-[12vw] hover:text-accent transition-colors cursor-pointer block pressable"
-          title={t(locale, "cta.lets_talk")}
-        >
-          {t(locale, "cta.lets_talk")}
-        </a>
-        <SocialIcons />
-        <div className="mt-20 type-mono text-white/40">{t(locale, "cta.copyright")}</div>
-      </SectionEntrance>
+      <HomeSection id="sobre" surface="g-azul">
+        <HomeAbout />
+      </HomeSection>
+
+      <HomeSection id="blog" surface="g-papel">
+        <HomeBlog posts={posts} />
+      </HomeSection>
+
+      <HomeSection id="contato" surface="g-azul">
+        <HomeContact />
+      </HomeSection>
     </div>
   );
 };
