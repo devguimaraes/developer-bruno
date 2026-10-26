@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { activeSectionAt, clamp, scrollPercent } from "./scroll";
+import { describe, expect, it } from "vitest";
+import { activeSectionAt, articleProgress, clamp, readLineRatioOf, scrollPercent } from "./scroll";
 
 describe("clamp", () => {
   it("prende o valor no intervalo", () => {
@@ -27,6 +27,52 @@ describe("scrollPercent", () => {
 
   it("um artigo que ainda não chegou ao topo está em 0", () => {
     expect(scrollPercent(-40, 800)).toBe(0);
+  });
+});
+
+describe("readLineRatioOf", () => {
+  it("lê a fração e ignora ausência ou texto inválido", () => {
+    expect(readLineRatioOf("0.7")).toBe(0.7);
+    expect(readLineRatioOf(null)).toBeNull();
+    expect(readLineRatioOf("")).toBeNull();
+    expect(readLineRatioOf("  ")).toBeNull();
+    expect(readLineRatioOf("alto")).toBeNull();
+  });
+});
+
+describe("articleProgress", () => {
+  it("sem linha de leitura, 0 no topo da janela e 100 quando a base chega na base", () => {
+    expect(articleProgress(0, 2000, 800, null)).toBe(0);
+    expect(articleProgress(-600, 2000, 800, null)).toBe(50);
+    expect(articleProgress(-1200, 2000, 800, null)).toBe(100);
+  });
+
+  it("com a linha a 70%, 0 quando o topo do artigo está na linha", () => {
+    const viewport = 1000;
+    expect(articleProgress(viewport * 0.7, 2000, viewport, 0.7)).toBe(0);
+  });
+
+  it("com a linha a 70%, 100 quando a base do artigo chega na mesma linha", () => {
+    const viewport = 1000;
+    const height = 2000;
+    const top = viewport * 0.7 - height;
+    expect(articleProgress(top, height, viewport, 0.7)).toBe(100);
+  });
+
+  it("com a linha a 70%, o meio do percurso é 50", () => {
+    const viewport = 1000;
+    const height = 2000;
+    const top = viewport * 0.7 - height / 2;
+    expect(articleProgress(top, height, viewport, 0.7)).toBe(50);
+  });
+
+  it("antes da linha, o progresso fica em 0", () => {
+    expect(articleProgress(900, 2000, 1000, 0.7)).toBe(0);
+  });
+
+  it("a linha a 70% não usa o topo da janela como zero", () => {
+    expect(articleProgress(0, 2000, 1000, null)).toBe(0);
+    expect(articleProgress(0, 2000, 1000, 0.7)).toBe(35);
   });
 });
 

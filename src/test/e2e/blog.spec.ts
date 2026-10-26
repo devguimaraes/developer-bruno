@@ -49,8 +49,8 @@ test.describe("Fluxo do Blog", () => {
 
     // Botão de voltar (na página de post)
     const backButton = page
-      .getByRole("link", { name: /VOLTAR AO BLOG/i })
-      .or(page.getByRole("link", { name: /back to blog/i }));
+      .locator("main")
+      .getByRole("link", { name: /^(Blog|Voltar para o blog|Back to the blog)$/i });
     await backButton.first().click();
 
     await expect(page).toHaveURL(/.*blog$/);

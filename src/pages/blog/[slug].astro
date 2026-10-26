@@ -1,10 +1,11 @@
 ---
-import Layout from "@/layouts/Layout.astro";
-import BlogPostPageClient from "@/components/pages/BlogPostPage";
 import { getCollection, render } from "astro:content";
-import { generateSlug, toISODate, convertBrazilianDate } from "@/lib/blog";
-import type { BlogPost } from "@/types/blog";
+import BlogPostPageClient from "@/components/pages/BlogPostPage";
+import Layout from "@/layouts/Layout.astro";
+import { convertBrazilianDate, generateSlug, toISODate } from "@/lib/blog";
 import { t } from "@/lib/i18n";
+import type { BlogPost } from "@/types/blog";
+import "@/styles/giro-post.css";
 
 export async function getStaticPaths() {
   const entries = await getCollection("blog");
@@ -39,13 +40,13 @@ export async function getStaticPaths() {
     params: { slug: generateSlug(entry.id) },
     props: {
       post: toBlogPost(entry),
-      next: index < sortedEntries.length - 1 ? toBlogPost(sortedEntries[index + 1]) : null,
+      following: sortedEntries.slice(index + 1, index + 3).map(item => toBlogPost(item)),
       Content,
     },
   }));
 }
 
-const { post, next, Content } = Astro.props;
+const { post, following, Content } = Astro.props;
 ---
 
 <Layout
@@ -54,7 +55,7 @@ const { post, next, Content } = Astro.props;
   ogType="article"
   articlePublishedTime={toISODate(post.date)}
 >
-  <BlogPostPageClient post={post} next={next} client:load>
+  <BlogPostPageClient post={post} following={following} client:load>
     <Content />
   </BlogPostPageClient>
 </Layout>
