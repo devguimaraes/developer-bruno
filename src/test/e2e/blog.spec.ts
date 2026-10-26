@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test.describe("Fluxo do Blog", () => {
   test.beforeEach(async ({ page }) => {
@@ -8,8 +8,8 @@ test.describe("Fluxo do Blog", () => {
   test("Deve listar os posts do blog e permitir navegação para um post específico", async ({
     page,
   }) => {
-    // O h1 da página de blog é "POSTS" (i18n blog.heading)
-    await expect(page.locator("h1").first()).toContainText(/POSTS/i);
+    // O h1 da página de blog é "Blog" (i18n blog.heading)
+    await expect(page.locator("h1").first()).toHaveText("Blog");
 
     // Os cards de post são links <a> com href /blog/{slug}
     const blogCards = page.locator("a[href^='/blog/']");
@@ -20,7 +20,7 @@ test.describe("Fluxo do Blog", () => {
     expect(initialCount).toBeGreaterThan(0);
 
     // Pega o título do primeiro post para comparar depois
-    const firstPostTitle = await blogCards.first().locator("h2").textContent();
+    const firstPostTitle = await blogCards.first().locator("h3").textContent();
 
     const postHref = await blogCards.first().getAttribute("href");
     expect(postHref).toMatch(/^\/blog\/.+/);

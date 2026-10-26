@@ -1,10 +1,14 @@
-import type React from "react";
-import { useEffect, useState, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import type { BlogPost } from "@/types/blog";
-import { t } from "@/lib/i18n";
+import { useEffect, useMemo, useState } from "react";
+import { Giro } from "@/components/brand/Giro";
+import { Button } from "@/components/giro/Button";
+import { Chip } from "@/components/giro/Chip";
+import { PostRow } from "@/components/giro/PostRow";
 import { useLocale } from "@/hooks/useLocale";
-import { BrandIcon } from "@/components/brand";
+import { toISODate } from "@/lib/blog";
+import { parseReadingTime } from "@/lib/blog/content";
+import type { Locale } from "@/lib/i18n";
+import { formatDate, t } from "@/lib/i18n";
+import type { BlogPost } from "@/types/blog";
 
 const POSTS_PER_PAGE = 6;
 
@@ -12,186 +16,124 @@ interface BlogPageProps {
   initialPosts?: BlogPost[];
 }
 
-const BlogPage: React.FC<BlogPageProps> = ({ initialPosts = [] }) => {
+/** Data ISO lida como UTC, para o dia não mudar com o fuso. */
+function dateFromIso(iso: string): Date {
+  return new Date(`${iso}T00:00:00Z`);
+}
+
+function categoriesFrom(posts: BlogPost[]): string[] {
+  const seen = new Set<string>();
+  for (const post of posts) {
+    const category = post.tags[0];
+    if (category) seen.add(category);
+  }
+  return [...seen];
+}
+
+function readingLabel(locale: Locale, post: BlogPost): string {
+  const minutes = post.readingTime ?? parseReadingTime(post.readTime);
+  const readTime =
+    minutes === undefined ? post.readTime : t(locale, "posts.read_time", { n: minutes });
+  // Os posts estão só em português: em inglês, cada linha avisa.
+  const languageNote = t(locale, "posts.card_language_note");
+  return languageNote ? `${readTime} · ${languageNote}` : readTime;
+}
+
+export default function BlogPage({ initialPosts = [] }: BlogPageProps) {
   const locale = useLocale();
   const [visibleCount, setVisibleCount] = useState(POSTS_PER_PAGE);
-  const [activeCategory, setActiveCategory] = useState(t(locale, "blog.all_categories"));
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  // Extrair categorias únicas de tags[0]
-  const categories = useMemo(() => {
-    const seen = new Set<string>();
-    initialPosts.forEach(post => {
-      if (post.tags[0]) seen.add(post.tags[0]);
-    });
-    return Array.from(seen);
-  }, [initialPosts]);
+  const categories = useMemo(() => categoriesFrom(initialPosts), [initialPosts]);
 
-  // Lógica de filtragem por categoria
   const filteredPosts = useMemo(() => {
-    if (activeCategory === t(locale, "blog.all_categories")) return initialPosts;
+    if (activeCategory === null) return initialPosts;
     return initialPosts.filter(post => post.tags[0] === activeCategory);
-  }, [initialPosts, activeCategory, locale]);
+  }, [initialPosts, activeCategory]);
 
   const visiblePosts = filteredPosts.slice(0, visibleCount);
-  const hasMore = visibleCount < filteredPosts.length;
+  const remaining = filteredPosts.length - visiblePosts.length;
+  const isEmpty = activeCategory !== null && filteredPosts.length === 0;
+
+  function selectCategory(category: string | null) {
+    setActiveCategory(category);
+    setVisibleCount(POSTS_PER_PAGE);
+  }
 
   return (
-    <div className="bg-black min-h-screen pt-[72px] sm:pt-[88px] overflow-x-clip">
-      {/* ── Hero Section ──────────────────────────── */}
-      <div className="relative overflow-hidden border-b border-white/[0.08] pt-32 sm:pt-40 pb-16 sm:pb-20 px-6 sm:px-8 md:px-12">
-        {/* Gradient overlay for text readability */}
-        <div className="absolute inset-0 z-[1] pointer-events-none bg-gradient-to-b from-black/60 via-transparent to-black" />
-
-        <div className="max-w-6xl mx-auto relative z-10 flex items-end justify-between gap-10 flex-wrap">
-          <div>
-            <span className="type-mono text-[10px] tracking-[0.38em] text-accent flex items-center gap-2 mb-6 font-bold">
-              <BrandIcon name="documentacao" size={20} decorative />
-              {t(locale, "blog.label")}
-            </span>
-            <h1
-              className="type-raster-hero text-white leading-[0.8] tracking-[-0.04em] mb-8"
-              style={{ fontSize: "clamp(72px, 11vw, 140px)" }}
-            >
-              {t(locale, "blog.heading")}
-            </h1>
-            <p className="font-serif italic text-[19px] leading-[1.55] text-white/70 max-w-[500px]">
-              {t(locale, "blog.description")}
-            </p>
+    <section className="blog-page g-papel">
+      <div className="blog-page__inner">
+        <header className="blog-page__head">
+          <div className="blog-page__intro">
+            <p className="g-eyebrow">{t(locale, "blog.label")}</p>
+            <h1 className="blog-page__title">{t(locale, "blog.heading")}</h1>
+            <p className="blog-page__description">{t(locale, "blog.description")}</p>
           </div>
+          <p className="blog-page__count">
+            <span className="blog-page__count-value">{initialPosts.length}</span>
+            <span className="blog-page__count-label">{t(locale, "blog.total_label")}</span>
+          </p>
+        </header>
 
-          <div className="text-right self-end">
-            <span
-              className="type-raster-section text-white/[0.06] block leading-none tracking-[-0.04em]"
-              style={{ fontSize: "clamp(52px, 7vw, 80px)" }}
+        <fieldset className="blog-page__filters">
+          <legend>{t(locale, "posts.filter.label")}</legend>
+          <Chip selected={activeCategory === null} onClick={() => selectCategory(null)}>
+            {t(locale, "blog.all_categories")}
+          </Chip>
+          {categories.map(category => (
+            <Chip
+              key={category}
+              selected={activeCategory === category}
+              onClick={() => selectCategory(category)}
             >
-              {initialPosts.length}
-            </span>
-            <span className="type-mono text-[9px] tracking-[0.22em] text-white/20">
-              {t(locale, "blog.total_label")}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Sticky Category Filter ────────────────── */}
-      <div className="sticky top-[72px] sm:top-[88px] z-40 bg-black/90 backdrop-blur-xl border-b border-white/[0.08]">
-        <div className="max-w-6xl mx-auto px-6 sm:px-8 md:px-12 flex gap-0 overflow-x-auto scrollbar-hide">
-          {[t(locale, "blog.all_categories"), ...categories].map(cat => {
-            const isActive = cat === activeCategory;
-            const count =
-              cat === t(locale, "blog.all_categories")
-                ? initialPosts.length
-                : initialPosts.filter(p => p.tags[0] === cat).length;
-            return (
-              <button
-                key={cat}
-                type="button"
-                onClick={() => {
-                  setActiveCategory(cat);
-                  setVisibleCount(POSTS_PER_PAGE);
-                }}
-                className="type-mono text-[10px] tracking-[0.20em] py-[18px] px-5 border-none cursor-pointer flex items-center gap-2 whitespace-nowrap transition-all duration-200 outline-none select-none leading-none pressable"
-                style={{
-                  background: isActive ? "hsl(45,87%,57%)" : "transparent",
-                  color: isActive ? "#000" : "rgba(255,255,255,0.55)",
-                  borderBottom: isActive ? "2px solid hsl(45,87%,57%)" : "2px solid transparent",
-                }}
-              >
-                {cat}
-                <span
-                  className={`type-mono text-[9px] px-1.5 py-px leading-[1.4] font-bold ${isActive ? "bg-black/20 text-black/70" : "bg-white/[0.08] text-white/40"}`}
-                >
-                  {count}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* ── Filtered Count Label ──────────────────── */}
-      <div className="max-w-6xl mx-auto px-6 sm:px-8 md:px-12 pt-6 pb-0">
-        <span className="type-mono text-[9px] tracking-[0.22em] text-white/20">
-          {filteredPosts.length} {t(locale, "blog.heading")}
-        </span>
-      </div>
-
-      {/* ── Posts List ────────────────────────────── */}
-      <main className="max-w-6xl mx-auto px-6 sm:px-8 md:px-12 pt-2 pb-40">
-        <AnimatePresence mode="popLayout">
-          {visiblePosts.map((post, index) => (
-            <motion.a
-              key={post.slug}
-              href={`/blog/${post.slug}`}
-              layout
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.25, delay: index * 0.04 }}
-              className="group block py-10 border-b border-white/[0.08] text-white cursor-pointer transition-[background,padding] duration-160 hover:bg-white/[0.018] pressable"
-            >
-              {/* Meta row: badge + date + readtime + CTA */}
-              <div className="flex items-center justify-between gap-6 mb-4">
-                <div className="flex items-center gap-3 flex-wrap">
-                  <span className="type-mono text-[9px] font-bold tracking-[0.20em] bg-accent text-black px-3 py-[3px] leading-none whitespace-nowrap">
-                    {post.tags[0] || "POST"}
-                  </span>
-                  <span className="type-mono text-[9px] tracking-[0.18em] text-white/30 whitespace-nowrap">
-                    {post.date}
-                  </span>
-                  <span className="text-[9px] text-white/20">·</span>
-                  <span className="type-mono text-[9px] tracking-[0.18em] text-white/30 whitespace-nowrap">
-                    {post.readTime}
-                  </span>
-                </div>
-                <span className="type-mono text-[10px] tracking-[0.28em] text-white/30 whitespace-nowrap shrink-0 pb-[3px] border-b border-white/10 group-hover:text-accent group-hover:border-accent transition-colors">
-                  {t(locale, "blog.read_label")}
-                </span>
-              </div>
-
-              {/* Title */}
-              <h2
-                className="type-raster-section text-white/90 group-hover:text-accent transition-colors leading-[0.88] tracking-[-0.02em] mb-4 max-w-3xl"
-                style={{ fontSize: "clamp(22px, 3.8vw, 46px)" }}
-              >
-                {post.title}
-              </h2>
-
-              {/* Summary */}
-              <p className="font-serif italic text-base leading-[1.62] text-white/50 max-w-2xl">
-                {post.excerpt}
-              </p>
-            </motion.a>
+              {category}
+            </Chip>
           ))}
-        </AnimatePresence>
+        </fieldset>
 
-        {filteredPosts.length === 0 && (
-          <div className="text-center py-24 border-2 border-dashed border-white/[0.05]">
-            <p className="type-mono text-white/40 tracking-[0.2em] text-xs">
-              {t(locale, "blog.empty")}
-            </p>
+        {isEmpty ? (
+          <div className="g-empty" role="status">
+            <Giro state="empty" size={72} />
+            <p className="g-empty__title">{t(locale, "blog.empty")}</p>
+            <Button variant="secondary" onClick={() => selectCategory(null)}>
+              {t(locale, "blog.show_all")}
+            </Button>
+          </div>
+        ) : (
+          <div className="blog-page__list">
+            {visiblePosts.map(post => {
+              const iso = toISODate(post.date);
+              return (
+                <PostRow
+                  key={post.slug}
+                  href={`/blog/${post.slug}`}
+                  date={formatDate(locale, dateFromIso(iso))}
+                  dateTime={iso}
+                  title={post.title}
+                  category={post.tags[0] ?? ""}
+                  readTime={readingLabel(locale, post)}
+                  excerpt={post.excerpt}
+                />
+              );
+            })}
           </div>
         )}
 
-        {hasMore && (
-          <div className="flex justify-center mt-12">
-            <button
-              type="button"
-              onClick={() => setVisibleCount(prev => prev + POSTS_PER_PAGE)}
-              className="border-2 border-white/20 text-white hover:border-accent hover:text-accent hover:shadow-brutal px-10 py-4 type-mono uppercase tracking-widest transition-all bg-black pressable"
+        {remaining > 0 && (
+          <div className="blog-page__more">
+            <Button
+              variant="secondary"
+              onClick={() => setVisibleCount(count => count + POSTS_PER_PAGE)}
             >
-              {t(locale, "blog.load_more")} ({filteredPosts.length - visibleCount}{" "}
-              {t(locale, "blog.remaining")})
-            </button>
+              {`${t(locale, "blog.load_more")} (${remaining} ${t(locale, "blog.remaining")})`}
+            </Button>
           </div>
         )}
-      </main>
-    </div>
+      </div>
+    </section>
   );
-};
-
-export default BlogPage;
+}
