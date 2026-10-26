@@ -1,0 +1,260 @@
+/* Hero "O Giro roda" (decisão 52): título com a Anybody esticando, Giro que sai da origem e
+   campo de spinners atrás. Medidas da prancha Hero2-Campo, desktop em 768px ou mais.
+   Cores só pelos papéis --s-* da superfície g-azul. */
+
+.hr-stage {
+  position: relative;
+  isolation: isolate;
+  /* O Giro sai do header no computador e pode passar do topo do palco: o eixo y fica visível. */
+  overflow-x: clip;
+  overflow-y: visible;
+  touch-action: pan-y;
+  min-height: 100svh;
+}
+
+.hr-field {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Celular: nome em mono e idioma no topo. No computador o header já tem os dois. */
+.hr-top {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 4;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--s-line);
+}
+
+.hr-name {
+  color: var(--s-fg);
+  font: var(--text-rotulo);
+  text-decoration: none;
+}
+
+.hr-name:focus-visible {
+  outline: 2px solid var(--s-focus);
+  outline-offset: 3px;
+}
+
+.hr-copy {
+  position: absolute;
+  z-index: 2;
+  top: 140px;
+  right: 16px;
+  left: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.hr-title {
+  margin: 0;
+  color: var(--s-fg);
+  font-family: var(--font-sans);
+  font-size: min(72px, 18.46vw);
+  font-weight: 900;
+  line-height: 0.84;
+  letter-spacing: -0.03em;
+  user-select: none;
+}
+
+.hr-l1,
+.hr-l2 {
+  display: block;
+  white-space: nowrap;
+}
+
+/* Estado antes do JS: letras finas, como no início da prancha. O motor assume depois. */
+.hr-c {
+  font-variation-settings:
+    "wdth" 50,
+    "wght" 250;
+}
+
+.hr-base {
+  display: inline-block;
+  width: 0;
+  height: 0;
+}
+
+.hr-foot {
+  position: absolute;
+  z-index: 2;
+  top: 400px;
+  right: 16px;
+  left: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.hr-lede {
+  margin: 0;
+  color: var(--s-muted);
+  font: var(--text-corpo);
+  text-wrap: pretty;
+}
+
+.hr-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.hr-hud {
+  display: none;
+}
+
+.hr-seat {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.hr-seat circle {
+  fill: none;
+  stroke: var(--s-line-strong);
+  stroke-width: 16px;
+  stroke-dasharray: 4 16;
+  stroke-linecap: round;
+}
+
+/* O Giro que voa. Começa invisível: o Giro da origem aparece até o lançamento. */
+.hr-giro {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 6;
+  box-sizing: border-box;
+  width: 60px;
+  height: 60px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+  opacity: 0;
+  will-change: transform;
+}
+
+.hr-giro:disabled {
+  cursor: default;
+}
+
+.hr-giro:focus-visible {
+  outline: 2px solid var(--s-focus);
+  outline-offset: 6px;
+}
+
+.hr-stage.is-out .hr-giro {
+  opacity: 1;
+}
+
+.hr-giro-in {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-origin: 50% 92%;
+}
+
+.hr-giro .g-giro {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* O Giro da origem esmaece quando o hero o tira do lugar. */
+.g-signature__o .g-giro,
+.g-tabbar__giro .g-giro {
+  transition: opacity 120ms linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .g-signature__o .g-giro,
+  .g-tabbar__giro .g-giro {
+    transition: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .hr-stage {
+    min-height: 812px;
+  }
+
+  .hr-top {
+    display: none;
+  }
+
+  .hr-title {
+    font-size: min(196px, 13.61vw);
+  }
+
+  .hr-copy {
+    top: 44px;
+    right: 64px;
+    left: 64px;
+    gap: 28px;
+  }
+
+  .hr-foot {
+    top: auto;
+    right: auto;
+    bottom: 56px;
+    left: 64px;
+    max-width: 560px;
+    gap: 28px;
+  }
+
+  .hr-lede {
+    font: var(--text-corpo-l);
+  }
+
+  .hr-hud {
+    position: absolute;
+    right: 64px;
+    bottom: 56px;
+    z-index: 2;
+    display: block;
+    color: var(--s-muted);
+    font: var(--text-micro);
+  }
+
+  .hr-hud dl {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 6px 20px;
+    margin: 0;
+  }
+
+  .hr-hud dt {
+    margin: 0;
+  }
+
+  .hr-hud dd {
+    min-width: 13ch;
+    margin: 0;
+    color: var(--s-fg);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .hr-giro {
+    width: 150px;
+    height: 150px;
+  }
+}
