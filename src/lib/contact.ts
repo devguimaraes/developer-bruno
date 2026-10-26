@@ -1,4 +1,4 @@
-import type { TranslationKey } from "@/lib/i18n";
+import { getLocale, type TranslationKey } from "@/lib/i18n";
 
 /** Rota da função de contato na Vercel (issue #54). */
 export const CONTACT_ENDPOINT = "/api/contato";
@@ -45,7 +45,7 @@ export async function submitContact(values: ContactValues): Promise<ContactResul
     const response = await fetch(CONTACT_ENDPOINT, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(values),
+      body: JSON.stringify({ ...values, locale: getLocale() }),
     });
     if (response.ok) return "ok";
     if (response.status === 429) return "rate_limit";

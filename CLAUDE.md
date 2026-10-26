@@ -42,7 +42,7 @@ Workflow, branching (Gitflow: `feature/*` from `develop`, `hotfix/*` from `main`
 
 ## Architecture
 
-Astro 5 site with React 18 islands, TypeScript and Tailwind 3. Portfolio of a Brazilian front-end developer at `devguimaraes.com.br`. Pages are prerendered (`output: 'static'`, `build.format: 'directory'`) with the `@astrojs/vercel` adapter. The only planned server code is one on-demand Vercel function for the contact form (ADR 0002, #54); a route that needs it sets `prerender = false`. There are no other API routes. Navigation between pages goes through Astro's `ClientRouter`, so the page does not reload.
+Astro 5 site with React 18 islands, TypeScript and Tailwind 3. Portfolio of a Brazilian front-end developer at `devguimaraes.com.br`. Pages are prerendered (`output: 'static'`, `build.format: 'directory'`) with the `@astrojs/vercel` adapter. The only server code is the on-demand Vercel function for the contact form (`src/pages/api/contato.ts`, ADR 0002, #54), with `prerender = false`. There are no other API routes. Navigation between pages goes through Astro's `ClientRouter`, so the page does not reload.
 
 ### Astro shell, React content
 

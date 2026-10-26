@@ -1,4 +1,5 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { setLocale } from "@/lib/i18n";
 import {
   CONTACT_ENDPOINT,
   type ContactValues,
@@ -46,9 +47,14 @@ describe("validateContact", () => {
 });
 
 describe("submitContact", () => {
+  beforeEach(() => {
+    setLocale("pt");
+  });
+
   afterEach(() => {
     vi.unstubAllGlobals();
     vi.restoreAllMocks();
+    setLocale("pt");
   });
 
   it("envia POST JSON para o endpoint e devolve ok com 2xx", async () => {
@@ -58,7 +64,24 @@ describe("submitContact", () => {
     await expect(submitContact(valid)).resolves.toBe("ok");
     expect(fetchMock).toHaveBeenCalledWith(
       CONTACT_ENDPOINT,
-      expect.objectContaining({ method: "POST", body: JSON.stringify(valid) })
+      expect.objectContaining({
+        method: "POST",
+        body: JSON.stringify({ ...valid, locale: "pt" }),
+      })
+    );
+  });
+
+  it("manda o idioma atual no corpo", async () => {
+    setLocale("en");
+    const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 200 }));
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(submitContact(valid)).resolves.toBe("ok");
+    expect(fetchMock).toHaveBeenCalledWith(
+      CONTACT_ENDPOINT,
+      expect.objectContaining({
+        body: JSON.stringify({ ...valid, locale: "en" }),
+      })
     );
   });
 
