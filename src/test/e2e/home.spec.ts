@@ -46,20 +46,18 @@ test.describe("Navegação Principal", () => {
     );
     expect(inner).toEqual([]);
 
-    await page.mouse.move(600, 400);
-    await page.mouse.wheel(0, 400);
+    // scrollBy porque o WebKit de celular não tem mouse.wheel. A janela é o único contêiner.
+    await page.evaluate(() => window.scrollBy(0, 400));
     await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(300);
     expect(await page.evaluate(() => document.querySelector("main")?.scrollTop)).toBe(0);
   });
 
   test("Deve levar o menu até a seção de projetos ao rolar", async ({ page }) => {
     await page.goto("/");
+    await page.waitForFunction(() => !document.documentElement.hasAttribute("data-loader"));
+    await page.evaluate(() => window.scrollBy(0, 500));
 
-    const nav = page.locator("nav").first();
-    await expect(nav).toBeVisible();
-
-    await page.mouse.wheel(0, 500);
-
+    // O header (computador) e a barra de abas (celular) têm o link. O getByRole só vê o visível.
     const projectsLink = page.getByRole("link", { name: /^Projetos$/ }).first();
     await expect(projectsLink).toHaveAttribute("href", /#projetos$/i);
 

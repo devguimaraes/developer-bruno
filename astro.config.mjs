@@ -26,6 +26,8 @@ export default defineConfig({
     }),
   ],
   output: 'static',
+  // A barra de dev cobre a barra de abas no celular e intercepta cliques. Só o e2e a desliga.
+  devToolbar: { enabled: process.env.E2E !== '1' },
   markdown: {
     rehypePlugins: [rehypePostContent],
   },

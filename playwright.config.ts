@@ -39,6 +39,9 @@ export default defineConfig({
     {
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
+      // O WebKit do Playwright no Linux desenha canvas por software: o hero leva ~1s por quadro
+      // e a hidratação passa de 15s. No Safari real (GPU) não acontece.
+      timeout: 90 * 1000,
     },
     
     /* Test against mobile viewports. */
@@ -49,12 +52,13 @@ export default defineConfig({
     {
       name: 'Mobile Safari',
       use: { ...devices['iPhone 12'] },
+      timeout: 90 * 1000,
     },
   ],
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'bun run dev -- --host 127.0.0.1 --port 4321',
+    command: 'E2E=1 bun run dev -- --host 127.0.0.1 --port 4321',
     url: 'http://127.0.0.1:4321',
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
