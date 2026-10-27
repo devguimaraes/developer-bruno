@@ -1,4 +1,4 @@
-> **Nota:** Este documento é histórico. Os componentes PixelLoader, GlassSurface, Magnetic, LatestPosts, InfoBar, EngineeringPractices, ShuffleText e BorderGlow foram removidos na limpeza de Jul/2026.
+> **Nota:** Este documento é histórico e descreve a identidade anterior (dark, brutalista), substituída pela Identidade Giro na v2.0.0. A fonte de verdade agora é `docs/adr/0001-identidade-visual-giro.md`, `docs/adr/0002-astro-com-funcao-na-vercel.md`, `GLOSSARY.md` e `src/styles/giro.css`. Os componentes PixelLoader, GlassSurface, Magnetic, LatestPosts, InfoBar, EngineeringPractices, ShuffleText e BorderGlow já tinham sido removidos na limpeza de Jul/2026.
 # Guia de Design Atual
 
 ## Objetivo
