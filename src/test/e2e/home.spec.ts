@@ -34,6 +34,24 @@ test.describe("Navegação Principal", () => {
     );
   });
 
+  test("Deve rolar só a janela, sem contêiner de rolagem dentro das seções", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator(".hr-stage")).toBeVisible();
+
+    const inner = await page.evaluate(() =>
+      Array.from(document.querySelectorAll("body *"))
+        .filter(el => el.tagName !== "TEXTAREA")
+        .filter(el => /(auto|scroll)/.test(getComputedStyle(el).overflowY))
+        .map(el => el.tagName)
+    );
+    expect(inner).toEqual([]);
+
+    await page.mouse.move(600, 400);
+    await page.mouse.wheel(0, 400);
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(300);
+    expect(await page.evaluate(() => document.querySelector("main")?.scrollTop)).toBe(0);
+  });
+
   test("Deve levar o menu até a seção de projetos ao rolar", async ({ page }) => {
     await page.goto("/");
 

@@ -8,8 +8,9 @@
   /* O Giro sai do header no computador e pode passar do topo do palco: o eixo y fica visível. */
   overflow-x: clip;
   overflow-y: visible;
-  touch-action: pan-y;
-  min-height: 100svh;
+  touch-action: pan-y pinch-zoom;
+  /* Conteúdo absoluto termina em 655px; os 760px deixam os botões acima da barra de abas. */
+  min-height: max(100svh, 760px);
 }
 
 .hr-field {

@@ -31,7 +31,8 @@
     padding: 0;
     background-color: #000;
     color: #fff;
-    overflow-x: hidden;
+    /* clip não cria contêiner de rolagem; hidden faria html, body e main rolarem por conta própria. */
+    overflow-x: clip;
   }
 
   html {
@@ -40,7 +41,7 @@
   }
 
   main {
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   body {
