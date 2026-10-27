@@ -148,6 +148,8 @@ export function createSpinnerField(
     },
 
     paint(t) {
+      // Palco ainda sem tamanho: o WebKit lança InvalidStateError ao desenhar canvas de largura 0.
+      if (buffer.width === 0 || buffer.height === 0 || cs === 0) return;
       bufferCtx.clearRect(0, 0, buffer.width, buffer.height);
       // Ondas separáveis: uma por coluna, uma por linha e uma por diagonal, calculadas a cada quadro.
       const sc = new Float32Array(cols);
@@ -189,6 +191,7 @@ export function createSpinnerField(
     },
 
     present(hole) {
+      if (buffer.width === 0 || buffer.height === 0) return;
       ctx.globalAlpha = 1;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(buffer, 0, 0);
