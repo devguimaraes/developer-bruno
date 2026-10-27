@@ -13,7 +13,7 @@ const valid: ContactValues = {
   email: "ana@empresa.com.br",
   type: "website",
   message: "Preciso de um site.",
-  website: "",
+  hp_extra: "",
 };
 
 describe("validateContact", () => {
@@ -39,6 +39,17 @@ describe("validateContact", () => {
     expect(validateContact({ ...valid, email: "ana.empresa.com" }).email).toBe(
       "contact.form.error.email_invalid"
     );
+  });
+
+  it("recusa os e-mails que o servidor também recusa", () => {
+    for (const email of ["a@b.c", "a@x..com", "a..b@x.com", "a@b.com.", "x@y.z"]) {
+      expect(validateContact({ ...valid, email }).email, email).toBe(
+        "contact.form.error.email_invalid"
+      );
+    }
+    expect(
+      validateContact({ ...valid, email: "ana.silva+x@empresa.com.br" }).email
+    ).toBeUndefined();
   });
 
   it("não exige tipo de projeto", () => {

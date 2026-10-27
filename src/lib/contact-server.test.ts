@@ -4,6 +4,7 @@ import {
   clearContactRateLimit,
   createResendMailSender,
   handleContactSubmission,
+  isSameOriginRequest,
   resolveResendApiKey,
 } from "./contact-server";
 
@@ -13,7 +14,7 @@ const validBody = {
   type: "website",
   message: "Preciso de um site.",
   locale: "pt",
-  website: "",
+  hp_extra: "",
 };
 
 const brunoText =
@@ -54,13 +55,37 @@ describe("handleContactSubmission", () => {
     expect(send).not.toHaveBeenCalled();
   });
 
+  it("rejeita nome, mensagem e campo armadilha acima do limite", async () => {
+    const send = sender();
+    const cases: unknown[] = [
+      { ...validBody, name: "a".repeat(121) },
+      { ...validBody, message: "a".repeat(5001) },
+      { ...validBody, hp_extra: "a".repeat(201) },
+    ];
+    for (const body of cases) {
+      const result = await handleContactSubmission({ body, ip: "203.0.113.9", send });
+      expect(result).toEqual({ status: 400, body: { ok: false } });
+    }
+    expect(send).not.toHaveBeenCalled();
+  });
+
+  it("se só a confirmação falha, responde ok para o reenvio não duplicar a mensagem", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => undefined);
+    const send = sender()
+      .mockResolvedValueOnce(undefined)
+      .mockRejectedValueOnce(new Error("confirmation down"));
+    const result = await handleContactSubmission({ body: validBody, ip: "203.0.113.10", send });
+    expect(result).toEqual({ status: 200, body: { ok: true } });
+    expect(send).toHaveBeenCalledTimes(2);
+  });
+
   it("campo armadilha preenchido não envia e não conta no limite", async () => {
     const send = sender();
     const ip = "203.0.113.5";
 
     for (let attempt = 0; attempt < 5; attempt += 1) {
       const trapped = await handleContactSubmission({
-        body: { ...validBody, website: "https://spam.example" },
+        body: { ...validBody, hp_extra: "https://spam.example" },
         ip,
         send,
       });
@@ -212,5 +237,22 @@ describe("resolveResendApiKey", () => {
     expect(resolveResendApiKey("", "re_file")).toBe("re_file");
     expect(resolveResendApiKey(undefined, undefined)).toBeUndefined();
     expect(resolveResendApiKey("", "")).toBeUndefined();
+  });
+});
+
+describe("isSameOriginRequest", () => {
+  const url = "https://devguimaraes.com.br/api/contato";
+
+  it("aceita a própria origem, inclusive em preview e no dev", () => {
+    expect(isSameOriginRequest("https://devguimaraes.com.br", url)).toBe(true);
+    expect(isSameOriginRequest("http://localhost:4321", "http://localhost:4321/api/contato")).toBe(
+      true
+    );
+  });
+
+  it("recusa outro domínio, origem ausente e origem inválida", () => {
+    expect(isSameOriginRequest("https://evil.example", url)).toBe(false);
+    expect(isSameOriginRequest(null, url)).toBe(false);
+    expect(isSameOriginRequest("not a url", url)).toBe(false);
   });
 });

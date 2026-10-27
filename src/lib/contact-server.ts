@@ -8,6 +8,9 @@ const CONTACT_FROM = "contato@devguimaraes.com.br";
 const RATE_LIMIT_MAX = 5;
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 
+/** O corpo legítimo cabe em ~6 KB (mensagem de até 5000 caracteres). */
+export const CONTACT_MAX_BODY_BYTES = 16 * 1024;
+
 const CONTACT_TYPES = ["website", "landing_page", "store", "app", "other"] as const;
 
 const TYPE_LABEL_KEYS = {
@@ -19,12 +22,12 @@ const TYPE_LABEL_KEYS = {
 } as const satisfies Record<ContactType, TranslationKey>;
 
 const contactRequestSchema = z.object({
-  name: z.string().trim().min(1),
-  email: z.string().trim().pipe(z.email()),
+  name: z.string().trim().min(1).max(120),
+  email: z.string().trim().max(254).pipe(z.email()),
   type: z.enum(CONTACT_TYPES).nullable(),
-  message: z.string().trim().min(1),
+  message: z.string().trim().min(1).max(5000),
   locale: z.enum(["pt", "en"]),
-  website: z.string(),
+  hp_extra: z.string().max(200),
 });
 
 type ContactRequest = z.infer<typeof contactRequestSchema>;
@@ -47,18 +50,28 @@ export type ContactSubmissionResult =
 // então o limite não é global entre as funções.
 const hitsByIp = new Map<string, number[]>();
 
+/** Só aceita envio vindo de uma página do próprio site, para um form em outro domínio não disparar e-mails. */
+export function isSameOriginRequest(origin: string | null, requestUrl: string): boolean {
+  if (!origin) return false;
+  try {
+    return new URL(origin).host === new URL(requestUrl).host;
+  } catch {
+    return false;
+  }
+}
+
 export function clearContactRateLimit(): void {
   hitsByIp.clear();
 }
 
 function takeContactSlot(ip: string, now: number): boolean {
-  const recent = (hitsByIp.get(ip) ?? []).filter(
-    timestamp => now - timestamp < RATE_LIMIT_WINDOW_MS
-  );
-  if (recent.length >= RATE_LIMIT_MAX) {
-    hitsByIp.set(ip, recent);
-    return false;
+  for (const [key, timestamps] of hitsByIp) {
+    if (timestamps.every(timestamp => now - timestamp >= RATE_LIMIT_WINDOW_MS)) {
+      hitsByIp.delete(key);
+    }
   }
+  const recent = hitsByIp.get(ip) ?? [];
+  if (recent.length >= RATE_LIMIT_MAX) return false;
   recent.push(now);
   hitsByIp.set(ip, recent);
   return true;
@@ -164,7 +177,7 @@ export async function handleContactSubmission(input: {
   }
 
   // Honeypot preenchido: responde ok, não envia e não conta no limite.
-  if (parsed.data.website.trim() !== "") {
+  if (parsed.data.hp_extra.trim() !== "") {
     return { status: 200, body: { ok: true } };
   }
 
@@ -172,13 +185,19 @@ export async function handleContactSubmission(input: {
     return { status: 429, body: { ok: false } };
   }
 
+  const [bruno, confirmation] = composeContactMails(parsed.data);
   try {
-    const [bruno, confirmation] = composeContactMails(parsed.data);
     await input.send(bruno);
-    await input.send(confirmation);
-    return { status: 200, body: { ok: true } };
   } catch (error) {
     logContactFailure(error);
     return { status: 500, body: { ok: false } };
   }
+
+  // O aviso ao Bruno já saiu. Falhar a confirmação não pode virar erro: o reenvio duplicaria a mensagem.
+  try {
+    await input.send(confirmation);
+  } catch (error) {
+    logContactFailure(error);
+  }
+  return { status: 200, body: { ok: true } };
 }

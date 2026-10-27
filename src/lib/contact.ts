@@ -11,7 +11,7 @@ export interface ContactValues {
   type: ContactType | null;
   message: string;
   /** Campo armadilha: humano deixa vazio. Vai junto para o servidor descartar bots. */
-  website: string;
+  hp_extra: string;
 }
 
 export type ContactField = "name" | "email" | "message";
@@ -21,7 +21,11 @@ export type ContactErrors = Partial<Record<ContactField, TranslationKey>>;
 
 export type ContactResult = "ok" | "rate_limit" | "error";
 
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+/** Mais estrita que "tem @ e ponto", para não aceitar o que o servidor recusa (ex.: a@b.c, a..b@x.com). */
+const EMAIL_PATTERN =
+  /^(?!.*\.\.)(?:[^\s@.]|[^\s@.][^\s@]*[^\s@.])@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,}$/;
+
+const SUBMIT_TIMEOUT_MS = 15_000;
 
 export function validateContact(values: ContactValues): ContactErrors {
   const errors: ContactErrors = {};
@@ -46,6 +50,7 @@ export async function submitContact(values: ContactValues): Promise<ContactResul
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...values, locale: getLocale() }),
+      signal: AbortSignal.timeout(SUBMIT_TIMEOUT_MS),
     });
     if (response.ok) return "ok";
     if (response.status === 429) return "rate_limit";

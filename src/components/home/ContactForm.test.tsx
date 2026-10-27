@@ -17,7 +17,7 @@ function fillValid(container: HTMLElement) {
   fireEvent.change(screen.getByLabelText("mensagem"), {
     target: { value: "Preciso de um site para a loja." },
   });
-  const honeypot = container.querySelector<HTMLInputElement>('input[name="website"]');
+  const honeypot = container.querySelector<HTMLInputElement>('input[name="hp_extra"]');
   expect(honeypot).not.toBeNull();
 }
 
@@ -50,7 +50,7 @@ describe("ContactForm", () => {
 
   it("campo armadilha fica fora da tela e fora da tabulação", () => {
     const { container } = render(<ContactForm />);
-    const honeypot = container.querySelector<HTMLInputElement>('input[name="website"]');
+    const honeypot = container.querySelector<HTMLInputElement>('input[name="hp_extra"]');
     expect(honeypot).toHaveAttribute("tabindex", "-1");
     expect(honeypot).toHaveAttribute("aria-hidden", "true");
     expect(honeypot).toHaveClass("g-sr");
@@ -90,7 +90,7 @@ describe("ContactForm", () => {
         name: "Ana Souza",
         email: "ana@empresa.com.br",
         message: "Preciso de um site para a loja.",
-        website: "",
+        hp_extra: "",
       })
     );
     expect(

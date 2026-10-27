@@ -28,7 +28,7 @@ const EMPTY_VALUES: ContactValues = {
   email: "",
   type: null,
   message: "",
-  website: "",
+  hp_extra: "",
 };
 
 /** Estado do envio. "ok" da API vira "sent" na tela. */
@@ -155,12 +155,12 @@ export function ContactForm() {
       <input
         className="g-sr"
         type="text"
-        name="website"
+        name="hp_extra"
         tabIndex={-1}
         autoComplete="off"
         aria-hidden="true"
-        value={values.website}
-        onChange={event => updateValues({ ...values, website: event.target.value })}
+        value={values.hp_extra}
+        onChange={event => updateValues({ ...values, hp_extra: event.target.value })}
       />
 
       <div className="home-form__submit">
