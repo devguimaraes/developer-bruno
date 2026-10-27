@@ -48,9 +48,11 @@ Astro 5 site with React 18 islands, TypeScript and Tailwind 3. Portfolio of a Br
 
 Astro pages in `src/pages/` are thin wrappers that hydrate one React component from `src/components/pages/` (or `src/components/projects/CaseStudy.tsx`) via `client:load`. Routes: `index`, `blog/index`, `blog/[slug]`, `projetos/[slug]`, `404`. `dev/[page]` is generated only by the dev server.
 
-`src/layouts/Layout.astro` is the only layout. Besides SEO (OG, Twitter, canonical, `noindex` on Vercel previews), Plausible (prod only) and `<ClientRouter />` in the head, it mounts `Navigation`, `Footer` (`client:visible`) and the `<slot />` inside `<main>`. Home sections are wrapped in `SectionEntrance` (`src/components/ui/SectionEntrance.tsx`) in `components/pages/Index.tsx`; the anchors `#hero`, `#projetos`, `#about`, `#contact` are used by Navigation and e2e tests. The marked comment at the end of `<body>` is where the scroll island and the tab bar go, with `transition:persist` so they survive page changes (not built yet).
+`src/layouts/Layout.astro` is the only layout. Besides SEO (OG, Twitter, canonical, `noindex` on Vercel previews), Plausible (prod only) and `<ClientRouter />` in the head, the body mounts `LoadingScreen`, `SiteHeader` (desktop), the `<slot />` inside `<main>`, `SiteFooter` (`client:visible`), and the `ScrollIsland` (desktop) and `TabBar` (mobile) with `transition:persist`, so they survive page changes. Nav code lives in `src/components/nav/` (`sections.ts` has the section ids and the tab list). Home sections are wrapped in `SectionEntrance` (`src/components/ui/SectionEntrance.tsx`) in `components/pages/Index.tsx`; the anchors are `#hero`, `#projetos`, `#processo`, `#sobre`, `#blog`, `#contato`, used by the nav and the e2e tests.
 
-`<slot />` (the page's island) sits in `<main>`, alongside `Navigation` and `Footer`. Each `client:*` component is its own island, so state shared across islands goes through module-level stores (see i18n below). With `ClientRouter`, islands are remounted on each navigation unless they use `transition:persist`. Scripts in pages must also run again on `astro:page-load`, not only on first load.
+The page's island sits in `<slot />` inside `<main>`. Each `client:*` component is its own island, so state shared across islands goes through module-level stores (see i18n below). With `ClientRouter`, islands are remounted on each navigation unless they use `transition:persist`. Scripts in pages must also run again on `astro:page-load`, not only on first load. Menus kept alive by `transition:persist` must close themselves on `astro:before-preparation` (see `useMenuDismiss`).
+
+Scroll: never put `overflow-x: hidden` on `html`, `body` or `main`. It turns them into scroll containers (`overflow-y` becomes `auto`), which causes scroll inside sections and breaks `position: sticky`. Use `overflow-x: clip`. An e2e test in `home.spec.ts` guards this.
 
 Transition for the case page: `src/pages/projetos/[slug].astro` has a global style where, on mobile only and without reduced motion, the case slides in from the right. The style exists only on that page, so the rule applies to `/projetos/*` destinations.
 
@@ -66,7 +68,7 @@ Unit tests alias `astro:content` to `src/test/__mocks__/astro-content.ts` (`vite
 
 ### Other data and config
 
-- `src/data/projects.ts`, `skills.ts`: typed static data feeding Projects and case study pages.
+- `src/data/projects.ts`: typed static data feeding the home cases and the case study pages.
 - `src/config/site.ts`: SEO config, Brazilian market keywords, contact data, performance budgets (300KB JS, 500KB images, 50KB CSS, 1MB total, enforced for media by `check:media-budget`).
 - Giro mascot and states (ADR 0001): components in `src/components/brand/` (`Giro.tsx`, states in `giro-states.ts`). It is animated SVG with Framer Motion, one variant per state. Do not add Rive or Lottie.
 - Motion: Framer Motion is the only animation library. GSAP, Lenis and the glass effect were removed, and ADR 0001 says not to bring them back without revisiting it. Animated components should honor `useReducedMotion`.
@@ -75,7 +77,7 @@ Unit tests alias `astro:content` to `src/test/__mocks__/astro-content.ts` (`vite
 
 Identity Giro (ADR 0001) replaces the old dark, neo-brutalist theme. Source of truth: the "Giro" Design System artifact linked in the ADR. In code, tokens and surfaces live in `src/styles/giro.css`: `g-papel` (reading), `g-azul` (brand) and `g-tinta` (dark). Pages alternate brand and reading surfaces. There is no dark mode at launch.
 
-Fonts are Anybody (`sans`) and Geist Mono (`mono`), bundled in `src/assets/fonts/` and set as CSS variables in `giro.css`. Tailwind `fontFamily` only maps those two. Check `tailwind.config.ts` and `giro.css` before using a token. The legacy `brutal` palette and `shadow-brutal*` classes still exist and a few components still use them, but do not use them in new code. The docs `docs/guia-de-design-atual.md` and `docs/identidade-visual-atual.md` describe the previous identity and are historical.
+Fonts are Anybody (`sans`) and Geist Mono (`mono`), bundled in `src/assets/fonts/` and set as CSS variables in `giro.css`. Tailwind `fontFamily` only maps those two. Check `tailwind.config.ts` and `giro.css` before using a token. The legacy `brutal` palette, shadcn tokens and `shadow-brutal*` classes were removed. The docs `docs/guia-de-design-atual.md` and `docs/identidade-visual-atual.md` describe the previous identity and are historical.
 
 ## Testing
 
@@ -88,7 +90,7 @@ Fonts are Anybody (`sans`) and Geist Mono (`mono`), bundled in `src/assets/fonts
 ## Related documentation
 
 - `AGENTS.md`: structure, naming, Gitflow, commit and PR rules
-- `GEMINI.md`, `TESTING.md`, `CONTRIBUTING.md`: overlap with this file; GEMINI.md is a copy-style overview for another tool
+- `TESTING.md`, `CONTRIBUTING.md`: overlap with this file
 - `docs/`: design guides, branding, audits, plans. Many are historical, so verify against code.
 
 ## Agent skills
