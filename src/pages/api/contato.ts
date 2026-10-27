@@ -1,5 +1,9 @@
 import type { APIRoute } from "astro";
-import { createResendMailSender, handleContactSubmission } from "@/lib/contact-server";
+import {
+  createResendMailSender,
+  handleContactSubmission,
+  resolveResendApiKey,
+} from "@/lib/contact-server";
 
 /** Função sob demanda na Vercel. O resto do site continua pré-gerado. */
 export const prerender = false;
@@ -29,7 +33,10 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     const result = await handleContactSubmission({
       body,
       ip: clientAddress,
-      send: createResendMailSender(process.env.RESEND_API_KEY),
+      send: createResendMailSender(
+        // No `astro dev` o .env entra em import.meta.env. Na Vercel a chave chega em process.env.
+        resolveResendApiKey(process.env.RESEND_API_KEY, import.meta.env.RESEND_API_KEY)
+      ),
     });
     return jsonResponse(result.body, result.status);
   } catch (error) {

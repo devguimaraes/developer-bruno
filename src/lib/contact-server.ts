@@ -119,6 +119,15 @@ function logContactFailure(error: unknown): void {
   console.error("Failed to send contact email:", redact(raw, undefined));
 }
 
+export function resolveResendApiKey(
+  processValue: string | undefined,
+  fileValue: string | undefined
+): string | undefined {
+  if (processValue) return processValue;
+  if (fileValue) return fileValue;
+  return undefined;
+}
+
 export function createResendMailSender(apiKey: string | undefined): ContactMailSender {
   return async mail => {
     if (!apiKey) {
