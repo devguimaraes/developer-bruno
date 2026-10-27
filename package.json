@@ -27,7 +27,6 @@
     "@astrojs/sitemap": "^3.7.2",
     "@astrojs/tailwind": "^6.0.2",
     "@astrojs/vercel": "^9.0.5",
-    "@icons-pack/react-simple-icons": "^13.8.0",
     "astro": "^5.18.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.24",
@@ -36,7 +35,6 @@
     "react-dom": "^18.3.1",
     "resend": "^6.34.1",
     "tailwind-merge": "^2.6.0",
-    "tailwindcss-animate": "^1.0.7",
     "zod": "^4.6.7"
   },
   "devDependencies": {

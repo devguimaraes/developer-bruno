@@ -15,10 +15,6 @@ export const siteConfig: SiteConfig = {
   github: "https://github.com/devguimaraes",
   linkedin: "https://www.linkedin.com/in/bcguimaraes/",
   avatar: "/avatar.webp",
-  cv: {
-    url: "/cv-bruno-guimaraes.pdf",
-    filename: "Bruno-Guimaraes-CV.pdf",
-  },
   seo: {
     image: "/og-image.png",
     siteName: "Bruno Guimarães Portfolio",

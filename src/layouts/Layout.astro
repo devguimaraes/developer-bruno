@@ -94,11 +94,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta property="twitter:description" content={finalDesc} />
     <meta property="twitter:image" content={finalImage} />
 
-    <!-- Preconnects -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
-
     <!-- Performance/Analytics scripts base (como Plausible se houver) -->
     { import.meta.env.PROD && (
       <script defer data-domain="devguimaraes.com.br" src="https://plausible.io/js/script.js"></script>
