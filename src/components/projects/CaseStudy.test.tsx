@@ -33,6 +33,10 @@ describe("CaseStudy", () => {
       expect(screen.getByText(item)).toBeInTheDocument();
     }
     expect(container.querySelector(".g-stat")).toBeNull();
+    expect(container.querySelector(".case-hero__photo img")).toHaveAttribute(
+      "fetchpriority",
+      "high"
+    );
   });
 
   it("omite a lista de necessidades quando needs é null", () => {

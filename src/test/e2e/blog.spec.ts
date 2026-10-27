@@ -43,17 +43,20 @@ test.describe("Fluxo do Blog", () => {
   });
 
   test("Deve permitir voltar da página do post para a listagem", async ({ page }) => {
-    // Cards são links <a>, não <article>
-    const blogCard = page.locator("a[href^='/blog/']").first();
-    await blogCard.click();
+    // A primeira visita cobre a página com a tela de carregamento. O clique só vale depois dela.
+    await page.waitForFunction(() => !document.documentElement.hasAttribute("data-loader"));
 
-    // Botão de voltar (na página de post)
+    const blogCard = page.locator("main a[href^='/blog/']").first();
+    await blogCard.click();
+    await expect(page).toHaveURL(/\/blog\/.+/);
+
+    // No computador o link é "Blog". No celular, "Voltar para o blog".
     const backButton = page
       .locator("main")
       .getByRole("link", { name: /^(Blog|Voltar para o blog|Back to the blog)$/i });
-    await backButton.first().click();
+    await backButton.click();
 
-    await expect(page).toHaveURL(/.*blog$/);
+    await expect(page).toHaveURL(/\/blog\/?$/);
   });
 
   test("Deve exibir erro 404 para posts inexistentes", async ({ page }) => {

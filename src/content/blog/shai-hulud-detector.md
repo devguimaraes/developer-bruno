@@ -78,7 +78,7 @@ Se o script detectar pacotes comprometidos:
 1. **Remova `node_modules`**: Delete a pasta `node_modules`.
 2. **Limpe o Cache**: Execute `npm cache clean --force` (ou equivalente).
 3. **Fixe Versões**: Use versões exatas no `package.json` para evitar atualizações automáticas para versões maliciosas.
-4. **Regere o Lockfile**: Delete o arquivo de lock e instale as dependências novamente.
+4. **Regenere o lockfile**: Delete o arquivo de lock e instale as dependências novamente.
 5. **Rotacione Segredos**: Por precaução, troque tokens e chaves de API que possam ter sido expostos.
 
 Mantenha seus projetos seguros! 🔒

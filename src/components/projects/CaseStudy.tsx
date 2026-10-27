@@ -193,7 +193,8 @@ export default function CaseStudy({ project }: CaseStudyProps) {
             ))}
           </dl>
           <figure className="case-hero__photo">
-            <img src={photo} alt={project.title} fetchPriority="high" decoding="async" />
+            {/* React 18 não repassa fetchPriority. O atributo em minúsculo entra no HTML. */}
+            <img src={photo} alt={project.title} decoding="async" {...{ fetchpriority: "high" }} />
           </figure>
         </header>
 

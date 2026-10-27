@@ -1,5 +1,12 @@
-import { motion } from "framer-motion";
-import { type ReactNode, type RefObject, useLayoutEffect, useMemo, useRef, useState } from "react";
+import {
+  type ReactNode,
+  type RefObject,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { createPortal } from "react-dom";
 import { ArrowLink } from "@/components/giro/Button";
 import { CodeBlock } from "@/components/giro/CodeBlock";
@@ -8,7 +15,6 @@ import { PostRow } from "@/components/giro/PostRow";
 import { PostToc } from "@/components/giro/PostToc";
 import { siteConfig } from "@/config/site";
 import { useLocale } from "@/hooks/useLocale";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { toISODate } from "@/lib/blog";
 import { parseReadingTime } from "@/lib/blog/content";
 import { type ArticleHeading, headingsFromMarkdown } from "@/lib/blog/headings";
@@ -32,8 +38,9 @@ interface CodeRecord {
   target: HTMLElement;
 }
 
-const RESOLVE_EASE: [number, number, number, number] = [0.2, 0.8, 0.2, 1];
-const RESOLVE = { duration: 0.4, ease: RESOLVE_EASE };
+// No servidor, useLayoutEffect só avisa e não roda. No cliente ele mede e move o DOM antes da pintura.
+const useIsomorphicLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
+
 const FOLLOWING_LIMIT = 2;
 
 function bareLabel(label: string): string {
@@ -98,7 +105,7 @@ function useCodeBlocks(
 ): CodeRecord[] {
   const [records, setRecords] = useState<CodeRecord[]>([]);
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const root = articleRef.current?.querySelector<HTMLElement>("[data-markdown-content]");
     // children é o markdown desta render. A lista redecora o código quando ele troca.
     if (!root || children == null) return;
@@ -172,7 +179,7 @@ function useArticleReading(
   const [progress, setProgress] = useState(0);
   const [activeId, setActiveId] = useState<string | null>(null);
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const measure = () => {
       const article = articleRef.current;
       if (!article) return;
@@ -213,7 +220,7 @@ function PostCode({ record }: { record: CodeRecord }) {
   const locale = useLocale();
   const host = useRef<HTMLDivElement>(null);
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const destination = host.current?.querySelector("pre code");
     const source = record.source;
     if (!destination) return;
@@ -247,7 +254,6 @@ function PostCode({ record }: { record: CodeRecord }) {
 
 const BlogPostPage = ({ post, following = [], children }: BlogPostPageClientProps) => {
   const locale = useLocale();
-  const reducedMotion = useReducedMotion();
   const articleRef = useRef<HTMLElement>(null);
   const parsed = useMemo(() => headingsFromMarkdown(post.content), [post.content]);
   const { items, progress, activeId } = useArticleReading(articleRef, parsed);
@@ -272,14 +278,7 @@ const BlogPostPage = ({ post, following = [], children }: BlogPostPageClientProp
 
         <header className="post-header">
           <p className="g-eyebrow">{t(locale, "post.kicker", { category })}</p>
-          <motion.h1
-            className="titulo-1 post-title"
-            initial={reducedMotion ? false : { opacity: 0, y: 12 }}
-            animate={reducedMotion ? undefined : { opacity: 1, y: 0 }}
-            transition={RESOLVE}
-          >
-            {post.title}
-          </motion.h1>
+          <h1 className="titulo-1 post-title">{post.title}</h1>
           {languageNote ? <p className="rotulo post-language-note">{languageNote}</p> : null}
           {post.excerpt ? <p className="corpo-l post-lead">{post.excerpt}</p> : null}
           <div className="post-meta">
