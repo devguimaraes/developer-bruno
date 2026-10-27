@@ -6,9 +6,9 @@ describe("HOME_SECTIONS", () => {
     expect(SECTION_IDS).toEqual(["projetos", "processo", "sobre", "blog", "contato"]);
   });
 
-  it("o menu da ilha leva só Projetos, Processo e Sobre", () => {
+  it("o menu da ilha leva as cinco seções, para o computador não ficar sem Blog e Contato", () => {
     const inMenu = HOME_SECTIONS.filter(section => section.inMenu).map(section => section.id);
-    expect(inMenu).toEqual(["projetos", "processo", "sobre"]);
+    expect(inMenu).toEqual(["projetos", "processo", "sobre", "blog", "contato"]);
   });
 });
 

@@ -8,9 +8,9 @@ import { useLocale } from "@/hooks/useLocale";
 import { t } from "@/lib/i18n";
 import { getPageGiro, subscribePageGiro } from "@/lib/page-giro";
 import { SectionMenu } from "./SectionMenu";
-import { useEscapeToClose } from "./useEscapeToClose";
+import { useMenuDismiss } from "./useMenuDismiss";
 import { resolveNavGiro, useGiroEggs } from "./useGiroEggs";
-import { HOME_SECTIONS, SECTION_IDS, TABS, tabForLocation } from "./sections";
+import { HOME_SECTIONS, SECTION_IDS, SECTION_TAB, TABS, tabForLocation } from "./sections";
 import type { TabId, TabItem } from "./sections";
 import { LOOK_PX, useScrollState } from "./useScrollState";
 
@@ -23,8 +23,8 @@ const TAB_ICONS: Readonly<Record<TabId, LucideIcon>> = {
 
 const TOGGLE_ID = "tab-bar-toggle";
 const MENU_ID = "tab-bar-menu";
-// A aba Projetos já está na barra, então o menu do Giro traz só Processo e Sobre.
-const TAB_MENU = HOME_SECTIONS.filter(section => section.inMenu && section.id !== "projetos");
+// Projetos, Blog e Contato já têm aba, então o menu do Giro traz só Processo e Sobre.
+const TAB_MENU = HOME_SECTIONS.filter(section => section.inMenu && !(section.id in SECTION_TAB));
 
 export interface TabBarViewProps {
   /** 0 a 100, lido do artigo ou da página. */
@@ -127,7 +127,7 @@ export function TabBar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const closeMenu = useCallback(() => setMenuOpen(false), []);
-  useEscapeToClose(menuOpen, closeMenu, TOGGLE_ID);
+  useMenuDismiss(menuOpen, closeMenu, TOGGLE_ID, MENU_ID);
 
   return (
     <TabBarView

@@ -101,13 +101,14 @@ describe("ScrollIslandView", () => {
     expect(closeToggle.getAttribute("aria-expanded")).toBe("true");
   });
 
-  it("menu aberto lista Projetos, Processo e Sobre num diálogo", () => {
+  it("menu aberto lista as cinco seções num diálogo e leva o foco ao primeiro item", () => {
     render(<ScrollIslandView progress={10} label="// projetos" direction={0} menuOpen />);
     const dialog = screen.getByRole("dialog");
     const items = within(dialog)
       .getAllByRole("link")
       .map(link => link.textContent);
-    expect(items).toEqual(["Projetos", "Processo", "Sobre"]);
+    expect(items).toEqual(["Projetos", "Processo", "Sobre", "Blog", "Contato"]);
+    expect(document.activeElement).toBe(within(dialog).getAllByRole("link")[0]);
   });
 
   it("marca a seção atual no menu com aria-current", () => {
@@ -203,6 +204,38 @@ describe("ScrollIsland", () => {
     fireEvent.keyDown(document, { key: "Escape" });
     expect(screen.queryByRole("dialog")).toBeNull();
     expect(document.activeElement).toBe(document.getElementById("scroll-island-toggle"));
+  });
+
+  it("clique fora, troca de página e mudança de hash fecham o menu sem mexer no foco", () => {
+    render(<ScrollIsland />);
+    const toggle = screen.getByRole("button", { name: "Abrir menu" });
+    const open = () => {
+      if (!screen.queryByRole("dialog"))
+        fireEvent.click(screen.getByRole("button", { name: /menu/i }));
+    };
+
+    fireEvent.click(toggle);
+    fireEvent.pointerDown(within(screen.getByRole("dialog")).getAllByRole("link")[0]);
+    expect(screen.getByRole("dialog")).toBeTruthy();
+
+    fireEvent.pointerDown(document.body);
+    expect(screen.queryByRole("dialog")).toBeNull();
+
+    open();
+    act(() => {
+      document.dispatchEvent(new Event("astro:before-preparation"));
+    });
+    expect(screen.queryByRole("dialog")).toBeNull();
+    // O estado de navegação é de módulo: termina a troca para não vazar para os outros testes.
+    act(() => {
+      document.dispatchEvent(new Event("astro:page-load"));
+    });
+
+    open();
+    act(() => {
+      window.dispatchEvent(new HashChangeEvent("hashchange"));
+    });
+    expect(screen.queryByRole("dialog")).toBeNull();
   });
 
   it("não mostra giro extra quando o movimento está reduzido", () => {

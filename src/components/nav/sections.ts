@@ -7,7 +7,7 @@ export interface HomeSection {
   menuKey: TranslationKey;
   /** Rótulo mono da ilha, já com "// ", ex.: "// projetos". */
   labelKey: TranslationKey;
-  /** Aparece no menu da ilha e da barra de abas (as abas já cobrem o resto). */
+  /** Aparece no menu da ilha, no computador. A barra de abas tira as seções que já têm aba. */
   inMenu: boolean;
 }
 
@@ -16,8 +16,8 @@ export const HOME_SECTIONS: readonly HomeSection[] = [
   { id: "projetos", menuKey: "menu.projects", labelKey: "projects.label", inMenu: true },
   { id: "processo", menuKey: "menu.process", labelKey: "process.label", inMenu: true },
   { id: "sobre", menuKey: "menu.about", labelKey: "about.label", inMenu: true },
-  { id: "blog", menuKey: "menu.blog", labelKey: "posts.label", inMenu: false },
-  { id: "contato", menuKey: "menu.contact", labelKey: "contact.label", inMenu: false },
+  { id: "blog", menuKey: "menu.blog", labelKey: "posts.label", inMenu: true },
+  { id: "contato", menuKey: "menu.contact", labelKey: "contact.label", inMenu: true },
 ];
 
 export const SECTION_IDS: readonly string[] = HOME_SECTIONS.map(section => section.id);
@@ -38,7 +38,7 @@ export const TABS: readonly TabItem[] = [
   { id: "contact", href: "/#contato", labelKey: "tabs.contact" },
 ];
 
-const SECTION_TAB: Readonly<Record<string, TabId>> = {
+export const SECTION_TAB: Readonly<Record<string, TabId>> = {
   projetos: "projects",
   blog: "blog",
   contato: "contact",

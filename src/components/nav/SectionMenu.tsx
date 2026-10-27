@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { ArrowRight } from "lucide-react";
 import { LanguageSwitch } from "@/components/giro/LanguageSwitch";
 import { useLocale } from "@/hooks/useLocale";
@@ -16,9 +17,16 @@ export interface SectionMenuProps {
 /** Painel do menu (g-menu): seções e troca de idioma. Usado pela ilha e pela barra de abas. */
 export function SectionMenu({ id, sections, activeId, className, onNavigate }: SectionMenuProps) {
   const locale = useLocale();
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  // O painel só monta quando o menu abre: o foco vai para o primeiro item.
+  useEffect(() => {
+    panelRef.current?.querySelector("a")?.focus();
+  }, []);
 
   return (
     <div
+      ref={panelRef}
       id={id}
       className={["g-menu", className].filter(Boolean).join(" ")}
       role="dialog"

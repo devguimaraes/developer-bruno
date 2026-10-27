@@ -10,7 +10,7 @@ import { t } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
 import { getPageGiro, subscribePageGiro } from "@/lib/page-giro";
 import { SectionMenu } from "./SectionMenu";
-import { useEscapeToClose } from "./useEscapeToClose";
+import { useMenuDismiss } from "./useMenuDismiss";
 import { resolveNavGiro, useGiroEggs } from "./useGiroEggs";
 import { HOME_SECTIONS, SECTION_IDS, TABS, tabForLocation } from "./sections";
 import { LOOK_PX, useScrollState } from "./useScrollState";
@@ -84,9 +84,7 @@ export function ScrollIslandView({
           hop={giro.hop}
           className={giro.party ? "is-party" : undefined}
         />
-        <span className="g-island__label" aria-live="polite">
-          {label}
-        </span>
+        <span className="g-island__label">{label}</span>
         <IconButton
           id={TOGGLE_ID}
           aria-expanded={menuOpen}
@@ -124,7 +122,7 @@ export function ScrollIsland() {
   const pageGiro = useSyncExternalStore(subscribePageGiro, getPageGiro, () => null);
 
   const closeMenu = useCallback(() => setMenuOpen(false), []);
-  useEscapeToClose(menuOpen, closeMenu, TOGGLE_ID);
+  useMenuDismiss(menuOpen, closeMenu, TOGGLE_ID, MENU_ID);
 
   // Movimento reduzido: sem giro extra (decisão 20).
   const fast = scroll.fast && !reducedMotion;
