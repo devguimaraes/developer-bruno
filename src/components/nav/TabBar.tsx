@@ -99,7 +99,9 @@ export function TabBarView({
           type="button"
           id={TOGGLE_ID}
           className="g-tabbar__giro"
-          aria-label={t(locale, "giro.menu_progress", { n: progress })}
+          aria-label={
+            menuOpen ? t(locale, "menu.close") : t(locale, "giro.menu_progress", { n: progress })
+          }
           aria-expanded={menuOpen}
           aria-controls={MENU_ID}
           onClick={onToggleMenu}

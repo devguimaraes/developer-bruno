@@ -97,6 +97,9 @@ describe("TabBarView", () => {
     expect(onToggleMenu).toHaveBeenCalledTimes(1);
 
     rerender(<TabBarView progress={40} activeTab={null} menuOpen />);
+    expect(screen.getByRole("button", { name: "Fechar menu" }).getAttribute("aria-expanded")).toBe(
+      "true"
+    );
     const dialog = screen.getByRole("dialog");
     const items = within(dialog)
       .getAllByRole("link")
