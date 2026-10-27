@@ -2,6 +2,9 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { ProcessDiagram } from "./ProcessDiagram";
 
+// Renderização pesada: com a suíte inteira em paralelo passa dos 5s padrão.
+vi.setConfig({ testTimeout: 20_000 });
+
 // Tabela de ferramentas por etapa (ProcessDiagram do DS, decisão 49).
 const TOOLS_BY_STEP: Record<string, string[]> = {
   talk: ["Google Meet", "WhatsApp", "Google Drive", "Slack", "Linear"],

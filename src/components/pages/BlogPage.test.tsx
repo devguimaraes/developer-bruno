@@ -1,8 +1,11 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { setLocale } from "@/lib/i18n";
 import type { BlogPost } from "@/types/blog";
 import BlogPage from "./BlogPage";
+
+// Renderização pesada: com a suíte inteira em paralelo passa dos 5s padrão.
+vi.setConfig({ testTimeout: 20_000 });
 
 function makePost(overrides: Partial<BlogPost> & Pick<BlogPost, "slug" | "title">): BlogPost {
   return {
