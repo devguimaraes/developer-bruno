@@ -116,7 +116,8 @@ function composeContactMails(data: ContactRequest): [ContactMail, ContactMail] {
     to: data.email,
     replyTo: contactData.email,
     subject: t(locale, "email.reply.subject"),
-    text: `${t(locale, "email.reply.body", { name })}\n\n${t(locale, "email.reply.copy_label")}\n${data.message}`,
+    // Texto fixo: nada digitado no formulário volta para o endereço informado (evita abuso como relay).
+    text: t(locale, "email.reply.body"),
   };
   return [bruno, confirmation];
 }

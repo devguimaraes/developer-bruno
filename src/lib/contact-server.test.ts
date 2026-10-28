@@ -21,7 +21,7 @@ const brunoText =
   "Nome: Ana · E-mail: ana@empresa.com.br · Tipo: site · Idioma do site: pt · Mensagem: Preciso de um site.";
 
 const confirmationText =
-  "Oi, Ana. Recebi sua mensagem pelo devguimaraes.com.br e respondo por este e-mail. Se quiser acrescentar alguma coisa, é só responder. Bruno Guimarães\n\nSua mensagem\nPreciso de um site.";
+  "Oi. Recebi sua mensagem pelo devguimaraes.com.br e respondo por este e-mail. Se quiser acrescentar alguma coisa, é só responder. Bruno Guimarães";
 
 function sender() {
   return vi.fn<(mail: ContactMail) => Promise<void>>().mockResolvedValue(undefined);
@@ -150,6 +150,21 @@ describe("handleContactSubmission", () => {
     });
   });
 
+  it("a confirmação não repete nome nem mensagem digitados", async () => {
+    const send = sender();
+    await handleContactSubmission({
+      body: {
+        ...validBody,
+        name: "Nome https://evil.example",
+        message: "Clique https://evil.example",
+      },
+      ip: "203.0.113.11",
+      send,
+    });
+    const confirmation = send.mock.calls[1][0];
+    expect(confirmation.text).not.toContain("evil.example");
+  });
+
   it("confirmação em inglês usa o idioma enviado e o Bruno continua em português", async () => {
     const send = sender();
     const result = await handleContactSubmission({
@@ -173,7 +188,7 @@ describe("handleContactSubmission", () => {
       to: "ana@empresa.com.br",
       replyTo: "bc.guimaraes@outlook.com",
       subject: "I got your message",
-      text: "Hi Ana. I got your message from devguimaraes.com.br and I'll reply to this email. If you want to add anything, just reply. Bruno Guimarães\n\nYour message\nPreciso de um site.",
+      text: "Hi. I got your message from devguimaraes.com.br and I'll reply to this email. If you want to add anything, just reply. Bruno Guimarães",
     });
   });
 
