@@ -1,0 +1,77 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+    }
+    #error-cur,
+    #error-nov {
+      width: 440px;
+      height: 440px;
+    }
+  </style>
+  <div data-hf-id="hf-00ub" id="root" data-composition-id="error" data-width="1920" data-height="1080">
+    <p data-hf-id="hf-vvsf" id="error-label" class="scene-label">// repouso → erro → repouso</p>
+    <div data-hf-id="hf-uodq" class="panel panel-a">
+      <p data-hf-id="hf-i1dv" class="panel-tag">atual · giro.css de hoje</p>
+      <svg data-hf-id="hf-ftvl" id="error-cur" class="giro" viewBox="0 0 120 120" aria-hidden="true">
+        <circle data-hf-id="hf-ynie" class="g-disc" cx="60" cy="60" r="60" />
+        <g data-hf-id="hf-qz6i" class="g-body">
+          <g data-hf-id="hf-vqgr" class="g-turn"><g data-hf-id="hf-m906" class="g-spin"><circle data-hf-id="hf-0qp3" class="g-arc" cx="60" cy="60" r="44" /></g></g>
+          <g data-hf-id="hf-eis9" class="g-lid g-lid-l"><ellipse data-hf-id="hf-j586" class="g-eye g-eye-l" cx="46" cy="54" rx="6" ry="9" /></g>
+          <g data-hf-id="hf-mbev" class="g-lid g-lid-r"><ellipse data-hf-id="hf-hogj" class="g-eye g-eye-r" cx="74" cy="54" rx="6" ry="9" /></g>
+          <path data-hf-id="hf-l604" class="g-f g-happy-l" d="M38 60 Q46 46 54 60" />
+          <path data-hf-id="hf-75wd" class="g-f g-happy-r" d="M66 60 Q74 46 82 60" />
+          <path data-hf-id="hf-01op" class="g-f g-x" d="M39 52 L53 62" />
+          <path data-hf-id="hf-4dfp" class="g-f g-x" d="M53 52 L39 62" />
+          <path data-hf-id="hf-hkoj" class="g-f g-x" d="M67 52 L81 62" />
+          <path data-hf-id="hf-6z6z" class="g-f g-x" d="M81 52 L67 62" />
+          <path data-hf-id="hf-2rup" class="g-f g-sleep-l" d="M39 55 Q46 62 53 55" />
+          <path data-hf-id="hf-a19g" class="g-f g-sleep-r" d="M67 55 Q74 62 81 55" />
+          <path data-hf-id="hf-glth" class="g-z" d="M88 22 H98 L88 34 H98" />
+        </g>
+      </svg>
+    </div>
+    <div data-hf-id="hf-qq9p" class="panel panel-b">
+      <p data-hf-id="hf-iab2" class="panel-tag">proposto</p>
+      <svg data-hf-id="hf-g5r2" id="error-nov" class="giro" viewBox="0 0 120 120" aria-hidden="true">
+        <circle data-hf-id="hf-2oi2" class="g-disc" cx="60" cy="60" r="60" />
+        <g data-hf-id="hf-kmny" class="g-body">
+          <g data-hf-id="hf-ghob" class="g-turn"><g data-hf-id="hf-5gje" class="g-spin"><circle data-hf-id="hf-sp8n" class="g-arc" cx="60" cy="60" r="44" /></g></g>
+          <g data-hf-id="hf-nqlp" class="g-lid g-lid-l"><ellipse data-hf-id="hf-osre" class="g-eye g-eye-l" cx="46" cy="54" rx="6" ry="9" /></g>
+          <g data-hf-id="hf-p7jb" class="g-lid g-lid-r"><ellipse data-hf-id="hf-xbhv" class="g-eye g-eye-r" cx="74" cy="54" rx="6" ry="9" /></g>
+          <path data-hf-id="hf-8aqk" class="g-f g-happy-l" d="M38 60 Q46 46 54 60" />
+          <path data-hf-id="hf-gkvl" class="g-f g-happy-r" d="M66 60 Q74 46 82 60" />
+          <path data-hf-id="hf-nhj1" class="g-f g-x" d="M39 52 L53 62" />
+          <path data-hf-id="hf-r9ll" class="g-f g-x" d="M53 52 L39 62" />
+          <path data-hf-id="hf-pcgj" class="g-f g-x" d="M67 52 L81 62" />
+          <path data-hf-id="hf-px8r" class="g-f g-x" d="M81 52 L67 62" />
+          <path data-hf-id="hf-jvrp" class="g-f g-sleep-l" d="M39 55 Q46 62 53 55" />
+          <path data-hf-id="hf-xq58" class="g-f g-sleep-r" d="M67 55 Q74 62 81 55" />
+          <path data-hf-id="hf-mjl5" class="g-z" d="M88 22 H98 L88 34 H98" />
+        </g>
+      </svg>
+    </div>
+    <p data-hf-id="hf-cz1v" id="error-caption" class="caption">Proposto: recua, treme perdendo força e desenha o X.</p>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      const cur = GiroRig.create(document.querySelector("#error-cur"), { v: "cur" });
+      const nov = GiroRig.create(document.querySelector("#error-nov"), { v: "nov" });
+      [cur, nov].forEach(function (g) {
+        g.init(tl);
+        g.idle(tl, 0, 0.8);
+        g.blink(tl, 0.3);
+        g.error(tl, 0.8);
+        g.recover(tl, 3.0);
+        g.idle(tl, 3.6, 5);
+        g.blink(tl, 4.3);
+      });
+      tl.fromTo("#error-label", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.18, ease: "power4.out" }, 0);
+      tl.fromTo("#error-caption", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.18, ease: "power4.out" }, 0.1);
+      tl.to(["#error-label", "#error-caption"], { opacity: 0, filter: "blur(8px)", duration: 0.15, ease: "power2.in" }, 4.8);
+      window.__timelines["error"] = tl;
+    })();
+  </script>
+</template>

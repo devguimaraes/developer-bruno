@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="assets/giro-rig.js"></script>
+    <style>
+      @font-face {
+        font-family: "Anybody";
+        font-style: normal;
+        font-weight: 100 900;
+        font-stretch: 50% 150%;
+        src: url("assets/fonts/anybody-latin-wdth-wght.woff2") format("woff2-variations");
+      }
+      @font-face {
+        font-family: "Geist Mono";
+        font-style: normal;
+        font-weight: 100 900;
+        src: url("assets/fonts/geist-mono-latin-wght.woff2") format("woff2-variations");
+      }
+      :root {
+        --azul-sinal: #2b2eff;
+        --azul-fundo: #1f22d6;
+        --lima: #d2ff4d;
+        --papel: #f6f5f0;
+        --tinta: #0b0c1f;
+        --nevoa-azul: #d4d5fa;
+        --font-sans: "Anybody", "Arial Black", sans-serif;
+        --font-mono: "Geist Mono", monospace;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--azul-sinal);
+      }
+      #root {
+        width: 100%;
+        height: 100%;
+        font-family: var(--font-sans);
+        color: var(--papel);
+      }
+      #ground {
+        position: absolute;
+        inset: 0;
+        background: var(--azul-sinal);
+      }
+
+      /* Peças comuns às cenas. */
+      .scene-label {
+        position: absolute;
+        left: 80px;
+        top: 64px;
+        font-family: var(--font-mono);
+        font-size: 30px;
+        color: var(--lima);
+      }
+      .panel {
+        position: absolute;
+        top: 140px;
+        width: 860px;
+        height: 730px;
+        border-radius: 28px;
+        background: var(--azul-fundo);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .panel-a {
+        left: 80px;
+      }
+      .panel-b {
+        left: 980px;
+      }
+      .panel-tag {
+        position: absolute;
+        left: 36px;
+        top: 30px;
+        font-family: var(--font-mono);
+        font-size: 28px;
+        color: var(--nevoa-azul);
+      }
+      .panel-b .panel-tag {
+        color: var(--lima);
+      }
+      .caption {
+        position: absolute;
+        left: 80px;
+        top: 912px;
+        width: 1760px;
+        font-size: 34px;
+        line-height: 1.35;
+        font-weight: 450;
+        color: var(--papel);
+      }
+
+      /* Giro: só a forma. Tudo que muda vem do rig (assets/giro-rig.js). */
+      .giro {
+        overflow: visible;
+        color: var(--lima);
+      }
+      .g-disc {
+        fill: var(--tinta);
+      }
+      .g-arc {
+        fill: none;
+        stroke: currentColor;
+        stroke-linecap: round;
+      }
+      .g-eye {
+        fill: currentColor;
+      }
+      .g-f,
+      .g-z {
+        fill: none;
+        stroke: currentColor;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .g-z {
+        stroke-width: 6;
+      }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-dqd3"
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="41"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div data-hf-id="hf-7hg0" id="ground"></div>
+      <div data-hf-id="hf-pmkc" id="intro" data-composition-id="intro" data-composition-src="compositions/intro.html" data-start="0" data-duration="2.5" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div data-hf-id="hf-exgy" id="done" data-composition-id="done" data-composition-src="compositions/done.html" data-start="2.5" data-duration="5.5" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div data-hf-id="hf-yis4" id="error" data-composition-id="error" data-composition-src="compositions/error.html" data-start="8" data-duration="5" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div data-hf-id="hf-aqsr" id="sleep" data-composition-id="sleep" data-composition-src="compositions/sleep.html" data-start="13" data-duration="6.5" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div data-hf-id="hf-7tij" id="small" data-composition-id="small" data-composition-src="compositions/small.html" data-start="19.5" data-duration="6.2" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div data-hf-id="hf-7392" id="wink" data-composition-id="wink" data-composition-src="compositions/wink.html" data-start="25.7" data-duration="3.5" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div data-hf-id="hf-cni1" id="hello" data-composition-id="hello" data-composition-src="compositions/hello.html" data-start="29.2" data-duration="4.5" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div data-hf-id="hf-ixni" id="listen" data-composition-id="listen" data-composition-src="compositions/listen.html" data-start="33.7" data-duration="4.5" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div data-hf-id="hf-oxfd" id="outro" data-composition-id="outro" data-composition-src="compositions/outro.html" data-start="38.2" data-duration="2.8" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
