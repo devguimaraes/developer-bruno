@@ -10,8 +10,10 @@ Seis rotas foram desenhadas. Três editoriais em creme e serifa (Prumo, Bem-te-v
 
 ## Consequences
 
-- Saem o efeito de vidro (LiquidGlass), o granulado, o cursor customizado, o vídeo do hero, a rolagem suave com Lenis, o menu em GSAP, o mascote BLOCO e as fontes Satoshi, JetBrains Mono, Jersey 15, Silkscreen e Newsreader. As dependências `gsap` e `lenis` deixam de ser usadas. Não reintroduza esses efeitos sem rever este ADR.
-- O mascote é SVG animado com Framer Motion, com uma variante por estado. Não use Rive nem Lottie: o runtime pesa de 100 a 200 KB e o Giro tem só um arco e dois olhos.
+- Saem o efeito de vidro (LiquidGlass), o granulado, o cursor customizado, o vídeo do hero, a rolagem suave com Lenis, o menu em GSAP, o mascote BLOCO e as fontes Satoshi, JetBrains Mono, Jersey 15, Silkscreen e Newsreader. As dependências `gsap` e `lenis` deixam de ser usadas no site. Não reintroduza esses efeitos sem rever este ADR.
+- O mascote é SVG com os estados em CSS: o atributo `data-state` escolhe o estado, `data-from` guarda o anterior para coreografar a troca e `data-moment` toca uma reação curta por cima (piscadela, oi, ouvindo, tonto). O CSS desenha antes da hidratação, o que a tela de carregamento precisa, e não pesa no bundle. Só a saída do carregando usa Web Animations, para terminar a volta a partir do ângulo em que o arco estava. Não use Rive nem Lottie: o runtime pesa de 100 a 200 KB e o Giro tem só um arco e dois olhos.
+- Revisão de outubro de 2026: a primeira versão animava o mascote com Framer Motion, uma variante por estado. Passou para CSS pelos motivos acima. O Framer Motion continua nos diagramas, no voo do Giro da tela de carregamento e nas entradas de seção.
+- O movimento do Giro é estudado antes em vídeo, no estúdio HyperFrames da pasta `motion/`, e só depois portado para o CSS com as mesmas curvas e durações. O GSAP existe só ali, fora do site e do bundle.
 - Os diagramas (o processo na home e a arquitetura de cada case) também são SVG desenhado à mão com Framer Motion. A React Flow foi descartada porque mostra a marca dela no canto de todo diagrama, e tirar a marca exige assinatura paga.
 - O site deixa de ser só escuro: alterna superfícies de marca (azul) e de leitura (papel). Não existe modo escuro no lançamento.
 - O redesign sai inteiro de uma vez, pela branch `feature/identidade-giro`, como `v2.0.0`. Nenhuma rota fica com a identidade antiga em produção.

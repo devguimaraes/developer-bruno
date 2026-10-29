@@ -13,8 +13,12 @@ O mascote: um arco e dois olhos, que gira quando algo carrega e sorri quando ter
 _Avoid_: spinner, logo, BLOCO
 
 **Estado do Giro**:
-Uma expressão do Giro ligada a um momento da interface, como repouso, carregando, pronto, erro ou vazio.
+Uma expressão do Giro ligada a uma situação da interface, como repouso, carregando, pronto, erro ou vazio.
 _Avoid_: pose, humor, animação
+
+**Momento do Giro**:
+Uma reação curta do Giro por cima do estado, causada por um gesto do visitante, como piscadela, oi, ouvindo ou tonto.
+_Avoid_: estado, animação, easter egg
 
 **Assinatura**:
 O nome "bruno guimarães" escrito com o Giro no lugar do "o".

@@ -70,8 +70,8 @@ Unit tests alias `astro:content` to `src/test/__mocks__/astro-content.ts` (`vite
 
 - `src/data/projects.ts`: typed static data feeding the home cases and the case study pages.
 - `src/config/site.ts`: SEO config, Brazilian market keywords, contact data, performance budgets (300KB JS, 500KB images, 50KB CSS, 1MB total, enforced for media by `check:media-budget`).
-- Giro mascot and states (ADR 0001): components in `src/components/brand/` (`Giro.tsx`, states in `giro-states.ts`). It is animated SVG with Framer Motion, one variant per state. Do not add Rive or Lottie.
-- Motion: Framer Motion is the only animation library. GSAP, Lenis and the glass effect were removed, and ADR 0001 says not to bring them back without revisiting it. Animated components should honor `useReducedMotion`.
+- Giro mascot (ADR 0001): `src/components/brand/` (`Giro.tsx`, states and moments in `giro-states.ts`). It is SVG animated in CSS (`src/styles/giro.css`), not Framer Motion: `data-state` picks the state, `data-from` holds the previous one for the transition, and `data-moment` plays a short reaction on top (wink, hello, listening, dizzy), cleared when the `g-moment` clock animation ends. CSS renders before hydration, which the loader relies on. The only JS animation is leaving loading (Web Animations, pose math in `giro-motion.ts`, which mirrors the keyframes in `giro.css`). `--g-amp` scales translations at small sizes. Do not add Rive or Lottie.
+- Motion: in the site, Framer Motion is the only animation library (diagrams, the loader flight, section entrances). GSAP, Lenis and the glass effect were removed, and ADR 0001 says not to bring them back without revisiting it. GSAP lives only in `motion/`, a HyperFrames studio outside the site build where Giro motion is studied on video before being ported to CSS. Animated components should honor `useReducedMotion`; Giro moments are skipped under reduced motion.
 
 ### Design system
 
