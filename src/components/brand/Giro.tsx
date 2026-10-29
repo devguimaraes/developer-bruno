@@ -7,7 +7,7 @@ import {
   RESOLVE_EASING,
   spinFinish,
 } from "./giro-motion";
-import type { GiroState } from "./giro-states";
+import { GIRO_MOMENT_EVENT, type GiroMoment, type GiroState, isGiroMoment } from "./giro-states";
 
 // Alcance dos olhos no curioso (unidades do quadro) e a inclinação máxima que ele rende.
 const MAX_LOOK = 6;
@@ -15,6 +15,8 @@ const MAX_TILT_DEG = 8;
 const DASH_RESOLVE_MS = 520;
 // Destinos com giro próprio no CSS: terminar a volta por cima dele faria o arco saltar no fim.
 const OWN_SPIN: ReadonlySet<GiroState> = new Set(["thinking", "lost"]);
+// Relógio de cada momento de uma vez só (giro.css): quando ele termina, o momento sai do svg.
+const MOMENT_CLOCK = "g-moment";
 
 // A saída do giro precisa rodar antes da pintura; no servidor não há o que medir.
 const useBrowserLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
@@ -33,6 +35,11 @@ export interface GiroProps {
   look?: { x: number; y: number };
   /** Dá o pulo do fim (classe is-hop). */
   hop?: boolean;
+  /** Reação por cima do estado. Piscadela e oi tocam uma vez a cada troca; ouvindo dura enquanto
+   * a prop estiver ligada. Com movimento reduzido, nenhuma toca. */
+  moment?: GiroMoment;
+  /** No ouvindo, o arco pulsa a cada mudança deste número. */
+  pulse?: number;
   className?: string;
 }
 
@@ -44,6 +51,11 @@ function sizeClass(size: number | undefined, signature: boolean): string | undef
   if (size >= 32) return "g-giro--md";
   if (size >= 24) return "g-giro--sm";
   return "g-giro--xs";
+}
+
+/** O relógio do momento (no próprio svg, não num filho) terminou ou foi cancelado. */
+function isMomentClock(event: AnimationEvent, svg: Element): boolean {
+  return event.target === svg && event.animationName === MOMENT_CLOCK;
 }
 
 /** Início da animação de giro em curso, no relógio de performance.now(). */
@@ -98,9 +110,12 @@ export function Giro({
   progress,
   look,
   hop = false,
+  moment,
+  pulse,
   className,
 }: GiroProps) {
   const reducedMotion = useReducedMotion();
+  const svgRef = useRef<SVGSVGElement>(null);
   const spinRef = useRef<SVGGElement>(null);
   const arcRef = useRef<SVGCircleElement>(null);
   const loadingSince = useRef<number | null>(null);
@@ -111,6 +126,35 @@ export function Giro({
   if (trail.state !== state) setTrail({ state, from: trail.state });
   const from = trail.state === state ? trail.from : trail.state;
   const hasProgress = progress !== undefined;
+
+  // O momento toca de novo a cada troca da prop, ou quando outra ilha manda pelo evento.
+  const [played, setPlayed] = useState<{ prop?: GiroMoment; playing?: GiroMoment }>({
+    prop: moment,
+    playing: moment,
+  });
+  if (played.prop !== moment) setPlayed({ prop: moment, playing: moment });
+  const playing = played.prop === moment ? played.playing : moment;
+
+  useEffect(() => {
+    const svg = svgRef.current;
+    if (!svg) return;
+    const play = (event: Event) => {
+      if (!(event instanceof CustomEvent) || !isGiroMoment(event.detail)) return;
+      const next: GiroMoment = event.detail;
+      setPlayed(current => ({ ...current, playing: next }));
+    };
+    // Relógio cancelado (svg escondido no meio) também encerra: senão o momento tocaria de novo
+    // quando o Giro reaparecesse. O React 18 não tem onAnimationCancel.
+    const cancel = (event: AnimationEvent) => {
+      if (isMomentClock(event, svg)) setPlayed(current => ({ ...current, playing: undefined }));
+    };
+    svg.addEventListener(GIRO_MOMENT_EVENT, play);
+    svg.addEventListener("animationcancel", cancel);
+    return () => {
+      svg.removeEventListener(GIRO_MOMENT_EVENT, play);
+      svg.removeEventListener("animationcancel", cancel);
+    };
+  }, []);
 
   useBrowserLayoutEffect(() => {
     const spin = spinRef.current;
@@ -157,10 +201,18 @@ export function Giro({
 
   return (
     <svg
+      ref={svgRef}
       className={classes.join(" ")}
       data-state={state === "idle" ? undefined : state}
       data-from={from === undefined || from === "idle" ? undefined : from}
       data-progress={progress}
+      data-moment={reducedMotion ? undefined : playing}
+      data-pulse={reducedMotion || pulse === undefined ? undefined : pulse % 2}
+      onAnimationEnd={event => {
+        if (isMomentClock(event.nativeEvent, event.currentTarget)) {
+          setPlayed(current => ({ ...current, playing: undefined }));
+        }
+      }}
       style={style}
       viewBox="0 0 120 120"
       aria-hidden="true"

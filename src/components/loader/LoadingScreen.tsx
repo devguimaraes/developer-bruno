@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Giro } from "@/components/brand/Giro";
-import type { GiroState } from "@/components/brand/giro-states";
+import { type GiroState, playGiroMoment } from "@/components/brand/giro-states";
 import { useLocale } from "@/hooks/useLocale";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { t } from "@/lib/i18n";
@@ -19,6 +19,8 @@ const FLIGHT_EASE: [number, number, number, number] = [0.2, 0.8, 0.2, 1];
 // Corte do md do Tailwind: acima dele o Giro voa até a assinatura, abaixo até a barra de abas.
 const DESKTOP_MIN_WIDTH = 768;
 const LOADER_ATTR = "data-loader";
+// Giro do hero (home): ele sai da assinatura ou da aba, então o destino não fica à vista.
+const HERO_GIRO = ".hr-giro";
 
 type Phase = "pending" | "loading" | "done" | "flying" | "fading" | "hidden";
 
@@ -56,7 +58,10 @@ export function LoadingScreen() {
   const [phase, setPhase] = useState<Phase>("pending");
   const [face, setFace] = useState<GiroState>("loading");
   const [flight, setFlight] = useState<Flight>(REST);
+  const [landed, setLanded] = useState(false);
+  const [waving, setWaving] = useState(false);
   const giroRef = useRef<HTMLDivElement>(null);
+  const targetRef = useRef<Element | null>(null);
 
   // Só a primeira visita da sessão mostra a tela. Sem a marca (ou com o storage bloqueado), o
   // overlay que o script inline pôs no <html> sai e a página aparece direto.
@@ -125,6 +130,7 @@ export function LoadingScreen() {
       const target = flightTarget();
       const measured = giro && target ? measureFlight(giro, target) : null;
       if (measured) {
+        targetRef.current = target;
         setFlight(measured);
         setPhase("flying");
       } else {
@@ -134,11 +140,21 @@ export function LoadingScreen() {
     return () => clearTimeout(timer);
   }, [phase]);
 
-  // Ao pousar, o Giro vira a assinatura em repouso e a tela começa a sumir.
+  // Ao pousar, o Giro ganha o traço da assinatura e acena (oi). O Giro de destino acena junto: a
+  // tela some por cima dele em 240 ms e o aceno continua lá, sem segurar a página. Na home o hero
+  // tira o Giro do destino (às vezes logo depois do pouso) e cumprimenta do jeito dele, então
+  // ninguém acena.
   useEffect(() => {
     if (phase !== "flying") return;
     const timer = setTimeout(() => {
-      setFace("idle");
+      const target = targetRef.current;
+      const shown =
+        target !== null &&
+        document.querySelector(HERO_GIRO) === null &&
+        getComputedStyle(target).opacity !== "0";
+      setLanded(true);
+      setWaving(shown);
+      if (target && shown) playGiroMoment(target, "hello");
       setPhase("fading");
     }, FLIGHT_MS);
     return () => clearTimeout(timer);
@@ -167,7 +183,12 @@ export function LoadingScreen() {
         animate={flight}
         transition={{ duration: FLIGHT_MS / 1000, ease: FLIGHT_EASE }}
       >
-        <Giro state={face} signature={face === "idle"} hop={phase === "done"} />
+        <Giro
+          state={face}
+          signature={landed}
+          hop={phase === "done"}
+          moment={waving ? "hello" : undefined}
+        />
       </motion.div>
       <span className="g-sr">{t(locale, "loader.label")}</span>
     </motion.div>

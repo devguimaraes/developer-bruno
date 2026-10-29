@@ -39,16 +39,17 @@ describe("CopyButton — copiar", () => {
     const button = screen.getByRole("button", { name: "Copiar link" });
     expect(button.className).toContain("g-button--secondary");
     expect(button.className).toContain("g-button--sm");
-    expect(container.querySelector('svg[data-state="done"]')).toBeNull();
+    expect(container.querySelector(".g-giro")).toBeNull();
   });
 
-  it("copia o valor com navigator.clipboard e mostra copiado com Giro done", async () => {
+  it("copia o valor com navigator.clipboard e mostra copiado com a piscadela do Giro", async () => {
     const { container } = render(<CopyButton {...props} />);
     await clicarNoBotao("Copiar link");
 
     expect(writeText).toHaveBeenCalledWith(VALUE);
     expect(screen.getByRole("button", { name: "Link copiado" })).toBeTruthy();
-    expect(container.querySelector('svg[data-state="done"]')).not.toBeNull();
+    expect(container.querySelector('svg[data-moment="wink"]')).not.toBeNull();
+    expect(container.querySelector('svg[data-state="done"]')).toBeNull();
   });
 
   it("volta ao repouso depois de 1,8 s", async () => {

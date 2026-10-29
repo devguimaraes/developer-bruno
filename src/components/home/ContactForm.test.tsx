@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { renderToString } from "react-dom/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { submitContact } from "@/lib/contact";
@@ -130,6 +130,41 @@ describe("ContactForm", () => {
     ).toBeInTheDocument();
     await waitFor(() =>
       expect(screen.getByRole("button", { name: "Enviar mensagem" })).toBeEnabled()
+    );
+  });
+
+  it("o Giro do botão ouve enquanto o visitante digita e volta ao repouso depois", () => {
+    vi.useFakeTimers();
+    try {
+      const { container } = render(<ContactForm />);
+      const giro = () => container.querySelector(".home-form__submit .g-giro");
+      const message = screen.getByLabelText("mensagem");
+      expect(giro()).not.toBeNull();
+      expect(giro()?.hasAttribute("data-moment")).toBe(false);
+
+      fireEvent.focus(message);
+      fireEvent.input(message, { target: { value: "Olá" } });
+      expect(giro()?.getAttribute("data-moment")).toBe("listening");
+
+      act(() => {
+        vi.advanceTimersByTime(1200);
+      });
+      expect(giro()?.hasAttribute("data-moment")).toBe(false);
+
+      fireEvent.input(message, { target: { value: "Olá, tudo" } });
+      expect(giro()?.getAttribute("data-moment")).toBe("listening");
+      fireEvent.blur(message);
+      expect(giro()?.hasAttribute("data-moment")).toBe(false);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("escolher um tipo de projeto não liga o ouvindo", () => {
+    const { container } = render(<ContactForm />);
+    fireEvent.focus(screen.getByRole("button", { name: "site" }));
+    expect(container.querySelector(".home-form__submit .g-giro")?.hasAttribute("data-moment")).toBe(
+      false
     );
   });
 

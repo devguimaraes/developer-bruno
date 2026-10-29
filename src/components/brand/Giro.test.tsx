@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { render } from "@testing-library/react";
+import { act, createEvent, fireEvent, render } from "@testing-library/react";
 import { Giro } from "./Giro";
-import { GIRO_STATES, type GiroState } from "./giro-states";
+import { GIRO_STATES, type GiroState, playGiroMoment } from "./giro-states";
 
 function getSvg(props: Parameters<typeof Giro>[0] = {}) {
   const { container } = render(<Giro {...props} />);
@@ -276,5 +276,80 @@ describe("Giro — saída do carregamento", () => {
     progress.rerender(<Giro state="done" progress={100} />);
     expect(spinCalls()).toHaveLength(1);
     expect(dashCalls()).toHaveLength(0);
+  });
+});
+
+describe("Giro — momentos", () => {
+  // O jsdom não tem AnimationEvent: o nome da animação vai à mão.
+  function endAnimation(target: Element, animationName: string) {
+    const event = createEvent.animationEnd(target);
+    Object.defineProperty(event, "animationName", { value: animationName });
+    fireEvent(target, event);
+  }
+
+  it("a piscadela toca uma vez e sai quando o relógio do momento termina", () => {
+    const { container } = render(<Giro moment="wink" />);
+    const svg = container.querySelector("svg") as SVGSVGElement;
+    expect(svg.getAttribute("data-moment")).toBe("wink");
+
+    // O fim de uma animação de dentro (o corpo) não encerra o momento.
+    endAnimation(svg.querySelector(".g-giro__body") as Element, "g-wink-body");
+    expect(svg.getAttribute("data-moment")).toBe("wink");
+
+    endAnimation(svg, "g-moment");
+    expect(svg.hasAttribute("data-moment")).toBe(false);
+  });
+
+  it("relógio cancelado (svg escondido no meio) também encerra o momento", () => {
+    const { container } = render(<Giro moment="wink" />);
+    const svg = container.querySelector("svg") as SVGSVGElement;
+    const cancel = new Event("animationcancel");
+    Object.defineProperty(cancel, "animationName", { value: "g-moment" });
+    act(() => {
+      svg.dispatchEvent(cancel);
+    });
+    expect(svg.hasAttribute("data-moment")).toBe(false);
+  });
+
+  it("toca de novo quando a prop troca", () => {
+    const { container, rerender } = render(<Giro moment="wink" />);
+    const svg = container.querySelector("svg") as SVGSVGElement;
+    endAnimation(svg, "g-moment");
+    rerender(<Giro />);
+    rerender(<Giro moment="wink" />);
+    expect(svg.getAttribute("data-moment")).toBe("wink");
+  });
+
+  it("outra ilha toca o momento pelo evento", () => {
+    const { container } = render(<Giro state="done" />);
+    const svg = container.querySelector("svg") as SVGSVGElement;
+    act(() => playGiroMoment(svg, "hello"));
+    expect(svg.getAttribute("data-moment")).toBe("hello");
+    expect(svg.getAttribute("data-state")).toBe("done");
+  });
+
+  it("no ouvindo, o pulso alterna a cada mudança", () => {
+    const { container, rerender } = render(<Giro moment="listening" pulse={0} />);
+    const svg = container.querySelector("svg") as SVGSVGElement;
+    expect(svg.getAttribute("data-pulse")).toBe("0");
+    rerender(<Giro moment="listening" pulse={1} />);
+    expect(svg.getAttribute("data-pulse")).toBe("1");
+    expect(svg.getAttribute("data-moment")).toBe("listening");
+  });
+
+  it("com movimento reduzido, nenhum momento toca", () => {
+    vi.mocked(window.matchMedia).mockImplementationOnce(
+      (query: string) =>
+        ({
+          matches: true,
+          media: query,
+          addEventListener: vi.fn(),
+          removeEventListener: vi.fn(),
+        }) as unknown as MediaQueryList
+    );
+    const { container } = render(<Giro moment="listening" pulse={2} />);
+    const svg = container.querySelector("svg") as SVGSVGElement;
+    expect(svg.hasAttribute("data-moment")).toBe(false);
+    expect(svg.hasAttribute("data-pulse")).toBe(false);
   });
 });

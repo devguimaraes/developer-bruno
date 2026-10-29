@@ -1,9 +1,11 @@
 import { type FormEvent, useEffect, useRef, useState } from "react";
+import { Giro } from "@/components/brand/Giro";
 import { Button } from "@/components/giro/Button";
 import { Chip } from "@/components/giro/Chip";
 import { Field, TextArea } from "@/components/giro/Field";
 import { Notice } from "@/components/giro/Notice";
 import { useLocale } from "@/hooks/useLocale";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import {
   type ContactErrors,
   type ContactResult,
@@ -31,11 +33,21 @@ const EMPTY_VALUES: ContactValues = {
   hp_extra: "",
 };
 
+// Ouvindo: o Giro do botão acompanha a digitação e volta ao repouso 1,2 s depois da última tecla
+// ou ao sair do campo. Os olhos vão de um lado ao outro em 40 colunas e descem 3 unidades; o arco
+// pulsa ao começar a ouvir e depois a cada 3 teclas.
+const LISTEN_IDLE_MS = 1200;
+const LISTEN_COLUMNS = 40;
+const LISTEN_LOOK_X = 5;
+const LISTEN_LOOK_Y = 3;
+const LISTEN_PULSE_EVERY = 3;
+
 /** Estado do envio. "ok" da API vira "sent" na tela. */
 type FormStatus = "idle" | "sending" | "sent" | Exclude<ContactResult, "ok">;
 
 export function ContactForm() {
   const locale = useLocale();
+  const reducedMotion = useReducedMotion();
   const formRef = useRef<HTMLFormElement>(null);
   const [values, setValues] = useState<ContactValues>(EMPTY_VALUES);
   const [errors, setErrors] = useState<ContactErrors>({});
@@ -48,6 +60,29 @@ export function ContactForm() {
   useEffect(() => setHydrated(true), []);
 
   const locked = status === "sending" || status === "sent";
+
+  const [hearing, setHearing] = useState<{ x: number; keys: number } | null>(null);
+  const hearingTimer = useRef<number | undefined>(undefined);
+  useEffect(() => () => window.clearTimeout(hearingTimer.current), []);
+
+  function hear(target: EventTarget, typed: boolean) {
+    // Com movimento reduzido o Giro não ouve: nem o momento, nem os olhos seguindo o texto.
+    if (reducedMotion) return;
+    const isField = target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement;
+    if (!isField || target.name === "hp_extra") return;
+    // Coluna do cursor na linha atual: é para onde os olhos olham.
+    const before = target.value.slice(0, target.selectionStart ?? target.value.length);
+    const column = Math.min(before.length - before.lastIndexOf("\n") - 1, LISTEN_COLUMNS);
+    const x = LISTEN_LOOK_X * ((2 * column) / LISTEN_COLUMNS - 1);
+    setHearing(current => ({ x, keys: (current?.keys ?? 0) + (typed ? 1 : 0) }));
+    window.clearTimeout(hearingTimer.current);
+    hearingTimer.current = window.setTimeout(() => setHearing(null), LISTEN_IDLE_MS);
+  }
+
+  function stopHearing() {
+    window.clearTimeout(hearingTimer.current);
+    setHearing(null);
+  }
 
   function updateValues(next: ContactValues) {
     setValues(next);
@@ -99,6 +134,9 @@ export function ContactForm() {
       aria-label={t(locale, "contact.form.label")}
       noValidate
       onSubmit={handleSubmit}
+      onFocus={event => hear(event.target, false)}
+      onInput={event => hear(event.target, true)}
+      onBlur={stopHearing}
     >
       <div className="home-form__row">
         <Field
@@ -173,6 +211,13 @@ export function ContactForm() {
           variant="primary"
           status={buttonStatus}
           disabled={!hydrated || status === "sending" || status === "sent"}
+          lead={
+            <Giro
+              moment={hearing ? "listening" : undefined}
+              look={hearing ? { x: hearing.x, y: LISTEN_LOOK_Y } : undefined}
+              pulse={hearing ? Math.floor(hearing.keys / LISTEN_PULSE_EVERY) : undefined}
+            />
+          }
         >
           {buttonText}
         </Button>

@@ -60,10 +60,12 @@ export function CopyButton({
         size="sm"
         onClick={handleClick}
         aria-label={accessibleName ? accessibleLabel : undefined}
-        status={status === "copied" ? "done" : "idle"}
         lead={
           status === "error" ? (
             <Giro state="error" />
+          ) : status === "copied" ? (
+            // Sucesso pequeno, reação pequena: piscadela em vez do pronto inteiro.
+            <Giro moment="wink" />
           ) : (
             <Copy className="g-icon" aria-hidden="true" />
           )

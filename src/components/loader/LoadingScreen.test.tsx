@@ -1,5 +1,6 @@
 import { act, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { GIRO_MOMENT_EVENT } from "@/components/brand/giro-states";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { LoadingScreen } from "./LoadingScreen";
 import { LOADED_KEY } from "./loader-flag";
@@ -97,6 +98,10 @@ describe("LoadingScreen", () => {
     const wrapper = addFlightTarget(
       '<header data-site-header><span class="g-signature__o"><svg class="g-giro"></svg></span></header>'
     );
+    const moments: unknown[] = [];
+    wrapper
+      .querySelector(".g-giro")
+      ?.addEventListener(GIRO_MOMENT_EVENT, event => moments.push((event as CustomEvent).detail));
     vi.spyOn(Element.prototype, "getBoundingClientRect").mockImplementation(function (
       this: Element
     ) {
@@ -109,12 +114,41 @@ describe("LoadingScreen", () => {
     expect(overlaySvg()?.getAttribute("data-state")).toBe("done");
     expect(screen.getByRole("status")).toBeTruthy();
 
+    expect(moments).toEqual([]);
+
+    // Pousa sorrindo e acena; o Giro da assinatura recebe o mesmo oi.
     await advance(520);
     expect(overlaySvg()?.classList.contains("g-giro--signature")).toBe(true);
-    expect(overlaySvg()?.getAttribute("data-state")).toBeNull();
+    expect(overlaySvg()?.getAttribute("data-state")).toBe("done");
+    expect(overlaySvg()?.getAttribute("data-moment")).toBe("hello");
+    expect(moments).toEqual(["hello"]);
 
     await advance(240);
     expect(screen.queryByRole("status")).toBeNull();
+    wrapper.remove();
+  });
+
+  it("na home, com o hero, ninguém acena", async () => {
+    const wrapper = addFlightTarget(
+      '<header data-site-header><span class="g-signature__o"><svg class="g-giro"></svg></span></header><div class="hr-giro"></div>'
+    );
+    const moments: unknown[] = [];
+    wrapper
+      .querySelector(".g-giro")
+      ?.addEventListener(GIRO_MOMENT_EVENT, event => moments.push((event as CustomEvent).detail));
+    vi.spyOn(Element.prototype, "getBoundingClientRect").mockImplementation(function (
+      this: Element
+    ) {
+      return this.closest("[data-site-header]") ? rect(100, 20, 20) : rect(500, 300, 168);
+    });
+
+    render(<LoadingScreen />);
+    await advance(600);
+    await advance(400);
+    await advance(520);
+    expect(overlaySvg()?.classList.contains("g-giro--signature")).toBe(true);
+    expect(overlaySvg()?.hasAttribute("data-moment")).toBe(false);
+    expect(moments).toEqual([]);
     wrapper.remove();
   });
 
