@@ -4,9 +4,9 @@ import { contactData } from "@/config/site";
 import { HomeContact } from "./HomeContact";
 
 describe("HomeContact", () => {
-  it("mostra o título Contato e o formulário", () => {
+  it("mostra o título do contato e o formulário", () => {
     render(<HomeContact />);
-    expect(screen.getByRole("heading", { level: 2, name: "Contato" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 2, name: "Vamos conversar." })).toBeInTheDocument();
     expect(screen.getByRole("form", { name: "Formulário de contato" })).toBeInTheDocument();
   });
 

@@ -24,7 +24,7 @@ test.describe("Navegação Principal", () => {
     await page.goto("/#contato");
 
     const contactSection = page.locator("#contato");
-    await expect(contactSection.getByRole("heading", { name: "Contato" })).toBeVisible();
+    await expect(contactSection.getByRole("heading", { name: "Vamos conversar." })).toBeVisible();
     await expect(contactSection.getByRole("form", { name: "Formulário de contato" })).toBeVisible();
     await expect(contactSection.getByRole("button", { name: "Enviar mensagem" })).toBeVisible();
 
@@ -64,7 +64,7 @@ test.describe("Navegação Principal", () => {
     await projectsLink.click();
     await expect(page).toHaveURL(/#projetos$/i);
     await expect(
-      page.locator("#projetos").getByRole("heading", { name: "Projetos", level: 2 })
+      page.locator("#projetos").getByRole("heading", { name: "No ar.", level: 2 })
     ).toBeVisible();
   });
 });

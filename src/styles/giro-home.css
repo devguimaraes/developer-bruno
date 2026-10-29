@@ -171,6 +171,11 @@
   flex-direction: column;
   gap: 36px;
   min-width: 0;
+  container-type: inline-size;
+}
+/* O título é o nome: "Guimarães" mede ~7x o corpo, então o corpo acompanha a largura da coluna. */
+.home-section .home-about__head .g-section-head__title {
+  font-size: min(136px, 13.5cqi);
 }
 .home-about__head {
   display: flex;
@@ -360,6 +365,9 @@
   .home-about {
     grid-template-columns: minmax(0, 1fr);
     gap: 48px;
+  }
+  .home-section .home-about__head .g-section-head__title {
+    font-size: min(58px, 13.5cqi);
   }
   .home-about__giro {
     right: -8px;

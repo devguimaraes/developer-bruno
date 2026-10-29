@@ -39,9 +39,9 @@ describe("Hero", () => {
     mockReducedMotion(false);
     render(<Hero />);
 
-    expect(screen.getByText("// desenvolvedor front-end · rio de janeiro")).toBeInTheDocument();
+    expect(screen.getByText("// desenvolvedor front-end · design systems")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Interfaces com vida." })).toBeInTheDocument();
-    expect(screen.getByText(/Sites, lojas e sistemas em React/)).toBeInTheDocument();
+    expect(screen.getByText(/Construo interfaces em React, Next.js e Astro/)).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Ver projetos" })).toHaveAttribute("href", "#projetos");
     expect(screen.getByRole("link", { name: "Falar comigo" })).toHaveAttribute("href", "#contato");
   });

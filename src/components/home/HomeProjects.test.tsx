@@ -11,7 +11,7 @@ describe("HomeProjects", () => {
 
   it("mostra o título da seção com a âncora de projetos na home", () => {
     render(<HomeProjects />);
-    expect(screen.getByRole("heading", { level: 2, name: "Projetos" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 2, name: "No ar." })).toBeInTheDocument();
     expect(screen.getByText("// projetos")).toBeInTheDocument();
   });
 
@@ -42,7 +42,7 @@ describe("HomeProjects", () => {
   it("troca o idioma do resumo e do rótulo de ação", () => {
     setLocale("en");
     render(<HomeProjects />);
-    expect(screen.getByRole("heading", { name: "Projects" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Live." })).toBeInTheDocument();
     expect(screen.getAllByText("View case study")).toHaveLength(homeCases.length);
   });
 });

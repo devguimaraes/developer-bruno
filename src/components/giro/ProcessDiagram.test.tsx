@@ -123,7 +123,7 @@ describe("ProcessDiagram", () => {
     expect(talk).toHaveAttribute("aria-expanded", "false");
     expect(design).toHaveAttribute("aria-expanded", "true");
     expect(screen.getByText(/Entendo o negócio/)).not.toBeVisible();
-    expect(screen.getByText(/Desenho as telas/)).toBeVisible();
+    expect(screen.getByText(/Defino tokens, componentes/)).toBeVisible();
   });
 
   it("aria-controls aponta para o painel do detalhe da etapa", () => {
@@ -134,7 +134,7 @@ describe("ProcessDiagram", () => {
     expect(controls).toBeTruthy();
     const panel = document.getElementById(controls ?? "");
     expect(panel?.tagName).toBe("SECTION");
-    expect(panel).toHaveTextContent("Construo com componentes");
+    expect(panel).toHaveTextContent("Construo sobre o design system");
   });
 
   it("a etapa é um botão nativo, focável, que Enter e Espaço acionam", () => {

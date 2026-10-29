@@ -29,15 +29,15 @@ const ptDictionary = {
   "loader.label": "Carregando o site",
   "meta.home_title": "Bruno Guimarães · desenvolvedor front-end",
   "meta.home_description":
-    "Desenvolvedor front-end no Rio de Janeiro. Sites, lojas e sistemas em React, Next.js e Astro.",
+    "Desenvolvedor front-end especializado em React, Next.js, TypeScript e design systems. Interfaces rápidas, acessíveis e consistentes, do protótipo ao deploy.",
   "meta.case_title": "{project} · case de Bruno Guimarães",
   "meta.post_title": "{title} · blog de Bruno Guimarães",
 
   // Hero
-  "hero.label": "// desenvolvedor front-end · rio de janeiro",
+  "hero.label": "// desenvolvedor front-end · design systems",
   "hero.title": "Interfaces com vida.",
   "hero.intro":
-    "Sites, lojas e sistemas em React, Next.js e Astro. Desenho os estados, escrevo o código e acompanho o site depois que ele vai ao ar.",
+    "Construo interfaces em React, Next.js e Astro e crio os design systems que mantêm o produto consistente enquanto ele cresce. Do protótipo ao deploy, com tipos, testes e métricas.",
   "hero.cta_projects": "Ver projetos",
   "hero.cta_contact": "Falar comigo",
   "giro.label_state": "estado",
@@ -54,51 +54,58 @@ const ptDictionary = {
 
   // Home · projetos
   "projects.label": "// projetos",
-  "projects.title": "Projetos",
-  "projects.intro": "Cinco cases reais, cada um com o problema, a solução e o resultado.",
+  "projects.title": "No ar.",
+  "projects.intro":
+    "Cinco projetos em produção. Em cada um: o problema, as decisões técnicas e o resultado.",
   "projects.card_link": "Ver case",
 
   // Home · processo
   "process.label": "// processo",
-  "process.title": "Processo",
-  "process.intro": "Uma linha da conversa à entrega. Cada ferramenta sai da etapa em que é usada.",
+  "process.title": "Do escopo ao deploy.",
+  "process.intro":
+    "Quatro etapas, da conversa ao site no ar. Cada ferramenta aparece na etapa em que entra.",
   "process.diagram_label": "Processo em quatro etapas",
   "process.hint":
     "clique numa etapa para ver o detalhe (no celular: toque numa etapa para ver o detalhe)",
   "process.step_label": "etapa",
   "process.talk.name": "Conversa",
-  "process.talk.body": "Entendo o negócio, quem vai usar e o que precisa sair do papel.",
+  "process.talk.body":
+    "Entendo o negócio, quem vai usar e qual resultado o projeto precisa entregar.",
   "process.talk.deliverable": "escopo e prazo por escrito",
   "process.design.name": "Desenho",
-  "process.design.body": "Desenho as telas e os estados antes de qualquer linha de código.",
-  "process.design.deliverable": "protótipo navegável",
+  "process.design.body":
+    "Defino tokens, componentes e os estados de cada tela antes de escrever código.",
+  "process.design.deliverable": "protótipo e design system",
   "process.code.name": "Código",
-  "process.code.body": "Construo com componentes, tipos e testes, e reviso cada entrega.",
-  "process.code.deliverable": "código revisado e documentado",
+  "process.code.body":
+    "Construo sobre o design system, com componentes tipados, testes e revisão em cada entrega.",
+  "process.code.deliverable": "código tipado, testado e documentado",
   "process.launch.name": "Entrega",
-  "process.launch.body": "Publico, meço e acompanho o site depois que ele vai ao ar.",
+  "process.launch.body":
+    "Publico com CI/CD, meço Core Web Vitals e acompanho o site depois do lançamento.",
   "process.launch.deliverable": "site no ar com métricas",
   "process.deliverable_label": "você recebe",
 
   // Home · sobre
   "about.label": "// sobre",
-  "about.title": "Sobre",
+  "about.title": "Bruno Guimarães",
   "about.bio_1":
-    "Sou formado em Desenvolvimento de Sistemas Web pelo Senac e trabalho com front-end há 5 anos.",
+    "Trabalho com front-end há 5 anos, no ponto em que design e engenharia se encontram.",
   "about.bio_2":
-    "Trabalho com React, TypeScript e arquitetura server-side, guiado por princípios de engenharia de software e design com intenção. Otimizo performance e Core Web Vitals em projetos com tráfego real e mantenho testes automatizados e pipelines de CI/CD.",
+    "Crio e mantenho design systems: tokens, componentes e documentação que deixam o produto consistente e o time mais rápido. No código, uso React, TypeScript e Next.js com foco em performance, Core Web Vitals e acessibilidade, e mantenho testes automatizados e CI/CD em projetos com tráfego real.",
   "about.photo_alt": "Bruno Guimarães, de braços cruzados, sorrindo",
-  "about.capability.development": "Desenvolvimento front-end",
-  "about.capability.apis": "APIs",
+  "about.capability.development": "Front-end em React e TypeScript",
+  "about.capability.apis": "Integração com APIs",
   "about.capability.deploy": "Deploy e CI/CD",
   "about.capability.a11y": "Acessibilidade e UX",
-  "about.capability.practices": "Boas práticas e processo",
-  "about.capability.collaboration": "Colaboração com produto",
+  "about.capability.practices": "Design systems e documentação",
+  "about.capability.collaboration": "Colaboração com design e produto",
 
   // Home · blog e página do blog
   "posts.label": "// blog",
-  "posts.title": "Blog",
-  "posts.home_intro": "Os três posts mais recentes.",
+  "posts.title": "Notas de campo.",
+  "posts.home_intro":
+    "Front-end, arquitetura e performance, escrito a partir de projeto real. Os três posts mais recentes.",
   "posts.read_all": "Ver o blog",
   "posts.card_language_note": "",
   "posts.read_time": "{n} min de leitura",
@@ -107,8 +114,9 @@ const ptDictionary = {
 
   // Home · contato
   "contact.label": "// contato",
-  "contact.title": "Contato",
-  "contact.intro": "Me conta o que você quer construir. Respondo pelo e-mail que você deixar.",
+  "contact.title": "Vamos conversar.",
+  "contact.intro":
+    "Projeto novo, redesign ou um design system para o seu time. Me conta o contexto e eu respondo pelo e-mail que você deixar.",
   "contact.form.label": "Formulário de contato",
   "contact.form.name_label": "nome",
   "contact.form.name_placeholder": "Como posso te chamar",
@@ -121,7 +129,7 @@ const ptDictionary = {
   "contact.form.type.app": "sistema",
   "contact.form.type.other": "outro",
   "contact.form.message_label": "mensagem",
-  "contact.form.message_placeholder": "O que é, para quem e para quando",
+  "contact.form.message_placeholder": "O que é, para quem e qual o prazo",
   "contact.form.error.name": "Escreva seu nome.",
   "contact.form.error.email": "Escreva seu e-mail.",
   "contact.form.error.email_invalid": "Esse e-mail está incompleto. Confira o @ e o domínio.",
@@ -214,8 +222,8 @@ const ptDictionary = {
   "about.fact.experience_label": "de front-end",
   "about.fact.education_value": "Senac",
   "about.fact.education_label": "Desenvolvimento de Sistemas Web",
-  "about.fact.location_value": "Rio de Janeiro",
-  "about.fact.location_label": "Brasil",
+  "about.fact.location_value": "Remoto",
+  "about.fact.location_label": "base no Brasil",
 } as const;
 
 export type TranslationKey = keyof typeof ptDictionary;
@@ -244,15 +252,15 @@ const enDictionary: Record<TranslationKey, string> = {
   "loader.label": "Loading the site",
   "meta.home_title": "Bruno Guimarães · front-end developer",
   "meta.home_description":
-    "Front-end developer in Rio de Janeiro. Websites, online stores and web apps in React, Next.js and Astro.",
+    "Front-end developer specialized in React, Next.js, TypeScript and design systems. Fast, accessible and consistent interfaces, from prototype to deploy.",
   "meta.case_title": "{project} · case study by Bruno Guimarães",
   "meta.post_title": "{title} · Bruno Guimarães's blog",
 
   // Hero
-  "hero.label": "// front-end developer · rio de janeiro",
+  "hero.label": "// front-end developer · design systems",
   "hero.title": "Interfaces that live.",
   "hero.intro":
-    "Websites, online stores and web apps in React, Next.js and Astro. I design the states, write the code and stay with the site after it goes live.",
+    "I build interfaces in React, Next.js and Astro, and I create the design systems that keep a product consistent as it grows. From prototype to deploy, with types, tests and metrics.",
   "hero.cta_projects": "See projects",
   "hero.cta_contact": "Get in touch",
   "giro.label_state": "state",
@@ -269,51 +277,56 @@ const enDictionary: Record<TranslationKey, string> = {
 
   // Home · projects
   "projects.label": "// projects",
-  "projects.title": "Projects",
-  "projects.intro": "Five real projects, each with the problem, the solution and the result.",
+  "projects.title": "Live.",
+  "projects.intro":
+    "Five projects in production. For each one: the problem, the technical decisions and the result.",
   "projects.card_link": "View case study",
 
   // Home · process
   "process.label": "// process",
-  "process.title": "Process",
+  "process.title": "Scope to deploy.",
   "process.intro":
-    "One line from the first talk to launch. Each tool branches off the stage where I use it.",
+    "Four stages, from the first talk to a live site. Each tool shows up at the stage where it comes in.",
   "process.diagram_label": "Process in four stages",
   "process.hint": "click a stage to see the details (on the phone: tap a stage to see the details)",
   "process.step_label": "stage",
   "process.talk.name": "Talk",
-  "process.talk.body": "I learn the business, who will use it and what has to get built.",
+  "process.talk.body":
+    "I learn the business, who will use it and what result the project has to deliver.",
   "process.talk.deliverable": "scope and timeline in writing",
   "process.design.name": "Design",
-  "process.design.body": "I design the screens and their states before writing any code.",
-  "process.design.deliverable": "a clickable prototype",
+  "process.design.body":
+    "I define tokens, components and every screen's states before writing code.",
+  "process.design.deliverable": "a prototype and a design system",
   "process.code.name": "Code",
-  "process.code.body": "I build with components, types and tests, and review every delivery.",
-  "process.code.deliverable": "reviewed, documented code",
+  "process.code.body":
+    "I build on top of the design system, with typed components, tests and review on every delivery.",
+  "process.code.deliverable": "typed, tested, documented code",
   "process.launch.name": "Launch",
-  "process.launch.body": "I publish, measure and stay with the site after it goes live.",
+  "process.launch.body":
+    "I ship through CI/CD, measure Core Web Vitals and stay with the site after launch.",
   "process.launch.deliverable": "a live site with metrics",
   "process.deliverable_label": "you get",
 
   // Home · about
   "about.label": "// about",
-  "about.title": "About",
-  "about.bio_1":
-    "I have a degree in Web Systems Development from Senac and 5 years of experience in front-end.",
+  "about.title": "Bruno Guimarães",
+  "about.bio_1": "I've worked in front-end for 5 years, where design and engineering meet.",
   "about.bio_2":
-    "I work with React, TypeScript and server-side architecture, guided by software engineering principles and intentional design. I optimize performance and Core Web Vitals on projects with real traffic, and I maintain automated tests and CI/CD pipelines.",
+    "I create and maintain design systems: tokens, components and documentation that keep a product consistent and a team faster. In code, I use React, TypeScript and Next.js with a focus on performance, Core Web Vitals and accessibility, and I maintain automated tests and CI/CD on projects with real traffic.",
   "about.photo_alt": "Bruno Guimarães, arms crossed, smiling",
-  "about.capability.development": "Front-end development",
-  "about.capability.apis": "APIs",
+  "about.capability.development": "Front-end in React and TypeScript",
+  "about.capability.apis": "API integration",
   "about.capability.deploy": "Deployment and CI/CD",
   "about.capability.a11y": "Accessibility and UX",
-  "about.capability.practices": "Engineering practices",
-  "about.capability.collaboration": "Product collaboration",
+  "about.capability.practices": "Design systems and documentation",
+  "about.capability.collaboration": "Working with design and product",
 
   // Home · blog and blog page
   "posts.label": "// blog",
-  "posts.title": "Blog",
-  "posts.home_intro": "The three latest posts.",
+  "posts.title": "Field notes.",
+  "posts.home_intro":
+    "Front-end, architecture and performance, written from real projects. The three latest posts.",
   "posts.read_all": "Read the blog",
   "posts.card_language_note": "In Portuguese",
   "posts.read_time": "{n} min read",
@@ -322,8 +335,9 @@ const enDictionary: Record<TranslationKey, string> = {
 
   // Home · contact
   "contact.label": "// contact",
-  "contact.title": "Contact",
-  "contact.intro": "Tell me what you want to build. I'll reply to the email you leave.",
+  "contact.title": "Let's talk.",
+  "contact.intro":
+    "A new project, a redesign or a design system for your team. Tell me the context and I'll reply to the email you leave.",
   "contact.form.label": "Contact form",
   "contact.form.name_label": "name",
   "contact.form.name_placeholder": "What should I call you",
@@ -336,7 +350,7 @@ const enDictionary: Record<TranslationKey, string> = {
   "contact.form.type.app": "web app",
   "contact.form.type.other": "other",
   "contact.form.message_label": "message",
-  "contact.form.message_placeholder": "What it is, who it's for and when you need it",
+  "contact.form.message_placeholder": "What it is, who it's for and the deadline",
   "contact.form.error.name": "Enter your name.",
   "contact.form.error.email": "Enter your email.",
   "contact.form.error.email_invalid": "This email looks incomplete. Check the @ and the domain.",
@@ -429,8 +443,8 @@ const enDictionary: Record<TranslationKey, string> = {
   "about.fact.experience_label": "of front-end",
   "about.fact.education_value": "Senac",
   "about.fact.education_label": "Web Systems Development",
-  "about.fact.location_value": "Rio de Janeiro",
-  "about.fact.location_label": "Brazil",
+  "about.fact.location_value": "Remote",
+  "about.fact.location_label": "based in Brazil",
 };
 
 export const dictionary = {

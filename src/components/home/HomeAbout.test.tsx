@@ -14,17 +14,17 @@ describe("HomeAbout", () => {
   it("mostra a bio em dois parágrafos", () => {
     render(<HomeAbout />);
     expect(
-      screen.getByText(/formado em Desenvolvimento de Sistemas Web pelo Senac/i)
+      screen.getByText(/no ponto em que design e engenharia se encontram/i)
     ).toBeInTheDocument();
-    expect(screen.getByText(/Trabalho com React, TypeScript/)).toBeInTheDocument();
+    expect(screen.getByText(/Crio e mantenho design systems/)).toBeInTheDocument();
   });
 
-  it("mostra os fatos: 5 anos, Senac e Rio de Janeiro", () => {
+  it("mostra os fatos: 5 anos, Senac e remoto", () => {
     const { container } = render(<HomeAbout />);
     const facts = Array.from(container.querySelectorAll(".home-about__facts dt")).map(
       el => el.textContent
     );
-    expect(facts).toEqual(["5 anos", "Senac", "Rio de Janeiro"]);
+    expect(facts).toEqual(["5 anos", "Senac", "Remoto"]);
   });
 
   it("lista as seis capacidades", () => {
