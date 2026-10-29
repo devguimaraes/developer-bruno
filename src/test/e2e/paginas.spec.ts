@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { waitForHydration } from "./ready";
 
 test.describe("Case, 404 e movimento reduzido", () => {
   test("Deve abrir o case e seguir para o próximo", async ({ page }) => {
@@ -9,7 +10,7 @@ test.describe("Case, 404 e movimento reduzido", () => {
       /\/projetos\/estudio-entre/
     );
 
-    await page.waitForFunction(() => !document.documentElement.hasAttribute("data-loader"));
+    await waitForHydration(page);
     await page
       .getByRole("link", { name: /Atlas Marine Solutions/ })
       .last()
@@ -24,7 +25,7 @@ test.describe("Case, 404 e movimento reduzido", () => {
     await expect(page.getByRole("heading", { name: "Essa página se perdeu." })).toBeVisible();
     await expect(page.getByText("// endereço: /rota-que-nao-existe")).toBeVisible();
 
-    await page.waitForFunction(() => !document.documentElement.hasAttribute("data-loader"));
+    await waitForHydration(page);
     await page.getByRole("link", { name: "Voltar ao início" }).click();
     await expect(page).toHaveURL(/\/$/);
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Interfaces com vida.");

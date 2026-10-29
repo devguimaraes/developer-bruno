@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { waitForHydration } from "./ready";
 
 test.describe("Navegação Principal", () => {
   test("Deve carregar a home com as seções na ordem e abrir o blog", async ({ page }) => {
@@ -54,7 +55,7 @@ test.describe("Navegação Principal", () => {
 
   test("Deve levar o menu até a seção de projetos ao rolar", async ({ page }) => {
     await page.goto("/");
-    await page.waitForFunction(() => !document.documentElement.hasAttribute("data-loader"));
+    await waitForHydration(page);
     await page.evaluate(() => window.scrollBy(0, 500));
 
     // O header (computador) e a barra de abas (celular) têm o link. O getByRole só vê o visível.

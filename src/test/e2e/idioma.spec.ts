@@ -1,11 +1,12 @@
 import { expect, test } from "@playwright/test";
+import { waitForHydration } from "./ready";
 
 test.describe("Idioma", () => {
   test("Deve trocar para inglês, atualizar o lang e lembrar a escolha ao navegar e recarregar", async ({
     page,
   }) => {
     await page.goto("/");
-    await page.waitForFunction(() => !document.documentElement.hasAttribute("data-loader"));
+    await waitForHydration(page);
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Interfaces com vida.");
 
     // O clique antes da hidratação não faz nada, então repete até a página responder.

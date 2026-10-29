@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { waitForHydration } from "./ready";
 
 test.describe("Fluxo do Blog", () => {
   test.beforeEach(async ({ page }) => {
@@ -44,7 +45,7 @@ test.describe("Fluxo do Blog", () => {
 
   test("Deve permitir voltar da página do post para a listagem", async ({ page }) => {
     // A primeira visita cobre a página com a tela de carregamento. O clique só vale depois dela.
-    await page.waitForFunction(() => !document.documentElement.hasAttribute("data-loader"));
+    await waitForHydration(page);
 
     const blogCard = page.locator("main a[href^='/blog/']").first();
     await blogCard.click();

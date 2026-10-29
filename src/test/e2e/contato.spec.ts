@@ -1,8 +1,9 @@
 import { expect, type Page, test } from "@playwright/test";
+import { waitForHydration } from "./ready";
 
 async function openForm(page: Page) {
   await page.goto("/#contato");
-  await page.waitForFunction(() => !document.documentElement.hasAttribute("data-loader"));
+  await waitForHydration(page);
   const form = page.getByRole("form", { name: "Formulário de contato" });
   await expect(form).toBeVisible();
   return form;
