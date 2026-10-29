@@ -1,4 +1,4 @@
-import { type FormEvent, useRef, useState } from "react";
+import { type FormEvent, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/giro/Button";
 import { Chip } from "@/components/giro/Chip";
 import { Field, TextArea } from "@/components/giro/Field";
@@ -42,6 +42,10 @@ export function ContactForm() {
   // Depois da primeira tentativa, cada campo é revalidado enquanto o visitante digita.
   const [attempted, setAttempted] = useState(false);
   const [status, setStatus] = useState<FormStatus>("idle");
+  // O botão só liga depois da hidratação. Antes disso (ou sem JS), o envio seria o submit nativo,
+  // por GET, com nome, e-mail e mensagem na URL. Com o botão desligado, o Enter também não envia.
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
 
   const locked = status === "sending" || status === "sent";
 
@@ -168,7 +172,7 @@ export function ContactForm() {
           type="submit"
           variant="primary"
           status={buttonStatus}
-          disabled={status === "sending" || status === "sent"}
+          disabled={!hydrated || status === "sending" || status === "sent"}
         >
           {buttonText}
         </Button>

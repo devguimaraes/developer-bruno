@@ -1,4 +1,5 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import { renderToString } from "react-dom/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { submitContact } from "@/lib/contact";
 import { setLocale } from "@/lib/i18n";
@@ -54,6 +55,13 @@ describe("ContactForm", () => {
     expect(honeypot).toHaveAttribute("tabindex", "-1");
     expect(honeypot).toHaveAttribute("aria-hidden", "true");
     expect(honeypot).toHaveClass("g-sr");
+  });
+
+  it("no HTML do servidor, o envio fica desligado até a hidratação", () => {
+    // Sem o React, o submit seria o nativo, por GET, com nome, e-mail e mensagem na URL.
+    const container = document.createElement("div");
+    container.innerHTML = renderToString(<ContactForm />);
+    expect(within(container).getByRole("button", { name: "Enviar mensagem" })).toBeDisabled();
   });
 
   it("sem preencher, mostra erro em cada campo obrigatório e não envia", () => {

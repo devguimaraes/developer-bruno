@@ -71,3 +71,19 @@ test.describe("Formulário de contato", () => {
     await expect(page.getByText(/Não deu para enviar/)).toBeVisible();
   });
 });
+
+test.describe("Formulário de contato sem JavaScript", () => {
+  test.use({ javaScriptEnabled: false });
+
+  test("Não deve mandar os dados pela URL quando a página não hidrata", async ({ page }) => {
+    await page.goto("/#contato");
+    const form = page.getByRole("form", { name: "Formulário de contato" });
+    await expect(form.getByRole("button", { name: "Enviar mensagem" })).toBeDisabled();
+
+    // Enter num campo é o envio implícito do navegador. O Playwright espera a navegação que ele
+    // dispara, então a URL abaixo já é a de depois do envio, se houver.
+    await fillValid(form);
+    await form.getByLabel("nome").press("Enter");
+    expect(page.url()).not.toContain("name=");
+  });
+});
