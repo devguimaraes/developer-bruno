@@ -1,12 +1,23 @@
-import type { CSSProperties } from "react";
+import { type CSSProperties, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+import {
+  CIRCUMFERENCE,
+  FINISH_EASING,
+  loadingPose,
+  RESOLVE_EASING,
+  spinFinish,
+} from "./giro-motion";
 import type { GiroState } from "./giro-states";
-
-// Circunferência do arco (raio 44). --g-dash é "<visível> <resto>" e precisa somar 277.
-const CIRCUMFERENCE = 277;
 
 // Alcance dos olhos no curioso (unidades do quadro) e a inclinação máxima que ele rende.
 const MAX_LOOK = 6;
 const MAX_TILT_DEG = 8;
+const DASH_RESOLVE_MS = 520;
+// Destinos com giro próprio no CSS: terminar a volta por cima dele faria o arco saltar no fim.
+const OWN_SPIN: ReadonlySet<GiroState> = new Set(["thinking", "lost"]);
+
+// A saída do giro precisa rodar antes da pintura; no servidor não há o que medir.
+const useBrowserLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 type GiroStyle = CSSProperties & { [name: `--${string}`]: string };
 
@@ -35,6 +46,51 @@ function sizeClass(size: number | undefined, signature: boolean): string | undef
   return "g-giro--xs";
 }
 
+/** Início da animação de giro em curso, no relógio de performance.now(). */
+function spinStart(spin: SVGGElement): number {
+  const starts = spin
+    .getAnimations()
+    .map(animation => animation.startTime)
+    .filter((time): time is number => typeof time === "number");
+  return starts.length > 0 ? Math.min(...starts) : performance.now();
+}
+
+// Ao sair de loading o CSS tira a animação de giro e o arco voltaria a 0° num quadro. Aqui a volta
+// termina a partir de onde estava, e o traço do arco fecha o ciclo no mesmo tempo. Com `dash` falso
+// o destino tem transição própria do traço (sleeping, progresso) e ela fica valendo.
+function finishSpin(
+  spin: SVGGElement,
+  arc: SVGCircleElement,
+  elapsedMs: number,
+  dash: boolean
+): Animation[] {
+  const pose = loadingPose(elapsedMs / 1000);
+  const finish = spinFinish(pose);
+  const timing = { duration: finish.duration, easing: FINISH_EASING };
+  const animations = [
+    spin.animate(
+      [{ transform: `rotate(${finish.from}deg)` }, { transform: "rotate(360deg)" }],
+      timing
+    ),
+    arc.animate(
+      [{ strokeDashoffset: `${pose.offset}` }, { strokeDashoffset: `${finish.offsetTo}` }],
+      timing
+    ),
+  ];
+  if (!dash) return animations;
+  // Transição de CSS vence animação na cascata: sem desligá-la, o traço saltaria para o valor novo.
+  arc.style.transition = "none";
+  const target = getComputedStyle(arc).strokeDasharray;
+  const resolve = arc.animate(
+    [{ strokeDasharray: `${pose.dash} ${CIRCUMFERENCE - pose.dash}` }, { strokeDasharray: target }],
+    { duration: DASH_RESOLVE_MS, easing: RESOLVE_EASING }
+  );
+  // onfinish não dispara no cancel; quem cancela devolve a transição (cancelFinish).
+  resolve.onfinish = () => arc.style.removeProperty("transition");
+  animations.push(resolve);
+  return animations;
+}
+
 export function Giro({
   state = "idle",
   size,
@@ -44,6 +100,41 @@ export function Giro({
   hop = false,
   className,
 }: GiroProps) {
+  const reducedMotion = useReducedMotion();
+  const spinRef = useRef<SVGGElement>(null);
+  const arcRef = useRef<SVGCircleElement>(null);
+  const loadingSince = useRef<number | null>(null);
+  const finishing = useRef<Animation[]>([]);
+
+  // Estado anterior, para o CSS coreografar cada par (data-from).
+  const [trail, setTrail] = useState<{ state: GiroState; from?: GiroState }>({ state });
+  if (trail.state !== state) setTrail({ state, from: trail.state });
+  const from = trail.state === state ? trail.from : trail.state;
+  const hasProgress = progress !== undefined;
+
+  useBrowserLayoutEffect(() => {
+    const spin = spinRef.current;
+    const arc = arcRef.current;
+    if (!spin || !arc) return;
+    // Uma saída ainda em curso ficaria por cima das animações de CSS do próximo estado.
+    const cancelFinish = () => {
+      for (const animation of finishing.current) animation.cancel();
+      finishing.current = [];
+      arc.style.removeProperty("transition");
+    };
+    if (state === "loading") {
+      cancelFinish();
+      loadingSince.current = spinStart(spin);
+      return;
+    }
+    const since = loadingSince.current;
+    loadingSince.current = null;
+    if (since === null || from !== "loading" || reducedMotion || OWN_SPIN.has(state)) return;
+    cancelFinish();
+    const dash = state !== "sleeping" && !hasProgress;
+    finishing.current = finishSpin(spin, arc, performance.now() - since, dash);
+  }, [state, from, reducedMotion, hasProgress]);
+
   const style: GiroStyle = {};
   if (size !== undefined) style.fontSize = `${size}px`;
   if (progress !== undefined) {
@@ -68,6 +159,7 @@ export function Giro({
     <svg
       className={classes.join(" ")}
       data-state={state === "idle" ? undefined : state}
+      data-from={from === undefined || from === "idle" ? undefined : from}
       data-progress={progress}
       style={style}
       viewBox="0 0 120 120"
@@ -76,26 +168,33 @@ export function Giro({
       <g className="g-giro__body">
         <circle className="g-giro__track" cx="60" cy="60" r="44" />
         <g className="g-giro__turn">
-          <g className="g-giro__spin">
-            <circle className="g-giro__arc" cx="60" cy="60" r="44" />
+          <g className="g-giro__spin" ref={spinRef}>
+            <circle className="g-giro__arc" ref={arcRef} cx="60" cy="60" r="44" />
           </g>
         </g>
-        <g className="g-giro__blink">
+        {/* Cada olho tem a sua pálpebra: piscam com 40 ms de diferença. */}
+        <g className="g-giro__lid g-giro__lid--l">
           <ellipse className="g-giro__eye" cx="46" cy="54" rx="6" ry="9" />
+        </g>
+        <g className="g-giro__lid g-giro__lid--r">
           <ellipse className="g-giro__eye" cx="74" cy="54" rx="6" ry="9" />
         </g>
+        {/* Rostos separados por lado e por traço, para serem desenhados um depois do outro. */}
+        <path className="g-giro__face g-giro__face--happy" d="M38 60 Q46 46 54 60" />
         <path
-          className="g-giro__face g-giro__face--happy"
-          d="M38 60 Q46 46 54 60 M66 60 Q74 46 82 60"
+          className="g-giro__face g-giro__face--happy g-giro__face--r"
+          d="M66 60 Q74 46 82 60"
         />
+        <path className="g-giro__face g-giro__face--x" d="M39 52 L53 62" />
+        <path className="g-giro__face g-giro__face--x g-giro__face--l2" d="M53 52 L39 62" />
+        <path className="g-giro__face g-giro__face--x g-giro__face--r" d="M67 52 L81 62" />
+        <path className="g-giro__face g-giro__face--x g-giro__face--r2" d="M81 52 L67 62" />
+        <path className="g-giro__face g-giro__face--flat" d="M39 58 H53" />
+        <path className="g-giro__face g-giro__face--flat g-giro__face--r" d="M67 58 H81" />
+        <path className="g-giro__face g-giro__face--sleep" d="M39 55 Q46 62 53 55" />
         <path
-          className="g-giro__face g-giro__face--x"
-          d="M39 52 L53 62 M53 52 L39 62 M67 52 L81 62 M81 52 L67 62"
-        />
-        <path className="g-giro__face g-giro__face--flat" d="M39 58 H53 M67 58 H81" />
-        <path
-          className="g-giro__face g-giro__face--sleep"
-          d="M39 55 Q46 62 53 55 M67 55 Q74 62 81 55"
+          className="g-giro__face g-giro__face--sleep g-giro__face--r"
+          d="M67 55 Q74 62 81 55"
         />
         <path className="g-giro__z" d="M88 22 H98 L88 34 H98" />
       </g>

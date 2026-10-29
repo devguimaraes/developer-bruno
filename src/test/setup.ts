@@ -47,6 +47,19 @@ Object.defineProperty(window, "ResizeObserver", {
   value: ResizeObserverMock,
 });
 
+// Mock da Web Animations API (o Giro termina a volta do loading com element.animate). Os testes
+// que conferem a chamada trocam estes por espiões.
+Object.defineProperty(Element.prototype, "getAnimations", {
+  writable: true,
+  configurable: true,
+  value: vi.fn(() => []),
+});
+Object.defineProperty(Element.prototype, "animate", {
+  writable: true,
+  configurable: true,
+  value: vi.fn(() => ({ finished: Promise.resolve(), cancel: vi.fn() })),
+});
+
 // Mock de Framer Motion robusto
 vi.mock("framer-motion", async () => {
   const React = await import("react");

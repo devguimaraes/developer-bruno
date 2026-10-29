@@ -183,7 +183,10 @@
 /* O Giro da origem esmaece quando o hero o tira do lugar. */
 .g-signature__o .g-giro,
 .g-tabbar__giro .g-giro {
-  transition: opacity 120ms linear;
+  transition:
+    opacity 120ms linear,
+    color 220ms linear,
+    background-color 220ms linear;
 }
 
 @media (prefers-reduced-motion: reduce) {

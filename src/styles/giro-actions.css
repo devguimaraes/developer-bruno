@@ -85,6 +85,8 @@
 .g-button .g-giro {
   font-size: 28px;
   --g-ink: currentColor;
+  /* O tamanho vem daqui, não do size do Giro: a amplitude de 24 a 31 px vai junto. */
+  --g-amp: 2.6;
 }
 .g-button--sm .g-giro {
   font-size: 24px;

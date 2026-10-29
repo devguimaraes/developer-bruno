@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { render } from "@testing-library/react";
 import { Giro } from "./Giro";
 import { GIRO_STATES, type GiroState } from "./giro-states";
@@ -132,5 +132,149 @@ describe("Giro — tamanho", () => {
     const svg = getSvg({ size: 16, className: "ml-2" });
     expect(svg.classList.contains("g-giro--xs")).toBe(true);
     expect(svg.classList.contains("ml-2")).toBe(true);
+  });
+});
+
+describe("Giro — estado anterior (data-from)", () => {
+  it("no primeiro render não há estado anterior", () => {
+    expect(getSvg({ state: "loading" }).hasAttribute("data-from")).toBe(false);
+  });
+
+  it("ao trocar de estado, data-from guarda o anterior", () => {
+    const { container, rerender } = render(<Giro state="sleeping" />);
+    rerender(<Giro state="idle" />);
+    expect(container.querySelector("svg")?.getAttribute("data-from")).toBe("sleeping");
+    rerender(<Giro state="error" />);
+    expect(container.querySelector("svg")?.hasAttribute("data-from")).toBe(false);
+  });
+
+  it("re-render no mesmo estado mantém o anterior", () => {
+    const { container, rerender } = render(<Giro state="error" />);
+    rerender(<Giro state="idle" />);
+    rerender(<Giro state="idle" look={{ x: 1, y: 0 }} />);
+    expect(container.querySelector("svg")?.getAttribute("data-from")).toBe("error");
+  });
+});
+
+describe("Giro — saída do carregamento", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  function spinCalls() {
+    return vi
+      .mocked(Element.prototype.animate)
+      .mock.calls.filter(
+        ([frames]) => Array.isArray(frames) && frames[0] && "transform" in frames[0]
+      );
+  }
+
+  it("de loading para done termina a volta a partir do ângulo em que estava", () => {
+    // A animação de giro começou em 1000 ms; 2 s depois o giro está em 760°, ou seja, 40° na volta.
+    vi.spyOn(Element.prototype, "getAnimations").mockReturnValue([
+      { startTime: 1000 } as unknown as Animation,
+    ]);
+    const now = vi.spyOn(performance, "now").mockReturnValue(1000);
+    const animate = vi.mocked(Element.prototype.animate);
+    animate.mockClear();
+
+    const { rerender } = render(<Giro state="loading" />);
+    now.mockReturnValue(3000);
+    rerender(<Giro state="done" />);
+
+    const calls = spinCalls();
+    expect(calls).toHaveLength(1);
+    const [frames, timing] = calls[0] as [Keyframe[], KeyframeAnimationOptions];
+    expect(Number.parseFloat(String(frames[0].transform).slice(7))).toBeCloseTo(40, 3);
+    expect(frames[1].transform).toBe("rotate(360deg)");
+    // Faltam 320°: 2,2 ms por grau.
+    expect(timing.duration).toBeCloseTo(704, 3);
+  });
+
+  it("sem ter passado por loading, nada é animado por JS", () => {
+    const animate = vi.mocked(Element.prototype.animate);
+    animate.mockClear();
+    const { rerender } = render(<Giro state="idle" />);
+    rerender(<Giro state="done" />);
+    expect(animate).not.toHaveBeenCalled();
+  });
+
+  it("com movimento reduzido a troca é direta", () => {
+    // Once: o hook consulta uma vez por montagem e o mock não vaza para os testes seguintes.
+    vi.mocked(window.matchMedia).mockImplementationOnce(
+      (query: string) =>
+        ({
+          matches: true,
+          media: query,
+          addEventListener: vi.fn(),
+          removeEventListener: vi.fn(),
+        }) as unknown as MediaQueryList
+    );
+    const animate = vi.mocked(Element.prototype.animate);
+    animate.mockClear();
+    const { rerender } = render(<Giro state="loading" />);
+    rerender(<Giro state="done" />);
+    expect(animate).not.toHaveBeenCalled();
+  });
+
+  function dashCalls() {
+    return vi
+      .mocked(Element.prototype.animate)
+      .mock.calls.filter(
+        ([frames]) => Array.isArray(frames) && frames[0] && "strokeDasharray" in frames[0]
+      );
+  }
+
+  it("a transição do arco volta quando o traço termina de resolver", () => {
+    const animate = vi.mocked(Element.prototype.animate);
+    animate.mockClear();
+    const { container, rerender } = render(<Giro state="loading" />);
+    rerender(<Giro state="done" />);
+
+    const arc = container.querySelector<SVGCircleElement>(".g-giro__arc");
+    expect(arc?.style.transition).toBe("none");
+    const resolve = animate.mock.results.at(-1)?.value as Animation;
+    resolve.onfinish?.call(resolve, new Event("finish") as AnimationPlaybackEvent);
+    expect(arc?.style.transition).toBe("");
+  });
+
+  it("voltar a loading antes do fim cancela a saída e devolve a transição", () => {
+    const animate = vi.mocked(Element.prototype.animate);
+    animate.mockClear();
+    const { container, rerender } = render(<Giro state="loading" />);
+    rerender(<Giro state="done" />);
+    const exits = animate.mock.results.map(result => result.value as Animation);
+    expect(exits).toHaveLength(3);
+
+    rerender(<Giro state="loading" />);
+    for (const exit of exits) expect(exit.cancel).toHaveBeenCalledOnce();
+    expect(container.querySelector<SVGCircleElement>(".g-giro__arc")?.style.transition).toBe("");
+  });
+
+  it("thinking e lost têm giro próprio: a volta não é terminada por JS", () => {
+    const animate = vi.mocked(Element.prototype.animate);
+    for (const target of ["thinking", "lost"] as const) {
+      animate.mockClear();
+      const { rerender, unmount } = render(<Giro state="loading" />);
+      rerender(<Giro state={target} />);
+      expect(animate).not.toHaveBeenCalled();
+      unmount();
+    }
+  });
+
+  it("sleeping e progresso mantêm a transição própria do traço", () => {
+    const animate = vi.mocked(Element.prototype.animate);
+    animate.mockClear();
+    const sleep = render(<Giro state="loading" />);
+    sleep.rerender(<Giro state="sleeping" />);
+    expect(spinCalls()).toHaveLength(1);
+    expect(dashCalls()).toHaveLength(0);
+    sleep.unmount();
+
+    animate.mockClear();
+    const progress = render(<Giro state="loading" progress={40} />);
+    progress.rerender(<Giro state="done" progress={100} />);
+    expect(spinCalls()).toHaveLength(1);
+    expect(dashCalls()).toHaveLength(0);
   });
 });
