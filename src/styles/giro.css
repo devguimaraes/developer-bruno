@@ -586,6 +586,9 @@
 .g-giro[data-moment="hello"] {
   animation: g-moment 2000ms linear 1;
 }
+.g-giro[data-moment="dizzy"] {
+  animation: g-moment 1400ms linear 1;
+}
 
 /* wink: o olho direito fecha, vira sorriso e o corpo inclina para o lado. */
 .g-giro[data-moment="wink"] .g-giro__lid--r .g-giro__eye {
@@ -614,6 +617,15 @@
 }
 .g-giro[data-moment="hello"] .g-giro__face--happy {
   animation: g-hello-smile 2000ms linear 1;
+}
+
+/* dizzy: depois de uma rolagem rápida e longa, o corpo balança perdendo força e os olhos vão
+   para o lado oposto. O arco fica onde está: na navegação ele é o progresso. */
+.g-giro[data-moment="dizzy"] .g-giro__body {
+  animation: g-dizzy-body 1400ms linear 1;
+}
+.g-giro[data-moment="dizzy"] .g-giro__eye {
+  animation: g-dizzy-eye 1400ms linear 1;
 }
 
 /* listening: arco curto no alto, olhos para baixo seguindo o texto e um pulso a cada tecla
@@ -1017,6 +1029,51 @@
   80% {
     opacity: 0;
     stroke-dashoffset: var(--g-len);
+  }
+}
+/* Cada balanço tem a metade do anterior, com ida e volta em inOut. */
+@keyframes g-dizzy-body {
+  0% {
+    transform: rotate(0deg);
+    animation-timing-function: var(--ease-resolve);
+  }
+  12% {
+    transform: rotate(12deg);
+    animation-timing-function: var(--g-ease-in-out);
+  }
+  30% {
+    transform: rotate(-9deg);
+    animation-timing-function: var(--g-ease-in-out);
+  }
+  48% {
+    transform: rotate(6deg);
+    animation-timing-function: var(--g-ease-in-out);
+  }
+  64% {
+    transform: rotate(-3.5deg);
+    animation-timing-function: var(--g-ease-in-out);
+  }
+  80% {
+    transform: rotate(1.5deg);
+    animation-timing-function: var(--g-ease-in-out);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+/* Sem 0% e 100%: parte do olhar da navegação (--g-look-*) e volta a ele. */
+@keyframes g-dizzy-eye {
+  12% {
+    translate: calc(-3px * var(--g-amp)) calc(1px * var(--g-amp));
+  }
+  30% {
+    translate: calc(2.5px * var(--g-amp)) calc(-1px * var(--g-amp));
+  }
+  48% {
+    translate: calc(-1.8px * var(--g-amp)) calc(1px * var(--g-amp));
+  }
+  64% {
+    translate: calc(1px * var(--g-amp)) 0;
   }
 }
 @keyframes g-pulse-a {

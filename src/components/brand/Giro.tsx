@@ -35,7 +35,7 @@ export interface GiroProps {
   look?: { x: number; y: number };
   /** Dá o pulo do fim (classe is-hop). */
   hop?: boolean;
-  /** Reação por cima do estado. Piscadela e oi tocam uma vez a cada troca; ouvindo dura enquanto
+  /** Reação por cima do estado. Piscadela, oi e tonto tocam uma vez a cada troca; ouvindo dura enquanto
    * a prop estiver ligada. Com movimento reduzido, nenhuma toca. */
   moment?: GiroMoment;
   /** No ouvindo, o arco pulsa a cada mudança deste número. */

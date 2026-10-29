@@ -42,6 +42,7 @@ const SCROLL: ScrollState = {
   progress: 62,
   direction: 1,
   fast: false,
+  dizzy: false,
   activeId: "processo",
   pastHero: true,
   pathname: "/",
@@ -69,6 +70,13 @@ describe("ScrollIslandView", () => {
     const giro = container.querySelector("svg.g-giro");
     expect(giro?.getAttribute("data-progress")).toBe("62");
     expect(giro?.getAttribute("data-state")).toBeNull();
+  });
+
+  it("depois de uma rolagem rápida e longa, o Giro fica tonto", () => {
+    const { container } = render(
+      <ScrollIslandView progress={40} label="Projetos" direction={1} dizzy />
+    );
+    expect(container.querySelector(".g-island .g-giro")?.getAttribute("data-moment")).toBe("dizzy");
   });
 
   it("no fim da página, o Giro fecha em sorriso e pula", () => {

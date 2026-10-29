@@ -33,6 +33,8 @@ export interface ScrollIslandViewProps {
   direction: 1 | -1 | 0;
   /** Rolagem rápida: liga o giro extra. */
   fast?: boolean;
+  /** Logo depois de uma rolagem rápida e longa: o Giro fica tonto. */
+  dizzy?: boolean;
   /** Se a ilha aparece (depois do hero). */
   visible?: boolean;
   menuOpen?: boolean;
@@ -55,6 +57,7 @@ export function ScrollIslandView({
   label,
   direction,
   fast = false,
+  dizzy = false,
   visible = true,
   menuOpen = false,
   activeId = null,
@@ -82,6 +85,8 @@ export function ScrollIslandView({
           look={{ x: 0, y: lookY }}
           state={giro.state}
           hop={giro.hop}
+          // Tonto só em repouso: no pronto, na festa, no sono ou carregando, o corpo já tem animação.
+          moment={dizzy && giro.state === "idle" ? "dizzy" : undefined}
           className={giro.party ? "is-party" : undefined}
         />
         <span className="g-island__label">{label}</span>
@@ -133,6 +138,7 @@ export function ScrollIsland() {
       label={islandLabel(locale, scroll.activeId, scroll.pathname)}
       direction={scroll.direction}
       fast={fast}
+      dizzy={scroll.dizzy}
       visible={scroll.pastHero}
       menuOpen={menuOpen}
       activeId={scroll.activeId}

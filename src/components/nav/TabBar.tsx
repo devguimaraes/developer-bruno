@@ -38,6 +38,8 @@ export interface TabBarViewProps {
   asleep?: boolean;
   /** Atalho escondido: festa que roda uma vez. */
   celebrating?: boolean;
+  /** Logo depois de uma rolagem rápida e longa: o Giro fica tonto. */
+  dizzy?: boolean;
   /** Giro pedido pela página do case, quando houver. */
   pageGiro?: GiroState | null;
   onToggleMenu?: () => void;
@@ -53,6 +55,7 @@ export function TabBarView({
   navigating = false,
   asleep = false,
   celebrating = false,
+  dizzy = false,
   pageGiro = null,
   onToggleMenu,
   onNavigate,
@@ -112,6 +115,8 @@ export function TabBarView({
             look={{ x: 0, y: menuOpen ? LOOK_PX : 0 }}
             state={giro.state}
             hop={giro.hop}
+            // Tonto só em repouso: no pronto, na festa, no sono ou carregando, o corpo já tem animação.
+            moment={dizzy && giro.state === "idle" ? "dizzy" : undefined}
             className={giro.party ? "is-party" : undefined}
           />
         </button>
@@ -122,7 +127,7 @@ export function TabBarView({
 
 /** Barra de abas ligada à página: aba ativa pela rota e pela seção, Giro com a leitura. */
 export function TabBar() {
-  const { progress, activeId, pathname } = useScrollState(SECTION_IDS);
+  const { progress, activeId, pathname, dizzy } = useScrollState(SECTION_IDS);
   const navigating = useNavigating();
   const { asleep, celebrating } = useGiroEggs();
   const pageGiro = useSyncExternalStore(subscribePageGiro, getPageGiro, () => null);
@@ -140,6 +145,7 @@ export function TabBar() {
       navigating={navigating}
       asleep={asleep}
       celebrating={celebrating}
+      dizzy={dizzy}
       pageGiro={pageGiro}
       onToggleMenu={() => setMenuOpen(open => !open)}
       onNavigate={closeMenu}
