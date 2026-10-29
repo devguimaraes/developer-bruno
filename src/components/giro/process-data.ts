@@ -10,6 +10,12 @@ export interface ProcessTool {
   name: string;
 }
 
+/** Ferramentas de uma etapa reunidas pela função que cumprem (base, conteúdo, hospedagem...). */
+export interface ProcessToolGroup {
+  labelKey: TranslationKey;
+  tools: readonly ProcessTool[];
+}
+
 export interface ProcessStep {
   id: ProcessStepId;
   /** Número da etapa, de 1 a 4. */
@@ -18,10 +24,10 @@ export interface ProcessStep {
   nameKey: TranslationKey;
   bodyKey: TranslationKey;
   deliverableKey: TranslationKey;
-  tools: readonly ProcessTool[];
+  groups: readonly ProcessToolGroup[];
 }
 
-// Ferramentas por etapa: decisão 49 e tabela do ProcessDiagram no DS.
+// Ferramentas por etapa: decisão 49 e tabela do ProcessDiagram no DS, agrupadas por função.
 export const PROCESS_STEPS: readonly ProcessStep[] = [
   {
     id: "talk",
@@ -30,12 +36,22 @@ export const PROCESS_STEPS: readonly ProcessStep[] = [
     nameKey: "process.talk.name",
     bodyKey: "process.talk.body",
     deliverableKey: "process.talk.deliverable",
-    tools: [
-      { slug: "google-meet", name: "Google Meet" },
-      { slug: "whatsapp", name: "WhatsApp" },
-      { slug: "google-drive", name: "Google Drive" },
-      { slug: "slack", name: "Slack" },
-      { slug: "linear", name: "Linear" },
+    groups: [
+      {
+        labelKey: "process.group.communication",
+        tools: [
+          { slug: "google-meet", name: "Google Meet" },
+          { slug: "whatsapp", name: "WhatsApp" },
+          { slug: "slack", name: "Slack" },
+        ],
+      },
+      {
+        labelKey: "process.group.organization",
+        tools: [
+          { slug: "google-drive", name: "Google Drive" },
+          { slug: "linear", name: "Linear" },
+        ],
+      },
     ],
   },
   {
@@ -45,9 +61,9 @@ export const PROCESS_STEPS: readonly ProcessStep[] = [
     nameKey: "process.design.name",
     bodyKey: "process.design.body",
     deliverableKey: "process.design.deliverable",
-    tools: [
-      { slug: "figma", name: "Figma" },
-      { slug: "claude", name: "Claude" },
+    groups: [
+      { labelKey: "process.group.screens", tools: [{ slug: "figma", name: "Figma" }] },
+      { labelKey: "process.group.exploration", tools: [{ slug: "claude", name: "Claude" }] },
     ],
   },
   {
@@ -57,18 +73,38 @@ export const PROCESS_STEPS: readonly ProcessStep[] = [
     nameKey: "process.code.name",
     bodyKey: "process.code.body",
     deliverableKey: "process.code.deliverable",
-    tools: [
-      { slug: "react", name: "React" },
-      { slug: "nextjs", name: "Next.js" },
-      { slug: "astro", name: "Astro" },
-      { slug: "typescript", name: "TypeScript" },
-      { slug: "tailwindcss", name: "Tailwind CSS" },
-      { slug: "shadcn-ui", name: "shadcn/ui" },
-      { slug: "motion", name: "Motion" },
-      { slug: "sanity", name: "Sanity" },
-      { slug: "wordpress", name: "WordPress" },
-      { slug: "github", name: "GitHub" },
-      { slug: "claude-code", name: "Claude Code" },
+    groups: [
+      {
+        labelKey: "process.group.foundation",
+        tools: [
+          { slug: "react", name: "React" },
+          { slug: "nextjs", name: "Next.js" },
+          { slug: "astro", name: "Astro" },
+          { slug: "typescript", name: "TypeScript" },
+        ],
+      },
+      {
+        labelKey: "process.group.interface",
+        tools: [
+          { slug: "tailwindcss", name: "Tailwind CSS" },
+          { slug: "shadcn-ui", name: "shadcn/ui" },
+          { slug: "motion", name: "Motion" },
+        ],
+      },
+      {
+        labelKey: "process.group.content",
+        tools: [
+          { slug: "sanity", name: "Sanity" },
+          { slug: "wordpress", name: "WordPress" },
+        ],
+      },
+      {
+        labelKey: "process.group.workflow",
+        tools: [
+          { slug: "github", name: "GitHub" },
+          { slug: "claude-code", name: "Claude Code" },
+        ],
+      },
     ],
   },
   {
@@ -78,14 +114,32 @@ export const PROCESS_STEPS: readonly ProcessStep[] = [
     nameKey: "process.launch.name",
     bodyKey: "process.launch.body",
     deliverableKey: "process.launch.deliverable",
-    tools: [
-      { slug: "vercel", name: "Vercel" },
-      { slug: "cloudflare", name: "Cloudflare" },
-      { slug: "hostinger", name: "Hostinger" },
-      { slug: "aws", name: "AWS" },
-      { slug: "github-actions", name: "GitHub Actions" },
-      { slug: "playwright", name: "Playwright" },
-      { slug: "plausible-analytics", name: "Plausible" },
+    groups: [
+      {
+        labelKey: "process.group.hosting",
+        tools: [
+          { slug: "vercel", name: "Vercel" },
+          { slug: "cloudflare", name: "Cloudflare" },
+          { slug: "hostinger", name: "Hostinger" },
+          { slug: "aws", name: "AWS" },
+        ],
+      },
+      {
+        labelKey: "process.group.quality",
+        tools: [
+          { slug: "github-actions", name: "GitHub Actions" },
+          { slug: "playwright", name: "Playwright" },
+        ],
+      },
+      {
+        labelKey: "process.group.metrics",
+        tools: [{ slug: "plausible-analytics", name: "Plausible" }],
+      },
     ],
   },
 ];
+
+/** Todas as ferramentas da etapa, na ordem dos grupos. */
+export function stepTools(step: ProcessStep): ProcessTool[] {
+  return step.groups.flatMap(group => group.tools);
+}

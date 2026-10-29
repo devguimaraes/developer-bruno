@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import { animate } from "framer-motion";
 import { ProcessDiagram } from "./ProcessDiagram";
 
 // Renderização pesada: com a suíte inteira em paralelo passa dos 5s padrão.
@@ -152,17 +153,144 @@ describe("ProcessDiagram", () => {
     expect(screen.getByText(/clique numa etapa para ver o detalhe/)).toBeInTheDocument();
   });
 
-  it("no computador usa o layout de linha com as mesmas ferramentas", () => {
-    restore = mockMatchMedia(query => query === "(min-width: 1024px)");
-    const { container } = render(<ProcessDiagram />);
+  describe("no computador (trilho com painel)", () => {
+    const desktop = () => {
+      restore = mockMatchMedia(query => query === "(min-width: 1024px)");
+    };
+    const panelTools = (container: HTMLElement) =>
+      Array.from(container.querySelectorAll(".g-track__slide.is-active .g-tool__name")).map(
+        el => el.textContent ?? ""
+      );
 
-    const group = screen.getByRole("region", { name: "Processo em quatro etapas" });
-    expect(group.querySelector(".g-metro__frame")).toBeInTheDocument();
-    expect(group).toHaveAttribute("data-motion", "on");
-    expect(within(group).getAllByRole("button")).toHaveLength(4);
-    for (const [stepId, tools] of Object.entries(TOOLS_BY_STEP)) {
-      expect(toolNamesIn(container, stepId).sort()).toEqual([...tools].sort());
-    }
+    it("abre em Conversa, com as ferramentas agrupadas da etapa", () => {
+      desktop();
+      const { container } = render(<ProcessDiagram />);
+
+      const group = screen.getByRole("region", { name: "Processo em quatro etapas" });
+      expect(group).toHaveClass("g-track");
+      expect(screen.getByRole("button", { name: /Conversa/ })).toHaveAttribute(
+        "aria-expanded",
+        "true"
+      );
+      expect(screen.getByRole("heading", { level: 3, name: "Conversa" })).toBeInTheDocument();
+      expect(screen.getByText("etapa 01 de 04")).toBeInTheDocument();
+      expect(panelTools(container).sort()).toEqual([...TOOLS_BY_STEP.talk].sort());
+      expect(screen.getByText("conversa")).toBeInTheDocument();
+      expect(screen.getByText("organização")).toBeInTheDocument();
+    });
+
+    it("clicar numa etapa troca o painel, e aria-controls aponta para ele", () => {
+      desktop();
+      const { container } = render(<ProcessDiagram />);
+
+      const code = screen.getByRole("button", { name: /Código/ });
+      fireEvent.click(code);
+
+      expect(code).toHaveAttribute("aria-expanded", "true");
+      expect(screen.getByRole("button", { name: /Conversa/ })).toHaveAttribute(
+        "aria-expanded",
+        "false"
+      );
+      const panel = document.getElementById(code.getAttribute("aria-controls") ?? "");
+      expect(panel).toHaveTextContent("Construo sobre o design system");
+      expect(panelTools(container).sort()).toEqual([...TOOLS_BY_STEP.code].sort());
+      expect(screen.getByText("interface e design system")).toBeInTheDocument();
+    });
+
+    it("anterior e próxima andam pelas etapas e travam nas pontas", () => {
+      desktop();
+      render(<ProcessDiagram />);
+
+      // Cada etapa tem os seus botões; só os da etapa aberta ficam visíveis para o leitor.
+      const prev = () => screen.getByRole("button", { name: "Etapa anterior" });
+      const next = () => screen.getByRole("button", { name: "Próxima etapa" });
+      expect(prev()).toBeDisabled();
+
+      fireEvent.click(next());
+      fireEvent.click(next());
+      fireEvent.click(next());
+      expect(screen.getByRole("heading", { level: 3, name: "Entrega" })).toBeInTheDocument();
+      expect(screen.queryByRole("heading", { level: 3, name: "Código" })).not.toBeInTheDocument();
+      expect(next()).toBeDisabled();
+
+      fireEvent.click(prev());
+      expect(screen.getByRole("heading", { level: 3, name: "Código" })).toBeInTheDocument();
+    });
+
+    it("com movimento, o autoplay começa ao entrar na tela e pode ser pausado", () => {
+      desktop();
+      render(<ProcessDiagram />);
+
+      const group = screen.getByRole("region", { name: "Processo em quatro etapas" });
+      expect(group).toHaveAttribute("data-motion", "on");
+      const pause = screen.getByRole("button", { name: "pausar" });
+      fireEvent.click(pause);
+      expect(screen.getByRole("button", { name: "reproduzir" })).toBeInTheDocument();
+    });
+
+    it("o autoplay avança uma etapa quando a borda fecha e para no fim da volta", () => {
+      desktop();
+      vi.mocked(animate).mockClear();
+      render(<ProcessDiagram />);
+
+      // Cada etapa termina quando a animação do cronômetro chama onComplete.
+      const finishStep = () => {
+        const calls = vi.mocked(animate).mock.calls;
+        const options = calls[calls.length - 1]?.[2] as { onComplete?: () => void } | undefined;
+        act(() => options?.onComplete?.());
+      };
+
+      expect(screen.getByRole("heading", { level: 3, name: "Conversa" })).toBeInTheDocument();
+      finishStep();
+      expect(screen.getByRole("heading", { level: 3, name: "Desenho" })).toBeInTheDocument();
+      finishStep();
+      finishStep();
+      expect(screen.getByRole("heading", { level: 3, name: "Entrega" })).toBeInTheDocument();
+      finishStep();
+      const replay = screen.getByRole("button", { name: "ver de novo" });
+
+      fireEvent.click(replay);
+      expect(screen.getByRole("heading", { level: 3, name: "Conversa" })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "pausar" })).toBeInTheDocument();
+    });
+
+    it("com o foco dentro, o autoplay espera", () => {
+      desktop();
+      render(<ProcessDiagram />);
+      vi.mocked(animate).mockClear();
+
+      fireEvent.focus(screen.getByRole("button", { name: "pausar" }));
+      expect(animate).not.toHaveBeenCalled();
+    });
+
+    it("anterior e próxima levam o foco para o botão da etapa nova", () => {
+      desktop();
+      render(<ProcessDiagram />);
+
+      fireEvent.click(screen.getByRole("button", { name: "Próxima etapa" }));
+      expect(screen.getByRole("button", { name: "Próxima etapa" })).toHaveFocus();
+    });
+
+    it("escolher uma etapa para o autoplay", () => {
+      desktop();
+      render(<ProcessDiagram />);
+
+      fireEvent.click(screen.getByRole("button", { name: /Desenho/ }));
+      expect(screen.getByRole("button", { name: "reproduzir" })).toBeInTheDocument();
+    });
+
+    it("com movimento reduzido não há autoplay nem botão de pausa", () => {
+      restore = mockMatchMedia(
+        query => query === "(min-width: 1024px)" || query.includes("prefers-reduced-motion")
+      );
+      vi.mocked(animate).mockClear();
+      render(<ProcessDiagram />);
+
+      const group = screen.getByRole("region", { name: "Processo em quatro etapas" });
+      expect(group).not.toHaveAttribute("data-motion");
+      expect(screen.queryByRole("button", { name: "pausar" })).not.toBeInTheDocument();
+      expect(animate).not.toHaveBeenCalled();
+    });
   });
 
   it("com movimento reduzido não liga a animação", async () => {

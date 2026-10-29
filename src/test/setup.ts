@@ -99,6 +99,7 @@ vi.mock("framer-motion", async () => {
       set: vi.fn(),
     }),
     useMotionValue: (initial?: number | string) => ({ get: () => initial ?? 0, set: vi.fn() }),
+    animate: vi.fn(() => ({ stop: vi.fn() })),
     useInView: () => true, // Hook crítico para ScrollReveal e Contact
     useAnimation: () => ({
       start: vi.fn(),
