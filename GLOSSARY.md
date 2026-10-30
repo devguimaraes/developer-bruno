@@ -17,7 +17,7 @@ Uma expressão do Giro ligada a uma situação da interface, como repouso, carre
 _Avoid_: pose, humor, animação
 
 **Momento do Giro**:
-Uma reação curta do Giro por cima do estado, causada por um gesto do visitante, como piscadela, oi, ouvindo ou tonto.
+Uma reação curta do Giro por cima do estado, causada por um gesto ou por uma pausa do visitante, como piscadela, oi, ouvindo, tonto ou espiando.
 _Avoid_: estado, animação, easter egg
 
 **Assinatura**:
