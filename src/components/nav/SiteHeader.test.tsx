@@ -13,7 +13,6 @@ const SCROLL: ScrollState = {
   progress: 0,
   direction: 0,
   fast: false,
-  dizzy: false,
   activeId: "processo",
   pastHero: false,
   pathname: "/",

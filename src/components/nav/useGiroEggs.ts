@@ -8,6 +8,7 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 const GIRO_SHORTCUT = "giro";
 const GIRO_SHORTCUT_MS = 1500;
 const PARTY_MS = 2400;
+const NAP_AFTER_MS = 60_000;
 
 export interface GiroShortcutBuffer {
   progress: string;
@@ -16,7 +17,7 @@ export interface GiroShortcutBuffer {
 
 export const EMPTY_GIRO_SHORTCUT: GiroShortcutBuffer = { progress: "", startedAt: null };
 
-function isTypingTarget(target: EventTarget | null): boolean {
+export function isTypingTarget(target: EventTarget | null): boolean {
   if (!(target instanceof Element)) return false;
   if (target.closest("input, textarea, select")) return true;
   const editable = target.closest("[contenteditable]");
@@ -64,6 +65,10 @@ let buffer: GiroShortcutBuffer = EMPTY_GIRO_SHORTCUT;
 let partyTimer: ReturnType<typeof setTimeout> | null = null;
 let reducedMotion = false;
 let reducedHolders = 0;
+let napping = false;
+let lastActivity = 0;
+let napTimer: ReturnType<typeof setTimeout> | null = null;
+const wakeListeners = new Set<() => void>();
 
 function emit(): void {
   for (const listener of listeners) listener();
@@ -91,9 +96,47 @@ function eggsBlocked(): boolean {
 
 function syncAsleepFromDocument(): void {
   if (typeof document === "undefined" || eggsBlocked()) return;
-  if (document.hidden === eggs.asleep) return;
-  eggs = { asleep: document.hidden, celebrating: eggs.celebrating };
+  const next = document.hidden || napping;
+  if (next === eggs.asleep) return;
+  const woke = eggs.asleep && !next;
+  eggs = { asleep: next, celebrating: eggs.celebrating };
   emit();
+  if (woke) for (const listener of wakeListeners) listener();
+}
+
+function scheduleNapCheck(delay: number): void {
+  if (napTimer !== null) return;
+  napTimer = setTimeout(checkNap, delay);
+}
+
+// Um timer só. Se houve atividade depois do disparo, reagenda pelo tempo que falta.
+function checkNap(): void {
+  napTimer = null;
+  const idle = performance.now() - lastActivity;
+  if (idle < NAP_AFTER_MS) {
+    scheduleNapCheck(NAP_AFTER_MS - idle);
+    return;
+  }
+  if (eggsBlocked()) {
+    scheduleNapCheck(NAP_AFTER_MS);
+    return;
+  }
+  napping = true;
+  syncAsleepFromDocument();
+}
+
+function registerActivity(): void {
+  lastActivity = performance.now();
+  if (napping) {
+    napping = false;
+    syncAsleepFromDocument();
+  }
+  scheduleNapCheck(NAP_AFTER_MS);
+}
+
+function onVisibilityChange(): void {
+  if (!document.hidden) registerActivity();
+  syncAsleepFromDocument();
 }
 
 export function endGiroParty(): void {
@@ -132,12 +175,26 @@ function onAnimationEnd(event: AnimationEvent): void {
   endGiroParty();
 }
 
-// visibilitychange, keydown e animationend saem do document. No servidor não há document
-// e nada é registrado.
+/** Listener chamado quando o Giro acorda. Devolve a função que remove. */
+export function onGiroWake(listener: () => void): () => void {
+  wakeListeners.add(listener);
+  return () => {
+    wakeListeners.delete(listener);
+  };
+}
+
+// visibilitychange, keydown, animationend e a atividade saem do document; scroll sai da window.
+// No servidor não há document e nada é registrado.
 if (typeof document !== "undefined") {
-  document.addEventListener("visibilitychange", syncAsleepFromDocument);
+  document.addEventListener("visibilitychange", onVisibilityChange);
   document.addEventListener("keydown", onKeyDown);
   document.addEventListener("animationend", onAnimationEnd);
+  for (const type of ["pointermove", "pointerdown", "keydown", "wheel", "touchstart"]) {
+    document.addEventListener(type, registerActivity, { passive: true });
+  }
+  window.addEventListener("scroll", registerActivity, { passive: true });
+  lastActivity = performance.now();
+  scheduleNapCheck(NAP_AFTER_MS);
 }
 
 function setReducedHold(hold: boolean): void {
@@ -150,7 +207,11 @@ function setReducedHold(hold: boolean): void {
   }
   reducedMotion = next;
   if (next) suppressEggs();
-  else syncAsleepFromDocument();
+  else {
+    // O tempo parado com movimento reduzido não conta: o cochilo espera 60 s inteiros.
+    lastActivity = performance.now();
+    syncAsleepFromDocument();
+  }
 }
 
 function subscribeGiroEggs(listener: Listener): () => void {

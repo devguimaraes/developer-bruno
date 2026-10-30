@@ -42,7 +42,13 @@ export function HomeContact() {
           />
           <div className="home-mail__links">
             {socials.map(link => (
-              <ArrowLink key={link.id} href={link.href} target="_blank" rel="noopener noreferrer">
+              <ArrowLink
+                key={link.id}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-giro-wink=""
+              >
                 {link.label}
               </ArrowLink>
             ))}

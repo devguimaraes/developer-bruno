@@ -7,6 +7,7 @@ import {
   scrollPercent,
   subscribeFrames,
 } from "./scroll";
+import { requestGiroMoment } from "./giro-director";
 
 /** Linha de leitura: a seção em leitura é a que já passou dela, a 35% do topo da janela. */
 const READ_LINE_RATIO = 0.35;
@@ -14,10 +15,8 @@ const READ_LINE_RATIO = 0.35;
 const FAST_STEP_PX = 60;
 /** Depois da última rolagem rápida, o giro extra espera isso antes de terminar. */
 const FAST_HOLD_MS = 350;
-/** Rolagem rápida contínua por isso deixa o Giro tonto quando para. Um gesto isolado não deixa. */
+/** Rolagem rápida contínua por isso pede o momento tonto quando para. Um gesto isolado não pede. */
 const DIZZY_AFTER_MS = 700;
-/** Duração do momento tonto (g-dizzy em giro.css). */
-const DIZZY_MS = 1400;
 
 // Deslocamento dos olhos do Giro, em px, quando a rolagem tem direção ou o menu está aberto.
 export const LOOK_PX = 3;
@@ -29,8 +28,6 @@ export interface ScrollState {
   direction: 1 | -1 | 0;
   /** true enquanto a rolagem está rápida: o Giro dá um giro a mais. */
   fast: boolean;
-  /** true logo depois de uma rolagem rápida e longa: o Giro fica tonto. */
-  dizzy: boolean;
   /** Seção da home em leitura, ou null (no hero e nas outras páginas). */
   activeId: string | null;
   /** O hero já saiu da tela. Sem hero, vale o header da página (data-site-header). */
@@ -42,7 +39,6 @@ const INITIAL_STATE: ScrollState = {
   progress: 0,
   direction: 0,
   fast: false,
-  dizzy: false,
   activeId: null,
   pastHero: false,
   pathname: "/",
@@ -84,12 +80,10 @@ function readPastHero(): boolean {
 export function useScrollState(sectionIds: readonly string[]): ScrollState {
   const [state, setState] = useState<ScrollState>(INITIAL_STATE);
   const [fast, setFast] = useState(false);
-  const [dizzy, setDizzy] = useState(false);
 
   useEffect(() => {
     let lastY = window.scrollY;
     let fastTimer: number | undefined;
-    let dizzyTimer: number | undefined;
     let fastSince: number | null = null;
     let lastFastAt = 0;
 
@@ -131,9 +125,7 @@ export function useScrollState(sectionIds: readonly string[]): ScrollState {
           fastSince = null;
           setFast(false);
           if (lasted < DIZZY_AFTER_MS) return;
-          setDizzy(true);
-          window.clearTimeout(dizzyTimer);
-          dizzyTimer = window.setTimeout(() => setDizzy(false), DIZZY_MS);
+          requestGiroMoment("dizzy");
         }, FAST_HOLD_MS);
       }
     });
@@ -141,9 +133,8 @@ export function useScrollState(sectionIds: readonly string[]): ScrollState {
     return () => {
       unsubscribe();
       window.clearTimeout(fastTimer);
-      window.clearTimeout(dizzyTimer);
     };
   }, [sectionIds]);
 
-  return { ...state, fast, dizzy };
+  return { ...state, fast };
 }

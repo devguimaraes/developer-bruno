@@ -42,7 +42,6 @@ const SCROLL: ScrollState = {
   progress: 40,
   direction: 1,
   fast: false,
-  dizzy: false,
   activeId: null,
   pastHero: true,
   pathname: "/",
@@ -82,15 +81,15 @@ describe("TabBarView", () => {
     expect(giro?.classList.contains("is-hop")).toBe(false);
   });
 
-  it("depois de uma rolagem rápida e longa, o Giro central fica tonto", () => {
-    const { container } = render(<TabBarView progress={40} activeTab={null} dizzy />);
+  it("com o momento tonto do diretor, o Giro central fica tonto", () => {
+    const { container } = render(<TabBarView progress={40} activeTab={null} moment="dizzy" />);
     expect(container.querySelector(".g-tabbar__giro .g-giro")?.getAttribute("data-moment")).toBe(
       "dizzy"
     );
   });
 
   it("no fim da leitura o pulo do pronto vence o tonto", () => {
-    const { container } = render(<TabBarView progress={100} activeTab={null} dizzy />);
+    const { container } = render(<TabBarView progress={100} activeTab={null} moment="dizzy" />);
     const giro = container.querySelector(".g-tabbar__giro .g-giro");
     expect(giro?.getAttribute("data-state")).toBe("done");
     expect(giro?.hasAttribute("data-moment")).toBe(false);

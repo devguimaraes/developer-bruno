@@ -1,4 +1,4 @@
-import { useCallback, useState, useSyncExternalStore } from "react";
+import { type Ref, useCallback, useRef, useState, useSyncExternalStore } from "react";
 import { Menu, X } from "lucide-react";
 import { Giro } from "@/components/brand/Giro";
 import type { GiroState } from "@/components/brand/giro-states";
@@ -13,6 +13,8 @@ import { SectionMenu } from "./SectionMenu";
 import { useMenuDismiss } from "./useMenuDismiss";
 import { resolveNavGiro, useGiroEggs } from "./useGiroEggs";
 import { HOME_SECTIONS, SECTION_IDS, TABS, tabForLocation } from "./sections";
+import { type DirectedMoment, useDirectedMoment } from "./giro-director";
+import { useCursorLook } from "./useCursorLook";
 import { LOOK_PX, useScrollState } from "./useScrollState";
 
 const TOGGLE_ID = "scroll-island-toggle";
@@ -33,8 +35,8 @@ export interface ScrollIslandViewProps {
   direction: 1 | -1 | 0;
   /** Rolagem rápida: liga o giro extra. */
   fast?: boolean;
-  /** Logo depois de uma rolagem rápida e longa: o Giro fica tonto. */
-  dizzy?: boolean;
+  /** Momento escolhido pelo diretor (giro-director): tonto, piscadela ou oi. */
+  moment?: DirectedMoment;
   /** Se a ilha aparece (depois do hero). */
   visible?: boolean;
   menuOpen?: boolean;
@@ -47,6 +49,10 @@ export interface ScrollIslandViewProps {
   celebrating?: boolean;
   /** Giro pedido pela página do case, quando houver. */
   pageGiro?: GiroState | null;
+  /** Olhar na direção do mouse, quando ele está perto do Giro. Vence a direção da rolagem. */
+  cursorLook?: { x: number; y: number } | null;
+  /** Caixa do Giro, medida para saber onde está o mouse. */
+  giroRef?: Ref<HTMLSpanElement>;
   onToggleMenu?: () => void;
   onNavigate?: () => void;
 }
@@ -57,7 +63,7 @@ export function ScrollIslandView({
   label,
   direction,
   fast = false,
-  dizzy = false,
+  moment,
   visible = true,
   menuOpen = false,
   activeId = null,
@@ -65,11 +71,14 @@ export function ScrollIslandView({
   asleep = false,
   celebrating = false,
   pageGiro = null,
+  cursorLook = null,
+  giroRef,
   onToggleMenu,
   onNavigate,
 }: ScrollIslandViewProps) {
   const locale = useLocale();
-  const lookY = menuOpen ? LOOK_PX : direction * LOOK_PX;
+  // Menu aberto: olha para o menu. Senão, o mouse perto vence a direção da rolagem.
+  const look = menuOpen ? { x: 0, y: LOOK_PX } : (cursorLook ?? { x: 0, y: direction * LOOK_PX });
   const giro = resolveNavGiro({ navigating, celebrating, asleep, progress, pageGiro });
 
   return (
@@ -79,16 +88,18 @@ export function ScrollIslandView({
         aria-label={t(locale, "tabs.label")}
         data-fast={fast ? "true" : undefined}
       >
-        <Giro
-          size={40}
-          progress={progress}
-          look={{ x: 0, y: lookY }}
-          state={giro.state}
-          hop={giro.hop}
-          // Tonto só em repouso: no pronto, na festa, no sono ou carregando, o corpo já tem animação.
-          moment={dizzy && giro.state === "idle" ? "dizzy" : undefined}
-          className={giro.party ? "is-party" : undefined}
-        />
+        <span className="g-island__giro" ref={giroRef}>
+          <Giro
+            size={40}
+            progress={progress}
+            look={look}
+            state={giro.state}
+            hop={giro.hop}
+            // Só em repouso: no pronto, na festa, no sono ou carregando, o corpo já tem animação.
+            moment={giro.state === "idle" ? moment : undefined}
+            className={giro.party ? "is-party" : undefined}
+          />
+        </span>
         <span className="g-island__label">{label}</span>
         <IconButton
           id={TOGGLE_ID}
@@ -125,12 +136,16 @@ export function ScrollIsland() {
   const navigating = useNavigating();
   const { asleep, celebrating } = useGiroEggs();
   const pageGiro = useSyncExternalStore(subscribePageGiro, getPageGiro, () => null);
+  const moment = useDirectedMoment();
+  const giroRef = useRef<HTMLSpanElement>(null);
 
   const closeMenu = useCallback(() => setMenuOpen(false), []);
   useMenuDismiss(menuOpen, closeMenu, TOGGLE_ID, MENU_ID);
 
   // Movimento reduzido: sem giro extra (decisão 20).
   const fast = scroll.fast && !reducedMotion;
+  // Ilha escondida no hero ou menu aberto: não há o que seguir.
+  const cursorLook = useCursorLook(giroRef, scroll.pastHero && !menuOpen);
 
   return (
     <ScrollIslandView
@@ -138,7 +153,7 @@ export function ScrollIsland() {
       label={islandLabel(locale, scroll.activeId, scroll.pathname)}
       direction={scroll.direction}
       fast={fast}
-      dizzy={scroll.dizzy}
+      moment={moment}
       visible={scroll.pastHero}
       menuOpen={menuOpen}
       activeId={scroll.activeId}
@@ -146,6 +161,8 @@ export function ScrollIsland() {
       asleep={asleep}
       celebrating={celebrating}
       pageGiro={pageGiro}
+      cursorLook={cursorLook}
+      giroRef={giroRef}
       onToggleMenu={() => setMenuOpen(open => !open)}
       onNavigate={closeMenu}
     />

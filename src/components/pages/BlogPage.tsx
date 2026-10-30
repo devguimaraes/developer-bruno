@@ -81,7 +81,11 @@ export default function BlogPage({ initialPosts = [] }: BlogPageProps) {
 
         <fieldset className="blog-page__filters">
           <legend>{t(locale, "posts.filter.label")}</legend>
-          <Chip selected={activeCategory === null} onClick={() => selectCategory(null)}>
+          <Chip
+            selected={activeCategory === null}
+            onClick={() => selectCategory(null)}
+            data-giro-wink=""
+          >
             {t(locale, "blog.all_categories")}
           </Chip>
           {categories.map(category => (
@@ -89,6 +93,7 @@ export default function BlogPage({ initialPosts = [] }: BlogPageProps) {
               key={category}
               selected={activeCategory === category}
               onClick={() => selectCategory(category)}
+              data-giro-wink=""
             >
               {category}
             </Chip>
@@ -99,7 +104,7 @@ export default function BlogPage({ initialPosts = [] }: BlogPageProps) {
           <div className="g-empty" role="status">
             <Giro state="empty" size={72} />
             <p className="g-empty__title">{t(locale, "blog.empty")}</p>
-            <Button variant="secondary" onClick={() => selectCategory(null)}>
+            <Button variant="secondary" onClick={() => selectCategory(null)} data-giro-wink="">
               {t(locale, "blog.show_all")}
             </Button>
           </div>

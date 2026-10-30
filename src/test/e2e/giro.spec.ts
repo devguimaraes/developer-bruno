@@ -71,6 +71,50 @@ test.describe("Giro: momentos", () => {
   });
 });
 
+// O Giro da navegação: a ilha no computador e a barra de abas no celular. Os dois seguem o diretor.
+const NAV_GIRO = ".g-island .g-giro, .g-tabbar .g-giro";
+
+async function setTabHidden(page: Page, hidden: boolean) {
+  await page.evaluate(value => {
+    Object.defineProperty(document, "hidden", { configurable: true, get: () => value });
+    document.dispatchEvent(new Event("visibilitychange"));
+  }, hidden);
+}
+
+test.describe("Giro: reações da navegação", () => {
+  test("Deve piscar ao escolher uma categoria do blog", async ({ page }) => {
+    await recordMoments(page);
+    await page.goto("/blog");
+    await waitForHydration(page);
+    await page.locator(".blog-page__filters [data-giro-wink]").last().click();
+    await expect.poll(() => moments(page), { timeout: 4000 }).toContain("wink");
+  });
+
+  test("Deve dormir com a aba escondida e acordar dizendo oi", async ({ page }) => {
+    await recordMoments(page);
+    await page.goto("/");
+    await waitForHydration(page);
+
+    await setTabHidden(page, true);
+    await expect(page.locator(NAV_GIRO).first()).toHaveAttribute("data-state", "sleeping");
+    await setTabHidden(page, false);
+    await expect.poll(() => moments(page), { timeout: 4000 }).toContain("hello");
+  });
+
+  test("Deve cochilar depois de 60 s parado e acordar no primeiro gesto", async ({ page }) => {
+    await page.clock.install();
+    await recordMoments(page);
+    await page.goto("/");
+    await waitForHydration(page);
+
+    await page.clock.fastForward(61_000);
+    await expect(page.locator(NAV_GIRO).first()).toHaveAttribute("data-state", "sleeping");
+    await page.keyboard.press("Shift");
+    await expect(page.locator(NAV_GIRO).first()).not.toHaveAttribute("data-state", "sleeping");
+    await expect.poll(() => moments(page), { timeout: 4000 }).toContain("hello");
+  });
+});
+
 test.describe("Giro: movimento reduzido", () => {
   test("Deve trocar de estado sem transição, só piscando, e sem momentos", async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });

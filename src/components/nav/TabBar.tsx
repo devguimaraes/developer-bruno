@@ -12,6 +12,8 @@ import { useMenuDismiss } from "./useMenuDismiss";
 import { resolveNavGiro, useGiroEggs } from "./useGiroEggs";
 import { HOME_SECTIONS, SECTION_IDS, SECTION_TAB, TABS, tabForLocation } from "./sections";
 import type { TabId, TabItem } from "./sections";
+import { useDirectedMoment } from "./giro-director";
+import type { DirectedMoment } from "./giro-director";
 import { LOOK_PX, useScrollState } from "./useScrollState";
 
 const TAB_ICONS: Readonly<Record<TabId, LucideIcon>> = {
@@ -38,8 +40,8 @@ export interface TabBarViewProps {
   asleep?: boolean;
   /** Atalho escondido: festa que roda uma vez. */
   celebrating?: boolean;
-  /** Logo depois de uma rolagem rápida e longa: o Giro fica tonto. */
-  dizzy?: boolean;
+  /** Momento escolhido pelo diretor (giro-director): tonto, piscadela ou oi. */
+  moment?: DirectedMoment;
   /** Giro pedido pela página do case, quando houver. */
   pageGiro?: GiroState | null;
   onToggleMenu?: () => void;
@@ -55,7 +57,7 @@ export function TabBarView({
   navigating = false,
   asleep = false,
   celebrating = false,
-  dizzy = false,
+  moment,
   pageGiro = null,
   onToggleMenu,
   onNavigate,
@@ -115,8 +117,8 @@ export function TabBarView({
             look={{ x: 0, y: menuOpen ? LOOK_PX : 0 }}
             state={giro.state}
             hop={giro.hop}
-            // Tonto só em repouso: no pronto, na festa, no sono ou carregando, o corpo já tem animação.
-            moment={dizzy && giro.state === "idle" ? "dizzy" : undefined}
+            // Só em repouso: no pronto, na festa, no sono ou carregando, o corpo já tem animação.
+            moment={giro.state === "idle" ? moment : undefined}
             className={giro.party ? "is-party" : undefined}
           />
         </button>
@@ -127,10 +129,11 @@ export function TabBarView({
 
 /** Barra de abas ligada à página: aba ativa pela rota e pela seção, Giro com a leitura. */
 export function TabBar() {
-  const { progress, activeId, pathname, dizzy } = useScrollState(SECTION_IDS);
+  const { progress, activeId, pathname } = useScrollState(SECTION_IDS);
   const navigating = useNavigating();
   const { asleep, celebrating } = useGiroEggs();
   const pageGiro = useSyncExternalStore(subscribePageGiro, getPageGiro, () => null);
+  const moment = useDirectedMoment();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const closeMenu = useCallback(() => setMenuOpen(false), []);
@@ -145,7 +148,7 @@ export function TabBar() {
       navigating={navigating}
       asleep={asleep}
       celebrating={celebrating}
-      dizzy={dizzy}
+      moment={moment}
       pageGiro={pageGiro}
       onToggleMenu={() => setMenuOpen(open => !open)}
       onNavigate={closeMenu}

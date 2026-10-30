@@ -25,6 +25,7 @@ export function HomeOtherSites() {
               href={site.live}
               target="_blank"
               rel="noopener noreferrer"
+              data-giro-wink=""
             >
               <span className="home-stat__top">
                 <span className="g-eyebrow">{`// ${site.title.toLowerCase()}`}</span>

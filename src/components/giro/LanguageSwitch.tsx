@@ -25,6 +25,7 @@ export function LanguageSwitch({ groupLabel, className }: LanguageSwitchProps) {
           key={locale}
           type="button"
           className="g-lang__option"
+          data-giro-wink=""
           aria-pressed={locale === current}
           onClick={() => setLocale(locale)}
         >

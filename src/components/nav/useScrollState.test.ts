@@ -1,6 +1,11 @@
 import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { requestGiroMoment } from "./giro-director";
 import { useScrollState } from "./useScrollState";
+
+vi.mock("./giro-director", () => ({
+  requestGiroMoment: vi.fn(),
+}));
 
 // Os quadros são disparados à mão: assim dá para controlar quanto a página andou em cada um.
 let onFrame: () => void = () => {};
@@ -49,30 +54,39 @@ describe("useScrollState — tonto", () => {
   afterEach(() => {
     vi.useRealTimers();
     vi.restoreAllMocks();
+    vi.mocked(requestGiroMoment).mockClear();
     Reflect.deleteProperty(window, "scrollY");
   });
 
-  it("rolagem rápida por mais de 700 ms deixa o Giro tonto quando para, por 1,4 s", () => {
+  it("rolagem rápida por mais de 700 ms pede o tonto quando para", () => {
     const { result } = renderHook(() => useScrollState(NO_SECTIONS));
     scrollFast(900);
     expect(result.current.fast).toBe(true);
-    expect(result.current.dizzy).toBe(false);
+    expect(requestGiroMoment).not.toHaveBeenCalled();
 
     wait(350);
     expect(result.current.fast).toBe(false);
-    expect(result.current.dizzy).toBe(true);
-
-    wait(1399);
-    expect(result.current.dizzy).toBe(true);
-    wait(1);
-    expect(result.current.dizzy).toBe(false);
+    expect(requestGiroMoment).toHaveBeenCalledTimes(1);
+    expect(requestGiroMoment).toHaveBeenCalledWith("dizzy");
   });
 
-  it("um gesto rápido e curto não deixa tonto", () => {
+  it("um gesto rápido e curto não pede o tonto", () => {
     const { result } = renderHook(() => useScrollState(NO_SECTIONS));
     scrollFast(300);
     wait(350);
     expect(result.current.fast).toBe(false);
-    expect(result.current.dizzy).toBe(false);
+    expect(requestGiroMoment).not.toHaveBeenCalled();
+  });
+
+  it("rolagem lenta não pede o tonto, mesmo longa", () => {
+    const { result } = renderHook(() => useScrollState(NO_SECTIONS));
+    for (let t = 0; t <= 2000; t += 50) {
+      now += 50;
+      scrollY += 20;
+      act(() => onFrame());
+    }
+    wait(350);
+    expect(result.current.fast).toBe(false);
+    expect(requestGiroMoment).not.toHaveBeenCalled();
   });
 });

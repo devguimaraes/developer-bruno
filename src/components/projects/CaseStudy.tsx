@@ -314,7 +314,13 @@ export default function CaseStudy({ project }: CaseStudyProps) {
               {(liveUrl || githubUrl) && (
                 <div className="case-actions">
                   {liveUrl && (
-                    <ButtonLink href={liveUrl} target="_blank" rel="noreferrer" arrow>
+                    <ButtonLink
+                      href={liveUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      arrow
+                      data-giro-wink=""
+                    >
                       {t(locale, "case.page.cta_live")}
                     </ButtonLink>
                   )}
@@ -325,6 +331,7 @@ export default function CaseStudy({ project }: CaseStudyProps) {
                       rel="noreferrer"
                       variant="secondary"
                       arrow
+                      data-giro-wink=""
                     >
                       {t(locale, "case.page.cta_code")}
                     </ButtonLink>

@@ -42,7 +42,6 @@ const SCROLL: ScrollState = {
   progress: 62,
   direction: 1,
   fast: false,
-  dizzy: false,
   activeId: "processo",
   pastHero: true,
   pathname: "/",
@@ -72,11 +71,40 @@ describe("ScrollIslandView", () => {
     expect(giro?.getAttribute("data-state")).toBeNull();
   });
 
-  it("depois de uma rolagem rápida e longa, o Giro fica tonto", () => {
+  it("com o momento tonto do diretor, o Giro fica tonto", () => {
     const { container } = render(
-      <ScrollIslandView progress={40} label="Projetos" direction={1} dizzy />
+      <ScrollIslandView progress={40} label="Projetos" direction={1} moment="dizzy" />
     );
     expect(container.querySelector(".g-island .g-giro")?.getAttribute("data-moment")).toBe("dizzy");
+  });
+
+  it("com o mouse perto, os olhos vão para ele em vez da direção da rolagem", () => {
+    const { container } = render(
+      <ScrollIslandView
+        progress={40}
+        label="Projetos"
+        direction={1}
+        cursorLook={{ x: 2.1, y: -2.1 }}
+      />
+    );
+    const giro = container.querySelector<SVGSVGElement>("svg.g-giro");
+    expect(giro?.style.getPropertyValue("--g-look-x")).toBe("2.1px");
+    expect(giro?.style.getPropertyValue("--g-look-y")).toBe("-2.1px");
+  });
+
+  it("com o menu aberto, os olhos ficam no menu mesmo com o mouse perto", () => {
+    const { container } = render(
+      <ScrollIslandView
+        progress={40}
+        label="Projetos"
+        direction={-1}
+        menuOpen
+        cursorLook={{ x: -3, y: 0 }}
+      />
+    );
+    const giro = container.querySelector<SVGSVGElement>("svg.g-giro");
+    expect(giro?.style.getPropertyValue("--g-look-x")).toBe("0px");
+    expect(giro?.style.getPropertyValue("--g-look-y")).toBe("3px");
   });
 
   it("no fim da página, o Giro fecha em sorriso e pula", () => {

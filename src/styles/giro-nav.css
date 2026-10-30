@@ -131,6 +131,11 @@
 .g-island .g-giro {
   flex: none;
 }
+/* Caixa do Giro: o olhar mede onde ela está para seguir o mouse. */
+.g-island__giro {
+  display: flex;
+  flex: none;
+}
 /* Rolagem rápida: um giro a mais. A animação recomeça a cada vez que data-fast liga. */
 .g-island[data-fast="true"] .g-giro__spin {
   animation: g-spin var(--dur-spin) linear 1;

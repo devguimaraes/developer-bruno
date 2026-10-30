@@ -317,6 +317,7 @@ export function ProcessTrack({ locale, label, motionOn, inView }: ProcessTrackPr
                       variant="secondary"
                       size="sm"
                       data-nav="prev"
+                      data-giro-wink=""
                       onClick={() => select(index - 1, "prev")}
                       disabled={index === 0}
                     >
@@ -326,6 +327,7 @@ export function ProcessTrack({ locale, label, motionOn, inView }: ProcessTrackPr
                       size="sm"
                       arrow
                       data-nav="next"
+                      data-giro-wink=""
                       onClick={() => select(index + 1, "next")}
                       disabled={index === LAST}
                     >
