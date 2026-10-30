@@ -71,9 +71,23 @@ function endMoment(): void {
   emit();
 }
 
+// Giros da navegação: a ilha no computador e a barra de abas no celular.
+const NAV_GIRO = ".g-island .g-giro, .g-tabbar .g-giro";
+
+/** Algum Giro da navegação está à vista. A ilha escondida no hero e o Giro da barra emprestado
+ * ao título não contam: o momento tocaria sem ninguém ver e gastaria o intervalo. */
+function navGiroOnScreen(): boolean {
+  for (const giro of document.querySelectorAll(NAV_GIRO)) {
+    // Sem checkVisibility (Safari antes do 17.4), vale como visível.
+    if (typeof giro.checkVisibility !== "function") return true;
+    if (giro.checkVisibility({ opacityProperty: true, visibilityProperty: true })) return true;
+  }
+  return false;
+}
+
 /** Pede um momento (relógio performance.now()). Devolve se foi aceito. */
 export function requestGiroMoment(moment: DirectedMoment): boolean {
-  if (prefersReducedMotion()) return false;
+  if (prefersReducedMotion() || !navGiroOnScreen()) return false;
   const now = performance.now();
   const next = decideMoment(director, moment, now);
   if (next === null) return false;

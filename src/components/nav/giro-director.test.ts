@@ -80,11 +80,24 @@ describe("requestGiroMoment", () => {
     });
   }
 
+  /** Põe na página o Giro da ilha. `visible` responde ao checkVisibility; sem ele, o jsdom não tem
+   * o método e o Giro vale como visível. */
+  function mountIslandGiro(visible?: boolean): void {
+    const island = document.createElement("nav");
+    island.className = "g-island";
+    const giro = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    giro.setAttribute("class", "g-giro");
+    if (visible !== undefined) Object.assign(giro, { checkVisibility: () => visible });
+    island.append(giro);
+    document.body.append(island);
+  }
+
   beforeEach(() => {
     vi.useFakeTimers();
     now = 0;
     vi.spyOn(performance, "now").mockImplementation(() => now);
     resetGiroDirector();
+    mountIslandGiro();
   });
 
   afterEach(() => {
@@ -122,6 +135,24 @@ describe("requestGiroMoment", () => {
     expect(result.current).toBe("dizzy");
     advance(1);
     expect(result.current).toBeUndefined();
+  });
+
+  it("sem Giro da navegação na página, descarta e não gasta o intervalo", () => {
+    document.body.replaceChildren();
+    expect(request("wink")).toBe(false);
+
+    mountIslandGiro();
+    expect(request("wink")).toBe(true);
+  });
+
+  it("com a ilha escondida (hero), descarta e não gasta o intervalo", () => {
+    document.body.replaceChildren();
+    mountIslandGiro(false);
+    expect(request("hello")).toBe(false);
+
+    document.body.replaceChildren();
+    mountIslandGiro(true);
+    expect(request("hello")).toBe(true);
   });
 
   it("com movimento reduzido, nada é publicado", () => {

@@ -81,8 +81,26 @@ async function setTabHidden(page: Page, hidden: boolean) {
   }, hidden);
 }
 
+// O diretor só aceita momento com um Giro da navegação à vista, pelo mesmo critério do código.
+async function waitForNavGiro(page: Page) {
+  await page.waitForFunction(selector => {
+    for (const giro of document.querySelectorAll(selector)) {
+      if (giro.checkVisibility({ opacityProperty: true, visibilityProperty: true })) return true;
+    }
+    return false;
+  }, NAV_GIRO);
+}
+
+async function openPastHero(page: Page) {
+  await page.goto("/#processo");
+  await waitForHydration(page);
+  await waitForNavGiro(page);
+}
+
 test.describe("Giro: reações da navegação", () => {
   test("Deve piscar ao escolher uma categoria do blog", async ({ page }) => {
+    // No celular a barra de abas está sempre à vista; no computador a ilha só depois do header.
+    await page.setViewportSize({ width: 390, height: 844 });
     await recordMoments(page);
     await page.goto("/blog");
     await waitForHydration(page);
@@ -92,8 +110,7 @@ test.describe("Giro: reações da navegação", () => {
 
   test("Deve dormir com a aba escondida e acordar dizendo oi", async ({ page }) => {
     await recordMoments(page);
-    await page.goto("/");
-    await waitForHydration(page);
+    await openPastHero(page);
 
     await setTabHidden(page, true);
     await expect(page.locator(NAV_GIRO).first()).toHaveAttribute("data-state", "sleeping");
@@ -104,14 +121,24 @@ test.describe("Giro: reações da navegação", () => {
   test("Deve cochilar depois de 60 s parado e acordar no primeiro gesto", async ({ page }) => {
     await page.clock.install();
     await recordMoments(page);
-    await page.goto("/");
-    await waitForHydration(page);
+    await openPastHero(page);
 
     await page.clock.fastForward(61_000);
     await expect(page.locator(NAV_GIRO).first()).toHaveAttribute("data-state", "sleeping");
     await page.keyboard.press("Shift");
     await expect(page.locator(NAV_GIRO).first()).not.toHaveAttribute("data-state", "sleeping");
     await expect.poll(() => moments(page), { timeout: 4000 }).toContain("hello");
+  });
+
+  test("Não deve dizer oi com o Giro da navegação fora de vista, no hero", async ({ page }) => {
+    await recordMoments(page);
+    await page.goto("/");
+    await waitForHydration(page);
+
+    await setTabHidden(page, true);
+    await setTabHidden(page, false);
+    await page.waitForTimeout(800);
+    expect(await moments(page)).not.toContain("hello");
   });
 });
 
