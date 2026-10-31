@@ -92,6 +92,23 @@ describe("ScrollIslandView", () => {
     expect(giro?.style.getPropertyValue("--g-look-y")).toBe("-2.1px");
   });
 
+  it("espiando: o passo da leitura vence o mouse e passa o tempo e a inclinação ao Giro", () => {
+    const { container } = render(
+      <ScrollIslandView
+        progress={40}
+        label="Projetos"
+        direction={1}
+        cursorLook={{ x: -3, y: 0 }}
+        peek={{ look: { x: 3, y: 1.5 }, durationMs: 1100, ease: "inOut" }}
+      />
+    );
+    const giro = container.querySelector<SVGSVGElement>("svg.g-giro");
+    expect(giro?.style.getPropertyValue("--g-look-x")).toBe("3px");
+    const box = container.querySelector<HTMLElement>(".g-island__giro");
+    expect(box?.style.getPropertyValue("--g-look-dur")).toBe("1100ms");
+    expect(box?.style.getPropertyValue("--g-tilt")).toBe("3deg");
+  });
+
   it("com o menu aberto, os olhos ficam no menu mesmo com o mouse perto", () => {
     const { container } = render(
       <ScrollIslandView

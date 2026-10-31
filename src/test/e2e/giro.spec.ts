@@ -130,6 +130,21 @@ test.describe("Giro: reações da navegação", () => {
     await expect.poll(() => moments(page), { timeout: 4000 }).toContain("hello");
   });
 
+  test("Deve espiar depois de 5 s parado numa seção e parar na rolagem", async ({ page }) => {
+    await page.clock.install();
+    await openPastHero(page);
+    // A contagem recomeça na rolagem: assim ela começa depois do pouso na seção.
+    await page.mouse.wheel(0, 120);
+    // O evento de rolagem chega assíncrono: sem esperar, ele zeraria a contagem já adiantada.
+    await page.waitForTimeout(300);
+    const box = page.locator(".g-island__giro, .g-tabbar__giro").filter({ visible: true }).first();
+
+    await page.clock.fastForward(5_500);
+    await expect(box).toHaveAttribute("style", /--g-tilt: 3deg/);
+    await page.mouse.wheel(0, 120);
+    await expect(box).not.toHaveAttribute("style", /--g-tilt/);
+  });
+
   test("Não deve dizer oi com o Giro da navegação fora de vista, no hero", async ({ page }) => {
     await recordMoments(page);
     await page.goto("/");

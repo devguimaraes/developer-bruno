@@ -5,6 +5,7 @@ import { Giro } from "@/components/brand/Giro";
 import type { GiroState } from "@/components/brand/giro-states";
 import { useNavigating } from "@/components/loader/navigation-state";
 import { useLocale } from "@/hooks/useLocale";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { t } from "@/lib/i18n";
 import { getPageGiro, subscribePageGiro } from "@/lib/page-giro";
 import { SectionMenu } from "./SectionMenu";
@@ -14,6 +15,7 @@ import { HOME_SECTIONS, SECTION_IDS, SECTION_TAB, TABS, tabForLocation } from ".
 import type { TabId, TabItem } from "./sections";
 import { useDirectedMoment } from "./giro-director";
 import type { DirectedMoment } from "./giro-director";
+import { type PeekPose, peekKey, peekStyle, usePeek } from "./usePeek";
 import { LOOK_PX, useScrollState } from "./useScrollState";
 
 const TAB_ICONS: Readonly<Record<TabId, LucideIcon>> = {
@@ -44,6 +46,8 @@ export interface TabBarViewProps {
   moment?: DirectedMoment;
   /** Giro pedido pela página do case, quando houver. */
   pageGiro?: GiroState | null;
+  /** Espiando: o passo da leitura em curso. */
+  peek?: PeekPose | null;
   onToggleMenu?: () => void;
   onNavigate?: () => void;
 }
@@ -59,6 +63,7 @@ export function TabBarView({
   celebrating = false,
   moment,
   pageGiro = null,
+  peek = null,
   onToggleMenu,
   onNavigate,
 }: TabBarViewProps) {
@@ -110,11 +115,12 @@ export function TabBarView({
           aria-expanded={menuOpen}
           aria-controls={MENU_ID}
           onClick={onToggleMenu}
+          style={peekStyle(peek)}
         >
           <Giro
             size={40}
             progress={progress}
-            look={{ x: 0, y: menuOpen ? LOOK_PX : 0 }}
+            look={menuOpen ? { x: 0, y: LOOK_PX } : (peek?.look ?? { x: 0, y: 0 })}
             state={giro.state}
             hop={giro.hop}
             // Só em repouso: no pronto, na festa, no sono ou carregando, o corpo já tem animação.
@@ -134,7 +140,20 @@ export function TabBar() {
   const { asleep, celebrating } = useGiroEggs();
   const pageGiro = useSyncExternalStore(subscribePageGiro, getPageGiro, () => null);
   const moment = useDirectedMoment();
+  const reducedMotion = useReducedMotion();
   const [menuOpen, setMenuOpen] = useState(false);
+  // Espiando só em repouso: sem menu, momento, troca de página ou fim de leitura.
+  const peek = usePeek(
+    peekKey(pathname, activeId),
+    !menuOpen &&
+      !reducedMotion &&
+      moment === undefined &&
+      !navigating &&
+      !asleep &&
+      !celebrating &&
+      pageGiro === null &&
+      progress < 100
+  );
 
   const closeMenu = useCallback(() => setMenuOpen(false), []);
   useMenuDismiss(menuOpen, closeMenu, TOGGLE_ID, MENU_ID);
@@ -150,6 +169,7 @@ export function TabBar() {
       celebrating={celebrating}
       moment={moment}
       pageGiro={pageGiro}
+      peek={peek}
       onToggleMenu={() => setMenuOpen(open => !open)}
       onNavigate={closeMenu}
     />

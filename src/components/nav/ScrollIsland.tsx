@@ -15,6 +15,7 @@ import { resolveNavGiro, useGiroEggs } from "./useGiroEggs";
 import { HOME_SECTIONS, SECTION_IDS, TABS, tabForLocation } from "./sections";
 import { type DirectedMoment, useDirectedMoment } from "./giro-director";
 import { useCursorLook } from "./useCursorLook";
+import { type PeekPose, peekKey, peekStyle, usePeek } from "./usePeek";
 import { LOOK_PX, useScrollState } from "./useScrollState";
 
 const TOGGLE_ID = "scroll-island-toggle";
@@ -51,6 +52,8 @@ export interface ScrollIslandViewProps {
   pageGiro?: GiroState | null;
   /** Olhar na direção do mouse, quando ele está perto do Giro. Vence a direção da rolagem. */
   cursorLook?: { x: number; y: number } | null;
+  /** Espiando: o passo da leitura em curso. Vence o mouse e a direção da rolagem. */
+  peek?: PeekPose | null;
   /** Caixa do Giro, medida para saber onde está o mouse. */
   giroRef?: Ref<HTMLSpanElement>;
   onToggleMenu?: () => void;
@@ -72,13 +75,16 @@ export function ScrollIslandView({
   celebrating = false,
   pageGiro = null,
   cursorLook = null,
+  peek = null,
   giroRef,
   onToggleMenu,
   onNavigate,
 }: ScrollIslandViewProps) {
   const locale = useLocale();
   // Menu aberto: olha para o menu. Senão, o mouse perto vence a direção da rolagem.
-  const look = menuOpen ? { x: 0, y: LOOK_PX } : (cursorLook ?? { x: 0, y: direction * LOOK_PX });
+  const look = menuOpen
+    ? { x: 0, y: LOOK_PX }
+    : (peek?.look ?? cursorLook ?? { x: 0, y: direction * LOOK_PX });
   const giro = resolveNavGiro({ navigating, celebrating, asleep, progress, pageGiro });
 
   return (
@@ -88,7 +94,7 @@ export function ScrollIslandView({
         aria-label={t(locale, "tabs.label")}
         data-fast={fast ? "true" : undefined}
       >
-        <span className="g-island__giro" ref={giroRef}>
+        <span className="g-island__giro" ref={giroRef} style={peekStyle(peek)}>
           <Giro
             size={40}
             progress={progress}
@@ -146,6 +152,19 @@ export function ScrollIsland() {
   const fast = scroll.fast && !reducedMotion;
   // Ilha escondida no hero ou menu aberto: não há o que seguir.
   const cursorLook = useCursorLook(giroRef, scroll.pastHero && !menuOpen);
+  // Espiando só com o Giro à vista e em repouso: sem menu, momento, troca de página ou fim de leitura.
+  const peek = usePeek(
+    peekKey(scroll.pathname, scroll.activeId),
+    scroll.pastHero &&
+      !menuOpen &&
+      !reducedMotion &&
+      moment === undefined &&
+      !navigating &&
+      !asleep &&
+      !celebrating &&
+      pageGiro === null &&
+      scroll.progress < 100
+  );
 
   return (
     <ScrollIslandView
@@ -162,6 +181,7 @@ export function ScrollIsland() {
       celebrating={celebrating}
       pageGiro={pageGiro}
       cursorLook={cursorLook}
+      peek={peek}
       giroRef={giroRef}
       onToggleMenu={() => setMenuOpen(open => !open)}
       onNavigate={closeMenu}

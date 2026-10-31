@@ -356,8 +356,9 @@
   transform-origin: center;
   translate: var(--g-look-x, 0px) var(--g-look-y, 0px);
   scale: var(--g-eye);
+  /* --g-look-dur e --g-look-ease: quem guia o olhar (o espiando) escolhe o tempo de cada passo. */
   transition:
-    translate 260ms var(--ease-resolve),
+    translate var(--g-look-dur, 260ms) var(--g-look-ease, var(--ease-resolve)),
     scale 340ms var(--ease-hop) 80ms,
     opacity 120ms linear 60ms;
 }
