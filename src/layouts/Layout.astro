@@ -115,6 +115,16 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       document.addEventListener('astro:after-swap', applyLocale);
       document.addEventListener('astro:page-load', applyLocale);
     </script>
+    <!-- Aba escondida: o Giro do favicon dorme. O ClientRouter troca o head, então reaplica após cada troca. -->
+    <script>
+      function applyFavicon() {
+        var icon = document.querySelector('link[rel="icon"][type="image/svg+xml"]');
+        if (icon) icon.setAttribute('href', document.hidden ? '/favicon-sleep.svg' : '/favicon.svg');
+      }
+      applyFavicon();
+      document.addEventListener('visibilitychange', applyFavicon);
+      document.addEventListener('astro:after-swap', applyFavicon);
+    </script>
   </head>
   <body class="bg-black">
     <LoadingScreen client:load />

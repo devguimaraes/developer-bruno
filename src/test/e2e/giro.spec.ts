@@ -118,6 +118,17 @@ test.describe("Giro: reações da navegação", () => {
     await expect.poll(() => moments(page), { timeout: 4000 }).toContain("hello");
   });
 
+  test("Deve trocar o favicon para o Giro dormindo com a aba escondida", async ({ page }) => {
+    await page.goto("/");
+    await waitForHydration(page);
+    const icon = page.locator('link[rel="icon"][type="image/svg+xml"]');
+
+    await setTabHidden(page, true);
+    await expect(icon).toHaveAttribute("href", /\/favicon-sleep\.svg$/);
+    await setTabHidden(page, false);
+    await expect(icon).toHaveAttribute("href", /\/favicon\.svg$/);
+  });
+
   test("Deve cochilar depois de 60 s parado e acordar no primeiro gesto", async ({ page }) => {
     await page.clock.install();
     await recordMoments(page);
