@@ -11,14 +11,21 @@ describe("HomeOtherSites", () => {
       expect(link).toHaveAttribute("target", "_blank");
       expect(link).toHaveAttribute("rel", expect.stringContaining("noopener"));
     }
-    expect(links[0]).toHaveAttribute("href", "https://engerod.com.br/");
+    expect(links.map(link => link.getAttribute("href"))).toEqual([
+      "https://www.agenciamultibr.com/",
+      "https://atlasmarinesolutions.com/",
+      "https://societyshow.com.br/",
+    ]);
   });
 
   it("separa o que cada número mede e a fonte", () => {
     render(<HomeOtherSites />);
     expect(screen.getByText("na taxa de rejeição depois do redesign")).toBeInTheDocument();
-    expect(screen.getByText("WordPress · acessibilidade e performance")).toBeInTheDocument();
+    expect(screen.getByText("Next.js · Core Web Vitals")).toBeInTheDocument();
+    expect(screen.getByText("de contatos de novos clientes internacionais")).toBeInTheDocument();
+    expect(screen.getByText("Next.js · site em quatro idiomas")).toBeInTheDocument();
     expect(screen.getByText("mais rápido para carregar que o site anterior")).toBeInTheDocument();
+    expect(screen.getByText("Astro · Vercel")).toBeInTheDocument();
   });
 
   it("tem o rótulo // outros sites no ar", () => {

@@ -104,9 +104,14 @@ describe("homeCases", () => {
 describe("outcomeSites", () => {
   it("lista os três sites com número, com pt e en", () => {
     expect(outcomeSites.map(site => site.id)).toEqual([
-      "engerod",
-      "semogrj",
-      "luis-felipe-pereira",
+      "agencia-multi-br",
+      "atlas-marine-solutions",
+      "society-show",
+    ]);
+    expect(outcomeSites.map(site => site.live)).toEqual([
+      "https://www.agenciamultibr.com/",
+      "https://atlasmarinesolutions.com/",
+      "https://societyshow.com.br/",
     ]);
     for (const site of outcomeSites) {
       expect(site.summary.pt, site.id).not.toBe("");

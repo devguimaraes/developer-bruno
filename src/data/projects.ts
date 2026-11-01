@@ -436,34 +436,35 @@ export const homeCases = [
 export type Project = (typeof homeCases)[number];
 
 /**
- * Sites no ar com número medido (fora dos cases).
+ * Sites no ar com número medido, na ordem dos cards da home.
+ * Agência Multi BR e Atlas também têm case.
  */
 export const outcomeSites = [
   {
-    id: "engerod",
-    title: "Engerod Engenharia",
-    live: "https://engerod.com.br/",
+    id: "agencia-multi-br",
+    title: "Agência Multi BR",
+    live: "https://www.agenciamultibr.com/",
     summary: {
-      pt: "−30% na taxa de rejeição depois do redesign · WordPress · acessibilidade e performance",
-      en: "−30% bounce rate after the redesign · WordPress · accessibility and performance",
+      pt: "−30% na taxa de rejeição depois do redesign · Next.js · Core Web Vitals",
+      en: "−30% bounce rate after the redesign · Next.js · Core Web Vitals",
     },
   },
   {
-    id: "semogrj",
-    title: "SEMOGRJ",
-    live: "https://semogrj.com.br/",
+    id: "atlas-marine-solutions",
+    title: "Atlas Marine Solutions",
+    live: "https://atlasmarinesolutions.com/",
     summary: {
-      pt: "+40% de contatos de novos clientes internacionais · WordPress · site multilíngue",
-      en: "+40% contacts from new international clients · WordPress · multilingual site",
+      pt: "+40% de contatos de novos clientes internacionais · Next.js · site em quatro idiomas",
+      en: "+40% contacts from new international clients · Next.js · four-language site",
     },
   },
   {
-    id: "luis-felipe-pereira",
-    title: "Luis Felipe Pereira",
-    live: "https://luisfelipepereira.com.br/",
+    id: "society-show",
+    title: "Society Show",
+    live: "https://societyshow.com.br/",
     summary: {
-      pt: "3x mais rápido para carregar que o site anterior · WordPress · galeria em WebP com lazy loading",
-      en: "3x faster to load than the previous site · WordPress · WebP gallery with lazy loading",
+      pt: "3x mais rápido para carregar que o site anterior · Astro · Vercel",
+      en: "3x faster to load than the previous site · Astro · Vercel",
     },
   },
 ] as const;
