@@ -7,12 +7,19 @@ import FieldsShowcase from "@/components/dev/FieldsShowcase.astro";
 import ContentShowcase from "@/components/dev/ContentShowcase.astro";
 import NavShowcase from "@/components/dev/NavShowcase.astro";
 import ProcessShowcase from "@/components/dev/ProcessShowcase.astro";
+import SignatureSizePrototype from "@/components/dev/SignatureSizePrototype";
 
 // Página interna para conferir a fundação da Giro contra o canvas ("Fase 4 · componentes").
+// `assinatura` é o protótipo dos tamanhos da assinatura grande.
 // Só existe no dev server: no build, getStaticPaths devolve vazio e a rota não é gerada.
 export function getStaticPaths() {
-  return import.meta.env.DEV ? [{ params: { page: "giro" } }] : [];
+  return import.meta.env.DEV
+    ? [{ params: { page: "giro" } }, { params: { page: "assinatura" } }]
+    : [];
 }
+
+const page = Astro.params.page;
+const variant = Astro.url.searchParams.get("variant");
 
 const surfaces = [
   { name: "g-papel", label: "papel · leitura" },
@@ -26,9 +33,18 @@ const surfaces = [
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex, nofollow" />
-    <title>Giro · fundação</title>
+    <title>
+      {page === "assinatura" ? "Protótipo · tamanhos da assinatura" : "Giro · fundação"}
+    </title>
   </head>
-  <body class="bg-papel font-sans">
+  <body class={page === "assinatura" ? "g-azul" : "bg-papel font-sans"}>
+    {
+      page === "assinatura" && (
+        <SignatureSizePrototype client:load initialVariant={variant} />
+      )
+    }
+    {page === "assinatura" ? null : (
+      <>
     {
       surfaces.map((surface) => (
         <section class={`${surface.name} px-4 py-12 md:px-16 md:py-18`}>
@@ -67,5 +83,7 @@ const surfaces = [
     <ContentShowcase />
     <NavShowcase />
     <ProcessShowcase />
+      </>
+    )}
   </body>
 </html>
