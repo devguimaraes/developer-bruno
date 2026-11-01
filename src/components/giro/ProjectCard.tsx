@@ -1,6 +1,4 @@
-import { useRef, useState, type PointerEvent } from "react";
 import { ArrowRight } from "lucide-react";
-import { Giro } from "@/components/brand/Giro";
 import type { Project } from "@/data/projects";
 
 // Os campos que o card usa vêm do case. Capa e stack são ampliados aqui:
@@ -21,46 +19,11 @@ export interface ProjectCardProps {
   href: string;
 }
 
-// Alcance máximo do olhar do Giro (unidades do componente) e distância, em px,
-// em que o olhar já chega ao limite.
-const MAX_LOOK = 6;
-const LOOK_REACH_PX = 48;
-
 export function ProjectCard({ project, kicker, summary, ctaLabel, href }: ProjectCardProps) {
-  const giroRef = useRef<HTMLSpanElement>(null);
-  const [look, setLook] = useState({ x: 0, y: 0 });
-
-  function handlePointerMove(event: PointerEvent<HTMLAnchorElement>) {
-    const giro = giroRef.current;
-    if (!giro) return;
-    const rect = giro.getBoundingClientRect();
-    const dx = event.clientX - (rect.left + rect.width / 2);
-    const dy = event.clientY - (rect.top + rect.height / 2);
-    const distance = Math.hypot(dx, dy);
-    if (distance === 0) {
-      setLook({ x: 0, y: 0 });
-      return;
-    }
-    const reach = Math.min(MAX_LOOK, distance / LOOK_REACH_PX);
-    setLook({ x: (dx / distance) * reach, y: (dy / distance) * reach });
-  }
-
   return (
-    <a
-      className="g-project-card"
-      href={href}
-      onPointerMove={handlePointerMove}
-      onPointerLeave={() => setLook({ x: 0, y: 0 })}
-    >
+    <a className="g-project-card" href={href}>
       <div className="g-project-card__media">
-        {project.image && (
-          <>
-            <img src={project.image} alt="" loading="lazy" decoding="async" />
-            <span className="g-project-card__giro" ref={giroRef}>
-              <Giro state="curious" look={look} />
-            </span>
-          </>
-        )}
+        {project.image && <img src={project.image} alt="" loading="lazy" decoding="async" />}
       </div>
       <div className="g-project-card__body">
         <span className="g-project-card__meta">{kicker}</span>

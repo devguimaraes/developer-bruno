@@ -73,22 +73,6 @@
   object-fit: cover;
   transition: scale 600ms var(--ease-resolve);
 }
-.g-project-card__giro {
-  position: absolute;
-  right: 12px;
-  top: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: var(--tinta);
-  --s-signal: var(--lima);
-}
-.g-project-card__giro .g-giro {
-  font-size: 32px;
-}
 .g-project-card__body {
   display: flex;
   flex-direction: column;
