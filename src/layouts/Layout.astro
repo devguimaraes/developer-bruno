@@ -2,15 +2,15 @@
 // src/layouts/Layout.astro
 import "@/index.css";
 import "@/styles/markdown.css";
+import { ClientRouter } from "astro:transitions";
+import anybodyFont from "@/assets/fonts/anybody-latin-wdth-wght.woff2";
+import { LoadingScreen } from "@/components/loader/LoadingScreen";
+import { ScrollIsland } from "@/components/nav/ScrollIsland";
+import { SiteFooter } from "@/components/nav/SiteFooter";
+import { SiteHeader } from "@/components/nav/SiteHeader";
+import { TabBar } from "@/components/nav/TabBar";
 import { siteConfig } from "@/config/site";
 import { t } from "@/lib/i18n";
-import { ClientRouter } from "astro:transitions";
-
-import { SiteHeader } from "@/components/nav/SiteHeader";
-import { SiteFooter } from "@/components/nav/SiteFooter";
-import { ScrollIsland } from "@/components/nav/ScrollIsland";
-import { TabBar } from "@/components/nav/TabBar";
-import { LoadingScreen } from "@/components/loader/LoadingScreen";
 
 interface Props {
   title?: string;
@@ -50,6 +50,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         }
       } catch (e) { /* sessionStorage bloqueado: a página aparece direto */ }
     </script>
+    <!-- A coreografia espera esta fonte. O href é o mesmo arquivo do @font-face, para o preload
+         e o CSS dividirem um único download. -->
+    <link rel="preload" href={anybodyFont} as="font" type="font/woff2" crossorigin="anonymous" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
