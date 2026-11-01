@@ -41,7 +41,7 @@ _Avoid_: seção clara, fundo branco
 ## Navegação
 
 **Tela de carregamento**:
-A tela com o Giro carregando que aparece na primeira visita e termina com ele pousando na assinatura do menu ou, no celular, no centro da barra de abas.
+A apresentação da assinatura na primeira visita da sessão, com o Giro no lugar do "o", que pousa no menu ou, no celular, na barra de abas. O desdobramento espera a Anybody. Lima pode ser o fundo só nesta tela.
 _Avoid_: splash, loader, preloader
 
 **Ilha de rolagem**:
