@@ -46,7 +46,7 @@ const SERVICES: readonly Service[] = [
 ];
 
 // Intervalo da cascata: cada card termina de carregar um pouco depois do anterior.
-const STAGGER_MS = 180;
+const STAGGER_MS = 160;
 
 export function HomeServices() {
   const locale = useLocale();

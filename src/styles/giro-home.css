@@ -39,52 +39,15 @@
   min-width: 0;
 }
 
-/* ---------- Serviços: artes isométricas em loop ---------- */
+/* ---------- Serviços: interfaces em camadas ---------- */
 
-/* A arte entra como a interface carrega: o Giro gira no lugar, sorri e sai; a arte sobe montada. */
+/* O palco mede a largura do container (100cqw). Sem container-type a arte escala na viewport. */
 .service-art {
-  position: relative;
   display: block;
+  container-type: inline-size;
 }
-.service-art__svg {
+.service-art__host {
   display: block;
-  opacity: 0;
-  scale: 0.94;
-  translate: 0 18px;
-  transition:
-    opacity 500ms linear,
-    scale 700ms var(--ease-resolve),
-    translate 700ms var(--ease-resolve);
-}
-.service-art[data-ready="true"] .service-art__svg {
-  opacity: 1;
-  scale: 1;
-  translate: 0 0;
-}
-.service-art__svg .sa {
-  --line: var(--s-fg);
-  --line-soft: color-mix(in srgb, var(--s-fg) 26%, transparent);
-  --accent: var(--s-signal);
-  --face-top: var(--art-face);
-  --face-side: var(--art-side);
-  display: block;
-  width: 100%;
-  height: auto;
-}
-.service-art__loading {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  transition:
-    opacity 260ms linear,
-    scale var(--dur-hop) var(--ease-hop);
-}
-.service-art[data-ready="true"] .service-art__loading {
-  opacity: 0;
-  scale: 0.6;
 }
 
 .home-services__grid {
@@ -95,24 +58,20 @@
   padding: 0;
   list-style: none;
 }
-/* As faces das artes escondem as linhas de trás, então ficam na cor do card. Hex fixo:
-   color-mix rende num tom diferente na camada animada do SVG e a caixa da arte aparece.
-   #edece8 e #e1e0dd são tinta a 4% e 9% sobre papel. */
+/* #edece8 é tinta a 4% sobre papel. A regra vem depois de .g-azul, então o card azul
+   repete o fundo da superfície. */
 .home-service {
-  --art-face: #edece8;
-  --art-side: #e1e0dd;
   grid-column: span 2;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   border-radius: 30px;
-  background: var(--art-face);
+  background: #edece8;
   box-shadow: inset 0 0 0 1px var(--s-line);
   transition: translate var(--dur-resolve) var(--ease-resolve);
 }
 .home-service.g-azul {
-  --art-face: var(--azul-sinal);
-  --art-side: var(--azul-fundo);
+  background: var(--s-bg);
 }
 .home-service:nth-child(-n + 2) {
   grid-column: span 3;
@@ -128,15 +87,15 @@
   overflow: hidden;
 }
 .home-service:nth-child(-n + 2) .home-service__art {
-  height: 340px;
+  height: 360px;
 }
-/* Maior que o card nos pequenos: a borda corta a arte. */
+/* O palco é justo (--ratio = largura / altura): a arte ocupa a altura da área. */
 .home-service__art .service-art {
   flex: none;
-  width: 118%;
+  width: min(100% - 24px, calc(276px * var(--ratio)));
 }
 .home-service:nth-child(-n + 2) .home-service__art .service-art {
-  width: 92%;
+  width: min(100% - 24px, calc(336px * var(--ratio)));
 }
 .home-service__body {
   display: flex;
@@ -486,14 +445,21 @@
   .home-service__art,
   .home-service:nth-child(-n + 2) .home-service__art {
     height: auto;
-    padding: 8px 16px 0;
+    padding: 16px 0 0;
   }
   .home-service__art .service-art,
   .home-service:nth-child(-n + 2) .home-service__art .service-art {
     width: 100%;
   }
   .home-service__body {
-    padding: 4px 24px 24px;
+    gap: 14px;
+    padding: 8px 24px 28px;
+  }
+  .home-service__title {
+    font-size: 34px;
+  }
+  .home-service__text {
+    font-size: 18px;
   }
   .home-section__body {
     gap: 40px;
@@ -602,8 +568,13 @@
   .home-service:hover {
     translate: none;
   }
-  .service-art__svg,
-  .service-art__loading {
+  .ar * {
+    animation: none !important;
+  }
+  .ar .pl,
+  .ar .pl__e,
+  .ar .pl__face,
+  .ar .fl {
     transition: none;
   }
 }

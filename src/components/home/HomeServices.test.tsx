@@ -27,14 +27,13 @@ describe("HomeServices", () => {
     ).toEqual(["Astro", "SEO", "CMS"]);
   });
 
-  it("mostra o Giro no lugar de cada arte antes de ela chegar", () => {
+  it("deixa as artes vazias até elas carregarem", () => {
     const { container } = render(<HomeServices />);
     const arts = container.querySelectorAll(".service-art");
     expect(arts).toHaveLength(5);
     for (const art of arts) {
       expect(art).toHaveAttribute("data-ready", "false");
-      expect(art.querySelector(".service-art__svg")?.childElementCount).toBe(0);
-      expect(art.querySelector(".service-art__loading svg")).not.toBeNull();
+      expect(art.querySelector(".service-art__host")?.childElementCount).toBe(0);
     }
   });
 });
