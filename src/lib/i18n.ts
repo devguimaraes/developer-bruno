@@ -10,6 +10,7 @@ const ptDictionary = {
   // Global
   "global.signature_label": "Bruno Guimarães, início",
   "global.main_nav_label": "Principal",
+  "menu.services": "Serviços",
   "menu.projects": "Projetos",
   "menu.process": "Processo",
   "menu.about": "Sobre",
@@ -61,6 +62,31 @@ const ptDictionary = {
   "projects.intro":
     "Cinco projetos em produção. Em cada um: o problema, as decisões técnicas e o resultado.",
   "projects.card_link": "Ver case",
+
+  // Home · serviços
+  "services.label": "// serviços",
+  "services.title": "O que eu faço.",
+  "services.intro":
+    "Cinco jeitos de trabalharmos juntos, do site institucional à identidade que vira código.",
+  "services.sites.title": "Sites completos",
+  "services.sites.body":
+    "Do mapa do site à publicação: estrutura, conteúdo, SEO e um painel para editar sem depender de mim.",
+  "services.sites.tags": "Astro · SEO · CMS",
+  "services.landing.title": "Landing pages",
+  "services.landing.body":
+    "Uma página, um objetivo. Carrega rápido, mede cada clique e é fácil de testar.",
+  "services.landing.tags": "Conversão · Analytics · Web Vitals",
+  "services.product.title": "Interfaces de produto",
+  "services.product.body":
+    "Telas com todos os estados: carregando, vazio, erro e o momento em que tudo funciona.",
+  "services.product.tags": "React · Design system · Acessibilidade",
+  "services.fullstack.title": "Full stack",
+  "services.fullstack.body":
+    "O front-end com o back-end que ele precisa: formulários, APIs e banco.",
+  "services.fullstack.tags": "Next.js · APIs · Banco",
+  "services.branding.title": "Branding",
+  "services.branding.body": "Identidade que vira código: tokens, componentes e movimento.",
+  "services.branding.tags": "Identidade · Tokens · Motion",
 
   // Home · processo
   "process.label": "// processo",
@@ -253,6 +279,7 @@ const enDictionary: Record<TranslationKey, string> = {
   // Global
   "global.signature_label": "Bruno Guimarães, home",
   "global.main_nav_label": "Main",
+  "menu.services": "Services",
   "menu.projects": "Projects",
   "menu.process": "Process",
   "menu.about": "About",
@@ -304,6 +331,30 @@ const enDictionary: Record<TranslationKey, string> = {
   "projects.intro":
     "Five projects in production. For each one: the problem, the technical decisions and the result.",
   "projects.card_link": "View case study",
+
+  // Home · services
+  "services.label": "// services",
+  "services.title": "What I do.",
+  "services.intro":
+    "Five ways to work together, from a company website to an identity that turns into code.",
+  "services.sites.title": "Full websites",
+  "services.sites.body":
+    "From sitemap to launch: structure, content, SEO and a CMS so you can edit without depending on me.",
+  "services.sites.tags": "Astro · SEO · CMS",
+  "services.landing.title": "Landing pages",
+  "services.landing.body":
+    "One page, one goal. Loads fast, measures every click and is easy to test.",
+  "services.landing.tags": "Conversion · Analytics · Web Vitals",
+  "services.product.title": "Product interfaces",
+  "services.product.body":
+    "Screens with every state: loading, empty, error and the moment everything works.",
+  "services.product.tags": "React · Design system · Accessibility",
+  "services.fullstack.title": "Full stack",
+  "services.fullstack.body": "The front end with the back end it needs: forms, APIs and database.",
+  "services.fullstack.tags": "Next.js · APIs · Database",
+  "services.branding.title": "Branding",
+  "services.branding.body": "Identity that turns into code: tokens, components and motion.",
+  "services.branding.tags": "Identity · Tokens · Motion",
 
   // Home · process
   "process.label": "// process",

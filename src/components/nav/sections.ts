@@ -13,6 +13,8 @@ export interface HomeSection {
 
 /** Seções da home, na ordem do documento. */
 export const HOME_SECTIONS: readonly HomeSection[] = [
+  // Fora do menu: entra no scroll spy para a ilha e as reações do Giro saberem onde o leitor está.
+  { id: "servicos", menuKey: "menu.services", labelKey: "services.label", inMenu: false },
   { id: "projetos", menuKey: "menu.projects", labelKey: "projects.label", inMenu: true },
   { id: "processo", menuKey: "menu.process", labelKey: "process.label", inMenu: true },
   { id: "sobre", menuKey: "menu.about", labelKey: "about.label", inMenu: true },
@@ -39,6 +41,8 @@ export const TABS: readonly TabItem[] = [
 ];
 
 export const SECTION_TAB: Readonly<Record<string, TabId>> = {
+  // Serviços vem logo depois do hero e ainda é o começo da home: Início continua acesa.
+  servicos: "home",
   projetos: "projects",
   blog: "blog",
   contato: "contact",

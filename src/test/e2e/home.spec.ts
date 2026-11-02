@@ -10,7 +10,7 @@ test.describe("Navegação Principal", () => {
     await expect(page.locator("h1").first()).toBeVisible();
 
     // Âncoras das seções da home, usadas pela navegação
-    for (const id of ["projetos", "processo", "sobre", "blog", "contato"]) {
+    for (const id of ["servicos", "projetos", "processo", "sobre", "blog", "contato"]) {
       await expect(page.locator(`#${id}`)).toHaveCount(1);
     }
 

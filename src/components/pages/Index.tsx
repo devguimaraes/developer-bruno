@@ -6,6 +6,7 @@ import { HomeContact } from "@/components/home/HomeContact";
 import { HomeOtherSites } from "@/components/home/HomeOtherSites";
 import { HomeProcess } from "@/components/home/HomeProcess";
 import { HomeProjects } from "@/components/home/HomeProjects";
+import { HomeServices } from "@/components/home/HomeServices";
 import SectionEntrance from "@/components/ui/SectionEntrance";
 
 interface IndexProps {
@@ -41,7 +42,11 @@ const Index: React.FC<IndexProps> = ({ posts }) => {
         <Hero />
       </SectionEntrance>
 
-      <HomeSection id="projetos" surface="g-papel">
+      <HomeSection id="servicos" surface="g-papel">
+        <HomeServices />
+      </HomeSection>
+
+      <HomeSection id="projetos" surface="g-papel" ruled>
         <HomeProjects />
         <HomeOtherSites />
       </HomeSection>

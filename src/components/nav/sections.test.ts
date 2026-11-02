@@ -2,8 +2,8 @@ import { describe, it, expect } from "vitest";
 import { HOME_SECTIONS, SECTION_IDS, TABS, tabForLocation } from "./sections";
 
 describe("HOME_SECTIONS", () => {
-  it("lista as cinco seções da home na ordem do documento", () => {
-    expect(SECTION_IDS).toEqual(["projetos", "processo", "sobre", "blog", "contato"]);
+  it("lista as seções da home na ordem do documento, com serviços logo depois do hero", () => {
+    expect(SECTION_IDS).toEqual(["servicos", "projetos", "processo", "sobre", "blog", "contato"]);
   });
 
   it("o menu da ilha leva as cinco seções, para o computador não ficar sem Blog e Contato", () => {
@@ -21,6 +21,11 @@ describe("TABS", () => {
 describe("tabForLocation", () => {
   it("no topo da home, a aba é Início", () => {
     expect(tabForLocation("/", null)).toBe("home");
+  });
+
+  // Regressão: com serviços no scroll spy, nenhuma aba acendia logo depois do hero.
+  it("em serviços, logo depois do hero, a aba continua Início", () => {
+    expect(tabForLocation("/", "servicos")).toBe("home");
   });
 
   it("nas seções com aba, a aba segue a seção", () => {
