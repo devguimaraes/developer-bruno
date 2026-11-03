@@ -68,4 +68,23 @@ test.describe("Navegação Principal", () => {
       page.locator("#projetos").getByRole("heading", { name: "No ar.", level: 2 })
     ).toBeVisible();
   });
+
+  test("Deve pintar a faixa ao entrar e levar ao estudo", async ({ page }) => {
+    await page.goto("/#projetos");
+    await waitForHydration(page);
+
+    const projectsSection = page.locator("#projetos");
+    await expect(projectsSection.getByRole("heading", { name: "No ar.", level: 2 })).toBeVisible();
+
+    const entre = projectsSection.getByRole("link", { name: "Estúdio Entre" });
+    await expect(entre).toHaveAttribute("href", "/projetos/estudio-entre");
+    await entre.scrollIntoViewIfNeeded();
+    await expect(projectsSection.locator(".home-band").first()).toHaveAttribute(
+      "data-painted",
+      "true"
+    );
+
+    await entre.click();
+    await expect(page).toHaveURL(/\/projetos\/estudio-entre$/);
+  });
 });

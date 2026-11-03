@@ -62,6 +62,7 @@ const ptDictionary = {
   "projects.intro":
     "Cinco projetos em produção. Em cada um: o problema, as decisões técnicas e o resultado.",
   "projects.card_link": "Ver case",
+  "projects.stack": "Stack",
 
   // Home · serviços
   "services.label": "// serviços",
@@ -331,6 +332,7 @@ const enDictionary: Record<TranslationKey, string> = {
   "projects.intro":
     "Five projects in production. For each one: the problem, the technical decisions and the result.",
   "projects.card_link": "View case study",
+  "projects.stack": "Stack",
 
   // Home · services
   "services.label": "// services",
