@@ -1,0 +1,23 @@
+/* Variação da C no papel. Todas as faixas terminam em papel: a troca de cor vira um anel lima
+   que passa e um disco de papel novo que cobre por trás, como uma página recarregando.
+   O texto fica em tinta o tempo todo (16,7:1 sobre lima, 17,7:1 sobre papel), então a
+   cópia recortada da C não é necessária. Uma linha fina separa as faixas. */
+
+.vc2 .vc-band + .vc-band {
+  border-top: 1px solid var(--linha-papel);
+}
+
+.vc2 .vc-band {
+  min-height: 760px;
+}
+
+/* O anel fica mais visível: o papel sai 240 ms depois do lima. */
+.vc2 .vc-band.is-painted .vc-disk--to {
+  transition-delay: 240ms;
+}
+
+@container pj (max-width: 760px) {
+  .vc2 .vc-band {
+    min-height: 0;
+  }
+}
