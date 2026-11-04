@@ -10,6 +10,9 @@ export interface PeekPose {
 /** Parado este tempo numa seção, o Giro começa a espiar. */
 export const PEEK_AFTER_MS = 5000;
 
+/** Atributo que o Layout põe no <html> enquanto a tela de carregamento cobre a página. */
+const LOADER_ATTR = "data-loader";
+
 /** Passos da leitura, em ordem. `holdMs` é quanto esperar depois deste passo antes do próximo. */
 export const PEEK_STEPS: readonly (PeekPose & { holdMs: number })[] = [
   { look: { x: -2.5, y: 0.5 }, durationMs: 340, ease: "resolve", holdMs: 400 },
@@ -64,10 +67,13 @@ export function usePeek(key: string | null, enabled: boolean): PeekPose | null {
       }
     };
 
-    // Reinicia a contagem. Chave já usada não agenda nada.
+    const loaderOn = () => document.documentElement.hasAttribute(LOADER_ATTR);
+
+    // Reinicia a contagem. Chave já usada não agenda nada. Com a tela de carregamento por cima, o
+    // Giro não está à vista: a contagem só começa quando ela sai.
     const schedule = () => {
       window.clearTimeout(idleTimer);
-      if (usedRef.current.has(key)) return;
+      if (usedRef.current.has(key) || loaderOn()) return;
       idleTimer = window.setTimeout(() => {
         usedRef.current.add(key);
         showStep(0);
@@ -85,10 +91,15 @@ export function usePeek(key: string | null, enabled: boolean): PeekPose | null {
       schedule();
     };
 
+    const loader = new MutationObserver(() => {
+      if (!loaderOn()) schedule();
+    });
+    loader.observe(document.documentElement, { attributes: true, attributeFilter: [LOADER_ATTR] });
     schedule();
     window.addEventListener("scroll", onScroll, { passive: true });
 
     return () => {
+      loader.disconnect();
       window.removeEventListener("scroll", onScroll);
       window.clearTimeout(idleTimer);
       window.clearTimeout(stepTimer);

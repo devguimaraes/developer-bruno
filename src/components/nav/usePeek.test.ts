@@ -45,6 +45,29 @@ describe("usePeek", () => {
     ]);
   });
 
+  // Regressão: a tela de carregamento dura mais de 5 s e o espiando acontecia escondido atrás dela,
+  // gastando a seção antes de o Giro aparecer.
+  it("não conta o tempo parado enquanto a tela de carregamento está de pé", async () => {
+    document.documentElement.setAttribute("data-loader", "on");
+    try {
+      const { result } = setup();
+      advance(PEEK_AFTER_MS * 2);
+      expect(result.current).toBeNull();
+
+      document.documentElement.removeAttribute("data-loader");
+      // O MutationObserver avisa num microtask.
+      await act(async () => {
+        await Promise.resolve();
+      });
+      advance(PEEK_AFTER_MS - 1);
+      expect(result.current).toBeNull();
+      advance(1);
+      expect(result.current).toMatchObject({ look: { x: -2.5, y: 0.5 } });
+    } finally {
+      document.documentElement.removeAttribute("data-loader");
+    }
+  });
+
   it("não espia antes de 5 s parado", () => {
     const { result } = setup();
     advance(PEEK_AFTER_MS - 1);
