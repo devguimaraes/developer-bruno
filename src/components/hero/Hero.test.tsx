@@ -1,5 +1,6 @@
 import { act, render, screen } from "@testing-library/react";
-import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { setLocale } from "@/lib/i18n";
 import { Hero } from "./Hero";
 
 const originalMatchMedia = window.matchMedia;
@@ -19,19 +20,11 @@ function mockReducedMotion(reduced: boolean): void {
   }));
 }
 
-beforeAll(() => {
-  // jsdom não tem canvas 2D: o campo precisa ficar desligado sem quebrar a ilha.
-  Object.defineProperty(HTMLCanvasElement.prototype, "getContext", {
-    configurable: true,
-    writable: true,
-    value: () => null,
-  });
-});
-
 afterEach(() => {
   window.matchMedia = originalMatchMedia;
   rafSpy?.mockRestore();
   rafSpy = undefined;
+  act(() => setLocale("pt"));
 });
 
 describe("Hero", () => {
@@ -53,13 +46,89 @@ describe("Hero", () => {
     expect(screen.getByRole("button", { name: "Fazer o Giro pular" })).toBeEnabled();
   });
 
-  it("com movimento reduzido, não roda o loop e deixa o pulo inerte", async () => {
+  it("monta as quatro camadas e as estações fora do leitor de tela", () => {
+    mockReducedMotion(false);
+    const { container } = render(<Hero />);
+
+    expect(container.querySelectorAll("[data-layer]")).toHaveLength(4);
+    expect(container.querySelectorAll(".hb-stop")).toHaveLength(5);
+    expect(container.querySelector(".hb-line")).toHaveAttribute("aria-hidden", "true");
+    expect(container.querySelector(".hb-world")).toHaveAttribute("aria-hidden", "true");
+  });
+
+  it("troca os rótulos da linha com o idioma", () => {
+    mockReducedMotion(false);
+    const { container } = render(<Hero />);
+    const tags = () => Array.from(container.querySelectorAll(".hb-tag"), n => n.textContent);
+
+    expect(tags()).toEqual(["// tokens", "// componentes", "// tela", "// estado"]);
+    act(() => setLocale("en"));
+    expect(tags()).toEqual(["// tokens", "// components", "// screen", "// state"]);
+  });
+
+  it("só lança o Giro depois que a tela de carregamento sai e devolve a origem ao desmontar", async () => {
+    vi.useFakeTimers({
+      toFake: [
+        "setTimeout",
+        "clearTimeout",
+        "requestAnimationFrame",
+        "cancelAnimationFrame",
+        "performance",
+      ],
+    });
+    // Computador: a origem é o Giro da assinatura no header.
+    window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+      matches: query === "(min-width: 768px)",
+      media: query,
+      onchange: null,
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    }));
+    const header = document.createElement("header");
+    header.setAttribute("data-site-header", "");
+    header.innerHTML = '<span class="g-signature__o"><svg class="g-giro"></svg></span>';
+    document.body.append(header);
+    const source = header.querySelector<SVGElement>(".g-giro");
+    document.documentElement.setAttribute("data-loader", "on");
+
+    try {
+      const { container, unmount } = render(<Hero />);
+      const stage = container.querySelector(".hb");
+      const rider = screen.getByRole("button", { name: "Fazer o Giro pular" });
+
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(3000);
+      });
+      expect(stage).not.toHaveClass("is-away");
+      expect(rider).toHaveAttribute("tabindex", "-1");
+
+      document.documentElement.removeAttribute("data-loader");
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(400);
+      });
+      expect(stage).toHaveClass("is-away");
+      expect(rider).toHaveAttribute("tabindex", "0");
+      expect(source?.style.opacity).toBe("0");
+
+      unmount();
+      expect(source?.style.opacity).toBe("");
+    } finally {
+      document.documentElement.removeAttribute("data-loader");
+      header.remove();
+      vi.useRealTimers();
+    }
+  });
+
+  it("com movimento reduzido, não roda o laço e deixa o pulo inerte", async () => {
     mockReducedMotion(true);
     const raf = vi.spyOn(window, "requestAnimationFrame");
     rafSpy = raf;
     const { container } = render(<Hero />);
 
-    // Dá tempo para os efeitos assentarem; o motor não pode voltar a pedir quadros.
+    // Dá tempo para os efeitos assentarem; o laço não pode voltar a pedir quadros.
     await act(async () => {
       await new Promise(resolve => setTimeout(resolve, 0));
     });
@@ -69,7 +138,7 @@ describe("Hero", () => {
     });
 
     expect(raf.mock.calls.length).toBe(calls);
-    expect(container.querySelector(".hr-stage")).toHaveClass("is-out");
+    expect(container.querySelector(".hb")).toHaveClass("is-still", "is-away");
     expect(screen.getByRole("button", { name: "Fazer o Giro pular" })).toBeDisabled();
   });
 });

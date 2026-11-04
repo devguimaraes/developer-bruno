@@ -38,7 +38,7 @@ test.describe("Case, 404 e movimento reduzido", () => {
     await page.goto("/");
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Interfaces com vida.");
     // Só desabilita depois da hidratação, que demora mais com o servidor frio.
-    await expect(page.locator(".hr-giro")).toBeDisabled({ timeout: 45_000 });
+    await expect(page.locator(".hb-rider")).toBeDisabled({ timeout: 45_000 });
     await page.getByRole("link", { name: "Ver projetos" }).click();
     await expect(page).toHaveURL(/#projetos$/);
   });

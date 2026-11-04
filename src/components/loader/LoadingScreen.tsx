@@ -23,7 +23,7 @@ const TYPE_MS = 390;
 const FLIGHT_EASE: [number, number, number, number] = [0.2, 0.8, 0.2, 1];
 const DESKTOP_MIN_WIDTH = 768;
 const LOADER_ATTR = "data-loader";
-const HERO_GIRO = ".hr-giro";
+const HERO_GIRO = ".hb-rider";
 const ANYBODY_SPEC = '800 16px "Anybody"';
 const LINE_KEYS = ["loader.line1", "loader.line2", "loader.line3"] as const satisfies readonly [
   TranslationKey,

@@ -190,7 +190,7 @@ describe("LoadingScreen", () => {
 
   it("na home, com o hero, ninguém acena", async () => {
     const wrapper = addFlightTarget(
-      '<header data-site-header><span class="g-signature__o"><svg class="g-giro"></svg></span></header><div class="hr-giro"></div>'
+      '<header data-site-header><span class="g-signature__o"><svg class="g-giro"></svg></span></header><div class="hb-rider"></div>'
     );
     const moments: unknown[] = [];
     wrapper

@@ -37,7 +37,7 @@ test.describe("Navegação Principal", () => {
 
   test("Deve rolar só a janela, sem contêiner de rolagem dentro das seções", async ({ page }) => {
     await page.goto("/");
-    await expect(page.locator(".hr-stage")).toBeVisible();
+    await expect(page.locator("section.hb")).toBeVisible();
 
     const inner = await page.evaluate(() =>
       Array.from(document.querySelectorAll("body *"))
