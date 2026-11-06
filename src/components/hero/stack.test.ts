@@ -39,6 +39,9 @@ describe("configs e escala", () => {
   it("usa os números da prancha em cada config", () => {
     expect(DESKTOP_STACK.k).toBe(0.92);
     expect(DESKTOP_STACK.Go).toBe(150);
+    // Estação de partida mais baixa: o chão da entrada quicando fica abaixo da quina da pilha.
+    expect(DESKTOP_STACK.rest).toBe(170);
+    expect(MOBILE_STACK.rest).toBe(120);
     expect(MOBILE_STACK.k).toBe(0.5);
     expect(MOBILE_STACK.Go).toBe(100);
     expect(MOBILE_STACK.arc).toBe(120);

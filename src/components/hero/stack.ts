@@ -44,7 +44,7 @@ export const DESKTOP_STACK: StackConfig = {
   Gc: 16,
   Go: 150,
   topExtra: 0,
-  rest: 110,
+  rest: 170,
   gap: 40,
   tagGap: 46,
   k: 0.92,
