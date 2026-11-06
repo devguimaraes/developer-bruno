@@ -5,20 +5,25 @@ import {
   approach,
   cycleSteps,
   DESKTOP_STACK,
-  easeInOutCubic,
+  easeInOutSine,
   FIRE_DELAY_MS,
   FLIGHT_S,
   flightAt,
   hitLayer,
   LAYER_COUNT,
+  LOADING_SPIN,
   layerHeights,
   layoutScale,
   MOBILE_STACK,
   makeCamera,
   pointerOpen,
-  rideDuration,
+  RIDE_ARRIVE,
+  RIDE_MAX_SPEED,
+  RIDE_SMOOTH_S,
+  ROLL_PER_PX,
   riderAt,
   scrollProgress,
+  smoothDamp,
   stackCenter,
   stackOrigin,
   stations,
@@ -43,6 +48,9 @@ const HOP_SPEED = 560;
 const GRAVITY = 2200;
 const HUD_STEP_MS = 200;
 const MAX_DT_S = 0.05;
+// Rapidez com que o giro do anel acompanha a velocidade: alto o bastante para parecer preso ao chão.
+const ROLL_FOLLOW = 10;
+const GROW_RATE = 7;
 
 export type HudMood = StackMood | "air";
 
@@ -146,11 +154,15 @@ function createRuntime(
   let hover = -1;
   let mode: Mode = "seat";
   let rp = -1;
-  let ride: { from: number; to: number; t: number; T: number; done?: () => void } | null = null;
+  let rpVel = 0;
+  // A viagem só acaba quando o Giro assenta; a chegada (done) dispara um pouco antes, já parando.
+  let ride: { to: number; arrived: boolean; done?: () => void } | null = null;
   let fly: { from: Point; t: number } | null = null;
   let jumpY = 0;
   let jumpV = 0;
   let roll = 0;
+  let spinVel = 0;
+  let mood: StackMood = "idle";
   let gscale = 1;
   let lastPos: Point | null = null;
   let loopN = 0;
@@ -223,18 +235,19 @@ function createRuntime(
   };
 
   // Na estação o Giro olha para a esquerda, para a camada que ele acabou de acender.
-  const setMood = (mood: StackMood, watch = false): void => {
-    svg.setAttribute("data-state", mood);
+  const setMood = (next: StackMood, watch = false): void => {
+    mood = next;
+    svg.setAttribute("data-state", next);
     svg.classList.remove("is-hop");
-    if (mood === "done") restartClass(svg, "is-hop");
-    if (mood === "curious") {
+    if (next === "done") restartClass(svg, "is-hop");
+    if (next === "curious") {
       look(-6, -1);
       svg.style.setProperty("--g-tilt", "-7deg");
     } else {
       svg.style.setProperty("--g-tilt", "0deg");
       look(watch ? -5 : 0, 0);
     }
-    if (mode !== "seat") setHud(mood);
+    if (mode !== "seat") setHud(next);
   };
 
   const squash = (): void => restartClass(inner, "is-squash");
@@ -293,7 +306,8 @@ function createRuntime(
     if (away) placeSeat();
   };
 
-  const drawLine = (): void => {
+  // dt > 0 só no laço: é ele que integra o giro do anel.
+  const drawLine = (dt = 0): void => {
     if (!cam) return;
     const st: Station[] = stations(cfg, cam, zs, scale);
     rail.setAttribute("points", st.map(s => `${s.x.toFixed(1)},${s.y.toFixed(1)}`).join(" "));
@@ -321,9 +335,16 @@ function createRuntime(
     const start = st[0];
     const pos =
       fly && start
-        ? flightAt(fly.from, start, Math.min(1, fly.t / FLIGHT_S), cfg.arc)
+        ? flightAt(fly.from, start, easeInOutSine(Math.min(1, fly.t / FLIGHT_S)), cfg.arc)
         : riderAt(st, rp);
-    if (lastPos) roll += (pos.y - lastPos.y) * -2.4 + (pos.x - lastPos.x) * 1.2;
+    if (dt > 0) {
+      // O anel gira pela velocidade, não pelo deslocamento do quadro: um quadro lento não vira
+      // um salto de ângulo, e o loading soma a volta dele em vez de trocar de animação.
+      const moved = lastPos ? -(pos.y - lastPos.y) + (pos.x - lastPos.x) * 0.5 : 0;
+      const target = (moved * ROLL_PER_PX) / dt + (mood === "loading" ? LOADING_SPIN : 0);
+      spinVel = approach(spinVel, target, ROLL_FOLLOW, dt);
+      roll = (roll + spinVel * dt) % 360;
+    }
     lastPos = pos;
     rider.style.transform = `translate(${pos.x.toFixed(1)}px, ${(pos.y - jumpY).toFixed(1)}px)`;
     svg.style.setProperty("--roll", `${roll.toFixed(1)}deg`);
@@ -345,7 +366,7 @@ function createRuntime(
     clearLinks();
     setMood("idle");
     look(0, to > rp ? -4 : 4);
-    ride = { from: rp, to, t: 0, T: rideDuration(rp, to), done };
+    ride = { to, arrived: false, done };
     setHud(null, to < 0 ? { kind: "to", layer: -1 } : { kind: "to", layer: to });
   };
 
@@ -403,6 +424,7 @@ function createRuntime(
     fly = null;
     mode = "rail";
     rp = -1;
+    rpVel = 0;
     squash();
     setHud("idle", { kind: "floor" });
     after(LOOP_AFTER_LAND_MS, loop);
@@ -448,15 +470,15 @@ function createRuntime(
       if (fly.t >= FLIGHT_S) landed();
     } else if (ride) {
       const m = ride;
-      m.t += dt;
-      const u = Math.min(1, m.t / m.T);
-      rp = m.from + (m.to - m.from) * easeInOutCubic(u);
-      if (u >= 1) {
-        ride = null;
-        rp = m.to;
+      const next = smoothDamp(rp, m.to, rpVel, RIDE_SMOOTH_S, RIDE_MAX_SPEED, dt);
+      rp = next.value;
+      rpVel = next.vel;
+      if (!m.arrived && Math.abs(m.to - rp) < RIDE_ARRIVE) {
+        m.arrived = true;
         squash();
         m.done?.();
       }
+      if (ride === m && rp === m.to) ride = null;
     }
     if (jumpV !== 0 || jumpY > 0) {
       jumpV -= GRAVITY * dt;
@@ -467,8 +489,8 @@ function createRuntime(
         squash();
       }
     }
-    if (gscale < 1) gscale = Math.min(1, gscale + dt * 2.4);
-    drawLine();
+    if (gscale < 1) gscale = Math.min(1, approach(gscale, 1.001, GROW_RATE, dt));
+    drawLine(dt);
     if (mode !== "seat") placeSeat();
     if (now - hudAt > HUD_STEP_MS) {
       hudAt = now;
@@ -502,6 +524,8 @@ function createRuntime(
   const resume = (): void => {
     clearTimers();
     ride = null;
+    rpVel = 0;
+    spinVel = 0;
     lastPos = null;
     // Uma pausa no meio de uma batida cancelou o timer que limparia a camada.
     for (const n of layers) n.classList.remove("is-fire", "is-fresh", "is-error");

@@ -14,9 +14,12 @@ import {
   makeCamera,
   pointerOpen,
   project,
-  rideDuration,
+  RIDE_ARRIVE,
+  RIDE_MAX_SPEED,
+  RIDE_SMOOTH_S,
   riderAt,
   scrollProgress,
+  smoothDamp,
   stackCenter,
   stackOrigin,
   stations,
@@ -173,11 +176,46 @@ describe("estações, linha e voo", () => {
     expect(mid.y).toBeCloseTo(-50);
   });
 
-  it("rideDuration segue 0.3 + 0.14 por camada", () => {
-    expect(rideDuration(-1, 3)).toBeCloseTo(0.86);
-    expect(rideDuration(0, 0)).toBeCloseTo(0.3);
+  it("FLIGHT_S e FIRE_DELAY_MS seguem a prancha", () => {
     expect(FLIGHT_S).toBe(0.86);
     expect(FIRE_DELAY_MS).toBe(220);
+  });
+
+  // Simula a viagem a 60 quadros por segundo e devolve posição e velocidade a cada quadro.
+  function ride(from: number, to: number, frames = 120, vel = 0) {
+    const out: { value: number; vel: number }[] = [];
+    let cur = { value: from, vel };
+    for (let i = 0; i < frames; i += 1) {
+      cur = smoothDamp(cur.value, to, cur.vel, RIDE_SMOOTH_S, RIDE_MAX_SPEED, 1 / 60);
+      out.push(cur);
+    }
+    return out;
+  }
+
+  it("smoothDamp sai do repouso sem salto, não passa do alvo e assenta", () => {
+    const path = ride(-1, 0);
+    // Primeiro quadro: anda pouco, sem o salto de uma velocidade cheia.
+    expect(path[0].value + 1).toBeLessThan(0.05);
+    expect(path.every(p => p.value <= 0)).toBe(true);
+    expect(path[path.length - 1].value).toBe(0);
+    // Uma estação chega perto do alvo antes de 1 s, a tempo da batida seguinte do ciclo.
+    const arrive = path.findIndex(p => Math.abs(p.value) < RIDE_ARRIVE);
+    expect(arrive).toBeGreaterThan(0);
+    expect(arrive).toBeLessThan(60);
+  });
+
+  it("smoothDamp respeita o teto de velocidade numa viagem longa", () => {
+    const path = ride(3, -1);
+    expect(Math.max(...path.map(p => Math.abs(p.vel)))).toBeLessThanOrEqual(RIDE_MAX_SPEED + 1e-6);
+  });
+
+  it("smoothDamp troca de alvo no meio sem zerar a velocidade", () => {
+    const going = ride(-1, 3, 20);
+    const last = going[going.length - 1];
+    const back = smoothDamp(last.value, 0, last.vel, RIDE_SMOOTH_S, RIDE_MAX_SPEED, 1 / 60);
+    // Ainda indo para cima no quadro da troca: freia em vez de inverter na hora.
+    expect(back.vel).toBeGreaterThan(0);
+    expect(back.vel).toBeLessThan(last.vel);
   });
 });
 

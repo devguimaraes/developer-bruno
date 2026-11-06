@@ -526,6 +526,12 @@
   rotate: var(--roll, 0deg);
 }
 
+/* Na linha, o giro do loading vem do laço (--roll), somado ao da viagem. A animação de CSS
+   pulava até uma volta inteira ao sair do loading. */
+.hb .hb-rider .g-giro[data-state="loading"] .g-giro__spin {
+  animation: none;
+}
+
 /* No celular o Giro tem 44 px: traço do tamanho médio. */
 @media (max-width: 767px) {
   .hb .hb-rider .g-giro {

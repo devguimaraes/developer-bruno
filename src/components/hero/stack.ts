@@ -93,9 +93,9 @@ export function easeInOutQuad(p: number): number {
   return p < 0.5 ? 2 * p * p : 1 - (-2 * p + 2) ** 2 / 2;
 }
 
-/** A curva do stepRide da prancha. */
-export function easeInOutCubic(u: number): number {
-  return u < 0.5 ? 4 * u * u * u : 1 - (-2 * u + 2) ** 3 / 2;
+/** Meia volta de cosseno: sai e chega com velocidade zero, sem o tranco da cúbica no meio. */
+export function easeInOutSine(u: number): number {
+  return 0.5 - 0.5 * Math.cos(Math.PI * u);
 }
 
 export interface Camera {
@@ -256,10 +256,54 @@ export function flightAt(from: Point, to: Point, u: number, arc: number): Point 
 
 export const FLIGHT_S = 0.86;
 
-/** Duração de uma viagem na linha, em segundos. */
-export function rideDuration(from: number, to: number): number {
-  return 0.3 + 0.14 * Math.abs(to - from);
+export interface Damped {
+  value: number;
+  vel: number;
 }
+
+/**
+ * Amortecimento crítico com teto de velocidade (o SmoothDamp de Game Programming Gems 4).
+ * Trocar o alvo no meio do caminho mantém a velocidade, então não há tranco na troca.
+ * Nunca passa do alvo e assenta exatamente nele.
+ */
+export function smoothDamp(
+  current: number,
+  target: number,
+  vel: number,
+  smoothTime: number,
+  maxSpeed: number,
+  dt: number
+): Damped {
+  const omega = 2 / smoothTime;
+  const x = omega * dt;
+  const decay = 1 / (1 + x + 0.48 * x * x + 0.235 * x * x * x);
+  const maxChange = maxSpeed * smoothTime;
+  const change = Math.max(-maxChange, Math.min(maxChange, current - target));
+  const goal = current - change;
+  const temp = (vel + omega * change) * dt;
+  let nextVel = (vel - omega * temp) * decay;
+  let value = goal + (change + temp) * decay;
+  // Passou do alvo, ou ficou a menos de um centésimo de px dele: assenta, senão nunca chega.
+  if (target - current > 0 === value > target || Math.abs(target - value) < 1e-4) {
+    value = target;
+    nextVel = 0;
+  }
+  return { value, vel: nextVel };
+}
+
+/** Viagem na linha: tempo de assentar, em s, e teto em estações por segundo. */
+export const RIDE_SMOOTH_S = 0.2;
+export const RIDE_MAX_SPEED = 7;
+/** A chegada conta a esta distância da estação, antes do último milímetro do amortecimento. */
+export const RIDE_ARRIVE = 0.04;
+
+/**
+ * Giro do anel, em graus por px andado. Metade de rolar de verdade num Giro de 64 px:
+ * rolar inteiro dá mais de 200 graus por estação e o anel vira um borrão.
+ */
+export const ROLL_PER_PX = 0.9;
+/** Uma volta a cada 900 ms, o --dur-spin do loading. */
+export const LOADING_SPIN = 400;
 
 /** Camada sob o ponto, de cima para baixo, ou -1. */
 export function hitLayer(cfg: StackConfig, cam: Camera, zs: readonly number[], p: Point): number {
