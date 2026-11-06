@@ -53,6 +53,42 @@ test.describe("Navegação Principal", () => {
     expect(await page.evaluate(() => document.querySelector("main")?.scrollTop)).toBe(0);
   });
 
+  test.describe("no celular", () => {
+    test.use({ viewport: { width: 390, height: 844 } });
+
+    test("Não deve criar rolagem lateral durante a entrada do Giro", async ({ page }) => {
+      await page.goto("/");
+      await waitForHydration(page);
+
+      // Amostra a cada quadro até o Giro estacionar: no celular a bola bate nas bordas da tela.
+      const entrance = await page.evaluate(
+        () =>
+          new Promise<{ widest: number; width: number; parked: boolean }>(resolve => {
+            const hud = document.querySelector('[data-hud="state"]');
+            const width = window.innerWidth;
+            const t0 = performance.now();
+            let widest = document.documentElement.scrollWidth;
+            // "rolando" só aparece na entrada; o primeiro "pronto" depois dele é o Giro estacionado.
+            let rolled = false;
+            const tick = (): void => {
+              widest = Math.max(widest, document.documentElement.scrollWidth);
+              const state = hud?.textContent;
+              if (state === "rolando") rolled = true;
+              const parked = rolled && state === "pronto";
+              if (parked || performance.now() - t0 > 9000) {
+                resolve({ widest, width, parked });
+                return;
+              }
+              requestAnimationFrame(tick);
+            };
+            tick();
+          })
+      );
+      expect(entrance.parked).toBe(true);
+      expect(entrance.widest).toBeLessThanOrEqual(entrance.width);
+    });
+  });
+
   test("Deve levar o menu até a seção de projetos ao rolar", async ({ page }) => {
     await page.goto("/");
     await waitForHydration(page);

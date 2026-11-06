@@ -27,9 +27,13 @@ Em `prancha/`, com os mesmos nomes do canvas:
 
 Os `.dc.html` rodam só dentro do runtime do canvas. Eles importam `./support.js` e `ds/giro/tokens.css` e `ds/giro/components/bundle.css`, que não foram copiados para cá. Por isso não abrem sozinhos no navegador.
 
+## Entrada quicando
+
+A entrada do Giro, que substitui o voo em arco do lançamento, tem handoff próprio em `quique/`: as pranchas "Quique" e "Quique celular", o CSS da entrada e capturas. Ver `quique/README.md`.
+
 ## Código do site
 
-- `src/components/hero/`: `Hero.tsx`, `StackScene.tsx`, `stack.ts`, `useHeroStack.ts`
+- `src/components/hero/`: `Hero.tsx`, `StackScene.tsx`, `stack.ts`, `useHeroStack.ts`, `bounce.ts` (física da entrada)
 - `src/styles/giro-hero.css`
 
 Atenção: nesta branch, `StackScene.tsx`, `stack.ts` e `useHeroStack.ts` ainda não existem. A pasta `src/components/hero/` tem hoje a versão anterior (`Hero.tsx`, `SpinnerField.tsx`, `field.ts`, `heroEngine.ts`, `useHeroEngine.ts`), com o campo de spinners em canvas. A vista explodida precisa ser escrita nesses caminhos.
