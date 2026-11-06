@@ -72,6 +72,9 @@ const TEXT_BARS = [
 ];
 
 export function StackScene({ labels }: { labels: StackLabels }) {
+  // --n é o número de caracteres do rótulo; o CSS usa para digitar uma letra por passo.
+  const tagText = labels.layers.map(name => `// ${name}`);
+  const tagStyle = (text: string) => ({ "--n": text.length }) as CSSProperties;
   return (
     <>
       <div className="hb-floor-layer" aria-hidden="true">
@@ -349,10 +352,18 @@ export function StackScene({ labels }: { labels: StackLabels }) {
           <b className="hb-link" data-link="1" />
           <b className="hb-link" data-link="2" />
           <b className="hb-link" data-link="3" />
-          <span className="hb-tag" data-tag="0">{`// ${labels.layers[0]}`}</span>
-          <span className="hb-tag" data-tag="1">{`// ${labels.layers[1]}`}</span>
-          <span className="hb-tag" data-tag="2">{`// ${labels.layers[2]}`}</span>
-          <span className="hb-tag" data-tag="3">{`// ${labels.layers[3]}`}</span>
+          <span className="hb-tag" data-tag="0" style={tagStyle(tagText[0])}>
+            {tagText[0]}
+          </span>
+          <span className="hb-tag" data-tag="1" style={tagStyle(tagText[1])}>
+            {tagText[1]}
+          </span>
+          <span className="hb-tag" data-tag="2" style={tagStyle(tagText[2])}>
+            {tagText[2]}
+          </span>
+          <span className="hb-tag" data-tag="3" style={tagStyle(tagText[3])}>
+            {tagText[3]}
+          </span>
         </div>
       </div>
     </>

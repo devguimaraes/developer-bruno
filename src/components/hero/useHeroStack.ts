@@ -362,6 +362,15 @@ function createRuntime(
     for (const [k, n] of stops) n.classList.toggle("is-on", k === i);
   };
 
+  // Rótulo da linha: aparece digitado quando o Giro chega na estação e some quando a pilha fecha.
+  const showTag = (i: number): void => {
+    tags.get(i)?.classList.add("is-shown");
+  };
+
+  const hideTags = (): void => {
+    for (const n of tags.values()) n.classList.remove("is-shown");
+  };
+
   const startRide = (to: number, done?: () => void): void => {
     clearLinks();
     setMood("idle");
@@ -382,6 +391,7 @@ function createRuntime(
     if (mode !== "rail") return;
     startRide(i, () => {
       setLit(i);
+      showTag(i);
       const link = links.get(i);
       if (link) restartClass(link, "is-live");
       setHud(null, { kind: "at", layer: i });
@@ -400,6 +410,7 @@ function createRuntime(
   const home = (done?: () => void): void => {
     startRide(-1, () => {
       openAuto = 0;
+      hideTags();
       setLit(hover);
       setHud("idle", { kind: "floor" });
       done?.();
@@ -523,6 +534,7 @@ function createRuntime(
   // Ao voltar para a tela, o ciclo recomeça do chão em vez de retomar timers pela metade.
   const resume = (): void => {
     clearTimers();
+    hideTags();
     ride = null;
     rpVel = 0;
     spinVel = 0;
@@ -572,6 +584,8 @@ function createRuntime(
     renderLayers();
     drawLine();
     setLit(-1);
+    // Sem movimento, os quatro rótulos ficam à mostra de uma vez.
+    for (let i = 0; i < LAYER_COUNT; i += 1) showTag(i);
     setMood("idle");
     syncSource();
     setHud("idle", { kind: "floor" });
@@ -660,6 +674,7 @@ function createRuntime(
     for (const n of layers) n.classList.remove("is-fire", "is-fresh", "is-error", "is-hover");
     clearLinks();
     setLit(-1);
+    hideTags();
     setMood("idle");
     look(0, 0);
     stage.classList.toggle("is-still", reduced);

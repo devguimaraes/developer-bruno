@@ -446,7 +446,30 @@
   color: var(--nevoa-azul);
   font: var(--text-rotulo);
   white-space: nowrap;
-  transition: color 200ms linear;
+  /* Escondido até o Giro chegar na estação. Ao fechar a pilha, esmaece e o recorte volta ao zero. */
+  opacity: 0;
+  clip-path: inset(0 100% 0 0);
+  transition:
+    opacity 240ms linear,
+    clip-path 0s linear 240ms,
+    color 200ms linear;
+}
+
+/* Digitado, um caractere por passo (a fonte é mono, então cada passo é uma letra). */
+.hb .hb-tag.is-shown {
+  opacity: 1;
+  clip-path: inset(0 0 0 0);
+  transition:
+    opacity 60ms linear,
+    clip-path calc(var(--n, 10) * 34ms) steps(var(--n, 10), end),
+    color 200ms linear;
+}
+
+/* Movimento reduzido: os quatro rótulos ficam visíveis, sem digitação. */
+.hb.is-still .hb-tag {
+  opacity: 1;
+  clip-path: none;
+  transition: none;
 }
 
 .hb .hb-tag.is-on {
