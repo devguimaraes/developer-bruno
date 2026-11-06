@@ -114,6 +114,21 @@ describe("camadas e molas", () => {
     expect(zs).toEqual([14, 30, 46, 76]);
   });
 
+  it("no celular, com a pilha aberta, o vão até a camada de estado leva o extra de 60", () => {
+    const zs = layerHeights(MOBILE_STACK, [0, 1, 1, 1], [0, 0, 0, 0]);
+    expect(zs[3] - zs[2]).toBe(MOBILE_STACK.Go + 60);
+    expect(zs[2] - zs[1]).toBe(MOBILE_STACK.Go);
+  });
+
+  it("no computador o vão até a camada de estado não muda com a pilha aberta", () => {
+    const zs = layerHeights(DESKTOP_STACK, [0, 1, 1, 1], [0, 0, 0, 0]);
+    expect(zs[3] - zs[2]).toBe(DESKTOP_STACK.Go);
+  });
+
+  it("com a pilha fechada, o celular tem as mesmas alturas de antes", () => {
+    expect(layerHeights(MOBILE_STACK, [0, 0, 0, 0], [0, 0, 0, 0])).toEqual([14, 30, 46, 62]);
+  });
+
   it("geometria da camada 3 é a do estado", () => {
     const base = layerGeo(DESKTOP_STACK, 0);
     expect(base.x).toBeCloseTo(0);

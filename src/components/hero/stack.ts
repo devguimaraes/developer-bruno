@@ -20,6 +20,8 @@ export interface StackConfig {
   Gc: number;
   /** Vão aberto entre camadas. */
   Go: number;
+  /** Vão extra só entre a camada 2 e a de estado, em px, cresce com a abertura. */
+  topExtra: number;
   /** Estação de partida, abaixo de Z0. */
   rest: number;
   gap: number;
@@ -41,6 +43,7 @@ export const DESKTOP_STACK: StackConfig = {
   Z0: 14,
   Gc: 16,
   Go: 150,
+  topExtra: 0,
   rest: 110,
   gap: 40,
   tagGap: 46,
@@ -58,6 +61,9 @@ export const MOBILE_STACK: StackConfig = {
   Z0: 14,
   Gc: 16,
   Go: 100,
+  // No celular o aviso de estado ficava quase em cima da tela: vão extra só para ele, que
+  // cresce com a abertura, para ficar perto do vão das outras camadas.
+  topExtra: 60,
   rest: 120,
   gap: 22,
   tagGap: 30,
@@ -184,6 +190,9 @@ export function layerHeights(
   for (let i = 0; i < LAYER_COUNT; i += 1) {
     if (i > 0) {
       z += cfg.Gc + (cfg.Go - cfg.Gc) * Math.max(-0.08, open[i]);
+      if (i === 3) {
+        z += cfg.topExtra * Math.max(0, open[i]);
+      }
     }
     zs.push(z + lift[i]);
   }
