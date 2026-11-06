@@ -65,13 +65,13 @@ def pill(cls, text, bg, fg, w=3.6):
 
 def cursor(cls, z):
     # A ponta da seta fica na origem: é ela que toca o botão.
-    return billboard(cls, f'<svg class="cur {cls}-p" viewBox="0 0 24 24" style="left:-.33em;top:-.22em;width:2.6em;height:2.6em">'
+    return billboard(cls, f'<svg aria-hidden="true" class="cur {cls}-p" viewBox="0 0 24 24" style="left:-.33em;top:-.22em;width:2.6em;height:2.6em">'
                           '<path d="M3 2 L3 19 L8 14.6 L11.4 22 L14.6 20.6 L11.2 13.4 L17.6 13.4 Z"/></svg>', z)
 
 
 def giro(x, y, size, cls="", color="var(--ink)"):
     return (
-        f'<svg class="gm {cls}" viewBox="0 0 120 120" style="left:{E(x)};top:{E(y)};width:{E(size)};height:{E(size)};color:{color}">'
+        f'<svg aria-hidden="true" class="gm {cls}" viewBox="0 0 120 120" style="left:{E(x)};top:{E(y)};width:{E(size)};height:{E(size)};color:{color}">'
         '<circle class="gm__track" cx="60" cy="60" r="44"/>'
         '<g class="gm__turn"><circle class="gm__arc" cx="60" cy="60" r="44"/></g>'
         '<g class="gm__eyes"><ellipse cx="46" cy="54" rx="6" ry="9"/><ellipse cx="74" cy="54" rx="6" ry="9"/></g>'
@@ -84,7 +84,7 @@ def giro(x, y, size, cls="", color="var(--ink)"):
 
 def check(x, y, size, cls="", color="var(--paper)"):
     return (
-        f'<svg class="ck {cls}" viewBox="0 0 24 24" style="left:{E(x)};top:{E(y)};width:{E(size)};height:{E(size)};color:{color}">'
+        f'<svg aria-hidden="true" class="ck {cls}" viewBox="0 0 24 24" style="left:{E(x)};top:{E(y)};width:{E(size)};height:{E(size)};color:{color}">'
         '<path d="M5 12.5 L10 17 L19 7" pathLength="1"/></svg>'
     )
 
@@ -281,7 +281,7 @@ def art_sites():
         txt(1.4, 12.6, "3 páginas · 0 erros", "t"),
     ])
     seo = "".join([
-        '<svg viewBox="0 0 40 40" style="left:.7em;top:.7em;width:3.2em;height:3.2em">'
+        '<svg aria-hidden="true" viewBox="0 0 40 40" style="left:.7em;top:.7em;width:3.2em;height:3.2em">'
         '<circle cx="20" cy="20" r="15" style="fill:none;stroke:var(--ink-3);stroke-width:5"/>'
         '<circle class="s1-ring" cx="20" cy="20" r="15" style="fill:none;stroke:var(--azul);stroke-width:5;stroke-linecap:round;stroke-dasharray:100" pathLength="100" transform="rotate(-90 20 20)"/></svg>',
         txt(4.5, .95, "SEO"),
@@ -379,7 +379,7 @@ def art_landing():
     path = "M0 40 C 10 40 18 22 30 24 S 48 48 62 44 S 82 16 98 22 S 124 46 138 42 S 156 40 162 40"
     wave = (f'<path d="{path} L162 66 L0 66 Z" style="fill:rgba(43,46,255,.10)"/>'
             f'<path d="{path}" style="fill:none;stroke:var(--azul);stroke-width:2.6;vector-effect:non-scaling-stroke"/>')
-    spark = (f'<svg class="s2-spark" viewBox="0 0 324 66" preserveAspectRatio="none" style="left:0;top:0;width:32.4em;height:6.6em">'
+    spark = (f'<svg aria-hidden="true" class="s2-spark" viewBox="0 0 324 66" preserveAspectRatio="none" style="left:0;top:0;width:32.4em;height:6.6em">'
              f'{wave}<g transform="translate(162 0)">{wave}</g></svg>')
     angles = [(1, 0), (.5, .87), (-.5, .87), (-1, 0), (-.5, -.87), (.5, -.87)]
     colors = ["var(--azul)", "var(--lima)", "var(--ink)"] * 2
@@ -397,7 +397,7 @@ def art_landing():
             txt(1.15, .55, "+1", "n", "font-size:1.05em")),
     ])
     vit = "".join([
-        '<svg viewBox="0 0 40 40" style="left:.8em;top:.75em;width:3.3em;height:3.3em">'
+        '<svg aria-hidden="true" viewBox="0 0 40 40" style="left:.8em;top:.75em;width:3.3em;height:3.3em">'
         '<circle cx="20" cy="20" r="15" style="fill:none;stroke:var(--ink-3);stroke-width:5"/>'
         '<circle class="s2-ring" cx="20" cy="20" r="15" style="fill:none;stroke:var(--azul);stroke-width:5;stroke-linecap:round;stroke-dasharray:100" pathLength="100" transform="rotate(-90 20 20)"/></svg>',
         txt(4.8, 1.05, "LCP"),
@@ -563,7 +563,9 @@ def art_product():
     pop = [(0, {"transform": "scale(1)"}, None)]
     for c in changes:
         pop += [(c, {"transform": "scale(1)"}, ER), (c + 1.5, {"transform": "scale(.9)"}, EH), (min(c + 5, 100), {"transform": "scale(1)"}, None)]
-    pop.append((100, {"transform": "scale(1)"}, None))
+    # O último toque já termina em 100%: repetir a parada vira seletor duplicado no keyframe.
+    if pop[-1][0] < 100:
+        pop.append((100, {"transform": "scale(1)"}, None))
     vars_, ratio = fit()
     css = "\n".join([
         f".ar-product{{--T:{T}s;{vars_}}}",
