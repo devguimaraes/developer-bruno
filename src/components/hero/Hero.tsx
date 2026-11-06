@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { type ReactNode, useEffect, useRef } from "react";
 import { Giro } from "@/components/brand/Giro";
 import { ButtonLink } from "@/components/giro/Button";
 import { LanguageSwitch } from "@/components/giro/LanguageSwitch";
@@ -40,6 +40,28 @@ function stackLabelsFor(locale: Locale): StackLabels {
   };
 }
 
+/**
+ * Cada letra vira um span, para o runtime medir e afundar uma a uma. O espaço continua texto.
+ * A chave é o prefixo da linha até a letra: é única e não depende do índice.
+ */
+function letterSpans(line: string): ReactNode[] {
+  const out: ReactNode[] = [];
+  let prefix = "";
+  for (const ch of line) {
+    prefix += ch;
+    out.push(
+      ch === " " ? (
+        ch
+      ) : (
+        <span key={prefix} className="hb-ch">
+          {ch}
+        </span>
+      )
+    );
+  }
+  return out;
+}
+
 function hudLabelsFor(locale: Locale): HudLabels {
   return {
     states: {
@@ -49,6 +71,7 @@ function hudLabelsFor(locale: Locale): HudLabels {
       error: t(locale, "giro.state.error"),
       curious: t(locale, "giro.state.curious"),
       air: t(locale, "giro.state.air"),
+      roll: t(locale, "giro.state.roll"),
     },
     layers: layerNames(locale),
     floor: t(locale, "hero.layer.floor"),
@@ -92,10 +115,10 @@ export function Hero() {
         <h1 className="hb-title">
           <span className="g-sr">{title}</span>
           <span className="hb-title__line" aria-hidden="true">
-            {line1}
+            {letterSpans(line1)}
           </span>
           <span className="hb-title__line" aria-hidden="true">
-            {line2}
+            {letterSpans(line2)}
           </span>
         </h1>
       </div>
@@ -115,6 +138,11 @@ export function Hero() {
       <svg ref={seatRef} className="hb-seat" viewBox="0 0 120 120" aria-hidden="true">
         <circle cx="60" cy="60" r="44" />
       </svg>
+
+      <svg className="hb-trail" aria-hidden="true">
+        <path className="hb-trail__p" />
+      </svg>
+      <span className="hb-shadow" aria-hidden="true" />
 
       <button
         ref={riderRef}

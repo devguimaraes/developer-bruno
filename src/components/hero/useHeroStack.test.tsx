@@ -5,7 +5,12 @@ import { Hero } from "./Hero";
 
 const originalMatchMedia = window.matchMedia;
 const FRAME_MS = 16;
+// Quatro quadros por act: os estados conferidos duram centenas de ms, e um act por quadro deixa a
+// simulação lenta demais quando a suíte inteira roda em paralelo.
+const STEP_MS = FRAME_MS * 4;
 const LIMIT_MS = 20_000;
+// A simulação percorre segundos de laço; o limite padrão de 5 s não basta com a suíte em paralelo.
+const SIM_TIMEOUT_MS = 15_000;
 
 // Movimento reduzido ligado: só a consulta de prefers-reduced-motion responde true.
 function mockReducedMotion(reduced: boolean): void {
@@ -36,12 +41,12 @@ async function advanceUntil(
   done: (shown: string[]) => boolean
 ): Promise<string[][]> {
   const history: string[][] = [];
-  for (let t = 0; t <= LIMIT_MS; t += FRAME_MS) {
+  for (let t = 0; t <= LIMIT_MS; t += STEP_MS) {
     const shown = shownTags(container);
     if (history.at(-1)?.join() !== shown.join()) history.push(shown);
     if (done(shown)) return history;
     await act(async () => {
-      await vi.advanceTimersByTimeAsync(FRAME_MS);
+      await vi.advanceTimersByTimeAsync(STEP_MS);
     });
   }
   throw new Error(`o laço não chegou ao estado esperado em ${LIMIT_MS}ms`);
@@ -65,7 +70,7 @@ afterEach(() => {
   act(() => setLocale("pt"));
 });
 
-describe("useHeroStack, rótulos da linha", () => {
+describe("useHeroStack, rótulos da linha", { timeout: SIM_TIMEOUT_MS }, () => {
   it("nenhum rótulo aparece antes de o Giro chegar na primeira estação", () => {
     mockReducedMotion(false);
     const { container } = render(<Hero />);
@@ -115,5 +120,43 @@ describe("useHeroStack, rótulos da linha", () => {
 
     // "// components" tem 13 caracteres.
     expect(tag(1)?.style.getPropertyValue("--n")).toBe("13");
+  });
+});
+
+// Avança quadro a quadro até o painel de estado mostrar `state`.
+async function advanceUntilState(container: HTMLElement, state: string): Promise<void> {
+  for (let t = 0; t <= LIMIT_MS; t += STEP_MS) {
+    if (container.querySelector('[data-hud="state"]')?.textContent === state) return;
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(STEP_MS);
+    });
+  }
+  throw new Error(`o painel não chegou a "${state}" em ${LIMIT_MS}ms`);
+}
+
+describe("useHeroStack, entrada quicando", { timeout: SIM_TIMEOUT_MS }, () => {
+  it("depois do lançamento o painel passa por no ar e termina em pronto, com o Giro estacionado", async () => {
+    mockReducedMotion(false);
+    const { container } = render(<Hero />);
+
+    await advanceUntilState(container, "no ar");
+    await advanceUntilState(container, "pronto");
+
+    // Estacionado: a bola largou o transform do Giro e a sombra sumiu.
+    expect(container.querySelector<HTMLElement>(".hb-rider__in")?.style.transform).toBe("");
+    expect(container.querySelector<HTMLElement>(".hb-shadow")?.style.opacity).toBe("0");
+  });
+
+  it("desenha o rastro enquanto a bola está no ar", async () => {
+    mockReducedMotion(false);
+    const { container } = render(<Hero />);
+
+    await advanceUntilState(container, "no ar");
+    // Alguns quadros de voo: o histórico precisa juntar pontos de um quadro para o outro.
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(FRAME_MS * 10);
+    });
+
+    expect(container.querySelector(".hb-trail__p")?.getAttribute("d")).toMatch(/^M.+Z$/);
   });
 });

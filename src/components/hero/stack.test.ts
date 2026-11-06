@@ -4,8 +4,6 @@ import {
   cycleSteps,
   DESKTOP_STACK,
   FIRE_DELAY_MS,
-  FLIGHT_S,
-  flightAt,
   hitLayer,
   layerGeo,
   layerHeights,
@@ -44,7 +42,6 @@ describe("configs e escala", () => {
     expect(MOBILE_STACK.rest).toBe(120);
     expect(MOBILE_STACK.k).toBe(0.5);
     expect(MOBILE_STACK.Go).toBe(100);
-    expect(MOBILE_STACK.arc).toBe(120);
   });
 
   it("layoutScale do desktop limita em 1 e do mobile em 1.15", () => {
@@ -158,7 +155,7 @@ describe("camadas e molas", () => {
   });
 });
 
-describe("estações, linha e voo", () => {
+describe("estações e linha", () => {
   // Pilha aberta: a ordem de altura das estações só é estrita nesse caso.
   const zsOpen = layerHeights(DESKTOP_STACK, [0, 1, 1, 1], [0, 0, 0, 0]);
 
@@ -184,18 +181,7 @@ describe("estações, linha e voo", () => {
     expect(p.y).toBeCloseTo((st[1].y + st[2].y) / 2, 6);
   });
 
-  it("flightAt parte do ponto inicial, chega ao destino e sobe no meio", () => {
-    const from = { x: 0, y: 0 };
-    const to = { x: 100, y: 0 };
-    expect(flightAt(from, to, 0, 50)).toEqual(from);
-    expect(flightAt(from, to, 1, 50)).toEqual(to);
-    const mid = flightAt(from, to, 0.5, 50);
-    expect(mid.x).toBeCloseTo(50);
-    expect(mid.y).toBeCloseTo(-50);
-  });
-
-  it("FLIGHT_S e FIRE_DELAY_MS seguem a prancha", () => {
-    expect(FLIGHT_S).toBe(0.86);
+  it("FIRE_DELAY_MS segue a prancha", () => {
     expect(FIRE_DELAY_MS).toBe(220);
   });
 

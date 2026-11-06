@@ -39,6 +39,21 @@ describe("Hero", () => {
     expect(screen.getByRole("link", { name: "Falar comigo" })).toHaveAttribute("href", "#contato");
   });
 
+  it("o título vira uma letra por caractere, sem espaço, e o nome continua inteiro", () => {
+    mockReducedMotion(false);
+    const { container } = render(<Hero />);
+
+    // "Interfaces com vida." tem 18 letras; o espaço fica como texto.
+    expect(container.querySelectorAll(".hb-ch")).toHaveLength(18);
+    expect(screen.getByRole("heading", { name: "Interfaces com vida." })).toBeInTheDocument();
+
+    act(() => setLocale("en"));
+
+    // "Interfaces that live." tem 19 letras.
+    expect(container.querySelectorAll(".hb-ch")).toHaveLength(19);
+    expect(screen.getByRole("heading", { name: "Interfaces that live." })).toBeInTheDocument();
+  });
+
   it("dá nome ao botão do pulo e o deixa ativo fora do movimento reduzido", () => {
     mockReducedMotion(false);
     render(<Hero />);
@@ -106,8 +121,9 @@ describe("Hero", () => {
       expect(rider).toHaveAttribute("tabindex", "-1");
 
       document.documentElement.removeAttribute("data-loader");
+      // 300 ms de espera, 110 ms de amasso na origem e só então o Giro sai.
       await act(async () => {
-        await vi.advanceTimersByTimeAsync(400);
+        await vi.advanceTimersByTimeAsync(500);
       });
       expect(stage).toHaveClass("is-away");
       expect(rider).toHaveAttribute("tabindex", "0");

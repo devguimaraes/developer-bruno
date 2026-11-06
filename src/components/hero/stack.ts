@@ -30,8 +30,6 @@ export interface StackConfig {
   k: number;
   /** Tamanho do Giro em px. */
   gs: number;
-  /** Altura do arco do voo. */
-  arc: number;
   est: { cx: number; cy: number; w: number; h: number };
 }
 
@@ -49,7 +47,6 @@ export const DESKTOP_STACK: StackConfig = {
   tagGap: 46,
   k: 0.92,
   gs: 64,
-  arc: 170,
   est: { cx: 10, cy: -6, w: 170, h: 62 },
 };
 
@@ -69,7 +66,6 @@ export const MOBILE_STACK: StackConfig = {
   tagGap: 30,
   k: 0.5,
   gs: 44,
-  arc: 120,
   est: { cx: 10, cy: -6, w: 170, h: 62 },
 };
 
@@ -97,11 +93,6 @@ export function stackOrigin(cfg: StackConfig, W: number, H: number): Point {
 /** O `ease` da prancha. */
 export function easeInOutQuad(p: number): number {
   return p < 0.5 ? 2 * p * p : 1 - (-2 * p + 2) ** 2 / 2;
-}
-
-/** Meia volta de cosseno: sai e chega com velocidade zero, sem o tranco da cúbica no meio. */
-export function easeInOutSine(u: number): number {
-  return 0.5 - 0.5 * Math.cos(Math.PI * u);
 }
 
 export interface Camera {
@@ -254,16 +245,6 @@ export function riderAt(st: readonly Station[], rp: number): Point {
   const far = st[a + 2];
   return { x: near.x + (far.x - near.x) * f, y: near.y + (far.y - near.y) * f };
 }
-
-/** Voo do lançamento: reta de from até to com arco 4*arc*u*(1-u) para cima. u em 0..1. */
-export function flightAt(from: Point, to: Point, u: number, arc: number): Point {
-  return {
-    x: from.x + (to.x - from.x) * u,
-    y: from.y + (to.y - from.y) * u - 4 * arc * u * (1 - u),
-  };
-}
-
-export const FLIGHT_S = 0.86;
 
 export interface Damped {
   value: number;

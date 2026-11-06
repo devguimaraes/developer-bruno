@@ -83,6 +83,12 @@
   white-space: nowrap;
 }
 
+/* Cada letra é um bloco próprio, para afundar e medir sem mexer no resto da linha. */
+.hb .hb-title .hb-ch {
+  display: inline-block;
+  white-space: pre;
+}
+
 .hb .hb-foot {
   position: absolute;
   z-index: 2;
@@ -584,6 +590,46 @@
   outline: 2px solid var(--s-focus);
   outline-offset: 6px;
   border-radius: 50%;
+}
+
+/* Rastro da bola: uma faixa só, em lima, desenhada pelo runtime atrás do Giro. */
+.hb .hb-trail {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.hb .hb-trail__p {
+  fill: var(--lima);
+  opacity: 0.72;
+}
+
+/* Sombra no chão, invisível no azul: diz onde o chão está antes de o Giro chegar nele. */
+.hb .hb-shadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  width: 56px;
+  height: 12px;
+  margin: -6px 0 0 -28px;
+  border-radius: 50%;
+  background: rgba(11, 12, 31, 0.34);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 260ms linear;
+}
+
+@media (max-width: 767px) {
+  .hb .hb-shadow {
+    width: 40px;
+    height: 9px;
+    margin: -4.5px 0 0 -20px;
+  }
 }
 
 /* Lugar vazio que o Giro deixa ao sair da linha. */
@@ -1164,4 +1210,10 @@
     animation: none !important;
     transition: none !important;
   }
+}
+
+/* Com movimento reduzido não há bola, rastro nem sombra. */
+.hb.is-still .hb-trail,
+.hb.is-still .hb-shadow {
+  display: none;
 }
