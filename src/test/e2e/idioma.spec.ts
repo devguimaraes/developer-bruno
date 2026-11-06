@@ -30,4 +30,19 @@ test.describe("Idioma", () => {
       "true"
     );
   });
+
+  test("Não deve dar erro de hidratação com o inglês salvo", async ({ page }) => {
+    // O HTML sai pré-renderizado em português; o idioma salvo só entra depois da hidratação.
+    await page.addInitScript(() => localStorage.setItem("locale", "en"));
+    const errors: string[] = [];
+    page.on("console", message => {
+      if (message.type() === "error") errors.push(message.text());
+    });
+    page.on("pageerror", error => errors.push(String(error)));
+
+    await page.goto("/");
+    await waitForHydration(page);
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Interfaces that live.");
+    expect(errors).toEqual([]);
+  });
 });
