@@ -77,7 +77,7 @@ Unit tests alias `astro:content` to `src/test/__mocks__/astro-content.ts` (`vite
 
 Identity Giro (ADR 0001) replaces the old dark, neo-brutalist theme. Source of truth: the "Giro" Design System artifact linked in the ADR. In code, tokens and surfaces live in `src/styles/giro.css`: `g-papel` (reading), `g-azul` (brand) and `g-tinta` (dark). Pages alternate brand and reading surfaces. There is no dark mode at launch.
 
-Fonts are Anybody (`sans`) and Geist Mono (`mono`), bundled in `src/assets/fonts/` and set as CSS variables in `giro.css`. Tailwind `fontFamily` only maps those two. Check `tailwind.config.ts` and `giro.css` before using a token. The legacy `brutal` palette, shadcn tokens and `shadow-brutal*` classes were removed. The docs `docs/guia-de-design-atual.md` and `docs/identidade-visual-atual.md` describe the previous identity and are historical.
+Fonts are Anybody (`sans`) and Geist Mono (`mono`), bundled in `src/assets/fonts/` and set as CSS variables in `giro.css`. Tailwind `fontFamily` only maps those two. Geist Serif (`--font-serif`, Regular 400 only, display face) is used only for blog post titles: the `/blog` list, the post `h1`, related posts and markdown `h2`/`h3`. Page titles and the home stay in Anybody. Check `tailwind.config.ts` and `giro.css` before using a token. The legacy `brutal` palette, shadcn tokens and `shadow-brutal*` classes were removed. The docs `docs/guia-de-design-atual.md` and `docs/identidade-visual-atual.md` describe the previous identity and are historical.
 
 ## Testing
 

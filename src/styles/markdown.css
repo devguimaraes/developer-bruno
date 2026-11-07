@@ -27,22 +27,24 @@
   scroll-margin-top: 96px;
 }
 
+/* h2 e h3 em Geist Serif (display, só 400). h4 a h6 ficam em Anybody: pequenos demais para a serif. */
+[data-markdown-content] h2,
+[data-markdown-content] h3 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
 [data-markdown-content] h2 {
   margin: 2.75rem 0 0.75rem;
   font-size: 40px;
   line-height: 1.05;
-  font-weight: 900;
-  font-stretch: 112%;
-  letter-spacing: -0.025em;
 }
 
 [data-markdown-content] h3 {
   margin: 2rem 0 0.625rem;
   font-size: 26px;
   line-height: 1.15;
-  font-weight: 800;
-  font-stretch: 110%;
-  letter-spacing: -0.015em;
 }
 
 [data-markdown-content] h4,

@@ -87,6 +87,13 @@
 .blog-page__list {
   border-bottom: 1px solid var(--s-line);
 }
+/* Título de post em Geist Serif. O "Blog" do topo segue em Anybody: é título de página. */
+.blog-page__list .g-post-row__title {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-stretch: 100%;
+  letter-spacing: -0.01em;
+}
 .blog-page__more {
   display: flex;
   justify-content: center;

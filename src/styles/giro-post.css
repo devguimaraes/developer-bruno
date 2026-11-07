@@ -28,6 +28,19 @@
   overflow-wrap: break-word;
 }
 
+/* Títulos de post em Geist Serif: o tamanho segue o titulo-1, o peso e a largura não. */
+.post-header .post-title,
+.post-page .g-post-row__title {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-stretch: 100%;
+  letter-spacing: -0.01em;
+}
+
+.post-header .post-title {
+  line-height: 1.02;
+}
+
 .post-language-note,
 .post-lead {
   margin: 0;
