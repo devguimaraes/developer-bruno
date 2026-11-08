@@ -129,7 +129,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       document.addEventListener('astro:after-swap', applyFavicon);
     </script>
   </head>
-  <body class="bg-black">
+  <body>
     <LoadingScreen client:load />
     <SiteHeader client:load />
     <main class="w-full relative">
