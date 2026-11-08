@@ -54,3 +54,11 @@ gha-creds-*.json
 .design-sync/compiled.css
 ds-bundle/
 brand-kit/
+
+.claude/
+C:*
+**/lighthouse.*
+
+# Local tooling output
+.playwright-mcp/
+__pycache__/
