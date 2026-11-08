@@ -50,8 +50,7 @@ gha-creds-*.json
 
 .pi/
 
-# Design sync build artifacts
-.design-sync/compiled.css
+# Build artifacts
 ds-bundle/
 brand-kit/
 
