@@ -1,16 +1,6 @@
 export * from "./blog";
 
-export interface Skill {
-  id: string;
-  icon: string;
-  title: string;
-  description: string;
-  color: string;
-  category: "development" | "design" | "performance" | "deployment";
-  technologies?: readonly string[];
-}
-
-export interface SocialLink {
+interface SocialLink {
   id: string;
   href: string;
   label: string;

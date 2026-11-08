@@ -16,7 +16,7 @@ const MOMENT_MS: Readonly<Record<DirectedMoment, number>> = {
 const PRIORITY: Readonly<Record<DirectedMoment, number>> = { dizzy: 3, hello: 2, wink: 1 };
 
 /** Intervalo mínimo entre o fim de um momento e o pedido seguinte. */
-export const MOMENT_GAP_MS = 6000;
+const MOMENT_GAP_MS = 6000;
 
 export interface DirectorState {
   moment: DirectedMoment | null;
@@ -26,7 +26,7 @@ export interface DirectorState {
   blockedUntil: number;
 }
 
-export const IDLE_DIRECTOR: DirectorState = { moment: null, playingUntil: 0, blockedUntil: 0 };
+const IDLE_DIRECTOR: DirectorState = { moment: null, playingUntil: 0, blockedUntil: 0 };
 
 /** Função pura. Devolve o novo estado ou null se o pedido for descartado. */
 export function decideMoment(

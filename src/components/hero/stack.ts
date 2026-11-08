@@ -91,7 +91,7 @@ export function stackOrigin(cfg: StackConfig, W: number, H: number): Point {
 }
 
 /** O `ease` da prancha. */
-export function easeInOutQuad(p: number): number {
+function easeInOutQuad(p: number): number {
   return p < 0.5 ? 2 * p * p : 1 - (-2 * p + 2) ** 2 / 2;
 }
 

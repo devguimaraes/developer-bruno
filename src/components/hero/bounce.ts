@@ -192,13 +192,7 @@ export function launchBall(world: BallWorld, cfg: BallConfig, start: Point): Bal
  * Aderência do primeiro toque no chão: a vx que, somando os quiques até parar e a rolagem com
  * desaceleração constante, termina exatamente na estação.
  */
-export function aimFloor(
-  x: number,
-  vyOut: number,
-  stationX: number,
-  cfg: BallConfig,
-  e: number
-): number {
+function aimFloor(x: number, vyOut: number, stationX: number, cfg: BallConfig, e: number): number {
   let T = 0;
   for (let v = vyOut; v >= cfg.vRoll; v *= e) T += (2 * v) / cfg.g;
   const D = stationX - x;

@@ -16,7 +16,7 @@ export type GiroState = (typeof GIRO_STATES)[number];
 
 // Momentos: reações curtas por cima do estado, cada uma presa a um gesto do visitante. Piscadela,
 // oi e tonto tocam uma vez e somem; ouvindo dura enquanto quem usa o Giro mantiver o momento.
-export const GIRO_MOMENTS = ["wink", "hello", "listening", "dizzy"] as const;
+const GIRO_MOMENTS = ["wink", "hello", "listening", "dizzy"] as const;
 
 export type GiroMoment = (typeof GIRO_MOMENTS)[number];
 

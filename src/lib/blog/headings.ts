@@ -13,7 +13,7 @@ interface HastNode {
 }
 
 /** Título de heading sem marcação markdown, para o slug bater com o HTML renderizado. */
-export function plainHeading(title: string): string {
+function plainHeading(title: string): string {
   return title
     .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
     .replace(/`([^`]*)`/g, "$1")
@@ -23,7 +23,7 @@ export function plainHeading(title: string): string {
     .trim();
 }
 
-export function slugifyHeading(value: string): string {
+function slugifyHeading(value: string): string {
   const slug = plainHeading(value)
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")

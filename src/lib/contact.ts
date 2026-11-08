@@ -14,7 +14,7 @@ export interface ContactValues {
   hp_extra: string;
 }
 
-export type ContactField = "name" | "email" | "message";
+type ContactField = "name" | "email" | "message";
 
 /** Chave de erro por campo. Ausente quando o campo está certo. */
 export type ContactErrors = Partial<Record<ContactField, TranslationKey>>;
