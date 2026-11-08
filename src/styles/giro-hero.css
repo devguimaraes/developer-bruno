@@ -275,38 +275,6 @@
   background: var(--hi-paper);
 }
 
-/* Sombra no chão, embaixo de cada placa. */
-.hb .iso-fl {
-  position: absolute;
-  top: calc(var(--y) - var(--h) / 2);
-  left: calc(var(--x) - var(--w) / 2);
-  width: var(--w);
-  height: var(--h);
-  border-radius: var(--r, 14px);
-  background: rgba(11, 12, 31, 0.24);
-  opacity: 0;
-  transform: translateZ(0.5px);
-  transition: opacity 500ms linear;
-}
-
-.hb .iso-bb,
-.hb .iso-bb__r {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 0;
-  transform-style: preserve-3d;
-}
-
-.hb .iso-bb {
-  transform: translate3d(var(--bx, 0px), var(--by, 0px), var(--bz, 0px));
-}
-
-.hb .iso-bb__r {
-  transform: rotateZ(calc(var(--rz) * -1)) rotateX(calc(var(--rx) * -1));
-}
-
 /* ---------- Direção B: pilha, chão e linha de estações ---------- */
 
 /* As alturas vêm do JS a cada quadro (abertura, ponteiro e rolagem), então as camadas não têm

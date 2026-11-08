@@ -349,31 +349,12 @@
   background: var(--s-raised);
   box-shadow: inset 0 0 0 2px var(--s-signal);
 }
-.g-node.is-dragging {
-  cursor: grabbing;
-  transform: scale(1.03) rotate(-1.5deg);
-  box-shadow:
-    inset 0 0 0 1.5px var(--s-fg),
-    0 14px 30px rgba(11, 12, 31, 0.18);
-}
 .g-edge {
   fill: none;
   stroke: var(--s-line-strong);
   stroke-width: 2px;
   stroke-linecap: round;
   stroke-dasharray: 6 8;
-}
-.g-edge--drawn {
-  stroke-dasharray: none;
-  animation: g-draw 900ms var(--ease-resolve) 1 both;
-}
-@keyframes g-draw {
-  from {
-    stroke-dasharray: 0 999;
-  }
-  to {
-    stroke-dasharray: 999 0;
-  }
 }
 
 /* ---------- Post table of contents ---------- */
