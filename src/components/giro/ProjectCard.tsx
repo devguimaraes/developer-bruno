@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+import { StackLogo } from "@/components/giro/ToolLogo";
 import type { Project } from "@/data/projects";
 
 // Os campos que o card usa vêm do case. Capa e stack são ampliados aqui:
@@ -32,6 +33,7 @@ export function ProjectCard({ project, kicker, summary, ctaLabel, href }: Projec
         <div className="g-project-card__tags">
           {project.stack.map(tag => (
             <span className="g-tag" key={tag}>
+              <StackLogo name={tag} />
               {tag}
             </span>
           ))}

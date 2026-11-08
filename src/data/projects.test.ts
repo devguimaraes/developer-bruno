@@ -29,9 +29,9 @@ describe("homeCases", () => {
   it("lista os cinco cases da home na ordem certa", () => {
     expect(homeCases.map(project => project.title)).toEqual([
       "Estúdio Entre",
+      "Agência Multi BR",
       "Atlas Marine Solutions",
       "Movies Bremen",
-      "Agência Multi BR",
       "Danila Rizo Palmieri",
     ]);
   });
@@ -87,7 +87,8 @@ describe("homeCases", () => {
   });
 
   it("Atlas tem papel, problema e resultado confirmados (#48)", () => {
-    const atlas = homeCases[1];
+    const atlas = homeCases.find(project => project.slug === "atlas-marine-solutions");
+    if (!atlas) throw new Error("atlas-marine-solutions ausente em homeCases");
     expect(atlas.id).toBe("atlas-marine-solutions");
     expect(atlas.role.pt).toBe("Desenvolvimento full-stack e DevOps");
     expect(atlas.live).toBe("https://atlasmarinesolutions.com/");

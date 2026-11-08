@@ -11,3 +11,20 @@ export function ToolLogo({ slug, className }: { slug: ProcessLogoSlug; className
     </svg>
   );
 }
+
+// Tecnologias das badges de projeto. Fora da lista (ex.: SEO) a badge fica só com texto.
+const STACK_LOGOS: Readonly<Record<string, ProcessLogoSlug>> = {
+  Astro: "astro",
+  React: "react",
+  "Next.js": "nextjs",
+  Sanity: "sanity",
+  "Tailwind CSS": "tailwindcss",
+  Vercel: "vercel",
+  WordPress: "wordpress",
+  PHP: "php",
+};
+
+export function StackLogo({ name }: { name: string }) {
+  const slug = STACK_LOGOS[name];
+  return slug ? <ToolLogo slug={slug} className="g-tag__logo" /> : null;
+}

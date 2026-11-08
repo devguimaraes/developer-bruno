@@ -49,6 +49,11 @@
 .service-art__host {
   display: block;
 }
+/* Se a arte não carregar, a caixa mantém a proporção e mostra um bloco neutro. */
+.service-art[data-failed] {
+  background: var(--s-raised);
+  border-radius: 12px;
+}
 
 .home-services__grid {
   display: grid;
@@ -137,9 +142,11 @@
   font: var(--text-micro);
 }
 
-/* ---------- Projetos: faixas C2 (papel, anel lima) ----------
-   A largura é a da própria seção, como a prancha. O anel desacelera: a curva
-   simétrica de 520ms do loader passava rápido demais numa faixa inteira. */
+/* ---------- Projetos: faixas no papel ----------
+   A largura é a da própria seção. Cada faixa entra uma vez: texto, capa e
+   detalhes sobem 12px e aparecem em ease-out, em cascata curta. Só opacity e
+   transform animam, e ambos voltam a none/1 no fim, para o link da faixa
+   (::after absoluto) continuar medindo a faixa inteira. */
 
 .home-projects {
   container: home-projects / inline-size;
@@ -149,11 +156,7 @@
   flex-direction: column;
 }
 .home-band {
-  --ease-wash: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-leave: cubic-bezier(0.4, 0, 0.7, 0.2);
-  --ox: 70%;
-  --oy: 46%;
-  --r: 900px;
+  --ease-enter: cubic-bezier(0.23, 1, 0.32, 1);
   position: relative;
   isolation: isolate;
   display: grid;
@@ -168,39 +171,27 @@
 .home-band + .home-band {
   border-top: 1px solid var(--s-line);
 }
-.home-band__wash {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  overflow: hidden;
-  pointer-events: none;
-}
-.home-band__disk {
-  position: absolute;
-  inset: 0;
-  clip-path: circle(0px at var(--ox) var(--oy));
-  transition: clip-path 1200ms var(--ease-wash);
-}
-.home-band__disk--lima {
-  background: var(--lima);
-  transition-delay: 140ms;
-}
-.home-band__disk--to {
-  background: var(--s-bg);
-}
-.home-band[data-painted="true"] .home-band__disk {
-  clip-path: circle(var(--r) at var(--ox) var(--oy));
-}
-.home-band[data-painted="true"] .home-band__disk--lima {
-  transition-delay: 0ms;
-}
-.home-band[data-painted="true"] .home-band__disk--to {
-  transition-delay: 480ms;
-}
 .home-band__head,
 .home-band__body,
 .home-band__cover {
   min-width: 0;
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 240ms var(--ease-enter),
+    transform 280ms var(--ease-enter);
+}
+.home-band__cover {
+  transition-delay: 60ms;
+}
+.home-band__body {
+  transition-delay: 120ms;
+}
+.home-band[data-painted="true"] .home-band__head,
+.home-band[data-painted="true"] .home-band__body,
+.home-band[data-painted="true"] .home-band__cover {
+  opacity: 1;
+  transform: none;
 }
 .home-band__head {
   grid-area: head;
@@ -219,13 +210,6 @@
 }
 .home-band__index {
   color: var(--s-signal);
-}
-.home-band__typed {
-  display: inline-block;
-  max-width: 100%;
-  overflow: hidden;
-  vertical-align: bottom;
-  white-space: normal;
 }
 .home-band__title {
   margin: 0;
@@ -300,42 +284,6 @@
   object-fit: cover;
   object-position: 50% 0;
   z-index: 0;
-  opacity: 0;
-  transform: scale(1.04);
-  transition:
-    opacity 900ms var(--ease-wash),
-    transform 1400ms var(--ease-resolve);
-}
-.home-band[data-loaded="true"] .home-band__img {
-  opacity: 1;
-  transform: none;
-}
-.home-band__giro {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 2;
-  display: grid;
-  place-items: center;
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: var(--tinta);
-  font-size: 56px;
-  line-height: 0;
-  opacity: 1;
-  visibility: visible;
-  pointer-events: none;
-  transform: translate(calc(50cqw - 40px), calc(50cqh - 40px)) scale(1);
-  transition:
-    opacity 800ms var(--ease-leave),
-    transform 800ms var(--ease-leave),
-    visibility 0s linear 800ms;
-}
-.home-band[data-loaded="true"] .home-band__giro {
-  opacity: 0;
-  visibility: hidden;
-  transform: translate(calc(50cqw - 40px), calc(50cqh - 40px)) scale(0.94);
 }
 .home-band__sel {
   position: absolute;
@@ -348,10 +296,6 @@
   transition:
     opacity 180ms linear,
     transform 330ms var(--ease-resolve);
-}
-.home-band[data-selected="true"] .home-band__sel {
-  opacity: 1;
-  transform: none;
 }
 .home-band__handle {
   position: absolute;
@@ -384,10 +328,6 @@
   bottom: -7px;
   transition-delay: 135ms;
 }
-.home-band[data-selected="true"] .home-band__handle {
-  opacity: 1;
-  transform: scale(1);
-}
 .home-band__tag {
   position: absolute;
   bottom: calc(100% + 10px);
@@ -402,10 +342,6 @@
   transition:
     opacity 200ms linear 90ms,
     transform 330ms var(--ease-resolve) 90ms;
-}
-.home-band[data-selected="true"] .home-band__tag {
-  opacity: 1;
-  transform: none;
 }
 
 @container home-projects (min-width: 760px) {
@@ -431,16 +367,6 @@
   .home-band__label {
     margin-bottom: 18px;
   }
-  .home-band__typed {
-    width: 0;
-    white-space: nowrap;
-  }
-  .home-band[data-painted="true"] .home-band__typed {
-    width: calc(var(--n) * 1ch);
-  }
-  .home-band[data-typing="true"] .home-band__typed {
-    animation: home-band-type 620ms steps(var(--n), end) 180ms both;
-  }
   .home-band__title {
     font-size: 72px;
     line-height: 0.95;
@@ -457,15 +383,6 @@
   }
   .home-band__frame {
     border-radius: var(--radius-lg);
-  }
-  .home-band__giro {
-    width: 96px;
-    height: 96px;
-    font-size: 72px;
-    transform: translate(calc(50cqw - 48px), calc(50cqh - 48px)) scale(1);
-  }
-  .home-band[data-loaded="true"] .home-band__giro {
-    transform: translate(calc(50cqw - 48px), calc(50cqh - 48px)) scale(0.94);
   }
 }
 
@@ -504,30 +421,15 @@
   }
 }
 
-@keyframes home-band-type {
-  from {
-    width: 0;
-  }
-  to {
-    width: calc(var(--n) * 1ch);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .home-band__disk,
-  .home-band__img,
-  .home-band__giro,
+  .home-band__head,
+  .home-band__body,
+  .home-band__cover,
   .home-band__sel,
   .home-band__handle,
   .home-band__tag,
-  .home-band__typed,
   .home-band__cta {
     transition: none;
-    animation: none;
-  }
-  .home-band__giro {
-    opacity: 0;
-    visibility: hidden;
   }
 }
 

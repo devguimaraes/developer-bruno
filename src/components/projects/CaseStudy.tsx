@@ -124,8 +124,8 @@ export default function CaseStudy({ project }: CaseStudyProps) {
     };
   }, []);
 
-  // O main tem overflow-x: hidden, então sticky não acompanha a rolagem.
-  // O trilho fica fixo na coluna enquanto o miolo do case está na tela.
+  // O trilho fica fixo na coluna (abaixo do header, a 96px) e só aparece enquanto o miolo
+  // do case está na tela, senão cobre a foto. O sticky do CSS não faz essa checagem.
   useEffect(() => {
     const rail = railRef.current;
     const wrap = railWrapRef.current;

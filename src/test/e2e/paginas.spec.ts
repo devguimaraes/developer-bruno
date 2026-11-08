@@ -12,11 +12,11 @@ test.describe("Case, 404 e movimento reduzido", () => {
 
     await waitForHydration(page);
     await page
-      .getByRole("link", { name: /Atlas Marine Solutions/ })
+      .getByRole("link", { name: /Agência Multi BR/ })
       .last()
       .click();
-    await expect(page).toHaveURL(/\/projetos\/atlas-marine-solutions/);
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("Atlas Marine Solutions");
+    await expect(page).toHaveURL(/\/projetos\/agencia-multi-br/);
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Agência Multi BR");
   });
 
   test("Deve mostrar a 404 com o endereço pedido e voltar ao início", async ({ page }) => {

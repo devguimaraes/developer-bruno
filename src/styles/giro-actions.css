@@ -254,6 +254,14 @@
   font: var(--text-micro);
   white-space: nowrap;
 }
+.g-tag__logo {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
+  margin-left: -2px;
+  fill: currentColor;
+}
 
 /* ---------- Language switch ---------- */
 

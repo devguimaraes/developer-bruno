@@ -59,6 +59,7 @@ export function ServiceArt({ name, delay = 0 }: ServiceArtProps) {
   const [seen, setSeen] = useState(false);
   const [inserted, setInserted] = useState(false);
   const [revealed, setRevealed] = useState(false);
+  const [failed, setFailed] = useState(false);
   const reducedMotion = useReducedMotion();
 
   useEffect(() => {
@@ -99,6 +100,7 @@ export function ServiceArt({ name, delay = 0 }: ServiceArtProps) {
       })
       .catch(error => {
         console.error("Failed to load service art:", error);
+        if (!cancelled) setFailed(true);
       });
     return () => {
       cancelled = true;
@@ -135,7 +137,13 @@ export function ServiceArt({ name, delay = 0 }: ServiceArtProps) {
   };
 
   return (
-    <span ref={boxRef} className="service-art" data-ready={revealed} style={style}>
+    <span
+      ref={boxRef}
+      className="service-art"
+      data-ready={revealed}
+      data-failed={failed || undefined}
+      style={style}
+    >
       <span ref={hostRef} className="service-art__host" />
     </span>
   );

@@ -3,14 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { homeCases } from "@/data/projects";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { setLocale } from "@/lib/i18n";
-import {
-  BAND_ARRIVE_MS,
-  BAND_GIRO_FADE_MS,
-  BAND_SELECT_HOLD_MS,
-  BAND_TYPE_DELAY_MS,
-  BAND_TYPE_MS,
-  HomeProjects,
-} from "./HomeProjects";
+import { HomeProjects } from "./HomeProjects";
 import { paintedBandIds } from "./painted-bands";
 
 vi.mock("@/hooks/useReducedMotion", () => ({ useReducedMotion: vi.fn() }));
@@ -85,17 +78,10 @@ function enterFirst() {
   });
 }
 
-async function advance(ms: number) {
-  await act(async () => {
-    await vi.advanceTimersByTimeAsync(ms);
-  });
-}
-
 beforeEach(() => {
   observers.length = 0;
   paintedBandIds.clear();
   document.documentElement.removeAttribute("data-loader");
-  vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout", "setInterval", "clearInterval"] });
   vi.mocked(useReducedMotion).mockReturnValue(false);
   vi.stubGlobal("IntersectionObserver", BandObserver);
 });
@@ -104,7 +90,6 @@ afterEach(() => {
   setLocale("pt");
   document.documentElement.removeAttribute("data-loader");
   vi.unstubAllGlobals();
-  vi.useRealTimers();
 });
 
 describe("HomeProjects", () => {
@@ -151,7 +136,7 @@ describe("HomeProjects", () => {
     );
   });
 
-  it("não pinta enquanto o loader está na tela e pinta quando ele sai", async () => {
+  it("não entra enquanto o loader está na tela e entra quando ele sai", async () => {
     document.documentElement.setAttribute("data-loader", "mounted");
     render(<HomeProjects />);
     enterFirst();
@@ -164,69 +149,56 @@ describe("HomeProjects", () => {
     });
 
     expect(band()).toHaveAttribute("data-painted", "true");
-    expect(band()).toHaveAttribute("data-typing", "true");
   });
 
-  it("pinta uma vez: entrar de novo não recomeça a digitação", async () => {
+  it("entra uma vez: sair e voltar para a tela não recomeça", () => {
     render(<HomeProjects />);
-    enterFirst();
-    expect(band()).toHaveAttribute("data-typing", "true");
-
-    await advance(BAND_TYPE_DELAY_MS + BAND_TYPE_MS);
-    expect(band()).toHaveAttribute("data-typing", "false");
+    expect(band()).toHaveAttribute("data-painted", "false");
 
     enterFirst();
     expect(band()).toHaveAttribute("data-painted", "true");
-    expect(band()).toHaveAttribute("data-typing", "false");
+
+    act(() => {
+      observers[0]?.intersect(0);
+    });
+    expect(band()).toHaveAttribute("data-painted", "true");
   });
 
-  it("leva a capa e o Giro some no centro, sem ir para o canto", async () => {
+  it("põe o logo da tecnologia na badge, e só texto onde não há logo", () => {
+    render(<HomeProjects />);
+
+    const tags = [...document.querySelectorAll<HTMLElement>(".home-band .g-tag")];
+    const byName = (name: string) => tags.filter(tag => tag.textContent === name);
+
+    for (const name of ["Astro", "React", "Next.js", "PHP", "WordPress"]) {
+      for (const tag of byName(name)) {
+        expect(tag.querySelector("svg.g-tag__logo")).toHaveAttribute("aria-hidden", "true");
+      }
+    }
+    expect(byName("SEO").length).toBeGreaterThan(0);
+    for (const tag of byName("SEO")) expect(tag.querySelector("svg")).toBeNull();
+  });
+
+  it("não usa mais loader, troca de fundo nem seleção automática na capa", () => {
     render(<HomeProjects />);
     enterFirst();
 
-    await advance(BAND_ARRIVE_MS);
-    expect(band()).toHaveAttribute("data-loaded", "true");
-    expect(band()).toHaveAttribute("data-selected", "true");
-    expect(band().querySelector(".g-giro")).toHaveAttribute("data-state", "loading");
-
-    await advance(BAND_GIRO_FADE_MS);
-    expect(band().querySelector(".g-giro")).not.toHaveAttribute("data-state");
-
-    await advance(BAND_SELECT_HOLD_MS - BAND_GIRO_FADE_MS);
-    expect(band()).toHaveAttribute("data-selected", "false");
+    expect(band().querySelector(".g-giro")).toBeNull();
+    expect(band().querySelector(".home-band__wash")).toBeNull();
+    expect(band()).not.toHaveAttribute("data-loaded");
+    expect(band()).not.toHaveAttribute("data-typing");
+    expect(band()).not.toHaveAttribute("data-selected");
   });
 
-  it("com movimento reduzido a faixa já chega pintada, sem digitação", () => {
+  it("com movimento reduzido a faixa já chega assentada", () => {
     vi.mocked(useReducedMotion).mockReturnValue(true);
     render(<HomeProjects />);
 
     expect(band()).toHaveAttribute("data-painted", "true");
-    expect(band()).toHaveAttribute("data-loaded", "true");
-    expect(band()).toHaveAttribute("data-typing", "false");
-    expect(band()).toHaveAttribute("data-selected", "false");
-    expect(band().querySelector(".g-giro")).not.toHaveAttribute("data-state");
     expect(observers).toHaveLength(0);
   });
 
-  it("no celular com movimento reduzido a seleção fica visível", () => {
-    vi.mocked(useReducedMotion).mockReturnValue(true);
-    vi.stubGlobal(
-      "matchMedia",
-      vi.fn((query: string) => ({
-        matches: query.includes("887"),
-        media: query,
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-        dispatchEvent: vi.fn(),
-      }))
-    );
-    render(<HomeProjects />);
-
-    expect(band()).toHaveAttribute("data-selected", "true");
-    expect(band()).toHaveAttribute("data-typing", "false");
-  });
-
-  it("ao voltar para a home a faixa que já pintou entra assentada", () => {
+  it("ao voltar para a home a faixa que já entrou chega assentada", () => {
     const first = render(<HomeProjects />);
     enterFirst();
     expect(band()).toHaveAttribute("data-painted", "true");
@@ -234,8 +206,6 @@ describe("HomeProjects", () => {
 
     render(<HomeProjects />);
     expect(band()).toHaveAttribute("data-painted", "true");
-    expect(band()).toHaveAttribute("data-loaded", "true");
-    expect(band()).toHaveAttribute("data-typing", "false");
     expect(band("atlas-marine-solutions")).toHaveAttribute("data-painted", "false");
   });
 });

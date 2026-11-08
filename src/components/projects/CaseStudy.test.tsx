@@ -6,7 +6,8 @@ import { getPageGiro, setPageGiro } from "@/lib/page-giro";
 import CaseStudy from "./CaseStudy";
 
 const entre = homeCases[0];
-const atlas = homeCases[1];
+const atlas = homeCases.find(project => project.slug === "atlas-marine-solutions");
+if (!atlas) throw new Error("atlas-marine-solutions ausente em homeCases");
 const last = homeCases[homeCases.length - 1];
 
 beforeEach(() => {

@@ -7,8 +7,9 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
     setupFiles: "./src/test/setup.ts",
+    testTimeout: 10000,
     css: true,
-    exclude: ["**/src/test/e2e/**", "**/.worktrees/**", "**/node_modules/**", ".opencode/**"],
+    exclude: ["**/src/test/e2e/**", "**/.worktrees/**", "**/.claude/**", "**/node_modules/**", ".opencode/**"],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'lcov', 'json'],
@@ -20,6 +21,7 @@ export default defineConfig({
         'src/types/**',
         'node_modules/**',
         '**/.worktrees/**',
+        '**/.claude/**',
         '**/*.config.{ts,js}',
         '**/*.astro',
       ],

@@ -105,7 +105,7 @@ test.describe("Navegação Principal", () => {
     ).toBeVisible();
   });
 
-  test("Deve pintar a faixa ao entrar e levar ao estudo", async ({ page }) => {
+  test("Deve revelar a faixa ao entrar e levar ao estudo", async ({ page }) => {
     await page.goto("/#projetos");
     await waitForHydration(page);
 

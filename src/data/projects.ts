@@ -35,7 +35,6 @@ export const homeCases = [
     image: "/capa-estudio-entre.webp",
     bannerImage: "/capa-estudio-entre.webp",
     tags: ["cultura", "hub", "independente", "e-commerce", "cms"],
-    relatedPosts: [],
     pendingConfirmation: [],
     context: {
       title: {
@@ -144,6 +143,76 @@ export const homeCases = [
         },
       },
     ],
+    nextCase: "agencia-multi-br",
+  },
+  {
+    id: "agencia-multi-br",
+    slug: "agencia-multi-br",
+    title: "Agência Multi BR",
+    kicker: {
+      pt: "Agência digital 360º",
+      en: "Full-service digital agency",
+    },
+    summary: {
+      pt: "Site institucional focado em conversão, com Next.js otimizado para Core Web Vitals.",
+      en: "A conversion-focused company site, with Next.js tuned for Core Web Vitals.",
+    },
+    label: {
+      pt: "// case · agência digital 360º",
+      en: "// case study · full-service digital agency",
+    },
+    role: {
+      pt: "Liderança de front-end e UI/UX",
+      en: "Front-end lead and UI/UX",
+    },
+    stack: ["React", "Next.js", "Tailwind CSS"],
+    live: "https://www.agenciamultibr.com/",
+    github: null,
+    image: "/agencia-multi-br.webp",
+    bannerImage: null,
+    tags: ["marketing", "web-design", "seo", "branding"],
+    pendingConfirmation: [],
+    context: {
+      title: {
+        pt: "Uma agência que precisava se mostrar.",
+        en: "An agency that had to show what it does.",
+      },
+      text: {
+        pt: "A Agência Multi BR é uma agência de marketing digital 360º. Ela precisava de um site institucional à altura dessa posição.",
+        en: "Agência Multi BR is a full-service digital marketing agency. It needed a company site that matched that position.",
+      },
+    },
+    problem: {
+      title: {
+        pt: "Captar clientes e provar a técnica.",
+        en: "Win clients and prove the craft.",
+      },
+      text: {
+        pt: "O site tinha que passar profissionalismo, criatividade e resultados, captar clientes e mostrar a capacidade técnica da própria agência.",
+        en: "The site had to convey professionalism, creativity and results, win clients and show the agency's own technical skill.",
+      },
+      needs: null,
+    },
+    solution: {
+      title: {
+        pt: "Next.js otimizado para Core Web Vitals.",
+        en: "Next.js tuned for Core Web Vitals.",
+      },
+      text: {
+        pt: "Um site focado em conversão, em Next.js, otimizado para Core Web Vitals e SEO.",
+        en: "A conversion-focused site in Next.js, tuned for Core Web Vitals and SEO.",
+      },
+      diagram: null,
+    },
+    result: {
+      title: null,
+      text: {
+        pt: "Site responsivo que explica os serviços com clareza e trouxe mais leads orgânicos.",
+        en: "A responsive site that explains the services clearly and brought in more organic leads.",
+      },
+      items: null,
+    },
+    screenshots: [],
     nextCase: "atlas-marine-solutions",
   },
   {
@@ -172,7 +241,6 @@ export const homeCases = [
     image: "/atlas-marine-solutions.webp",
     bannerImage: null,
     tags: [],
-    relatedPosts: [],
     pendingConfirmation: [],
     context: {
       title: {
@@ -241,10 +309,9 @@ export const homeCases = [
     stack: ["Next.js", "React", "Tailwind CSS"],
     live: "https://www.moviesbremen.com/",
     github: null,
-    image: "/movies-bremen.webp",
+    image: "/banner-movies-event-house-bremen.webp",
     bannerImage: "/banner-movies-event-house-bremen.webp",
     tags: ["entretenimento", "premium", "internacional", "adult"],
-    relatedPosts: ["react-19-server-components", "typescript-performance"],
     pendingConfirmation: [],
     context: {
       title: {
@@ -287,77 +354,6 @@ export const homeCases = [
       items: null,
     },
     screenshots: [],
-    nextCase: "agencia-multi-br",
-  },
-  {
-    id: "agencia-multi-br",
-    slug: "agencia-multi-br",
-    title: "Agência Multi BR",
-    kicker: {
-      pt: "Agência digital 360º",
-      en: "Full-service digital agency",
-    },
-    summary: {
-      pt: "Site institucional focado em conversão, com Next.js otimizado para Core Web Vitals.",
-      en: "A conversion-focused company site, with Next.js tuned for Core Web Vitals.",
-    },
-    label: {
-      pt: "// case · agência digital 360º",
-      en: "// case study · full-service digital agency",
-    },
-    role: {
-      pt: "Liderança de front-end e UI/UX",
-      en: "Front-end lead and UI/UX",
-    },
-    stack: ["React", "Next.js", "Tailwind CSS"],
-    live: "https://www.agenciamultibr.com/",
-    github: null,
-    image: "/agencia-multi-br.webp",
-    bannerImage: null,
-    tags: ["marketing", "web-design", "seo", "branding"],
-    relatedPosts: ["engenharia-interface-2026", "react-server-components"],
-    pendingConfirmation: [],
-    context: {
-      title: {
-        pt: "Uma agência que precisava se mostrar.",
-        en: "An agency that had to show what it does.",
-      },
-      text: {
-        pt: "A Agência Multi BR é uma agência de marketing digital 360º. Ela precisava de um site institucional à altura dessa posição.",
-        en: "Agência Multi BR is a full-service digital marketing agency. It needed a company site that matched that position.",
-      },
-    },
-    problem: {
-      title: {
-        pt: "Captar clientes e provar a técnica.",
-        en: "Win clients and prove the craft.",
-      },
-      text: {
-        pt: "O site tinha que passar profissionalismo, criatividade e resultados, captar clientes e mostrar a capacidade técnica da própria agência.",
-        en: "The site had to convey professionalism, creativity and results, win clients and show the agency's own technical skill.",
-      },
-      needs: null,
-    },
-    solution: {
-      title: {
-        pt: "Next.js otimizado para Core Web Vitals.",
-        en: "Next.js tuned for Core Web Vitals.",
-      },
-      text: {
-        pt: "Um site focado em conversão, em Next.js, otimizado para Core Web Vitals e SEO.",
-        en: "A conversion-focused site in Next.js, tuned for Core Web Vitals and SEO.",
-      },
-      diagram: null,
-    },
-    result: {
-      title: null,
-      text: {
-        pt: "Site responsivo que explica os serviços com clareza e trouxe mais leads orgânicos.",
-        en: "A responsive site that explains the services clearly and brought in more organic leads.",
-      },
-      items: null,
-    },
-    screenshots: [],
     nextCase: "danila-rizo-palmieri",
   },
   {
@@ -386,7 +382,6 @@ export const homeCases = [
     image: "/banner-danila-rizo.webp",
     bannerImage: "/banner-danila-rizo.webp",
     tags: ["rh", "internacionalização", "business", "premium"],
-    relatedPosts: ["engenharia-interface-2026"],
     pendingConfirmation: [],
     context: {
       title: {
