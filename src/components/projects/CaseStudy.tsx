@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Giro } from "@/components/brand/Giro";
 import { ArrowLink, ButtonLink } from "@/components/giro/Button";
 import { SectionHeader } from "@/components/giro/SectionHeader";
@@ -62,8 +62,6 @@ export default function CaseStudy({ project }: CaseStudyProps) {
   const locale = useLocale();
   const reducedMotion = useReducedMotion();
   const [active, setActive] = useState<SectionId>("contexto");
-  const railRef = useRef<HTMLElement>(null);
-  const railWrapRef = useRef<HTMLDivElement>(null);
 
   const caseIndex = homeCases.findIndex(item => item.slug === project.slug);
   const nextCase =
@@ -124,48 +122,6 @@ export default function CaseStudy({ project }: CaseStudyProps) {
     };
   }, []);
 
-  // O trilho fica fixo na coluna (abaixo do header, a 96px) e só aparece enquanto o miolo
-  // do case está na tela, senão cobre a foto. O sticky do CSS não faz essa checagem.
-  useEffect(() => {
-    const rail = railRef.current;
-    const wrap = railWrapRef.current;
-    if (!rail || !wrap) return;
-
-    const place = () => {
-      const column = wrap.getBoundingClientRect();
-      const body = wrap.parentElement?.getBoundingClientRect();
-      if (!body || column.width === 0) {
-        rail.style.position = "";
-        rail.style.top = "";
-        rail.style.left = "";
-        rail.style.width = "";
-        rail.style.visibility = "";
-        rail.style.zIndex = "";
-        return;
-      }
-      const top = 96;
-      // Só fica visível quando o miolo encosta na linha do trilho, senão cobre a foto.
-      const inRange = body.top <= top && body.bottom > top + rail.offsetHeight + 24;
-      rail.style.position = "fixed";
-      rail.style.top = `${top}px`;
-      rail.style.left = `${column.left}px`;
-      rail.style.width = `${column.width}px`;
-      rail.style.zIndex = "2";
-      rail.style.visibility = inRange ? "visible" : "hidden";
-    };
-
-    place();
-    window.addEventListener("scroll", place, { passive: true });
-    window.addEventListener("resize", place);
-    const resize = new ResizeObserver(place);
-    resize.observe(wrap);
-    return () => {
-      window.removeEventListener("scroll", place);
-      window.removeEventListener("resize", place);
-      resize.disconnect();
-    };
-  }, []);
-
   return (
     <article className="case-page g-papel">
       <div className="case-page__inner">
@@ -199,12 +155,8 @@ export default function CaseStudy({ project }: CaseStudyProps) {
         </header>
 
         <div className="case-body">
-          <div className="case-rail-wrap" ref={railWrapRef}>
-            <nav
-              className="case-rail"
-              aria-label={t(locale, "case.page.steps_label")}
-              ref={railRef}
-            >
+          <div className="case-rail-wrap">
+            <nav className="case-rail" aria-label={t(locale, "case.page.steps_label")}>
               <div className="case-rail__giro" aria-hidden="true">
                 <Giro state={SECTION_STATE[active]} size={56} />
               </div>

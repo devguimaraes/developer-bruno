@@ -89,9 +89,11 @@
 .case-rail-wrap {
   min-width: 0;
 }
+/* 96px deixa o trilho abaixo do header. A coluna acompanha a altura do miolo, então o trilho
+   nunca sobe sobre a foto do topo. */
 .case-rail {
   position: sticky;
-  top: 32px;
+  top: 96px;
   display: flex;
   flex-direction: column;
   gap: 20px;
