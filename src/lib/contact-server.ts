@@ -1,5 +1,5 @@
 import { Resend } from "resend";
-import { z } from "zod";
+import z from "zod";
 import { contactData } from "@/config/site";
 import type { ContactType } from "@/lib/contact";
 import { type Locale, type TranslationKey, t } from "@/lib/i18n";
