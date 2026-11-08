@@ -133,6 +133,29 @@ function logContactFailure(error: unknown): void {
   console.error("Failed to send contact email:", redact(raw, undefined));
 }
 
+/**
+ * Lê o corpo em stream e para ao passar do limite, então um envio gigante (inclusive chunked ou
+ * com content-length falso) nunca vai inteiro para a memória. Devolve null quando passa do limite.
+ */
+export async function readLimitedText(request: Request, maxBytes: number): Promise<string | null> {
+  if (!request.body) return "";
+  const reader = request.body.getReader();
+  const decoder = new TextDecoder();
+  let received = 0;
+  let text = "";
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    received += value.byteLength;
+    if (received > maxBytes) {
+      await reader.cancel();
+      return null;
+    }
+    text += decoder.decode(value, { stream: true });
+  }
+  return text + decoder.decode();
+}
+
 export function resolveResendApiKey(
   processValue: string | undefined,
   fileValue: string | undefined

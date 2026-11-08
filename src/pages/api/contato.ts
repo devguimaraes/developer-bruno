@@ -4,6 +4,7 @@ import {
   createResendMailSender,
   handleContactSubmission,
   isSameOriginRequest,
+  readLimitedText,
   resolveResendApiKey,
 } from "@/lib/contact-server";
 
@@ -31,13 +32,8 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     return jsonResponse({ ok: false }, 415);
   }
 
-  const declaredLength = Number(request.headers.get("content-length"));
-  if (declaredLength > CONTACT_MAX_BODY_BYTES) {
-    return jsonResponse({ ok: false }, 413);
-  }
-
-  const text = await request.text();
-  if (new TextEncoder().encode(text).length > CONTACT_MAX_BODY_BYTES) {
+  const text = await readLimitedText(request, CONTACT_MAX_BODY_BYTES);
+  if (text === null) {
     return jsonResponse({ ok: false }, 413);
   }
 

@@ -5,6 +5,7 @@ import {
   createResendMailSender,
   handleContactSubmission,
   isSameOriginRequest,
+  readLimitedText,
   resolveResendApiKey,
 } from "./contact-server";
 
@@ -269,5 +270,34 @@ describe("isSameOriginRequest", () => {
     expect(isSameOriginRequest("https://evil.example", url)).toBe(false);
     expect(isSameOriginRequest(null, url)).toBe(false);
     expect(isSameOriginRequest("not a url", url)).toBe(false);
+  });
+});
+
+describe("readLimitedText", () => {
+  function post(body: BodyInit | null): Request {
+    return new Request("http://localhost/api/contato", { method: "POST", body });
+  }
+
+  it("devolve o texto quando cabe no limite", async () => {
+    expect(await readLimitedText(post('{"a":"ção"}'), 64)).toBe('{"a":"ção"}');
+  });
+
+  it("devolve vazio quando não há corpo", async () => {
+    expect(await readLimitedText(post(null), 64)).toBe("");
+  });
+
+  it("devolve null e para de ler quando passa do limite, mesmo em stream sem content-length", async () => {
+    let pulls = 0;
+    const stream = new ReadableStream<Uint8Array>({
+      pull(controller) {
+        pulls += 1;
+        controller.enqueue(new TextEncoder().encode("x".repeat(40)));
+      },
+    });
+    // O Node exige duplex para corpo em stream, e o tipo DOM ainda não declara.
+    const init: RequestInit & { duplex: "half" } = { method: "POST", body: stream, duplex: "half" };
+    const request = new Request("http://localhost/api/contato", init);
+    expect(await readLimitedText(request, 64)).toBeNull();
+    expect(pulls).toBeLessThan(5);
   });
 });
