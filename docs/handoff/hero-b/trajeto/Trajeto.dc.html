@@ -1,0 +1,1619 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Giro, trajeto desenhado</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/giro/tokens.css">
+<link rel="stylesheet" href="ds/giro/components/bundle.css">
+<link rel="stylesheet" href="hero.css">
+<link rel="stylesheet" href="hero-b.css">
+<link rel="stylesheet" href="hero-quique.css">
+<link rel="stylesheet" href="hero-loader.css">
+<link rel="stylesheet" href="hero-trajeto.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,100..900&amp;family=Geist+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:#2b2eff}
+</style>
+</helmet>
+<div class="hi-board hb hq {{rootCls}}">
+<section class="hi g-azul" ref="{{r.root}}" id="hero" aria-labelledby="hb-title">
+
+<div class="hi-head">
+<header class="g-site-header">
+<a class="g-signature" href="#hero" aria-label="Bruno Guimarães, início" onClick="{{h.replay}}"><span>brun</span><span class="g-signature__o hi-o" ref="{{r.sigO}}"><svg class="g-giro g-giro--signature" viewBox="0 0 120 120" aria-hidden="true"><g class="g-giro__body"><g class="g-giro__turn"><g class="g-giro__spin"><circle class="g-giro__arc" cx="60" cy="60" r="44"></circle></g></g><g class="g-giro__blink"><ellipse class="g-giro__eye" cx="46" cy="54" rx="6" ry="9"></ellipse><ellipse class="g-giro__eye" cx="74" cy="54" rx="6" ry="9"></ellipse></g></g></svg><svg class="hi-seat" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="44"></circle></svg></span><span>&#160;guimarães</span></a>
+<div class="hi-head__end">
+<nav class="g-site-header__nav" aria-label="Principal"><a class="g-nav-link" href="#projetos">Projetos</a><a class="g-nav-link" href="#processo">Processo</a><a class="g-nav-link" href="#sobre">Sobre</a><a class="g-nav-link" href="#blog">Blog</a><a class="g-nav-link" href="#contato">Contato</a></nav>
+<div class="g-lang" role="group" aria-label="Idioma"><button type="button" class="g-lang__option" aria-pressed="true">pt</button><button type="button" class="g-lang__option" aria-pressed="false">en</button></div>
+</div>
+</header>
+</div>
+
+<div class="hi-top">
+<a class="hi-name" href="#hero">bruno guimarães</a>
+<div class="g-lang" role="group" aria-label="Idioma"><button type="button" class="g-lang__option" aria-pressed="true">pt</button><button type="button" class="g-lang__option" aria-pressed="false">en</button></div>
+</div>
+
+<div class="hi-stage" ref="{{r.stage}}" onPointerMove="{{h.move}}" onPointerLeave="{{h.leave}}" onClick="{{h.click}}">
+
+<div class="hi-floor" aria-hidden="true">
+<div class="iso" ref="{{r.isoFloor}}">
+<b class="hb-floor"></b>
+<b class="hb-base"></b>
+</div>
+</div>
+
+<div class="hi-copy">
+<p class="g-eyebrow">// desenvolvedor front-end · design systems</p>
+<h1 class="hi-title" id="hb-title" ref="{{r.title}}" aria-label="Interfaces com vida."><span aria-hidden="true"><span class="hq-ch">I</span><span class="hq-ch">n</span><span class="hq-ch">t</span><span class="hq-ch">e</span><span class="hq-ch">r</span><span class="hq-ch">f</span><span class="hq-ch">a</span><span class="hq-ch">c</span><span class="hq-ch">e</span><span class="hq-ch">s</span></span><span aria-hidden="true"><span class="hq-ch">c</span><span class="hq-ch">o</span><span class="hq-ch">m</span> <span class="hq-ch">v</span><span class="hq-ch">i</span><span class="hq-ch">d</span><span class="hq-ch">a</span><span class="hq-ch">.</span></span></h1>
+</div>
+
+<div class="hi-foot">
+<p class="hi-lede">Construo interfaces em React, Next.js e Astro e crio os design systems que mantêm o produto consistente enquanto ele cresce. Do protótipo ao deploy, com tipos, testes e métricas.</p>
+<div class="hi-ctas">
+<a class="g-button" href="#projetos">Ver projetos<svg class="g-icon g-button__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a>
+<a class="g-button g-button--secondary" href="#contato">Falar comigo</a>
+</div>
+</div>
+
+<div class="hi-world" aria-hidden="true">
+<div class="iso" ref="{{r.isoWorld}}">
+
+<div class="iso-pl hb-pl" data-layer="0" style="--x:0px;--y:0px;--w:330px;--h:230px;--r:18px;--zr:14px">
+<i class="iso-pl__e"></i><i class="iso-pl__e"></i><i class="iso-pl__e"></i>
+<div class="iso-pl__face">
+<b class="hb-sw" style="left:22px;top:20px;width:34px;height:34px;background:#2b2eff;--c:#2b2eff;--i:0"></b>
+<b class="hb-sw" style="left:66px;top:20px;width:34px;height:34px;background:#d2ff4d;--c:#d2ff4d;--i:1"></b>
+<b class="hb-sw hb-sw--papel" style="left:110px;top:20px;width:34px;height:34px;background:#f6f5f0;--c:#f6f5f0;--i:2"></b>
+<b class="hb-sw" style="left:154px;top:20px;width:34px;height:34px;background:#0b0c1f;--c:#0b0c1f;--i:3"></b>
+<b class="hb-sw" style="left:198px;top:20px;width:34px;height:34px;background:#ff5c3d;--c:#ff5c3d;--i:4"></b>
+<b class="t" style="left:25px;top:62px">azul</b>
+<b class="t" style="left:68px;top:62px">lima</b>
+<b class="t" style="left:110px;top:62px">papel</b>
+<b class="t" style="left:155px;top:62px">tinta</b>
+<b class="t" style="left:199px;top:62px">coral</b>
+<b class="hb-aa" style="left:20px;top:88px">Aa</b>
+<b class="t" style="left:24px;top:190px">Anybody · Geist Mono</b>
+<b class="hb-rule" style="left:196px;top:96px;width:10px;--i:0"></b>
+<b class="hb-rule" style="left:196px;top:110px;width:20px;--i:1"></b>
+<b class="hb-rule" style="left:196px;top:124px;width:30px;--i:2"></b>
+<b class="hb-rule" style="left:196px;top:138px;width:40px;--i:3"></b>
+<b class="hb-rule" style="left:196px;top:152px;width:60px;--i:4"></b>
+<b class="hb-rule" style="left:196px;top:166px;width:80px;--i:5"></b>
+<b class="t" style="left:288px;top:94px">4</b>
+<b class="t" style="left:288px;top:108px">8</b>
+<b class="t" style="left:288px;top:122px">12</b>
+<b class="t" style="left:288px;top:136px">16</b>
+<b class="t" style="left:288px;top:150px">24</b>
+<b class="t" style="left:288px;top:164px">32</b>
+<b class="hb-rad" style="left:196px;top:188px;width:22px;height:22px;border-radius:3px"></b>
+<b class="hb-rad" style="left:226px;top:188px;width:22px;height:22px;border-radius:7px"></b>
+<b class="hb-rad" style="left:256px;top:188px;width:22px;height:22px;border-radius:9px"></b>
+<b class="hb-rad" style="left:286px;top:188px;width:22px;height:22px;border-radius:50%"></b>
+</div>
+</div>
+
+<div class="iso-pl hb-pl" data-layer="1" style="--x:30px;--y:-30px;--w:330px;--h:230px;--r:18px;--zr:164px">
+<i class="iso-pl__e"></i><i class="iso-pl__e"></i><i class="iso-pl__e"></i>
+<div class="iso-pl__face">
+<b class="hb-btn hb-btn--pri" style="left:22px;top:22px;width:136px;height:40px">Ver projetos</b>
+<b class="hb-btn hb-btn--sec" style="left:170px;top:22px;width:136px;height:40px">Falar comigo</b>
+<b class="hb-tg" style="left:22px;top:84px;width:56px;height:30px"><b></b></b>
+<b class="hb-cb" style="left:94px;top:86px;width:26px;height:26px"><svg class="ck" viewBox="0 0 24 24"><path d="M5 12.5 L10 17 L19 7"></path></svg></b>
+<b class="hb-chip" style="left:136px;top:88px;width:78px;height:22px"><span class="t" style="color:#0b0c1f">pronto</span></b>
+<b class="hb-field" style="left:22px;top:132px;width:286px;height:40px"><b class="hb-typed" style="left:18px;top:12px;width:94px;height:16px">Olá, Bruno</b><b class="hb-caret" style="left:114px;top:12px"></b></b>
+<b class="hb-range" style="left:22px;top:196px;width:190px;height:6px"><b></b></b>
+<b class="t" style="left:228px;top:193px">gap 24</b>
+<span class="hb-note" style="left:22px;top:184px;width:286px;height:30px"><i></i>Não deu para enviar. Tente de novo.</span>
+</div>
+</div>
+
+<div class="iso-pl hb-pl" data-layer="2" style="--x:60px;--y:-60px;--w:330px;--h:230px;--r:18px;--zr:314px">
+<i class="iso-pl__e"></i><i class="iso-pl__e"></i><i class="iso-pl__e"></i>
+<div class="iso-pl__face">
+<b class="hb-chrome" style="left:0px;top:0px;width:330px;height:28px"></b>
+<b class="hb-dot" style="left:12px;top:10.5px"></b>
+<b class="hb-dot" style="left:24px;top:10.5px"></b>
+<b class="hb-dot" style="left:36px;top:10.5px"></b>
+<b class="hb-url" style="left:60px;top:6px;width:200px;height:16px"><b class="t hb-urltext" style="left:10px;top:3px;width:122px">devguimaraes.com.br</b></b>
+<b class="hb-page" style="left:0px;top:28px;width:330px;height:202px">
+<b class="hb-skel" style="left:14px;top:12px;width:80px;height:8px"></b>
+<b class="hb-skel" style="left:14px;top:40px;width:150px;height:24px"></b>
+<b class="hb-skel" style="left:14px;top:68px;width:120px;height:24px"></b>
+<b class="hb-skel" style="left:14px;top:104px;width:180px;height:6px"></b>
+<b class="hb-skel" style="left:14px;top:136px;width:70px;height:22px;border-radius:11px"></b>
+<b class="hb-skel" style="left:206px;top:44px;width:110px;height:80px;border-radius:8px"></b>
+<b class="hb-paint" style="left:0px;top:0px;width:330px;height:202px">
+<b class="hb-mini-sig" style="left:14px;top:12px">bruno guimarães</b>
+<b class="hb-bar" style="left:232px;top:14px;width:22px;height:5px"></b>
+<b class="hb-bar" style="left:260px;top:14px;width:20px;height:5px"></b>
+<b class="hb-bar" style="left:286px;top:14px;width:28px;height:5px"></b>
+<b class="hb-mini-title" style="left:14px;top:46px;font-size:44px">No ar.</b>
+<b class="hb-bar" style="left:14px;top:104px;width:176px;height:5px"></b>
+<b class="hb-bar" style="left:14px;top:114px;width:140px;height:5px"></b>
+<b class="hb-mini-cta" style="left:14px;top:136px;width:70px;height:22px"></b>
+<b class="hb-card" style="left:206px;top:44px;width:110px;height:80px"><b class="hb-mini-cta" style="left:12px;top:12px;width:18px;height:18px"></b><b class="hb-skel" style="left:12px;top:44px;width:80px;height:6px"></b><b class="hb-skel" style="left:12px;top:56px;width:56px;height:6px"></b></b>
+<b class="hb-card" style="left:206px;top:132px;width:52px;height:56px"></b>
+<b class="hb-card" style="left:264px;top:132px;width:52px;height:56px"></b>
+</b>
+</b>
+</div>
+</div>
+
+<div class="iso-pl hb-pl" data-layer="3" style="--x:10px;--y:-6px;--w:170px;--h:62px;--r:31px;--zr:464px">
+<i class="iso-pl__e"></i><i class="iso-pl__e"></i><i class="iso-pl__e"></i>
+<div class="iso-pl__face">
+<b class="hb-toast-dot" style="left:16px;top:23px"></b>
+<b class="hb-slot" style="left:42px;top:14px;width:116px;height:16px"><b class="hb-slot__a" style="left:0px">carregando</b><b class="hb-slot__b" style="left:0px">pronto</b></b>
+<b class="hb-prog" style="left:42px;top:38px;width:110px;height:5px"><b></b></b>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="hb-line" aria-hidden="true">
+<div class="hb-line__deco">
+<svg class="hb-line__svg">
+<polyline class="hb-rail" ref="{{r.rail}}" points="0,0 0,0"></polyline>
+<circle class="hb-stop" data-stop="-1" cx="0" cy="0" r="4"></circle>
+<circle class="hb-stop" data-stop="0" cx="0" cy="0" r="5"></circle>
+<circle class="hb-stop" data-stop="1" cx="0" cy="0" r="5"></circle>
+<circle class="hb-stop" data-stop="2" cx="0" cy="0" r="5"></circle>
+<circle class="hb-stop" data-stop="3" cx="0" cy="0" r="5"></circle>
+</svg>
+<b class="hb-link" data-link="0"></b>
+<b class="hb-link" data-link="1"></b>
+<b class="hb-link" data-link="2"></b>
+<b class="hb-link" data-link="3"></b>
+<span class="hb-tag" data-tag="0">// tokens</span>
+<span class="hb-tag" data-tag="1">// componentes</span>
+<span class="hb-tag" data-tag="2">// tela</span>
+<span class="hb-tag" data-tag="3">// estado</span>
+</div>
+<svg class="hq-trail" aria-hidden="true"><path class="hq-trail__p" ref="{{r.trailPath}}" d=""></path></svg>
+<b class="hq-shadow" ref="{{r.shadow}}"></b>
+<div class="hi-giro hb-rider" ref="{{r.giro}}"><div class="hi-giro__in" ref="{{r.giroIn}}"><svg class="g-giro" ref="{{r.giroSvg}}" data-state="idle" viewBox="0 0 120 120" aria-hidden="true"><g class="g-giro__body"><circle class="g-giro__track" cx="60" cy="60" r="44"></circle><g class="g-giro__turn"><g class="g-giro__spin"><circle class="g-giro__arc" cx="60" cy="60" r="44"></circle></g></g><g class="g-giro__blink"><ellipse class="g-giro__eye" cx="46" cy="54" rx="6" ry="9"></ellipse><ellipse class="g-giro__eye" cx="74" cy="54" rx="6" ry="9"></ellipse></g><path class="g-giro__face g-giro__face--happy" d="M38 60 Q46 46 54 60 M66 60 Q74 46 82 60"></path><path class="g-giro__face g-giro__face--x" d="M39 52 L53 62 M53 52 L39 62 M67 52 L81 62 M81 52 L67 62"></path><path class="g-giro__face g-giro__face--flat" d="M39 58 H53 M67 58 H81"></path><path class="g-giro__face g-giro__face--sleep" d="M39 55 Q46 62 53 55 M67 55 Q74 62 81 55"></path></g></svg></div></div>
+</div>
+
+<div class="hi-hud" aria-hidden="true">
+<dl>
+<dt>estado</dt><dd>{{hud.estado}}</dd>
+<dt>camada</dt><dd>{{hud.ui}}</dd>
+<dt>abertura</dt><dd>{{hud.pos}}</dd>
+</dl>
+</div>
+
+</div>
+
+<nav class="g-tabbar hi-tabs" aria-label="Navegação">
+<div class="g-tabbar__bg" aria-hidden="true"></div>
+<div class="g-tabbar__tabs">
+<a class="g-tab" href="#hero" aria-current="page"><span class="g-tab__pill"><svg class="g-icon g-icon--24" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg></span>Início</a>
+<a class="g-tab" href="#projetos"><span class="g-tab__pill"><svg class="g-icon g-icon--24" viewBox="0 0 24 24" aria-hidden="true"><rect width="7" height="7" x="3" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="14" rx="1"></rect><rect width="7" height="7" x="3" y="14" rx="1"></rect></svg></span>Projetos</a>
+<span aria-hidden="true"></span>
+<a class="g-tab" href="#blog"><span class="g-tab__pill"><svg class="g-icon g-icon--24" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"></path><path d="M18 14h-8"></path><path d="M15 18h-5"></path><path d="M10 6h8v4h-8V6Z"></path></svg></span>Blog</a>
+<a class="g-tab" href="#contato"><span class="g-tab__pill"><svg class="g-icon g-icon--24" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg></span>Contato</a>
+</div>
+<button type="button" class="g-tabbar__giro hi-o" ref="{{r.tabO}}" aria-label="Repetir a entrada do Giro" onClick="{{h.replay}}"><svg class="g-giro g-giro--md" viewBox="0 0 120 120" aria-hidden="true"><g class="g-giro__body"><g class="g-giro__turn"><g class="g-giro__spin"><circle class="g-giro__arc" cx="60" cy="60" r="44"></circle></g></g><g class="g-giro__blink"><ellipse class="g-giro__eye" cx="46" cy="54" rx="6" ry="9"></ellipse><ellipse class="g-giro__eye" cx="74" cy="54" rx="6" ry="9"></ellipse></g></g></svg><svg class="hi-seat" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="44"></circle></svg></button>
+</nav>
+
+<div class="lc" ref="{{r.lc}}" role="status">
+<div class="lc__bg"></div>
+<div class="lc__scene" ref="{{r.lcScene}}" aria-hidden="true">
+<div class="lc-pl" data-plate="0" style="--c:#d2ff4d;--e:#a6cc33;--ink:#2b2eff"><i class="lc-pl__e"></i><i class="lc-pl__e"></i><i class="lc-pl__e"></i><div class="lc-pl__face"><i class="lc-pl__paper"></i><span class="lc-pl__tag">// tokens</span></div></div>
+<div class="lc-pl" data-plate="1" style="--c:#f6f5f0;--e:#c9cae9;--ink:#2b2eff"><i class="lc-pl__e"></i><i class="lc-pl__e"></i><i class="lc-pl__e"></i><div class="lc-pl__face"><i class="lc-pl__paper"></i><span class="lc-pl__tag">// componentes</span></div></div>
+<div class="lc-pl" data-plate="2" style="--c:#0b0c1f;--e:#2a2d55;--ink:#f6f5f0"><i class="lc-pl__e"></i><i class="lc-pl__e"></i><i class="lc-pl__e"></i><div class="lc-pl__face"><i class="lc-pl__paper"></i><span class="lc-pl__tag">// tela</span></div></div>
+</div>
+<div class="lc__stage" aria-hidden="true"><div class="lc__name" ref="{{r.lcName}}"><span class="lc__row"><span class="lc__left"><span class="lc__lt" style="--i:3">b</span><span class="lc__lt" style="--i:2">r</span><span class="lc__lt" style="--i:1">u</span><span class="lc__lt" style="--i:0">n</span></span><span class="lc__o"><span class="lc__fly" ref="{{r.lcFly}}"><svg class="g-giro g-giro--signature" ref="{{r.lcGiro}}" data-state="loading" viewBox="0 0 120 120" aria-hidden="true"><g class="g-giro__body"><circle class="g-giro__track" cx="60" cy="60" r="44"></circle><g class="g-giro__turn"><g class="g-giro__spin"><circle class="g-giro__arc" cx="60" cy="60" r="44"></circle></g></g><g class="g-giro__blink"><ellipse class="g-giro__eye" cx="46" cy="54" rx="6" ry="9"></ellipse><ellipse class="g-giro__eye" cx="74" cy="54" rx="6" ry="9"></ellipse></g><path class="g-giro__face g-giro__face--happy" d="M38 60 Q46 46 54 60 M66 60 Q74 46 82 60"></path></g></svg></span><span class="lc__sel"><span class="lc__tag">&lt;Giro /&gt;</span><span class="lc__hd" style="--h:0"></span><span class="lc__hd" style="--h:1"></span><span class="lc__hd" style="--h:2"></span><span class="lc__hd" style="--h:3"></span></span></span><span class="lc__right"><span class="lc__gap lc__lt" style="--i:0"></span><span class="lc__lt" style="--i:1">g</span><span class="lc__lt" style="--i:2">u</span><span class="lc__lt" style="--i:3">i</span><span class="lc__lt" style="--i:4">m</span><span class="lc__lt" style="--i:5">a</span><span class="lc__lt" style="--i:6">r</span><span class="lc__lt" style="--i:7">ã</span><span class="lc__lt" style="--i:8">e</span><span class="lc__lt" style="--i:9">s</span></span></span></div></div>
+<div class="lc__ink" aria-hidden="true"><div class="lc__name"><span class="lc__row"><span class="lc__left"><span class="lc__lt" style="--i:3">b</span><span class="lc__lt" style="--i:2">r</span><span class="lc__lt" style="--i:1">u</span><span class="lc__lt" style="--i:0">n</span></span><span class="lc__o"></span><span class="lc__right"><span class="lc__gap lc__lt" style="--i:0"></span><span class="lc__lt" style="--i:1">g</span><span class="lc__lt" style="--i:2">u</span><span class="lc__lt" style="--i:3">i</span><span class="lc__lt" style="--i:4">m</span><span class="lc__lt" style="--i:5">a</span><span class="lc__lt" style="--i:6">r</span><span class="lc__lt" style="--i:7">ã</span><span class="lc__lt" style="--i:8">e</span><span class="lc__lt" style="--i:9">s</span></span></span></div></div>
+<span class="g-sr">Carregando o site</span>
+</div>
+
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"layout":{"editor":null,"default":"desktop"},"autoplay":{"editor":"boolean","default":true},"reducedMotion":{"editor":"boolean","default":false},"velocidade":{"editor":"enum","options":["100%","50%","25%"],"default":"100%"},"comLoader":{"editor":"boolean","default":true},"soEntrada":{"editor":"boolean","default":false},"repetir":{"editor":"boolean","default":true},"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  // Unidades da cena em px antes da projeção. Cada camada fica 30 para trás da de baixo. O Giro
+  // não pisa nas camadas: anda numa linha de estações à direita da pilha, no azul.
+  conf() {
+    const base = {
+      s: 30,
+      lw: 330,
+      lh: 230,
+      Z0: 14,
+      Gc: 16,
+      est: { cx: 10, cy: -6, w: 170, h: 62 },
+    };
+    if (this.props.layout === "mobile") {
+      return Object.assign(base, {
+        mobile: true,
+        k: 0.5,
+        gs: 44,
+        Go: 100,
+        // No celular o aviso de estado ficava quase em cima da tela: vão extra só para ele, que
+        // cresce com a abertura, para ficar perto do vão das outras camadas.
+        topExtra: 60,
+        rest: 120,
+        gap: 22,
+        tagGap: 30,
+        origin: (W) => ({ x: W / 2 - 65, y: 452 }),
+        source: "tabO",
+        arc: 120,
+        // Física do quique, em px e segundos. O celular sai da aba de baixo e salta até o título.
+        g: 2400,
+        popH: 0,
+        lift: 70,
+        aim: 1,
+        vRoll: 280,
+        vMinTitle: 150,
+        aRoll: 700,
+        // O título ocupa a largura toda: entre o fim de "Interfaces" e a borda não cabe o Giro.
+        // Depois de dois toques no título ele cai pela frente das letras, sem sair da tela.
+        titleHops: 2,
+        hops: [3, 8],
+        h0: 46,
+        h: [34, 8, 46, 34],
+        hopH: 14,
+        hopX: 10,
+      });
+    }
+    return Object.assign(base, {
+      mobile: false,
+      k: 0.92,
+      gs: 64,
+      Go: 150,
+      rest: 170,
+      gap: 40,
+      tagGap: 46,
+      origin: (W, H) => ({ x: W / 2 + 270, y: H * 0.69 }),
+      source: "sigO",
+      arc: 170,
+      g: 2600,
+      popH: 70,
+      lift: 0,
+      aim: 0.5,
+      vRoll: 320,
+      vMinTitle: 170,
+      aRoll: 900,
+      titleHops: 0,
+      hops: [3, 8],
+      h0: 70,
+      h: [55, 10, 80, 50],
+      hopH: 26,
+      hopX: 16,
+    });
+  }
+
+  label(s) {
+    const names = {
+      idle: "repouso",
+      loading: "carregando",
+      done: "pronto",
+      error: "erro",
+      curious: "curioso",
+      air: "no ar",
+      roll: "rolando",
+    };
+    return names[s] || s;
+  }
+
+  layerName(i) {
+    return ["tokens", "componentes", "tela", "estado"][i] || "chão";
+  }
+
+  componentDidMount() {
+    this.alive = true;
+    this.gen = 0;
+    this.timers = [];
+    this.frame = this.frame.bind(this);
+    this.onResize = () => this.layout();
+    window.addEventListener("resize", this.onResize);
+    if (typeof ResizeObserver !== "undefined" && this.el && this.el.stage) {
+      this.ro = new ResizeObserver(() => this.alive && this.layout());
+      this.ro.observe(this.el.stage);
+    }
+    this.visible = true;
+    if (typeof IntersectionObserver !== "undefined" && this.el && this.el.stage) {
+      this.io = new IntersectionObserver((entries) => {
+        const was = this.visible;
+        this.visible = entries.some((en) => en.isIntersecting);
+        // No canvas todas as pranchas montam juntas: quando esta volta para a tela, a entrada toca de novo.
+        if (this.visible && !was && this.mode === "rail" && !this.still()) this.boot();
+        // Saiu da tela no meio do loader: volta ao começo e espera a prancha reaparecer.
+        if (!this.visible && was && this.lcActive) this.boot();
+      });
+      this.io.observe(this.el.stage);
+    }
+    this.onSkip = () => this.skipLoader();
+    if (this.el && this.el.lc) this.el.lc.addEventListener("pointerdown", this.onSkip);
+    this.boot();
+  }
+
+  componentDidUpdate(prev) {
+    const p = this.props;
+    if (prev.layout !== p.layout || prev.reducedMotion !== p.reducedMotion || prev.autoplay !== p.autoplay || prev.soLoader !== p.soLoader || prev.comLoader !== p.comLoader || prev.soEntrada !== p.soEntrada || prev.cadencia !== p.cadencia || prev.isoMs !== p.isoMs || prev.abertura !== p.abertura || prev.velocidade !== p.velocidade) {
+      this.boot();
+    } else if (prev.rolagem !== p.rolagem && this.still()) {
+      this.renderStill();
+    }
+  }
+
+  componentWillUnmount() {
+    this.alive = false;
+    this.halt();
+    window.removeEventListener("resize", this.onResize);
+    if (this.el && this.el.lc) this.el.lc.removeEventListener("pointerdown", this.onSkip);
+    if (this.ro) this.ro.disconnect();
+    if (this.io) this.io.disconnect();
+  }
+
+  still() {
+    const mq = typeof window !== "undefined" && window.matchMedia
+      && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    return this.props.reducedMotion === true || mq;
+  }
+
+  halt() {
+    cancelAnimationFrame(this.raf);
+    this.raf = 0;
+    this.timers.forEach(clearTimeout);
+    this.timers = [];
+  }
+
+  after(ms, fn) {
+    const gen = this.gen;
+    const t = setTimeout(() => {
+      if (this.alive && gen === this.gen) fn();
+    }, ms);
+    this.timers.push(t);
+  }
+
+  ease(p) {
+    return p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+  }
+
+  rolagem() {
+    return Math.max(0, Math.min(100, Number(this.props.rolagem) || 0)) / 100;
+  }
+
+  boot() {
+    const el = this.el;
+    if (!el || !el.stage || !el.isoWorld) return;
+    this.halt();
+    this.gen += 1;
+    this.pendingLaunch = 0;
+    this.pendingLoader = 0;
+    this.cycleBusy = false;
+    this.restAt = 0;
+    this.hopX = 0;
+    this.C = this.conf();
+    const all = (sel, attr) => {
+      const out = {};
+      el.stage.querySelectorAll(sel).forEach((n) => {
+        out[n.getAttribute(attr)] = n;
+      });
+      return out;
+    };
+    this.layerEl = [];
+    el.isoWorld.querySelectorAll("[data-layer]").forEach((n) => {
+      this.layerEl[Number(n.getAttribute("data-layer"))] = n;
+      n.classList.remove("is-fire", "is-fresh", "is-error", "is-hover", "is-hit");
+    });
+    this.stopEl = all("[data-stop]", "data-stop");
+    this.linkEl = all("[data-link]", "data-link");
+    this.tagEl = all("[data-tag]", "data-tag");
+    // Cada rótulo digita um caractere por passo: o CSS lê a quantidade em --n.
+    Object.keys(this.tagEl).forEach((k) => {
+      this.tagEl[k].style.setProperty("--n", String(this.tagEl[k].textContent.length));
+    });
+    this.hideTags();
+    this.oi = [0, 0, 0, 0];
+    this.ov = [0, 0, 0, 0];
+    this.zs = [0, 0, 0, 0];
+    this.lift = [0, 0, 0, 0];
+    this.hover = -1;
+    this.oAuto = 0;
+    this.oPtr = 0;
+    this.tilt = { x: 0, y: 0, tx: 0, ty: 0 };
+    this.loopN = 0;
+    this.gscale = 1;
+    this.lastHud = 0;
+    this.rp = -1;
+    this.mv = null;
+    this.jy = 0;
+    this.jv = 0;
+    this.roll = 0;
+    this.lastPos = null;
+    this.mode = "seat";
+    this.ball = null;
+    this.trail = [];
+    this.simT = 0;
+    if (el.giroIn) el.giroIn.style.transform = "";
+    if (el.shadow) el.shadow.style.opacity = "0";
+    (this.letters || []).forEach((L) => {
+      L.el.style.transform = "";
+    });
+    this.letters = null;
+    this.clearLinks();
+    this.setLab(-1);
+    this.layout();
+    this.placeLayers();
+    if (el.giroSvg) {
+      el.giroSvg.classList.remove("is-squint", "is-wide");
+      el.giroSvg.removeAttribute("data-moment");
+    }
+    el.giroIn.classList.remove("is-crouch");
+    el.stage.querySelectorAll(".is-tramp").forEach((n) => n.classList.remove("is-tramp"));
+    this.setGiro("idle");
+    this.look(0, 0);
+    if (this.still()) {
+      this.hideLoader();
+      this.renderStill();
+      return;
+    }
+    el.root.classList.remove("is-away");
+    el.giro.classList.remove("is-on");
+    this.computeZ();
+    this.renderLayers();
+    this.drawLine();
+    this.hud("idle", "—", "0%");
+    this.last = performance.now();
+    this.raf = requestAnimationFrame(this.frame);
+    // O loader só começa com a prancha na tela; o laço por quadro é quem confere (ver frame).
+    if (this.skipsLoader()) {
+      this.hideLoader();
+      this.pendingLaunch = performance.now() + 500;
+      return;
+    }
+    this.resetLoader();
+    this.pendingLoader = performance.now() + 200;
+  }
+
+  // Movimento reduzido: a pilha meio aberta, cada camada na pose montada, o Giro na primeira estação.
+  renderStill() {
+    const el = this.el;
+    el.root.classList.add("is-away");
+    el.giro.classList.add("is-on");
+    const p = this.rolagem();
+    const o = 0.72 * (1 - this.ease(p));
+    this.oi = [o, o, o, o];
+    this.applyCam(p, 0, 0);
+    this.computeZ();
+    this.renderLayers();
+    this.mode = "rail";
+    this.rp = -1;
+    this.drawLine();
+    this.setLab(-1);
+    Object.keys(this.tagEl || {}).forEach((k) => this.showTag(Number(k)));
+    this.hud("idle", "chão", `${Math.round(o * 100)}%`);
+  }
+
+  layout() {
+    const el = this.el;
+    if (!el || !el.stage || !this.C) return;
+    const o = this.C.origin(el.stage.clientWidth, el.stage.clientHeight);
+    this.origin = o;
+    [el.isoFloor, el.isoWorld].forEach((n) => {
+      n.style.setProperty("--ox", `${o.x}px`);
+      n.style.setProperty("--oy", `${o.y}px`);
+    });
+    el.giro.style.setProperty("--gs", `${this.C.gs}px`);
+    const t = this.tilt || { x: 0, y: 0 };
+    this.applyCam(this.rolagem(), t.x, t.y);
+    if (this.zs && this.mode !== "seat") this.drawLine();
+    this.lcMeasure();
+  }
+
+  // Câmera: inclina com o ponteiro e, com a rolagem, gira até ficar de frente.
+  applyCam(p, tx, ty) {
+    const el = this.el;
+    if (!el || !el.root || !this.origin) return;
+    const e = this.ease(p);
+    const rxd = (60 - 4 * ty) * (1 - e);
+    const rzd = (-45 + 5 * tx) * (1 - e);
+    const k = this.C.k * (1 - 0.08 * e);
+    const root = el.root.style;
+    root.setProperty("--rx", `${rxd.toFixed(2)}deg`);
+    root.setProperty("--rz", `${rzd.toFixed(2)}deg`);
+    root.setProperty("--k", k.toFixed(4));
+    root.setProperty("--lo", (1 - e).toFixed(3));
+    root.setProperty("--fo", (1 - e).toFixed(3));
+    const rx = (rxd * Math.PI) / 180;
+    const rz = (rzd * Math.PI) / 180;
+    this.cam = { ox: this.origin.x, oy: this.origin.y, k, cx: Math.cos(rx), sx: Math.sin(rx), cz: Math.cos(rz), sz: Math.sin(rz) };
+  }
+
+  layerGeo(i) {
+    const C = this.C;
+    if (i === 3) return { x: C.est.cx, y: C.est.cy, w: C.est.w, h: C.est.h };
+    return { x: C.s * i, y: -C.s * i, w: C.lw, h: C.lh };
+  }
+
+  placeLayers() {
+    this.layerEl.forEach((n, i) => {
+      const g = this.layerGeo(i);
+      n.style.setProperty("--x", `${g.x}px`);
+      n.style.setProperty("--y", `${g.y}px`);
+    });
+  }
+
+  computeZ() {
+    const C = this.C;
+    let z = C.Z0;
+    for (let i = 0; i < 4; i += 1) {
+      if (i > 0) z += C.Gc + (C.Go - C.Gc) * Math.max(-0.08, this.oi[i]);
+      if (i === 3 && C.topExtra) z += C.topExtra * Math.max(0, this.oi[i]);
+      this.zs[i] = z + this.lift[i];
+    }
+  }
+
+  renderLayers() {
+    for (let i = 0; i < 4; i += 1) {
+      const n = this.layerEl[i];
+      if (n) n.style.setProperty("--zr", `${this.zs[i].toFixed(1)}px`);
+    }
+  }
+
+  proj(x, y, z) {
+    const c = this.cam;
+    const x1 = x * c.cz - y * c.sz;
+    const y1 = x * c.sz + y * c.cz;
+    return { x: c.ox + c.k * x1, y: c.oy + c.k * (y1 * c.cx - z * c.sx) };
+  }
+
+  unproj(px, py, z) {
+    const c = this.cam;
+    const x1 = (px - c.ox) / c.k;
+    const y1 = ((py - c.oy) / c.k + z * c.sx) / c.cx;
+    return { x: x1 * c.cz + y1 * c.sz, y: -x1 * c.sz + y1 * c.cz };
+  }
+
+  // Estações da linha, de baixo (-1, o ponto de partida) até o estado (3). Cada uma fica na altura
+  // da sua camada, à direita da quina; a ligação vai da quina da camada até a estação.
+  stations() {
+    const C = this.C;
+    const out = [];
+    for (let i = -1; i <= 3; i += 1) {
+      const z = i < 0 ? C.Z0 - C.rest : this.zs[i];
+      const col = Math.max(0, Math.min(i, 2));
+      const cc = this.proj(C.s * col + C.lw / 2, -C.s * col + C.lh / 2, z);
+      const own = i === 3 ? this.proj(C.est.cx + C.est.w / 2, C.est.cy + C.est.h / 2, z) : cc;
+      out.push({ x: cc.x + C.gap, y: own.y, cx: own.x });
+    }
+    return out;
+  }
+
+  riderAt(st) {
+    const r = Math.max(-1, Math.min(3, this.rp));
+    const a = Math.min(2, Math.floor(r));
+    const f = r - a;
+    const A = st[a + 1];
+    const B = st[a + 2];
+    return { x: A.x + (B.x - A.x) * f, y: A.y + (B.y - A.y) * f };
+  }
+
+  drawLine() {
+    const el = this.el;
+    if (!el.rail || !this.cam) return;
+    const st = this.stations();
+    el.rail.setAttribute("points", st.map((s) => `${s.x.toFixed(1)},${s.y.toFixed(1)}`).join(" "));
+    for (let i = -1; i <= 3; i += 1) {
+      const s = st[i + 1];
+      const stop = this.stopEl[String(i)];
+      if (stop) {
+        stop.setAttribute("cx", s.x.toFixed(1));
+        stop.setAttribute("cy", s.y.toFixed(1));
+      }
+      if (i < 0) continue;
+      const link = this.linkEl[String(i)];
+      if (link) {
+        link.style.left = `${s.cx.toFixed(1)}px`;
+        link.style.top = `${(s.y - 1).toFixed(1)}px`;
+        link.style.width = `${Math.max(0, s.x - s.cx).toFixed(1)}px`;
+      }
+      const tag = this.tagEl[String(i)];
+      if (tag) {
+        tag.style.left = `${(s.x + this.C.tagGap).toFixed(1)}px`;
+        tag.style.top = `${(s.y - 9).toFixed(1)}px`;
+      }
+    }
+    if (this.ball) {
+      this.placeBall(st);
+      return;
+    }
+    const pos = this.riderAt(st);
+    if (this.lastPos && this.mode !== "seat") this.roll += (pos.y - this.lastPos.y) * -2.4 + (pos.x - this.lastPos.x) * 1.2;
+    this.lastPos = pos;
+    if (this.mode === "seat") return;
+    el.giro.style.transform = `translate(${(pos.x + this.hopX).toFixed(1)}px, ${(pos.y - this.jy).toFixed(1)}px)`;
+    el.giroSvg.style.setProperty("--roll", `${this.roll.toFixed(1)}deg`);
+    el.giroIn.style.setProperty("--gscale", this.gscale.toFixed(3));
+    this.riderPos = pos;
+  }
+
+  // ---------- Trajeto desenhado ----------
+  // Uma trajetória só: assinatura, dois toques em "Interfaces", ponto final de "vida." como
+  // trampolim, impacto na pilha, que abre as camadas, e pouso na estação de tokens. A gravidade é
+  // constante e os pontos de contato são escolhidos, então o tempo não muda com a largura da tela.
+  speed() {
+    return { "100%": 1, "50%": 0.5, "25%": 0.25 }[this.props.velocidade] || 1;
+  }
+
+  // Topo de tinta de cada letra, pelo canvas: a caixa do span é a da fonte, não a do desenho.
+  measure() {
+    const el = this.el;
+    if (!el.title || !el.stage) return;
+    const st = el.stage.getBoundingClientRect();
+    const cs = getComputedStyle(el.title);
+    const size = parseFloat(cs.fontSize);
+    const lh = parseFloat(cs.lineHeight) || size * 0.94;
+    if (!this.ctx) this.ctx = document.createElement("canvas").getContext("2d");
+    const ctx = this.ctx;
+    ctx.font = `${cs.fontWeight} ${size}px ${cs.fontFamily}`;
+    const fm = ctx.measureText("Hx");
+    const A = fm.fontBoundingBoxAscent || size * 0.9;
+    const D = fm.fontBoundingBoxDescent || size * 0.25;
+    const lines = Array.from(el.title.children);
+    this.letters = Array.from(el.title.querySelectorAll(".hq-ch")).map((n) => {
+      n.style.transform = "";
+      const r = n.getBoundingClientRect();
+      const m = ctx.measureText(n.textContent);
+      const base = r.top - st.top + (lh - (A + D)) / 2 + A;
+      return {
+        el: n,
+        l: r.left - st.left + 2,
+        r: r.right - st.left - 2,
+        top: base - m.actualBoundingBoxAscent,
+        line: lines.indexOf(n.parentElement),
+        y: 0,
+        v: 0,
+      };
+    });
+  }
+
+  // A origem encolhe antes de soltar o Giro, como quem pega impulso.
+  prelaunch() {
+    const src = this.el[this.C.source];
+    const svg = src && src.querySelector(".g-giro");
+    if (svg && svg.animate) {
+      svg.animate(
+        [{ transform: "scale(1, 1)" }, { transform: "scale(1.22, 0.74)" }, { transform: "scale(1, 1)" }],
+        { duration: 180, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)" }
+      );
+    }
+    this.later(110, () => this.launchPath());
+  }
+
+  later(ms, fn) {
+    this.after(ms / this.speed(), fn);
+  }
+
+  skipsLoader() {
+    return this.props.comLoader === false || this.props.soEntrada === true;
+  }
+
+  // Arco de a até b com a gravidade da cena e o topo em yA. O tempo sai da altura, como na física.
+  arc(a, b, yA, extra) {
+    const g = this.C.g;
+    const top = Math.min(a.y, b.y, yA);
+    const up = Math.sqrt((2 * (a.y - top)) / g);
+    const dn = Math.sqrt((2 * (b.y - top)) / g);
+    const T = Math.max(0.08, up + dn);
+    return Object.assign({ ax: a.x, ay: a.y, bx: b.x, by: b.y, T, vx: (b.x - a.x) / T, vy: -g * up }, extra);
+  }
+
+  launchPath() {
+    const el = this.el;
+    const C = this.C;
+    const src = el[C.source];
+    if (!src) return;
+    this.measure();
+    const L = this.letters || [];
+    if (!L.length) return;
+    const st = el.stage.getBoundingClientRect();
+    const r = src.getBoundingClientRect();
+    const R = C.gs / 2;
+    const S = { x: r.left + r.width / 2 - st.left, y: r.top + r.height / 2 - st.top };
+    const on = (i) => ({ x: (L[i].l + L[i].r) / 2, y: L[i].top - R });
+    const dot = L.length - 1;
+    const P1 = on(C.hops[0]);
+    const P2 = on(C.hops[1]);
+    const P3 = on(dot);
+    // Impacto no centro da camada de cima, com a pilha fechada.
+    const c = this.proj(C.s * 2, -C.s * 2, this.zs[2]);
+    const P4 = { x: c.x, y: c.y - R * 0.9 };
+    const P5 = this.stations()[1];
+    // O topo do primeiro arco não passa da borda da tela.
+    const limit = R + 6 - (st.top - el.root.getBoundingClientRect().top);
+    const first = Math.max(limit, Math.min(S.y, P1.y) - C.h0);
+    const segs = [
+      this.arc(S, P1, first, { hit: "letter", i: C.hops[0] }),
+      this.arc(P1, P2, Math.min(P1.y, P2.y) - C.h[0], { hit: "letter", i: C.hops[1] }),
+      this.arc(P2, P3, Math.min(P2.y, P3.y) - C.h[1], { hit: "dot", i: dot, front: true }),
+      this.arc(P3, P4, Math.min(P3.y, P4.y) - C.h[2], { hit: "pile" }),
+      this.arc(P4, P5, Math.min(P4.y, P5.y) - C.h[3], { hit: "land" }),
+    ];
+    el.root.classList.add("is-away");
+    el.giro.classList.add("is-on");
+    this.mode = "ball";
+    this.lastPos = null;
+    this.gscale = Math.max(0.2, r.width / C.gs);
+    this.ball = { x: S.x, y: S.y, vx: segs[0].vx, vy: segs[0].vy, segs, i: 0, t: 0, w: 0, q: 0, qv: 0, nx: 0, ny: -1, s: 0, scale: this.gscale };
+    this.setGiro("idle");
+    this.hud("air", "→ pilha");
+    this.placeBall(this.stations());
+  }
+
+  stepPath(dt) {
+    const b = this.ball;
+    const C = this.C;
+    const R = C.gs / 2;
+    b.t += dt;
+    b.qv += (-1400 * b.q - 26 * b.qv) * dt;
+    b.q = Math.max(-0.22, Math.min(0.32, b.q + b.qv * dt));
+    let seg = b.segs[b.i];
+    if (b.t >= seg.T) {
+      const over = b.t - seg.T;
+      b.x = seg.bx;
+      b.y = seg.by;
+      this.pathHit(seg, seg.vy + C.g * seg.T);
+      if (!this.ball) return;
+      b.i += 1;
+      b.t = over;
+      seg = b.segs[b.i];
+    }
+    const t = b.t;
+    b.x = seg.ax + seg.vx * t;
+    b.y = seg.ay + seg.vy * t + 0.5 * C.g * t * t;
+    b.vx = seg.vx;
+    b.vy = seg.vy + C.g * t;
+    const stretch = Math.min(0.14, Math.hypot(b.vx, b.vy) / 12000);
+    b.s += (stretch - b.s) * (1 - Math.exp(-dt * 18));
+    b.w += (b.vx / R - b.w) * (1 - Math.exp(-dt * 9));
+    this.roll += b.w * dt * 57.2958;
+    b.scale = Math.min(1, b.scale + (1.001 - b.scale) * (1 - Math.exp(-dt * 7)));
+    // Do "c" ao ponto final ele cai pela frente das letras: cresce um pouco para ler como frente.
+    this.gscale = b.scale + (seg.front ? 0.14 * Math.sin((Math.PI * t) / seg.T) : 0);
+    this.trailPush(b);
+  }
+
+  squint() {
+    const svg = this.el.giroSvg;
+    svg.classList.add("is-squint");
+    this.later(130, () => svg.classList.remove("is-squint"));
+  }
+
+  pathHit(seg, vi) {
+    if (seg.hit === "land") {
+      this.landStation();
+      return;
+    }
+    this.kick(0, -1, vi);
+    const svg = this.el.giroSvg;
+    if (seg.hit === "letter") {
+      this.dip(seg.i, vi);
+      this.squint();
+      return;
+    }
+    if (seg.hit === "dot") {
+      this.dip(seg.i, vi * 2);
+      const n = this.letters[seg.i].el;
+      n.classList.remove("is-tramp");
+      void n.offsetWidth;
+      n.classList.add("is-tramp");
+      svg.classList.remove("is-squint");
+      svg.classList.add("is-wide");
+      return;
+    }
+    this.hitPile();
+    svg.classList.remove("is-wide");
+    svg.setAttribute("data-moment", "dizzy");
+    this.later(1400, () => svg.removeAttribute("data-moment"));
+    this.hud("loading", "pilha");
+  }
+
+  // O impacto amassa a pilha e, ao voltar, as molas abrem as camadas em cascata.
+  hitPile() {
+    this.oAuto = 1;
+    for (let i = 1; i < 4; i += 1) this.ov[i] = -2.4;
+    this.lift[2] = -9;
+    this.lift[1] = -5;
+    const top = this.layerEl[2];
+    if (top) {
+      top.classList.add("is-hit");
+      this.later(260, () => top.classList.remove("is-hit"));
+    }
+  }
+
+  // Os olhos vão na frente: olham para o próximo ponto de contato, não para onde ele já está indo.
+  lookAhead(b) {
+    const seg = b.segs[b.i];
+    const dx = seg.bx - b.x;
+    const dy = seg.by - b.y;
+    const d = Math.hypot(dx, dy) || 1;
+    this.look((6 * dx) / d, (5 * dy) / d);
+  }
+
+    kick(nx, ny, vi) {
+    const b = this.ball;
+    b.qv += Math.min(10, vi / 170);
+    b.nx = nx;
+    b.ny = ny;
+  }
+
+  dip(i, vi) {
+    if (this.props.letras === false || !this.letters) return;
+    const k = Math.min(240, vi * 0.16);
+    const L = this.letters[i];
+    for (let j = i - 1; j <= i + 1; j += 1) {
+      const n = this.letters[j];
+      if (n && n.line === L.line) n.v += j === i ? k : k * 0.35;
+    }
+  }
+
+  trailPush(b) {
+    this.trail.push({ x: b.x, y: b.y, t: this.simT });
+    if (this.trail.length > 90) this.trail.shift();
+  }
+
+  trailLife() {
+    const v = Number(this.props.rastroMs);
+    // No celular a subida é longa e rápida: com 320 ms o rastro vira uma cunha cruzando a tela.
+    return Math.max(100, Math.min(700, Number.isFinite(v) ? v : this.C.mobile ? 190 : 320)) / 1000;
+  }
+
+  // Rastro em lima como cauda de cometa: uma faixa só, larga atrás do Giro e afinando até um
+  // ponto conforme o caminho envelhece. Uma faixa, e não segmentos, para as emendas não somarem
+  // opacidade e virarem contas mais claras.
+  drawTrail() {
+    const path = this.el.trailPath;
+    if (!path) return;
+    const life = this.trailLife();
+    const pts = this.trail.filter((p) => this.simT - p.t < life);
+    if (this.props.rastro === false || pts.length < 2) {
+      path.setAttribute("d", "");
+      return;
+    }
+    const w0 = (this.C.gs / 2) * 0.9;
+    const left = [];
+    const right = [];
+    for (let i = pts.length - 1; i >= 0; i -= 1) {
+      const p = pts[i];
+      const a = pts[Math.min(pts.length - 1, i + 1)];
+      const b = pts[Math.max(0, i - 1)];
+      let dx = a.x - b.x;
+      let dy = a.y - b.y;
+      const len = Math.hypot(dx, dy) || 1;
+      dx /= len;
+      dy /= len;
+      const f = Math.min(1, (this.simT - p.t) / life);
+      const h = (w0 / 2) * Math.pow(1 - f, 0.9);
+      left.push(`${(p.x - dy * h).toFixed(1)},${(p.y + dx * h).toFixed(1)}`);
+      right.push(`${(p.x + dy * h).toFixed(1)},${(p.y - dx * h).toFixed(1)}`);
+    }
+    path.setAttribute("d", `M${left.join("L")}L${right.reverse().join("L")}Z`);
+  }
+
+  stepLetters(dt) {
+    (this.letters || []).forEach((L) => {
+      if (Math.abs(L.y) < 0.02 && Math.abs(L.v) < 0.02) {
+        if (L.y !== 0) {
+          L.y = 0;
+          L.v = 0;
+          L.el.style.transform = "";
+        }
+        return;
+      }
+      L.v += (-900 * L.y - 20 * L.v) * dt;
+      L.y += L.v * dt;
+      L.el.style.transform = `translateY(${L.y.toFixed(2)}px)`;
+    });
+  }
+
+  placeBall(st) {
+    const el = this.el;
+    const b = this.ball;
+    const R = this.C.gs / 2;
+    el.giro.style.transform = `translate(${b.x.toFixed(1)}px, ${b.y.toFixed(1)}px)`;
+    // Amasso ao longo da normal do contato, a partir do ponto que tocou; esticado na direção do voo.
+    const cx = -b.nx * R;
+    const cy = -b.ny * R;
+    const a = Math.atan2(b.nx, -b.ny);
+    const q = b.q;
+    const dir = Math.atan2(b.vy, b.vx);
+    const sq = `translate(${cx.toFixed(1)}px, ${cy.toFixed(1)}px) rotate(${a.toFixed(3)}rad) scale(${(1 + q * 0.7).toFixed(3)}, ${(1 - q).toFixed(3)}) rotate(${(-a).toFixed(3)}rad) translate(${(-cx).toFixed(1)}px, ${(-cy).toFixed(1)}px)`;
+    const sp = `rotate(${dir.toFixed(3)}rad) scale(${(1 + b.s).toFixed(3)}, ${(1 / (1 + b.s)).toFixed(3)}) rotate(${(-dir).toFixed(3)}rad)`;
+    el.giroIn.style.transform = `${sq} ${sp}`;
+    el.giroIn.style.setProperty("--gscale", this.gscale.toFixed(3));
+    el.giroSvg.style.setProperty("--roll", `${this.roll.toFixed(1)}deg`);
+    this.lookAhead(b);
+    this.riderPos = { x: b.x, y: b.y };
+  }
+
+  // Pousou na estação de tokens: a pilha já abriu com o impacto, então a camada dispara na hora.
+  landStation() {
+    const el = this.el;
+    this.ball = null;
+    el.giroIn.style.transform = "";
+    if (el.shadow) el.shadow.style.opacity = "0";
+    this.mode = "rail";
+    this.rp = 0;
+    this.lastPos = null;
+    this.gscale = 1;
+    this.squash();
+    this.arrive(0, false, "done");
+    if (this.props.soEntrada === true) {
+      this.later(1800, () => this.boot());
+      return;
+    }
+    if (this.props.autoplay === false) {
+      this.cycleBusy = false;
+      this.later(3000, () => this.home());
+      return;
+    }
+    // A primeira volta tem o erro: ela pode ser a única que a pessoa vê.
+    this.loopN = 1;
+    this.cycleBusy = true;
+    this.cycleFrom0(true, 0);
+  }
+
+  // Ritmo desigual de propósito: o erro segura mais tempo, o fim acelera.
+  cycleFrom0(err, base) {
+    let at = base + 1350;
+    this.later(at, () => this.visit(1, err));
+    at += err ? 2100 : 1500;
+    this.later(at, () => this.visit(2, false));
+    at += 1400;
+    this.later(at, () => this.visit(3, false));
+    at += 1250;
+    this.later(at, () => this.home());
+  }
+
+  // Uma volta depois do descanso, quando o ponteiro chega perto da pilha.
+  runCycle() {
+    this.cycleBusy = true;
+    this.loopN += 1;
+    this.oAuto = 1;
+    this.later(350, () => this.visit(0, false));
+    this.cycleFrom0(this.loopN % 2 === 1, 950);
+  }
+
+  // Volta uma vez e para: fora de um gesto do visitante, a hero descansa ao lado do CTA.
+  rest() {
+    this.cycleBusy = false;
+    this.restAt = performance.now();
+    this.hud("idle", "chão");
+    this.later(700, () => {
+      if (this.mode === "rail" && !this.mv) this.setGiro("idle");
+    });
+    if (this.props.repetir !== false) {
+      this.later(5200, () => {
+        if (!this.cycleBusy) this.boot();
+      });
+    }
+  }
+
+  // Salto entre estações, com a gravidade da entrada: subindo ele passa um pouco do alvo e cai
+  // nele; descendo ele sobe um pouco antes de despencar.
+  ride(to, done) {
+    this.clearLinks();
+    this.setGiro("idle");
+    this.look(0, to > this.rp ? -4 : 4);
+    this.hud(null, `→ ${this.layerName(to)}`);
+    const from = this.rp;
+    const st = this.stations();
+    const D = Math.max(1, Math.abs(st[to + 1].y - st[Math.round(from) + 1].y));
+    const g = this.C.g;
+    const up = to > from;
+    const h = up ? this.C.hopH : this.C.hopH * 1.2;
+    const v = up ? Math.sqrt(2 * g * (D + h)) : Math.sqrt(2 * g * h);
+    const T = up ? (v + Math.sqrt(Math.max(0, v * v - 2 * g * D))) / g : (v + Math.sqrt(v * v + 2 * g * D)) / g;
+    const n = this.el.giroIn;
+    n.classList.remove("is-crouch", "is-squash");
+    void n.offsetWidth;
+    n.classList.add("is-crouch");
+    this.later(95, () => {
+      n.classList.remove("is-crouch");
+      this.mv = { from, to, t: 0, T, D, v, up, done };
+    });
+  }
+
+  stepRide(dt) {
+    const m = this.mv;
+    const g = this.C.g;
+    m.t = Math.min(m.T, m.t + dt);
+    const t = m.t;
+    const s = m.up ? m.v * t - 0.5 * g * t * t : -m.v * t + 0.5 * g * t * t;
+    this.rp = m.from + (m.to - m.from) * Math.max(0, Math.min(1, s / m.D));
+    this.jy = s > m.D ? s - m.D : s < 0 ? -s : 0;
+    const u = t / m.T;
+    this.hopX = this.C.hopX * 4 * u * (1 - u);
+    const stretch = Math.min(1, Math.abs(m.v - g * t) / 1400);
+    this.el.giroIn.style.transform = `scale(${(1 - 0.1 * stretch).toFixed(3)}, ${(1 + 0.14 * stretch).toFixed(3)})`;
+    if (t >= m.T) {
+      this.mv = null;
+      this.rp = m.to;
+      this.jy = 0;
+      this.jv = 0;
+      this.hopX = 0;
+      this.el.giroIn.style.transform = "";
+      this.squash();
+      if (m.done) m.done();
+    }
+  }
+
+  // Na estação, o Giro olha para a camada, o sinal corre pela ligação e a camada dispara.
+  arrive(i, err, face) {
+    this.setLab(i);
+    this.showTag(i);
+    const link = this.linkEl[String(i)];
+    if (link) {
+      link.classList.remove("is-live");
+      void link.offsetWidth;
+      link.classList.add("is-live");
+    }
+    this.hud(null, this.layerName(i));
+    this.later(220, () => this.fire(i, err));
+    if (face === "done") {
+      this.setGiro("done");
+      this.later(1000, () => this.setGiro("idle", true));
+    } else if (i === 0) {
+      this.setGiro("loading");
+      this.later(1000, () => this.setGiro("idle", true));
+    } else if (i === 1 && err) {
+      this.setGiro("error");
+      this.later(800, () => this.setGiro("loading"));
+      this.later(1300, () => {
+        if (this.layerEl[1]) this.layerEl[1].classList.remove("is-error");
+        this.setGiro("done");
+      });
+    } else if (i === 1) {
+      this.setGiro("curious");
+      this.later(1000, () => this.setGiro("idle", true));
+    } else if (i === 2) {
+      this.setGiro("loading");
+      this.later(800, () => this.setGiro("done"));
+    } else {
+      this.setGiro("done");
+    }
+  }
+
+  visit(i, err) {
+    if (this.mode !== "rail") return;
+    this.ride(i, () => this.arrive(i, err));
+  }
+
+  // Salta da última estação para o chão, e o pouso é o que fecha a pilha.
+  home() {
+    this.ride(-1, () => {
+      this.oAuto = 0;
+      this.hideTags();
+      this.setLab(this.hover);
+      this.setGiro("done");
+      this.rest();
+    });
+  }
+
+    fire(i, err) {
+    const n = this.layerEl[i];
+    if (!n) return;
+    n.classList.remove("is-fire", "is-fresh");
+    void n.offsetWidth;
+    n.classList.add("is-fire", "is-fresh");
+    if (i === 1) n.classList.toggle("is-error", !!err);
+  }
+
+  // Rótulo da linha: aparece digitado quando o Giro chega na estação e some quando a pilha fecha.
+  showTag(i) {
+    const t = this.tagEl && this.tagEl[String(i)];
+    if (t) t.classList.add("is-shown");
+  }
+
+  hideTags() {
+    Object.keys(this.tagEl || {}).forEach((k) => this.tagEl[k].classList.remove("is-shown"));
+  }
+
+  clearLinks() {
+    Object.keys(this.linkEl || {}).forEach((k) => this.linkEl[k].classList.remove("is-live"));
+  }
+
+  setLab(i) {
+    Object.keys(this.tagEl || {}).forEach((k) => this.tagEl[k].classList.toggle("is-on", Number(k) === i));
+    Object.keys(this.stopEl || {}).forEach((k) => this.stopEl[k].classList.toggle("is-on", Number(k) === i));
+  }
+
+  // Na estação o Giro olha para a esquerda, para a camada que ele acabou de acender.
+  setGiro(s, watch) {
+    const svg = this.el && this.el.giroSvg;
+    if (!svg) return;
+    svg.setAttribute("data-state", s);
+    svg.classList.remove("is-hop");
+    if (s === "done") {
+      void svg.getBoundingClientRect();
+      svg.classList.add("is-hop");
+    }
+    if (s === "curious") {
+      this.look(-6, -1);
+      svg.style.setProperty("--g-tilt", "-7deg");
+    } else {
+      svg.style.setProperty("--g-tilt", "0deg");
+      this.look(watch ? -5 : 0, 0);
+    }
+    if (this.mode && this.mode !== "seat") this.hud(s);
+  }
+
+  look(x, y) {
+    const svg = this.el && this.el.giroSvg;
+    if (!svg) return;
+    svg.style.setProperty("--g-look-x", `${x.toFixed(1)}px`);
+    svg.style.setProperty("--g-look-y", `${y.toFixed(1)}px`);
+  }
+
+  // ---------- Tela de carregamento: as cores eram camadas ----------
+  // Os três discos são telas cheias empilhadas. No fim elas deitam na câmera da hero, se separam
+  // no ar e assentam fechadas, na pose exata da pilha real, que entra no lugar delas.
+
+  lcTimes() {
+    const num = (v, d) => (Number.isFinite(Number(v)) && v !== undefined && v !== null ? Number(v) : d);
+    const c = Math.max(300, Math.min(700, num(this.props.cadencia, 480)));
+    const iso = Math.max(600, Math.min(1600, num(this.props.isoMs, 950)));
+    const open = Math.max(0.4, Math.min(1.4, num(this.props.abertura, 100) / 100));
+    const d1 = 1200;
+    const d2 = d1 + c;
+    const d3 = d2 + c;
+    return { d1, d2, d3, wash: 520, ready: d3 + 400, exit: d3 + 620, iso, open };
+  }
+
+  lcMeasure() {
+    const el = this.el;
+    if (!el.lc || !el.root || !this.origin) return;
+    if (!this.lcN) {
+      this.lcN = {
+        scene: el.lcScene,
+        plates: Array.from(el.lc.querySelectorAll(".lc-pl")).map((n, i) => ({
+          el: n,
+          face: n.querySelector(".lc-pl__face"),
+          tag: n.querySelector(".lc-pl__tag"),
+          paper: n.querySelector(".lc-pl__paper"),
+          edges: Array.from(n.querySelectorAll(".lc-pl__e")),
+          e: [[166, 204, 51], [201, 202, 233], [42, 45, 85]][i],
+        })),
+      };
+    }
+    const W = el.root.clientWidth;
+    const H = el.root.clientHeight;
+    const r = el.root.getBoundingClientRect();
+    const s = el.stage.getBoundingClientRect();
+    el.lc.style.setProperty("--W", `${W}px`);
+    el.lc.style.setProperty("--H", `${H}px`);
+    this.lcGeo = {
+      W,
+      H,
+      ox: this.origin.x,
+      oy: this.origin.y + (s.top - r.top),
+      font: parseFloat(getComputedStyle(this.lcN.plates[0].tag).fontSize) || 20,
+    };
+    if (!this.iso) this.renderIso(0);
+  }
+
+  resetLoader() {
+    const el = this.el;
+    const T = this.lcTimes();
+    this.iso = null;
+    this.lcActive = false;
+    el.root.style.setProperty("--lc-t", String(1 / this.speed()));
+    el.root.classList.remove("lc-exit", "lc-reveal");
+    el.root.classList.add("lc-on");
+    el.lc.classList.remove("is-off", "is-play", "is-iso");
+    el.lc.style.setProperty("--d1", `${T.d1}ms`);
+    el.lc.style.setProperty("--d2", `${T.d2}ms`);
+    el.lc.style.setProperty("--d3", `${T.d3}ms`);
+    el.lc.style.setProperty("--wash", `${T.wash}ms`);
+    el.lcName.style.transform = "";
+    el.lcName.style.transformOrigin = "";
+    el.lcFly.style.transform = "";
+    el.lcGiro.setAttribute("data-state", "loading");
+    el.lcGiro.classList.remove("is-hop");
+    void el.lc.offsetWidth;
+    this.lcMeasure();
+    this.renderIso(0);
+  }
+
+  hideLoader() {
+    const el = this.el;
+    this.iso = null;
+    this.lcActive = false;
+    el.root.classList.remove("lc-on", "lc-exit", "lc-reveal");
+    el.lc.classList.add("is-off");
+  }
+
+  // O relógio só começa com a Anybody pronta. Até lá o Giro gira sozinho, como no site.
+  startLoader() {
+    const gen = this.gen;
+    const go = () => {
+      if (this.alive && gen === this.gen) this.playLoader();
+    };
+    const fonts = document.fonts;
+    if (fonts && fonts.load) fonts.load('800 16px "Anybody"', "bruno guimarães").then(go, go);
+    else go();
+  }
+
+  playLoader() {
+    const el = this.el;
+    const T = this.lcTimes();
+    const sp = this.speed();
+    this.lcActive = true;
+    el.lc.classList.add("is-play");
+    this.hud("loading", "—", "0%");
+    this.after((T.d1 - 60) / sp, () => this.lcAnchor());
+    this.after(T.ready / sp, () => this.lcSmile());
+    this.after(T.exit / sp, () => this.startIso());
+  }
+
+  // Os discos nascem no centro do Giro já assentado, depois que o nome desdobrou.
+  lcAnchor() {
+    const el = this.el;
+    const o = el.lcFly.getBoundingClientRect();
+    const r = el.lc.getBoundingClientRect();
+    if (!o.width) return;
+    el.lc.style.setProperty("--g-ox", `${(o.left + o.width / 2 - r.left).toFixed(1)}px`);
+    el.lc.style.setProperty("--g-oy", `${(o.top + o.height / 2 - r.top).toFixed(1)}px`);
+  }
+
+  lcSmile() {
+    const svg = this.el.lcGiro;
+    if (svg.getAttribute("data-state") === "done") return;
+    svg.setAttribute("data-state", "done");
+    svg.classList.add("is-hop");
+  }
+
+  // Clique na tela adianta para a saída, como no site.
+  skipLoader() {
+    if (!this.lcActive || this.iso) return;
+    this.lcSmile();
+    this.startIso();
+  }
+
+  lcFly() {
+    const el = this.el;
+    const src = el[this.C.source];
+    const target = src && src.querySelector(".g-giro");
+    if (!target) return;
+    const o = el.lcFly.getBoundingClientRect();
+    const t = target.getBoundingClientRect();
+    if (!o.width || !t.width) return;
+    const cx = o.left + o.width / 2;
+    const cy = o.top + o.height / 2;
+    const move = `translate(${(t.left + t.width / 2 - cx).toFixed(1)}px, ${(t.top + t.height / 2 - cy).toFixed(1)}px) scale(${(t.width / o.width).toFixed(4)})`;
+    if (this.C.mobile) {
+      el.lcFly.style.transform = move;
+      return;
+    }
+    const n = el.lcName.getBoundingClientRect();
+    el.lcName.style.transformOrigin = `${(cx - n.left).toFixed(1)}px ${(cy - n.top).toFixed(1)}px`;
+    el.lcName.style.transform = move;
+  }
+
+  startIso() {
+    if (this.iso || !this.lcActive) return;
+    const el = this.el;
+    this.lcAnchor();
+    el.lc.classList.add("is-iso");
+    el.root.classList.add("lc-exit");
+    this.lcFly();
+    // Relógio real: com o FPS baixo a pose não pode atrasar em relação ao voo do nome, que é CSS.
+    this.iso = { t0: performance.now(), T: this.lcTimes().iso / this.speed() };
+  }
+
+  stepIso(now) {
+    const I = this.iso;
+    const u = Math.max(0, Math.min(1, (now - I.t0) / I.T));
+    this.renderIso(u);
+    if (u >= 1) this.endIso();
+  }
+
+  // cubic-bezier(.66, 0, .14, 1): a tela tem peso para sair e chega devagar, para dar tempo de ler.
+  lcCurve(p) {
+    if (p <= 0) return 0;
+    if (p >= 1) return 1;
+    let lo = 0;
+    let hi = 1;
+    let t = p;
+    for (let i = 0; i < 16; i += 1) {
+      t = (lo + hi) / 2;
+      const x = 3 * (1 - t) * (1 - t) * t * 0.66 + 3 * (1 - t) * t * t * 0.14 + t * t * t;
+      if (x < p) lo = t;
+      else hi = t;
+    }
+    return 3 * (1 - t) * t * t + t * t * t;
+  }
+
+  lcMix(a, b, t) {
+    const c = a.map((v, i) => Math.round(v + (b[i] - v) * t));
+    return `rgb(${c[0]}, ${c[1]}, ${c[2]})`;
+  }
+
+  // u em 0..1: de tela cheia e de frente até a pose fechada da pilha da hero.
+  renderIso(u) {
+    const g = this.lcGeo;
+    const n = this.lcN;
+    const C = this.C;
+    if (!g || !n || !C) return;
+    const c01 = (v) => Math.max(0, Math.min(1, v));
+    const tilt = this.lcCurve(c01(u / 0.54));
+    const shrink = this.lcCurve(c01((u - 0.03) / 0.6));
+    const spread = this.lcCurve(c01((u - 0.08) / 0.5));
+    const k = C.k;
+    const cx = g.W / 2 + (g.ox - g.W / 2) * shrink;
+    const cy = g.H / 2 + (g.oy - g.H / 2) * shrink;
+    n.scene.style.transform = `translate3d(${cx.toFixed(2)}px, ${cy.toFixed(2)}px, 0) scale(${k}) rotateX(${(60 * tilt).toFixed(3)}deg) rotateZ(${(-45 * tilt).toFixed(3)}deg)`;
+    // Tamanho em progressão geométrica: quem encolhe em linha reta parece acelerar no fim.
+    const ww = Math.pow(g.W / k, 1 - shrink) * Math.pow(C.lw, shrink);
+    const wh = Math.pow(g.H / k, 1 - shrink) * Math.pow(C.lh, shrink);
+    const sx = ww / g.W;
+    const sy = wh / g.H;
+    const q = c01((u - 0.16) / 0.42);
+    const br = `${((18 * q) / sx).toFixed(2)}px / ${((18 * q) / sy).toFixed(2)}px`;
+    // O rótulo não encolhe junto até sumir: termina num corpo legível na placa, sem deformar.
+    const f = Math.pow(1 / k, 1 - shrink) * Math.pow((C.mobile ? 12 : 15) / g.font, shrink);
+    const open = this.lcTimes().open;
+    const side = [201, 202, 233];
+    n.plates.forEach((P, i) => {
+      // Assentam de baixo para cima, como cartas caindo na mesa.
+      const fall = c01((u - (i === 1 ? 0.72 : 0.77)) / 0.23);
+      const land = i === 0 ? 1 : fall * fall;
+      const zo = C.Z0 + i * C.Go * open;
+      const zc = C.Z0 + i * C.Gc;
+      const z = zc + (zo - zc) * spread * (1 - land) + i * 0.1;
+      const x = C.s * i * shrink;
+      const y = -C.s * i * shrink;
+      P.el.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, ${z.toFixed(2)}px) scale3d(${sx.toFixed(5)}, ${sy.toFixed(5)}, 1)`;
+      P.el.style.setProperty("--br", br);
+      P.tag.style.transform = `scale(${(f / sx).toFixed(4)}, ${(f / sy).toFixed(4)})`;
+      P.tag.style.opacity = (1 - c01((u - 0.66) / 0.12)).toFixed(3);
+      // A cor sai como entrou: um disco, agora de papel, nascendo no centro da placa assentada.
+      const wipe = this.lcCurve(c01((u - (0.7 + i * 0.04)) / 0.22));
+      const R = (wipe * Math.hypot(C.lw, C.lh) * 1.05) / 2;
+      P.paper.style.clipPath = `ellipse(${(R / sx).toFixed(1)}px ${(R / sy).toFixed(1)}px at 50% 50%)`;
+      const edge = this.lcMix(P.e, side, wipe);
+      P.edges.forEach((e) => {
+        e.style.background = edge;
+      });
+    });
+  }
+
+  endIso() {
+    const el = this.el;
+    const sp = this.speed();
+    this.iso = null;
+    this.lcActive = false;
+    el.lc.classList.add("is-off");
+    el.root.classList.remove("lc-on", "lc-exit");
+    el.root.classList.add("lc-reveal");
+    this.after(420 / sp, () => el.root.classList.remove("lc-reveal"));
+    this.hud("idle", "chão", "0%");
+    if (this.props.soLoader === true) {
+      this.after(1800 / sp, () => this.boot());
+      return;
+    }
+    this.after(300 / sp, () => this.prelaunch());
+  }
+
+  squash() {
+    const n = this.el.giroIn;
+    n.classList.remove("is-squash");
+    void n.offsetWidth;
+    n.classList.add("is-squash");
+  }
+
+  frame(now) {
+    if (!this.alive) return;
+    const dt = Math.min(0.05, (now - this.last) / 1000);
+    this.last = now;
+    if (!this.visible || document.hidden) {
+      this.raf = requestAnimationFrame(this.frame);
+      return;
+    }
+    if (this.pendingLoader && now >= this.pendingLoader) {
+      this.pendingLoader = 0;
+      this.startLoader();
+    }
+    if (this.pendingLaunch && now >= this.pendingLaunch) {
+      this.pendingLaunch = 0;
+      this.prelaunch();
+    }
+    const p = this.rolagem();
+    const e = this.ease(p);
+    const t = this.tilt;
+    const kt = 1 - Math.exp(-dt * 5);
+    t.x += (t.tx - t.x) * kt;
+    t.y += (t.ty - t.y) * kt;
+    this.applyCam(p, t.x, t.y);
+    // Abertura: uma mola por camada, as de cima mais rápidas, então abre em cascata.
+    const target = Math.max(this.oAuto, this.oPtr) * (1 - e);
+    for (let i = 1; i < 4; i += 1) {
+      const stiff = 120 + 40 * i;
+      const acc = (target - this.oi[i]) * stiff - this.ov[i] * 15;
+      this.ov[i] += acc * dt;
+      this.oi[i] += this.ov[i] * dt;
+    }
+    const kl = 1 - Math.exp(-dt * 10);
+    for (let i = 0; i < 4; i += 1) {
+      this.lift[i] += ((i === this.hover ? 14 : 0) - this.lift[i]) * kl;
+    }
+    this.computeZ();
+    this.renderLayers();
+    const sdt = dt * this.speed();
+    this.simT += sdt;
+    if (this.iso) this.stepIso(now);
+    if (this.ball) {
+      this.stepPath(sdt);
+    } else if (this.mv) {
+      this.stepRide(sdt);
+    }
+    this.stepLetters(sdt);
+    if (!this.mv && (this.jv || this.jy > 0)) {
+      this.jv -= 2200 * dt;
+      this.jy += this.jv * dt;
+      if (this.jy <= 0) {
+        this.jy = 0;
+        this.jv = 0;
+        this.squash();
+      }
+    }
+    if (this.gscale < 1) this.gscale = Math.min(1, this.gscale + dt * 2.4);
+    this.drawLine();
+    this.drawTrail();
+    if (now - this.lastHud > 200) {
+      this.lastHud = now;
+      const pos = `${Math.round(Math.max(0, this.oi[2]) * 100)}%`;
+      if (pos !== this.hudPosText) this.hud(null, null, pos);
+    }
+    this.raf = requestAnimationFrame(this.frame);
+  }
+
+  hud(state, ui, pos) {
+    if (state) this.hudState = state;
+    if (ui !== undefined && ui !== null) this.hudUi = ui;
+    if (pos !== undefined) this.hudPosText = pos;
+    this.setState({
+      hud: { estado: this.label(this.hudState || "idle"), ui: this.hudUi || "—", pos: this.hudPosText || "0%" },
+    });
+  }
+
+  local(e) {
+    const r = this.el.stage.getBoundingClientRect();
+    return { x: e.clientX - r.left, y: e.clientY - r.top };
+  }
+
+  inCopy(e) {
+    return !!(e.target && e.target.closest && e.target.closest(".hi-copy, .hi-foot, .hi-top, .hi-tabs, .hi-hud"));
+  }
+
+  // Camada sob o ponteiro, de cima para baixo, cada uma no plano da sua altura.
+  hit(p) {
+    for (let i = 3; i >= 0; i -= 1) {
+      const geo = this.layerGeo(i);
+      const f = this.unproj(p.x, p.y, this.zs[i]);
+      if (Math.abs(f.x - geo.x) < geo.w / 2 && Math.abs(f.y - geo.y) < geo.h / 2) return i;
+    }
+    return -1;
+  }
+
+  setHover(i) {
+    if (i === this.hover) return;
+    if (this.hover >= 0 && this.layerEl[this.hover]) this.layerEl[this.hover].classList.remove("is-hover");
+    this.hover = i;
+    if (i >= 0 && this.layerEl[i]) this.layerEl[i].classList.add("is-hover");
+    const at = Math.round(this.rp);
+    this.setLab(i >= 0 ? i : !this.mv && at >= 0 && Math.abs(this.rp - at) < 0.01 ? at : -1);
+  }
+
+  // Ponteiro: chegar perto abre a pilha, a posição inclina a câmera e a camada sob ele sobe.
+  onMove(e) {
+    if (!this.C || !this.cam || this.still() || this.mode === "seat") return;
+    const p = this.local(e);
+    const W = this.el.stage.clientWidth;
+    const H = this.el.stage.clientHeight;
+    const c = this.proj(this.C.s, -this.C.s, (this.zs[0] + this.zs[2]) / 2);
+    const d = Math.hypot(p.x - c.x, p.y - c.y);
+    if (this.inCopy(e)) {
+      this.oPtr = 0;
+      this.setHover(-1);
+      return;
+    }
+    this.oPtr = Math.max(0, Math.min(1, 1 - (d - 160) / 300));
+    this.tilt.tx = Math.max(-1, Math.min(1, (p.x - c.x) / (W / 2)));
+    this.tilt.ty = Math.max(-1, Math.min(1, (p.y - c.y) / (H / 2)));
+    this.setHover(this.hit(p));
+    // O ponteiro perto da pilha acorda uma volta nova; fora disso a hero descansa.
+    if (this.oPtr > 0.6 && !this.cycleBusy && this.mode === "rail" && !this.mv && performance.now() - this.restAt > 1500) this.runCycle();
+  }
+
+  onLeave() {
+    if (!this.tilt) return;
+    this.oPtr = 0;
+    this.tilt.tx = 0;
+    this.tilt.ty = 0;
+    this.setHover(-1);
+  }
+
+  // Clique no Giro: pulo. Numa camada: o Giro vai até a estação dela e o ciclo recomeça depois.
+  onClick(e) {
+    if (!this.C || !this.cam || this.still() || this.mode !== "rail") return;
+    if (e.target && e.target.closest && e.target.closest("a, button")) return;
+    const p = this.local(e);
+    const g = this.riderPos;
+    if (g && Math.hypot(p.x - g.x, p.y - (g.y - this.jy)) < this.C.gs * 0.62) {
+      if (this.jy === 0) this.jv = 560;
+      return;
+    }
+    const i = this.hit(p);
+    if (i < 0) return;
+    this.gen += 1;
+    this.mv = null;
+    this.jy = 0;
+    this.hopX = 0;
+    this.oAuto = 1;
+    this.visit(i, false);
+    this.cycleBusy = true;
+    this.later(3200, () => this.home());
+  }
+
+  replay(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    this.boot();
+  }
+
+  renderVals() {
+    if (!this.el) this.el = {};
+    if (!this.r) {
+      const keep = (k) => (node) => {
+        if (node) this.el[k] = node;
+      };
+      this.r = {
+        root: keep("root"),
+        stage: keep("stage"),
+        isoFloor: keep("isoFloor"),
+        isoWorld: keep("isoWorld"),
+        rail: keep("rail"),
+        giro: keep("giro"),
+        giroIn: keep("giroIn"),
+        giroSvg: keep("giroSvg"),
+        sigO: keep("sigO"),
+        tabO: keep("tabO"),
+        title: keep("title"),
+        trailPath: keep("trailPath"),
+        shadow: keep("shadow"),
+        lc: keep("lc"),
+        lcScene: keep("lcScene"),
+        lcName: keep("lcName"),
+        lcFly: keep("lcFly"),
+        lcGiro: keep("lcGiro"),
+      };
+      this.h = {
+        move: (e) => this.onMove(e),
+        leave: () => this.onLeave(),
+        click: (e) => this.onClick(e),
+        replay: (e) => this.replay(e),
+      };
+    }
+    const mobile = this.props.layout === "mobile";
+    const hud = (this.state && this.state.hud) || { estado: "repouso", ui: "—", pos: "0%" };
+    return {
+      r: this.r,
+      h: this.h,
+      rootCls: [mobile ? "is-mobile" : "is-desktop", this.still() ? "is-still" : ""].filter(Boolean).join(" "),
+      hud,
+    };
+  }
+}
+</script>
+</body>
+</html>

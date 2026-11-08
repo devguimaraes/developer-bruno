@@ -1,0 +1,105 @@
+/* Trajeto desenhado do Giro: rosto que reage, trampolim no ponto final, impacto na pilha e saltos
+   entre as estações. Soma ao que hero-b.css e hero-quique.css já desenham. */
+
+/* Aperta os olhos a cada toque e arregala quando vê para onde está indo. */
+.g-giro.is-squint .g-giro__eye {
+  scale: var(--g-eye) calc(var(--g-eye) * 0.3);
+}
+
+.g-giro.is-wide .g-giro__eye {
+  scale: calc(var(--g-eye) * 1.32);
+}
+
+/* Tontura: o mesmo momento do site (g-dizzy-body e g-dizzy-eye em giro.css). */
+.g-giro[data-moment="dizzy"] .g-giro__body {
+  animation: tj-dizzy-body 1400ms linear 1;
+}
+
+.g-giro[data-moment="dizzy"] .g-giro__eye {
+  animation: tj-dizzy-eye 1400ms linear 1;
+}
+
+/* O ponto final é o trampolim: amassa com o Giro e devolve. */
+.hq .hi-title .hq-ch.is-tramp {
+  transform-origin: 50% 82%;
+  animation: tj-tramp 460ms var(--ease-resolve);
+}
+
+/* A camada de cima acende no instante do impacto. */
+.hb .iso-pl.is-hit .iso-pl__face {
+  box-shadow:
+    inset 0 0 0 1px rgba(11, 12, 31, 0.06),
+    0 0 0 3px var(--lima);
+}
+
+/* Agacha antes de saltar para a próxima estação. */
+.hq .hb-rider .hi-giro__in.is-crouch {
+  transform-origin: 50% 100%;
+  animation: tj-crouch 110ms var(--ease-resolve) both;
+}
+
+@keyframes tj-tramp {
+  0% {
+    scale: 1.4 0.5;
+  }
+  38% {
+    scale: 0.84 1.45;
+  }
+  70% {
+    scale: 1.07 0.94;
+  }
+  100% {
+    scale: 1 1;
+  }
+}
+
+@keyframes tj-crouch {
+  to {
+    transform: scale(1.18, 0.78);
+  }
+}
+
+@keyframes tj-dizzy-body {
+  0% {
+    transform: rotate(0deg);
+    animation-timing-function: var(--ease-resolve);
+  }
+  12% {
+    transform: rotate(12deg);
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  30% {
+    transform: rotate(-9deg);
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  48% {
+    transform: rotate(6deg);
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  64% {
+    transform: rotate(-3.5deg);
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  80% {
+    transform: rotate(1.5deg);
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes tj-dizzy-eye {
+  12% {
+    translate: -3px 1px;
+  }
+  30% {
+    translate: 2.5px -1px;
+  }
+  48% {
+    translate: -1.8px 1px;
+  }
+  64% {
+    translate: 1px 0;
+  }
+}

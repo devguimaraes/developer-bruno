@@ -17,7 +17,7 @@ Uma expressão do Giro ligada a uma situação da interface, como repouso, carre
 _Avoid_: pose, humor, animação
 
 **Momento do Giro**:
-Uma reação curta do Giro por cima do estado, causada por um gesto ou por uma pausa do visitante, como piscadela, oi, ouvindo, tonto ou espiando.
+Uma reação curta do Giro por cima do estado, causada por um gesto ou por uma pausa do visitante, ou por uma batida durante a Entrada do Giro, como piscadela, oi, ouvindo, tonto ou espiando.
 _Avoid_: estado, animação, easter egg
 
 **Assinatura**:
@@ -51,6 +51,24 @@ _Avoid_: header, navbar, barra de progresso
 **Barra de abas**:
 A navegação fixa embaixo da tela no celular, com Início e Projetos de um lado, Blog e Contato do outro, e o Giro no centro mostrando a leitura e abrindo o menu.
 _Avoid_: menu, tab bar, rodapé
+
+## Hero
+
+**Pilha**:
+A interface aberta em camadas isométricas no hero, que fica fechada em repouso e abre quando o Giro bate nela.
+_Avoid_: stack, cena 3D, vista explodida
+
+**Camada**:
+Uma das partes da pilha: tokens, componentes, tela ou estado. Na tela de carregamento, cada cor é uma camada em tela cheia.
+_Avoid_: placa, plano, nível
+
+**Estação**:
+Um ponto da linha ao lado da pilha onde o Giro para e faz uma camada disparar.
+_Avoid_: parada, nó
+
+**Entrada do Giro**:
+O caminho do Giro na primeira vez que o hero aparece, da assinatura ou da barra de abas até a primeira estação, passando pelo título e pela pilha.
+_Avoid_: quique, entrada quicando, voo
 
 ## Trabalho
 
