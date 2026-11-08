@@ -187,9 +187,9 @@
 .home-band__body {
   transition-delay: 120ms;
 }
-.home-band[data-painted="true"] .home-band__head,
-.home-band[data-painted="true"] .home-band__body,
-.home-band[data-painted="true"] .home-band__cover {
+.home-band[data-entered="true"] .home-band__head,
+.home-band[data-entered="true"] .home-band__body,
+.home-band[data-entered="true"] .home-band__cover {
   opacity: 1;
   transform: none;
 }

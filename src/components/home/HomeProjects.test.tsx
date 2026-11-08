@@ -3,8 +3,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { homeCases } from "@/data/projects";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { setLocale } from "@/lib/i18n";
+import { enteredBandIds } from "./entered-bands";
 import { HomeProjects } from "./HomeProjects";
-import { paintedBandIds } from "./painted-bands";
 
 vi.mock("@/hooks/useReducedMotion", () => ({ useReducedMotion: vi.fn() }));
 
@@ -80,7 +80,7 @@ function enterFirst() {
 
 beforeEach(() => {
   observers.length = 0;
-  paintedBandIds.clear();
+  enteredBandIds.clear();
   document.documentElement.removeAttribute("data-loader");
   vi.mocked(useReducedMotion).mockReturnValue(false);
   vi.stubGlobal("IntersectionObserver", BandObserver);
@@ -141,27 +141,27 @@ describe("HomeProjects", () => {
     render(<HomeProjects />);
     enterFirst();
 
-    expect(band()).toHaveAttribute("data-painted", "false");
+    expect(band()).toHaveAttribute("data-entered", "false");
 
     await act(async () => {
       document.documentElement.removeAttribute("data-loader");
       await Promise.resolve();
     });
 
-    expect(band()).toHaveAttribute("data-painted", "true");
+    expect(band()).toHaveAttribute("data-entered", "true");
   });
 
   it("entra uma vez: sair e voltar para a tela não recomeça", () => {
     render(<HomeProjects />);
-    expect(band()).toHaveAttribute("data-painted", "false");
+    expect(band()).toHaveAttribute("data-entered", "false");
 
     enterFirst();
-    expect(band()).toHaveAttribute("data-painted", "true");
+    expect(band()).toHaveAttribute("data-entered", "true");
 
     act(() => {
       observers[0]?.intersect(0);
     });
-    expect(band()).toHaveAttribute("data-painted", "true");
+    expect(band()).toHaveAttribute("data-entered", "true");
   });
 
   it("põe o logo da tecnologia na badge, e só texto onde não há logo", () => {
@@ -194,18 +194,18 @@ describe("HomeProjects", () => {
     vi.mocked(useReducedMotion).mockReturnValue(true);
     render(<HomeProjects />);
 
-    expect(band()).toHaveAttribute("data-painted", "true");
+    expect(band()).toHaveAttribute("data-entered", "true");
     expect(observers).toHaveLength(0);
   });
 
   it("ao voltar para a home a faixa que já entrou chega assentada", () => {
     const first = render(<HomeProjects />);
     enterFirst();
-    expect(band()).toHaveAttribute("data-painted", "true");
+    expect(band()).toHaveAttribute("data-entered", "true");
     first.unmount();
 
     render(<HomeProjects />);
-    expect(band()).toHaveAttribute("data-painted", "true");
-    expect(band("atlas-marine-solutions")).toHaveAttribute("data-painted", "false");
+    expect(band()).toHaveAttribute("data-entered", "true");
+    expect(band("atlas-marine-solutions")).toHaveAttribute("data-entered", "false");
   });
 });

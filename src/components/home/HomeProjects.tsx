@@ -1,5 +1,5 @@
 import { ArrowRight } from "lucide-react";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { SectionHeader } from "@/components/giro/SectionHeader";
 import { StackLogo } from "@/components/giro/ToolLogo";
 import { homeCases, type Project } from "@/data/projects";
@@ -7,7 +7,7 @@ import { useLocale } from "@/hooks/useLocale";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { type Locale, t } from "@/lib/i18n";
 import { bareLabel } from "./copy";
-import { paintedBandIds } from "./painted-bands";
+import { enteredBandIds } from "./entered-bands";
 
 const ENTER_RATIO = 0.33;
 
@@ -50,17 +50,22 @@ type CaseBandProps = {
 function CaseBand({ project, index, total, locale, reducedMotion }: CaseBandProps) {
   const bandRef = useRef<HTMLElement>(null);
   const played = useRef(false);
-  const [painted, setPainted] = useState(false);
+  const [entered, setEntered] = useState(false);
   const label = project.label[locale];
   const count = String(total).padStart(2, "0");
   const position = String(index + 1).padStart(2, "0");
 
-  useLayoutEffect(() => {
-    if (!reducedMotion && !systemReduced() && !paintedBandIds.has(project.id)) return;
+  const enter = useCallback(() => {
+    if (played.current) return;
     played.current = true;
-    paintedBandIds.add(project.id);
-    setPainted(true);
-  }, [project.id, reducedMotion]);
+    enteredBandIds.add(project.id);
+    setEntered(true);
+  }, [project.id]);
+
+  // Sem animação (movimento reduzido ou faixa que já entrou nesta visita): entra antes da pintura.
+  useLayoutEffect(() => {
+    if (reducedMotion || systemReduced() || enteredBandIds.has(project.id)) enter();
+  }, [project.id, reducedMotion, enter]);
 
   useEffect(() => {
     if (played.current || reducedMotion || systemReduced()) return;
@@ -70,10 +75,8 @@ function CaseBand({ project, index, total, locale, reducedMotion }: CaseBandProp
     let seen = false;
 
     const begin = () => {
-      if (played.current || !seen || loaderBlocking()) return;
-      played.current = true;
-      paintedBandIds.add(project.id);
-      setPainted(true);
+      if (!seen || loaderBlocking()) return;
+      enter();
     };
 
     const intersection = new IntersectionObserver(
@@ -96,13 +99,13 @@ function CaseBand({ project, index, total, locale, reducedMotion }: CaseBandProp
       intersection.disconnect();
       mutations.disconnect();
     };
-  }, [project.id, reducedMotion]);
+  }, [reducedMotion, enter]);
 
   return (
     <article
       className="home-band"
       id={`home-band-${project.id}`}
-      data-painted={painted ? "true" : "false"}
+      data-entered={entered ? "true" : "false"}
       ref={bandRef}
     >
       <div className="home-band__head">

@@ -116,7 +116,7 @@ test.describe("Navegação Principal", () => {
     await expect(entre).toHaveAttribute("href", "/projetos/estudio-entre");
     await entre.scrollIntoViewIfNeeded();
     await expect(projectsSection.locator(".home-band").first()).toHaveAttribute(
-      "data-painted",
+      "data-entered",
       "true"
     );
 
