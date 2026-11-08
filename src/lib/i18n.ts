@@ -630,8 +630,12 @@ type Listener = (locale: Locale) => void;
 
 function getInitialLocale(): Locale {
   if (typeof window === "undefined") return defaultLocale;
-  const stored = localStorage.getItem("locale") as Locale | null;
-  if (stored && (stored === "pt" || stored === "en")) return stored;
+  try {
+    const stored = localStorage.getItem("locale");
+    if (stored === "pt" || stored === "en") return stored;
+  } catch {
+    // Storage bloqueado (janela privada, cookies desligados): segue no idioma padrão.
+  }
   return defaultLocale;
 }
 
@@ -655,7 +659,11 @@ export function setLocale(locale: Locale): void {
   }
   currentLocale = locale;
   if (typeof window !== "undefined") {
-    localStorage.setItem("locale", locale);
+    try {
+      localStorage.setItem("locale", locale);
+    } catch {
+      // Sem storage o idioma vale só nesta sessão.
+    }
     applyLocaleDocumentMetadata(locale);
   }
   listeners.forEach(fn => {

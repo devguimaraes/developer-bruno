@@ -1,5 +1,5 @@
-import { describe, expect, it } from "vitest";
-import { dictionary, formatDate, t, type TranslationKey } from "./i18n";
+import { describe, expect, it, vi } from "vitest";
+import { dictionary, formatDate, getLocale, setLocale, t, type TranslationKey } from "./i18n";
 
 describe("t", () => {
   it("returns the string for the requested locale", () => {
@@ -50,5 +50,17 @@ describe("formatDate", () => {
 describe("dictionary", () => {
   it("has the same keys in pt and en", () => {
     expect(Object.keys(dictionary.en).sort()).toEqual(Object.keys(dictionary.pt).sort());
+  });
+});
+
+describe("setLocale", () => {
+  it("troca o idioma mesmo com o localStorage bloqueado", () => {
+    const setItem = vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
+      throw new DOMException("blocked", "SecurityError");
+    });
+    expect(() => setLocale("en")).not.toThrow();
+    expect(getLocale()).toBe("en");
+    setLocale("pt");
+    setItem.mockRestore();
   });
 });
