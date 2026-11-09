@@ -68,7 +68,7 @@ test.describe("Formulário de contato", () => {
       route.fulfill({ status: 500, json: { ok: false } })
     );
     await form.getByRole("button", { name: "Enviar mensagem" }).click();
-    await expect(page.getByText(/Não deu para enviar/)).toBeVisible();
+    await expect(form.getByText(/Não deu para enviar/)).toBeVisible();
   });
 });
 

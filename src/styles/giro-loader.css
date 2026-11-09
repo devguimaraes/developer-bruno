@@ -2,6 +2,11 @@
    data-loader, que o script inline de Layout.astro põe antes do primeiro paint. Sem JS, nunca
    ganha o atributo e a página não fica presa.
 
+   Coreografia em camadas: os discos concêntricos expandem revelando as quatro camadas da interface
+   (tokens, componentes, tela e estado). Na home e com a coreografia completa, a tela deita em 3D
+   e transfere o palco para a pilha da hero. Se o usuário adiantar por interação ou ao abrir
+   rotas internas diretamente, a saída acontece por cortina vertical.
+
    Tamanho: variante A. O nome vai de 50px em 390 até 136px em 1920. O código, de 15px a 26px.
    Abaixo de 960px o sobrenome desce. Cada lado do nome é nowrap: o eixo de largura da Anybody
    não pode reflowar a linha. O "o" fica no centro e as letras crescem para fora. */
