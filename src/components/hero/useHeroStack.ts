@@ -15,6 +15,7 @@ import {
 import type { Camera, Point, StackConfig, StackMood, Station } from "./stack";
 import {
   approach,
+  createHopRide,
   cycleSteps,
   DESKTOP_STACK,
   FIRE_DELAY_MS,
@@ -27,19 +28,17 @@ import {
   makeCamera,
   pointerOpen,
   project,
-  RIDE_ARRIVE,
-  RIDE_MAX_SPEED,
-  RIDE_SMOOTH_S,
   ROLL_PER_PX,
   riderAt,
   scrollProgress,
-  smoothDamp,
   stackCenter,
   stackOrigin,
   stations,
+  stepHop,
   stepSprings,
   visitBeats,
 } from "./stack";
+import type { HopRide } from "./stack";
 
 const DESKTOP_QUERY = "(min-width: 768px)";
 // Origem do lançamento: a assinatura no cabeçalho (computador) ou a aba do Giro (celular).
@@ -170,9 +169,13 @@ function createRuntime(
   let hover = -1;
   let mode: Mode = "seat";
   let rp = -1;
-  let rpVel = 0;
-  // A viagem só acaba quando o Giro assenta; a chegada (done) dispara um pouco antes, já parando.
-  let ride: { to: number; arrived: boolean; done?: () => void } | null = null;
+  interface ActiveRide {
+    ride: HopRide;
+    t: number;
+    done?: () => void;
+  }
+  let activeRide: ActiveRide | null = null;
+  let hopX = 0;
   // A bola da entrada desenhada em arcos e as letras medidas (mesma ordem do DOM).
   let ball: EntryPathBall | null = null;
   let letters: Letter[] = [];
@@ -371,7 +374,7 @@ function createRuntime(
       roll = (roll + spinVel * dt) % 360;
     }
     lastPos = pos;
-    rider.style.transform = `translate(${pos.x.toFixed(1)}px, ${(pos.y - jumpY).toFixed(1)}px)`;
+    rider.style.transform = `translate(${(pos.x + hopX).toFixed(1)}px, ${(pos.y - jumpY).toFixed(1)}px)`;
     svg.style.setProperty("--roll", `${roll.toFixed(1)}deg`);
     inner.style.setProperty("--gscale", gscale.toFixed(3));
   };
@@ -399,8 +402,27 @@ function createRuntime(
     clearLinks();
     setMood("idle");
     look(0, to > rp ? -4 : 4);
-    ride = { to, arrived: false, done };
     setHud(null, to < 0 ? { kind: "to", layer: -1 } : { kind: "to", layer: to });
+
+    if (!cam) return;
+    const from = rp;
+    const st = stations(cfg, cam, zs, scale);
+    const fromIdx = Math.max(-1, Math.min(3, Math.round(from))) + 1;
+    const toIdx = to + 1;
+    const fromStation = st[fromIdx] ?? st[0];
+    const toStation = st[toIdx] ?? st[0];
+    const D = Math.max(1, Math.abs(toStation.y - fromStation.y));
+    const g = entryCfg.g;
+    const hop = createHopRide({ from, to, D, g, hopH: cfg.hopH });
+
+    inner.classList.remove("is-crouch", "is-squash");
+    void inner.offsetWidth;
+    inner.classList.add("is-crouch");
+
+    after(95, () => {
+      inner.classList.remove("is-crouch");
+      activeRide = { ride: hop, t: 0, done };
+    });
   };
 
   const fire = (i: number, error: boolean): void => {
@@ -421,7 +443,7 @@ function createRuntime(
     if (face === "done") {
       setMood("done");
       after(1000, () => {
-        if (mode === "rail" && !ride && mood === "done") setMood("idle", true);
+        if (mode === "rail" && !activeRide && mood === "done") setMood("idle", true);
       });
       return;
     }
@@ -445,6 +467,7 @@ function createRuntime(
       openAuto = 0;
       hideTags();
       setLit(hover);
+      setMood("done");
       setHud("idle", { kind: "floor" });
       done?.();
     });
@@ -453,13 +476,13 @@ function createRuntime(
   // Um ciclo: a pilha abre, o Giro sobe a linha parando em cada estação, volta e a pilha fecha.
   const loop = (): void => {
     loopN += 1;
-    openAuto = 0;
+    openAuto = 1;
+    visit(0, false);
     for (const step of cycleSteps(loopN)) {
       after(step.at, () => {
-        if (step.kind === "open") openAuto = 1;
-        else if (step.kind === "visit") visit(step.layer, step.error);
+        if (step.kind === "visit") visit(step.layer, step.error);
         else if (step.kind === "home") home();
-        else loop();
+        else if (step.kind === "next") loop();
       });
     }
   };
@@ -536,18 +559,14 @@ function createRuntime(
     inner.style.transform = "";
     mode = "rail";
     rp = 0;
-    rpVel = 0;
     spinVel = 0;
     lastPos = null;
     gscale = 1;
     squash();
     arrive(0, false, "done");
     loopN = 1;
-    // O ciclo segue a agenda atual a partir da visita à camada 1, descontando o que já passou
-    const base = 1100;
     for (const step of cycleSteps(loopN)) {
-      if (step.at <= base) continue;
-      after(step.at - base, () => {
+      after(step.at, () => {
         if (step.kind === "visit") visit(step.layer, step.error);
         else if (step.kind === "home") home();
         else if (step.kind === "next") loop();
@@ -789,17 +808,23 @@ function createRuntime(
         pushTrail(ball);
         placeBall();
       }
-    } else if (ride) {
-      const m = ride;
-      const next = smoothDamp(rp, m.to, rpVel, RIDE_SMOOTH_S, RIDE_MAX_SPEED, dt);
-      rp = next.value;
-      rpVel = next.vel;
-      if (!m.arrived && Math.abs(m.to - rp) < RIDE_ARRIVE) {
-        m.arrived = true;
+    } else if (activeRide) {
+      activeRide.t += dt;
+      const res = stepHop(activeRide.ride, activeRide.t, entryCfg.g, cfg.hopX);
+      rp = res.rp;
+      jumpY = res.jumpY;
+      hopX = res.hopX;
+      inner.style.transform = `scale(${(1 - 0.1 * res.stretch).toFixed(3)}, ${(1 + 0.14 * res.stretch).toFixed(3)})`;
+      if (res.done) {
+        const done = activeRide.done;
+        activeRide = null;
+        rp = res.rp;
+        jumpY = 0;
+        hopX = 0;
+        inner.style.transform = "";
         squash();
-        m.done?.();
+        done?.();
       }
-      if (ride === m && rp === m.to) ride = null;
     }
 
     stepLetters(dt);
@@ -846,10 +871,13 @@ function createRuntime(
   const resume = (): void => {
     clearTimers();
     hideTags();
-    ride = null;
-    rpVel = 0;
+    activeRide = null;
+    jumpY = 0;
+    hopX = 0;
     spinVel = 0;
     lastPos = null;
+    inner.classList.remove("is-crouch");
+    inner.style.transform = "";
     for (const n of layers) n.classList.remove("is-fire", "is-fresh", "is-error");
     if (mode === "seat") {
       queueLaunch(LAUNCH_MS);
@@ -907,7 +935,7 @@ function createRuntime(
     hover = i;
     layers[i]?.classList.add("is-hover");
     const at = Math.round(rp);
-    setLit(i >= 0 ? i : !ride && at >= 0 && Math.abs(rp - at) < 0.01 ? at : -1);
+    setLit(i >= 0 ? i : !activeRide && at >= 0 && Math.abs(rp - at) < 0.01 ? at : -1);
   };
 
   const onMove = (e: PointerEvent): void => {
@@ -939,14 +967,14 @@ function createRuntime(
     const i = hitLayer(cfg, cam, zs, local(e));
     if (i < 0) return;
     clearTimers();
-    ride = null;
+    activeRide = null;
     openAuto = 1;
     visit(i, false);
     after(CLICK_RETURN_MS, () => home(() => after(CLICK_RESTART_MS, loop)));
   };
 
   const onHop = (): void => {
-    if (reduced || mode !== "rail" || jumpY > 0) return;
+    if (reduced || mode !== "rail" || jumpY > 0 || activeRide) return;
     jumpV = HOP_SPEED;
     if (!running) jumpV = 0;
   };

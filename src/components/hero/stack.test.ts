@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   approach,
+  createHopRide,
   cycleSteps,
   DESKTOP_STACK,
   FIRE_DELAY_MS,
@@ -12,15 +13,12 @@ import {
   makeCamera,
   pointerOpen,
   project,
-  RIDE_ARRIVE,
-  RIDE_MAX_SPEED,
-  RIDE_SMOOTH_S,
   riderAt,
   scrollProgress,
-  smoothDamp,
   stackCenter,
   stackOrigin,
   stations,
+  stepHop,
   stepSprings,
   unproject,
   visitBeats,
@@ -39,9 +37,13 @@ describe("configs e escala", () => {
     expect(DESKTOP_STACK.Go).toBe(150);
     // Estação de partida mais baixa: o chão da entrada quicando fica abaixo da quina da pilha.
     expect(DESKTOP_STACK.rest).toBe(170);
+    expect(DESKTOP_STACK.hopH).toBe(26);
+    expect(DESKTOP_STACK.hopX).toBe(16);
     expect(MOBILE_STACK.rest).toBe(120);
     expect(MOBILE_STACK.k).toBe(0.5);
     expect(MOBILE_STACK.Go).toBe(100);
+    expect(MOBILE_STACK.hopH).toBe(14);
+    expect(MOBILE_STACK.hopX).toBe(10);
   });
 
   it("layoutScale do desktop limita em 1 e do mobile em 1.15", () => {
@@ -185,41 +187,38 @@ describe("estações e linha", () => {
     expect(FIRE_DELAY_MS).toBe(220);
   });
 
-  // Simula a viagem a 60 quadros por segundo e devolve posição e velocidade a cada quadro.
-  function ride(from: number, to: number, frames = 120, vel = 0) {
-    const out: { value: number; vel: number }[] = [];
-    let cur = { value: from, vel };
-    for (let i = 0; i < frames; i += 1) {
-      cur = smoothDamp(cur.value, to, cur.vel, RIDE_SMOOTH_S, RIDE_MAX_SPEED, 1 / 60);
-      out.push(cur);
-    }
-    return out;
-  }
-
-  it("smoothDamp sai do repouso sem salto, não passa do alvo e assenta", () => {
-    const path = ride(-1, 0);
-    // Primeiro quadro: anda pouco, sem o salto de uma velocidade cheia.
-    expect(path[0].value + 1).toBeLessThan(0.05);
-    expect(path.every(p => p.value <= 0)).toBe(true);
-    expect(path[path.length - 1].value).toBe(0);
-    // Uma estação chega perto do alvo antes de 1 s, a tempo da batida seguinte do ciclo.
-    const arrive = path.findIndex(p => Math.abs(p.value) < RIDE_ARRIVE);
-    expect(arrive).toBeGreaterThan(0);
-    expect(arrive).toBeLessThan(60);
+  it("createHopRide calcula velocidade e duração de subida física", () => {
+    const hop = createHopRide({ from: 0, to: 1, D: 100, g: 2600, hopH: 26 });
+    expect(hop.up).toBe(true);
+    expect(hop.v).toBeGreaterThan(0);
+    expect(hop.T).toBeGreaterThan(0.2);
+    expect(hop.T).toBeLessThan(0.7);
   });
 
-  it("smoothDamp respeita o teto de velocidade numa viagem longa", () => {
-    const path = ride(3, -1);
-    expect(Math.max(...path.map(p => Math.abs(p.vel)))).toBeLessThanOrEqual(RIDE_MAX_SPEED + 1e-6);
+  it("createHopRide calcula velocidade e duração de descida física", () => {
+    const hop = createHopRide({ from: 3, to: -1, D: 300, g: 2600, hopH: 26 });
+    expect(hop.up).toBe(false);
+    expect(hop.v).toBeGreaterThan(0);
+    expect(hop.T).toBeGreaterThan(0.3);
   });
 
-  it("smoothDamp troca de alvo no meio sem zerar a velocidade", () => {
-    const going = ride(-1, 3, 20);
-    const last = going[going.length - 1];
-    const back = smoothDamp(last.value, 0, last.vel, RIDE_SMOOTH_S, RIDE_MAX_SPEED, 1 / 60);
-    // Ainda indo para cima no quadro da troca: freia em vez de inverter na hora.
-    expect(back.vel).toBeGreaterThan(0);
-    expect(back.vel).toBeLessThan(last.vel);
+  it("stepHop interpola rp, calcula arco hopX e termina em done", () => {
+    const hop = createHopRide({ from: 0, to: 1, D: 100, g: 2600, hopH: 26 });
+    const early = stepHop(hop, hop.T * 0.25, 2600, 16);
+    expect(early.rp).toBeGreaterThan(0);
+    expect(early.rp).toBeLessThan(1);
+    expect(early.hopX).toBeGreaterThan(0);
+    expect(early.done).toBe(false);
+
+    const mid = stepHop(hop, hop.T / 2, 2600, 16);
+    expect(mid.jumpY).toBeGreaterThan(0);
+    expect(mid.hopX).toBeGreaterThan(0);
+
+    const end = stepHop(hop, hop.T, 2600, 16);
+    expect(end.rp).toBe(1);
+    expect(end.hopX).toBe(0);
+    expect(end.jumpY).toBe(0);
+    expect(end.done).toBe(true);
   });
 });
 
@@ -257,13 +256,16 @@ describe("ponteiro", () => {
 describe("ciclo do Giro", () => {
   const visit1 = (n: number) => cycleSteps(n).find(s => s.kind === "visit" && s.layer === 1);
 
-  it("cycleSteps segue a agenda de 200 a 10200 ms", () => {
-    expect(cycleSteps(1).map(s => s.at)).toEqual([200, 1100, 2700, 4300, 5900, 7600, 10200]);
+  it("cycleSteps segue a agenda nova contada do pouso em tokens", () => {
+    // Primeira volta (loopN=1) tem o erro na camada 1
+    expect(cycleSteps(1).map(s => s.at)).toEqual([1350, 3450, 4850, 6100, 7500]);
+    // Segunda volta (loopN=2) sem o erro na camada 1
+    expect(cycleSteps(2).map(s => s.at)).toEqual([1350, 2850, 4250, 5500, 6900]);
   });
 
-  it("cycleSteps(2) tem erro na camada 1 e cycleSteps(1) não", () => {
-    expect(visit1(2)).toEqual({ at: 2700, kind: "visit", layer: 1, error: true });
-    expect(visit1(1)).toEqual({ at: 2700, kind: "visit", layer: 1, error: false });
+  it("cycleSteps(1) tem erro na camada 1 e cycleSteps(2) não", () => {
+    expect(visit1(1)).toEqual({ at: 1350, kind: "visit", layer: 1, error: true });
+    expect(visit1(2)).toEqual({ at: 1350, kind: "visit", layer: 1, error: false });
   });
 
   it("visitBeats com erro termina limpando o erro", () => {
@@ -274,6 +276,13 @@ describe("ciclo do Giro", () => {
 
   it("visitBeats sem erro não limpa nada", () => {
     expect(visitBeats(1, false).some(b => b.clearError)).toBe(false);
+  });
+
+  it("visitBeats da estação 2 cai para done aos 800 ms", () => {
+    expect(visitBeats(2, false)).toEqual([
+      { at: 0, mood: "loading" },
+      { at: 800, mood: "done" },
+    ]);
   });
 
   it("visitBeats da estação 0 carrega e volta a olhar a linha", () => {

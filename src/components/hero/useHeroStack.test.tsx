@@ -100,6 +100,19 @@ describe("useHeroStack, rótulos da linha", { timeout: SIM_TIMEOUT_MS }, () => {
     expect(nextCycle.at(-1)).toEqual(["0"]);
   });
 
+  it("a pilha fecha e esconde rótulos no pouso ao voltar ao chão", async () => {
+    mockReducedMotion(false);
+    const { container } = render(<Hero />);
+
+    // Espera todas as 4 estações serem visitadas
+    await advanceUntil(container, shown => shown.length === 4);
+    // Espera o pouso no chão fechar a pilha
+    await advanceUntil(container, shown => shown.length === 0);
+
+    expect(shownTags(container)).toEqual([]);
+    expect(container.querySelector('[data-hud="layer"]')?.textContent).toBe("chão");
+  });
+
   it("com movimento reduzido, os quatro rótulos ficam mostrados de uma vez", () => {
     mockReducedMotion(true);
     const { container } = render(<Hero />);

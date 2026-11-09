@@ -30,6 +30,10 @@ export interface StackConfig {
   k: number;
   /** Tamanho do Giro em px. */
   gs: number;
+  /** Altura do pico do salto em px. */
+  hopH: number;
+  /** Amplitude lateral do salto em px. */
+  hopX: number;
   est: { cx: number; cy: number; w: number; h: number };
 }
 
@@ -47,6 +51,8 @@ export const DESKTOP_STACK: StackConfig = {
   tagGap: 46,
   k: 0.92,
   gs: 64,
+  hopH: 26,
+  hopX: 16,
   est: { cx: 10, cy: -6, w: 170, h: 62 },
 };
 
@@ -66,6 +72,8 @@ export const MOBILE_STACK: StackConfig = {
   tagGap: 30,
   k: 0.5,
   gs: 44,
+  hopH: 14,
+  hopX: 10,
   est: { cx: 10, cy: -6, w: 170, h: 62 },
 };
 
@@ -246,46 +254,71 @@ export function riderAt(st: readonly Station[], rp: number): Point {
   return { x: near.x + (far.x - near.x) * f, y: near.y + (far.y - near.y) * f };
 }
 
-export interface Damped {
-  value: number;
-  vel: number;
+export interface HopRideParams {
+  from: number;
+  to: number;
+  D: number;
+  g: number;
+  hopH: number;
+}
+
+export interface HopRide {
+  from: number;
+  to: number;
+  D: number;
+  v: number;
+  T: number;
+  up: boolean;
 }
 
 /**
- * Amortecimento crítico com teto de velocidade (o SmoothDamp de Game Programming Gems 4).
- * Trocar o alvo no meio do caminho mantém a velocidade, então não há tranco na troca.
- * Nunca passa do alvo e assenta exatamente nele.
+ * Salto entre estações com a mesma gravidade da entrada:
+ * Subindo: v = sqrt(2g(D + h)), T = (v + sqrt(max(0, v² - 2gD))) / g
+ * Descendo: h = 1.2 * hopH, v = sqrt(2gh), T = (v + sqrt(v² + 2gD)) / g
  */
-export function smoothDamp(
-  current: number,
-  target: number,
-  vel: number,
-  smoothTime: number,
-  maxSpeed: number,
-  dt: number
-): Damped {
-  const omega = 2 / smoothTime;
-  const x = omega * dt;
-  const decay = 1 / (1 + x + 0.48 * x * x + 0.235 * x * x * x);
-  const maxChange = maxSpeed * smoothTime;
-  const change = Math.max(-maxChange, Math.min(maxChange, current - target));
-  const goal = current - change;
-  const temp = (vel + omega * change) * dt;
-  let nextVel = (vel - omega * temp) * decay;
-  let value = goal + (change + temp) * decay;
-  // Passou do alvo, ou ficou a menos de um centésimo de px dele: assenta, senão nunca chega.
-  if (target - current > 0 === value > target || Math.abs(target - value) < 1e-4) {
-    value = target;
-    nextVel = 0;
-  }
-  return { value, vel: nextVel };
+export function createHopRide(params: HopRideParams): HopRide {
+  const { from, to, D, g, hopH } = params;
+  const up = to > from;
+  const h = up ? hopH : hopH * 1.2;
+  const v = up ? Math.sqrt(2 * g * (D + h)) : Math.sqrt(2 * g * h);
+  const T = up
+    ? (v + Math.sqrt(Math.max(0, v * v - 2 * g * D))) / g
+    : (v + Math.sqrt(v * v + 2 * g * D)) / g;
+  return { from, to, D, v, T, up };
 }
 
-/** Viagem na linha: tempo de assentar, em s, e teto em estações por segundo. */
-export const RIDE_SMOOTH_S = 0.2;
-export const RIDE_MAX_SPEED = 7;
-/** A chegada conta a esta distância da estação, antes do último milímetro do amortecimento. */
-export const RIDE_ARRIVE = 0.04;
+export interface StepHopResult {
+  rp: number;
+  jumpY: number;
+  hopX: number;
+  stretch: number;
+  done: boolean;
+}
+
+/**
+ * Passo temporal de um salto na linha.
+ * u = t / T, arco lateral hopX = baseHopX * 4u(1 - u),
+ * deformação stretch = min(1, |v - gt| / 1400).
+ */
+export function stepHop(ride: HopRide, t: number, g: number, baseHopX: number): StepHopResult {
+  const clampedT = Math.min(ride.T, Math.max(0, t));
+  const s = ride.up
+    ? ride.v * clampedT - 0.5 * g * clampedT * clampedT
+    : -ride.v * clampedT + 0.5 * g * clampedT * clampedT;
+  const rp = ride.from + (ride.to - ride.from) * Math.max(0, Math.min(1, s / ride.D));
+  const jumpY = s > ride.D ? s - ride.D : s < 0 ? -s : 0;
+  const u = clampedT / ride.T;
+  const hopX = baseHopX * 4 * u * (1 - u);
+  const stretch = Math.min(1, Math.abs(ride.v - g * clampedT) / 1400);
+  const done = t >= ride.T;
+  return {
+    rp: done ? ride.to : rp,
+    jumpY: done ? 0 : jumpY,
+    hopX: done ? 0 : hopX,
+    stretch,
+    done,
+  };
+}
 
 /**
  * Giro do anel, em graus por px andado. Metade de rolar de verdade num Giro de 64 px:
@@ -328,24 +361,28 @@ export function scrollProgress(scrollY: number, heroHeight: number): number {
 export type StackMood = "idle" | "loading" | "done" | "error" | "curious";
 
 export type CycleStep =
-  | { at: number; kind: "open" }
   | { at: number; kind: "visit"; layer: number; error: boolean }
   | { at: number; kind: "home" }
   | { at: number; kind: "next" };
 
 /**
- * Agenda de um ciclo, em ms a partir do início. loopN começa em 1, e o erro da camada 1
- * acontece quando loopN é par, então um ciclo dá certo e o seguinte falha.
+ * Agenda de um ciclo, contada em ms a partir do pouso em tokens:
+ * camada 1 em 1350; camada 2 depois de 2100 com erro ou 1500 sem; camada 3 depois de 1400; volta ao chão depois de 1250.
+ * O erro vale quando loopN é ímpar, e a primeira volta é a 1.
  */
 export function cycleSteps(loopN: number): CycleStep[] {
+  const error = loopN % 2 === 1;
+  const t1 = 1350;
+  const t2 = t1 + (error ? 2100 : 1500);
+  const t3 = t2 + 1400;
+  const tHome = t3 + 1250;
+  const tNext = tHome + 1400;
   return [
-    { at: 200, kind: "open" },
-    { at: 1100, kind: "visit", layer: 0, error: false },
-    { at: 2700, kind: "visit", layer: 1, error: loopN % 2 === 0 },
-    { at: 4300, kind: "visit", layer: 2, error: false },
-    { at: 5900, kind: "visit", layer: 3, error: false },
-    { at: 7600, kind: "home" },
-    { at: 10200, kind: "next" },
+    { at: t1, kind: "visit", layer: 1, error },
+    { at: t2, kind: "visit", layer: 2, error: false },
+    { at: t3, kind: "visit", layer: 3, error: false },
+    { at: tHome, kind: "home" },
+    { at: tNext, kind: "next" },
   ];
 }
 
@@ -380,7 +417,7 @@ export function visitBeats(layer: number, error: boolean): Beat[] {
   if (layer === 2) {
     return [
       { at: 0, mood: "loading" },
-      { at: 1000, mood: "done" },
+      { at: 800, mood: "done" },
     ];
   }
   return [{ at: 0, mood: "done" }];

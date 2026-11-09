@@ -563,6 +563,18 @@
   animation: hb-squash 280ms var(--ease-resolve);
 }
 
+/* Agacha antes de saltar para a próxima estação. */
+.hb .hb-rider .hb-rider__in.is-crouch {
+  transform-origin: 50% 100%;
+  animation: tj-crouch 110ms var(--ease-resolve) both;
+}
+
+@keyframes tj-crouch {
+  to {
+    transform: scale(1.18, 0.78);
+  }
+}
+
 @keyframes hb-squash {
   0% {
     transform: scale(1.24, 0.72);
