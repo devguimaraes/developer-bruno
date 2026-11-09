@@ -2,13 +2,15 @@ import { motion } from "framer-motion";
 import { type CSSProperties, type ReactNode, useEffect, useRef, useState } from "react";
 import { Giro } from "@/components/brand/Giro";
 import { type GiroState, playGiroMoment } from "@/components/brand/giro-states";
+import { DESKTOP_STACK, MOBILE_STACK, stackOrigin } from "@/components/hero/stack";
 import { useLocale } from "@/hooks/useLocale";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { t } from "@/lib/i18n";
+import { computeLayDown, LAY_DOWN_DURATION_MS, type LayDownState } from "./lay-down";
 import { claimFirstVisit } from "./loader-flag";
 import { waitForFirstPaint } from "./ready";
 
-// Coreografia do estudo (motion/SPEC.md), adaptada para camadas (issue #104).
+// Coreografia do estudo (motion/SPEC.md), adaptada para camadas (issue #104 e #105).
 // O relógio só começa quando a Anybody cumpre document.fonts.load.
 // Até lá o Giro gira sozinho. O tamanho é a variante A.
 const READY_MS = 2560;
@@ -19,6 +21,7 @@ const FADE_MS = 360;
 const REDUCED_HOLD_MS = 600;
 const UNFOLD_START = 120;
 const STAGGER_MS = 53;
+const REVEAL_HOLD_MS = 420;
 const FLIGHT_EASE: [number, number, number, number] = [0.2, 0.8, 0.2, 1];
 const DESKTOP_MIN_WIDTH = 768;
 const LOADER_ATTR = "data-loader";
@@ -29,7 +32,7 @@ const DISK_ORIGIN_MS = 1140;
 const LEFT = ["b", "r", "u", "n"] as const;
 const RIGHT = ["g", "u", "i", "m", "a", "r", "ã", "e", "s"] as const;
 
-type Phase = "pending" | "wait" | "play" | "still" | "exit" | "fading" | "hidden";
+type Phase = "pending" | "wait" | "play" | "still" | "lay" | "exit" | "fading" | "hidden";
 type Visit = "unknown" | "first" | "skip";
 type Run = "wait" | "play" | "still";
 
@@ -42,6 +45,11 @@ type Flight = {
 type LoaderStyle = CSSProperties & { [name: `--${string}`]: string };
 
 const REST: Flight = { x: 0, y: 0, scale: 1 };
+
+function hasHero(): boolean {
+  if (typeof document === "undefined") return false;
+  return document.querySelector(".hb, [data-iso='world']") !== null;
+}
 
 function flightTarget(): Element | null {
   if (window.innerWidth >= DESKTOP_MIN_WIDTH) {
@@ -85,6 +93,39 @@ function keyedChars(chars: readonly string[]) {
   });
 }
 
+function applyLayDownState(
+  scene: HTMLElement | null,
+  plates: (HTMLElement | null)[],
+  state: LayDownState
+) {
+  if (scene) {
+    scene.style.transform = state.camera.transform;
+  }
+  for (let i = 0; i < 3; i += 1) {
+    const plEl = plates[i];
+    const plState = state.plates[i];
+    if (!plEl || !plState) continue;
+    plEl.style.transform = plState.transform;
+    plEl.style.setProperty("--br", plState.borderRadius);
+
+    const tag = plEl.querySelector<HTMLElement>(".g-loader-pl__tag");
+    if (tag) {
+      tag.style.transform = plState.tagTransform;
+      tag.style.opacity = String(plState.tagOpacity);
+    }
+
+    const paper = plEl.querySelector<HTMLElement>(".g-loader-pl__paper");
+    if (paper) {
+      paper.style.clipPath = plState.paperClipPath;
+    }
+
+    const edges = plEl.querySelectorAll<HTMLElement>(".g-loader-pl__e");
+    for (const edge of edges) {
+      edge.style.background = plState.edgeColor;
+    }
+  }
+}
+
 function NameSides({ mark }: { mark: ReactNode }) {
   return (
     <span className="g-loader__row">
@@ -123,6 +164,8 @@ export function LoadingScreen() {
   const nameRef = useRef<HTMLDivElement>(null);
   const giroRef = useRef<HTMLSpanElement>(null);
   const layersRef = useRef<HTMLDivElement>(null);
+  const sceneRef = useRef<HTMLDivElement>(null);
+  const platesRef = useRef<(HTMLDivElement | null)[]>([]);
   const inkRef = useRef<HTMLDivElement>(null);
   const targetRef = useRef<Element | null>(null);
   const started = useRef(false);
@@ -155,6 +198,10 @@ export function LoadingScreen() {
       return;
     }
     if (phase === "pending") return;
+    if (phase === "lay") {
+      document.documentElement.setAttribute(LOADER_ATTR, "lay");
+      return;
+    }
     const showExit = phase === "exit" || (phase === "fading" && leftStage.current);
     document.documentElement.setAttribute(LOADER_ATTR, showExit ? "exit" : "mounted");
   }, [phase]);
@@ -172,6 +219,35 @@ export function LoadingScreen() {
     return () => {
       cancelled = true;
     };
+  }, [phase]);
+
+  // Mede e aplica a pose inicial u = 0 na montagem/início de play
+  useEffect(() => {
+    if (phase !== "play" && phase !== "wait") return;
+    const desktop = window.innerWidth >= DESKTOP_MIN_WIDTH;
+    const cfg = desktop ? DESKTOP_STACK : MOBILE_STACK;
+    const W = window.innerWidth;
+    const H = window.innerHeight;
+    if (layersRef.current) {
+      layersRef.current.style.setProperty("--W", `${W}px`);
+      layersRef.current.style.setProperty("--H", `${H}px`);
+    }
+    const heroEl = document.querySelector(".hb");
+    const stageTop = heroEl ? heroEl.getBoundingClientRect().top : 0;
+    const initialOrigin = stackOrigin(cfg, W, H);
+    const tagEl = platesRef.current[0]?.querySelector<HTMLElement>(".g-loader-pl__tag");
+    const fontBody = tagEl ? parseFloat(getComputedStyle(tagEl).fontSize) || 20 : 20;
+
+    const initialState = computeLayDown({
+      u: 0,
+      cfg,
+      W,
+      H,
+      origin: initialOrigin,
+      stageTop,
+      fontBody,
+    });
+    applyLayDownState(sceneRef.current, platesRef.current, initialState);
   }, [phase]);
 
   useEffect(() => {
@@ -194,7 +270,7 @@ export function LoadingScreen() {
   }, [phase]);
 
   useEffect(() => {
-    if (phase !== "play" && phase !== "wait" && phase !== "still") return;
+    if (phase !== "play" && phase !== "wait" && phase !== "still" && phase !== "lay") return;
     const skip = (event: Event) => {
       if (event.type === "wheel" || event.type === "touchmove") {
         if (event.cancelable) event.preventDefault();
@@ -219,8 +295,8 @@ export function LoadingScreen() {
     };
   }, [phase]);
 
-  // Com a página pronta no começo, o sorriso entra aos 2560 ms e a saída aos 2780 ms. Se a página
-  // demora, o Giro segue em loading e a saída espera 220 ms depois que os dois estão prontos.
+  // Com a página pronta no começo, o sorriso entra aos 2560 ms e a saída aos 2780 ms.
+  // Na home (com hero completa) deita na câmera isométrica; fora da home ou se pular, faz cortina.
   useEffect(() => {
     if (phase !== "play") return;
     let pageReady = false;
@@ -238,7 +314,12 @@ export function LoadingScreen() {
       leaving = true;
       setFace("done");
       later(() => {
-        if (!cancelled) setPhase("exit");
+        if (cancelled) return;
+        if (stop.current || !hasHero()) {
+          setPhase("exit");
+        } else {
+          setPhase("lay");
+        }
       }, SMILE_MS);
     };
 
@@ -284,6 +365,107 @@ export function LoadingScreen() {
     };
   }, [phase]);
 
+  // Transição de Deitar (Issue #105)
+  useEffect(() => {
+    if (phase !== "lay") return;
+    const desktop = window.innerWidth >= DESKTOP_MIN_WIDTH;
+    const cfg = desktop ? DESKTOP_STACK : MOBILE_STACK;
+    const name = nameRef.current;
+    const mark = giroRef.current;
+    const target = flightTarget();
+
+    targetRef.current = target;
+    if (desktop && name && mark && target) {
+      const nameBox = name.getBoundingClientRect();
+      const oBox = mark.getBoundingClientRect();
+      const targetBox = target.getBoundingClientRect();
+      if (oBox.width > 0 && targetBox.width > 0) {
+        const oCx = oBox.left + oBox.width / 2;
+        const oCy = oBox.top + oBox.height / 2;
+        setOrigin(`${oCx - nameBox.left}px ${oCy - nameBox.top}px`);
+        setNameFlight({
+          x: targetBox.left + targetBox.width / 2 - oCx,
+          y: targetBox.top + targetBox.height / 2 - oCy,
+          scale: targetBox.width / oBox.width,
+        });
+      }
+    } else if (!desktop && mark && target) {
+      const measured = measureFlight(mark, target);
+      if (measured) setGiroFlight(measured);
+    }
+
+    const heroEl = document.querySelector(".hb");
+    const stageTop = heroEl ? heroEl.getBoundingClientRect().top : 0;
+    const W = window.innerWidth;
+    const H = window.innerHeight;
+    const origin = stackOrigin(cfg, W, H);
+    const tagEl = platesRef.current[0]?.querySelector<HTMLElement>(".g-loader-pl__tag");
+    const fontBody = tagEl ? parseFloat(getComputedStyle(tagEl).fontSize) || 20 : 20;
+
+    let animId: number;
+    let finished = false;
+    const t0 = performance.now();
+
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      cancelAnimationFrame(animId);
+
+      const finalState = computeLayDown({
+        u: 1,
+        cfg,
+        W,
+        H,
+        origin,
+        stageTop,
+        fontBody,
+      });
+      applyLayDownState(sceneRef.current, platesRef.current, finalState);
+
+      // Em u = 1 (950ms): o overlay do loader sai na hora (is-off / unmount), sem fade de 360ms
+      document.documentElement.removeAttribute(LOADER_ATTR);
+      const hero = document.querySelector(".hb");
+      if (hero) {
+        hero.classList.add("is-reveal");
+        setTimeout(() => {
+          hero.classList.remove("is-reveal");
+        }, REVEAL_HOLD_MS);
+      }
+      setPhase("hidden");
+    };
+
+    const step = (now: number) => {
+      if (finished) return;
+      const u = Math.max(0, Math.min(1, (now - t0) / LAY_DOWN_DURATION_MS));
+      const state = computeLayDown({
+        u,
+        cfg,
+        W,
+        H,
+        origin,
+        stageTop,
+        fontBody,
+      });
+      applyLayDownState(sceneRef.current, platesRef.current, state);
+
+      if (u >= 1) {
+        finish();
+      } else {
+        animId = requestAnimationFrame(step);
+      }
+    };
+
+    animId = requestAnimationFrame(step);
+    const timer = setTimeout(finish, LAY_DOWN_DURATION_MS);
+
+    return () => {
+      finished = true;
+      cancelAnimationFrame(animId);
+      clearTimeout(timer);
+    };
+  }, [phase]);
+
+  // Saída de Cortina (Issue #104)
   useEffect(() => {
     if (phase !== "exit") return;
     const desktop = window.innerWidth >= DESKTOP_MIN_WIDTH;
@@ -338,13 +520,14 @@ export function LoadingScreen() {
   if (phase === "exit") leftStage.current = true;
   if (phase === "hidden" || visit === "skip") return null;
 
+  const isLay = phase === "lay";
   const showExit = phase === "exit" || (phase === "fading" && leftStage.current);
   const run: Run =
     phase === "play" || phase === "still"
       ? phase
       : phase === "fading" && mode.current === "still"
         ? "still"
-        : showExit
+        : showExit || isLay
           ? mode.current
           : "wait";
   const giroFace: GiroState = phase === "still" || mode.current === "still" ? "idle" : face;
@@ -355,20 +538,62 @@ export function LoadingScreen() {
       role="status"
       data-run={run}
       data-exit={showExit ? "1" : undefined}
+      data-lay={isLay ? "1" : undefined}
       initial={{ opacity: 1 }}
       animate={{ opacity: phase === "fading" ? 0 : 1 }}
       transition={{ duration: FADE_MS / 1000 }}
     >
       <div ref={layersRef} className="g-loader__layers" aria-hidden="true">
-        <div className="g-loader__layer g-loader__layer--azul" />
-        <div className="g-loader__layer g-loader__layer--lima">
-          <span className="g-loader__layer-tag g-loader__tag">{`// ${t(locale, "hero.layer.tokens")}`}</span>
-        </div>
-        <div className="g-loader__layer g-loader__layer--papel">
-          <span className="g-loader__layer-tag g-loader__tag">{`// ${t(locale, "hero.layer.components")}`}</span>
-        </div>
-        <div className="g-loader__layer g-loader__layer--tinta">
-          <span className="g-loader__layer-tag g-loader__tag">{`// ${t(locale, "hero.layer.screen")}`}</span>
+        <div className="g-loader__bg g-loader__layer g-loader__layer--azul" />
+        <div ref={sceneRef} className="g-loader__scene">
+          {/* Placa 0: tokens */}
+          <div
+            ref={el => {
+              platesRef.current[0] = el;
+            }}
+            className="g-loader-pl g-loader-pl--0"
+            data-plate="0"
+          >
+            <i className="g-loader-pl__e" />
+            <i className="g-loader-pl__e" />
+            <i className="g-loader-pl__e" />
+            <div className="g-loader-pl__face g-loader__layer g-loader__layer--lima">
+              <i className="g-loader-pl__paper" />
+              <span className="g-loader-pl__tag g-loader__layer-tag g-loader__tag">{`// ${t(locale, "hero.layer.tokens")}`}</span>
+            </div>
+          </div>
+          {/* Placa 1: componentes */}
+          <div
+            ref={el => {
+              platesRef.current[1] = el;
+            }}
+            className="g-loader-pl g-loader-pl--1"
+            data-plate="1"
+          >
+            <i className="g-loader-pl__e" />
+            <i className="g-loader-pl__e" />
+            <i className="g-loader-pl__e" />
+            <div className="g-loader-pl__face g-loader__layer g-loader__layer--papel">
+              <i className="g-loader-pl__paper" />
+              <span className="g-loader-pl__tag g-loader__layer-tag g-loader__tag">{`// ${t(locale, "hero.layer.components")}`}</span>
+            </div>
+          </div>
+          {/* Placa 2: tela */}
+          <div
+            ref={el => {
+              platesRef.current[2] = el;
+            }}
+            className="g-loader-pl g-loader-pl--2"
+            data-plate="2"
+          >
+            <i className="g-loader-pl__e" />
+            <i className="g-loader-pl__e" />
+            <i className="g-loader-pl__e" />
+            <div className="g-loader-pl__face g-loader__layer g-loader__layer--tinta">
+              <i className="g-loader-pl__paper" />
+              <span className="g-loader-pl__tag g-loader__layer-tag g-loader__tag">{`// ${t(locale, "hero.layer.screen")}`}</span>
+            </div>
+          </div>
         </div>
       </div>
       <div className="g-loader__stage" aria-hidden="true">

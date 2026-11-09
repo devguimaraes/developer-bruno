@@ -52,6 +52,16 @@ beforeEach(() => {
   vi.mocked(useReducedMotion).mockReturnValue(false);
   vi.mocked(waitForFirstPaint).mockResolvedValue(undefined);
   mockFonts(() => Promise.resolve([{}]));
+  window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  }));
 });
 
 afterEach(() => {
@@ -374,5 +384,100 @@ describe("LoadingScreen", () => {
     });
     await advance(360);
     expect(screen.queryByRole("status")).toBeNull();
+  });
+
+  describe("transição de deitar (Issue #105)", () => {
+    it("com hero na página completa deita (data-loader='lay')", async () => {
+      const wrapper = addFlightTarget(
+        '<header data-site-header><span class="g-signature__o"><svg class="g-giro"></svg></span></header><section class="hb"><div data-iso="world"></div></section>'
+      );
+      render(<LoadingScreen />);
+      await advance(0);
+      await advance(2560);
+      expect(overlaySvg()?.getAttribute("data-state")).toBe("done");
+
+      await advance(220);
+      expect(document.documentElement.getAttribute("data-loader")).toBe("lay");
+      expect(screen.getByRole("status").getAttribute("data-lay")).toBe("1");
+
+      const hero = document.querySelector(".hb");
+      expect(hero?.classList.contains("is-reveal")).toBe(false);
+
+      // Em u = 1 (950 ms): o overlay sai na hora sem fade de 360 ms e dispara is-reveal
+      await advance(950);
+      expect(screen.queryByRole("status")).toBeNull();
+      expect(document.documentElement.hasAttribute("data-loader")).toBe(false);
+      expect(hero?.classList.contains("is-reveal")).toBe(true);
+
+      // Após 420 ms, a classe is-reveal sai da hero
+      await advance(420);
+      expect(hero?.classList.contains("is-reveal")).toBe(false);
+      wrapper.remove();
+    });
+
+    it("sem hero na página faz cortina (data-loader='exit')", async () => {
+      const wrapper = addFlightTarget(
+        '<header data-site-header><span class="g-signature__o"><svg class="g-giro"></svg></span></header>'
+      );
+      vi.spyOn(Element.prototype, "getBoundingClientRect").mockImplementation(function (
+        this: Element
+      ) {
+        return this.closest("[data-site-header]") ? rect(100, 20, 20) : rect(500, 300, 168);
+      });
+
+      render(<LoadingScreen />);
+      await advance(0);
+      await advance(2560);
+      await advance(220);
+
+      expect(document.documentElement.getAttribute("data-loader")).toBe("exit");
+      expect(screen.getByRole("status").getAttribute("data-exit")).toBe("1");
+      expect(screen.getByRole("status").hasAttribute("data-lay")).toBe(false);
+
+      await advance(780);
+      expect(screen.getByRole("status")).toBeTruthy();
+
+      await advance(360);
+      expect(screen.queryByRole("status")).toBeNull();
+      wrapper.remove();
+    });
+
+    it("tecla/clique durante a coreografia faz cortina mesmo com hero na página", async () => {
+      const wrapper = addFlightTarget(
+        '<header data-site-header><span class="g-signature__o"><svg class="g-giro"></svg></span></header><section class="hb"><div data-iso="world"></div></section>'
+      );
+      render(<LoadingScreen />);
+      await advance(0);
+      await advance(500);
+
+      expect(overlaySvg()?.getAttribute("data-state")).toBe("loading");
+      fireEvent.keyDown(window, { key: "Enter" });
+
+      expect(overlaySvg()?.getAttribute("data-state")).toBe("done");
+      expect(document.documentElement.getAttribute("data-loader")).toBe("exit");
+      expect(screen.getByRole("status").getAttribute("data-exit")).toBe("1");
+      expect(screen.getByRole("status").hasAttribute("data-lay")).toBe(false);
+
+      await advance(780);
+      await advance(360);
+      expect(screen.queryByRole("status")).toBeNull();
+      wrapper.remove();
+    });
+
+    it("clique com pointerDown durante a coreografia faz cortina", async () => {
+      const wrapper = addFlightTarget(
+        '<header data-site-header><span class="g-signature__o"><svg class="g-giro"></svg></span></header><section class="hb"><div data-iso="world"></div></section>'
+      );
+      render(<LoadingScreen />);
+      await advance(0);
+      await advance(300);
+
+      fireEvent.pointerDown(window);
+
+      expect(document.documentElement.getAttribute("data-loader")).toBe("exit");
+      expect(screen.getByRole("status").getAttribute("data-exit")).toBe("1");
+      expect(screen.getByRole("status").hasAttribute("data-lay")).toBe(false);
+      wrapper.remove();
+    });
   });
 });

@@ -1185,3 +1185,23 @@
 .hb.is-still .hb-shadow {
   display: none;
 }
+
+/* ---------- Transição do loader (Issue #105) ---------- */
+html[data-loader="lay"] [data-iso="world"],
+html[data-loader="lay"] .hb-line,
+html[data-loader="lay"] [data-site-header] .g-signature,
+html[data-loader="lay"] .g-tabbar__giro .g-giro {
+  visibility: hidden;
+}
+
+.hb.is-reveal .iso-pl__face > *,
+.hb.is-reveal [data-layer="3"] > *,
+.hb.is-reveal .hb-line {
+  animation: g-hero-fade-in 320ms linear both;
+}
+
+@keyframes g-hero-fade-in {
+  from {
+    opacity: 0;
+  }
+}
