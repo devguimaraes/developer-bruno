@@ -1,15 +1,17 @@
 import type { MutableRefObject, RefObject } from "react";
 import { useEffect, useRef } from "react";
-import type { Ball, BallConfig, BallWorld, Letter, LetterSpring } from "./bounce";
+import { playGiroMoment } from "@/components/brand/giro-states";
+import type { EntryPathBall, EntryPathConfig, Letter, LetterSpring } from "./entry-path";
 import {
-  BALL_ELASTICITY,
-  DESKTOP_BALL,
+  computePileContact,
+  createEntrySegments,
+  DESKTOP_ENTRY_PATH,
   dipLetters,
-  launchBall,
-  MOBILE_BALL,
-  stepBall,
+  lookAhead,
+  MOBILE_ENTRY_PATH,
   stepLetterSprings,
-} from "./bounce";
+  stepPath,
+} from "./entry-path";
 import type { Camera, Point, StackConfig, StackMood, Station } from "./stack";
 import {
   approach,
@@ -24,6 +26,7 @@ import {
   MOBILE_STACK,
   makeCamera,
   pointerOpen,
+  project,
   RIDE_ARRIVE,
   RIDE_MAX_SPEED,
   RIDE_SMOOTH_S,
@@ -60,12 +63,7 @@ const MAX_DT_S = 0.05;
 // Rapidez com que o giro do anel acompanha a velocidade: alto o bastante para parecer preso ao chão.
 const ROLL_FOLLOW = 10;
 const GROW_RATE = 7;
-// Rastro: vida em s, pontos guardados e graus por radiano do giro do anel.
-const TRAIL_LIFE_S = 0.32;
 const TRAIL_MAX = 90;
-const DEG_PER_RAD = 180 / Math.PI;
-// Sombra no chão: opacidade máxima, antes de a distância reduzir.
-const SHADOW_OPACITY = 0.34;
 
 export type HudMood = StackMood | "air" | "roll";
 
@@ -133,10 +131,6 @@ function restartClass(el: Element, ...names: string[]): void {
   el.classList.add(...names);
 }
 
-function bound(v: number, limit: number): number {
-  return Math.max(-limit, Math.min(limit, v));
-}
-
 function createRuntime(
   stage: HTMLElement,
   rider: HTMLButtonElement,
@@ -157,14 +151,12 @@ function createRuntime(
   const hudState = stage.querySelector<HTMLElement>('[data-hud="state"]');
   const hudLayer = stage.querySelector<HTMLElement>('[data-hud="layer"]');
   const hudOpen = stage.querySelector<HTMLElement>('[data-hud="open"]');
-  // Elementos da bola: opcionais, a pilha roda sem eles.
   const title = stage.querySelector<HTMLElement>(".hb-title");
   const trailPath = stage.querySelector<SVGPathElement>(".hb-trail__p");
-  const shadow = stage.querySelector<HTMLElement>(".hb-shadow");
   const desktopQuery = window.matchMedia(DESKTOP_QUERY);
 
   let cfg: StackConfig = desktopQuery.matches ? DESKTOP_STACK : MOBILE_STACK;
-  let ballCfg: BallConfig = desktopQuery.matches ? DESKTOP_BALL : MOBILE_BALL;
+  let entryCfg: EntryPathConfig = desktopQuery.matches ? DESKTOP_ENTRY_PATH : MOBILE_ENTRY_PATH;
   let scale = 1;
   let origin: Point = { x: 0, y: 0 };
   let cam: Camera | null = null;
@@ -181,9 +173,8 @@ function createRuntime(
   let rpVel = 0;
   // A viagem só acaba quando o Giro assenta; a chegada (done) dispara um pouco antes, já parando.
   let ride: { to: number; arrived: boolean; done?: () => void } | null = null;
-  // A bola da entrada, o mundo em que ela quica e as letras medidas (mesma ordem do DOM).
-  let ball: Ball | null = null;
-  let world: BallWorld | null = null;
+  // A bola da entrada desenhada em arcos e as letras medidas (mesma ordem do DOM).
+  let ball: EntryPathBall | null = null;
   let letters: Letter[] = [];
   let letterEls: HTMLElement[] = [];
   let springs: LetterSpring[] = [];
@@ -255,8 +246,8 @@ function createRuntime(
     if (hudOpen) hudOpen.textContent = `${Math.round(Math.max(0, open[2] ?? 0) * 100)}%`;
   };
 
-  const setHud = (mood: HudMood | null, layer?: HudLayer): void => {
-    if (mood) hud.mood = mood;
+  const setHud = (nextMood: HudMood | null, layer?: HudLayer): void => {
+    if (nextMood) hud.mood = nextMood;
     if (layer) hud.layer = layer;
     writeHud();
   };
@@ -285,6 +276,11 @@ function createRuntime(
   };
 
   const squash = (): void => restartClass(inner, "is-squash");
+
+  const squint = (): void => {
+    svg.classList.add("is-squint");
+    after(130, () => svg.classList.remove("is-squint"));
+  };
 
   // ---------- Geometria ----------
 
@@ -340,10 +336,6 @@ function createRuntime(
     if (away) placeSeat();
   };
 
-  // Primeira estação da linha: o chão da bola e o x onde ela para.
-  const floorStation = (): Station | null =>
-    cam ? (stations(cfg, cam, zs, scale)[0] ?? null) : null;
-
   // dt > 0 só no laço: é ele que integra o giro do anel.
   const drawLine = (dt = 0): void => {
     if (!cam) return;
@@ -373,8 +365,6 @@ function createRuntime(
     if (mode !== "rail") return;
     const pos = riderAt(st, rp);
     if (dt > 0) {
-      // O anel gira pela velocidade, não pelo deslocamento do quadro: um quadro lento não vira
-      // um salto de ângulo, e o loading soma a volta dele em vez de trocar de animação.
       const moved = lastPos ? -(pos.y - lastPos.y) + (pos.x - lastPos.x) * 0.5 : 0;
       const target = (moved * ROLL_PER_PX) / dt + (mood === "loading" ? LOADING_SPIN : 0);
       spinVel = approach(spinVel, target, ROLL_FOLLOW, dt);
@@ -397,7 +387,6 @@ function createRuntime(
     for (const [k, n] of stops) n.classList.toggle("is-on", k === i);
   };
 
-  // Rótulo da linha: aparece digitado quando o Giro chega na estação e some quando a pilha fecha.
   const showTag = (i: number): void => {
     tags.get(i)?.classList.add("is-shown");
   };
@@ -422,24 +411,33 @@ function createRuntime(
   };
 
   // Na estação, o Giro olha para a camada, o sinal corre pela ligação e a camada dispara.
+  const arrive = (i: number, error: boolean, face?: StackMood): void => {
+    setLit(i);
+    showTag(i);
+    const link = links.get(i);
+    if (link) restartClass(link, "is-live");
+    setHud(null, { kind: "at", layer: i });
+    after(FIRE_DELAY_MS, () => fire(i, error));
+    if (face === "done") {
+      setMood("done");
+      after(1000, () => {
+        if (mode === "rail" && !ride && mood === "done") setMood("idle", true);
+      });
+      return;
+    }
+    for (const beat of visitBeats(i, error)) {
+      const run = (): void => {
+        if (beat.clearError) layers[1]?.classList.remove("is-error");
+        setMood(beat.mood, beat.watch === true);
+      };
+      if (beat.at === 0) run();
+      else after(beat.at, run);
+    }
+  };
+
   const visit = (i: number, error: boolean): void => {
     if (mode !== "rail") return;
-    startRide(i, () => {
-      setLit(i);
-      showTag(i);
-      const link = links.get(i);
-      if (link) restartClass(link, "is-live");
-      setHud(null, { kind: "at", layer: i });
-      after(FIRE_DELAY_MS, () => fire(i, error));
-      for (const beat of visitBeats(i, error)) {
-        const run = (): void => {
-          if (beat.clearError) layers[1]?.classList.remove("is-error");
-          setMood(beat.mood, beat.watch === true);
-        };
-        if (beat.at === 0) run();
-        else after(beat.at, run);
-      }
-    });
+    startRide(i, () => arrive(i, error));
   };
 
   const home = (done?: () => void): void => {
@@ -477,10 +475,8 @@ function createRuntime(
     after(LOOP_AFTER_LAND_MS, loop);
   };
 
-  // ---------- Bola ----------
+  // ---------- Entrada desenhada (Issue #107) ----------
 
-  // Topo de tinta de cada letra, medido no DOM: a caixa do span é a da fonte, não a do desenho.
-  // Sem canvas (jsdom) usa o topo da caixa. Zera o transform antes de medir.
   const measure = (): void => {
     if (!title) return;
     if (inkCtx === undefined) inkCtx = document.createElement("canvas").getContext("2d");
@@ -502,7 +498,6 @@ function createRuntime(
     const groups = Array.from(title.querySelectorAll<HTMLElement>(".hb-title__line"), lineEl =>
       Array.from(lineEl.querySelectorAll<HTMLElement>(".hb-ch"))
     );
-    // Zera tudo antes de ler: escrever e medir letra a letra força um reflow por letra.
     for (const group of groups) for (const n of group) n.style.transform = "";
     groups.forEach((group, line) => {
       for (const n of group) {
@@ -519,52 +514,78 @@ function createRuntime(
     letters = next;
     letterEls = els;
     springs = next.map(() => ({ y: 0, v: 0 }));
-    if (world) world.letters = letters;
   };
 
-  // A bola: o Giro segue o ponto da física, amassa pela normal do contato e estica na direção do voo.
-  const placeBall = (): void => {
-    if (!ball || !world) return;
-    const b = ball;
-    const R = world.R;
-    rider.style.transform = `translate(${b.x.toFixed(1)}px, ${b.y.toFixed(1)}px)`;
-    // Amasso ao longo da normal do contato, a partir do ponto que tocou.
-    const cx = -b.nx * R;
-    const cy = -b.ny * R;
-    const a = Math.atan2(b.nx, -b.ny);
-    const pressed = `translate(${cx.toFixed(1)}px, ${cy.toFixed(1)}px) rotate(${a.toFixed(3)}rad) scale(${(1 + b.q * 0.7).toFixed(3)}, ${(1 - b.q).toFixed(3)}) rotate(${(-a).toFixed(3)}rad) translate(${(-cx).toFixed(1)}px, ${(-cy).toFixed(1)}px)`;
-    const dir = Math.atan2(b.vy, b.vx);
-    const stretched = `rotate(${dir.toFixed(3)}rad) scale(${(1 + b.s).toFixed(3)}, ${(1 / (1 + b.s)).toFixed(3)}) rotate(${(-dir).toFixed(3)}rad)`;
-    inner.style.transform = `${pressed} ${stretched}`;
-    inner.style.setProperty("--gscale", gscale.toFixed(3));
-    svg.style.setProperty("--roll", `${roll.toFixed(1)}deg`);
-    // Os olhos vão na frente do movimento.
-    look(bound(b.vx / 90, 5), bound(b.vy / 300, 4));
-    // Sombra só no chão: some por cima do título e encolhe com a altura.
-    if (shadow) {
-      const line0 = letters.filter(L => L.line === 0);
-      const lastOfLine0 = line0[line0.length - 1];
-      const topOfLine0 = Math.max(...line0.map(L => L.top));
-      const overTitle =
-        lastOfLine0 !== undefined && b.x < lastOfLine0.r + R && b.y < topOfLine0 + 40;
-      const h = Math.max(0, world.floorY - b.y);
-      const near = Math.max(0, 1 - h / 420);
-      shadow.style.opacity = overTitle ? "0" : (SHADOW_OPACITY * near).toFixed(3);
-      shadow.style.transform = `translate(${b.x.toFixed(1)}px, ${(world.floorY + R).toFixed(1)}px) scale(${(0.5 + 0.5 * near).toFixed(3)})`;
+  const hitPile = (): void => {
+    openAuto = 1;
+    for (let i = 1; i < LAYER_COUNT; i += 1) vel[i] = -2.4;
+    lift[2] = -9;
+    lift[1] = -5;
+    const top = layers[2];
+    if (top) {
+      restartClass(top, "is-hit");
+      after(260, () => top.classList.remove("is-hit"));
+    }
+    svg.classList.remove("is-wide");
+    playGiroMoment(svg, "dizzy");
+    setHud("loading", { kind: "to", layer: 0 });
+  };
+
+  const landStation = (): void => {
+    ball = null;
+    inner.style.transform = "";
+    mode = "rail";
+    rp = 0;
+    rpVel = 0;
+    spinVel = 0;
+    lastPos = null;
+    gscale = 1;
+    squash();
+    arrive(0, false, "done");
+    loopN = 1;
+    // O ciclo segue a agenda atual a partir da visita à camada 1, descontando o que já passou
+    const base = 1100;
+    for (const step of cycleSteps(loopN)) {
+      if (step.at <= base) continue;
+      after(step.at - base, () => {
+        if (step.kind === "visit") visit(step.layer, step.error);
+        else if (step.kind === "home") home();
+        else if (step.kind === "next") loop();
+      });
     }
   };
 
-  // Tira a bola de cena: o Giro volta a ser da linha, sem amasso, sombra, rastro nem letras afundadas.
+  const placeBall = (): void => {
+    if (!ball) return;
+    const b = ball;
+    const R = entryCfg.R;
+    rider.style.transform = `translate(${b.x.toFixed(1)}px, ${b.y.toFixed(1)}px)`;
+    const cx = -b.nx * R;
+    const cy = -b.ny * R;
+    const a = Math.atan2(b.nx, -b.ny);
+    const q = b.q;
+    const dir = Math.atan2(b.vy, b.vx);
+    const pressed = `translate(${cx.toFixed(1)}px, ${cy.toFixed(1)}px) rotate(${a.toFixed(3)}rad) scale(${(1 + q * 0.7).toFixed(3)}, ${(1 - q).toFixed(3)}) rotate(${(-a).toFixed(3)}rad) translate(${(-cx).toFixed(1)}px, ${(-cy).toFixed(1)}px)`;
+    const stretched = `rotate(${dir.toFixed(3)}rad) scale(${(1 + b.s).toFixed(3)}, ${(1 / (1 + b.s)).toFixed(3)}) rotate(${(-dir).toFixed(3)}rad)`;
+    inner.style.transform = `${pressed} ${stretched}`;
+    inner.style.setProperty("--gscale", b.gscale.toFixed(3));
+    svg.style.setProperty("--roll", `${b.roll.toFixed(1)}deg`);
+    const lookDir = lookAhead(b);
+    look(lookDir.x, lookDir.y);
+  };
+
   const endBall = (): void => {
     ball = null;
-    world = null;
     mode = "rail";
     gscale = 1;
     inner.style.transform = "";
-    if (shadow) shadow.style.opacity = "0";
+    svg.classList.remove("is-squint", "is-wide");
     trail = [];
     trailPath?.setAttribute("d", "");
-    for (const el of letterEls) el.style.transform = "";
+    for (const el of letterEls) {
+      el.style.transform = "";
+      el.classList.remove("is-tramp");
+    }
     for (const spring of springs) {
       spring.y = 0;
       spring.v = 0;
@@ -572,68 +593,93 @@ function createRuntime(
     springsLive = false;
   };
 
-  // Chegou na estação: o Giro assenta, comemora e o ciclo da pilha começa.
-  const park = (): void => {
-    ball = null;
-    world = null;
-    inner.style.transform = "";
-    if (shadow) shadow.style.opacity = "0";
-    mode = "rail";
-    rp = -1;
-    rpVel = 0;
-    spinVel = 0;
-    lastPos = null;
-    gscale = 1;
-    squash();
-    setMood("done");
-    setHud(null, { kind: "floor" });
-    after(700, () => {
-      if (mode === "rail" && !ride && mood === "done") setMood("idle");
-    });
-    after(900, loop);
-  };
-
-  // Lança o Giro da origem. A bola sai com a física de bounce.ts e o Giro já vai para a origem
-  // no mesmo quadro, senão aparece um quadro no canto do palco.
   const launch = (): void => {
-    const s0 = floorStation();
+    if (!cam) {
+      launchQueued = false;
+      return;
+    }
+    const st = stations(cfg, cam, zs, scale);
+    const s0 = st[1]; // estação 0 (tokens)
     if (!s0) {
       launchQueued = false;
       return;
     }
     measure();
-    const src = findSource();
-    const o = stage.getBoundingClientRect();
-    const b = src?.getBoundingClientRect();
-    const from = b
-      ? { x: b.left + b.width / 2 - o.left, y: b.top + b.height / 2 - o.top }
-      : { x: origin.x, y: origin.y - 200 };
-    const w: BallWorld = {
-      letters,
-      floorY: s0.y,
-      stationX: s0.x,
-      width: stage.clientWidth,
-      R: cfg.gs / 2,
-      e: BALL_ELASTICITY,
-    };
-    world = w;
-    ball = launchBall(w, ballCfg, from);
-    trail = [];
-    lastPos = null;
-    if (!ball) {
-      park();
-      // Sem bola o palco também precisa do estado de trilho (is-away, botão focável).
+    if (letters.length === 0) {
+      landStation();
       syncSource();
       return;
     }
+    const src = findSource();
+    const stageRect = stage.getBoundingClientRect();
+    const srcRect = src?.getBoundingClientRect();
+    const from: Point = srcRect
+      ? {
+          x: srcRect.left + srcRect.width / 2 - stageRect.left,
+          y: srcRect.top + srcRect.height / 2 - stageRect.top,
+        }
+      : { x: origin.x, y: origin.y - 200 };
+
+    const topLayer = layers[2];
+    let pilePoint: Point;
+    if (topLayer) {
+      const r = topLayer.getBoundingClientRect();
+      pilePoint = {
+        x: r.left + r.width * 0.5 - stageRect.left,
+        y: r.top + r.height * 0.35 - stageRect.top,
+      };
+    } else {
+      const p = project(cam, cfg.s * 2 + cfg.lw / 2, -cfg.s * 2 + cfg.lh / 2, zs[2] ?? cfg.Z0);
+      pilePoint = computePileContact(p, entryCfg.R);
+    }
+
+    const stationPoint: Point = { x: s0.x, y: s0.y };
+    const segs = createEntrySegments({
+      cfg: entryCfg,
+      start: from,
+      letters,
+      pilePoint,
+      stationPoint,
+      stageTop: 0,
+    });
+
+    if (segs.length === 0) {
+      landStation();
+      syncSource();
+      return;
+    }
+
+    trail = [];
+    lastPos = null;
     mode = "ball";
-    gscale = b && b.width > 0 ? Math.max(0.2, b.width / cfg.gs) : 1;
+    const srcScale = srcRect && srcRect.width > 0 ? Math.max(0.2, srcRect.width / cfg.gs) : 1;
+    gscale = srcScale;
+    ball = {
+      x: from.x,
+      y: from.y,
+      vx: segs[0].vx,
+      vy: segs[0].vy,
+      segs,
+      i: 0,
+      t: 0,
+      w: 0,
+      roll: 0,
+      q: 0,
+      qv: 0,
+      nx: 0,
+      ny: -1,
+      s: 0,
+      scale: srcScale,
+      gscale: srcScale,
+      done: false,
+      cfg: entryCfg,
+    };
     syncSource();
+    setMood("idle");
     setHud("air", { kind: "to", layer: -1 });
     placeBall();
   };
 
-  // A origem encolhe antes de soltar o Giro, como quem pega impulso.
   const prelaunch = (): void => {
     const src = findSource();
     if (src && typeof src.animate === "function") {
@@ -654,13 +700,12 @@ function createRuntime(
     if (trail.length > TRAIL_MAX) trail.shift();
   };
 
-  // Rastro em lima como cauda de cometa: uma faixa só, larga atrás do Giro e afinando até um
-  // ponto conforme o caminho envelhece. Uma faixa, e não segmentos, para as emendas não somarem
-  // opacidade e virarem contas mais claras.
+  const trailLifeS = (): number => (desktopQuery.matches ? 0.32 : 0.19);
+
   const drawTrail = (): void => {
     if (!trailPath) return;
-    trail = trail.filter(p => simT - p.t < TRAIL_LIFE_S);
-    // Com um ponto só não há faixa, mas ele fica: o próximo quadro soma o segundo.
+    const life = trailLifeS();
+    trail = trail.filter(p => simT - p.t < life);
     if (trail.length < 2) {
       if (trailPath.getAttribute("d")) trailPath.setAttribute("d", "");
       return;
@@ -680,7 +725,7 @@ function createRuntime(
       const len = Math.hypot(dx, dy) || 1;
       dx /= len;
       dy /= len;
-      const f = Math.min(1, (simT - p.t) / TRAIL_LIFE_S);
+      const f = Math.min(1, (simT - p.t) / life);
       const h = (w0 / 2) * (1 - f) ** 0.9;
       left.push(`${(p.x - dy * h).toFixed(1)},${(p.y + dx * h).toFixed(1)}`);
       right.push(`${(p.x + dy * h).toFixed(1)},${(p.y - dx * h).toFixed(1)}`);
@@ -688,7 +733,6 @@ function createRuntime(
     trailPath.setAttribute("d", `M${left.join("L")}L${right.reverse().join("L")}Z`);
   };
 
-  // As letras afundam pela mola de bounce.ts e voltam ao lugar; o transform sai quando assentam.
   const stepLetters = (dt: number): void => {
     if (!springsLive) return;
     const settled = stepLetterSprings(springs, dt);
@@ -713,29 +757,38 @@ function createRuntime(
     tilt.x = approach(tilt.x, tilt.tx, 5, dt);
     tilt.y = approach(tilt.y, tilt.ty, 5, dt);
     applyCamera(scroll);
-    // Abertura: uma mola por camada, as de cima mais rápidas, então abre em cascata.
     const e = 1 - (cam?.fade ?? 1);
     stepSprings(open, vel, Math.max(openAuto, openPtr) * (1 - e), dt);
     for (let i = 0; i < LAYER_COUNT; i += 1) {
       lift[i] = approach(lift[i] ?? 0, i === hover ? HOVER_LIFT : 0, 10, dt);
     }
     renderLayers();
-    if (ball && world) {
-      const s0 = floorStation();
-      if (s0) {
-        world.floorY = s0.y;
-        world.stationX = s0.x;
+
+    if (ball) {
+      const r = stepPath(ball, dt);
+      roll = ball.roll % 360;
+      if (r.hit) {
+        if (r.hit.type === "letter") {
+          dipLetters(springs, letters, r.hit.index ?? 0, r.hit.vi);
+          springsLive = true;
+          squint();
+        } else if (r.hit.type === "dot") {
+          dipLetters(springs, letters, r.hit.index ?? letters.length - 1, r.hit.vi * 2);
+          springsLive = true;
+          const dotEl = letterEls[r.hit.index ?? letterEls.length - 1];
+          if (dotEl) restartClass(dotEl, "is-tramp");
+          svg.classList.remove("is-squint");
+          svg.classList.add("is-wide");
+        } else if (r.hit.type === "pile") {
+          hitPile();
+        } else if (r.hit.type === "land") {
+          landStation();
+        }
       }
-      const r = stepBall(ball, world, ballCfg, dt);
-      roll = (roll + ball.w * dt * DEG_PER_RAD) % 360;
-      if (r.contact && r.contact.letter >= 0) {
-        dipLetters(springs, letters, r.contact.letter, r.contact.vi);
-        springsLive = true;
+      if (ball) {
+        pushTrail(ball);
+        placeBall();
       }
-      if (r.rolled) setHud("roll");
-      pushTrail(ball);
-      if (r.parked) park();
-      else placeBall();
     } else if (ride) {
       const m = ride;
       const next = smoothDamp(rp, m.to, rpVel, RIDE_SMOOTH_S, RIDE_MAX_SPEED, dt);
@@ -748,6 +801,7 @@ function createRuntime(
       }
       if (ride === m && rp === m.to) ride = null;
     }
+
     stepLetters(dt);
     drawTrail();
     if (jumpV !== 0 || jumpY > 0) {
@@ -779,7 +833,6 @@ function createRuntime(
 
   const loaderOn = (): boolean => document.documentElement.hasAttribute(LOADER_ATTR);
 
-  // Enquanto a tela de carregamento está de pé, o lançamento espera o atributo sair.
   const queueLaunch = (ms: number): void => {
     if (mode !== "seat" || launchQueued || loaderOn()) return;
     launchQueued = true;
@@ -790,7 +843,6 @@ function createRuntime(
     if (running) queueLaunch(LAUNCH_AFTER_LOADER_MS);
   };
 
-  // Ao voltar para a tela, o ciclo recomeça do chão em vez de retomar timers pela metade.
   const resume = (): void => {
     clearTimers();
     hideTags();
@@ -798,12 +850,10 @@ function createRuntime(
     rpVel = 0;
     spinVel = 0;
     lastPos = null;
-    // Uma pausa no meio de uma batida cancelou o timer que limparia a camada.
     for (const n of layers) n.classList.remove("is-fire", "is-fresh", "is-error");
     if (mode === "seat") {
       queueLaunch(LAUNCH_MS);
     } else {
-      // Uma bola no meio da entrada não volta: o Giro vai para a estação e o ciclo recomeça.
       if (mode === "ball") endBall();
       restartCycle();
     }
@@ -826,7 +876,6 @@ function createRuntime(
     }
   };
 
-  // Movimento reduzido: a pilha meio aberta, parada, com o Giro na estação de partida.
   const renderStill = (): void => {
     mode = "rail";
     rp = -1;
@@ -835,7 +884,6 @@ function createRuntime(
     renderLayers();
     drawLine();
     setLit(-1);
-    // Sem movimento, os quatro rótulos ficam à mostra de uma vez.
     for (let i = 0; i < LAYER_COUNT; i += 1) showTag(i);
     setMood("idle");
     syncSource();
@@ -862,7 +910,6 @@ function createRuntime(
     setLit(i >= 0 ? i : !ride && at >= 0 && Math.abs(rp - at) < 0.01 ? at : -1);
   };
 
-  // Ponteiro fino: chegar perto abre a pilha, a posição inclina a câmera e a camada sob ele sobe.
   const onMove = (e: PointerEvent): void => {
     if (e.pointerType !== "mouse" || !cam || mode === "seat") return;
     if (overCopy(e)) {
@@ -885,7 +932,6 @@ function createRuntime(
     setHover(-1);
   };
 
-  // Clique numa camada: o Giro vai até a estação dela e o ciclo recomeça depois.
   const onClick = (e: MouseEvent): void => {
     if (!cam || mode !== "rail" || !running) return;
     if (e.target instanceof Element && e.target.closest("a, button")) return;
@@ -902,7 +948,6 @@ function createRuntime(
   const onHop = (): void => {
     if (reduced || mode !== "rail" || jumpY > 0) return;
     jumpV = HOP_SPEED;
-    // Sem laço rodando não há quem desça o Giro.
     if (!running) jumpV = 0;
   };
 
@@ -911,12 +956,11 @@ function createRuntime(
     else layout(readScroll());
     if (mode === "ball") {
       measure();
-      if (world) world.width = stage.clientWidth;
     }
   };
 
   const onVariant = (): void => {
-    ballCfg = desktopQuery.matches ? DESKTOP_BALL : MOBILE_BALL;
+    entryCfg = desktopQuery.matches ? DESKTOP_ENTRY_PATH : MOBILE_ENTRY_PATH;
     const next = desktopQuery.matches ? DESKTOP_STACK : MOBILE_STACK;
     if (next === cfg) return;
     cfg = next;
@@ -924,7 +968,6 @@ function createRuntime(
     source = null;
     if (mode === "ball") {
       endBall();
-      // Fora da tela o resume() recomeça o ciclo quando a pilha voltar.
       if (running) restartCycle();
     }
     onResize();
@@ -963,7 +1006,6 @@ function createRuntime(
     io.observe(stage);
     mo = new MutationObserver(onLoader);
     mo.observe(document.documentElement, { attributes: true, attributeFilter: [LOADER_ATTR] });
-    // Quando a fonte assenta, o topo de tinta das letras muda: mede de novo.
     document.fonts?.ready.then(() => {
       if (!destroyed) measure();
     });
@@ -972,12 +1014,10 @@ function createRuntime(
 
   const relabel = (): void => {
     writeHud();
-    // O React já trocou as letras; a bola e as molas precisam das novas posições.
     if (mode === "ball" || springsLive) measure();
   };
 
   const destroy = (): void => {
-    // Com a bola no ar, tira o que ela escreveu inline: o runtime novo começa do zero.
     if (mode === "ball") endBall();
     destroyed = true;
     running = false;

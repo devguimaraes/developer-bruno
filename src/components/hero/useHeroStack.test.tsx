@@ -134,29 +134,60 @@ async function advanceUntilState(container: HTMLElement, state: string): Promise
   throw new Error(`o painel não chegou a "${state}" em ${LIMIT_MS}ms`);
 }
 
-describe("useHeroStack, entrada quicando", { timeout: SIM_TIMEOUT_MS }, () => {
-  it("depois do lançamento o painel passa por no ar e termina em pronto, com o Giro estacionado", async () => {
+describe("useHeroStack, entrada desenhada no trajeto novo", { timeout: SIM_TIMEOUT_MS }, () => {
+  it("depois do lançamento o painel passa por no ar e termina em pronto, com o Giro na estação de tokens", async () => {
     mockReducedMotion(false);
     const { container } = render(<Hero />);
 
     await advanceUntilState(container, "no ar");
     await advanceUntilState(container, "pronto");
 
-    // Estacionado: a bola largou o transform do Giro e a sombra sumiu.
+    // Estacionado em tokens: transform limpo e rótulo de tokens ligado
     expect(container.querySelector<HTMLElement>(".hb-rider__in")?.style.transform).toBe("");
-    expect(container.querySelector<HTMLElement>(".hb-shadow")?.style.opacity).toBe("0");
+    expect(shownTags(container)).toEqual(["0"]);
   });
 
-  it("desenha o rastro enquanto a bola está no ar", async () => {
+  it("desenha o rastro enquanto o Giro está no ar", async () => {
     mockReducedMotion(false);
     const { container } = render(<Hero />);
 
     await advanceUntilState(container, "no ar");
-    // Alguns quadros de voo: o histórico precisa juntar pontos de um quadro para o outro.
+    // Alguns quadros de voo: o histórico junta pontos de um quadro para o outro.
     await act(async () => {
       await vi.advanceTimersByTimeAsync(FRAME_MS * 10);
     });
 
     expect(container.querySelector(".hb-trail__p")?.getAttribute("d")).toMatch(/^M.+Z$/);
+  });
+
+  it("a pilha abre no impacto e a camada 2 acende com is-hit", async () => {
+    mockReducedMotion(false);
+    const { container } = render(<Hero />);
+
+    let sawHit = false;
+    for (let t = 0; t <= LIMIT_MS; t += FRAME_MS) {
+      if (container.querySelector('[data-layer="2"]')?.classList.contains("is-hit")) {
+        sawHit = true;
+        break;
+      }
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(FRAME_MS);
+      });
+    }
+
+    expect(sawHit).toBe(true);
+  });
+
+  it("o pouso em tokens dispara a camada 0 com is-fire", async () => {
+    mockReducedMotion(false);
+    const { container } = render(<Hero />);
+
+    await advanceUntilState(container, "pronto");
+    // Aguarda o FIRE_DELAY_MS do disparo da camada 0
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(300);
+    });
+
+    expect(container.querySelector('[data-layer="0"]')?.classList.contains("is-fire")).toBe(true);
   });
 });

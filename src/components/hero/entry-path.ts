@@ -413,6 +413,18 @@ export function stepPath(
   return { hit: hitResult, done: ball.done };
 }
 
+/**
+ * Os olhos vão na frente: olham para o próximo ponto de contato, não para onde ele já está indo.
+ */
+export function lookAhead(b: EntryPathBall): Point {
+  const seg = b.segs[b.i] ?? b.segs[b.segs.length - 1];
+  if (!seg) return { x: 0, y: 0 };
+  const dx = seg.bx - b.x;
+  const dy = seg.by - b.y;
+  const d = Math.hypot(dx, dy) || 1;
+  return { x: (6 * dx) / d, y: (5 * dy) / d };
+}
+
 /** Afunda a letra tocada e 35% nas vizinhas da mesma linha; ignora vi <= 120. */
 export function dipLetters(
   springs: LetterSpring[],

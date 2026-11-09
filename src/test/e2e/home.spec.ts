@@ -60,7 +60,7 @@ test.describe("Navegação Principal", () => {
       await page.goto("/");
       await waitForHydration(page);
 
-      // Amostra a cada quadro até o Giro estacionar: no celular a bola bate nas bordas da tela.
+      // Amostra a cada quadro até o Giro estacionar na estação de tokens.
       const entrance = await page.evaluate(
         () =>
           new Promise<{ widest: number; width: number; parked: boolean }>(resolve => {
@@ -68,13 +68,12 @@ test.describe("Navegação Principal", () => {
             const width = window.innerWidth;
             const t0 = performance.now();
             let widest = document.documentElement.scrollWidth;
-            // "rolando" só aparece na entrada; o primeiro "pronto" depois dele é o Giro estacionado.
-            let rolled = false;
+            let air = false;
             const tick = (): void => {
               widest = Math.max(widest, document.documentElement.scrollWidth);
               const state = hud?.textContent;
-              if (state === "rolando") rolled = true;
-              const parked = rolled && state === "pronto";
+              if (state === "no ar") air = true;
+              const parked = air && state === "pronto";
               if (parked || performance.now() - t0 > 9000) {
                 resolve({ widest, width, parked });
                 return;
