@@ -1,8 +1,8 @@
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GIRO_MOMENT_EVENT } from "@/components/brand/giro-states";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { t } from "@/lib/i18n";
+import { setLocale } from "@/lib/i18n";
 import { LoadingScreen } from "./LoadingScreen";
 import { LOADED_KEY } from "./loader-flag";
 import { waitForFirstPaint } from "./ready";
@@ -48,14 +48,17 @@ beforeEach(() => {
   vi.useFakeTimers();
   sessionStorage.clear();
   setInnerWidth(1440);
+  setLocale("pt");
   vi.mocked(useReducedMotion).mockReturnValue(false);
   vi.mocked(waitForFirstPaint).mockResolvedValue(undefined);
   mockFonts(() => Promise.resolve([{}]));
 });
 
 afterEach(() => {
+  cleanup();
   vi.useRealTimers();
   vi.restoreAllMocks();
+  setLocale("pt");
   document.documentElement.removeAttribute("data-loader");
   document.body.innerHTML = "";
 });
@@ -77,7 +80,7 @@ describe("LoadingScreen", () => {
     expect(screen.getByRole("status").getAttribute("data-run")).toBe("play");
   });
 
-  it("ancora o disco no centro do Giro antes dos 1500 ms", async () => {
+  it("ancora o disco no centro do Giro antes dos 1200 ms", async () => {
     vi.spyOn(Element.prototype, "getBoundingClientRect").mockImplementation(function (
       this: Element
     ) {
@@ -91,38 +94,48 @@ describe("LoadingScreen", () => {
     const layers = document.querySelector(".g-loader__layers");
     if (!(layers instanceof HTMLElement)) throw new Error("layers missing");
     expect(layers.style.getPropertyValue("--g-ox")).toBe("");
-    await advance(1229);
+    await advance(1139);
     expect(layers.style.getPropertyValue("--g-ox")).toBe("");
     await advance(1);
     expect(layers.style.getPropertyValue("--g-ox")).toBe("440px");
     expect(layers.style.getPropertyValue("--g-oy")).toBe("320px");
   });
 
-  it("o cursor dá um passo por caractere da linha", async () => {
+  it("mostra o nome das três camadas nos dois idiomas", async () => {
+    setLocale("pt");
     render(<LoadingScreen />);
     await advance(0);
-    const line = t("pt", "loader.line1");
-    const cursor = document.querySelector(".g-loader__cur");
-    expect(cursor).toBeInstanceOf(HTMLElement);
-    expect((cursor as HTMLElement).style.animationTimingFunction).toBe(
-      `steps(${line.length}, end), linear`
-    );
+
+    expect(document.querySelector(".g-loader__layer--lima")?.textContent).toBe("// tokens");
+    expect(document.querySelector(".g-loader__layer--papel")?.textContent).toBe("// componentes");
+    expect(document.querySelector(".g-loader__layer--tinta")?.textContent).toBe("// tela");
+
+    cleanup();
+    sessionStorage.clear();
+
+    setLocale("en");
+    render(<LoadingScreen />);
+    await advance(0);
+
+    expect(document.querySelector(".g-loader__layer--lima")?.textContent).toBe("// tokens");
+    expect(document.querySelector(".g-loader__layer--papel")?.textContent).toBe("// components");
+    expect(document.querySelector(".g-loader__layer--tinta")?.textContent).toBe("// screen");
   });
 
-  it("sorri aos 4045 ms e sai aos 4645 ms quando a página já está pronta", async () => {
+  it("sorri aos 2560 ms e sai aos 2780 ms quando a página já está pronta", async () => {
     render(<LoadingScreen />);
     await advance(0);
-    await advance(4044);
+    await advance(2559);
     expect(overlaySvg()?.getAttribute("data-state")).toBe("loading");
     await advance(1);
     expect(overlaySvg()?.getAttribute("data-state")).toBe("done");
-    await advance(599);
+    await advance(219);
     expect(screen.getByRole("status")).toBeTruthy();
     await advance(1);
     expect(screen.getByRole("status").getAttribute("data-exit")).toBe("1");
   });
 
-  it("segue girando depois de 4045 ms se a página ainda não pintou", async () => {
+  it("segue girando depois de 2560 ms se a página ainda não pintou", async () => {
     let release = () => {};
     vi.mocked(waitForFirstPaint).mockReturnValue(
       new Promise(resolve => {
@@ -131,14 +144,14 @@ describe("LoadingScreen", () => {
     );
     render(<LoadingScreen />);
     await advance(0);
-    await advance(5000);
+    await advance(3500);
     expect(overlaySvg()?.getAttribute("data-state")).toBe("loading");
     expect(screen.getByRole("status")).toBeTruthy();
 
     await act(async () => {
       release();
     });
-    await advance(599);
+    await advance(219);
     expect(overlaySvg()?.getAttribute("data-state")).toBe("done");
     await advance(1);
     expect(screen.getByRole("status").getAttribute("data-exit")).toBe("1");
@@ -147,9 +160,9 @@ describe("LoadingScreen", () => {
   it("sem assinatura na página, o Giro sorri e a tela só some com o fade", async () => {
     render(<LoadingScreen />);
     await advance(0);
-    await advance(4045);
+    await advance(2560);
     expect(overlaySvg()?.getAttribute("data-state")).toBe("done");
-    await advance(600);
+    await advance(220);
     expect(screen.getByRole("status")).toBeTruthy();
     await advance(360);
     expect(screen.queryByRole("status")).toBeNull();
@@ -172,8 +185,8 @@ describe("LoadingScreen", () => {
 
     render(<LoadingScreen />);
     await advance(0);
-    await advance(4045);
-    await advance(600);
+    await advance(2560);
+    await advance(220);
     expect(overlaySvg()?.getAttribute("data-state")).toBe("done");
     expect(moments).toEqual([]);
 
@@ -204,8 +217,8 @@ describe("LoadingScreen", () => {
 
     render(<LoadingScreen />);
     await advance(0);
-    await advance(4045);
-    await advance(600);
+    await advance(2560);
+    await advance(220);
     await advance(780);
     expect(overlaySvg()?.classList.contains("g-giro--signature")).toBe(true);
     expect(overlaySvg()?.hasAttribute("data-moment")).toBe(false);
@@ -224,8 +237,8 @@ describe("LoadingScreen", () => {
 
     render(<LoadingScreen />);
     await advance(0);
-    await advance(4045);
-    await advance(600);
+    await advance(2560);
+    await advance(220);
     await advance(780);
     expect(overlaySvg()?.classList.contains("g-giro--signature")).toBe(true);
     expect(overlaySvg()?.getAttribute("data-moment")).toBe("hello");
@@ -266,7 +279,7 @@ describe("LoadingScreen", () => {
     expect(screen.queryByRole("status")).toBeNull();
   });
 
-  it("anuncia a tela para leitores de tela e esconde o nome e as linhas", async () => {
+  it("anuncia a tela para leitores de tela e esconde o visual do anúncio", async () => {
     render(<LoadingScreen />);
     await advance(0);
     const label = screen.getByText("Carregando o site");
@@ -275,9 +288,10 @@ describe("LoadingScreen", () => {
     const stage = document.querySelector(".g-loader__stage");
     const text = stage?.textContent?.replaceAll("\u00a0", " ") ?? "";
     expect(stage?.getAttribute("aria-hidden")).toBe("true");
-    expect(text).toContain("// desenvolvedor front-end");
     expect(text).toContain("brun");
     expect(text).toContain("guimarães");
+    const layers = document.querySelector(".g-loader__layers");
+    expect(layers?.getAttribute("aria-hidden")).toBe("true");
   });
 
   it("sessionStorage que lança erro não quebra e não mostra a tela", () => {

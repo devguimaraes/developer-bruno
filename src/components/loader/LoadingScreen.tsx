@@ -4,35 +4,28 @@ import { Giro } from "@/components/brand/Giro";
 import { type GiroState, playGiroMoment } from "@/components/brand/giro-states";
 import { useLocale } from "@/hooks/useLocale";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { type TranslationKey, t } from "@/lib/i18n";
+import { t } from "@/lib/i18n";
 import { claimFirstVisit } from "./loader-flag";
 import { waitForFirstPaint } from "./ready";
 
-// Coreografia do estudo (motion/SPEC.md), alongada para o preenchimento e os movimentos
-// lerem no computador e no celular. O relógio só começa quando a Anybody cumpre
-// document.fonts.load. Até lá o Giro gira sozinho. O tamanho é a variante A.
-const READY_MS = 4045;
-const EXIT_MS = 4645;
+// Coreografia do estudo (motion/SPEC.md), adaptada para camadas (issue #104).
+// O relógio só começa quando a Anybody cumpre document.fonts.load.
+// Até lá o Giro gira sozinho. O tamanho é a variante A.
+const READY_MS = 2560;
+const EXIT_MS = 2780;
 const SMILE_MS = EXIT_MS - READY_MS;
 const FLIGHT_MS = 780;
 const FADE_MS = 360;
 const REDUCED_HOLD_MS = 600;
 const UNFOLD_START = 120;
 const STAGGER_MS = 53;
-const TYPE_MS = 390;
 const FLIGHT_EASE: [number, number, number, number] = [0.2, 0.8, 0.2, 1];
 const DESKTOP_MIN_WIDTH = 768;
 const LOADER_ATTR = "data-loader";
 const HERO_GIRO = ".hb-rider";
 const ANYBODY_SPEC = '800 16px "Anybody"';
-const LINE_KEYS = ["loader.line1", "loader.line2", "loader.line3"] as const satisfies readonly [
-  TranslationKey,
-  TranslationKey,
-  TranslationKey,
-];
-const LINE_START = [1575, 2250, 2925] as const;
-// O desdobramento termina aos 1197 ms. O disco de 1500 ms nasce no centro do Giro já assentado.
-const DISK_ORIGIN_MS = 1230;
+// O desdobramento termina aos 1197 ms. O centro do Giro é medido aos 1140 ms, antes do 1º disco (1200 ms).
+const DISK_ORIGIN_MS = 1140;
 const LEFT = ["b", "r", "u", "n"] as const;
 const RIGHT = ["g", "u", "i", "m", "a", "r", "ã", "e", "s"] as const;
 
@@ -90,48 +83,6 @@ function keyedChars(chars: readonly string[]) {
     cursor += ch;
     return { ch, key: cursor, place: cursor.length };
   });
-}
-
-function CodeLine({ text, start, hideAt }: { text: string; start: number; hideAt: number }) {
-  const chars = keyedChars(Array.from(text));
-  return (
-    <p className="g-loader__ln">
-      {chars.map(({ ch, key, place }) => (
-        <span
-          key={key}
-          className="g-loader__ch"
-          style={{ "--d": `${start + (place * TYPE_MS) / chars.length}ms` } as LoaderStyle}
-        >
-          {ch === " " ? "\u00a0" : ch}
-        </span>
-      ))}
-      <i
-        className="g-loader__cur"
-        style={
-          {
-            "--d": `${start}ms`,
-            "--h": `${hideAt}ms`,
-            animationTimingFunction: `steps(${chars.length}, end), linear`,
-          } as LoaderStyle
-        }
-      />
-    </p>
-  );
-}
-
-function LoaderLines({ lines }: { lines: readonly string[] }) {
-  return (
-    <div className="g-loader__lines">
-      {lines.map((line, index) => (
-        <CodeLine
-          key={LINE_KEYS[index]}
-          text={line}
-          start={LINE_START[index] ?? 0}
-          hideAt={index === lines.length - 1 ? READY_MS : (LINE_START[index + 1] ?? READY_MS)}
-        />
-      ))}
-    </div>
-  );
 }
 
 function NameSides({ mark }: { mark: ReactNode }) {
@@ -268,8 +219,8 @@ export function LoadingScreen() {
     };
   }, [phase]);
 
-  // Com a página pronta no começo, o sorriso entra aos 4045 ms e a saída aos 4645 ms. Se a página
-  // demora, o Giro segue em loading e a saída espera 600 ms depois que os dois estão prontos.
+  // Com a página pronta no começo, o sorriso entra aos 2560 ms e a saída aos 2780 ms. Se a página
+  // demora, o Giro segue em loading e a saída espera 220 ms depois que os dois estão prontos.
   useEffect(() => {
     if (phase !== "play") return;
     let pageReady = false;
@@ -387,7 +338,6 @@ export function LoadingScreen() {
   if (phase === "exit") leftStage.current = true;
   if (phase === "hidden" || visit === "skip") return null;
 
-  const lines = LINE_KEYS.map(key => t(locale, key));
   const showExit = phase === "exit" || (phase === "fading" && leftStage.current);
   const run: Run =
     phase === "play" || phase === "still"
@@ -411,13 +361,17 @@ export function LoadingScreen() {
     >
       <div ref={layersRef} className="g-loader__layers" aria-hidden="true">
         <div className="g-loader__layer g-loader__layer--azul" />
-        <div className="g-loader__layer g-loader__layer--lima" />
-        <div className="g-loader__layer g-loader__layer--papel" />
-        <div className="g-loader__layer g-loader__layer--tinta" />
-        <div className="g-loader__layer g-loader__layer--close" />
+        <div className="g-loader__layer g-loader__layer--lima">
+          <span className="g-loader__layer-tag g-loader__tag">{`// ${t(locale, "hero.layer.tokens")}`}</span>
+        </div>
+        <div className="g-loader__layer g-loader__layer--papel">
+          <span className="g-loader__layer-tag g-loader__tag">{`// ${t(locale, "hero.layer.components")}`}</span>
+        </div>
+        <div className="g-loader__layer g-loader__layer--tinta">
+          <span className="g-loader__layer-tag g-loader__tag">{`// ${t(locale, "hero.layer.screen")}`}</span>
+        </div>
       </div>
       <div className="g-loader__stage" aria-hidden="true">
-        <LoaderLines lines={lines} />
         <motion.div
           ref={nameRef}
           className="g-loader__name"
@@ -457,7 +411,6 @@ export function LoadingScreen() {
         </motion.div>
       </div>
       <div ref={inkRef} className="g-loader__ink" aria-hidden="true">
-        <LoaderLines lines={lines} />
         <div className="g-loader__name">
           <NameSides mark={<span className="g-loader__o" />} />
         </div>

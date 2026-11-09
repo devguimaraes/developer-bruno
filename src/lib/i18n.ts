@@ -28,9 +28,6 @@ const ptDictionary = {
   "footer.copyright": "© 2026 Bruno Guimarães",
   "footer.built_with": "Feito com Astro",
   "loader.label": "Carregando o site",
-  "loader.line1": "// desenvolvedor front-end",
-  "loader.line2": "// construo interfaces",
-  "loader.line3": "// design systems",
   "meta.home_title": "Bruno Guimarães · desenvolvedor front-end",
   "meta.home_description":
     "Desenvolvedor front-end especializado em React, Next.js, TypeScript e design systems. Interfaces rápidas, acessíveis e consistentes, do protótipo ao deploy.",
@@ -313,9 +310,6 @@ const enDictionary: Record<TranslationKey, string> = {
   "footer.copyright": "© 2026 Bruno Guimarães",
   "footer.built_with": "Built with Astro",
   "loader.label": "Loading the site",
-  "loader.line1": "// front-end developer",
-  "loader.line2": "// i build interfaces",
-  "loader.line3": "// design systems",
   "meta.home_title": "Bruno Guimarães · front-end developer",
   "meta.home_description":
     "Front-end developer specialized in React, Next.js, TypeScript and design systems. Fast, accessible and consistent interfaces, from prototype to deploy.",

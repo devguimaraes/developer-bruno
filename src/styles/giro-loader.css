@@ -42,6 +42,7 @@ html[data-loader] .g-loader {
 .g-loader__layer {
   position: absolute;
   inset: 0;
+  overflow: hidden;
   clip-path: circle(0px at var(--g-ox) var(--g-oy));
 }
 
@@ -52,24 +53,51 @@ html[data-loader] .g-loader {
 
 .g-loader__layer--lima {
   background: var(--lima);
+  color: var(--azul-sinal);
 }
 
 .g-loader__layer--papel {
   background: var(--papel);
+  color: var(--azul-sinal);
 }
 
 .g-loader__layer--tinta {
   background: var(--tinta);
+  color: var(--papel);
 }
 
-.g-loader__layer--close {
-  display: none;
-  background: var(--azul-sinal);
+/* O nome da camada aparece com o disco recortado. */
+.g-loader__layer-tag,
+.g-loader__layer .g-loader__tag {
+  position: absolute;
+  bottom: 64px;
+  left: 64px;
+  font-family: var(--font-mono);
+  font-size: clamp(15px, calc(15px + (100vw - 390px) * 11 / 1530), 26px);
+  font-weight: 400;
+  line-height: 1.2;
+  white-space: nowrap;
+  transform-origin: 0 100%;
 }
 
-@media (min-width: 768px) {
-  .g-loader__layer--close {
-    display: block;
+.g-loader__layer--lima .g-loader__layer-tag,
+.g-loader__layer--lima .g-loader__tag,
+.g-loader__layer--papel .g-loader__layer-tag,
+.g-loader__layer--papel .g-loader__tag {
+  color: var(--azul-sinal);
+}
+
+.g-loader__layer--tinta .g-loader__layer-tag,
+.g-loader__layer--tinta .g-loader__tag {
+  color: var(--papel);
+}
+
+@media (max-width: 767px) {
+  .g-loader__layer-tag,
+  .g-loader__layer .g-loader__tag {
+    bottom: 40px;
+    left: 24px;
+    font-size: 15px;
   }
 }
 
@@ -87,7 +115,6 @@ html[data-loader] .g-loader {
   inset: 0;
   z-index: 3;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   pointer-events: none;
@@ -95,37 +122,6 @@ html[data-loader] .g-loader {
   --g-ox: 50%;
   --g-oy: 50%;
   clip-path: circle(0px at var(--g-ox) var(--g-oy));
-}
-
-.g-loader__lines {
-  margin-bottom: 0.55em;
-  font-family: var(--font-mono);
-  font-weight: 400;
-  font-stretch: 100%;
-  font-size: clamp(15px, calc(15px + (100vw - 390px) * 11 / 1530), 26px);
-  line-height: 1.5;
-  letter-spacing: 0;
-}
-
-.g-loader__ln {
-  position: relative;
-  width: fit-content;
-  margin: 0;
-  white-space: nowrap;
-}
-
-.g-loader__ch {
-  opacity: 0;
-}
-
-.g-loader__cur {
-  position: absolute;
-  top: 0.25em;
-  left: 0;
-  width: 0.6em;
-  height: 1.05em;
-  background: currentColor;
-  opacity: 0;
 }
 
 .g-loader__name {
@@ -224,7 +220,7 @@ html[data-loader] .g-loader {
   bottom: calc(var(--sel-hd) * -0.583);
 }
 
-.g-loader__tag {
+.g-loader__sel .g-loader__tag {
   position: absolute;
   bottom: calc(100% + var(--sel-tag) * 0.625);
   left: -2px;
@@ -282,56 +278,43 @@ html[data-loader="exit"] main {
   animation-delay: var(--d);
 }
 
-.g-loader[data-run="play"] .g-loader__ch {
-  animation: g-loader-ch 0s linear forwards;
-  animation-delay: var(--d);
-}
-
-.g-loader[data-run="play"] .g-loader__cur {
-  /* steps(1) é substituído no elemento por um passo por caractere. */
-  animation:
-    g-loader-caret 390ms steps(1, end) var(--d) forwards,
-    g-loader-hide 0s linear var(--h) forwards;
-}
-
 .g-loader[data-run="play"] .g-loader__layer--lima {
-  animation: g-loader-disk 520ms var(--ease-wash) 1500ms forwards;
+  animation: g-loader-disk 520ms var(--ease-wash) 1200ms forwards;
 }
 
 .g-loader[data-run="play"] .g-loader__layer--papel {
-  animation: g-loader-disk 520ms var(--ease-wash) 2175ms forwards;
+  animation: g-loader-disk 520ms var(--ease-wash) 1680ms forwards;
 }
 
 .g-loader[data-run="play"] .g-loader__layer--tinta {
-  animation: g-loader-disk 520ms var(--ease-wash) 2850ms forwards;
-}
-
-.g-loader[data-run="play"] .g-loader__layer--close {
-  animation: g-loader-disk 520ms var(--ease-wash) 3525ms forwards;
+  animation: g-loader-disk 520ms var(--ease-wash) 2160ms forwards;
 }
 
 .g-loader[data-run="play"] .g-loader__stage {
-  animation: g-loader-ink 5425ms linear forwards;
+  animation:
+    g-loader-c-azul 0s linear 1720ms forwards,
+    g-loader-c-papel 0s linear 2680ms forwards;
 }
 
 .g-loader[data-run="play"] .g-loader__ink {
   animation:
-    g-loader-disk 520ms var(--ease-wash) 1500ms forwards,
-    g-loader-disk 520ms var(--ease-wash) 2850ms forwards,
-    g-loader-ink-face 5425ms linear forwards;
+    g-loader-disk 520ms var(--ease-wash) 1200ms forwards,
+    g-loader-disk 520ms var(--ease-wash) 2160ms forwards,
+    g-loader-c-papel 0s linear 2160ms forwards;
 }
 
 .g-loader[data-run="play"] .g-loader__o .g-giro {
   --g-stroke: 12px;
   animation:
     g-loader-stroke 750ms var(--ease-resolve) 225ms forwards,
-    g-loader-giro 5425ms linear forwards;
+    g-loader-c-azul 0s linear 1200ms forwards,
+    g-loader-c-lima 0s linear 2160ms forwards;
 }
 
 .g-loader[data-run="play"] .g-loader__sel {
   animation:
-    g-loader-sel 330ms var(--ease-resolve) 2250ms both,
-    g-loader-hide 0s linear 2850ms forwards;
+    g-loader-sel 330ms var(--ease-resolve) 1740ms both,
+    g-loader-hide 0s linear 2160ms forwards;
 }
 
 .g-loader[data-run="play"] .g-loader__hd {
@@ -339,41 +322,43 @@ html[data-loader="exit"] main {
 }
 
 .g-loader[data-run="play"] .g-loader__hd:nth-child(2) {
-  animation-delay: 2295ms;
+  animation-delay: 1785ms;
 }
 
 .g-loader[data-run="play"] .g-loader__hd:nth-child(3) {
-  animation-delay: 2340ms;
+  animation-delay: 1830ms;
 }
 
 .g-loader[data-run="play"] .g-loader__hd:nth-child(4) {
-  animation-delay: 2385ms;
+  animation-delay: 1875ms;
 }
 
 .g-loader[data-run="play"] .g-loader__hd:nth-child(5) {
-  animation-delay: 2430ms;
+  animation-delay: 1920ms;
 }
 
-.g-loader[data-run="play"] .g-loader__tag {
-  animation: g-loader-tag 330ms var(--ease-resolve) 2340ms both;
+.g-loader[data-run="play"] .g-loader__sel .g-loader__tag {
+  animation: g-loader-tag 330ms var(--ease-resolve) 1830ms both;
 }
 
-.g-loader[data-run="still"] .g-loader__lt,
-.g-loader[data-run="still"] .g-loader__ch {
+.g-loader[data-run="still"] .g-loader__lt {
   font-stretch: 115%;
   opacity: 1;
 }
 
-.g-loader[data-exit] .g-loader__lt,
-.g-loader[data-exit] .g-loader__ch {
+.g-loader[data-exit] .g-loader__lt {
   font-stretch: 115%;
   opacity: 1;
   animation: none;
 }
 
-.g-loader[data-exit] .g-loader__cur,
 .g-loader[data-exit] .g-loader__sel {
   opacity: 0;
+  animation: none;
+}
+
+.g-loader[data-exit] .g-loader__stage {
+  color: var(--papel);
   animation: none;
 }
 
@@ -390,10 +375,6 @@ html[data-loader="exit"] main {
   animation: g-loader-up 780ms var(--ease-resolve) forwards;
 }
 
-.g-loader[data-exit] .g-loader__lines {
-  animation: g-loader-lines-up 780ms var(--ease-resolve) forwards;
-}
-
 @media (max-width: 767px) {
   .g-loader[data-run="play"] .g-loader__layer--lima,
   .g-loader[data-run="play"] .g-loader__layer--papel,
@@ -402,7 +383,7 @@ html[data-loader="exit"] main {
   }
 
   .g-loader[data-run="play"] .g-loader__ink {
-    animation-name: g-loader-disk-m, g-loader-disk-m, g-loader-ink-face;
+    animation-name: g-loader-disk-m, g-loader-disk-m, g-loader-c-papel;
   }
 
   .g-loader[data-exit] .g-loader__layers {
@@ -415,8 +396,7 @@ html[data-loader="exit"] main {
   }
 
   .g-loader[data-exit] .g-loader__left,
-  .g-loader[data-exit] .g-loader__right,
-  .g-loader[data-exit] .g-loader__lines {
+  .g-loader[data-exit] .g-loader__right {
     opacity: 0;
     animation: none;
     transition: opacity 780ms var(--ease-resolve);
@@ -430,15 +410,12 @@ html[data-loader="exit"] main {
     transition: none;
   }
 
-  .g-loader__lt,
-  .g-loader__ch {
+  .g-loader__lt {
     font-stretch: 115%;
     opacity: 1;
   }
 
   .g-loader[data-run="play"] .g-loader__lt,
-  .g-loader[data-run="play"] .g-loader__ch,
-  .g-loader[data-run="play"] .g-loader__cur,
   .g-loader[data-run="play"] .g-loader__layer,
   .g-loader[data-run="play"] .g-loader__stage,
   .g-loader[data-run="play"] .g-loader__ink,
@@ -446,7 +423,7 @@ html[data-loader="exit"] main {
   .g-loader[data-run="play"] .g-loader__o .g-giro,
   .g-loader[data-run="play"] .g-loader__sel,
   .g-loader[data-run="play"] .g-loader__hd,
-  .g-loader[data-run="play"] .g-loader__tag {
+  .g-loader[data-run="play"] .g-loader__sel .g-loader__tag {
     animation: none;
   }
 }
@@ -455,23 +432,6 @@ html[data-loader="exit"] main {
   to {
     font-stretch: 115%;
     opacity: 1;
-  }
-}
-
-@keyframes g-loader-ch {
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes g-loader-caret {
-  from {
-    opacity: 1;
-    left: 0;
-  }
-  to {
-    opacity: 1;
-    left: 100%;
   }
 }
 
@@ -499,46 +459,20 @@ html[data-loader="exit"] main {
   }
 }
 
-/* Trocas no fim do disco (2020 ms e 3370 ms de 5425 ms). O recorte é que faz a transição. */
-@keyframes g-loader-ink {
-  0%,
-  37.234% {
-    color: var(--papel);
-  }
-  37.235%,
-  62.119% {
+@keyframes g-loader-c-azul {
+  to {
     color: var(--azul-sinal);
   }
-  62.12%,
-  100% {
+}
+
+@keyframes g-loader-c-papel {
+  to {
     color: var(--papel);
   }
 }
 
-/* A cópia recortada troca no começo do disco tinta (2850 ms). */
-@keyframes g-loader-ink-face {
-  0%,
-  52.534% {
-    color: var(--azul-sinal);
-  }
-  52.535%,
-  100% {
-    color: var(--papel);
-  }
-}
-
-/* O Giro troca no começo do disco lima (1500 ms) e do disco tinta (2850 ms). */
-@keyframes g-loader-giro {
-  0%,
-  27.649% {
-    color: var(--lima);
-  }
-  27.65%,
-  52.534% {
-    color: var(--azul-sinal);
-  }
-  52.535%,
-  100% {
+@keyframes g-loader-c-lima {
+  to {
     color: var(--lima);
   }
 }
@@ -583,12 +517,6 @@ html[data-loader="exit"] main {
 @keyframes g-loader-up {
   to {
     transform: translateY(-100%);
-  }
-}
-
-@keyframes g-loader-lines-up {
-  to {
-    transform: translateY(-100vh);
   }
 }
 
