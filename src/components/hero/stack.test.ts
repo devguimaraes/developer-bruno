@@ -257,10 +257,12 @@ describe("ciclo do Giro", () => {
   const visit1 = (n: number) => cycleSteps(n).find(s => s.kind === "visit" && s.layer === 1);
 
   it("cycleSteps segue a agenda nova contada do pouso em tokens", () => {
-    // Primeira volta (loopN=1) tem o erro na camada 1
-    expect(cycleSteps(1).map(s => s.at)).toEqual([1350, 3450, 4850, 6100, 7500]);
+    // Primeira volta (loopN=1) tem o erro na camada 1 e fecha a pilha em home
+    expect(cycleSteps(1).map(s => s.at)).toEqual([1350, 3450, 4850, 6100]);
     // Segunda volta (loopN=2) sem o erro na camada 1
-    expect(cycleSteps(2).map(s => s.at)).toEqual([1350, 2850, 4250, 5500, 6900]);
+    expect(cycleSteps(2).map(s => s.at)).toEqual([1350, 2850, 4250, 5500]);
+    // Volta iniciada pelo ponteiro deslocada pela base de 950ms
+    expect(cycleSteps(2, 950).map(s => s.at)).toEqual([2300, 3800, 5200, 6450]);
   });
 
   it("cycleSteps(1) tem erro na camada 1 e cycleSteps(2) não", () => {

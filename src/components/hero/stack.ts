@@ -246,11 +246,12 @@ export function stations(
 
 /** Ponto do Giro na linha. rp em -1..3, interpolado entre estações. */
 export function riderAt(st: readonly Station[], rp: number): Point {
-  const r = Math.max(-1, Math.min(3, rp));
+  const safeRp = Number.isFinite(rp) ? rp : 0;
+  const r = Math.max(-1, Math.min(3, safeRp));
   const a = Math.min(2, Math.floor(r));
   const f = r - a;
-  const near = st[a + 1];
-  const far = st[a + 2];
+  const near = st[a + 1] ?? st[0] ?? { x: 0, y: 0, cx: 0 };
+  const far = st[a + 2] ?? near;
   return { x: near.x + (far.x - near.x) * f, y: near.y + (far.y - near.y) * f };
 }
 
@@ -362,27 +363,24 @@ export type StackMood = "idle" | "loading" | "done" | "error" | "curious";
 
 export type CycleStep =
   | { at: number; kind: "visit"; layer: number; error: boolean }
-  | { at: number; kind: "home" }
-  | { at: number; kind: "next" };
+  | { at: number; kind: "home" };
 
 /**
- * Agenda de um ciclo, contada em ms a partir do pouso em tokens:
+ * Agenda de um ciclo, contada em ms a partir do pouso em tokens (ou de uma base deslocada):
  * camada 1 em 1350; camada 2 depois de 2100 com erro ou 1500 sem; camada 3 depois de 1400; volta ao chão depois de 1250.
  * O erro vale quando loopN é ímpar, e a primeira volta é a 1.
  */
-export function cycleSteps(loopN: number): CycleStep[] {
+export function cycleSteps(loopN: number, base = 0): CycleStep[] {
   const error = loopN % 2 === 1;
-  const t1 = 1350;
+  const t1 = base + 1350;
   const t2 = t1 + (error ? 2100 : 1500);
   const t3 = t2 + 1400;
   const tHome = t3 + 1250;
-  const tNext = tHome + 1400;
   return [
     { at: t1, kind: "visit", layer: 1, error },
     { at: t2, kind: "visit", layer: 2, error: false },
     { at: t3, kind: "visit", layer: 3, error: false },
     { at: tHome, kind: "home" },
-    { at: tNext, kind: "next" },
   ];
 }
 

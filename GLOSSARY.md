@@ -41,16 +41,16 @@ _Avoid_: seção clara, fundo branco
 ## Navegação
 
 **Tela de carregamento**:
-A apresentação da assinatura na primeira visita da sessão, com o Giro no lugar do "o", que pousa no menu ou, no celular, na barra de abas. O desdobramento espera a Anybody. Lima pode ser o fundo só nesta tela.
+A apresentação da assinatura na primeira visita da sessão, com o Giro no lugar do "o", que pousa no menu ou, no celular, no trilho de ícones. O desdobramento espera a Anybody. Lima pode ser o fundo só nesta tela.
 _Avoid_: splash, loader, preloader
 
 **Ilha de rolagem**:
 A pílula fixa no topo da tela, centralizada, que aparece no computador depois do hero com o Giro, o nome da seção atual e o menu. O arco do Giro mostra quanto da página já foi lido.
 _Avoid_: header, navbar, barra de progresso
 
-**Barra de abas**:
-A navegação fixa embaixo da tela no celular, com Início e Projetos de um lado, Blog e Contato do outro, e o Giro no centro mostrando a leitura e abrindo o menu.
-_Avoid_: menu, tab bar, rodapé
+**Trilho de ícones**:
+A navegação fixa embaixo da tela no celular: ícones isométricos ligados por uma linha, com o arco do Giro pousando no ícone do trecho atual e mostrando quanto da página já foi lido.
+_Avoid_: barra de abas, tab bar, menu, rodapé
 
 ## Hero
 
@@ -59,7 +59,7 @@ A interface aberta em camadas isométricas no hero, que fica fechada em repouso 
 _Avoid_: stack, cena 3D, vista explodida
 
 **Camada**:
-Uma das partes da pilha: tokens, componentes, tela ou estado. Na tela de carregamento, cada cor é uma camada em tela cheia.
+Uma das partes da pilha: tokens, componentes, tela ou estado. Na tela de carregamento, cada cor é uma camada em tela cheia. No fim da home, cada capítulo é uma camada.
 _Avoid_: placa, plano, nível
 
 **Estação**:
@@ -67,8 +67,18 @@ Um ponto da linha ao lado da pilha onde o Giro para e faz uma camada disparar.
 _Avoid_: parada, nó
 
 **Entrada do Giro**:
-O caminho do Giro na primeira vez que o hero aparece, da assinatura ou da barra de abas até a primeira estação, passando pelo título e pela pilha.
+O caminho do Giro na primeira vez que o hero aparece, da assinatura ou do trilho de ícones até a primeira estação, passando pelo título e pela pilha.
 _Avoid_: quique, entrada quicando, voo
+
+## Home
+
+**Capítulo**:
+Cada parte da história contada na home, do início ao fim, com sua superfície e um papel para o Giro.
+_Avoid_: seção (na home), bloco, sessão
+
+**Passagem**:
+O disco de cor que sai do Giro e abre o capítulo seguinte.
+_Avoid_: transição, cortina, wipe
 
 ## Trabalho
 
@@ -76,10 +86,14 @@ _Avoid_: quique, entrada quicando, voo
 Um trabalho entregue a um cliente, com contexto, problema, solução e resultado.
 _Avoid_: job, trabalho, portfólio
 
+**Janela**:
+A moldura de navegador em que cada projeto aparece na home, com o endereço do site no ar.
+_Avoid_: card, faixa
+
 **Case**:
 A página que conta um projeto seguindo os estados do Giro, do contexto ao resultado.
 _Avoid_: estudo de caso, página do projeto
 
 **Processo**:
-O jeito como o Bruno trabalha, da conversa à entrega, mostrado na home como um diagrama com as ferramentas de cada etapa.
+O jeito como o Bruno trabalha, da conversa à entrega, mostrado na home como a mesma interface sendo feita, etapa por etapa, com as ferramentas de cada uma.
 _Avoid_: metodologia, workflow, stack

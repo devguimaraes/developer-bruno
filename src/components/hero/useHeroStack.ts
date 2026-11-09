@@ -52,7 +52,6 @@ const PRELAUNCH_MS = 110;
 const LOADER_ATTR = "data-loader";
 const LOOP_AFTER_LAND_MS = 350;
 const CLICK_RETURN_MS = 3200;
-const CLICK_RESTART_MS = 1400;
 const STILL_OPEN = 0.72;
 const HOVER_LIFT = 14;
 const HOP_SPEED = 560;
@@ -194,6 +193,9 @@ function createRuntime(
   let gscale = 1;
   let lastPos: Point | null = null;
   let loopN = 0;
+  let cycleBusy = false;
+  let restAt = 0;
+  let firstCycleCompleted = false;
   let gen = 0;
   let timers: number[] = [];
   const hud: { mood: HudMood; layer: HudLayer } = { mood: "idle", layer: { kind: "none" } };
@@ -462,32 +464,57 @@ function createRuntime(
     startRide(i, () => arrive(i, error));
   };
 
+  const rest = (): void => {
+    cycleBusy = false;
+    restAt = performance.now();
+    setHud("idle", { kind: "floor" });
+    after(700, () => {
+      if (mode === "rail" && !activeRide && rp < 0) {
+        setMood("idle");
+      }
+    });
+  };
+
   const home = (done?: () => void): void => {
     startRide(-1, () => {
       openAuto = 0;
       hideTags();
       setLit(hover);
       setMood("done");
-      setHud("idle", { kind: "floor" });
+      firstCycleCompleted = true;
+      rest();
       done?.();
     });
   };
 
-  // Um ciclo: a pilha abre, o Giro sobe a linha parando em cada estação, volta e a pilha fecha.
-  const loop = (): void => {
+  // Uma volta depois do descanso, quando o ponteiro chega perto da pilha.
+  const runCycle = (): void => {
+    cycleBusy = true;
     loopN += 1;
+    openAuto = 1;
+    after(350, () => visit(0, false));
+    for (const step of cycleSteps(loopN, 950)) {
+      after(step.at, () => {
+        if (step.kind === "visit") visit(step.layer, step.error);
+        else if (step.kind === "home") home();
+      });
+    }
+  };
+
+  const runFirstCycle = (): void => {
+    cycleBusy = true;
+    loopN = 1;
     openAuto = 1;
     visit(0, false);
     for (const step of cycleSteps(loopN)) {
       after(step.at, () => {
         if (step.kind === "visit") visit(step.layer, step.error);
         else if (step.kind === "home") home();
-        else if (step.kind === "next") loop();
       });
     }
   };
 
-  // Começa o ciclo do chão: a estação, o painel em repouso e o laço daqui a pouco.
+  // Começa o ciclo do chão se a primeira volta não terminou; senão, descansa.
   const restartCycle = (): void => {
     rp = -1;
     openAuto = 0;
@@ -495,7 +522,11 @@ function createRuntime(
     setLit(-1);
     setMood("idle");
     setHud("idle", { kind: "floor" });
-    after(LOOP_AFTER_LAND_MS, loop);
+    if (!firstCycleCompleted) {
+      after(LOOP_AFTER_LAND_MS, runFirstCycle);
+    } else {
+      rest();
+    }
   };
 
   // ---------- Entrada desenhada (Issue #107) ----------
@@ -565,11 +596,11 @@ function createRuntime(
     squash();
     arrive(0, false, "done");
     loopN = 1;
+    cycleBusy = true;
     for (const step of cycleSteps(loopN)) {
       after(step.at, () => {
         if (step.kind === "visit") visit(step.layer, step.error);
         else if (step.kind === "home") home();
-        else if (step.kind === "next") loop();
       });
     }
   };
@@ -881,9 +912,16 @@ function createRuntime(
     for (const n of layers) n.classList.remove("is-fire", "is-fresh", "is-error");
     if (mode === "seat") {
       queueLaunch(LAUNCH_MS);
-    } else {
+    } else if (!firstCycleCompleted) {
       if (mode === "ball") endBall();
       restartCycle();
+    } else {
+      rp = -1;
+      openAuto = 0;
+      clearLinks();
+      setLit(-1);
+      setMood("idle");
+      rest();
     }
   };
 
@@ -948,9 +986,20 @@ function createRuntime(
     const p = local(e);
     const c = stackCenter(cfg, cam, zs);
     openPtr = pointerOpen(Math.hypot(p.x - c.x, p.y - c.y));
-    tilt.tx = Math.max(-1, Math.min(1, (p.x - c.x) / (stage.clientWidth / 2)));
-    tilt.ty = Math.max(-1, Math.min(1, (p.y - c.y) / (stage.clientHeight / 2)));
+    const w2 = stage.clientWidth / 2;
+    const h2 = stage.clientHeight / 2;
+    tilt.tx = w2 > 0 ? Math.max(-1, Math.min(1, (p.x - c.x) / w2)) : 0;
+    tilt.ty = h2 > 0 ? Math.max(-1, Math.min(1, (p.y - c.y) / h2)) : 0;
     setHover(hitLayer(cfg, cam, zs, p));
+    if (
+      openPtr > 0.6 &&
+      !cycleBusy &&
+      mode === "rail" &&
+      !activeRide &&
+      performance.now() - restAt > 1500
+    ) {
+      runCycle();
+    }
   };
 
   const onLeave = (): void => {
@@ -968,9 +1017,12 @@ function createRuntime(
     if (i < 0) return;
     clearTimers();
     activeRide = null;
+    jumpY = 0;
+    hopX = 0;
     openAuto = 1;
     visit(i, false);
-    after(CLICK_RETURN_MS, () => home(() => after(CLICK_RESTART_MS, loop)));
+    cycleBusy = true;
+    after(CLICK_RETURN_MS, () => home());
   };
 
   const onHop = (): void => {

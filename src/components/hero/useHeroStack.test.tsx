@@ -87,17 +87,109 @@ describe("useHeroStack, rótulos da linha", { timeout: SIM_TIMEOUT_MS }, () => {
     expect(shownTags(container)).toEqual(["0"]);
   });
 
-  it("digita os rótulos na ordem das estações, esconde todos ao fechar a pilha e repete no ciclo seguinte", async () => {
+  it("digita os rótulos na ordem das estações e esconde todos ao fechar a pilha", async () => {
     mockReducedMotion(false);
     const { container } = render(<Hero />);
 
     const firstCycle = await advanceUntil(container, shown => shown.length === 4);
     const closed = await advanceUntil(container, shown => shown.length === 0);
-    const nextCycle = await advanceUntil(container, shown => shown.includes("0"));
 
     expect(firstCycle).toEqual([[], ["0"], ["0", "1"], ["0", "1", "2"], ["0", "1", "2", "3"]]);
     expect(closed).toEqual([["0", "1", "2", "3"], []]);
-    expect(nextCycle.at(-1)).toEqual(["0"]);
+  });
+
+  it("depois da primeira volta, o tempo passa e a hero descansa no chão sem disparar nada", async () => {
+    mockReducedMotion(false);
+    const { container } = render(<Hero />);
+
+    // Espera a volta completar e a pilha fechar no chão
+    await advanceUntil(container, shown => shown.length === 4);
+    await advanceUntil(container, shown => shown.length === 0);
+
+    // Passam 10 segundos sem interação
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(10_000);
+    });
+
+    // Nada deve ter disparado: pilha continua fechada, tags ocultas e painel no chão
+    expect(shownTags(container)).toEqual([]);
+    expect(container.querySelector('[data-hud="layer"]')?.textContent).toBe("chão");
+    expect(container.querySelector('[data-hud="state"]')?.textContent).toBe("repouso");
+  });
+
+  it("ponteiro antes de 1500 ms do descanso não acorda o ciclo", async () => {
+    mockReducedMotion(false);
+    const { container } = render(<Hero />);
+
+    await advanceUntil(container, shown => shown.length === 4);
+    await advanceUntil(container, shown => shown.length === 0);
+
+    // Avança apenas 600 ms após o pouso (< 1500 ms)
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(600);
+    });
+
+    const stage = container.querySelector<HTMLElement>(".hb");
+    expect(stage).not.toBeNull();
+    if (stage) {
+      act(() => {
+        stage.dispatchEvent(
+          new PointerEvent("pointermove", {
+            clientX: 0,
+            clientY: 452,
+            bubbles: true,
+            pointerType: "mouse",
+          })
+        );
+      });
+    }
+
+    // Espera 1000 ms adicionais e confirma que nada acordou
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1000);
+    });
+
+    expect(shownTags(container)).toEqual([]);
+    expect(container.querySelector('[data-hud="layer"]')?.textContent).toBe("chão");
+  });
+
+  it("ponteiro perto da pilha após 1500 ms do descanso acorda uma volta sem erro", async () => {
+    mockReducedMotion(false);
+    const { container } = render(<Hero />);
+
+    await advanceUntil(container, shown => shown.length === 4);
+    await advanceUntil(container, shown => shown.length === 0);
+
+    // Avança 2000 ms após o pouso (> 1500 ms)
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(2000);
+    });
+
+    const stage = container.querySelector<HTMLElement>(".hb");
+    expect(stage).not.toBeNull();
+    if (stage) {
+      act(() => {
+        stage.dispatchEvent(
+          new PointerEvent("pointermove", {
+            clientX: 0,
+            clientY: 452,
+            bubbles: true,
+            pointerType: "mouse",
+          })
+        );
+      });
+    }
+
+    // A segunda volta acorda: primeiro visita a camada 0 em 350 ms
+    const secondCycle = await advanceUntil(container, shown => shown.includes("0"));
+    expect(secondCycle.at(-1)).toEqual(["0"]);
+
+    // Espera a volta visitar a camada 1 (componentes)
+    await advanceUntil(container, shown => shown.includes("1"));
+
+    // Na segunda volta (loopN=2), a camada 1 (componentes) não tem erro
+    const layer1 = container.querySelector('.hb [data-layer="1"]');
+    expect(layer1?.classList.contains("is-error")).toBe(false);
   });
 
   it("a pilha fecha e esconde rótulos no pouso ao voltar ao chão", async () => {
