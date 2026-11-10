@@ -1,181 +1,241 @@
 import { ArrowRight } from "lucide-react";
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { SectionHeader } from "@/components/giro/SectionHeader";
-import { StackLogo } from "@/components/giro/ToolLogo";
-import { homeCases, type Project } from "@/data/projects";
+import { useCallback, useRef } from "react";
+import { homeCases, outcomeSites } from "@/data/projects";
 import { useLocale } from "@/hooks/useLocale";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { type Locale, t } from "@/lib/i18n";
-import { bareLabel } from "./copy";
-import { enteredBandIds } from "./entered-bands";
+import { t } from "@/lib/i18n";
+import { splitOutcome } from "./copy";
+import { projectHost, projectSurface, projectTimeline } from "./project-stage";
+import { type SceneBuilder, useChapterScenes } from "./story/useChapterScenes";
 
-const ENTER_RATIO = 0.33;
+// Mesmo corte do CSS (max-width: 768px), para cena e layout nunca discordarem.
+const MOBILE_QUERY = "(max-width: 768px)";
 
-function editorTag(title: string): string {
-  const plain = title.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-  const name = plain
-    .split(/[^A-Za-z0-9]+/)
-    .filter(part => part.length > 0)
-    .map(part => {
-      if (part.length <= 3 && part === part.toUpperCase() && /[A-Z]/.test(part)) return part;
-      const lower = part.toLowerCase();
-      return lower.charAt(0).toUpperCase() + lower.slice(1);
-    })
-    .join("");
-  return `<${name} />`;
-}
-
-function systemReduced(): boolean {
-  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-}
-
-function loaderBlocking(): boolean {
-  return document.documentElement.hasAttribute("data-loader");
-}
-
-function bandEntered(entry: IntersectionObserverEntry): boolean {
-  if (!entry.isIntersecting) return false;
-  if (entry.intersectionRatio >= ENTER_RATIO) return true;
-  return entry.intersectionRect.height >= window.innerHeight * ENTER_RATIO;
-}
-
-type CaseBandProps = {
-  project: Project;
-  index: number;
-  total: number;
-  locale: Locale;
-  reducedMotion: boolean;
-};
-
-function CaseBand({ project, index, total, locale, reducedMotion }: CaseBandProps) {
-  const bandRef = useRef<HTMLElement>(null);
-  const played = useRef(false);
-  const [entered, setEntered] = useState(false);
-  const label = project.label[locale];
-  const count = String(total).padStart(2, "0");
-  const position = String(index + 1).padStart(2, "0");
-
-  const enter = useCallback(() => {
-    if (played.current) return;
-    played.current = true;
-    enteredBandIds.add(project.id);
-    setEntered(true);
-  }, [project.id]);
-
-  // Sem animação (movimento reduzido ou faixa que já entrou nesta visita): entra antes da pintura.
-  useLayoutEffect(() => {
-    if (reducedMotion || systemReduced() || enteredBandIds.has(project.id)) enter();
-  }, [project.id, reducedMotion, enter]);
-
-  useEffect(() => {
-    if (played.current || reducedMotion || systemReduced()) return;
-    const band = bandRef.current;
-    if (!band) return;
-
-    let seen = false;
-
-    const begin = () => {
-      if (!seen || loaderBlocking()) return;
-      enter();
-    };
-
-    const intersection = new IntersectionObserver(
-      entries => {
-        if (!entries.some(bandEntered)) return;
-        seen = true;
-        begin();
-      },
-      { threshold: [0, ENTER_RATIO] }
-    );
-    intersection.observe(band);
-
-    const mutations = new MutationObserver(begin);
-    mutations.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["data-loader"],
-    });
-
-    return () => {
-      intersection.disconnect();
-      mutations.disconnect();
-    };
-  }, [reducedMotion, enter]);
-
-  return (
-    <article
-      className="home-band"
-      id={`home-band-${project.id}`}
-      data-entered={entered ? "true" : "false"}
-      ref={bandRef}
-    >
-      <div className="home-band__head">
-        <p className="home-band__label">
-          <span className="home-band__index">
-            {position}/{count}
-          </span>
-          <span>{label}</span>
-        </p>
-        <h3 className="home-band__title">
-          <a className="home-band__link" href={`/projetos/${project.slug}`}>
-            {project.title}
-          </a>
-        </h3>
-      </div>
-      <div className="home-band__cover" aria-hidden="true">
-        <div className="home-band__frame g-tinta">
-          <img className="home-band__img" src={project.image} alt="" />
-        </div>
-        <span className="home-band__sel" aria-hidden="true">
-          <span className="home-band__tag">{editorTag(project.title)}</span>
-          <span className="home-band__handle home-band__handle--tl" />
-          <span className="home-band__handle home-band__handle--tr" />
-          <span className="home-band__handle home-band__handle--bl" />
-          <span className="home-band__handle home-band__handle--br" />
-        </span>
-      </div>
-      <div className="home-band__body">
-        <p className="home-band__summary">{project.summary[locale]}</p>
-        <ul className="home-band__tags" aria-label={t(locale, "projects.stack")}>
-          {project.stack.map(item => (
-            <li className="g-tag" key={item}>
-              <StackLogo name={item} />
-              {item}
-            </li>
-          ))}
-        </ul>
-        <span className="g-button home-band__cta" aria-hidden="true">
-          {t(locale, "projects.card_link")}
-          <ArrowRight className="g-icon g-button__arrow" />
-        </span>
-      </div>
-    </article>
-  );
-}
-
-/** Faixas dos cases: cada uma entra uma vez, com fade e subida curta, ao aparecer na tela. */
+/**
+ * Projetos em janelas: cada case entra como uma janela por cima da anterior e, no fim, a pilha
+ * deita e os números dos outros sites aparecem ao lado. Sem data-scenes é leitura em ordem.
+ */
 export function HomeProjects() {
   const locale = useLocale();
   const reducedMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const buildScene = useCallback<SceneBuilder>(({ gsap, scene, setVars }) => {
+    const sec = sectionRef.current;
+    if (!sec) return;
+    const q = (s: string) => sec.querySelector<HTMLElement>(s);
+    const wins = [...sec.querySelectorAll<HTMLElement>(".pj")];
+    const world = q(".pj-world");
+    const big = q(".pj-big");
+    const lead = q(".pj-lead");
+    const out = q(".pj-out");
+    const disc = q(".pj-disc");
+    const exit = q(".pj-exit");
+    if (!world || !big || !lead || !out || !disc || !exit || wins.length === 0) return;
+
+    const W = window.innerWidth;
+    const H = window.innerHeight;
+    const mobile = window.matchMedia(MOBILE_QUERY).matches;
+    const { t0, step, tTilt, total } = projectTimeline(wins.length);
+
+    // O disco da passagem para tinta abre a partir da saída do Giro.
+    const ex = exit.offsetLeft;
+    const ey = exit.offsetTop;
+    setVars(disc, { "--dx": `${ex}px`, "--dy": `${ey}px`, "--dr": "0px" });
+    const radius = Math.hypot(Math.max(ex, W - ex), ey) + 40;
+
+    // Sem valor inicial o GSAP parte de zero, e --wk é a escala: as janelas sumiriam na virada.
+    setVars(world, { "--wk": 1, "--wrx": "0deg", "--wrz": "0deg", "--wx": "0px", "--wy": "0px" });
+    gsap.set(wins, { y: H * 1.1, scale: 1, z: 0, visibility: "visible", "--dim": 0 });
+
+    const tl = scene(sec);
+    tl.fromTo(big, { fontStretch: "50%" }, { fontStretch: "128%", duration: 1.1 }, 0);
+
+    wins.forEach((win, i) => {
+      const cover = win.querySelector(".pj-cover");
+      const img = win.querySelector(".pj-cover img");
+      const at = t0 + i * step;
+      tl.to(win, { y: 0, duration: 1, ease: "power2.out" }, at);
+      if (cover) {
+        tl.fromTo(
+          cover,
+          { clipPath: "inset(0 0 100% 0)" },
+          { clipPath: "inset(0 0 0% 0)", duration: 0.5 },
+          at + 0.05
+        );
+      }
+      if (img) tl.fromTo(img, { yPercent: 6 }, { yPercent: -6, duration: step * 1.6 }, at);
+      for (let j = 0; j < i; j += 1) {
+        const n = i - j;
+        tl.to(
+          wins[j],
+          {
+            y: -12 * n,
+            scale: 1 - 0.035 * n,
+            "--dim": Math.min(0.5, 0.2 * n),
+            duration: 0.9,
+            ease: "power1.out",
+          },
+          at
+        );
+      }
+    });
+
+    tl.to([big, lead], { autoAlpha: 0, duration: 0.5 }, t0 + 0.2);
+
+    const zGap = mobile ? 62 : 120;
+    tl.to(
+      wins,
+      { y: 0, scale: 1, z: i => i * zGap, "--dim": 0, duration: 1.3, ease: "power2.inOut" },
+      tTilt
+    )
+      .to(
+        world,
+        {
+          "--wrx": "60deg",
+          "--wrz": "-45deg",
+          "--wk": mobile ? 0.5 : 0.46,
+          "--wx": mobile ? "0px" : `${-W * 0.2}px`,
+          "--wy": mobile ? `${-H * 0.21}px` : `${H * 0.05}px`,
+          duration: 1.3,
+          ease: "power2.inOut",
+        },
+        tTilt
+      )
+      .fromTo(out, { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.6 }, tTilt + 1)
+      .to(disc, { "--dr": `${radius}px`, duration: 1, ease: "power2.in" }, tTilt + 3)
+      .to({}, { duration: 0.01 }, total);
+    return undefined;
+  }, []);
+
+  useChapterScenes(buildScene, [], {
+    scope: sectionRef,
+    enabled: reducedMotion ? false : undefined,
+  });
+
+  const count = String(homeCases.length).padStart(2, "0");
 
   return (
-    <div className="home-projects">
-      <SectionHeader
-        label={bareLabel(t(locale, "projects.label"))}
-        title={t(locale, "projects.title")}
-        lead={t(locale, "projects.intro")}
-      />
-      <div className="home-bands">
-        {homeCases.map((project, index) => (
-          <CaseBand
-            key={project.id}
-            project={project}
-            index={index}
-            total={homeCases.length}
-            locale={locale}
-            reducedMotion={reducedMotion}
+    <section className="pj-ch g-papel" id="projetos" aria-labelledby="pj-title" ref={sectionRef}>
+      <div className="pj-stage">
+        <div className="pj-head">
+          <h2 className="pj-big" id="pj-title">
+            <span className="pj-big__in">
+              {t(locale, "projects.title")}
+              <i
+                className="hs-stop pj-dot"
+                data-stop="pj-dot"
+                data-size="72"
+                data-size-m="40"
+                aria-hidden="true"
+              />
+            </span>
+          </h2>
+          <p className="pj-lead">{t(locale, "projects.intro")}</p>
+        </div>
+
+        <div className="pj-world">
+          {homeCases.map((project, i) => (
+            <article
+              key={project.id}
+              className={`pj ${projectSurface(i)}`}
+              aria-label={project.title}
+            >
+              <header className="pj-bar">
+                <span className="pj-slot">
+                  <i
+                    className="hs-stop pj-slot__stop"
+                    data-stop={`pj${i}`}
+                    data-size="30"
+                    data-size-m="30"
+                    aria-hidden="true"
+                  />
+                </span>
+                <span className="pj-url">{projectHost(project.live)}</span>
+                <span className="pj-live">
+                  <i aria-hidden="true" />
+                  {t(locale, "case.page.facts.live")}
+                </span>
+                <span className="pj-n">
+                  {String(i + 1).padStart(2, "0")}/{count}
+                </span>
+              </header>
+              <div className="pj-body">
+                <div className="pj-text">
+                  <p className="g-eyebrow">{project.label[locale]}</p>
+                  <h3>{project.title}</h3>
+                  <p>{project.summary[locale]}</p>
+                  <ul className="pj-stack" aria-label={t(locale, "projects.stack")}>
+                    {project.stack.map(item => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                  <a className="g-button" href={`/projetos/${project.slug}`}>
+                    <span>{t(locale, "projects.card_link")}</span>
+                    <span className="sr-only">{`: ${project.title}`}</span>
+                    <ArrowRight className="g-icon g-button__arrow" aria-hidden="true" />
+                  </a>
+                </div>
+                <figure className="pj-cover">
+                  <img
+                    src={project.image}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    style={
+                      project.coverPosition ? { objectPosition: project.coverPosition } : undefined
+                    }
+                  />
+                </figure>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <div className="pj-out">
+          <p className="g-eyebrow pj-out__e">
+            <i
+              className="hs-stop pj-out__stop"
+              data-stop="pj-out"
+              data-size="44"
+              data-size-m="44"
+              aria-hidden="true"
+            />
+            {t(locale, "outcomes.label")}
+          </p>
+          {outcomeSites.map(site => {
+            const parts = splitOutcome(site.summary[locale]);
+            return (
+              <a
+                key={site.id}
+                className="pj-stat"
+                href={site.live}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-giro-wink=""
+              >
+                <strong>{parts.value}</strong>
+                <span>
+                  {parts.label}
+                  <small>{`${site.title} · ${parts.source}`}</small>
+                </span>
+              </a>
+            );
+          })}
+          <p className="pj-out__note">{t(locale, "outcomes.measured")}</p>
+        </div>
+
+        {/* A saída fica dentro do disco: o Giro pousa já na superfície de tinta. */}
+        <div className="hs-disc pj-disc g-tinta" aria-hidden="true">
+          <i
+            className="hs-stop pj-exit"
+            data-stop="pj-exit"
+            data-size="56"
+            data-size-m="56"
+            aria-hidden="true"
           />
-        ))}
+        </div>
       </div>
-    </div>
+    </section>
   );
 }

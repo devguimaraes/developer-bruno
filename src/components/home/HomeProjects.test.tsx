@@ -1,211 +1,97 @@
-import { act, render, screen } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { render, screen, within } from "@testing-library/react";
+import { afterEach, describe, expect, it } from "vitest";
 import { homeCases } from "@/data/projects";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { setLocale } from "@/lib/i18n";
-import { enteredBandIds } from "./entered-bands";
 import { HomeProjects } from "./HomeProjects";
-
-vi.mock("@/hooks/useReducedMotion", () => ({ useReducedMotion: vi.fn() }));
-
-const observers: BandObserver[] = [];
-
-class BandObserver implements IntersectionObserver {
-  readonly root: Element | Document | null = null;
-  readonly rootMargin = "";
-  readonly scrollMargin = "";
-  readonly thresholds: readonly number[] = [];
-  elements: Element[] = [];
-
-  constructor(private readonly callback: IntersectionObserverCallback) {
-    observers.push(this);
-  }
-
-  observe(element: Element) {
-    this.elements.push(element);
-  }
-
-  unobserve(element: Element) {
-    this.elements = this.elements.filter(item => item !== element);
-  }
-
-  disconnect() {
-    this.elements = [];
-  }
-
-  takeRecords(): IntersectionObserverEntry[] {
-    return [];
-  }
-
-  intersect(ratio = 1) {
-    const height = 800;
-    this.callback(
-      this.elements.map(target => ({
-        isIntersecting: ratio > 0,
-        intersectionRatio: ratio,
-        intersectionRect: {
-          height: height * ratio,
-          width: 400,
-          top: 0,
-          left: 0,
-          bottom: height,
-          right: 400,
-          x: 0,
-          y: 0,
-          toJSON() {
-            return {};
-          },
-        },
-        boundingClientRect: target.getBoundingClientRect(),
-        rootBounds: null,
-        target,
-        time: 0,
-      })) as IntersectionObserverEntry[],
-      this
-    );
-  }
-}
-
-function band(id = "estudio-entre"): HTMLElement {
-  const element = document.getElementById(`home-band-${id}`);
-  if (!element) throw new Error(`faixa ${id} não encontrada`);
-  return element;
-}
-
-function enterFirst() {
-  act(() => {
-    observers[0]?.intersect();
-  });
-}
-
-beforeEach(() => {
-  observers.length = 0;
-  enteredBandIds.clear();
-  document.documentElement.removeAttribute("data-loader");
-  vi.mocked(useReducedMotion).mockReturnValue(false);
-  vi.stubGlobal("IntersectionObserver", BandObserver);
-});
 
 afterEach(() => {
   setLocale("pt");
-  document.documentElement.removeAttribute("data-loader");
-  vi.unstubAllGlobals();
 });
 
 describe("HomeProjects", () => {
-  it("mostra o título da seção e os cinco cases em português", () => {
+  it("mostra o título e uma janela por case, com link para a página do case", () => {
     render(<HomeProjects />);
 
     expect(screen.getByRole("heading", { level: 2, name: "No ar." })).toBeInTheDocument();
-    expect(screen.getByText("// projetos")).toBeInTheDocument();
+    const windows = screen.getAllByRole("article");
+    expect(windows).toHaveLength(homeCases.length);
 
-    for (const project of homeCases) {
-      expect(screen.getByRole("link", { name: project.title })).toHaveAttribute(
+    homeCases.forEach((project, i) => {
+      const win = windows[i];
+      expect(win).toHaveAccessibleName(project.title);
+      expect(within(win).getByRole("heading", { level: 3, name: project.title })).toBeVisible();
+      expect(within(win).getByText(project.label.pt)).toBeInTheDocument();
+      expect(within(win).getByText(project.summary.pt)).toBeInTheDocument();
+      expect(within(win).getByRole("link", { name: new RegExp(project.title) })).toHaveAttribute(
         "href",
         `/projetos/${project.slug}`
       );
-      expect(screen.getByText(project.label.pt)).toBeInTheDocument();
-      expect(screen.getByText(project.summary.pt)).toBeInTheDocument();
-      const tag = document.querySelector(`#home-band-${project.id} .home-band__tag`);
-      expect(tag?.textContent).toMatch(/^<[A-Za-z0-9]+ \/>$/);
-    }
-
-    expect(document.querySelector("#home-band-estudio-entre .home-band__tag")).toHaveTextContent(
-      "<EstudioEntre />"
-    );
-    expect(document.querySelector("#home-band-agencia-multi-br .home-band__tag")).toHaveTextContent(
-      "<AgenciaMultiBR />"
-    );
-    expect(screen.getAllByRole("list", { name: "Stack" })).toHaveLength(homeCases.length);
-    expect(screen.getAllByText("Ver case", { selector: ".home-band__cta" })).toHaveLength(
-      homeCases.length
-    );
-    expect(band().querySelector(".home-band__cover")).toHaveAttribute("aria-hidden", "true");
-    expect(band().querySelector(".home-band__sel")).toHaveAttribute("aria-hidden", "true");
+    });
   });
 
-  it("troca rótulo, resumo e chamada quando o idioma é inglês", () => {
+  it("põe o endereço do site na barra da janela, sem protocolo nem www", () => {
+    render(<HomeProjects />);
+    const [entre] = screen.getAllByRole("article");
+    expect(within(entre).getByText("estudioentre.com.br")).toBeInTheDocument();
+    expect(within(entre).getByText("01/05")).toBeInTheDocument();
+  });
+
+  it("alterna as superfícies das janelas como na prancha", () => {
+    render(<HomeProjects />);
+    const surfaces = screen
+      .getAllByRole("article")
+      .map(win => [...win.classList].find(c => c.startsWith("g-")));
+    expect(surfaces).toEqual(["g-tinta", "g-azul", "g-papel", "g-tinta", "g-azul"]);
+  });
+
+  it("lista a stack de cada case em texto", () => {
+    render(<HomeProjects />);
+    const stacks = screen.getAllByRole("list", { name: "Stack" });
+    expect(stacks).toHaveLength(homeCases.length);
+    expect(
+      within(stacks[0])
+        .getAllByRole("listitem")
+        .map(li => li.textContent)
+    ).toEqual([...homeCases[0].stack]);
+  });
+
+  it("mostra os outros sites no ar como links externos com o número e o que ele mede", () => {
+    render(<HomeProjects />);
+    expect(screen.getByText("// outros sites no ar")).toBeInTheDocument();
+    expect(screen.getByText("números medidos em cada projeto")).toBeInTheDocument();
+
+    const external = screen
+      .getAllByRole("link")
+      .filter(link => link.getAttribute("target") === "_blank");
+    expect(external.map(link => link.getAttribute("href"))).toEqual([
+      "https://www.agenciamultibr.com/",
+      "https://atlasmarinesolutions.com/",
+      "https://societyshow.com.br/",
+    ]);
+    for (const link of external) {
+      expect(link).toHaveAttribute("rel", expect.stringContaining("noopener"));
+    }
+    expect(within(external[0]).getByText("−30%")).toBeInTheDocument();
+    expect(
+      within(external[0]).getByText("na taxa de rejeição depois do redesign")
+    ).toBeInTheDocument();
+  });
+
+  it("marca as paradas do Giro: título, vaga de cada janela, números e saída", () => {
+    const { container } = render(<HomeProjects />);
+    const stops = [...container.querySelectorAll("[data-stop]")].map(n =>
+      n.getAttribute("data-stop")
+    );
+    expect(stops).toEqual(["pj-dot", "pj0", "pj1", "pj2", "pj3", "pj4", "pj-out", "pj-exit"]);
+  });
+
+  it("troca título, textos e chamada quando o idioma é inglês", () => {
     setLocale("en");
     render(<HomeProjects />);
-
     expect(screen.getByRole("heading", { level: 2, name: "Live." })).toBeInTheDocument();
     expect(screen.getByText(homeCases[0].label.en)).toBeInTheDocument();
     expect(screen.getByText(homeCases[0].summary.en)).toBeInTheDocument();
-    expect(screen.getAllByText("View case study", { selector: ".home-band__cta" })).toHaveLength(
-      homeCases.length
-    );
-  });
-
-  it("não entra enquanto o loader está na tela e entra quando ele sai", async () => {
-    document.documentElement.setAttribute("data-loader", "mounted");
-    render(<HomeProjects />);
-    enterFirst();
-
-    expect(band()).toHaveAttribute("data-entered", "false");
-
-    await act(async () => {
-      document.documentElement.removeAttribute("data-loader");
-      await Promise.resolve();
-    });
-
-    expect(band()).toHaveAttribute("data-entered", "true");
-  });
-
-  it("entra uma vez: sair e voltar para a tela não recomeça", () => {
-    render(<HomeProjects />);
-    expect(band()).toHaveAttribute("data-entered", "false");
-
-    enterFirst();
-    expect(band()).toHaveAttribute("data-entered", "true");
-
-    act(() => {
-      observers[0]?.intersect(0);
-    });
-    expect(band()).toHaveAttribute("data-entered", "true");
-  });
-
-  it("põe o logo da tecnologia na badge, e só texto onde não há logo", () => {
-    render(<HomeProjects />);
-
-    const tags = [...document.querySelectorAll<HTMLElement>(".home-band .g-tag")];
-    const byName = (name: string) => tags.filter(tag => tag.textContent === name);
-
-    for (const name of ["Astro", "React", "Next.js", "PHP", "WordPress"]) {
-      for (const tag of byName(name)) {
-        expect(tag.querySelector("svg.g-tag__logo")).toHaveAttribute("aria-hidden", "true");
-      }
-    }
-    expect(byName("SEO").length).toBeGreaterThan(0);
-    for (const tag of byName("SEO")) expect(tag.querySelector("svg")).toBeNull();
-  });
-
-  it("não usa mais loader, troca de fundo nem seleção automática na capa", () => {
-    render(<HomeProjects />);
-    enterFirst();
-
-    expect(band().querySelector(".g-giro")).toBeNull();
-    expect(band().querySelector(".home-band__wash")).toBeNull();
-    expect(band()).not.toHaveAttribute("data-loaded");
-    expect(band()).not.toHaveAttribute("data-typing");
-    expect(band()).not.toHaveAttribute("data-selected");
-  });
-
-  it("com movimento reduzido a faixa já chega assentada", () => {
-    vi.mocked(useReducedMotion).mockReturnValue(true);
-    render(<HomeProjects />);
-
-    expect(band()).toHaveAttribute("data-entered", "true");
-    expect(observers).toHaveLength(0);
-  });
-
-  it("ao voltar para a home a faixa que já entrou chega assentada", () => {
-    const first = render(<HomeProjects />);
-    enterFirst();
-    expect(band()).toHaveAttribute("data-entered", "true");
-    first.unmount();
-
-    render(<HomeProjects />);
-    expect(band()).toHaveAttribute("data-entered", "true");
-    expect(band("atlas-marine-solutions")).toHaveAttribute("data-entered", "false");
+    expect(screen.getAllByText("View case study")).toHaveLength(homeCases.length);
+    expect(screen.getByText("// other live sites")).toBeInTheDocument();
   });
 });

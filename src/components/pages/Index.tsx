@@ -3,7 +3,6 @@ import { Hero } from "@/components/hero/Hero";
 import { HomeAbout } from "@/components/home/HomeAbout";
 import { HomeBlog, type HomePost } from "@/components/home/HomeBlog";
 import { HomeContact } from "@/components/home/HomeContact";
-import { HomeOtherSites } from "@/components/home/HomeOtherSites";
 import { HomeProcess } from "@/components/home/HomeProcess";
 import { HomeProjects } from "@/components/home/HomeProjects";
 import { HomeServices } from "@/components/home/HomeServices";
@@ -34,8 +33,8 @@ function HomeSection({ id, surface, ruled = false, children }: HomeSectionProps)
         <i
           className="hs-stop home-section__stop"
           data-stop={id}
-          data-size={id === "projetos" ? "72" : id === "contato" ? "44" : "64"}
-          data-size-m={id === "projetos" ? "40" : "44"}
+          data-size={id === "contato" ? "44" : "64"}
+          data-size-m="44"
           aria-hidden="true"
         />
         <div className="home-section__body">{children}</div>
@@ -64,10 +63,7 @@ const Index: React.FC<IndexProps> = ({ posts }) => {
 
       <HomeServices />
 
-      <HomeSection id="projetos" surface="g-papel" ruled>
-        <HomeProjects />
-        <HomeOtherSites />
-      </HomeSection>
+      <HomeProjects />
 
       <HomeSection id="processo" surface="g-papel" ruled>
         <HomeProcess />

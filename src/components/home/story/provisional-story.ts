@@ -1,4 +1,5 @@
 import type { GiroState } from "@/components/brand/giro-states";
+import { calcProjectStep } from "@/components/home/project-stage";
 import { calcServiceStep } from "@/components/home/service-stage";
 import { type Chapter, createChapter } from "./chapters";
 import { detectSurface } from "./giro-jump";
@@ -68,6 +69,23 @@ export function buildProvisionalChapters(
               state: "curious",
             };
           },
+        })
+      );
+      continue;
+    }
+
+    if (cfg.id === "projetos") {
+      const count = Math.max(1, el.querySelectorAll(".pj").length);
+      chapters.push(
+        createChapter({
+          id: "projetos",
+          label: cfg.label,
+          top,
+          len,
+          altura: viewportH,
+          lead: 0.5,
+          surface: "papel",
+          at: (p: number) => calcProjectStep(p, count),
         })
       );
       continue;

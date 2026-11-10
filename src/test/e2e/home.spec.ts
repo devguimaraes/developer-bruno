@@ -104,22 +104,36 @@ test.describe("Navegação Principal", () => {
     ).toBeVisible();
   });
 
-  test("Deve revelar a faixa ao entrar e levar ao estudo", async ({ page }) => {
+  test("Deve trazer a janela do case ao rolar e abrir o case", async ({ page }) => {
     await page.goto("/#projetos");
     await waitForHydration(page);
 
     const projectsSection = page.locator("#projetos");
     await expect(projectsSection.getByRole("heading", { name: "No ar.", level: 2 })).toBeVisible();
 
-    const entre = projectsSection.getByRole("link", { name: "Estúdio Entre" });
+    // Com as cenas ligadas a primeira janela está toda na tela em t = 2,5 de 12,2.
+    await page.evaluate(() => {
+      const sec = document.getElementById("projetos");
+      if (!sec) return;
+      const top = sec.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo(0, top + (sec.offsetHeight - window.innerHeight) * (2.5 / 12.2));
+    });
+
+    const entre = projectsSection.getByRole("link", { name: /Estúdio Entre/ });
     await expect(entre).toHaveAttribute("href", "/projetos/estudio-entre");
-    await entre.scrollIntoViewIfNeeded();
-    await expect(projectsSection.locator(".home-band").first()).toHaveAttribute(
-      "data-entered",
-      "true"
-    );
+    await expect(entre).toBeInViewport();
 
     await entre.click();
     await expect(page).toHaveURL(/\/projetos\/estudio-entre$/);
+  });
+
+  test("Deve levar cada número dos outros sites ao site no ar", async ({ page }) => {
+    await page.goto("/#projetos");
+    await waitForHydration(page);
+
+    const stats = page.locator("#projetos .pj-stat");
+    await expect(stats).toHaveCount(3);
+    await expect(stats.first()).toHaveAttribute("href", "https://www.agenciamultibr.com/");
+    await expect(stats.first()).toHaveAttribute("target", "_blank");
   });
 });
