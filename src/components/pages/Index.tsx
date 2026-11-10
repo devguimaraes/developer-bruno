@@ -62,9 +62,7 @@ const Index: React.FC<IndexProps> = ({ posts }) => {
         <Hero />
       </SectionEntrance>
 
-      <HomeSection id="servicos" surface="g-papel">
-        <HomeServices />
-      </HomeSection>
+      <HomeServices />
 
       <HomeSection id="projetos" surface="g-papel" ruled>
         <HomeProjects />

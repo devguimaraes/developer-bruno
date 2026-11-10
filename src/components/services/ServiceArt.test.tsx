@@ -99,4 +99,92 @@ describe("ServiceArt", () => {
       expect(art).not.toHaveClass("is-pre");
     });
   });
+
+  it("no modo controlado ativo (active=true) remove is-pre e is-paused e marca data-ready", async () => {
+    vi.stubGlobal(
+      "IntersectionObserver",
+      class {
+        constructor(private callback: IntersectionObserverCallback) {}
+        observe = (target: Element) =>
+          this.callback(
+            [{ isIntersecting: true, target } as IntersectionObserverEntry],
+            this as unknown as IntersectionObserver
+          );
+        disconnect = vi.fn();
+        unobserve = vi.fn();
+        takeRecords = () => [];
+      }
+    );
+
+    const { container } = render(<ServiceArt name="landing-pages" active={true} />);
+
+    await waitFor(() => {
+      const art = container.querySelector(".ar");
+      expect(art).not.toBeNull();
+      expect(art).not.toHaveClass("is-pre");
+      expect(art).not.toHaveClass("is-paused");
+      expect(container.querySelector(".service-art")).toHaveAttribute("data-ready", "true");
+    });
+  });
+
+  it("no modo controlado inativo (active=false) aplica is-pre e is-paused", async () => {
+    vi.stubGlobal(
+      "IntersectionObserver",
+      class {
+        constructor(private callback: IntersectionObserverCallback) {}
+        observe = (target: Element) =>
+          this.callback(
+            [{ isIntersecting: true, target } as IntersectionObserverEntry],
+            this as unknown as IntersectionObserver
+          );
+        disconnect = vi.fn();
+        unobserve = vi.fn();
+        takeRecords = () => [];
+      }
+    );
+
+    const { container } = render(<ServiceArt name="landing-pages" active={false} />);
+
+    await waitFor(() => {
+      const art = container.querySelector(".ar");
+      expect(art).not.toBeNull();
+      expect(art).toHaveClass("is-pre");
+      expect(art).toHaveClass("is-paused");
+    });
+  });
+
+  it("alterna classes ao mudar a prop active de false para true", async () => {
+    vi.stubGlobal(
+      "IntersectionObserver",
+      class {
+        constructor(private callback: IntersectionObserverCallback) {}
+        observe = (target: Element) =>
+          this.callback(
+            [{ isIntersecting: true, target } as IntersectionObserverEntry],
+            this as unknown as IntersectionObserver
+          );
+        disconnect = vi.fn();
+        unobserve = vi.fn();
+        takeRecords = () => [];
+      }
+    );
+
+    const { container, rerender } = render(<ServiceArt name="landing-pages" active={false} />);
+
+    await waitFor(() => {
+      const art = container.querySelector(".ar");
+      expect(art).not.toBeNull();
+      expect(art).toHaveClass("is-pre");
+      expect(art).toHaveClass("is-paused");
+    });
+
+    rerender(<ServiceArt name="landing-pages" active={true} />);
+
+    await waitFor(() => {
+      const art = container.querySelector(".ar");
+      expect(art).not.toBeNull();
+      expect(art).not.toHaveClass("is-pre");
+      expect(art).not.toHaveClass("is-paused");
+    });
+  });
 });

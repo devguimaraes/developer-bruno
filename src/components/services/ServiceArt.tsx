@@ -42,13 +42,18 @@ interface ServiceArtProps {
   name: ServiceArtName;
   /** Espera da cascata entre cards, em ms. Vira --cd nas placas. */
   delay?: number;
+  /**
+   * Modo controlado: quando fornecido, a arte ativa remove `is-pre` e `is-paused` e zera
+   * o relógio; as outras recebem `is-pre` e `is-paused`.
+   */
+  active?: boolean;
 }
 
 /**
  * A arte entra com as placas subindo. Fora da tela o loop pausa; com movimento reduzido
  * fica na pose montada.
  */
-export function ServiceArt({ name, delay = 0 }: ServiceArtProps) {
+export function ServiceArt({ name, delay = 0, active }: ServiceArtProps) {
   // Os observadores olham a caixa (que já tem a proporção). O host só recebe o fragmento
   // e tem altura zero até a arte chegar: observado ele, as artes fora da primeira dobra
   // não carregavam.
@@ -86,7 +91,8 @@ export function ServiceArt({ name, delay = 0 }: ServiceArtProps) {
   }, []);
 
   useEffect(() => {
-    if (!nearScreen || inserted) return;
+    const shouldLoad = nearScreen || active;
+    if (!shouldLoad || inserted) return;
     let cancelled = false;
     ART[name]
       .load()
@@ -105,7 +111,7 @@ export function ServiceArt({ name, delay = 0 }: ServiceArtProps) {
     return () => {
       cancelled = true;
     };
-  }, [name, nearScreen, inserted]);
+  }, [name, nearScreen, active, inserted]);
 
   useEffect(() => {
     if (!inserted) return;
@@ -116,18 +122,33 @@ export function ServiceArt({ name, delay = 0 }: ServiceArtProps) {
       art.classList.remove("is-pre");
       art.classList.add("is-still");
       setRevealed(true);
-    } else {
-      art.classList.remove("is-still");
-      if (seen && art.classList.contains("is-pre")) {
+      return;
+    }
+
+    art.classList.remove("is-still");
+
+    if (active !== undefined) {
+      if (active) {
         resetClocks(art);
         art.classList.remove("is-pre");
+        art.classList.remove("is-paused");
         setRevealed(true);
+      } else {
+        art.classList.add("is-pre");
+        art.classList.add("is-paused");
       }
+      return;
+    }
+
+    if (seen && art.classList.contains("is-pre")) {
+      resetClocks(art);
+      art.classList.remove("is-pre");
+      setRevealed(true);
     }
 
     if (inView) art.classList.remove("is-paused");
     else art.classList.add("is-paused");
-  }, [inserted, reducedMotion, seen, inView]);
+  }, [inserted, reducedMotion, seen, inView, active]);
 
   const ratio = ART[name].ratio;
   const style: ArtStyle = {

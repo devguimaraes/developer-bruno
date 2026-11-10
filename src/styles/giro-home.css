@@ -55,91 +55,239 @@
   border-radius: 12px;
 }
 
-.home-services__grid {
+/* ---------- Serviços: um palco, cinco trocas (issue #116) ---------- */
+
+.sv-track {
+  position: relative;
+}
+
+[data-scenes="on"] .sv-track {
+  height: calc(var(--H, 100svh) * 3.6);
+}
+
+.sv-stage {
+  position: relative;
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 24px;
+  grid-template-columns: 45% 55%;
+  width: 100%;
+  min-height: 100svh;
+  box-sizing: border-box;
+}
+
+[data-scenes="on"] .sv-stage {
+  position: sticky;
+  top: 0;
+  height: var(--H, 100svh);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.sv-left {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 100svh;
+  padding: calc(var(--u) * 7) calc(var(--u) * 4) calc(var(--u) * 3) var(--G, 64px);
+}
+
+.sv-head .g-eyebrow,
+.sv-intro .g-eyebrow {
   margin: 0;
-  padding: 0;
+}
+
+.sv-title {
+  margin-top: calc(var(--u) * 1);
+  font-size: calc(var(--u) * 6.4);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+
+.sv-lead {
+  max-width: 44ch;
+  margin: calc(var(--u) * 1.4) 0 0;
+  color: var(--s-muted);
+  font: 450 calc(var(--u) * 1.25) / 1.45 var(--font-sans);
+}
+
+.sv-list {
+  position: relative;
+  margin: calc(var(--u) * 2.6) 0 0;
+  padding: 0 0 0 calc(var(--u) * 4.4);
   list-style: none;
 }
-/* #edece8 é tinta a 4% sobre papel. A regra vem depois de .g-azul, então o card azul
-   repete o fundo da superfície. */
-.home-service {
-  grid-column: span 2;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  border-radius: 30px;
-  background: #edece8;
-  box-shadow: inset 0 0 0 1px var(--s-line);
-  transition: translate var(--dur-resolve) var(--ease-resolve);
+
+.sv-list::before {
+  content: "";
+  position: absolute;
+  top: calc(var(--u) * 1.8);
+  bottom: calc(var(--u) * 1.8);
+  left: calc(var(--u) * 1.4);
+  border-left: 2px dotted var(--s-line-strong);
 }
-.home-service.g-azul {
+
+.sv-list li {
+  position: relative;
+}
+
+.sv-dot {
+  position: absolute;
+  top: 50%;
+  left: calc(var(--u) * -3);
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -5px;
+  border-radius: 50%;
   background: var(--s-bg);
+  box-shadow: inset 0 0 0 2px var(--s-line-strong);
 }
-.home-service:nth-child(-n + 2) {
-  grid-column: span 3;
-}
-.home-service:hover {
-  translate: 0 calc(-1 * var(--lift-card));
-}
-.home-service__art {
+
+.sv-row {
+  appearance: none;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 300px;
-  overflow: hidden;
-}
-.home-service:nth-child(-n + 2) .home-service__art {
-  height: 360px;
-}
-/* O palco é justo (--ratio = largura / altura): a arte ocupa a altura da área. */
-.home-service__art .service-art {
-  flex: none;
-  width: min(100% - 24px, calc(276px * var(--ratio)));
-}
-.home-service:nth-child(-n + 2) .home-service__art .service-art {
-  width: min(100% - 24px, calc(336px * var(--ratio)));
-}
-.home-service__body {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 8px 32px 32px;
-}
-.home-service__n {
-  font: var(--text-rotulo);
+  align-items: baseline;
+  gap: calc(var(--u) * 1.1);
+  width: 100%;
+  height: calc(var(--u) * 3.6);
+  padding: 0;
+  border: 0;
+  background: none;
   color: var(--s-muted);
+  text-align: left;
+  cursor: pointer;
 }
-.home-service__title {
-  margin: 0;
-  font-family: var(--font-sans);
-  font-size: 26px;
-  line-height: 1.15;
+
+.sv-row:focus-visible {
+  outline: 2px solid var(--s-signal);
+  outline-offset: 2px;
+}
+
+.sv-n {
+  font: var(--text-micro);
+  font-family: var(--font-mono);
+}
+
+.sv-name {
+  font-size: calc(var(--u) * 2.2);
   font-weight: 800;
-  font-stretch: 110%;
+  font-stretch: 70%;
+  line-height: calc(var(--u) * 3.6);
   letter-spacing: -0.015em;
+  white-space: nowrap;
+  transition:
+    font-stretch 480ms var(--ease-resolve),
+    color 200ms linear;
 }
-.home-service__text {
-  margin: 0;
+
+.sv-row.is-on {
+  color: var(--s-fg);
+}
+
+.sv-row.is-on .sv-name {
+  font-stretch: 122%;
+}
+
+.sv-slot {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  margin-top: calc(var(--u) * 1.6);
+  margin-left: calc(var(--u) * 4.4);
+}
+
+.sv-detail {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition:
+    opacity 200ms linear,
+    transform 360ms var(--ease-resolve);
+}
+
+.sv-detail.is-on {
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+}
+
+.sv-detail p {
   max-width: 46ch;
-  font: var(--text-corpo);
+  margin: 0;
   color: var(--s-muted);
+  font: 450 calc(var(--u) * 1.2) / 1.5 var(--font-sans);
 }
-.home-service__tags {
+
+.sv-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin: 0;
+  margin: calc(var(--u) * 1) 0 0;
   padding: 0;
   list-style: none;
 }
-.home-service__tags li {
+
+.sv-tags li {
   padding: 5px 12px;
   border: 1px solid var(--s-line-strong);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-pill, 999px);
   font: var(--text-micro);
+}
+
+.sv-panel {
+  position: relative;
+  overflow: hidden;
+  background: var(--sv-c, var(--azul-sinal));
+  transition: background-color 300ms ease;
+}
+
+.sv-panel__disc {
+  position: absolute;
+  inset: 0;
+  background: var(--sv-next, var(--azul-sinal));
+  clip-path: circle(0 at 0% var(--sv-oy, 50%));
+  pointer-events: none;
+}
+
+.sv-art__stage {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.sv-art {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms linear;
+}
+
+.sv-art.is-on {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sv-art .service-art {
+  display: block;
+  container-type: inline-size;
+  width: min(84%, calc(var(--H, 100svh) * 0.68 * var(--ratio)));
+}
+
+.sv-art[data-c="azul"] .ar {
+  --side: #c9cae9;
+  --floor: rgba(11, 12, 31, 0.16);
+}
+
+.sv-art[data-c="tinta"] .ar {
+  --side: #8d8fb3;
+  --floor: rgba(246, 245, 240, 0.1);
 }
 
 /* ---------- Projetos: faixas no papel ----------
@@ -433,18 +581,7 @@
   }
 }
 
-@media (max-width: 1023px) {
-  .home-services__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .home-service,
-  .home-service:nth-child(-n + 2) {
-    grid-column: span 1;
-  }
-  .home-service:last-child {
-    grid-column: span 2;
-  }
-}
+
 
 /* ---------- Outros sites no ar ---------- */
 
@@ -677,44 +814,141 @@
   border-top: 1px solid var(--s-line);
 }
 
+/* Classes de visibilidade da home em camadas */
+@media (max-width: 768px) {
+  .only-d {
+    display: none !important;
+  }
+}
+@media (min-width: 769px) {
+  .only-m {
+    display: none !important;
+  }
+}
+
 /* ---------- Celular (app web: seções mais baixas, uma coluna) ---------- */
+
+@media (max-width: 768px) {
+  .sv-intro {
+    padding: 96px 16px 32px;
+  }
+  .sv-intro .g-eyebrow {
+    margin: 0;
+  }
+  .sv-title {
+    margin-top: 10px;
+    font-size: 58px;
+    line-height: 0.95;
+  }
+  .sv-lead {
+    margin-top: 16px;
+    font-size: 18px;
+    line-height: 1.45;
+  }
+  .sv-stage {
+    display: flex;
+    flex-direction: column;
+    height: var(--H, 100svh);
+  }
+  /* A cor e a arte ocupam o que sobrar da tela; o texto fica colado na ilha, sem vão embaixo. */
+  .sv-panel {
+    order: 0;
+    flex: 1 1 0;
+    min-height: 0;
+  }
+  .sv-art {
+    grid-template-rows: auto minmax(0, 1fr);
+    place-items: stretch;
+  }
+  .sv-art__head {
+    padding: 24px 16px 0;
+    background: none;
+  }
+  .sv-art__head .g-eyebrow {
+    margin: 0;
+  }
+  .sv-art__name {
+    margin: 10px 0 0;
+    font-size: 50px;
+    font-weight: 900;
+    font-stretch: 104%;
+    line-height: 0.94;
+    letter-spacing: -0.03em;
+  }
+  .sv-art__stage {
+    container-type: size;
+  }
+  .sv-art .service-art {
+    width: min(100cqw, calc(94cqh * var(--ratio)));
+  }
+  .sv-left {
+    order: 1;
+    flex: none;
+    height: auto;
+    min-height: auto;
+    padding: 2px 16px 96px;
+  }
+  .sv-list {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    margin: 0;
+    padding: 0;
+    height: 48px;
+  }
+  .sv-list::before {
+    top: 24px;
+    right: 10%;
+    bottom: auto;
+    left: 10%;
+    border-top: 2px dotted var(--s-line-strong);
+    border-left: 0;
+  }
+  .sv-dot {
+    top: 24px;
+    left: 50%;
+    margin: -6px 0 0 -6px;
+  }
+  .sv-row {
+    display: block;
+    height: 48px;
+  }
+  .sv-n,
+  .sv-name {
+    position: absolute;
+    overflow: hidden;
+    width: 1px;
+    height: 1px;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  /* Os cinco textos no mesmo lugar da grade: o bloco mede o mais alto e nada pula na troca. */
+  .sv-slot {
+    display: grid;
+    flex: none;
+    margin: 4px 0 0;
+    margin-left: 0;
+  }
+  .sv-detail {
+    position: relative;
+    inset: auto;
+    grid-area: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .sv-detail p {
+    font-size: 18px;
+    line-height: 1.42;
+  }
+  .sv-tags {
+    margin-top: auto;
+    padding-top: 14px;
+  }
+}
 
 @media (max-width: 640px) {
   .home-section__inner {
     padding: 0 16px;
-  }
-  .home-services__grid {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 16px;
-  }
-  .home-service:last-child {
-    grid-column: span 1;
-  }
-  /* Um serviço por tela: com dois cards à vista as animações disputam a atenção. A altura
-     desconta a barra de abas (84px) e o respiro entre os cards. */
-  /* Arte e texto num bloco só, centrado no card; a arte inteira, sem corte. */
-  .home-service {
-    justify-content: center;
-    min-height: calc(100svh - 84px - env(safe-area-inset-bottom) - 32px);
-  }
-  .home-service__art,
-  .home-service:nth-child(-n + 2) .home-service__art {
-    height: auto;
-    padding: 16px 0 0;
-  }
-  .home-service__art .service-art,
-  .home-service:nth-child(-n + 2) .home-service__art .service-art {
-    width: 100%;
-  }
-  .home-service__body {
-    gap: 14px;
-    padding: 8px 24px 28px;
-  }
-  .home-service__title {
-    font-size: 34px;
-  }
-  .home-service__text {
-    font-size: 18px;
   }
   .home-section__body {
     gap: 40px;
@@ -793,10 +1027,25 @@
 
 @media (prefers-reduced-motion: reduce) {
   .home-stat,
-  .home-stat:hover,
-  .home-service,
-  .home-service:hover {
+  .home-stat:hover {
     translate: none;
+  }
+  [data-scenes="on"] .sv-track {
+    height: auto;
+  }
+  [data-scenes="on"] .sv-stage {
+    position: relative;
+    height: auto;
+    min-height: auto;
+  }
+  .sv-name,
+  .sv-detail,
+  .sv-art,
+  .sv-panel {
+    transition: none !important;
+  }
+  .sv-panel__disc {
+    display: none !important;
   }
   .ar * {
     animation: none !important;

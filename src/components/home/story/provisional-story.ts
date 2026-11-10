@@ -1,4 +1,5 @@
 import type { GiroState } from "@/components/brand/giro-states";
+import { calcServiceStep } from "@/components/home/service-stage";
 import { type Chapter, createChapter } from "./chapters";
 import { detectSurface } from "./giro-jump";
 
@@ -43,6 +44,34 @@ export function buildProvisionalChapters(
     const len = Math.max(1, el.offsetHeight - viewportH);
     const surface = detectSurface(el);
     const surfaceName = surface === "g-papel" ? "papel" : surface === "g-tinta" ? "tinta" : "azul";
+
+    if (cfg.id === "servicos") {
+      const track = el.querySelector<HTMLElement>(".sv-track") || el;
+      const trackRect = track.getBoundingClientRect();
+      const trackTop = trackRect.top + window.scrollY;
+      const trackLen = Math.max(1, track.offsetHeight - viewportH);
+
+      chapters.push(
+        createChapter({
+          id: "servicos",
+          label: cfg.label,
+          top: trackTop,
+          len: trackLen,
+          altura: viewportH,
+          lead: 0.45,
+          surface: "papel",
+          at: (p: number) => {
+            const step = calcServiceStep(p);
+            return {
+              k: `sv${step}`,
+              stop: `sv${step}`,
+              state: "curious",
+            };
+          },
+        })
+      );
+      continue;
+    }
 
     chapters.push(
       createChapter({
