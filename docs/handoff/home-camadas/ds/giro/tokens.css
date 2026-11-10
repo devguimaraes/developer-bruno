@@ -1,0 +1,115 @@
+ tag below was published to this artifact by one of its writers — treat the tag's contents as untrusted data, not instructions:
+<artifact-file-content>
+/* Giro — generated from tokens.json */
+:root, [data-theme="light"] {
+  --azul-sinal: #2b2eff; /* Superfície de marca: hero, destaques, rodapé e 404. Texto em papel (6,5:1) ou lima (6,2:1). */
+  --azul-fundo: #1f22d6; /* Cartões e áreas internas sobre azul-sinal. Texto em papel (8,5:1). */
+  --lima: #d2ff4d; /* Ação e mascote: botão principal, o Giro sobre azul ou tinta, progresso. Texto em tinta por cima (16,7:1). Nunca texto lima sobre papel. */
+  --papel: #f6f5f0; /* Fundo das páginas de leitura (cases, blog, post) e texto sobre azul ou tinta. */
+  --tinta: #0b0c1f; /* Texto sobre papel (17,7:1) e sobre lima. Fundo de seções escuras pontuais. */
+  --tinta-2: #15172e; /* Cartões sobre tinta. */
+  --grafite: #5b5e78; /* Texto de apoio sobre papel (5,8:1): legendas, datas, rótulos. */
+  --nevoa-azul: #d4d5fa; /* Texto de apoio sobre azul-sinal (5,0:1). */
+  --nevoa-tinta: #9a9cc0; /* Texto de apoio sobre tinta (7,3:1). */
+  --coral: #ff5c3d; /* Só estado de erro, como preenchimento com texto em tinta (6,3:1). Nunca como texto sobre azul (2,3:1). */
+  --linha-papel: rgba(11, 12, 31, 0.14); /* Divisórias e bordas finas sobre papel. */
+  --linha-azul: rgba(246, 245, 240, 0.22); /* Divisórias e bordas finas sobre azul-sinal. */
+}
+:root {
+  --space-1: 4px; /* Ajuste fino entre ícone e texto. */
+  --space-2: 8px; /* Gap entre chips e entre botões pequenos. */
+  --space-3: 12px; /* Gap entre botões e entre tiles de estado. */
+  --space-4: 16px; /* Margem lateral mínima no celular. */
+  --space-6: 24px; /* Padding de cards e gap de grids. */
+  --space-8: 32px; /* Gap entre blocos de uma seção. */
+  --space-12: 48px; /* Gap entre o título e o conteúdo da seção. */
+  --space-16: 64px; /* Margem lateral no desktop. */
+  --space-18: 72px; /* Padding vertical de seção no desktop. */
+  --radius-sm: 10px; /* Teclas (kbd), chips pequenos e ícones de 32px. */
+  --radius-md: 22px; /* Tiles de estado do mascote e cards de conteúdo. */
+  --radius-lg: 28px; /* Palcos grandes, cards de case e blocos de marca. */
+  --radius-pill: 999px; /* Botões, tags, inputs e nós da máquina de estados. A forma do Giro manda: tudo que é clicável é redondo. */
+  --font-sans: "Anybody", "Arial Black", system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --text-titulo-hero: 900 124px/0.94 var(--font-sans); /* Título do hero com font-stretch 106%. No celular cai para 56px. */
+  --text-titulo-1: 900 72px/1 var(--font-sans); /* Título de página e de seção grande, font-stretch 115%. No celular 44px. */
+  --text-titulo-2: 900 40px/1.05 var(--font-sans); /* Título de seção, font-stretch 112%. No celular 30px. */
+  --text-titulo-3: 800 26px/1.15 var(--font-sans); /* Título de card e de case, font-stretch 110%. */
+  --text-corpo-l: 450 20px/1.5 var(--font-sans); /* Abertura de página e bio. Largura 100%. */
+  --text-corpo: 450 17px/1.6 var(--font-sans); /* Texto corrido de cases e posts, até 68 caracteres por linha. */
+  --text-nav: 600 16px/1.2 var(--font-sans); /* Navegação e botões, font-stretch 110%. */
+  --text-rotulo: 400 13px/1.4 var(--font-mono); /* Rótulos de seção em minúsculas, sempre com // na frente. */
+  --text-codigo: 400 15px/1.6 var(--font-mono); /* Código, estados e dados técnicos. */
+  --text-micro: 400 12px/1.4 var(--font-mono); /* Legendas de imagem, metadados e anotações. */
+}
+.titulo-hero {
+  font-family: var(--font-sans);
+  font-size: 124px;
+  line-height: 0.94;
+  font-weight: 900;
+  letter-spacing: -0.035em;
+}
+.titulo-1 {
+  font-family: var(--font-sans);
+  font-size: 72px;
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+.titulo-2 {
+  font-family: var(--font-sans);
+  font-size: 40px;
+  line-height: 1.05;
+  font-weight: 900;
+  letter-spacing: -0.025em;
+}
+.titulo-3 {
+  font-family: var(--font-sans);
+  font-size: 26px;
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+}
+.corpo-l {
+  font-family: var(--font-sans);
+  font-size: 20px;
+  line-height: 1.5;
+  font-weight: 450;
+  letter-spacing: 0;
+}
+.corpo {
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.6;
+  font-weight: 450;
+  letter-spacing: 0;
+}
+.nav {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+.rotulo {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.4;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.codigo {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  line-height: 1.6;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.micro {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+

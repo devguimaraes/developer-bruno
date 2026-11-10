@@ -1,0 +1,701 @@
+/* Direção B, vista explodida. Uma interface só, aberta em camadas: tokens, componentes, tela e
+   estado. O Giro sobe quicando de camada em camada e cada pouso dispara a camada. As alturas vêm
+   do JS a cada quadro (abertura, ponteiro e rolagem), então as camadas não têm transição. */
+
+.hb .iso-pl {
+  transition: none;
+}
+
+.hb .iso-pl__face {
+  box-shadow: inset 0 0 0 1px rgba(11, 12, 31, 0.06);
+}
+
+.hb .iso-pl.is-hover .iso-pl__face {
+  box-shadow:
+    inset 0 0 0 1px rgba(11, 12, 31, 0.06),
+    0 0 0 3px var(--lima);
+}
+
+.hb b {
+  color: var(--hi-ink);
+}
+
+.hb .t {
+  font: 500 11px/1 var(--font-mono);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  color: var(--hi-ink-2);
+}
+
+.hb .ck {
+  overflow: visible;
+}
+
+.hb .ck path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------- Chão ---------- */
+
+.hb-floor {
+  position: absolute;
+  top: -620px;
+  left: -620px;
+  width: 1240px;
+  height: 1240px;
+  background-image: radial-gradient(circle, rgba(212, 213, 250, 0.34) 0 1.6px, transparent 2.2px);
+  background-size: 30px 30px;
+  -webkit-mask-image: radial-gradient(closest-side, #000 30%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 30%, transparent 100%);
+  opacity: var(--fo, 1);
+}
+
+.hb-base {
+  position: absolute;
+  top: -125px;
+  left: -175px;
+  width: 350px;
+  height: 250px;
+  border-radius: 22px;
+  background: rgba(11, 12, 31, 0.26);
+  opacity: var(--fo, 1);
+  transform: translateZ(0.5px);
+}
+
+/* ---------- Linha do estado, ao lado da pilha ----------
+   Uma estação por camada, como a linha de metrô do processo. O Giro anda pela linha no azul,
+   para em cada estação, manda o sinal pela ligação e a camada dispara. Tudo em 2D por cima da
+   cena: as posições vêm da projeção a cada quadro. */
+
+.hb-line {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hb-line__deco {
+  position: absolute;
+  inset: 0;
+  opacity: var(--lo, 1);
+}
+
+.hb-line__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.hb-rail {
+  fill: none;
+  stroke: rgba(212, 213, 250, 0.5);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 2 7;
+}
+
+.hb-stop {
+  fill: var(--azul-sinal);
+  stroke: var(--nevoa-azul);
+  stroke-width: 2;
+  transition:
+    fill 200ms linear,
+    stroke 200ms linear;
+}
+
+.hb-stop.is-on {
+  fill: var(--lima);
+  stroke: var(--lima);
+}
+
+.hb-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 2px;
+  border-radius: 1px;
+  background: rgba(212, 213, 250, 0.45);
+  transform-origin: 100% 50%;
+}
+
+.hb-link.is-live {
+  background: var(--lima);
+  animation: hb-link 280ms var(--ease-resolve) both;
+}
+
+@keyframes hb-link {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+.hb-tag {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: var(--nevoa-azul);
+  font: var(--text-rotulo);
+  white-space: nowrap;
+  transition: color 200ms linear;
+}
+
+.hb-tag.is-on {
+  color: var(--lima);
+}
+
+.is-mobile .hb-tag {
+  font-size: 11px;
+}
+
+.hb-rider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+}
+
+.hb-rider .hi-giro__in {
+  top: calc(var(--gs) / -2);
+  transform-origin: 50% 50%;
+}
+
+/* Miolo azul: a linha e a estação não aparecem por dentro do anel enquanto o Giro passa. */
+.hb-rider .hi-giro__in::before {
+  content: "";
+  position: absolute;
+  inset: 13%;
+  border-radius: 50%;
+  background: var(--azul-sinal);
+}
+
+.hb-rider .g-giro {
+  position: relative;
+}
+
+/* O cursor de texto anda junto com o que é digitado. */
+.is-fire .hb-caret {
+  animation:
+    hb-caret 900ms steps(10) 220ms both,
+    hb-blink 1s steps(1) infinite;
+}
+
+@keyframes hb-caret {
+  from {
+    transform: translateX(-94px);
+  }
+}
+
+/* ---------- Camada 0: tokens ---------- */
+
+.hb-sw {
+  border-radius: 50%;
+}
+
+.hb-sw--papel {
+  box-shadow: inset 0 0 0 1.5px var(--hi-ink);
+}
+
+.hb-aa {
+  font: 900 86px/1 var(--font-sans);
+  font-stretch: 100%;
+  letter-spacing: -0.03em;
+}
+
+.hb-rule {
+  height: 7px;
+  border-radius: 2px;
+  background: var(--azul-sinal);
+}
+
+.hb-rad {
+  width: 26px;
+  height: 26px;
+  box-shadow: inset 0 0 0 2px var(--hi-ink);
+}
+
+.is-fire .hb-sw {
+  animation: hb-swap 1100ms steps(1) both;
+  animation-delay: calc(var(--i) * 90ms);
+}
+
+.is-fire .hb-aa {
+  animation: hb-stretch 1300ms var(--ease-resolve) both;
+}
+
+.is-fire .hb-rule {
+  transform-origin: 0 50%;
+  animation: hb-grow-x 520ms var(--ease-resolve) both;
+  animation-delay: calc(200ms + var(--i) * 70ms);
+}
+
+@keyframes hb-swap {
+  0% {
+    background-color: var(--azul-sinal);
+  }
+  25% {
+    background-color: var(--papel);
+  }
+  50% {
+    background-color: var(--tinta);
+  }
+  75% {
+    background-color: var(--lima);
+  }
+  100% {
+    background-color: var(--c);
+  }
+}
+
+@keyframes hb-stretch {
+  0% {
+    font-stretch: 62%;
+  }
+  45% {
+    font-stretch: 125%;
+  }
+  100% {
+    font-stretch: 100%;
+  }
+}
+
+@keyframes hb-grow-x {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+/* ---------- Camada 1: componentes ---------- */
+
+.hb .hb-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font: 700 14px/1 var(--font-sans);
+  font-stretch: 110%;
+  white-space: nowrap;
+}
+
+.hb-btn--pri {
+  background: var(--azul-sinal);
+  color: var(--papel) !important;
+}
+
+.hb-btn--sec {
+  box-shadow: inset 0 0 0 2px var(--hi-ink);
+}
+
+.hb-tg {
+  border-radius: 15px;
+  background: var(--hi-soft);
+}
+
+.hb-tg b {
+  top: 3px;
+  left: 3px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--hi-paper);
+  box-shadow: 0 1px 3px rgba(11, 12, 31, 0.3);
+}
+
+.hb-cb {
+  border-radius: 7px;
+  box-shadow: inset 0 0 0 2px var(--hi-ink);
+  color: var(--papel);
+}
+
+.hb-cb svg {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  opacity: 0;
+}
+
+.hb .hb-chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--lima);
+}
+
+.hb-field {
+  border-radius: 999px;
+  background: var(--hi-paper);
+  box-shadow: inset 0 0 0 1.5px var(--hi-mid);
+  transition: box-shadow 200ms linear;
+}
+
+.hb-typed {
+  overflow: hidden;
+  font: 450 14px/1 var(--font-sans);
+  white-space: nowrap;
+}
+
+.hb-caret {
+  width: 2px;
+  height: 16px;
+  background: var(--hi-ink);
+  animation: hb-blink 1s steps(1) infinite;
+}
+
+.hb-range {
+  border-radius: 3px;
+  background: var(--hi-soft);
+}
+
+.hb-range b {
+  top: -6px;
+  left: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--azul-sinal);
+  transform: translateX(var(--rv, 120px));
+}
+
+.hb .hb-note {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: var(--tinta);
+  color: var(--papel) !important;
+  font: 500 11px/1 var(--font-mono);
+  white-space: nowrap;
+  opacity: 0;
+}
+
+.hb-note i {
+  display: block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--coral);
+}
+
+.is-fire .hb-btn--pri {
+  animation: hb-press 360ms var(--ease-resolve) both;
+}
+
+.is-fire .hb-tg {
+  animation: hb-tg 360ms var(--ease-resolve) 160ms both;
+}
+
+.is-fire .hb-tg b {
+  animation: hb-knob 420ms var(--ease-hop) 160ms both;
+}
+
+.is-fire .hb-cb {
+  animation: hb-cb 300ms linear 320ms both;
+}
+
+.is-fire .hb-cb svg {
+  animation: hb-show 200ms linear 380ms both;
+}
+
+.is-fire .hb-chip {
+  animation: hb-pop 460ms var(--ease-hop) 480ms both;
+}
+
+.is-fire .hb-typed {
+  animation: hb-type 900ms steps(10) 220ms both;
+}
+
+.is-fire .hb-range b {
+  animation: hb-range 900ms var(--ease-resolve) 300ms both;
+}
+
+.hb-tg,
+.hb-cb {
+  background: var(--hi-soft);
+}
+
+.hb .iso-pl:not(.is-fresh) .hb-tg {
+  background: var(--azul-sinal);
+}
+
+.hb .iso-pl:not(.is-fresh) .hb-tg b {
+  transform: translateX(26px);
+}
+
+.hb .iso-pl:not(.is-fresh) .hb-cb {
+  background: var(--hi-ink);
+}
+
+.hb .iso-pl:not(.is-fresh) .hb-cb svg {
+  opacity: 1;
+}
+
+/* Variante de erro: o campo pede correção e o aviso aparece em tinta. */
+.is-error .hb-field {
+  box-shadow: inset 0 0 0 2px var(--hi-ink);
+}
+
+.is-error .hb-note {
+  opacity: 1;
+  transition: opacity 200ms linear;
+}
+
+.is-error .hb-range {
+  opacity: 0;
+}
+
+@keyframes hb-press {
+  40% {
+    transform: scale(0.93);
+  }
+}
+
+@keyframes hb-tg {
+  from {
+    background-color: var(--hi-soft);
+  }
+  to {
+    background-color: var(--azul-sinal);
+  }
+}
+
+@keyframes hb-knob {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(26px);
+  }
+}
+
+@keyframes hb-cb {
+  from {
+    background-color: var(--hi-soft);
+  }
+  to {
+    background-color: var(--hi-ink);
+  }
+}
+
+@keyframes hb-show {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes hb-pop {
+  from {
+    transform: scale(0);
+  }
+}
+
+@keyframes hb-type {
+  from {
+    width: 0;
+  }
+}
+
+@keyframes hb-range {
+  from {
+    transform: translateX(0);
+  }
+}
+
+@keyframes hb-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ---------- Camada 2: tela ---------- */
+
+.hb-chrome {
+  background: var(--hi-paper-2);
+}
+
+.hb-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--hi-mid);
+}
+
+.hb-url {
+  border-radius: 999px;
+  background: var(--hi-paper);
+  box-shadow: inset 0 0 0 1px var(--hi-mid);
+}
+
+.hb .hb-urltext {
+  overflow: hidden;
+  font-size: 10px;
+}
+
+.is-fire .hb-urltext {
+  animation: hb-type 700ms steps(12) both;
+}
+
+.hb-paint {
+  background: var(--azul-sinal);
+}
+
+.hb-page {
+  overflow: hidden;
+  background: var(--azul-sinal);
+}
+
+.hb-page b {
+  color: var(--papel);
+}
+
+.hb-mini-sig {
+  font: 800 10px/1 var(--font-sans);
+  font-stretch: 115%;
+  white-space: nowrap;
+}
+
+.hb-mini-title {
+  font: 900 30px/0.92 var(--font-sans);
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+
+.hb-bar {
+  border-radius: 3px;
+  background: rgba(212, 213, 250, 0.55);
+}
+
+.hb-mini-cta {
+  border-radius: 999px;
+  background: var(--lima);
+}
+
+.hb-card {
+  border-radius: 8px;
+  background: var(--hi-paper);
+}
+
+.hb-skel {
+  border-radius: 3px;
+  background: rgba(11, 12, 31, 0.1);
+}
+
+.is-fire .hb-paint {
+  animation: hb-paint 1000ms steps(10) 160ms both;
+}
+
+@keyframes hb-paint {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* ---------- Camada 3: estado ---------- */
+
+.hb-toast-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--lima);
+  box-shadow: inset 0 0 0 1.5px rgba(11, 12, 31, 0.18);
+}
+
+.hb-slot {
+  overflow: hidden;
+  height: 16px;
+}
+
+.hb-slot b {
+  font: 500 12px/16px var(--font-mono);
+  white-space: nowrap;
+  color: var(--hi-ink);
+}
+
+.hb-slot__a {
+  top: 0;
+  opacity: 0;
+}
+
+.hb-slot__b {
+  top: 0;
+}
+
+.hb-prog {
+  overflow: hidden;
+  border-radius: 3px;
+  background: var(--hi-soft);
+}
+
+.hb-prog b {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--azul-sinal);
+  transform-origin: 0 50%;
+}
+
+.is-fire .hb-toast-dot {
+  animation: hb-dot 1100ms steps(1) both;
+}
+
+.is-fire .hb-slot__a {
+  animation: hb-out 1100ms linear both;
+}
+
+.is-fire .hb-slot__b {
+  animation: hb-in 1100ms linear both;
+}
+
+.is-fire .hb-prog b {
+  animation: hb-grow-x 900ms var(--ease-resolve) both;
+}
+
+@keyframes hb-dot {
+  0% {
+    background-color: var(--azul-sinal);
+  }
+  85%,
+  100% {
+    background-color: var(--lima);
+  }
+}
+
+@keyframes hb-out {
+  0%,
+  80% {
+    opacity: 1;
+  }
+  90%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes hb-in {
+  0%,
+  82% {
+    opacity: 0;
+  }
+  92%,
+  100% {
+    opacity: 1;
+  }
+}
