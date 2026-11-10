@@ -39,6 +39,9 @@
 }
 
 :root {
+  /* Unidade base proporcional da home em camadas: 14,4 px em 1440 x 900 */
+  --u: min(1vw, 1.6svh);
+
   /* Paleta. Texto lima ou coral nunca vai sobre papel (contrastes no README do DS). */
   --azul-sinal: #2b2eff;
   --azul-fundo: #1f22d6;

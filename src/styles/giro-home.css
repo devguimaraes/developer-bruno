@@ -808,3 +808,25 @@
     transition: none;
   }
 }
+
+/* ---------- Capítulos da home em camadas (issue #114) ---------- */
+
+.home-chapter {
+  position: relative;
+  box-sizing: border-box;
+  overflow-x: clip;
+}
+
+/* Sem data-scenes="on", os capítulos fluem normalmente como leitura sequencial. */
+[data-scenes="on"] .home-chapter {
+  height: calc(100svh * var(--ch-screens, 1));
+}
+
+[data-scenes="on"] .home-chapter__stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow-x: clip;
+  box-sizing: border-box;
+}
+

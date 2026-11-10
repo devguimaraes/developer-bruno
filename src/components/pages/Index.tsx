@@ -7,6 +7,7 @@ import { HomeOtherSites } from "@/components/home/HomeOtherSites";
 import { HomeProcess } from "@/components/home/HomeProcess";
 import { HomeProjects } from "@/components/home/HomeProjects";
 import { HomeServices } from "@/components/home/HomeServices";
+import { useChapterScenes } from "@/components/home/story/useChapterScenes";
 import SectionEntrance from "@/components/ui/SectionEntrance";
 
 interface IndexProps {
@@ -36,6 +37,9 @@ function HomeSection({ id, surface, ruled = false, children }: HomeSectionProps)
 }
 
 const Index: React.FC<IndexProps> = ({ posts }) => {
+  // Fundação das cenas de rolagem da home; carrega o chunk do GSAP sob demanda
+  useChapterScenes();
+
   return (
     <div className="flex flex-col">
       <SectionEntrance id="hero">

@@ -50,6 +50,16 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         }
       } catch (e) { /* sessionStorage bloqueado: a página aparece direto */ }
     </script>
+    <!-- Base sem animação: define data-scenes="on" antes do primeiro paint, salvo quando o visitante
+         prefere movimento reduzido. Sem esse atributo cada capítulo se comporta como leitura normal. -->
+    <script is:inline>
+      try {
+        var mql = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)");
+        if (!mql || !mql.matches) {
+          document.documentElement.setAttribute("data-scenes", "on");
+        }
+      } catch (e) {}
+    </script>
     <!-- A coreografia espera esta fonte. O href é o mesmo arquivo do @font-face, para o preload
          e o CSS dividirem um único download. -->
     <link rel="preload" href={anybodyFont} as="font" type="font/woff2" crossorigin="anonymous" />
@@ -114,9 +124,22 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
           if (ogLocale) ogLocale.content = locale === 'en' ? 'en_US' : 'pt_BR';
         } catch(e) { /* localStorage pode não estar disponível (ambientes restritivos) */ }
       }
+      function applyScenes() {
+        try {
+          var mql = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)");
+          if (!mql || !mql.matches) {
+            document.documentElement.setAttribute("data-scenes", "on");
+          } else {
+            document.documentElement.removeAttribute("data-scenes");
+          }
+        } catch(e) {}
+      }
       applyLocale();
+      applyScenes();
       document.addEventListener('astro:after-swap', applyLocale);
+      document.addEventListener('astro:after-swap', applyScenes);
       document.addEventListener('astro:page-load', applyLocale);
+      document.addEventListener('astro:page-load', applyScenes);
     </script>
     <!-- Aba escondida: o Giro do favicon dorme. O ClientRouter troca o head, então reaplica após cada troca. -->
     <script>
