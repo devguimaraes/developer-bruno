@@ -6,10 +6,8 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { t } from "@/lib/i18n";
 import { splitOutcome } from "./copy";
 import { projectHost, projectSurface, projectTimeline } from "./project-stage";
+import { SCENE_MOBILE_QUERY } from "./story/chapters";
 import { type SceneBuilder, useChapterScenes } from "./story/useChapterScenes";
-
-// Mesmo corte do CSS (max-width: 768px), para cena e layout nunca discordarem.
-const MOBILE_QUERY = "(max-width: 768px)";
 
 /**
  * Projetos em janelas: cada case entra como uma janela por cima da anterior e, no fim, a pilha
@@ -35,7 +33,7 @@ export function HomeProjects() {
 
     const W = window.innerWidth;
     const H = window.innerHeight;
-    const mobile = window.matchMedia(MOBILE_QUERY).matches;
+    const mobile = window.matchMedia(SCENE_MOBILE_QUERY).matches;
     const { t0, step, tTilt, total } = projectTimeline(wins.length);
 
     // O disco da passagem para tinta abre a partir da saída do Giro.

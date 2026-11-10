@@ -18,17 +18,13 @@ interface HomeSectionProps {
   id: string;
   /** Superfície da seção: g-papel (leitura) ou g-azul (marca). Alternadas como na prancha. */
   surface: "g-papel" | "g-azul";
-  ruled?: boolean;
   children: React.ReactNode;
 }
 
 // Cada seção entra uma vez ao aparecer (SectionEntrance) e as ids são as da navegação.
-function HomeSection({ id, surface, ruled = false, children }: HomeSectionProps) {
-  const className = [surface, "home-section", ruled && "home-section--ruled"]
-    .filter(Boolean)
-    .join(" ");
+function HomeSection({ id, surface, children }: HomeSectionProps) {
   return (
-    <SectionEntrance id={id} className={className}>
+    <SectionEntrance id={id} className={`${surface} home-section`}>
       <div className="home-section__inner relative">
         <i
           className="hs-stop home-section__stop"
@@ -65,9 +61,7 @@ const Index: React.FC<IndexProps> = ({ posts }) => {
 
       <HomeProjects />
 
-      <HomeSection id="processo" surface="g-papel" ruled>
-        <HomeProcess />
-      </HomeSection>
+      <HomeProcess />
 
       <HomeSection id="sobre" surface="g-azul">
         <HomeAbout />

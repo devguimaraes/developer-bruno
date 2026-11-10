@@ -7,9 +7,6 @@
   box-sizing: border-box;
   overflow-x: clip;
 }
-.home-section--ruled {
-  border-top: 1px solid var(--s-line);
-}
 .home-section__inner {
   box-sizing: border-box;
   max-width: 1440px;
@@ -29,7 +26,6 @@
   letter-spacing: -0.04em;
 }
 .home-services,
-.home-process,
 .home-blog,
 .home-contact {
   display: flex;
@@ -721,6 +717,369 @@
   }
 }
 
+/* ---------- Processo: a mesma interface sendo feita (issue #118) ----------
+   Base sem animação: título e as quatro etapas em grade. Com data-scenes="on" vira palco fixo
+   de 4,4 telas: a pilha da hero (StackPlates, CSS em .hb) é desenhada, aberta e pintada. */
+
+.pc-ch {
+  --G: 64px;
+  position: relative;
+  overflow-x: clip;
+}
+
+.pc-stage {
+  position: relative;
+  box-sizing: border-box;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 144px var(--G);
+}
+
+.pc-head .g-eyebrow {
+  margin: 0;
+}
+
+.pc-title {
+  margin: calc(var(--u) * 1) 0 0;
+  font-size: calc(var(--u) * 6);
+  font-weight: 900;
+  font-stretch: 112%;
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+}
+
+.pc-intro {
+  max-width: 40ch;
+  margin: calc(var(--u) * 1.4) 0 0;
+  color: var(--s-muted);
+  font: 450 calc(var(--u) * 1.2) / 1.45 var(--font-sans);
+}
+
+.pc-world,
+.pc-line {
+  display: none;
+}
+
+.pc-copy {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 48px 64px;
+  margin-top: 64px;
+}
+
+.pc-count {
+  margin: 0;
+  color: var(--s-muted);
+  font: var(--text-micro);
+}
+
+.pc-name {
+  margin: 8px 0 0;
+  font: 900 calc(var(--u) * 3.4) / 1 var(--font-sans);
+  font-stretch: 112%;
+  letter-spacing: -0.025em;
+}
+
+.pc-body {
+  margin: 10px 0 0;
+  color: var(--s-muted);
+  font: var(--text-corpo);
+}
+
+.pc-get {
+  margin: 10px 0 0;
+  font: var(--text-micro);
+}
+
+.pc-get b {
+  color: var(--s-muted);
+  font-weight: 400;
+}
+
+.pc-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pc-tools li {
+  padding: 4px 10px;
+  border: 1px solid var(--s-line);
+  border-radius: 999px;
+  color: var(--s-muted);
+  font: var(--text-micro);
+}
+
+/* A pilha da hero no escuro: bordas mais fundas e a página em esqueleto sobre papel. */
+.pc-world.hb {
+  --hi-side: #55577c;
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  min-height: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.pc-world.hb .hb-page {
+  background: var(--hi-paper);
+}
+
+.pc-grid {
+  position: absolute;
+  top: -720px;
+  left: -720px;
+  width: 1440px;
+  height: 1440px;
+  background-image: radial-gradient(circle, rgba(212, 213, 250, 0.26) 0 1.6px, transparent 2.2px);
+  background-size: 30px 30px;
+  mask-image: radial-gradient(closest-side, #000 30%, transparent 100%);
+}
+
+.pc-out {
+  position: absolute;
+  top: -115px;
+  left: -165px;
+  width: 330px;
+  height: 230px;
+  border-radius: 18px;
+  outline: 2px dashed rgba(212, 213, 250, 0.6);
+  outline-offset: -2px;
+}
+
+.pc-note .iso-pl__face {
+  display: grid;
+  place-items: center;
+}
+
+.pc-note__t {
+  color: var(--hi-ink);
+  font: 500 16px / 1 var(--font-mono);
+}
+
+.pc-code .iso-pl__face {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 22px;
+  background: var(--tinta-2);
+  box-shadow: inset 0 0 0 1px rgba(246, 245, 240, 0.14);
+}
+
+.pc-code__l {
+  color: var(--papel);
+  font: 500 14px / 1.2 var(--font-mono);
+  white-space: pre;
+}
+
+.pc-code__l--tag {
+  color: var(--lima);
+}
+
+.pc-code__ok {
+  margin-top: auto;
+  color: var(--lima);
+  font: 500 12px / 1 var(--font-mono);
+}
+
+.pc-line__rail {
+  position: absolute;
+  inset: 0;
+  border-top: 2px dotted var(--s-line-strong);
+}
+
+.pc-line__fill {
+  position: absolute;
+  inset: 0;
+  background: var(--lima);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+}
+
+.pc-st {
+  appearance: none;
+  position: absolute;
+  top: 1px;
+  left: var(--pd);
+  width: 112px;
+  height: 56px;
+  margin: -14px 0 0 -56px;
+  padding: 26px 0 0;
+  border: 0;
+  background: none;
+  color: var(--s-muted);
+  font: var(--text-rotulo);
+  cursor: pointer;
+}
+
+.pc-st::before {
+  content: "";
+  position: absolute;
+  top: 7px;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  margin-left: -7px;
+  border-radius: 50%;
+  background: var(--tinta);
+  box-shadow: inset 0 0 0 2px var(--s-line-strong);
+}
+
+.pc-st:focus-visible {
+  outline: 2px solid var(--s-signal);
+  outline-offset: 2px;
+}
+
+.pc-st.is-past {
+  color: var(--s-fg);
+}
+
+.pc-st.is-past::before {
+  background: var(--lima);
+  box-shadow: none;
+}
+
+.pc-st__stop {
+  top: 14px;
+  left: 50%;
+}
+
+/* Palco: só com as cenas ligadas. */
+[data-scenes="on"] .pc-ch {
+  height: calc(100svh * 4.4);
+}
+
+[data-scenes="on"] .pc-stage {
+  position: sticky;
+  top: 0;
+  max-width: none;
+  height: 100svh;
+  padding: 0;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+[data-scenes="on"] .pc-head {
+  position: absolute;
+  z-index: 2;
+  top: calc(var(--u) * 7);
+  left: var(--G);
+  width: calc(var(--u) * 42);
+}
+
+[data-scenes="on"] .pc-world {
+  display: block;
+}
+
+[data-scenes="on"] .pc-copy {
+  position: absolute;
+  z-index: 2;
+  bottom: calc(var(--u) * 10.4);
+  left: var(--G);
+  display: block;
+  width: calc(var(--u) * 34);
+  height: calc(var(--u) * 24);
+  margin: 0;
+}
+
+/* As quatro etapas no mesmo lugar: a troca não empurra nada. */
+[data-scenes="on"] .pc-slot {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(12px);
+  transition:
+    opacity 200ms linear,
+    transform 380ms var(--ease-resolve);
+}
+
+[data-scenes="on"] .pc-slot.is-on {
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+}
+
+[data-scenes="on"] .pc-line {
+  position: absolute;
+  z-index: 2;
+  right: var(--G);
+  bottom: calc(var(--u) * 5);
+  left: var(--G);
+  display: block;
+  height: 2px;
+}
+
+@media (max-width: 768px) {
+  .pc-ch {
+    --G: 16px;
+  }
+  .pc-stage {
+    padding: 88px var(--G);
+  }
+  .pc-title {
+    margin-top: 8px;
+    font-size: 40px;
+  }
+  .pc-copy {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 40px;
+    margin-top: 40px;
+  }
+  .pc-name {
+    font-size: 30px;
+  }
+  .pc-body {
+    font-size: 16px;
+    line-height: 1.4;
+  }
+  .pc-tools {
+    margin-top: 10px;
+  }
+  .pc-tools li {
+    padding: 2px 8px;
+    font-size: 11px;
+  }
+  .pc-st {
+    left: var(--pm);
+    width: 86px;
+    margin-left: -43px;
+    font-size: 11px;
+  }
+
+  [data-scenes="on"] .pc-ch {
+    height: calc(100svh * 4.2);
+  }
+  [data-scenes="on"] .pc-head {
+    top: 28px;
+    right: var(--G);
+    width: auto;
+  }
+  [data-scenes="on"] .pc-intro {
+    display: none;
+  }
+  [data-scenes="on"] .pc-copy {
+    top: 448px;
+    right: var(--G);
+    bottom: auto;
+    width: auto;
+    height: 262px;
+  }
+  [data-scenes="on"] .pc-slot {
+    top: 44px;
+    bottom: auto;
+  }
+  [data-scenes="on"] .pc-line {
+    top: 428px;
+    bottom: auto;
+  }
+}
+
 /* ---------- Sobre ---------- */
 
 .home-about {
@@ -1046,7 +1405,6 @@
     font-size: 58px;
   }
   .home-services,
-  .home-process,
   .home-blog,
   .home-contact {
     gap: 40px;

@@ -48,7 +48,7 @@ const REST: Flight = { x: 0, y: 0, scale: 1 };
 
 function hasHero(): boolean {
   if (typeof document === "undefined") return false;
-  return document.querySelector(".hb, [data-iso='world']") !== null;
+  return document.querySelector("section.hb, [data-iso='world']") !== null;
 }
 
 function flightTarget(): Element | null {
@@ -232,7 +232,7 @@ export function LoadingScreen() {
       layersRef.current.style.setProperty("--W", `${W}px`);
       layersRef.current.style.setProperty("--H", `${H}px`);
     }
-    const heroEl = document.querySelector(".hb");
+    const heroEl = document.querySelector("section.hb");
     const stageTop = heroEl ? heroEl.getBoundingClientRect().top : 0;
     const initialOrigin = stackOrigin(cfg, W, H);
     const tagEl = platesRef.current[0]?.querySelector<HTMLElement>(".g-loader-pl__tag");
@@ -394,7 +394,7 @@ export function LoadingScreen() {
       if (measured) setGiroFlight(measured);
     }
 
-    const heroEl = document.querySelector(".hb");
+    const heroEl = document.querySelector("section.hb");
     const stageTop = heroEl ? heroEl.getBoundingClientRect().top : 0;
     const W = window.innerWidth;
     const H = window.innerHeight;
@@ -424,7 +424,7 @@ export function LoadingScreen() {
 
       // Em u = 1 (950ms): o overlay do loader sai na hora (is-off / unmount), sem fade de 360ms
       document.documentElement.removeAttribute(LOADER_ATTR);
-      const hero = document.querySelector(".hb");
+      const hero = document.querySelector("section.hb");
       if (hero) {
         hero.classList.add("is-reveal");
         setTimeout(() => {

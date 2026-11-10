@@ -77,7 +77,7 @@ describe("HomeProjects", () => {
     ).toBeInTheDocument();
   });
 
-  it("marca as paradas do Giro: título, vaga de cada janela, números e saída", () => {
+  it("marca as estações do Giro: título, vaga de cada janela, números e saída", () => {
     const { container } = render(<HomeProjects />);
     const stops = [...container.querySelectorAll("[data-stop]")].map(n =>
       n.getAttribute("data-stop")

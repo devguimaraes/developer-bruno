@@ -1,4 +1,5 @@
 import type { GiroState } from "@/components/brand/giro-states";
+import { calcProcessChapterStep } from "@/components/home/process-stage";
 import { calcProjectStep } from "@/components/home/project-stage";
 import { calcServiceStep } from "@/components/home/service-stage";
 import { type Chapter, createChapter } from "./chapters";
@@ -86,6 +87,22 @@ export function buildProvisionalChapters(
           lead: 0.5,
           surface: "papel",
           at: (p: number) => calcProjectStep(p, count),
+        })
+      );
+      continue;
+    }
+
+    if (cfg.id === "processo") {
+      chapters.push(
+        createChapter({
+          id: "processo",
+          label: cfg.label,
+          top,
+          len,
+          altura: viewportH,
+          lead: 0.5,
+          surface: "tinta",
+          at: calcProcessChapterStep,
         })
       );
       continue;

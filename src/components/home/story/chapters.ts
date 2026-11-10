@@ -1,5 +1,8 @@
 import type { GiroState } from "@/components/brand/giro-states";
 
+/** Corte de celular das cenas: o mesmo do CSS (max-width: 768px), para cena e layout concordarem. */
+export const SCENE_MOBILE_QUERY = "(max-width: 768px)";
+
 export type ChapterSurface = "papel" | "azul" | "tinta";
 
 export interface ChapterStep {

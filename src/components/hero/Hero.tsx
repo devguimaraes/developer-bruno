@@ -6,39 +6,10 @@ import { useLocale } from "@/hooks/useLocale";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import type { Locale } from "@/lib/i18n";
 import { t } from "@/lib/i18n";
-import type { StackLabels } from "./StackScene";
 import { StackScene } from "./StackScene";
+import { layerNames, stackLabelsFor } from "./stack-labels";
 import type { HudLabels } from "./useHeroStack";
 import { useHeroStack } from "./useHeroStack";
-
-function layerNames(locale: Locale): StackLabels["layers"] {
-  return [
-    t(locale, "hero.layer.tokens"),
-    t(locale, "hero.layer.components"),
-    t(locale, "hero.layer.screen"),
-    t(locale, "hero.layer.state"),
-  ];
-}
-
-function stackLabelsFor(locale: Locale): StackLabels {
-  return {
-    layers: layerNames(locale),
-    colors: [
-      t(locale, "hero.color.blue"),
-      t(locale, "hero.color.lime"),
-      t(locale, "hero.color.paper"),
-      t(locale, "hero.color.ink"),
-      t(locale, "hero.color.coral"),
-    ],
-    ctaProjects: t(locale, "hero.cta_projects"),
-    ctaContact: t(locale, "hero.cta_contact"),
-    ready: t(locale, "hero.stack.ready"),
-    loading: t(locale, "hero.stack.loading"),
-    greeting: t(locale, "hero.stack.greeting"),
-    error: t(locale, "hero.stack.error"),
-    miniTitle: t(locale, "hero.stack.mini_title"),
-  };
-}
 
 /**
  * Cada letra vira um span, para o runtime medir e afundar uma a uma. O espaço continua texto.
