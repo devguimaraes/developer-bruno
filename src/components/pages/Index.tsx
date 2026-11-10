@@ -7,6 +7,7 @@ import { HomeOtherSites } from "@/components/home/HomeOtherSites";
 import { HomeProcess } from "@/components/home/HomeProcess";
 import { HomeProjects } from "@/components/home/HomeProjects";
 import { HomeServices } from "@/components/home/HomeServices";
+import { HomeGiro } from "@/components/home/story/HomeGiro";
 import { useChapterScenes } from "@/components/home/story/useChapterScenes";
 import SectionEntrance from "@/components/ui/SectionEntrance";
 
@@ -29,7 +30,14 @@ function HomeSection({ id, surface, ruled = false, children }: HomeSectionProps)
     .join(" ");
   return (
     <SectionEntrance id={id} className={className}>
-      <div className="home-section__inner">
+      <div className="home-section__inner relative">
+        <i
+          className="hs-stop home-section__stop"
+          data-stop={id}
+          data-size={id === "projetos" ? "72" : id === "contato" ? "44" : "64"}
+          data-size-m={id === "projetos" ? "40" : "44"}
+          aria-hidden="true"
+        />
         <div className="home-section__body">{children}</div>
       </div>
     </SectionEntrance>
@@ -41,8 +49,16 @@ const Index: React.FC<IndexProps> = ({ posts }) => {
   useChapterScenes();
 
   return (
-    <div className="flex flex-col">
-      <SectionEntrance id="hero">
+    <div className="flex flex-col relative">
+      <HomeGiro />
+      <SectionEntrance id="hero" className="relative g-azul">
+        <i
+          className="hs-stop home-section__stop"
+          data-stop="hero"
+          data-size="64"
+          data-size-m="44"
+          aria-hidden="true"
+        />
         <Hero />
       </SectionEntrance>
 

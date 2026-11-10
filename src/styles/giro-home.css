@@ -830,3 +830,114 @@
   box-sizing: border-box;
 }
 
+/* ---------- Ator do Giro e paradas da home (issue #115) ---------- */
+
+.home-giro-stage {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 60;
+}
+
+.hs-actor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  background: none;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.hs-actor__k {
+  position: absolute;
+  top: -48px;
+  left: -48px;
+  width: 96px;
+  height: 96px;
+  transform: scale(var(--gk, 1));
+}
+
+.hs-actor__in {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.hs-actor__in::before {
+  content: "";
+  position: absolute;
+  inset: 13%;
+  border-radius: 50%;
+  background: var(--s-bg);
+  opacity: var(--core, 1);
+}
+
+.hs-actor .g-giro {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.hs-actor .g-giro__spin {
+  rotate: var(--roll, 0deg);
+}
+
+.hs-actor__in.is-squash {
+  animation: hs-squash 300ms var(--ease-resolve);
+}
+
+.hs-actor__in.is-pulse {
+  animation: hs-pulse 180ms var(--ease-resolve);
+}
+
+@keyframes hs-squash {
+  0% {
+    transform: scale(1.26, 0.7);
+  }
+  55% {
+    transform: scale(0.93, 1.08);
+  }
+  100% {
+    transform: scale(1, 1);
+  }
+}
+
+@keyframes hs-pulse {
+  40% {
+    transform: scale(1.14);
+  }
+}
+
+.hs-stop {
+  position: absolute;
+  display: block;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.home-section__stop {
+  position: absolute;
+  top: 180px;
+  right: 64px;
+}
+
+@media (max-width: 768px) {
+  .home-section__stop {
+    top: 100px;
+    right: 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-giro-stage,
+  .hs-actor {
+    display: none;
+  }
+}
+
+
