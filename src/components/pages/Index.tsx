@@ -63,9 +63,7 @@ const Index: React.FC<IndexProps> = ({ posts }) => {
 
       <HomeProcess />
 
-      <HomeSection id="sobre" surface="g-azul">
-        <HomeAbout />
-      </HomeSection>
+      <HomeAbout />
 
       <HomeSection id="blog" surface="g-papel">
         <HomeBlog posts={posts} />

@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import {
   Accessibility,
   Code,
@@ -8,11 +7,14 @@ import {
   Rocket,
   Users,
 } from "lucide-react";
-import { Giro } from "@/components/brand/Giro";
+import { useCallback, useRef } from "react";
 import { useLocale } from "@/hooks/useLocale";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { type TranslationKey, t } from "@/lib/i18n";
+import { ABOUT_TIMELINE } from "./about-stage";
 import { bareLabel } from "./copy";
+import { SCENE_MOBILE_QUERY } from "./story/chapters";
+import { type SceneBuilder, useChapterScenes } from "./story/useChapterScenes";
 
 // Capacidades na ordem da prancha, cada uma com o ícone Lucide da própria linha.
 const CAPABILITIES: readonly { key: TranslationKey; icon: LucideIcon }[] = [
@@ -30,60 +32,118 @@ const FACTS: readonly { value: TranslationKey; label: TranslationKey }[] = [
   { value: "about.fact.location_value", label: "about.fact.location_label" },
 ];
 
-// Abertura da máscara circular da foto, na mesma curva da prancha.
-const PHOTO_CLOSED = "circle(0% at 50% 34%)";
-const PHOTO_OPEN = "circle(120% at 50% 34%)";
-// Mesma curva de --ease-resolve (giro.css).
-const RESOLVE_EASE: [number, number, number, number] = [0.2, 0.8, 0.2, 1];
-const PHOTO_RESOLVE = { duration: 1.5, delay: 0.12, ease: RESOLVE_EASE };
-
+/**
+ * Sobre: o nome grande passa por trás da foto e por cima dela, e a foto cede lugar à bio.
+ * Sem data-scenes é leitura em ordem: foto, bio, capacidades, fatos.
+ */
 export function HomeAbout() {
   const locale = useLocale();
   const reducedMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const buildScene = useCallback<SceneBuilder>(({ gsap, scene }) => {
+    const sec = sectionRef.current;
+    if (!sec) return;
+    const q = (s: string) => sec.querySelector<HTMLElement>(s);
+    const back = q(".sb-back");
+    const front = q(".sb-front");
+    const photo = q(".sb-photo");
+    const bio = q(".sb-bio");
+    if (!back || !front || !photo || !bio) return;
+
+    const H = window.innerHeight;
+    const W = window.innerWidth;
+    const { swapStart, swapEnd, photoSettle, namesFade, bioIn, bioDuration } = ABOUT_TIMELINE;
+
+    // No celular o palco não fixa: só um parallax curto enquanto o bloco passa pela tela.
+    if (window.matchMedia(SCENE_MOBILE_QUERY).matches) {
+      const tl = scene(q(".sb-art") ?? sec, { start: "top bottom", end: "bottom top" });
+      tl.fromTo(back, { y: 90 }, { y: -70, duration: 1 }, 0)
+        .fromTo(front, { y: -30 }, { y: 50, duration: 1 }, 0)
+        .fromTo(photo, { y: 40 }, { y: -30, duration: 1 }, 0);
+      return;
+    }
+
+    gsap.set(bio, { autoAlpha: 0, x: 80 });
+    const tl = scene(sec);
+    tl.fromTo(back, { y: H * 0.1 }, { y: -H * 0.08, duration: 1 }, 0)
+      .fromTo(front, { y: -H * 0.05 }, { y: H * 0.05, duration: 1 }, 0)
+      .fromTo(photo, { y: H * 0.08 }, { y: 0, duration: photoSettle }, 0)
+      .to([back, front], { autoAlpha: 0, duration: namesFade }, swapStart)
+      .to(
+        photo,
+        {
+          x: -W * 0.27,
+          scale: 0.92,
+          transformOrigin: "50% 100%",
+          duration: swapEnd - swapStart,
+          ease: "power2.inOut",
+        },
+        swapStart
+      )
+      .to(bio, { autoAlpha: 1, x: 0, duration: bioDuration, ease: "power2.out" }, bioIn);
+    return undefined;
+  }, []);
+
+  useChapterScenes(buildScene, [], {
+    scope: sectionRef,
+    enabled: reducedMotion ? false : undefined,
+  });
 
   return (
-    <div className="home-about">
-      <figure className="home-about__figure">
-        <motion.div
-          className="home-about__photo"
-          initial={reducedMotion ? false : { clipPath: PHOTO_CLOSED }}
-          whileInView={reducedMotion ? undefined : { clipPath: PHOTO_OPEN }}
-          viewport={{ once: true }}
-          transition={PHOTO_RESOLVE}
-        >
-          <img src="/brunoGuimaraes.webp" alt={t(locale, "about.photo_alt")} loading="lazy" />
-        </motion.div>
-        <span className="home-about__giro">
-          <Giro state="idle" />
-        </span>
-      </figure>
-
-      <div className="home-about__text">
-        <div className="home-about__head">
-          <p className="g-eyebrow">{bareLabel(t(locale, "about.label"))}</p>
-          <h2 className="g-section-head__title">{t(locale, "about.title")}</h2>
+    <section className="sb-ch g-azul" id="sobre" aria-labelledby="sb-title" ref={sectionRef}>
+      <div className="sb-stage">
+        <div className="sb-art">
+          <div className="sb-back" aria-hidden="true">
+            Bruno
+          </div>
+          <figure className="sb-photo">
+            <img
+              src="/bruno-duo.webp"
+              alt={t(locale, "about.photo_alt")}
+              loading="lazy"
+              draggable={false}
+            />
+            <i
+              className="hs-stop sb-peek"
+              data-stop="sb-peek"
+              data-size="120"
+              data-size-m="76"
+              aria-hidden="true"
+            />
+          </figure>
+          <div className="sb-front" aria-hidden="true">
+            Guimarães
+          </div>
         </div>
-        <p className="home-about__lead">{t(locale, "about.bio_1")}</p>
-        <p className="home-about__body">{t(locale, "about.bio_2")}</p>
 
-        <ul className="home-about__caps">
-          {CAPABILITIES.map(({ key, icon: Icon }) => (
-            <li key={key}>
-              <Icon className="g-icon" aria-hidden="true" />
-              {t(locale, key)}
-            </li>
-          ))}
-        </ul>
+        <div className="sb-bio">
+          <p className="g-eyebrow">{bareLabel(t(locale, "about.label"))}</p>
+          <h2 className="sb-title" id="sb-title">
+            {t(locale, "about.title")}
+          </h2>
+          <p className="sb-lead">{t(locale, "about.bio_1")}</p>
+          <p className="sb-body">{t(locale, "about.bio_2")}</p>
 
-        <dl className="home-about__facts">
-          {FACTS.map(fact => (
-            <div key={fact.value}>
-              <dt>{t(locale, fact.value)}</dt>
-              <dd>{t(locale, fact.label)}</dd>
-            </div>
-          ))}
-        </dl>
+          <ul className="sb-caps">
+            {CAPABILITIES.map(({ key, icon: Icon }) => (
+              <li key={key}>
+                <Icon className="g-icon" aria-hidden="true" />
+                {t(locale, key)}
+              </li>
+            ))}
+          </ul>
+
+          <dl className="sb-facts">
+            {FACTS.map(fact => (
+              <div key={fact.value}>
+                <dt>{t(locale, fact.value)}</dt>
+                <dd>{t(locale, fact.label)}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
       </div>
-    </div>
+    </section>
   );
 }
