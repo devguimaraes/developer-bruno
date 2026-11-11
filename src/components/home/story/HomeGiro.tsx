@@ -119,7 +119,9 @@ export const HomeGiro: FC<HomeGiroProps> = ({
 
     // Passagem de mão: com o HomeGiro em cena, o Giro da entrada (hero) fica inerte e sem rosto.
     const setHand = (handed: boolean) => {
-      if (handed) document.documentElement.setAttribute(HAND_ATTR, "story");
+      // Só há passagem de mão com as cenas ligadas; sem elas o Giro da hero fica onde está.
+      const scenes = document.documentElement.getAttribute("data-scenes") === "on";
+      if (handed && scenes) document.documentElement.setAttribute(HAND_ATTR, "story");
       else document.documentElement.removeAttribute(HAND_ATTR);
     };
 
@@ -168,6 +170,8 @@ export const HomeGiro: FC<HomeGiroProps> = ({
     const go = (d: ChapterStep) => {
       const n = findStop(d.stop);
       if (!n) return;
+      // Assume o Giro só depois de achar a parada: sem ela, o da hero continua visível.
+      setHand(d.hidden !== true);
 
       const surfCls = detectSurface(n);
       const isMobile = window.innerWidth < 768;
@@ -235,7 +239,6 @@ export const HomeGiro: FC<HomeGiroProps> = ({
 
       if (nextKey !== key) {
         key = nextKey;
-        setHand(d.hidden !== true);
         go(d);
       }
     };
@@ -246,7 +249,6 @@ export const HomeGiro: FC<HomeGiroProps> = ({
     const startStep = startChapter?.at(progress(window.scrollY, startChapter));
     if (startChapter && startStep && findStop(startStep.stop)) {
       key = `${startChapter.id}:${startStep.k}`;
-      setHand(startStep.hidden !== true);
       go(startStep);
     } else {
       const initialEl = findStop(initialStop);

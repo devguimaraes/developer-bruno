@@ -208,6 +208,9 @@ describe("HomeGiro component", () => {
     expect(Number(actor?.style.getPropertyValue("--gk"))).toBeCloseTo(0.5, 1);
   });
   describe("passagem de mão", () => {
+    // A passagem de mão só existe com as cenas ligadas.
+    beforeEach(() => document.documentElement.setAttribute("data-scenes", "on"));
+
     const rectAt = (x: number, y: number) => () => ({
       left: x,
       top: y,
@@ -222,6 +225,7 @@ describe("HomeGiro component", () => {
 
     afterEach(() => {
       document.documentElement.removeAttribute("data-giro-hand");
+      document.documentElement.removeAttribute("data-scenes");
     });
 
     it("escondido, o Giro não aparece e o hero segue com o rosto; ao liberar, assume e pousa", () => {
