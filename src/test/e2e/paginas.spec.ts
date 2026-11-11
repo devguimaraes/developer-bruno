@@ -42,4 +42,15 @@ test.describe("Case, 404 e movimento reduzido", () => {
     await page.getByRole("link", { name: "Ver projetos" }).click();
     await expect(page).toHaveURL(/#projetos$/);
   });
+
+  test("Deve deixar o rodapé para o capítulo final na home e mostrá-lo nas outras páginas", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    await expect(page.locator(".g-site-footer")).toHaveCount(0);
+    await expect(page.locator("#fim .fn-foot")).toBeAttached();
+
+    await page.goto("/blog");
+    await expect(page.locator(".g-site-footer")).toBeAttached();
+  });
 });

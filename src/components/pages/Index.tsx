@@ -3,6 +3,7 @@ import { Hero } from "@/components/hero/Hero";
 import { HomeAbout } from "@/components/home/HomeAbout";
 import { HomeBlog, type HomePost } from "@/components/home/HomeBlog";
 import { HomeContact } from "@/components/home/HomeContact";
+import { HomeEnd } from "@/components/home/HomeEnd";
 import { HomeProcess } from "@/components/home/HomeProcess";
 import { HomeProjects } from "@/components/home/HomeProjects";
 import { HomeServices } from "@/components/home/HomeServices";
@@ -43,6 +44,8 @@ const Index: React.FC<IndexProps> = ({ posts }) => {
       <HomeBlog posts={posts} />
 
       <HomeContact />
+
+      <HomeEnd />
     </div>
   );
 };

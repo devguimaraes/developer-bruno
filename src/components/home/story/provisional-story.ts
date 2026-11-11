@@ -1,6 +1,7 @@
 import type { GiroState } from "@/components/brand/giro-states";
 import { calcAboutStep } from "@/components/home/about-stage";
 import { calcBlogStep, calcContactStep } from "@/components/home/blog-contact-stage";
+import { calcEndStep } from "@/components/home/end-stage";
 import { calcProcessChapterStep } from "@/components/home/process-stage";
 import { calcProjectStep } from "@/components/home/project-stage";
 import { calcServiceStep } from "@/components/home/service-stage";
@@ -24,6 +25,7 @@ export const PROVISIONAL_SECTIONS: readonly SectionStoryConfig[] = [
   { id: "sobre", label: "// sobre", state: "curious", stop: "sobre" },
   { id: "blog", label: "// blog", state: "sleeping", stop: "blog" },
   { id: "contato", label: "// contato", state: "idle", stop: "contato" },
+  { id: "fim", label: "// fim da pilha", state: "loading", stop: "fn0" },
 ];
 
 /**
@@ -139,6 +141,22 @@ export function buildProvisionalChapters(
           lead: blog ? 0.6 : 0.55,
           surface: blog ? "papel" : "azul",
           at: () => (blog ? calcBlogStep(getStorySignals()) : calcContactStep(getStorySignals())),
+        })
+      );
+      continue;
+    }
+
+    if (cfg.id === "fim") {
+      chapters.push(
+        createChapter({
+          id: "fim",
+          label: cfg.label,
+          top,
+          len,
+          altura: viewportH,
+          lead: 0.4,
+          surface: "tinta",
+          at: p => calcEndStep(p, getStorySignals()),
         })
       );
       continue;

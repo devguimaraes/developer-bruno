@@ -11,6 +11,7 @@
 @import "./styles/home-sobre.css";
 @import "./styles/home-blog.css";
 @import "./styles/home-contact.css";
+@import "./styles/home-fim.css";
 
 @tailwind base;
 @tailwind components;
