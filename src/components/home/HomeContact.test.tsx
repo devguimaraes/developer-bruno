@@ -10,6 +10,11 @@ describe("HomeContact", () => {
     expect(screen.getByRole("form", { name: "Formulário de contato" })).toBeInTheDocument();
   });
 
+  it("é a seção #contato", () => {
+    const { container } = render(<HomeContact />);
+    expect(container.querySelector("section#contato")).not.toBeNull();
+  });
+
   it("mostra o e-mail direto com botão de copiar", () => {
     render(<HomeContact />);
     expect(screen.getByText(contactData.email)).toBeInTheDocument();

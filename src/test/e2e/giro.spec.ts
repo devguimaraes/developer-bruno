@@ -39,7 +39,7 @@ async function openContact(page: Page) {
 test.describe("Giro: momentos", () => {
   test("Deve piscar ao copiar o e-mail e voltar ao ícone", async ({ page }) => {
     await openContact(page);
-    const copy = page.locator(".home-mail .g-button");
+    const copy = page.locator(".ct-mail .g-button");
     await copy.click();
     await expect(copy.locator('.g-giro[data-moment="wink"]')).toBeAttached();
     await expect(copy.locator(".g-giro")).toHaveCount(0, { timeout: 4000 });
@@ -47,7 +47,7 @@ test.describe("Giro: momentos", () => {
 
   test("Deve ouvir enquanto a mensagem é digitada e voltar ao repouso", async ({ page }) => {
     await openContact(page);
-    const giro = page.locator(".home-form__submit .g-giro");
+    const giro = page.locator(".ct-submit .g-giro");
     await expect(giro).not.toHaveAttribute("data-moment");
 
     await page.getByLabel("mensagem").pressSequentially("Olá, tudo bem?", { delay: 40 });
@@ -174,7 +174,7 @@ test.describe("Giro: movimento reduzido", () => {
     await recordMoments(page);
     await openContact(page);
 
-    const giro = page.locator(".home-form__submit .g-giro");
+    const giro = page.locator(".ct-submit .g-giro");
     const motion = await giro.evaluate(svg => ({
       arc: getComputedStyle(svg.querySelector(".g-giro__arc") as Element).transitionDuration,
       body: getComputedStyle(svg.querySelector(".g-giro__body") as Element).animationName,
@@ -182,9 +182,9 @@ test.describe("Giro: movimento reduzido", () => {
     }));
     expect(motion).toEqual({ arc: "0s", body: "none", lid: "g-blink" });
 
-    await page.locator(".home-mail .g-button").click();
+    await page.locator(".ct-mail .g-button").click();
     await page.getByLabel("mensagem").pressSequentially("Olá", { delay: 40 });
-    await expect(page.locator(".home-mail .g-button .g-giro")).toBeAttached();
+    await expect(page.locator(".ct-mail .g-button .g-giro")).toBeAttached();
     expect(await moments(page)).toEqual([]);
   });
 });

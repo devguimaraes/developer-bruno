@@ -9,6 +9,8 @@
 @import "./styles/service-art.css";
 @import "./styles/giro-home.css";
 @import "./styles/home-sobre.css";
+@import "./styles/home-blog.css";
+@import "./styles/home-contact.css";
 
 @tailwind base;
 @tailwind components;

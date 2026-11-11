@@ -1,10 +1,12 @@
 import type { GiroState } from "@/components/brand/giro-states";
 import { calcAboutStep } from "@/components/home/about-stage";
+import { calcBlogStep, calcContactStep } from "@/components/home/blog-contact-stage";
 import { calcProcessChapterStep } from "@/components/home/process-stage";
 import { calcProjectStep } from "@/components/home/project-stage";
 import { calcServiceStep } from "@/components/home/service-stage";
 import { type Chapter, createChapter } from "./chapters";
 import { detectSurface } from "./giro-jump";
+import { getStorySignals } from "./story-signals";
 
 export interface SectionStoryConfig {
   id: string;
@@ -120,6 +122,23 @@ export function buildProvisionalChapters(
           lead: 0.5,
           surface: "azul",
           at: calcAboutStep,
+        })
+      );
+      continue;
+    }
+
+    if (cfg.id === "blog" || cfg.id === "contato") {
+      const blog = cfg.id === "blog";
+      chapters.push(
+        createChapter({
+          id: cfg.id,
+          label: cfg.label,
+          top,
+          len,
+          altura: viewportH,
+          lead: blog ? 0.6 : 0.55,
+          surface: blog ? "papel" : "azul",
+          at: () => (blog ? calcBlogStep(getStorySignals()) : calcContactStep(getStorySignals())),
         })
       );
       continue;

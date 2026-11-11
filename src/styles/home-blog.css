@@ -1,0 +1,161 @@
+/* ---------- Blog: o capítulo calmo (issue #120) ----------
+   Folha de papel que sobe sobre o azul do Sobre. Não fixa nem tem cena. A base lê bem sem JS e
+   com movimento reduzido; o que depende do Giro (data some, parada de cochilo) fica sob
+   [data-scenes="on"]. */
+
+.bl {
+  --G: 64px;
+  position: relative;
+  z-index: 2;
+  margin-top: -32px;
+  border-radius: 32px 32px 0 0;
+}
+
+.bl-in {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: 64px;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 144px var(--G) 176px;
+}
+
+/* A cabeça acompanha a lista. Nenhum ancestral pode ter overflow que não seja clip. */
+.bl-head {
+  position: sticky;
+  top: 96px;
+  align-self: start;
+}
+
+.bl-head .g-eyebrow {
+  margin: 0;
+}
+
+.bl-title {
+  margin: 12px 0 0;
+  font-size: 96px;
+  font-weight: 900;
+  font-stretch: 112%;
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+}
+
+.bl-lead {
+  max-width: 34ch;
+  margin: 24px 0 0;
+  color: var(--s-muted);
+  font: var(--text-corpo-l);
+}
+
+.bl-all {
+  display: inline-flex;
+  margin-top: 24px;
+}
+
+/* Régua em cima da lista: é onde o Giro cochila. */
+.bl-rule {
+  position: relative;
+  height: 56px;
+  border-bottom: 1px solid var(--s-line);
+}
+
+.bl-nap {
+  right: 28px;
+  bottom: 24px;
+}
+
+.bl-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  gap: 24px;
+  padding: 32px 0;
+  border-bottom: 1px solid var(--s-line);
+  color: var(--s-fg);
+  text-decoration: none;
+}
+
+.bl-seat {
+  top: 72px;
+  left: 28px;
+}
+
+.bl-row time {
+  padding-top: 6px;
+  color: var(--s-muted);
+  font: var(--text-micro);
+  transition: opacity 160ms linear;
+}
+
+.bl-row h3 {
+  margin: 0;
+  font: 800 26px / 1.15 var(--font-sans);
+  font-stretch: 104%;
+  letter-spacing: -0.015em;
+  transition: font-stretch 420ms var(--ease-resolve);
+}
+
+.bl-row p {
+  max-width: 62ch;
+  margin: 12px 0 0;
+  color: var(--s-muted);
+  font: var(--text-corpo);
+}
+
+.bl-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  color: var(--s-muted);
+  font: var(--text-micro);
+}
+
+/* Hover só onde há ponteiro de verdade. */
+@media (hover: hover) {
+  .bl-row:hover h3,
+  .bl-row:focus-visible h3 {
+    font-stretch: 116%;
+  }
+  /* A data some enquanto o Giro está em cima dela. Sem cenas não há Giro para cobri-la. */
+  [data-scenes="on"] .bl-row:hover time {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bl-row time,
+  .bl-row h3 {
+    transition: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .bl {
+    --G: 16px;
+  }
+  .bl-in {
+    display: block;
+    padding: 72px var(--G) 112px;
+  }
+  .bl-head {
+    position: static;
+  }
+  .bl-title {
+    font-size: 58px;
+  }
+  .bl-row {
+    display: block;
+    padding: 24px 0;
+  }
+  /* No celular o Giro só cochila: não há parada ao lado da data. */
+  .bl-seat {
+    display: none;
+  }
+  .bl-row h3 {
+    margin-top: 8px;
+    font-size: 23px;
+  }
+}

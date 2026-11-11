@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { submitContact } from "@/lib/contact";
 import { setLocale } from "@/lib/i18n";
 import { ContactForm } from "./ContactForm";
+import { getStorySignals, resetStorySignals } from "./story/story-signals";
 
 vi.mock("@/lib/contact", async importOriginal => {
   const actual = await importOriginal<typeof import("@/lib/contact")>();
@@ -29,6 +30,7 @@ describe("ContactForm", () => {
 
   afterEach(() => {
     setLocale("pt");
+    resetStorySignals();
   });
 
   it("tem nome, e-mail, tipo de projeto e mensagem", () => {
@@ -137,7 +139,7 @@ describe("ContactForm", () => {
     vi.useFakeTimers();
     try {
       const { container } = render(<ContactForm />);
-      const giro = () => container.querySelector(".home-form__submit .g-giro");
+      const giro = () => container.querySelector(".ct-send .g-giro");
       const message = screen.getByLabelText("mensagem");
       expect(giro()).not.toBeNull();
       expect(giro()?.hasAttribute("data-moment")).toBe(false);
@@ -163,9 +165,7 @@ describe("ContactForm", () => {
   it("escolher um tipo de projeto não liga o ouvindo", () => {
     const { container } = render(<ContactForm />);
     fireEvent.focus(screen.getByRole("button", { name: "site" }));
-    expect(container.querySelector(".home-form__submit .g-giro")?.hasAttribute("data-moment")).toBe(
-      false
-    );
+    expect(container.querySelector(".ct-send .g-giro")?.hasAttribute("data-moment")).toBe(false);
   });
 
   it("em inglês, usa as mensagens em inglês", () => {
@@ -174,5 +174,75 @@ describe("ContactForm", () => {
     expect(screen.getByLabelText("name")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Send message" }));
     expect(screen.getByText("Enter your name.")).toBeInTheDocument();
+  });
+
+  it("sinaliza a digitação e volta ao repouso 900 ms depois da última tecla", () => {
+    vi.useFakeTimers();
+    try {
+      const { unmount } = render(<ContactForm />);
+      const message = screen.getByLabelText("mensagem");
+      expect(getStorySignals().contactTyping).toBe(false);
+
+      fireEvent.input(message, { target: { value: "Olá" } });
+      expect(getStorySignals().contactTyping).toBe(true);
+
+      act(() => {
+        vi.advanceTimersByTime(800);
+      });
+      fireEvent.input(message, { target: { value: "Olá, tudo" } });
+      act(() => {
+        vi.advanceTimersByTime(800);
+      });
+      expect(getStorySignals().contactTyping).toBe(true);
+      act(() => {
+        vi.advanceTimersByTime(100);
+      });
+      expect(getStorySignals().contactTyping).toBe(false);
+
+      fireEvent.input(message, { target: { value: "Olá, tudo bem" } });
+      unmount();
+      expect(getStorySignals().contactTyping).toBe(false);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("o campo armadilha não conta como digitação", () => {
+    const { container } = render(<ContactForm />);
+    const honeypot = container.querySelector<HTMLInputElement>('input[name="hp_extra"]');
+    if (!honeypot) throw new Error("honeypot ausente");
+    fireEvent.input(honeypot, { target: { value: "x" } });
+    expect(getStorySignals().contactTyping).toBe(false);
+  });
+
+  it("o sinal de envio acompanha loading, done e volta a idle ao escrever outra", async () => {
+    let finish: (result: "ok") => void = () => {};
+    submitMock.mockReturnValue(new Promise<"ok">(resolve => (finish = resolve)));
+    const { container } = render(<ContactForm />);
+    fillValid(container);
+    fireEvent.click(screen.getByRole("button", { name: "Enviar mensagem" }));
+    await waitFor(() => expect(getStorySignals().contactSend).toBe("loading"));
+
+    await act(async () => finish("ok"));
+    expect(getStorySignals().contactSend).toBe("done");
+
+    fireEvent.click(screen.getByRole("button", { name: "Escrever outra" }));
+    expect(getStorySignals().contactSend).toBe("idle");
+  });
+
+  it("falha de envio e limite de envios viram o sinal error e o Giro do botão fica em error", async () => {
+    submitMock.mockResolvedValue("error");
+    const { container } = render(<ContactForm />);
+    fillValid(container);
+    fireEvent.click(screen.getByRole("button", { name: "Enviar mensagem" }));
+    await screen.findByText("Não deu para enviar. Tente de novo ou escreva para o e-mail ao lado.");
+    expect(getStorySignals().contactSend).toBe("error");
+    expect(container.querySelector(".ct-send .g-giro")?.getAttribute("data-state")).toBe("error");
+  });
+
+  it("tem a parada do Giro dentro do botão de enviar", () => {
+    render(<ContactForm />);
+    const button = screen.getByRole("button", { name: "Enviar mensagem" });
+    expect(button.querySelector('[data-stop="ct-send"]')).not.toBeNull();
   });
 });

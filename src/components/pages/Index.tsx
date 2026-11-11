@@ -14,31 +14,6 @@ interface IndexProps {
   posts: HomePost[];
 }
 
-interface HomeSectionProps {
-  id: string;
-  /** Superfície da seção: g-papel (leitura) ou g-azul (marca). Alternadas como na prancha. */
-  surface: "g-papel" | "g-azul";
-  children: React.ReactNode;
-}
-
-// Cada seção entra uma vez ao aparecer (SectionEntrance) e as ids são as da navegação.
-function HomeSection({ id, surface, children }: HomeSectionProps) {
-  return (
-    <SectionEntrance id={id} className={`${surface} home-section`}>
-      <div className="home-section__inner relative">
-        <i
-          className="hs-stop home-section__stop"
-          data-stop={id}
-          data-size={id === "contato" ? "44" : "64"}
-          data-size-m="44"
-          aria-hidden="true"
-        />
-        <div className="home-section__body">{children}</div>
-      </div>
-    </SectionEntrance>
-  );
-}
-
 const Index: React.FC<IndexProps> = ({ posts }) => {
   // Fundação das cenas de rolagem da home; carrega o chunk do GSAP sob demanda
   useChapterScenes();
@@ -65,13 +40,9 @@ const Index: React.FC<IndexProps> = ({ posts }) => {
 
       <HomeAbout />
 
-      <HomeSection id="blog" surface="g-papel">
-        <HomeBlog posts={posts} />
-      </HomeSection>
+      <HomeBlog posts={posts} />
 
-      <HomeSection id="contato" surface="g-azul">
-        <HomeContact />
-      </HomeSection>
+      <HomeContact />
     </div>
   );
 };

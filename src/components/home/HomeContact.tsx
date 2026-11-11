@@ -1,6 +1,5 @@
 import { ArrowLink } from "@/components/giro/Button";
 import { CopyButton } from "@/components/giro/CopyButton";
-import { SectionHeader } from "@/components/giro/SectionHeader";
 import { contactData } from "@/config/site";
 import { useLocale } from "@/hooks/useLocale";
 import { type TranslationKey, t } from "@/lib/i18n";
@@ -21,40 +20,42 @@ export function HomeContact() {
   });
 
   return (
-    <div className="home-contact">
-      <SectionHeader
-        label={bareLabel(t(locale, "contact.label"))}
-        title={t(locale, "contact.title")}
-        lead={t(locale, "contact.intro")}
-      />
-      <div className="home-contact__grid">
-        <ContactForm />
+    <section className="ct g-azul" id="contato" aria-labelledby="ct-title">
+      <div className="ct-in">
+        <p className="g-eyebrow">{bareLabel(t(locale, "contact.label"))}</p>
+        <h2 className="ct-title" id="ct-title">
+          {t(locale, "contact.title")}
+        </h2>
+        <p className="ct-lead">{t(locale, "contact.intro")}</p>
+        <div className="ct-grid">
+          <ContactForm />
 
-        <aside className="g-tinta home-mail" aria-label={t(locale, "contact.direct.region")}>
-          <p className="g-eyebrow">{t(locale, "contact.direct.label")}</p>
-          <p className="home-mail__address">{contactData.email}</p>
-          <CopyButton
-            value={contactData.email}
-            copyLabel={t(locale, "contact.direct.copy")}
-            copiedLabel={t(locale, "contact.direct.copied")}
-            errorLabel={t(locale, "contact.direct.copy_error")}
-            errorHint={t(locale, "contact.direct.copy_error_hint")}
-          />
-          <div className="home-mail__links">
-            {socials.map(link => (
-              <ArrowLink
-                key={link.id}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-giro-wink=""
-              >
-                {link.label}
-              </ArrowLink>
-            ))}
-          </div>
-        </aside>
+          <aside className="g-tinta ct-mail" aria-label={t(locale, "contact.direct.region")}>
+            <p className="g-eyebrow">{t(locale, "contact.direct.label")}</p>
+            <p className="ct-mail__a">{contactData.email}</p>
+            <CopyButton
+              value={contactData.email}
+              copyLabel={t(locale, "contact.direct.copy")}
+              copiedLabel={t(locale, "contact.direct.copied")}
+              errorLabel={t(locale, "contact.direct.copy_error")}
+              errorHint={t(locale, "contact.direct.copy_error_hint")}
+            />
+            <div className="ct-mail__l">
+              {socials.map(link => (
+                <ArrowLink
+                  key={link.id}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-giro-wink=""
+                >
+                  {link.label}
+                </ArrowLink>
+              ))}
+            </div>
+          </aside>
+        </div>
       </div>
-    </div>
+    </section>
   );
 }

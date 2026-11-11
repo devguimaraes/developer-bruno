@@ -16,6 +16,7 @@ import {
   validateContact,
 } from "@/lib/contact";
 import { type TranslationKey, t } from "@/lib/i18n";
+import { setStorySignal } from "./story/story-signals";
 
 const TYPE_OPTIONS: readonly { value: ContactType; labelKey: TranslationKey }[] = [
   { value: "website", labelKey: "contact.form.type.website" },
@@ -41,6 +42,8 @@ const LISTEN_COLUMNS = 40;
 const LISTEN_LOOK_X = 5;
 const LISTEN_LOOK_Y = 3;
 const LISTEN_PULSE_EVERY = 3;
+// Sinal de digitação para o Giro da história: volta ao repouso 900 ms depois da última tecla.
+const TYPING_IDLE_MS = 900;
 
 /** Estado do envio. "ok" da API vira "sent" na tela. */
 type FormStatus = "idle" | "sending" | "sent" | Exclude<ContactResult, "ok">;
@@ -64,6 +67,40 @@ export function ContactForm() {
   const [hearing, setHearing] = useState<{ x: number; keys: number } | null>(null);
   const hearingTimer = useRef<number | undefined>(undefined);
   useEffect(() => () => window.clearTimeout(hearingTimer.current), []);
+
+  // O formulário escreve os sinais do capítulo; o Giro da história (quando há cenas) lê.
+  const typingTimer = useRef<number | undefined>(undefined);
+  useEffect(
+    () => () => {
+      window.clearTimeout(typingTimer.current);
+      setStorySignal("contactTyping", false);
+      setStorySignal("contactSend", "idle");
+    },
+    []
+  );
+  useEffect(() => {
+    setStorySignal(
+      "contactSend",
+      status === "sending"
+        ? "loading"
+        : status === "sent"
+          ? "done"
+          : status === "error" || status === "rate_limit"
+            ? "error"
+            : "idle"
+    );
+  }, [status]);
+
+  function signalTyping(target: EventTarget) {
+    if (!(target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement)) return;
+    if (target.name === "hp_extra") return;
+    setStorySignal("contactTyping", true);
+    window.clearTimeout(typingTimer.current);
+    typingTimer.current = window.setTimeout(
+      () => setStorySignal("contactTyping", false),
+      TYPING_IDLE_MS
+    );
+  }
 
   function hear(target: EventTarget, typed: boolean) {
     // Com movimento reduzido o Giro não ouve: nem o momento, nem os olhos seguindo o texto.
@@ -130,15 +167,18 @@ export function ContactForm() {
   return (
     <form
       ref={formRef}
-      className="home-form"
+      className="ct-form"
       aria-label={t(locale, "contact.form.label")}
       noValidate
       onSubmit={handleSubmit}
       onFocus={event => hear(event.target, false)}
-      onInput={event => hear(event.target, true)}
+      onInput={event => {
+        hear(event.target, true);
+        signalTyping(event.target);
+      }}
       onBlur={stopHearing}
     >
-      <div className="home-form__row">
+      <div className="ct-row">
         <Field
           name="name"
           autoComplete="name"
@@ -162,9 +202,9 @@ export function ContactForm() {
         />
       </div>
 
-      <fieldset className="home-form__types" disabled={locked}>
+      <fieldset className="ct-types" disabled={locked}>
         <legend className="g-field__label">{t(locale, "contact.form.type_label")}</legend>
-        <div className="home-form__chips">
+        <div className="ct-chips">
           {TYPE_OPTIONS.map(option => (
             <Chip
               key={option.value}
@@ -205,20 +245,30 @@ export function ContactForm() {
         onChange={event => updateValues({ ...values, hp_extra: event.target.value })}
       />
 
-      <div className="home-form__submit">
+      <div className="ct-send">
         <Button
           type="submit"
           variant="primary"
           status={buttonStatus}
           disabled={!hydrated || status === "sending" || status === "sent"}
+          className="ct-submit"
           lead={
             <Giro
+              state={status === "error" || status === "rate_limit" ? "error" : undefined}
               moment={hearing ? "listening" : undefined}
               look={hearing ? { x: hearing.x, y: LISTEN_LOOK_Y } : undefined}
               pulse={hearing ? Math.floor(hearing.keys / LISTEN_PULSE_EVERY) : undefined}
             />
           }
         >
+          {/* Parada do Giro da história: com cenas, ele pousa aqui e o do botão fica escondido. */}
+          <i
+            className="hs-stop ct-seat"
+            data-stop="ct-send"
+            data-size="30"
+            data-size-m="30"
+            aria-hidden="true"
+          />
           {buttonText}
         </Button>
         {status === "sent" && (
