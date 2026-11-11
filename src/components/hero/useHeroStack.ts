@@ -50,6 +50,8 @@ const LAUNCH_AFTER_LOADER_MS = 300;
 // Tempo do amasso na origem antes de soltar o Giro.
 const PRELAUNCH_MS = 110;
 const LOADER_ATTR = "data-loader";
+// O HomeGiro marca aqui que recebeu o Giro. Enquanto vale "story", a hero fica inerte e sem rosto.
+const HAND_ATTR = "data-giro-hand";
 const LOOP_AFTER_LAND_MS = 350;
 const CLICK_RETURN_MS = 3200;
 const STILL_OPEN = 0.72;
@@ -117,7 +119,9 @@ export function useHeroStack(opts: HeroStackOptions): void {
 function byData(root: Element, attr: string): Map<number, HTMLElement | SVGElement> {
   const out = new Map<number, HTMLElement | SVGElement>();
   for (const node of root.querySelectorAll<HTMLElement | SVGElement>(`[${attr}]`)) {
-    out.set(Number(node.getAttribute(attr)), node);
+    const key = Number(node.getAttribute(attr));
+    // Estações com nome (a do HomeGiro) não são índices da linha.
+    if (!Number.isNaN(key)) out.set(key, node);
   }
   return out;
 }
@@ -151,6 +155,7 @@ function createRuntime(
   const hudOpen = stage.querySelector<HTMLElement>('[data-hud="open"]');
   const title = stage.querySelector<HTMLElement>(".hb-title");
   const trailPath = stage.querySelector<SVGPathElement>(".hb-trail__p");
+  const restStop = stage.querySelector<HTMLElement>(".hb-rest");
   const desktopQuery = window.matchMedia(DESKTOP_QUERY);
 
   let cfg: StackConfig = desktopQuery.matches ? DESKTOP_STACK : MOBILE_STACK;
@@ -210,6 +215,8 @@ function createRuntime(
   let ro: ResizeObserver | null = null;
   let mo: MutationObserver | null = null;
   let launchQueued = false;
+
+  const handed = (): boolean => document.documentElement.getAttribute(HAND_ATTR) === "story";
 
   const findSource = (): SVGElement | null => {
     if (!source?.isConnected) {
@@ -335,7 +342,7 @@ function createRuntime(
     const away = mode !== "seat";
     stage.classList.toggle("is-away", away);
     // Antes do lançamento o botão está invisível: fora do Tab, para não haver foco que não se vê.
-    rider.tabIndex = away ? 0 : -1;
+    rider.tabIndex = away && !handed() ? 0 : -1;
     // O Giro da origem some enquanto o Giro está na linha e volta quando o hero sai da tela.
     if (src) src.style.opacity = away && visible ? "0" : "";
     if (away) placeSeat();
@@ -366,6 +373,10 @@ function createRuntime(
         tag.style.top = `${(s.y - 9).toFixed(1)}px`;
       }
     });
+    const floor = st[0];
+    if (restStop && floor) {
+      restStop.style.transform = `translate(${floor.x.toFixed(1)}px, ${floor.y.toFixed(1)}px)`;
+    }
     // Na bola quem posiciona o Giro é placeBall; na linha, a estação.
     if (mode !== "rail") return;
     const pos = riderAt(st, rp);
@@ -928,7 +939,7 @@ function createRuntime(
   const sync = (): void => {
     if (destroyed) return;
     syncSource();
-    const should = !reduced && visible && !document.hidden;
+    const should = !reduced && visible && !document.hidden && !handed();
     if (should && !running) {
       running = true;
       last = performance.now();
@@ -977,7 +988,7 @@ function createRuntime(
   };
 
   const onMove = (e: PointerEvent): void => {
-    if (e.pointerType !== "mouse" || !cam || mode === "seat") return;
+    if (e.pointerType !== "mouse" || !cam || mode === "seat" || !running) return;
     if (overCopy(e)) {
       openPtr = 0;
       setHover(-1);
@@ -1032,8 +1043,13 @@ function createRuntime(
   };
 
   const onResize = (): void => {
-    if (reduced) renderStill();
-    else layout(readScroll());
+    if (reduced) {
+      renderStill();
+    } else {
+      layout(readScroll());
+      // Parado (aba oculta ou Giro entregue), o laço não redesenha a linha nem a estação do chão.
+      if (!running) drawLine();
+    }
     if (mode === "ball") {
       measure();
     }
@@ -1084,8 +1100,14 @@ function createRuntime(
       sync();
     });
     io.observe(stage);
-    mo = new MutationObserver(onLoader);
-    mo.observe(document.documentElement, { attributes: true, attributeFilter: [LOADER_ATTR] });
+    mo = new MutationObserver(records => {
+      if (records.some(r => r.attributeName === LOADER_ATTR)) onLoader();
+      if (records.some(r => r.attributeName === HAND_ATTR)) sync();
+    });
+    mo.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: [LOADER_ATTR, HAND_ATTR],
+    });
     document.fonts?.ready.then(() => {
       if (!destroyed) measure();
     });

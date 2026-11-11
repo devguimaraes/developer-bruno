@@ -1,0 +1,502 @@
+/* ---------- Abertura: a hero fecha e vira o capítulo Estados (issue #123) ----------
+   Hero e Estados dividem um palco. Sem data-scenes="on" a hero é a de sempre e os quatro estados
+   ficam lado a lado, em ordem. Toda regra de palco (altura, sticky, camadas) está sob o atributo. */
+
+.ab {
+  --G: 64px;
+  position: relative;
+  overflow-x: clip;
+}
+
+.ab-stage {
+  position: relative;
+  box-sizing: border-box;
+}
+
+.ab-world,
+.ab-demo,
+.ab-exit,
+.ab-pills,
+.ab-beats {
+  display: none;
+}
+
+/* Base: título e os quatro estados, cada um com a sua frase. */
+.ab-st {
+  position: relative;
+  padding: calc(var(--u) * 12) var(--G) 0;
+}
+
+.ab-st .g-eyebrow {
+  margin: 0;
+}
+
+.ab-st__title {
+  max-width: 14ch;
+  margin: calc(var(--u) * 1.2) 0 0;
+  font-size: calc(var(--u) * 5.6);
+  font-weight: 900;
+  font-stretch: 112%;
+  line-height: 0.92;
+  letter-spacing: -0.035em;
+}
+
+.ab-st__lead {
+  margin: calc(var(--u) * 1.6) 0 0;
+  color: var(--s-muted);
+  font: 500 calc(var(--u) * 1.7) / 1.3 var(--font-sans);
+}
+
+.ab-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+  margin: 0;
+  padding: calc(var(--u) * 4) var(--G) calc(var(--u) * 12);
+  list-style: none;
+}
+
+.ab-cell {
+  min-width: 0;
+}
+
+.ab-cell .dm {
+  position: relative;
+  height: 300px;
+}
+
+.ab-cell__beat {
+  margin: 16px 0 0;
+  color: var(--s-fg);
+  font: var(--text-corpo);
+}
+
+/* ---------- Tela de exemplo ---------- */
+
+.dm {
+  --hi-paper: #fbfaf6;
+  --hi-paper-2: #efeee8;
+  --hi-mid: rgba(11, 12, 31, 0.2);
+  --hi-soft: rgba(11, 12, 31, 0.08);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 24px;
+  box-shadow: 0 40px 80px -30px rgba(11, 12, 31, 0.6);
+}
+
+.dm-bar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 16px;
+  background: var(--hi-paper-2);
+}
+
+.dm-bar i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--hi-mid);
+}
+
+.dm-url {
+  display: flex;
+  flex: 0 1 280px;
+  align-items: center;
+  height: 26px;
+  margin-left: 10px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: var(--hi-paper);
+  box-shadow: inset 0 0 0 1px var(--hi-mid);
+  color: var(--grafite);
+  font: var(--text-micro);
+}
+
+.dm-body {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.dm-stop {
+  top: 36%;
+  left: 50%;
+}
+
+.dm-msg {
+  position: absolute;
+  top: 64%;
+  right: 24px;
+  left: 24px;
+  color: var(--s-fg);
+  text-align: center;
+}
+
+.dm-msg strong {
+  display: block;
+  font: 800 22px/1.15 var(--font-sans);
+  font-stretch: 110%;
+}
+
+.dm-msg span {
+  display: block;
+  margin-top: 6px;
+  color: var(--grafite);
+  font: 450 15px/1.4 var(--font-sans);
+}
+
+.dm-prog {
+  position: absolute;
+  right: 26%;
+  bottom: 14px;
+  left: 26%;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 3px;
+  background: var(--hi-soft);
+  opacity: 0;
+}
+
+.dm-prog b {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--azul-sinal);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+}
+
+.dm[data-st="loading"] .dm-prog {
+  opacity: 1;
+}
+
+.dm[data-st="loading"] .dm-prog b {
+  animation: dm-prog 1.5s var(--ease-resolve) forwards;
+}
+
+@keyframes dm-prog {
+  to {
+    transform: scaleX(0.76);
+  }
+}
+
+/* Erro: o fundo da tela fica coral a 14%. */
+.dm[data-st="error"] .dm-body {
+  background: rgba(255, 92, 61, 0.14);
+}
+
+/* Pronto: a página pinta de cima para baixo em 10 passos. */
+.dm-page {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 620ms steps(10);
+}
+
+.dm[data-st="done"] .dm-page {
+  clip-path: inset(0);
+}
+
+.dm-page__sig {
+  position: absolute;
+  top: 18px;
+  left: 22px;
+  font: 800 12px/1 var(--font-sans);
+  font-stretch: 115%;
+}
+
+.dm-page__title {
+  position: absolute;
+  top: 26%;
+  left: 20px;
+  font: 900 84px/0.9 var(--font-sans);
+  letter-spacing: -0.035em;
+}
+
+.dm-page__bar {
+  position: absolute;
+  top: 66%;
+  left: 22px;
+  width: 42%;
+  height: 7px;
+  border-radius: 4px;
+  background: rgba(212, 213, 250, 0.55);
+}
+
+.dm-page__bar--2 {
+  top: calc(66% + 15px);
+  width: 30%;
+}
+
+.dm-page__cta {
+  position: absolute;
+  top: 80%;
+  left: 22px;
+  width: 104px;
+  height: 28px;
+  border-radius: 14px;
+  background: var(--lima);
+}
+
+.dm-stop--done {
+  top: 60%;
+  right: 19%;
+}
+
+.dm-foot {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+  padding: 0 16px 0 22px;
+  border-top: 1px solid var(--s-line);
+}
+
+.dm-status {
+  color: var(--grafite);
+  font: var(--text-micro);
+}
+
+.dm-act {
+  --b-h: 44px;
+  --b-pad: 22px;
+  --b-font: 15px;
+}
+
+.dm-act:disabled {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .ab {
+    --G: 16px;
+  }
+
+  .ab-st {
+    padding-top: 96px;
+  }
+
+  .ab-st__title {
+    margin-top: 8px;
+    font-size: 40px;
+  }
+
+  .ab-st__lead {
+    margin-top: 10px;
+    font-size: 18px;
+  }
+
+  .ab-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 40px;
+    padding: 32px var(--G) 96px;
+  }
+}
+
+/* ---------- Palco: só com as cenas ligadas ---------- */
+
+[data-scenes="on"] .ab {
+  height: calc(100svh * 3.8);
+}
+
+[data-scenes="on"] .ab-stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+[data-scenes="on"] .ab-grid {
+  display: none;
+}
+
+/* A pilha da cena sobre a da hero. Só aparece depois da passagem de mão, quando as duas estão
+   na mesma pose e a da hero some (o runtime da hero já parou). */
+[data-scenes="on"] .ab-world.hb {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: block;
+  min-height: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+[data-scenes="on"] .ab-world .ab-iso {
+  display: none;
+}
+
+html[data-giro-hand="story"][data-scenes="on"] .ab-world .ab-iso {
+  display: block;
+}
+
+html[data-giro-hand="story"][data-scenes="on"] .ab-stage > .hb .hb-world {
+  visibility: hidden;
+}
+
+[data-scenes="on"] .ab-world .hb-page {
+  background: var(--hi-paper);
+}
+
+[data-scenes="on"] .ab-st {
+  position: absolute;
+  z-index: 2;
+  top: calc(100svh * 0.5 - var(--u) * 15);
+  left: var(--G);
+  width: calc(var(--u) * 40);
+  padding: 0;
+  visibility: hidden;
+}
+
+[data-scenes="on"] .ab-st__title {
+  max-width: none;
+}
+
+[data-scenes="on"] .ab-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+  margin: calc(var(--u) * 3) 0 0;
+  padding: 0;
+  border: 0;
+}
+
+[data-scenes="on"] .ab-beats {
+  position: relative;
+  display: block;
+  height: calc(var(--u) * 5.4);
+  margin-top: calc(var(--u) * 1.6);
+}
+
+[data-scenes="on"] .ab-beat {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  color: var(--s-fg);
+  font: var(--text-corpo-l);
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 200ms linear,
+    transform 360ms var(--ease-resolve);
+}
+
+[data-scenes="on"] .ab-beat.is-on {
+  opacity: 1;
+  transform: none;
+}
+
+[data-scenes="on"] .ab-demo {
+  position: absolute;
+  z-index: 2;
+  top: calc(100svh * 0.5 - var(--u) * 13.6);
+  left: calc(50% + var(--u) * 3);
+  display: block;
+  width: calc(var(--u) * 39);
+  height: calc(var(--u) * 27.2);
+  visibility: hidden;
+}
+
+[data-scenes="on"] .ab-exit {
+  bottom: 12%;
+  left: 50%;
+  display: block;
+}
+
+/* O Giro escondido (antes da passagem de mão) não aparece nem captura nada. */
+.hs-actor[data-hidden] {
+  visibility: hidden;
+}
+
+@media (max-width: 768px) {
+  [data-scenes="on"] .ab {
+    height: calc(100svh * 3.6);
+  }
+
+  [data-scenes="on"] .ab-st {
+    top: 76px;
+    right: var(--G);
+    width: auto;
+  }
+
+  [data-scenes="on"] .ab-pills {
+    position: absolute;
+    top: 482px;
+    flex-wrap: nowrap;
+    gap: 6px;
+    margin: 0;
+  }
+
+  [data-scenes="on"] .ab-pills .g-chip {
+    padding-inline: 10px;
+    font-size: 13px;
+  }
+
+  [data-scenes="on"] .ab-beats {
+    position: absolute;
+    top: 536px;
+    right: 0;
+    left: 0;
+    height: 78px;
+    margin: 0;
+  }
+
+  [data-scenes="on"] .ab-beat {
+    font: 500 18px / 1.35 var(--font-sans);
+  }
+
+  [data-scenes="on"] .ab-demo {
+    top: 252px;
+    right: var(--G);
+    left: var(--G);
+    width: auto;
+    height: 296px;
+  }
+
+  .dm-bar {
+    height: 40px;
+  }
+
+  .dm-foot {
+    height: 60px;
+  }
+
+  .dm-msg {
+    top: 60%;
+    right: 12px;
+    left: 12px;
+  }
+
+  .dm-msg strong {
+    font-size: 19px;
+  }
+
+  .dm-msg span {
+    font-size: 14px;
+  }
+
+  .dm-stop {
+    top: 32%;
+  }
+
+  .dm-page__title {
+    top: 20%;
+    font-size: 58px;
+  }
+
+  [data-scenes="on"] .ab-exit {
+    bottom: 170px;
+  }
+}

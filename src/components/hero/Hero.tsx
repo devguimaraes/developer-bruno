@@ -110,6 +110,15 @@ export function Hero() {
         <circle cx="60" cy="60" r="44" />
       </svg>
 
+      {/* Estação do Giro no chão da linha: o HomeGiro pousa aqui quando recebe o Giro da entrada. */}
+      <i
+        className="hs-stop hb-rest"
+        data-stop="hero"
+        data-size="64"
+        data-size-m="44"
+        aria-hidden="true"
+      />
+
       <svg className="hb-trail" aria-hidden="true">
         <path className="hb-trail__p" />
       </svg>

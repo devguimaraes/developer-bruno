@@ -65,6 +65,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  document.documentElement.removeAttribute("data-giro-hand");
   vi.useRealTimers();
   window.matchMedia = originalMatchMedia;
   act(() => setLocale("pt"));
@@ -294,5 +295,35 @@ describe("useHeroStack, entrada desenhada no trajeto novo", { timeout: SIM_TIMEO
     });
 
     expect(container.querySelector('[data-layer="0"]')?.classList.contains("is-fire")).toBe(true);
+  });
+});
+
+describe("useHeroStack, passagem de mão para o HomeGiro", { timeout: SIM_TIMEOUT_MS }, () => {
+  it("a estação do chão acompanha a linha, para o HomeGiro pousar nela", () => {
+    mockReducedMotion(false);
+    const { container } = render(<Hero />);
+
+    const rest = container.querySelector<HTMLElement>('.hb-rest[data-stop="hero"]');
+    expect(rest).not.toBeNull();
+    expect(rest?.style.transform).toMatch(/^translate\(/);
+  });
+
+  it("com o HomeGiro em cena a hero fica inerte, sem foco no botão e sem avançar a volta", async () => {
+    mockReducedMotion(false);
+    const { container } = render(<Hero />);
+
+    await advanceUntil(container, shown => shown.length >= 1);
+    act(() => document.documentElement.setAttribute("data-giro-hand", "story"));
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(STEP_MS);
+    });
+    const frozen = shownTags(container);
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(5000);
+    });
+
+    expect(shownTags(container)).toEqual(frozen);
+    expect(container.querySelector<HTMLButtonElement>(".hb-rider")?.tabIndex).toBe(-1);
   });
 });

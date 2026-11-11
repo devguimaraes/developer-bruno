@@ -5,6 +5,7 @@ import { calcEndStep } from "@/components/home/end-stage";
 import { calcProcessChapterStep } from "@/components/home/process-stage";
 import { calcProjectStep } from "@/components/home/project-stage";
 import { calcServiceStep } from "@/components/home/service-stage";
+import { calcOpeningStep } from "@/components/home/states-stage";
 import { type Chapter, createChapter } from "./chapters";
 import { detectSurface } from "./giro-jump";
 import { getStorySignals } from "./story-signals";
@@ -51,6 +52,22 @@ export function buildProvisionalChapters(
     const len = Math.max(1, el.offsetHeight - viewportH);
     const surface = detectSurface(el);
     const surfaceName = surface === "g-papel" ? "papel" : surface === "g-tinta" ? "tinta" : "azul";
+
+    if (cfg.id === "hero") {
+      chapters.push(
+        createChapter({
+          id: "hero",
+          label: cfg.label,
+          top,
+          len,
+          altura: viewportH,
+          lead: 0,
+          surface: "azul",
+          at: calcOpeningStep,
+        })
+      );
+      continue;
+    }
 
     if (cfg.id === "servicos") {
       const track = el.querySelector<HTMLElement>(".sv-track") || el;

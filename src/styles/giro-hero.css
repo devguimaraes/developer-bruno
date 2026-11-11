@@ -1236,3 +1236,16 @@ html[data-loader="lay"] .g-tabbar__giro .g-giro {
     opacity: 0;
   }
 }
+
+/* ---------- Passagem de mão para o HomeGiro (issue #123) ---------- */
+
+/* A estação do chão da linha. Quem a move é o runtime, a cada quadro. */
+.hb .hb-rest {
+  top: 0;
+  left: 0;
+}
+
+/* Com o HomeGiro em cena o Giro da entrada some: nunca há dois rostos na tela. */
+html[data-giro-hand="story"] .hb :is(.hb-rider, .hb-seat, .hb-trail, .hb-shadow) {
+  visibility: hidden;
+}

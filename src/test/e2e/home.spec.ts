@@ -10,7 +10,16 @@ test.describe("Navegação Principal", () => {
     await expect(page.locator("h1").first()).toBeVisible();
 
     // Âncoras das seções da home, usadas pela navegação
-    for (const id of ["servicos", "projetos", "processo", "sobre", "blog", "contato"]) {
+    for (const id of [
+      "hero",
+      "servicos",
+      "projetos",
+      "processo",
+      "sobre",
+      "blog",
+      "contato",
+      "fim",
+    ]) {
       await expect(page.locator(`#${id}`)).toHaveCount(1);
     }
 
@@ -135,5 +144,27 @@ test.describe("Navegação Principal", () => {
     await expect(stats).toHaveCount(3);
     await expect(stats.first()).toHaveAttribute("href", "https://www.agenciamultibr.com/");
     await expect(stats.first()).toHaveAttribute("target", "_blank");
+  });
+
+  test("Deve publicar, falhar, tentar de novo e ficar pronto na tela de exemplo", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    await waitForHydration(page);
+    // Batida "vazio" do capítulo Estados: t = 3 na linha de 10 unidades da abertura
+    await page.evaluate(() => {
+      const s = document.getElementById("hero") as HTMLElement;
+      window.scrollTo(0, (s.offsetHeight - window.innerHeight) * 0.3);
+    });
+    const status = page.getByText(/^estado: /).first();
+    await expect(status).toHaveText("estado: vazio");
+
+    await page.getByRole("button", { name: "Publicar", exact: true }).click();
+    await expect(status).toHaveText("estado: carregando");
+    await expect(status).toHaveText("estado: erro", { timeout: 4000 });
+
+    await page.getByRole("button", { name: "Tentar de novo" }).click();
+    await expect(status).toHaveText("estado: carregando");
+    await expect(status).toHaveText("estado: pronto", { timeout: 4000 });
   });
 });

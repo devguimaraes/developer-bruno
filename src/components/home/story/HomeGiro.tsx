@@ -16,6 +16,9 @@ import {
 } from "./giro-jump";
 import { buildProvisionalChapters } from "./provisional-story";
 
+// Marca no <html> que o Giro da home já tem dono: o hero e a pilha da abertura leem daqui.
+const HAND_ATTR = "data-giro-hand";
+
 export interface HomeGiroProps {
   /** Lista customizada de capítulos para testes ou injeção; padrão: seções provisórias do DOM */
   chapters?: readonly Chapter[];
@@ -114,6 +117,12 @@ export const HomeGiro: FC<HomeGiroProps> = ({
 
     let key = "";
 
+    // Passagem de mão: com o HomeGiro em cena, o Giro da entrada (hero) fica inerte e sem rosto.
+    const setHand = (handed: boolean) => {
+      if (handed) document.documentElement.setAttribute(HAND_ATTR, "story");
+      else document.documentElement.removeAttribute(HAND_ATTR);
+    };
+
     const findStop = (stopName: string): HTMLElement | null => {
       return (
         document.querySelector<HTMLElement>(`[data-stop="${stopName}"]`) ||
@@ -128,6 +137,7 @@ export const HomeGiro: FC<HomeGiroProps> = ({
 
     const land = () => {
       if (!A.next) return;
+      actor.removeAttribute("data-hidden");
       setSurface(A.next.cls);
       if (actor) {
         actor.className = `hs-actor ${A.next.cls}`;
@@ -167,6 +177,20 @@ export const HomeGiro: FC<HomeGiroProps> = ({
       A.tg = n;
 
       const p = pos(n);
+      const hidden = d.hidden === true;
+      actor.toggleAttribute("data-hidden", hidden);
+      if (hidden) {
+        // Escondido, o Giro só acompanha a parada, sem voar nem pousar: quem aparece é o da hero.
+        A.fl = null;
+        A.x = p.x;
+        A.y = p.y;
+        A.k = A.kT;
+        clearTimers();
+        actor.className = `hs-actor ${surfCls}`;
+        setSurface(surfCls);
+        setGiroState(d.state);
+        return;
+      }
       if (A.x < -100) {
         A.x = p.x;
         A.y = p.y;
@@ -211,26 +235,36 @@ export const HomeGiro: FC<HomeGiroProps> = ({
 
       if (nextKey !== key) {
         key = nextKey;
+        setHand(d.hidden !== true);
         go(d);
       }
     };
 
-    // Inicializa a parada padrão caso nenhuma chave tenha sido resolvida ainda
-    const initialEl = findStop(initialStop);
-    if (initialEl) {
-      const p = pos(initialEl);
-      A.x = p.x;
-      A.y = p.y;
-      A.tg = initialEl;
-      A.k = calcTargetScale(readStopSize(initialEl, window.innerWidth < 768));
-      A.kT = A.k;
-      const initialSurf = detectSurface(initialEl);
-      A.next = {
-        cls: initialSurf,
-        st: "done",
-        step: { k: "init", stop: initialStop, state: "done" },
-      };
-      land();
+    // O Giro começa na estação do capítulo em que a página abriu (voltando de outra página, a
+    // última estação), sem voar da hero. Sem capítulos ainda, parte da parada inicial.
+    const startChapter = chapters.length > 0 ? chapterAt(window.scrollY, chapters) : undefined;
+    const startStep = startChapter?.at(progress(window.scrollY, startChapter));
+    if (startChapter && startStep && findStop(startStep.stop)) {
+      key = `${startChapter.id}:${startStep.k}`;
+      setHand(startStep.hidden !== true);
+      go(startStep);
+    } else {
+      const initialEl = findStop(initialStop);
+      if (initialEl) {
+        const p = pos(initialEl);
+        A.x = p.x;
+        A.y = p.y;
+        A.tg = initialEl;
+        A.k = calcTargetScale(readStopSize(initialEl, window.innerWidth < 768));
+        A.kT = A.k;
+        const initialSurf = detectSurface(initialEl);
+        A.next = {
+          cls: initialSurf,
+          st: "done",
+          step: { k: "init", stop: initialStop, state: "done" },
+        };
+        land();
+      }
     }
 
     const frame = (now: number) => {
@@ -301,6 +335,7 @@ export const HomeGiro: FC<HomeGiroProps> = ({
 
     return () => {
       cancelled = true;
+      setHand(false);
       setGiroOnStage(false);
       clearTimers();
       if (resizeTimer) clearTimeout(resizeTimer);
@@ -318,7 +353,8 @@ export const HomeGiro: FC<HomeGiroProps> = ({
 
   return (
     <div className={containerClasses} aria-hidden="true">
-      <div ref={actorRef} className={`hs-actor ${surface}`}>
+      {/* Nasce escondido: só aparece depois do primeiro passo, na parada certa. */}
+      <div ref={actorRef} className={`hs-actor ${surface}`} data-hidden="">
         <div className="hs-actor__k">
           <div ref={actorInRef} className="hs-actor__in">
             <Giro state={giroState} />

@@ -207,4 +207,89 @@ describe("HomeGiro component", () => {
     // A escala --gk deve se aproximar de 0.5 (48 / 96)
     expect(Number(actor?.style.getPropertyValue("--gk"))).toBeCloseTo(0.5, 1);
   });
+  describe("passagem de mão", () => {
+    const rectAt = (x: number, y: number) => () => ({
+      left: x,
+      top: y,
+      width: 10,
+      height: 10,
+      right: x + 10,
+      bottom: y + 10,
+      x,
+      y,
+      toJSON: () => {},
+    });
+
+    afterEach(() => {
+      document.documentElement.removeAttribute("data-giro-hand");
+    });
+
+    it("escondido, o Giro não aparece e o hero segue com o rosto; ao liberar, assume e pousa", () => {
+      vi.spyOn(reducedMotionHook, "useReducedMotion").mockReturnValue(false);
+      const stop = document.createElement("div");
+      stop.dataset.stop = "hero";
+      stop.className = "g-azul";
+      stop.getBoundingClientRect = rectAt(300, 200);
+      document.body.appendChild(stop);
+
+      let hidden = true;
+      const chapter: Chapter = createChapter({
+        id: "hero",
+        label: "// início",
+        top: 0,
+        len: 1000,
+        surface: "azul",
+        lead: 0,
+        at: () =>
+          hidden
+            ? { k: "hand", stop: "hero", state: "done", hidden: true }
+            : { k: "rest", stop: "hero", state: "curious" },
+      });
+      let raf: FrameRequestCallback | null = null;
+      vi.spyOn(window, "requestAnimationFrame").mockImplementation(cb => {
+        raf = cb;
+        return 1;
+      });
+
+      const { container } = render(<HomeGiro chapters={[chapter]} />);
+      const actor = container.querySelector<HTMLElement>(".hs-actor");
+      const actorIn = container.querySelector(".hs-actor__in");
+
+      expect(actor?.hasAttribute("data-hidden")).toBe(true);
+      expect(document.documentElement.hasAttribute("data-giro-hand")).toBe(false);
+
+      hidden = false;
+      act(() => {
+        raf?.(performance.now());
+      });
+
+      expect(actor?.hasAttribute("data-hidden")).toBe(false);
+      expect(document.documentElement.getAttribute("data-giro-hand")).toBe("story");
+      expect(container.querySelector("svg.g-giro")?.getAttribute("data-state")).toBe("curious");
+      expect(actorIn?.classList.contains("is-squash")).toBe(true);
+    });
+
+    it("ao desmontar, devolve o rosto ao hero", () => {
+      vi.spyOn(reducedMotionHook, "useReducedMotion").mockReturnValue(false);
+      const stop = document.createElement("div");
+      stop.dataset.stop = "s1";
+      stop.className = "g-azul";
+      stop.getBoundingClientRect = rectAt(50, 50);
+      document.body.appendChild(stop);
+      const chapter: Chapter = createChapter({
+        id: "ch",
+        label: "ch",
+        top: 0,
+        len: 1000,
+        surface: "azul",
+        at: () => ({ k: "s1", stop: "s1", state: "done" }),
+      });
+
+      const { unmount } = render(<HomeGiro chapters={[chapter]} />);
+      expect(document.documentElement.getAttribute("data-giro-hand")).toBe("story");
+
+      unmount();
+      expect(document.documentElement.hasAttribute("data-giro-hand")).toBe(false);
+    });
+  });
 });
