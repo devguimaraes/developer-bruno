@@ -340,7 +340,7 @@ export function HomeEnd() {
         <div className="fn-foot">
           <Signature className="fn-sig" />
           <div className="fn-foot__r">
-            <LanguageSwitch groupLabel={t(locale, "language.group_label")} />
+            <LanguageSwitch groupLabel={t(locale, "language.group_label")} className="only-m" />
             {socialLinks.map(link => (
               <a key={link.id} className="g-link" href={link.href}>
                 {link.label}

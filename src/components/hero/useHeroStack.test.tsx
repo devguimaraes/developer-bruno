@@ -26,6 +26,20 @@ function mockReducedMotion(reduced: boolean): void {
   }));
 }
 
+// Computador: a consulta de largura mínima responde true, sem movimento reduzido.
+function mockDesktop(): void {
+  window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+    matches: query === "(min-width: 768px)",
+    media: query,
+    onchange: null,
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  }));
+}
+
 // Índices (data-tag) dos rótulos que estão mostrados agora.
 function shownTags(container: HTMLElement): string[] {
   return Array.from(
@@ -325,5 +339,42 @@ describe("useHeroStack, passagem de mão para o HomeGiro", { timeout: SIM_TIMEOU
 
     expect(shownTags(container)).toEqual(frozen);
     expect(container.querySelector<HTMLButtonElement>(".hb-rider")?.tabIndex).toBe(-1);
+  });
+
+  it("no celular, com o HomeGiro em cena, o arco do trilho volta a aparecer", async () => {
+    mockReducedMotion(false);
+    document.body.insertAdjacentHTML(
+      "beforeend",
+      '<span class="g-dock__ring" id="src-m"><svg class="g-giro"></svg></span>'
+    );
+    const { container } = render(<Hero />);
+    const src = document.querySelector<SVGElement>("#src-m .g-giro");
+
+    await advanceUntil(container, shown => shown.length >= 1);
+    expect(src?.style.opacity).toBe("0");
+    act(() => document.documentElement.setAttribute("data-giro-hand", "story"));
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(STEP_MS);
+    });
+    expect(src?.style.opacity).toBe("");
+    document.getElementById("src-m")?.remove();
+  });
+
+  it("no computador o Giro da assinatura, que tem rosto, segue escondido com o HomeGiro em cena", async () => {
+    mockDesktop();
+    document.body.insertAdjacentHTML(
+      "beforeend",
+      '<header data-site-header id="src-d"><span class="g-signature__o"><svg class="g-giro"></svg></span></header>'
+    );
+    const { container } = render(<Hero />);
+    const src = document.querySelector<SVGElement>("#src-d .g-giro");
+
+    await advanceUntil(container, shown => shown.length >= 1);
+    act(() => document.documentElement.setAttribute("data-giro-hand", "story"));
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(STEP_MS);
+    });
+    expect(src?.style.opacity).toBe("0");
+    document.getElementById("src-d")?.remove();
   });
 });

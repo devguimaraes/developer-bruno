@@ -1249,3 +1249,31 @@ html[data-loader="lay"] .g-dock__ring .g-giro {
 html[data-giro-hand="story"] .hb :is(.hb-rider, .hb-seat, .hb-trail, .hb-shadow) {
   visibility: hidden;
 }
+
+/* ---------- Sem JS: a pilha na pose do runtime (stackOrigin e a escala do layout) ----------
+   O runtime escreve --ox, --oy e --k inline e vence estes valores. Sem ele, a origem caía no
+   centro do palco e a pilha cobria o título. */
+section.hb {
+  --k: 0.92;
+}
+section.hb [data-iso] {
+  --ox: calc(50% + 270px);
+  --oy: 69%;
+}
+@media (max-width: 1439px) {
+  section.hb {
+    --k: 0.68;
+  }
+  section.hb [data-iso] {
+    --ox: calc(50% + 200px);
+  }
+}
+@media (max-width: 768px) {
+  section.hb {
+    --k: 0.5;
+  }
+  section.hb [data-iso] {
+    --ox: calc(50% - 65px);
+    --oy: 452px;
+  }
+}

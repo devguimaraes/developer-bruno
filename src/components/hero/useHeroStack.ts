@@ -344,8 +344,10 @@ function createRuntime(
     // Antes do lançamento o botão está invisível: fora do Tab, para não haver foco que não se vê.
     rider.tabIndex = away && !handed() ? 0 : -1;
     // O Giro da origem some enquanto o Giro está na linha e volta quando o hero sai da tela.
-    // Com o HomeGiro em cena o arco do trilho fica à vista: ele é o seletor, não um segundo rosto.
-    if (src) src.style.opacity = away && visible && !handed() ? "0" : "";
+    // No celular, com o HomeGiro em cena, o arco do trilho fica à vista: ele é o seletor, não um
+    // segundo rosto. No computador a origem é o Giro da assinatura, com rosto: continua escondido.
+    const railShows = handed() && !desktopQuery.matches;
+    if (src) src.style.opacity = away && visible && !railShows ? "0" : "";
     if (away) placeSeat();
   };
 

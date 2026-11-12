@@ -24,8 +24,9 @@ export function SiteFooter() {
           errorLabel={t(locale, "post.link.copy_error")}
           errorHint={t(locale, "contact.direct.copy_error_hint")}
         />
-        {/* No celular o trilho não tem menu: a troca de idioma das páginas internas fica aqui. */}
-        <LanguageSwitch groupLabel={t(locale, "language.group_label")} />
+        {/* No celular o trilho não tem menu: a troca de idioma das páginas internas fica aqui.
+            No computador ela já está no cabeçalho. */}
+        <LanguageSwitch groupLabel={t(locale, "language.group_label")} className="only-m" />
       </div>
       <nav className="g-site-footer__links">
         {links.map(link => (

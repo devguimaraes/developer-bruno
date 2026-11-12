@@ -15,7 +15,7 @@ export interface EndLayer {
 
 /**
  * As oito camadas da página em ordem de leitura: a primeira (início) fica em cima da pilha.
- * "estados" ainda não é uma seção da home, então por enquanto leva ao início.
+ * "estados" divide o palco com a hero (`HomeOpening`), então leva a `#hero`.
  */
 export const END_LAYERS: readonly EndLayer[] = [
   { id: "start", anchor: "hero", labelKey: "story.end.layer.start", stop: "fn0", surface: "azul" },

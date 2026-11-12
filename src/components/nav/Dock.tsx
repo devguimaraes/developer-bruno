@@ -350,7 +350,10 @@ export function Dock() {
       jumpToSection(item.sectionId);
       return;
     }
-    playCover(cover, event.currentTarget, item.cover, () => jumpToSection(item.sectionId));
+    // Se o ClientRouter trocar de página durante o disco, o salto não rola a página nova.
+    playCover(cover, event.currentTarget, item.cover, () => {
+      if (window.location.pathname === "/") jumpToSection(item.sectionId);
+    });
   };
 
   return (
