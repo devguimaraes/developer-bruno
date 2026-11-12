@@ -20,10 +20,13 @@ import {
   DEMO_ORDER,
   type DemoState,
   demoPress,
+  calcScreenBeatTime,
   getDemoOverride,
   OPENING_TOTAL,
   setDemoOverride,
+  setScreenBusy,
 } from "./states-stage";
+import { createBeatPlayer } from "./story/beats";
 import { type SceneBuilder, useChapterScenes } from "./story/useChapterScenes";
 
 /** Altura das placas com a pilha fechada para virar tela, e onde cada uma fica na hero. */
@@ -159,14 +162,14 @@ export function HomeOpening() {
         "--dr": "0px",
       });
 
-      const tl = scene(sec, {
-        onUpdate: (self: { progress: number }) => {
-          progressRef.current = self.progress;
-          // Com um pedido do visitante em curso, o roteiro espera a próxima rolagem.
-          if (getDemoOverride() === null) show(calcStatesScript(self.progress));
-        },
+      // A batida da tela toca no tempo: a rolagem só decide se a pilha está aberta ou virou tela.
+      const beats = gsap.timeline({
+        paused: true,
+        defaults: { ease: "none" },
+        onUpdate: () => setScreenBusy(beats.time() > 0.01),
       });
-      tl.to(outgoing, { y: -H * 0.2, autoAlpha: 0, duration: 1.1 }, 0)
+      beats
+        .to(outgoing, { y: -H * 0.2, autoAlpha: 0, duration: 1.1 }, 0)
         .to(faded, { autoAlpha: 0, duration: 0.5 }, 0)
         .to(plates[3], { autoAlpha: 0, duration: 0.7 }, 0.1)
         .to(
@@ -195,13 +198,39 @@ export function HomeOpening() {
         )
         .fromTo(text, { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 0.5 }, 1.9)
         .to(world, { autoAlpha: 0, duration: 0.2 }, 2.2)
-        .fromTo(demoBox, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.2 }, 2.2)
-        .to(disc, { "--dr": `${radius}px`, duration: 1, ease: "power2.in" }, 9)
-        .to({}, { duration: 0.01 }, OPENING_TOTAL);
+        .fromTo(demoBox, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.2 }, 2.2);
+      const player = createBeatPlayer(beats);
+      let beatTime = 0;
+
+      // Só o roteiro dos estados e a Passagem da saída seguem a rolagem.
+      const tl = scene(sec, {
+        onUpdate: (self: { progress: number }) => {
+          progressRef.current = self.progress;
+          const next = calcScreenBeatTime(self.progress);
+          if (next !== beatTime) {
+            beatTime = next;
+            player.playTo(next);
+          }
+          // Com um pedido do visitante em curso, o roteiro espera a próxima rolagem.
+          if (getDemoOverride() === null) show(calcStatesScript(self.progress));
+        },
+      });
+      tl.to(disc, { "--dr": `${radius}px`, duration: 1, ease: "power2.in" }, 9).to(
+        {},
+        { duration: 0.01 },
+        OPENING_TOTAL
+      );
 
       progressRef.current = tl.scrollTrigger?.progress ?? 0;
+      // Montagem e remontagem (resize) começam já no ponto certo, sem tocar a cena de novo.
+      beatTime = calcScreenBeatTime(progressRef.current);
+      player.jumpTo(beatTime);
+      setScreenBusy(beatTime > 0);
       show(calcStatesScript(progressRef.current));
-      return undefined;
+      return () => {
+        player.kill();
+        setScreenBusy(false);
+      };
     },
     [show]
   );

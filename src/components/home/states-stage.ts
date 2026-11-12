@@ -4,6 +4,19 @@ import type { ChapterStep } from "./story/chapters";
 export const OPENING_TOTAL = 10;
 /** A pilha começa a fechar: o Giro da entrada passa para o HomeGiro. */
 export const HAND_AT = 0.1;
+/**
+ * Batida da tela: a partir daqui a pilha fecha e vira a tela de exemplo, tocando no tempo até
+ * SCREEN_BEAT (o ponto da linha do tempo em que a tela está montada).
+ */
+export const SCREEN_FROM = 0.5;
+export const SCREEN_BEAT = 2.4;
+
+/** Ponto da linha do tempo da abertura para um progresso do capítulo: pilha aberta ou tela. */
+export function calcScreenBeatTime(progress: number): number {
+  const t = (Number.isNaN(progress) ? 0 : progress) * OPENING_TOTAL;
+  return t >= SCREEN_FROM ? SCREEN_BEAT : 0;
+}
+
 /** Faixa das quatro batidas; em BEATS_TO o Giro salta para a saída. */
 export const BEATS_FROM = 2.25;
 export const BEATS_TO = 9;
@@ -43,6 +56,14 @@ export function clearDemoOverride(): void {
   override = null;
 }
 
+// A cena da tela ainda não voltou ao começo. Enquanto isso o Giro da história segue em cena: se a
+// passagem de mão voltasse só pela rolagem, a pilha trocaria no meio da volta.
+let screenBusy = false;
+
+export function setScreenBusy(busy: boolean): void {
+  screenBusy = busy;
+}
+
 function stopFor(state: DemoState): string {
   return state === "done" ? "card-done" : "card";
 }
@@ -50,7 +71,7 @@ function stopFor(state: DemoState): string {
 /** Onde o Giro deve estar e com que rosto, para um progresso da abertura. */
 export function calcOpeningStep(progress: number): ChapterStep {
   const t = (Number.isNaN(progress) ? 0 : progress) * OPENING_TOTAL;
-  if (t < HAND_AT) return { k: "hand", stop: "hero", state: "done", hidden: true };
+  if (t < HAND_AT && !screenBusy) return { k: "hand", stop: "hero", state: "done", hidden: true };
   if (t < BEATS_FROM) return { k: "rest", stop: "hero", state: t < 0.2 ? "done" : "curious" };
   if (t >= BEATS_TO) return { k: "exit", stop: "exit", state: "curious" };
   if (override) return { k: `over-${override}`, stop: stopFor(override), state: override };

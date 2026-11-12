@@ -1,13 +1,17 @@
 import { afterEach, describe, expect, it } from "vitest";
 import {
   calcOpeningStep,
+  calcScreenBeatTime,
   calcStatesBeat,
   calcStatesScript,
   clearDemoOverride,
   demoPress,
   getDemoOverride,
   HAND_AT,
+  SCREEN_BEAT,
+  SCREEN_FROM,
   setDemoOverride,
+  setScreenBusy,
 } from "./states-stage";
 
 // Linha do tempo de 10 unidades: a pilha fecha até 2,2, as quatro batidas vão de 2,25 a 9.
@@ -106,5 +110,24 @@ describe("override da tela de exemplo", () => {
     expect(getDemoOverride()).toBe("loading");
     clearDemoOverride();
     expect(getDemoOverride()).toBeNull();
+  });
+});
+
+describe("batida da tela", () => {
+  afterEach(() => setScreenBusy(false));
+
+  it("antes de SCREEN_FROM a pilha fica aberta; depois, a cena vai até a tela montada", () => {
+    expect(calcScreenBeatTime(0)).toBe(0);
+    expect(calcScreenBeatTime(at(SCREEN_FROM - 0.01))).toBe(0);
+    expect(calcScreenBeatTime(at(SCREEN_FROM))).toBe(SCREEN_BEAT);
+    expect(calcScreenBeatTime(1)).toBe(SCREEN_BEAT);
+  });
+
+  it("enquanto a cena não voltou ao começo, o Giro da história não devolve a mão ao da hero", () => {
+    setScreenBusy(true);
+    expect(calcOpeningStep(0).hidden).toBeUndefined();
+    expect(calcOpeningStep(0)).toMatchObject({ k: "rest", stop: "hero" });
+    setScreenBusy(false);
+    expect(calcOpeningStep(0).hidden).toBe(true);
   });
 });
