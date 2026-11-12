@@ -43,14 +43,13 @@ Tarefas complementares do mapa:
 - Toda regra de palco vive sob `html[data-scenes="on"]`, que o `Layout.astro` liga antes do primeiro paint quando não há movimento reduzido. Sem JS ou com movimento reduzido, cada capítulo é leitura em ordem.
 - O Giro da história (`HomeGiro`) lê o passo de cada capítulo a cada quadro. Hover, digitação e envio chegam pelos sinais de `story/story-signals.ts`, não por estado do componente.
 - A passagem de mão entre o Giro da hero e o `HomeGiro` usa `html[data-giro-hand="story"]`: o runtime da hero para e o rider some, para nunca haver dois rostos.
-- O `SiteFooter` não é montado na home: o rodapé faz parte do capítulo Fim. No celular, a troca de idioma das páginas internas fica no rodapé, porque o trilho não tem menu.
+- O `SiteFooter` não é montado na home: o rodapé faz parte do capítulo Fim. No celular, a troca de idioma das páginas internas fica no rodapé (só no celular, `only-m`), porque o trilho não tem menu.
 - No celular, a câmera da pilha do Fim é calculada para caber entre o texto e o rodapé (`fitEndCamera`), em vez do `y` fixo da prancha.
 - A placa "estados" do Fim leva para `#hero`, porque o capítulo Estados divide o palco com a hero.
 
 ## Pendências para a conferência em aparelho real (#111)
 
 - Telas baixas (390 x 667): o trilho cobre o texto da etapa em Processo, e a base da hero corta abaixo de cerca de 760 px de altura.
-- Sem JS, a pilha da hero cobre parte do título.
 - Safari, GPU real e celular real ainda não foram conferidos.
 
 ## Como rodar a prancha fora do canvas
