@@ -1,4 +1,5 @@
 import type { GiroState } from "@/components/brand/giro-states";
+import type { SurfaceClass } from "./giro-jump";
 
 /** Corte de celular das cenas: o mesmo do CSS (max-width: 768px), para cena e layout concordarem. */
 export const SCENE_MOBILE_QUERY = "(max-width: 768px)";
@@ -12,6 +13,11 @@ export interface ChapterStep {
   stop: string;
   /** Estado de expressão do mascote Giro. */
   state: GiroState;
+  /**
+   * Superfície pintada embaixo do Giro neste passo, quando não é a da parada (um disco de troca
+   * de cor cobrindo o capítulo).
+   */
+  surface?: SurfaceClass;
   /** Transições tardias opcionais [tempoEmMs, novoEstado]. */
   after?: Array<[ms: number, state: GiroState]>;
   [key: string]: unknown;

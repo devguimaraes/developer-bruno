@@ -207,6 +207,70 @@ describe("HomeGiro component", () => {
     // A escala --gk deve se aproximar de 0.5 (48 / 96)
     expect(Number(actor?.style.getPropertyValue("--gk"))).toBeCloseTo(0.5, 1);
   });
+  it("na mesma parada, trocar só a superfície não faz o Giro saltar, mesmo com a parada andando", () => {
+    vi.spyOn(reducedMotionHook, "useReducedMotion").mockReturnValue(false);
+
+    let top = 100;
+    const stop = document.createElement("div");
+    stop.dataset.stop = "seat";
+    stop.className = "g-tinta";
+    stop.getBoundingClientRect = () => ({
+      left: 100,
+      top,
+      width: 0,
+      height: 0,
+      right: 100,
+      bottom: top,
+      x: 100,
+      y: top,
+      toJSON: () => {},
+    });
+    document.body.appendChild(stop);
+
+    let covered = false;
+    const chapter: Chapter = createChapter({
+      id: "ch",
+      label: "Capítulo",
+      top: 0,
+      len: 1000,
+      surface: "tinta",
+      at: () =>
+        covered
+          ? { k: "out", stop: "seat", state: "done", surface: "g-azul" }
+          : { k: "in", stop: "seat", state: "curious" },
+    });
+
+    let rafCallback: FrameRequestCallback | null = null;
+    vi.spyOn(window, "requestAnimationFrame").mockImplementation(cb => {
+      rafCallback = cb;
+      return 1;
+    });
+
+    const { container } = render(<HomeGiro chapters={[chapter]} initialStop="seat" />);
+    const actor = container.querySelector(".hs-actor");
+    const actorIn = container.querySelector(".hs-actor__in");
+    expect(actor?.classList.contains("g-tinta")).toBe(true);
+    actorIn?.classList.remove("is-squash");
+
+    // A parada anda 40 px na tela (rolagem) e, no mesmo quadro, o passo troca só a superfície.
+    const t0 = performance.now();
+    act(() => {
+      rafCallback?.(t0);
+    });
+    top = 140;
+    covered = true;
+    act(() => {
+      rafCallback?.(t0 + 16);
+    });
+
+    expect(actor?.classList.contains("g-azul")).toBe(true);
+    expect(actorIn?.classList.contains("is-leap")).toBe(false);
+    expect(actorIn?.classList.contains("is-squash")).toBe(false);
+    expect(container.querySelector("svg.g-giro")?.getAttribute("data-state")).toBe("done");
+
+    stop.remove();
+  });
+
   describe("passagem de mão", () => {
     // A passagem de mão só existe com as cenas ligadas.
     beforeEach(() => document.documentElement.setAttribute("data-scenes", "on"));

@@ -52,6 +52,15 @@
   text-wrap: pretty;
 }
 
+/* Rótulo, título e resumo seguem o ritmo comum do site (a coluna tem gap de 16 px). */
+.post-header > .g-eyebrow {
+  margin: 0 0 calc(var(--head-gap-eyebrow) - 16px);
+}
+
+.post-header > .post-lead {
+  margin-top: calc(var(--head-gap-lead) - 16px);
+}
+
 .post-language-note {
   color: var(--s-muted);
 }

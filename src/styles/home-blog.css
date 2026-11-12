@@ -4,7 +4,6 @@
    [data-scenes="on"]. */
 
 .bl {
-  --G: 64px;
   position: relative;
   z-index: 2;
   margin-top: -32px;
@@ -33,7 +32,7 @@
 }
 
 .bl-title {
-  margin: 12px 0 0;
+  margin: var(--head-gap-eyebrow) 0 0;
   font-size: 96px;
   font-weight: 900;
   font-stretch: 112%;
@@ -43,7 +42,7 @@
 
 .bl-lead {
   max-width: 34ch;
-  margin: 24px 0 0;
+  margin: var(--head-gap-lead) 0 0;
   color: var(--s-muted);
   font: var(--text-corpo-l);
 }
@@ -133,9 +132,6 @@
 }
 
 @media (max-width: 768px) {
-  .bl {
-    --G: 16px;
-  }
   .bl-in {
     display: block;
     padding: 72px var(--G) 112px;

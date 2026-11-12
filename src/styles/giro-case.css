@@ -16,6 +16,10 @@
   gap: 24px;
   min-width: 0;
 }
+/* Rótulo colado ao título no ritmo comum do site (a coluna tem gap de 24 px). */
+.case-hero > .g-eyebrow {
+  margin: 0 0 calc(var(--head-gap-eyebrow) - 24px);
+}
 .case-hero__title {
   margin: 0;
   max-width: 100%;
@@ -33,6 +37,9 @@
   color: var(--s-muted);
   font: var(--text-corpo-l);
   text-wrap: pretty;
+}
+.case-hero > .case-hero__summary {
+  margin-top: calc(var(--head-gap-lead) - 24px);
 }
 .case-back__mobile {
   display: none;

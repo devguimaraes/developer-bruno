@@ -4,7 +4,6 @@
    abrem em pilha, com a linha de estações ao lado (posições vindas do JS). */
 
 .fn-ch {
-  --G: 64px;
   position: relative;
   overflow-x: clip;
 }
@@ -22,7 +21,7 @@
 }
 
 .fn-title {
-  margin: 12px 0 0;
+  margin: var(--head-gap-eyebrow) 0 0;
   max-width: 14ch;
   font-size: calc(var(--u) * 5.6);
   font-weight: 900;
@@ -32,7 +31,7 @@
 }
 
 .fn-lead {
-  margin: calc(var(--u) * 1.6) 0 0;
+  margin: var(--head-gap-lead) 0 0;
   color: var(--s-muted);
   font: var(--text-corpo-l);
 }
@@ -285,19 +284,14 @@
 }
 
 @media (max-width: 768px) {
-  .fn-ch {
-    --G: 16px;
-  }
   .fn-stage {
     padding: 88px var(--G) 32px;
   }
   .fn-title {
-    margin-top: 8px;
     font-size: 44px;
   }
   .fn-lead {
-    margin-top: 10px;
-    font-size: 17px;
+    font-size: 18px;
   }
   .fn-tags {
     margin-top: 32px;

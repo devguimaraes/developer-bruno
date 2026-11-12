@@ -4,7 +4,6 @@
    Giro de dentro do botão fica escondido para nunca haver dois rostos. */
 
 .ct {
-  --G: 64px;
   position: relative;
   z-index: 2;
   margin-top: -32px;
@@ -23,7 +22,7 @@
 }
 
 .ct-title {
-  margin: 12px 0 0;
+  margin: var(--head-gap-eyebrow) 0 0;
   font-size: calc(var(--u) * 8.1);
   font-weight: 900;
   font-stretch: 112%;
@@ -34,7 +33,7 @@
 
 .ct-lead {
   max-width: 48ch;
-  margin: 24px 0 0;
+  margin: var(--head-gap-lead) 0 0;
   color: var(--s-muted);
   font: var(--text-corpo-l);
 }
@@ -136,9 +135,6 @@
 }
 
 @media (max-width: 768px) {
-  .ct {
-    --G: 16px;
-  }
   .ct-in {
     padding: 72px var(--G) 112px;
   }

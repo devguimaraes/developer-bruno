@@ -60,7 +60,7 @@
 }
 
 .sv-title {
-  margin-top: calc(var(--u) * 1);
+  margin-top: var(--head-gap-eyebrow);
   font-size: calc(var(--u) * 6.4);
   font-weight: 800;
   line-height: 0.95;
@@ -69,9 +69,9 @@
 
 .sv-lead {
   max-width: 44ch;
-  margin: calc(var(--u) * 1.4) 0 0;
+  margin: var(--head-gap-lead) 0 0;
   color: var(--s-muted);
-  font: 450 calc(var(--u) * 1.25) / 1.45 var(--font-sans);
+  font: 450 max(16px, calc(var(--u) * 1.25)) / 1.45 var(--font-sans);
 }
 
 .sv-list {
@@ -258,7 +258,6 @@
    capítulo vira palco fixo de 6 telas e o GSAP empilha as janelas e deita a pilha. */
 
 .pj-ch {
-  --G: 64px;
   --pw: min(91vw, 1312px);
   --ph: min(calc(100svh - 176px), 700px);
   position: relative;
@@ -298,7 +297,7 @@
 
 .pj-lead {
   max-width: 34ch;
-  margin: 24px 0 0;
+  margin: var(--head-gap-lead) 0 0;
   color: var(--s-muted);
   font: var(--text-corpo-l);
 }
@@ -582,7 +581,6 @@
 
 @media (max-width: 768px) {
   .pj-ch {
-    --G: 16px;
     --pw: calc(100vw - 32px);
     --ph: calc(100svh - 188px);
   }
@@ -690,7 +688,6 @@
    de 4,4 telas: a pilha da hero (StackPlates, CSS em .hb) é desenhada, aberta e pintada. */
 
 .pc-ch {
-  --G: 64px;
   position: relative;
   overflow-x: clip;
 }
@@ -708,7 +705,7 @@
 }
 
 .pc-title {
-  margin: calc(var(--u) * 1) 0 0;
+  margin: var(--head-gap-eyebrow) 0 0;
   font-size: calc(var(--u) * 6);
   font-weight: 900;
   font-stretch: 112%;
@@ -717,10 +714,11 @@
 }
 
 .pc-intro {
-  max-width: 40ch;
-  margin: calc(var(--u) * 1.4) 0 0;
+  /* Duas linhas no computador: em telas baixas a terceira encostava no texto da etapa. */
+  max-width: 52ch;
+  margin: var(--head-gap-lead) 0 0;
   color: var(--s-muted);
-  font: 450 calc(var(--u) * 1.2) / 1.45 var(--font-sans);
+  font: 450 max(16px, calc(var(--u) * 1.25)) / 1.45 var(--font-sans);
 }
 
 .pc-world,
@@ -942,6 +940,29 @@
   display: block;
 }
 
+/* Vida própria da cena: as placas flutuam com a rolagem parada ou não. Usa a propriedade
+   translate, que soma com o transform (a altura --zr vem do GSAP). A pilha sobe e desce junta,
+   na mesma fase: fechada, as placas ficam a 4 px uma da outra e fora de fase se atravessariam.
+   Só as notas da conversa, que estão soltas, têm fase própria. */
+[data-scenes="on"] .pc-iso .iso-pl {
+  animation: pc-float 3.4s ease-in-out infinite alternate;
+}
+
+[data-scenes="on"] .pc-iso .pc-note {
+  --float: 14px;
+  animation-duration: 2.6s;
+  animation-delay: var(--float-delay, 0s);
+}
+
+@keyframes pc-float {
+  from {
+    translate: 0 0 0;
+  }
+  to {
+    translate: 0 0 var(--float, 8px);
+  }
+}
+
 [data-scenes="on"] .pc-copy {
   position: absolute;
   z-index: 2;
@@ -984,14 +1005,10 @@
 }
 
 @media (max-width: 768px) {
-  .pc-ch {
-    --G: 16px;
-  }
   .pc-stage {
     padding: 88px var(--G);
   }
   .pc-title {
-    margin-top: 8px;
     font-size: 40px;
   }
   .pc-copy {
@@ -1020,7 +1037,10 @@
     font-size: 11px;
   }
 
+  /* --pc-up: em telas mais baixas que a prancha (844 px) a cena sobe até 100 px, para o texto
+     da etapa caber acima do trilho. Mesma conta de calcProcessLift em process-stage.ts. */
   [data-scenes="on"] .pc-ch {
+    --pc-up: clamp(0px, calc((844px - 100svh) * 0.6), 100px);
     height: calc(100svh * 4.2);
   }
   [data-scenes="on"] .pc-head {
@@ -1032,7 +1052,7 @@
     display: none;
   }
   [data-scenes="on"] .pc-copy {
-    top: 448px;
+    top: calc(448px - var(--pc-up));
     right: var(--G);
     bottom: auto;
     width: auto;
@@ -1043,7 +1063,7 @@
     bottom: auto;
   }
   [data-scenes="on"] .pc-line {
-    top: 428px;
+    top: calc(428px - var(--pc-up));
     bottom: auto;
   }
 }
@@ -1070,12 +1090,10 @@
     margin: 0;
   }
   .sv-title {
-    margin-top: 10px;
     font-size: 58px;
     line-height: 0.95;
   }
   .sv-lead {
-    margin-top: 16px;
     font-size: 18px;
     line-height: 1.45;
   }
@@ -1271,13 +1289,17 @@
   left: -48px;
   width: 96px;
   height: 96px;
-  transform: scale(var(--gk, 1));
+  /* --va e --st: o corpo estica na direção em que está indo e afina na outra. */
+  transform: scale(var(--gk, 1)) rotate(var(--va, 0deg))
+    scale(calc(1 + var(--st, 0)), calc(1 - var(--st, 0) * 0.7)) rotate(calc(var(--va, 0deg) * -1));
 }
 
 .hs-actor__in {
   position: relative;
   width: 100%;
   height: 100%;
+  /* Agacha e amassa a partir da base, como quem pisa no chão. */
+  transform-origin: 50% 86%;
 }
 
 .hs-actor__in::before {
@@ -1287,6 +1309,8 @@
   border-radius: 50%;
   background: var(--s-bg);
   opacity: var(--core, 1);
+  /* O miolo troca de cor no ar junto com o traço (220 ms no .g-giro). */
+  transition: background-color 220ms linear;
 }
 
 .hs-actor .g-giro {
@@ -1304,6 +1328,11 @@
   animation: hs-squash 300ms var(--ease-resolve);
 }
 
+/* Impulso na saída do salto: agacha e solta. */
+.hs-actor__in.is-leap {
+  animation: hs-leap 260ms var(--ease-resolve);
+}
+
 .hs-actor__in.is-pulse {
   animation: hs-pulse 180ms var(--ease-resolve);
 }
@@ -1314,6 +1343,18 @@
   }
   55% {
     transform: scale(0.93, 1.08);
+  }
+  100% {
+    transform: scale(1, 1);
+  }
+}
+
+@keyframes hs-leap {
+  0% {
+    transform: scale(1.14, 0.84);
+  }
+  60% {
+    transform: scale(0.94, 1.1);
   }
   100% {
     transform: scale(1, 1);

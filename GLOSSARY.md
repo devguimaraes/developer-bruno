@@ -80,6 +80,10 @@ _Avoid_: seção (na home), bloco, sessão
 O disco de cor que sai do Giro e abre o capítulo seguinte.
 _Avoid_: transição, cortina, wipe
 
+**Batida**:
+Momento de um capítulo que a rolagem escolhe e que toca sozinho até o fim, mesmo com a rolagem parada.
+_Avoid_: etapa (reservada às quatro do Processo), passo, cena
+
 ## Trabalho
 
 **Projeto**:

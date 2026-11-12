@@ -7,19 +7,34 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { type TranslationKey, t } from "@/lib/i18n";
 import {
   PROCESS_STATIONS,
+  PROCESS_DISC,
   PROCESS_TOTAL,
   calcProcessScrollTop,
+  calcProcessBeatTime,
+  calcProcessDiscRadius,
+  calcProcessMobileCamera,
   calcProcessStage,
 } from "./process-stage";
 import { SCENE_MOBILE_QUERY } from "./story/chapters";
+import { createBeatPlayer } from "./story/beats";
 import { type SceneBuilder, useChapterScenes } from "./story/useChapterScenes";
 
 /** Notas da conversa: posição no chão da pilha e altura em que pousam. */
-const NOTES: ReadonlyArray<{ key: TranslationKey; x: number; y: number; z: number }> = [
-  { key: "process.scene.what", x: -210, y: -30, z: 70 },
-  { key: "process.scene.who", x: 30, y: -190, z: 120 },
-  { key: "process.scene.when", x: 160, y: 70, z: 90 },
+const NOTES: ReadonlyArray<{
+  key: TranslationKey;
+  x: number;
+  y: number;
+  z: number;
+  /** Fase da flutuação, em segundos: cada nota sobe e desce no seu tempo. */
+  delay: number;
+}> = [
+  { key: "process.scene.what", x: -210, y: -30, z: 70, delay: 0 },
+  { key: "process.scene.who", x: 30, y: -190, z: 120, delay: -0.9 },
+  { key: "process.scene.when", x: 160, y: 70, z: 90, delay: -1.7 },
 ];
+
+/** Fração da tela em que o topo do capítulo precisa estar para a primeira etapa começar. */
+const ENTER_AT = 0.45;
 
 const CLOSED = [2, 6, 10, 30];
 const OPENED = { desktop: [14, 150, 290, 410], mobile: [14, 112, 210, 300] };
@@ -63,7 +78,7 @@ export function HomeProcess() {
   }, []);
 
   const buildScene = useCallback<SceneBuilder>(
-    ({ gsap, scene, setVars }) => {
+    ({ gsap, ScrollTrigger, scene, setVars }) => {
       const sec = sectionRef.current;
       if (!sec) return;
       const q = (s: string) => sec.querySelector<HTMLElement>(s);
@@ -81,9 +96,7 @@ export function HomeProcess() {
       const W = window.innerWidth;
       const H = window.innerHeight;
       const mobile = window.matchMedia(SCENE_MOBILE_QUERY).matches;
-      const origin = mobile
-        ? { x: W / 2 + 10, y: 306, k: 0.42 }
-        : { x: W * 0.65, y: H * 0.62, k: 1 };
+      const origin = mobile ? calcProcessMobileCamera(W, H) : { x: W * 0.65, y: H * 0.62, k: 1 };
       const opened = mobile ? OPENED.mobile : OPENED.desktop;
       const place = mobile ? PROCESS_STATIONS.mobile : PROCESS_STATIONS.desktop;
 
@@ -107,10 +120,10 @@ export function HomeProcess() {
       gsap.set(paint, { clipPath: "inset(0 0 100% 0)" });
       setVars(disc, { "--dx": "50%", "--dy": "50%", "--dr": "0px" });
 
-      const tl = scene(sec, {
-        onUpdate: (self: { progress: number }) => show(calcProcessStage(self.progress)),
-      });
-      tl.fromTo(fill, { scaleX: place[0] / 100 }, { scaleX: place[3] / 100, duration: 3.6 }, 0.2)
+      // As batidas tocam no tempo, não na rolagem: a rolagem escolhe a etapa e a cena vai até o
+      // ponto em que o desenho dela está completo, mesmo com a rolagem parada.
+      const beats = gsap.timeline({ paused: true, defaults: { ease: "none" } });
+      beats
         .to(out, { autoAlpha: 1, duration: 0.2 }, 0)
         .fromTo(
           notes,
@@ -120,7 +133,7 @@ export function HomeProcess() {
             autoAlpha: 1,
             duration: 0.5,
             stagger: 0.12,
-            ease: "power2.out",
+            ease: "back.out(1.4)",
           },
           0.05
         )
@@ -131,7 +144,7 @@ export function HomeProcess() {
         .to(plates[1], { autoAlpha: 1, duration: 0.2 }, 1.7)
         .to(
           plates,
-          { "--zr": (i: number) => `${opened[i]}px`, duration: 0.6, ease: "power2.inOut" },
+          { "--zr": (i: number) => `${opened[i]}px`, duration: 0.6, ease: "back.out(1.2)" },
           2.15
         )
         .to(plates[3], { autoAlpha: 1, duration: 0.3 }, 2.3)
@@ -142,12 +155,52 @@ export function HomeProcess() {
           { "--zr": (i: number) => `${CLOSED[i]}px`, duration: 0.5, ease: "power2.inOut" },
           3.2
         )
-        .to(paint, { clipPath: "inset(0 0 0% 0)", duration: 0.5 }, 3.45)
-        .to(disc, { "--dr": `${Math.hypot(W, H) * 0.56}px`, duration: 0.6, ease: "power2.in" }, 4.4)
+        .to(paint, { clipPath: "inset(0 0 0% 0)", duration: 0.5 }, 3.45);
+
+      // A cena é remontada a cada resize (no celular, a barra de endereço): começa já no ponto
+      // da etapa atual, sem tocar tudo de novo. Só as trocas seguintes são animadas.
+      let inView = sec.getBoundingClientRect().top < H * ENTER_AT;
+      const player = createBeatPlayer(beats);
+      const playTo = (stage: number) => player.playTo(calcProcessBeatTime(inView ? stage : -1));
+
+      // Só a linha de estações e a troca de cor da saída seguem a rolagem.
+      const tl = scene(sec, {
+        onUpdate: (self: { progress: number }) => {
+          const next = calcProcessStage(self.progress);
+          if (next !== stageRef.current) playTo(next);
+          show(next);
+        },
+      });
+      tl.fromTo(fill, { scaleX: place[0] / 100 }, { scaleX: place[3] / 100, duration: 3.6 }, 0.2)
+        .to(
+          disc,
+          {
+            "--dr": `${calcProcessDiscRadius(W, H)}px`,
+            duration: PROCESS_DISC.duration,
+            ease: "power2.in",
+          },
+          PROCESS_DISC.at
+        )
         .to({}, { duration: 0.01 }, PROCESS_TOTAL);
 
-      show(calcProcessStage(tl.scrollTrigger?.progress ?? 0));
-      return undefined;
+      // A primeira etapa começa quando o capítulo ocupa mais da metade da tela.
+      const enter = ScrollTrigger.create({
+        trigger: sec,
+        start: `top ${ENTER_AT * 100}%`,
+        onToggle: (self: { isActive: boolean; progress: number }) => {
+          inView = self.isActive || self.progress > 0;
+          playTo(stageRef.current);
+        },
+      });
+
+      const current = calcProcessStage(tl.scrollTrigger?.progress ?? 0);
+      // O gatilho pode ter disparado na criação e começado a perseguir a etapa antiga.
+      player.jumpTo(calcProcessBeatTime(inView ? current : -1));
+      show(current);
+      return () => {
+        enter.kill();
+        player.kill();
+      };
     },
     [show]
   );
@@ -191,7 +244,12 @@ export function HomeProcess() {
               <div
                 key={note.key}
                 className="iso-pl pc-note"
-                style={plateStyle(note.x, note.y, 190, 70, note.z)}
+                style={
+                  {
+                    ...plateStyle(note.x, note.y, 190, 70, note.z),
+                    "--float-delay": `${note.delay}s`,
+                  } as CSSProperties
+                }
               >
                 <PlateEdges />
                 <div className="iso-pl__face">

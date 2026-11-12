@@ -40,6 +40,9 @@ Tarefas complementares do mapa:
 ## O que mudou no porte
 
 - Uma linha do tempo por capítulo, montada por `useChapterScenes` com `scene()` (`start top top`, `end bottom bottom`, `scrub 0.35`, sem `pin`). O capítulo fica preso por `position: sticky` no CSS.
+- Exceção, desde 12 de novembro de 2026 (piloto): no Processo a rolagem só escolhe a etapa e a cena dela toca no tempo (`PROCESS_BEATS`, `calcProcessBeat`). Só a linha de estações e o disco da saída seguem escovados. As placas flutuam em CSS (`pc-float`).
+- O Giro da história segue a parada por mola (`stepSpring`), não mais colado quadro a quadro: leva a velocidade de um salto para o outro, estica na direção do movimento e troca de superfície no meio do voo. Uma parada sobre um disco de troca de cor declara a superfície em `data-surface`; um passo de capítulo pode declarar em `surface`.
+- Margem lateral e ritmo de cabeçalho são tokens em `giro.css` (`--G`, `--head-gap-eyebrow`, `--head-gap-lead`), usados por todos os capítulos e pelas páginas internas.
 - Toda regra de palco vive sob `html[data-scenes="on"]`, que o `Layout.astro` liga antes do primeiro paint quando não há movimento reduzido. Sem JS ou com movimento reduzido, cada capítulo é leitura em ordem.
 - O Giro da história (`HomeGiro`) lê o passo de cada capítulo a cada quadro. Hover, digitação e envio chegam pelos sinais de `story/story-signals.ts`, não por estado do componente.
 - A passagem de mão entre o Giro da hero e o `HomeGiro` usa `html[data-giro-hand="story"]`: o runtime da hero para e o rider some, para nunca haver dois rostos.
@@ -49,7 +52,7 @@ Tarefas complementares do mapa:
 
 ## Pendências para a conferência em aparelho real (#111)
 
-- Telas baixas (390 x 667): o trilho cobre o texto da etapa em Processo, e a base da hero corta abaixo de cerca de 760 px de altura.
+- Telas baixas (375 x 667): o Processo já sobe e encolhe a cena (`calcProcessLift`, `--pc-up`). Continuam pendentes: a base da hero corta abaixo de cerca de 760 px de altura, as pílulas de Estados encostam no trilho e as etiquetas da pilha do Fim se sobrepõem.
 - Safari, GPU real e celular real ainda não foram conferidos.
 
 ## Como rodar a prancha fora do canvas

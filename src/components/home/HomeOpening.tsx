@@ -256,7 +256,14 @@ export function HomeOpening() {
           ))}
         </ul>
 
-        <i className="hs-stop ab-exit" data-stop="exit" data-size="64" aria-hidden="true" />
+        {/* A saída fica sobre o disco de papel, que não é ancestral dela: declara a superfície. */}
+        <i
+          className="hs-stop ab-exit"
+          data-stop="exit"
+          data-size="64"
+          data-surface="g-papel"
+          aria-hidden="true"
+        />
         <div className="hs-disc ab-disc g-papel" aria-hidden="true" />
       </div>
     </section>

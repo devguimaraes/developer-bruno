@@ -5,19 +5,39 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { setGiroOnStage } from "@/lib/giroOnStage";
 import { type Chapter, type ChapterStep, chapterAt, progress } from "./chapters";
 import {
+  calcArcLift,
+  calcFlightOmega,
   calcJumpArcHeight,
   calcJumpDuration,
   calcJumpSpin,
+  calcStretch,
   calcTargetScale,
-  calcTrajectory,
   detectSurface,
+  MAX_FRAME,
   readStopSize,
+  type SpringAxis,
   type SurfaceClass,
+  stepSpring,
 } from "./giro-jump";
 import { buildProvisionalChapters } from "./provisional-story";
 
 // Marca no <html> que o Giro da home já tem dono: o hero e a pilha da abertura leem daqui.
 const HAND_ATTR = "data-giro-hand";
+
+/** Mola do Giro parado na estação: segue a parada com um pouco de atraso e assenta macio. */
+const GROUND_OMEGA = 38;
+const GROUND_ZETA = 0.78;
+/**
+ * Parado numa estação que anda na tela (seção que rola, janela escovada), o Giro acompanha esta
+ * fração do deslocamento dela na hora; a mola cuida só do resto. Sem isso ele ficaria dezenas de
+ * px atrás do assento e esticaria a cada rolagem.
+ */
+const GROUND_FOLLOW = 0.88;
+/** No voo a mola ultrapassa um pouco o alvo antes de assentar. */
+const FLIGHT_ZETA = 0.82;
+/** Flutuação em repouso, em px na escala 1, e o período dela em ms. */
+const BOB_AMP = 2;
+const BOB_PERIOD = 2800;
 
 export interface HomeGiroProps {
   /** Lista customizada de capítulos para testes ou injeção; padrão: seções provisórias do DOM */
@@ -32,13 +52,11 @@ export interface HomeGiroProps {
 }
 
 interface ActorFlight {
-  x0: number;
-  y0: number;
   t0: number;
   T: number;
   h: number;
-  spin: number;
-  r0: number;
+  /** A superfície nova já foi aplicada (acontece no meio do voo). */
+  dressed: boolean;
 }
 
 interface ActorNext {
@@ -48,13 +66,25 @@ interface ActorNext {
 }
 
 interface ActorState {
-  x: number;
-  y: number;
+  /** Posição e velocidade no chão (sem o arco do salto), uma mola por eixo. */
+  px: SpringAxis;
+  py: SpringAxis;
+  /** Giro do corpo: a mola persegue rollT, que cresce a cada salto. */
+  roll: SpringAxis;
+  rollT: number;
+  /** Altura do arco agora e a que sobrou de um salto interrompido. */
+  lift: number;
+  carry: number;
+  /** Quanto está em repouso (0 a 1): liga a flutuação aos poucos. */
+  rest: number;
+  placed: boolean;
+  last: number;
+  /** Onde a parada estava no quadro anterior, para saber quanto ela andou. */
+  seen: { x: number; y: number } | null;
   k: number;
   kT: number;
   tg: HTMLElement | null;
   fl: ActorFlight | null;
-  roll: number;
   next: ActorNext | null;
 }
 
@@ -105,14 +135,45 @@ export const HomeGiro: FC<HomeGiroProps> = ({
     updateChapters();
 
     const A: ActorState = {
-      x: -200,
-      y: -200,
+      px: { x: 0, v: 0 },
+      py: { x: 0, v: 0 },
+      roll: { x: 0, v: 0 },
+      rollT: 0,
+      lift: 0,
+      carry: 0,
+      rest: 0,
+      placed: false,
+      last: 0,
+      seen: null,
       k: 1,
       kT: 1,
       tg: null,
       fl: null,
-      roll: 0,
       next: null,
+    };
+
+    // Coloca o Giro direto num ponto, sem voo nem velocidade.
+    const place = (p: { x: number; y: number }) => {
+      A.px = { x: p.x, v: 0 };
+      A.py = { x: p.y, v: 0 };
+      A.lift = 0;
+      A.carry = 0;
+      A.k = A.kT;
+      A.placed = true;
+    };
+
+    // Toca de novo uma animação curta do corpo (impulso na saída, amassada no pouso).
+    const kick = (name: "is-squash" | "is-leap") => {
+      actorIn.classList.remove("is-squash", "is-leap");
+      // Força reflow para a animação recomeçar
+      void actorIn.offsetWidth;
+      actorIn.classList.add(name);
+    };
+
+    // Veste a superfície do destino: cor do traço e do miolo.
+    const dress = (cls: SurfaceClass) => {
+      actor.className = `hs-actor ${cls}`;
+      setSurface(cls);
     };
 
     let key = "";
@@ -137,21 +198,13 @@ export const HomeGiro: FC<HomeGiroProps> = ({
       return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
     };
 
-    const land = () => {
+    // quiet: o Giro já estava nesta parada (só muda rosto ou superfície), então não amassa.
+    const land = (quiet = false) => {
       if (!A.next) return;
       actor.removeAttribute("data-hidden");
-      setSurface(A.next.cls);
-      if (actor) {
-        actor.className = `hs-actor ${A.next.cls}`;
-      }
+      dress(A.next.cls);
       setGiroState(A.next.st);
-
-      if (actorIn) {
-        actorIn.classList.remove("is-squash");
-        // Força reflow para disparar a animação novamente
-        void actorIn.offsetWidth;
-        actorIn.classList.add("is-squash");
-      }
+      if (!quiet) kick("is-squash");
 
       onLand?.(A.next.step);
 
@@ -173,11 +226,13 @@ export const HomeGiro: FC<HomeGiroProps> = ({
       // Assume o Giro só depois de achar a parada: sem ela, o da hero continua visível.
       setHand(d.hidden !== true);
 
-      const surfCls = detectSurface(n);
+      const surfCls = d.surface ?? detectSurface(n);
       const isMobile = window.innerWidth < 768;
       const targetSize = readStopSize(n, isMobile);
       A.kT = calcTargetScale(targetSize);
       A.next = { cls: surfCls, st: d.state, step: d };
+      const sameStop = A.tg === n && !A.fl && !actor.hasAttribute("data-hidden");
+      if (A.tg !== n) A.seen = null;
       A.tg = n;
 
       const p = pos(n);
@@ -186,41 +241,44 @@ export const HomeGiro: FC<HomeGiroProps> = ({
       if (hidden) {
         // Escondido, o Giro só acompanha a parada, sem voar nem pousar: quem aparece é o da hero.
         A.fl = null;
-        A.x = p.x;
-        A.y = p.y;
-        A.k = A.kT;
+        place(p);
         clearTimers();
-        actor.className = `hs-actor ${surfCls}`;
-        setSurface(surfCls);
+        dress(surfCls);
         setGiroState(d.state);
         return;
       }
-      if (A.x < -100) {
-        A.x = p.x;
-        A.y = p.y;
-        A.k = A.kT;
+      if (!A.placed) {
+        place(p);
         land();
         return;
       }
 
-      const dist = Math.hypot(p.x - A.x, p.y - A.y);
-      if (dist < 2) {
-        land();
+      // Mesma parada, só muda rosto ou superfície: não salta, mesmo que a mola esteja alguns
+      // px atrás dela por causa da rolagem.
+      const dist = Math.hypot(p.x - A.px.x, p.y - A.py.x);
+      if (sameStop || dist < 2) {
+        A.fl = null;
+        A.lift = 0;
+        clearTimers();
+        land(sameStop);
         return;
       }
 
+      // Salto interrompido: a altura que ele tinha desce aos poucos por baixo do arco novo, e a
+      // velocidade segue na mola. Assim rolar rápido emenda os saltos em vez de recomeçar parado.
+      A.carry += A.lift;
+      A.lift = 0;
+      A.rollT += calcJumpSpin(dist) * Math.sign(p.x - A.px.x || 1);
       A.fl = {
-        x0: A.x,
-        y0: A.y,
         t0: performance.now(),
         T: calcJumpDuration(dist),
         h: calcJumpArcHeight(dist, isMobile),
-        spin: calcJumpSpin(dist),
-        r0: A.roll,
+        dressed: false,
       };
 
       clearTimers();
       setGiroState("idle");
+      kick("is-leap");
     };
 
     const story = () => {
@@ -253,12 +311,9 @@ export const HomeGiro: FC<HomeGiroProps> = ({
     } else {
       const initialEl = findStop(initialStop);
       if (initialEl) {
-        const p = pos(initialEl);
-        A.x = p.x;
-        A.y = p.y;
         A.tg = initialEl;
-        A.k = calcTargetScale(readStopSize(initialEl, window.innerWidth < 768));
-        A.kT = A.k;
+        A.kT = calcTargetScale(readStopSize(initialEl, window.innerWidth < 768));
+        place(pos(initialEl));
         const initialSurf = detectSurface(initialEl);
         A.next = {
           cls: initialSurf,
@@ -274,34 +329,68 @@ export const HomeGiro: FC<HomeGiroProps> = ({
 
       story();
 
-      if (A.tg) {
+      const dt = A.last === 0 ? 1 / 60 : Math.min(MAX_FRAME, Math.max(0, (now - A.last) / 1000));
+      A.last = now;
+
+      // Parada fora do DOM (capítulo remontado) mede 0,0: o Giro espera onde está.
+      if (A.tg?.isConnected) {
         const isMobile = window.innerWidth < 768;
         A.kT = calcTargetScale(readStopSize(A.tg, isMobile));
         const t = pos(A.tg);
-        let x = t.x;
-        let y = t.y;
+        const liftBefore = A.lift + A.carry;
+        let omega = GROUND_OMEGA;
+        let zeta = GROUND_ZETA;
 
         if (A.fl) {
           const f = A.fl;
           const u = Math.min(1, (now - f.t0) / f.T);
-          const pt = calcTrajectory({ x: f.x0, y: f.y0 }, t, u, f.h);
-          x = pt.x;
-          y = pt.y;
-          A.roll = f.r0 + f.spin * u;
+          omega = calcFlightOmega(f.T);
+          zeta = FLIGHT_ZETA;
+          A.lift = calcArcLift(u, f.h);
 
+          // No meio do voo o Giro já veste a superfície de destino: a cor troca no ar, com
+          // transição, em vez de pousar com o miolo da superfície de onde saiu.
+          if (!f.dressed && u >= 0.5 && A.next) {
+            f.dressed = true;
+            dress(A.next.cls);
+          }
           if (u >= 1) {
             A.fl = null;
+            A.lift = 0;
             land();
           }
         }
 
-        A.x = x;
-        A.y = y;
-        A.k += (A.kT - A.k) * 0.16;
+        // No chão ele anda junto com a parada; no ar a mola é que o leva até ela.
+        if (A.seen && !A.fl) {
+          A.px.x += (t.x - A.seen.x) * GROUND_FOLLOW;
+          A.py.x += (t.y - A.seen.y) * GROUND_FOLLOW;
+        }
+        A.seen = t;
+
+        A.carry *= Math.exp(-dt * 12);
+        A.px = stepSpring(A.px, t.x, omega, zeta, dt);
+        A.py = stepSpring(A.py, t.y, omega, zeta, dt);
+        A.roll = stepSpring(A.roll, A.rollT, omega, 1, dt);
+        A.k += (A.kT - A.k) * (1 - Math.exp(-dt * 10));
+
+        const lift = A.lift + A.carry;
+        const vy = A.py.v - (dt > 0 ? (lift - liftBefore) / dt : 0);
+        const stretch = calcStretch(A.px.v, vy);
+
+        // Em repouso ele flutua de leve; qualquer movimento desliga a flutuação.
+        const still = !A.fl && Math.hypot(A.px.v, A.py.v) < 40;
+        A.rest += ((still ? 1 : 0) - A.rest) * (1 - Math.exp(-dt * (still ? 3 : 14)));
+        const bob = Math.sin((now / BOB_PERIOD) * Math.PI * 2) * BOB_AMP * A.k * A.rest;
+
+        const x = A.px.x;
+        const y = A.py.x - lift + bob;
 
         actor.style.transform = `translate3d(${x.toFixed(1)}px,${y.toFixed(1)}px,0)`;
         actor.style.setProperty("--gk", A.k.toFixed(3));
-        actor.style.setProperty("--roll", `${A.roll.toFixed(1)}deg`);
+        actor.style.setProperty("--roll", `${A.roll.x.toFixed(1)}deg`);
+        actor.style.setProperty("--va", `${stretch.angle.toFixed(1)}deg`);
+        actor.style.setProperty("--st", stretch.amount.toFixed(3));
       }
 
       rafId = requestAnimationFrame(frame);

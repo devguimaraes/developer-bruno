@@ -1,13 +1,18 @@
 import { describe, expect, it } from "vitest";
 import {
+  calcArcLift,
+  calcFlightOmega,
   calcJumpArcHeight,
   calcJumpDuration,
   calcJumpSpin,
+  calcStretch,
   calcTargetScale,
-  calcTrajectory,
   clamp,
   detectSurface,
+  MAX_FRAME,
   readStopSize,
+  type SpringAxis,
+  stepSpring,
 } from "./giro-jump";
 
 describe("giro-jump pure functions", () => {
@@ -71,41 +76,70 @@ describe("giro-jump pure functions", () => {
     });
   });
 
-  describe("calcTrajectory", () => {
-    const p0 = { x: 100, y: 200 };
-    const p1 = { x: 500, y: 600 };
-    const h = 100;
-
-    it("retorna p0 quando u = 0", () => {
-      const pt = calcTrajectory(p0, p1, 0, h);
-      expect(pt.x).toBe(100);
-      expect(pt.y).toBe(200);
-    });
-
-    it("retorna pico da parábola quando u = 0.5", () => {
-      // x médio = 300
-      // y base médio = 400
-      // arco = - 100 * 4 * 0.5 * 0.5 = -100
-      // y = 400 - 100 = 300
-      const pt = calcTrajectory(p0, p1, 0.5, h);
-      expect(pt.x).toBe(300);
-      expect(pt.y).toBe(300);
-    });
-
-    it("retorna p1 quando u = 1", () => {
-      const pt = calcTrajectory(p0, p1, 1, h);
-      expect(pt.x).toBe(500);
-      expect(pt.y).toBe(600);
+  describe("calcArcLift", () => {
+    it("sai do chão, chega ao pico no meio e volta ao chão", () => {
+      expect(calcArcLift(0, 100)).toBe(0);
+      expect(calcArcLift(0.5, 100)).toBe(100);
+      expect(calcArcLift(1, 100)).toBe(0);
     });
 
     it("trava u fora do intervalo [0, 1]", () => {
-      const below = calcTrajectory(p0, p1, -0.5, h);
-      expect(below.x).toBe(100);
-      expect(below.y).toBe(200);
+      expect(calcArcLift(-0.5, 100)).toBe(0);
+      expect(calcArcLift(1.5, 100)).toBe(0);
+    });
+  });
 
-      const above = calcTrajectory(p0, p1, 1.5, h);
-      expect(above.x).toBe(500);
-      expect(above.y).toBe(600);
+  describe("stepSpring", () => {
+    const run = (axis: SpringAxis, target: number, seconds: number, dt: number) => {
+      let a = axis;
+      for (let t = 0; t < seconds; t += dt) a = stepSpring(a, target, 38, 0.78, dt);
+      return a;
+    };
+
+    it("assenta no alvo e para", () => {
+      const a = run({ x: 0, v: 0 }, 300, 1, 1 / 60);
+      expect(a.x).toBeCloseTo(300, 0);
+      expect(Math.abs(a.v)).toBeLessThan(1);
+    });
+
+    it("chega ao mesmo lugar em 30 e em 120 quadros por segundo", () => {
+      const slow = run({ x: 0, v: 0 }, 300, 0.2, 1 / 30);
+      const fast = run({ x: 0, v: 0 }, 300, 0.2, 1 / 120);
+      expect(Math.abs(slow.x - fast.x)).toBeLessThan(3);
+    });
+
+    it("leva a velocidade que já tinha quando o alvo muda", () => {
+      const moving = stepSpring({ x: 0, v: 900 }, 0, 38, 0.78, 1 / 60);
+      expect(moving.x).toBeGreaterThan(0);
+    });
+
+    it("um quadro longo demais não vira um salto", () => {
+      const long = stepSpring({ x: 0, v: 0 }, 300, 38, 0.78, 5);
+      const capped = stepSpring({ x: 0, v: 0 }, 300, 38, 0.78, MAX_FRAME);
+      expect(long.x).toBe(capped.x);
+    });
+
+    it("no voo chega perto do alvo antes do fim do salto", () => {
+      const T = 600;
+      let a: SpringAxis = { x: 0, v: 0 };
+      for (let t = 0; t < T / 1000; t += 1 / 60) {
+        a = stepSpring(a, 400, calcFlightOmega(T), 0.82, 1 / 60);
+      }
+      expect(Math.abs(a.x - 400)).toBeLessThan(12);
+    });
+  });
+
+  describe("calcStretch", () => {
+    it("não estica em movimento lento", () => {
+      expect(calcStretch(120, 80).amount).toBe(0);
+    });
+
+    it("estica na direção da velocidade e tem teto", () => {
+      const right = calcStretch(600, 0);
+      expect(right.angle).toBe(0);
+      expect(right.amount).toBeCloseTo(0.1, 5);
+      expect(calcStretch(0, 9000).angle).toBe(90);
+      expect(calcStretch(0, 9000).amount).toBe(0.2);
     });
   });
 
@@ -161,6 +195,26 @@ describe("giro-jump pure functions", () => {
       parent.appendChild(child);
 
       expect(detectSurface(child)).toBe("g-azul");
+    });
+
+    it("a superfície declarada na parada vence a do DOM", () => {
+      const parent = document.createElement("section");
+      parent.className = "g-azul";
+      const child = document.createElement("i");
+      child.dataset.surface = "g-papel";
+      parent.appendChild(child);
+
+      expect(detectSurface(child)).toBe("g-papel");
+    });
+
+    it("ignora uma superfície declarada que não existe", () => {
+      const parent = document.createElement("section");
+      parent.className = "g-tinta";
+      const child = document.createElement("i");
+      child.dataset.surface = "g-roxo";
+      parent.appendChild(child);
+
+      expect(detectSurface(child)).toBe("g-tinta");
     });
   });
 });

@@ -66,6 +66,12 @@
   --space-16: 64px;
   --space-18: 72px;
 
+  /* Margem lateral das páginas e o ritmo do cabeçalho (rótulo, título, texto de apoio). Valem
+     para todos os capítulos da home e para as páginas internas; no celular mudam mais abaixo. */
+  --G: 64px;
+  --head-gap-eyebrow: 12px;
+  --head-gap-lead: 24px;
+
   --radius-sm: 10px;
   --radius-md: 22px;
   --radius-lg: 28px;
@@ -99,6 +105,14 @@
   --focus-offset: 3px;
   --disabled-opacity: 0.4;
   --touch-min: 44px;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --G: 16px;
+    --head-gap-eyebrow: 10px;
+    --head-gap-lead: 16px;
+  }
 }
 
 /* Com movimento reduzido nada sobe, encolhe ou pula. --dur-spin fica de fora: o Giro

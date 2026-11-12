@@ -2,7 +2,11 @@ import type { GiroState } from "@/components/brand/giro-states";
 import { calcAboutStep } from "@/components/home/about-stage";
 import { calcBlogStep, calcContactStep } from "@/components/home/blog-contact-stage";
 import { calcEndStep } from "@/components/home/end-stage";
-import { calcProcessChapterStep } from "@/components/home/process-stage";
+import {
+  calcProcessChapterStep,
+  calcProcessCovered,
+  calcProcessDiscRadius,
+} from "@/components/home/process-stage";
 import { calcProjectStep } from "@/components/home/project-stage";
 import { calcServiceStep } from "@/components/home/service-stage";
 import { calcOpeningStep } from "@/components/home/states-stage";
@@ -28,6 +32,30 @@ export const PROVISIONAL_SECTIONS: readonly SectionStoryConfig[] = [
   { id: "contato", label: "// contato", state: "idle", stop: "contato" },
   { id: "fim", label: "// fim da pilha", state: "loading", stop: "fn0" },
 ];
+
+/**
+ * Progresso em que a Passagem do Processo cobre a última estação, medido no palco: o disco cresce
+ * do centro da tela e a estação fica a uma distância que muda com o tamanho dela.
+ */
+function processCovered(section: HTMLElement): number {
+  const stage = section.querySelector<HTMLElement>(".pc-stage");
+  const station = section.querySelector<HTMLElement>('[data-stop="pc3"]');
+  if (!stage || !station) return 1;
+  // offsetLeft/Top da estação até o palco: não dependem de onde a rolagem está.
+  let x = 0;
+  let y = 0;
+  for (
+    let n: HTMLElement | null = station;
+    n && n !== stage;
+    n = n.offsetParent as HTMLElement | null
+  ) {
+    x += n.offsetLeft;
+    y += n.offsetTop;
+  }
+  const W = window.innerWidth;
+  const H = window.innerHeight;
+  return calcProcessCovered(Math.hypot(x - W / 2, y - H / 2), calcProcessDiscRadius(W, H));
+}
 
 /**
  * Constrói capítulos provisórios a partir das seções presentes no DOM.
@@ -124,7 +152,7 @@ export function buildProvisionalChapters(
           altura: viewportH,
           lead: 0.5,
           surface: "tinta",
-          at: calcProcessChapterStep,
+          at: (p: number) => calcProcessChapterStep(p, processCovered(el)),
         })
       );
       continue;

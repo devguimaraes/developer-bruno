@@ -24,8 +24,11 @@
 .blog-page__intro {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: var(--head-gap-lead);
   min-width: 0;
+}
+.blog-page__intro > .g-eyebrow {
+  margin: 0 0 calc(var(--head-gap-eyebrow) - var(--head-gap-lead));
 }
 .blog-page__title {
   margin: 0;
