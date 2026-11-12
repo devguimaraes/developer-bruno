@@ -14,9 +14,19 @@ import { contactData } from "@/config/site";
 import { useLocale } from "@/hooks/useLocale";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { type TranslationKey, t } from "@/lib/i18n";
-import { calcEndGap, END_LAYERS, fitEndCamera, LIFT, PLATE } from "./end-stage";
+import {
+  calcEndFloat,
+  calcEndGap,
+  END_ENTER_AT,
+  END_LAYERS,
+  END_OPEN,
+  fitEndCamera,
+  LIFT,
+  PLATE,
+} from "./end-stage";
 import { SCENE_MOBILE_QUERY } from "./story/chapters";
 import { setStorySignal } from "./story/story-signals";
+import { createBeatPlayer } from "./story/beats";
 import { type SceneBuilder, useChapterScenes } from "./story/useChapterScenes";
 
 const FOOTER_LINK_IDS = ["linkedin", "github"];
@@ -136,7 +146,7 @@ export function HomeEnd() {
   // O sinal não pode sobrar quando a página troca: o Giro seguiria curioso numa placa que sumiu.
   useEffect(() => () => setStorySignal("endHover", -1), []);
 
-  const buildScene = useCallback<SceneBuilder>(({ scene, setVars }) => {
+  const buildScene = useCallback<SceneBuilder>(({ gsap, ScrollTrigger, setVars }) => {
     const sec = sectionRef.current;
     if (!sec) return;
     const q = (s: string) => sec.querySelector<HTMLElement>(s);
@@ -189,15 +199,18 @@ export function HomeEnd() {
     };
 
     // Altura das placas, estações e ligações saem do mesmo vão: a linha acompanha a pilha.
+    // A flutuação entra na mesma conta: a etiqueta e a ligação sobem e descem com a placa.
     const draw = (g: number) => {
       gapRef.current = g;
+      const seconds = performance.now() / 1000;
+      const heights = plates.map((_, i) => (n - 1 - i) * g + calcEndFloat(i, seconds, g));
       plates.forEach((pl, i) => {
         pl.style.setProperty(
           "--zr",
-          `${(n - 1 - i) * g + (hoverRef.current === Number(pl.dataset.i) ? LIFT : 0)}px`
+          `${heights[i] + (hoverRef.current === Number(pl.dataset.i) ? LIFT : 0)}px`
         );
       });
-      const pts = plates.map((_, i) => project(cam, PLATE.w / 2, PLATE.h / 2, (n - 1 - i) * g));
+      const pts = plates.map((_, i) => project(cam, PLATE.w / 2, PLATE.h / 2, heights[i]));
       const spineX = Math.max(...pts.map(p => p.x)) + (mobile ? 22 : 56);
       spine.setAttribute("x1", String(spineX));
       spine.setAttribute("x2", String(spineX));
@@ -218,13 +231,54 @@ export function HomeEnd() {
     const redraw = () => draw(calcEndGap(S.p, mobile));
     redraw();
 
-    const tl = scene(sec);
-    tl.to(S, { p: 1, duration: 1, onUpdate: redraw }, 0)
-      .fromTo(copy, { y: 50, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.3 }, 0.05)
-      .fromTo([rail, foot], { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.25 }, 0.5)
-      .to({}, { duration: 0.01 }, 1);
+    // A abertura da pilha é uma batida: toca no tempo quando o capítulo entra na tela.
+    const beats = gsap.timeline({ paused: true, defaults: { ease: "none" } });
+    beats
+      .to(S, { p: 1, duration: END_OPEN }, 0)
+      .fromTo(
+        copy,
+        { y: 50, autoAlpha: 0 },
+        { y: 0, autoAlpha: 1, duration: 0.5, ease: "power3.out" },
+        0.05
+      )
+      .fromTo([rail, foot], { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.3 }, 0.6);
+    const player = createBeatPlayer(beats);
+
+    const top = sec.getBoundingClientRect().top;
+    let open = top < H * END_ENTER_AT;
+    let visible = top < H && sec.getBoundingClientRect().bottom > 0;
+    const enter = ScrollTrigger.create({
+      trigger: sec,
+      start: `top ${END_ENTER_AT * 100}%`,
+      onToggle: (self: { isActive: boolean; progress: number }) => {
+        const next = self.isActive || self.progress > 0;
+        if (next === open) return;
+        open = next;
+        player.playTo(open ? END_OPEN : 0);
+      },
+    });
+    const watch = ScrollTrigger.create({
+      trigger: sec,
+      start: "top bottom",
+      end: "bottom top",
+      onToggle: (self: { isActive: boolean }) => {
+        visible = self.isActive;
+      },
+    });
+    // Montagem e remontagem (resize) começam já no estado certo, sem tocar a cena de novo.
+    player.jumpTo(open ? END_OPEN : 0);
+
+    // Fora da tela a pilha não é redesenhada.
+    const tick = () => {
+      if (visible) redraw();
+    };
+    gsap.ticker.add(tick);
 
     return () => {
+      gsap.ticker.remove(tick);
+      enter.kill();
+      watch.kill();
+      player.kill();
       drawRef.current = () => {};
     };
   }, []);

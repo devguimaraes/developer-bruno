@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { project } from "@/components/hero/stack";
-import { calcEndGap, calcEndStep, END_LAYERS, fitEndCamera } from "./end-stage";
+import { calcEndFloat, calcEndGap, calcEndStep, END_LAYERS, fitEndCamera } from "./end-stage";
 
 describe("END_LAYERS", () => {
   it("lista as oito camadas em ordem de leitura, início em cima, com paradas fn0 a fn7", () => {
@@ -120,5 +120,28 @@ describe("fitEndCamera", () => {
     expect(cam.k).toBeLessThan(0.42);
     expect(bounds(cam).top).toBeGreaterThanOrEqual(209.5);
     expect(bounds(cam).bottom).toBeLessThanOrEqual(420.5);
+  });
+});
+
+describe("calcEndFloat", () => {
+  it("com a pilha fechada a flutuação cabe no vão: duas vizinhas nunca se atravessam", () => {
+    const gap = 6;
+    for (let s = 0; s < 8; s += 0.05) {
+      const lower = 0 * gap + calcEndFloat(1, s, gap);
+      const upper = 1 * gap + calcEndFloat(0, s, gap);
+      expect(upper).toBeGreaterThan(lower);
+    }
+  });
+
+  it("aberta, a amplitude tem teto e as placas não se movem todas juntas", () => {
+    let max = 0;
+    for (let s = 0; s < 8; s += 0.05) max = Math.max(max, Math.abs(calcEndFloat(0, s, 92)));
+    expect(max).toBeLessThanOrEqual(7);
+    expect(max).toBeGreaterThan(6);
+    expect(calcEndFloat(0, 1, 92)).not.toBeCloseTo(calcEndFloat(3, 1, 92), 1);
+  });
+
+  it("sem vão não há flutuação", () => {
+    expect(calcEndFloat(2, 1.3, 0)).toBeCloseTo(0, 10);
   });
 });

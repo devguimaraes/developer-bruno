@@ -414,19 +414,30 @@ html[data-giro-hand="story"][data-scenes="on"] .ab-stage > .hb .hb-world {
 }
 
 @media (max-width: 768px) {
+  /* --ab-up: em telas mais baixas que a prancha (844 px) o palco encolhe até 100 px, para as
+     pílulas e a frase do estado caberem acima do trilho. */
   [data-scenes="on"] .ab {
+    --ab-up: clamp(0px, calc((844px - 100svh) * 0.6), 100px);
     height: calc(100svh * 3.6);
   }
 
+  [data-scenes="on"] .ab-st__title {
+    font-size: calc(40px - var(--ab-up) * 0.1);
+  }
+
+  [data-scenes="on"] .ab-st__lead {
+    font-size: calc(18px - var(--ab-up) * 0.03);
+  }
+
   [data-scenes="on"] .ab-st {
-    top: 76px;
+    top: calc(76px - var(--ab-up) * 0.2);
     right: var(--G);
     width: auto;
   }
 
   [data-scenes="on"] .ab-pills {
     position: absolute;
-    top: 482px;
+    top: calc(490px - var(--ab-up) * 0.95);
     flex-wrap: nowrap;
     gap: 6px;
     margin: 0;
@@ -439,7 +450,7 @@ html[data-giro-hand="story"][data-scenes="on"] .ab-stage > .hb .hb-world {
 
   [data-scenes="on"] .ab-beats {
     position: absolute;
-    top: 536px;
+    top: calc(544px - var(--ab-up) * 0.95);
     right: 0;
     left: 0;
     height: 78px;
@@ -451,11 +462,11 @@ html[data-giro-hand="story"][data-scenes="on"] .ab-stage > .hb .hb-world {
   }
 
   [data-scenes="on"] .ab-demo {
-    top: 252px;
+    top: calc(260px - var(--ab-up) * 0.72);
     right: var(--G);
     left: var(--G);
     width: auto;
-    height: 296px;
+    height: calc(296px - var(--ab-up) * 0.43);
   }
 
   .dm-bar {

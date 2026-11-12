@@ -52,6 +52,26 @@ export function calcEndGap(progress: number, mobile: boolean): number {
   return GAP_MIN + (max - GAP_MIN) * eased;
 }
 
+/** Duração da batida do Fim, em segundos: a pilha abre, o texto entra e as etiquetas aparecem. */
+export const END_OPEN = 1.4;
+/** Fração da tela em que o topo do capítulo precisa estar para a pilha começar a abrir. */
+export const END_ENTER_AT = 0.5;
+
+/** Flutuação de uma placa da pilha, em px, no instante `seconds`. */
+const FLOAT_AMP = 7;
+const FLOAT_PERIOD = 3.6;
+const FLOAT_PHASE = 0.7;
+
+/**
+ * Quanto a placa `index` sobe ou desce agora. As placas flutuam em onda, cada uma um pouco
+ * depois da vizinha; a amplitude nunca passa do vão, para duas placas não se atravessarem com a
+ * pilha fechada.
+ */
+export function calcEndFloat(index: number, seconds: number, gap: number): number {
+  const amp = Math.min(FLOAT_AMP, Math.max(0, gap));
+  return amp * Math.sin((seconds / FLOAT_PERIOD) * Math.PI * 2 + index * FLOAT_PHASE);
+}
+
 /** Placa da pilha, vão aberto do celular e quanto uma placa sobe no hover, em px. */
 export const PLATE = { w: 420, h: 280 } as const;
 export const LIFT = 30;

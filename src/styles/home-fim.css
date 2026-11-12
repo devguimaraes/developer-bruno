@@ -284,11 +284,14 @@
 }
 
 @media (max-width: 768px) {
+  /* --fn-up: em telas mais baixas que a prancha (844 px) o título e o respiro encolhem, e a
+     pilha ganha altura para as etiquetas não se sobreporem. */
   .fn-stage {
-    padding: 88px var(--G) 32px;
+    --fn-up: clamp(0px, calc((844px - 100svh) * 0.6), 100px);
+    padding: calc(88px - var(--fn-up) * 0.24) var(--G) 32px;
   }
   .fn-title {
-    font-size: 44px;
+    font-size: calc(44px - var(--fn-up) * 0.1);
   }
   .fn-lead {
     font-size: 18px;
