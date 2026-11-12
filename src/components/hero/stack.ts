@@ -198,6 +198,20 @@ export function layerHeights(
   return zs;
 }
 
+/** Flutuação da pilha em repouso: amplitude em px, período em s e defasagem entre camadas. */
+const FLOAT_AMP = 5;
+const FLOAT_PERIOD = 3.4;
+const FLOAT_PHASE = 0.7;
+
+/**
+ * Quanto a camada `index` sobe ou desce no instante `seconds`. As camadas flutuam em onda, cada
+ * uma um pouco depois da de baixo. Com 5 px e essa defasagem, duas vizinhas se aproximam no
+ * máximo 3,5 px: menos que o vão da pilha fechada, então nunca se atravessam.
+ */
+export function layerFloat(index: number, seconds: number): number {
+  return FLOAT_AMP * Math.sin((seconds / FLOAT_PERIOD) * Math.PI * 2 - index * FLOAT_PHASE);
+}
+
 /**
  * Molas da abertura, frame da prancha: só i=1..3, rigidez 120 + 40*i, amortecimento 15.
  * Muta open e vel. Integração semi-implícita, como na prancha.

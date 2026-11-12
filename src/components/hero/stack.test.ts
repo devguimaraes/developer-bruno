@@ -7,6 +7,7 @@ import {
   FIRE_DELAY_MS,
   hitLayer,
   layerGeo,
+  layerFloat,
   layerHeights,
   layoutScale,
   MOBILE_STACK,
@@ -307,5 +308,23 @@ describe("rolagem", () => {
 
   it("scrollProgress devolve 0 sem altura", () => {
     expect(scrollProgress(100, 0)).toBe(0);
+  });
+});
+
+describe("layerFloat", () => {
+  it("duas camadas vizinhas nunca se aproximam mais que o vão da pilha fechada", () => {
+    const gap = Math.min(DESKTOP_STACK.Gc, MOBILE_STACK.Gc);
+    let closest = Number.POSITIVE_INFINITY;
+    for (let s = 0; s < 8; s += 0.02) {
+      for (let i = 0; i < 3; i += 1) {
+        closest = Math.min(closest, gap + layerFloat(i + 1, s) - layerFloat(i, s));
+      }
+    }
+    expect(closest).toBeGreaterThan(gap / 2);
+  });
+
+  it("flutua em onda: no mesmo instante as camadas estão em alturas diferentes", () => {
+    expect(layerFloat(0, 1)).not.toBeCloseTo(layerFloat(2, 1), 1);
+    expect(Math.abs(layerFloat(0, 0.85))).toBeLessThanOrEqual(5);
   });
 });

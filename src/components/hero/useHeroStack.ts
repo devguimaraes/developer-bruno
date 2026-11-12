@@ -22,6 +22,7 @@ import {
   hitLayer,
   LAYER_COUNT,
   LOADING_SPIN,
+  layerFloat,
   layerHeights,
   layoutScale,
   MOBILE_STACK,
@@ -167,6 +168,9 @@ function createRuntime(
   const open = [0, 0, 0, 0];
   const vel = [0, 0, 0, 0];
   const lift = [0, 0, 0, 0];
+  // Flutuação em repouso: entra aos poucos e some quando a rolagem começa, para a pilha chegar
+  // parada à passagem de mão.
+  let floatGain = 0;
   const tilt = { x: 0, y: 0, tx: 0, ty: 0 };
   let openAuto = 0;
   let openPtr = 0;
@@ -320,8 +324,14 @@ function createRuntime(
     s.setProperty("--fo", cam.fade.toFixed(3));
   };
 
+  // A flutuação entra junto com o lift: a linha de estações e o assento do Giro leem as mesmas
+  // alturas, então sobem e descem com as camadas.
   const renderLayers = (): void => {
-    zs = layerHeights(cfg, open, lift);
+    zs = layerHeights(
+      cfg,
+      open,
+      lift.map((l, i) => l + layerFloat(i, simT) * floatGain)
+    );
     layers.forEach((n, i) => {
       n.style.setProperty("--zr", `${(zs[i] ?? 0).toFixed(1)}px`);
     });
@@ -826,6 +836,7 @@ function createRuntime(
     for (let i = 0; i < LAYER_COUNT; i += 1) {
       lift[i] = approach(lift[i] ?? 0, i === hover ? HOVER_LIFT : 0, 10, dt);
     }
+    floatGain = approach(floatGain, scroll > 0.001 ? 0 : 1, scroll > 0.001 ? 8 : 1.2, dt);
     renderLayers();
 
     if (ball) {
