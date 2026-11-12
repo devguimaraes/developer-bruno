@@ -17,23 +17,41 @@ Canvas privado "Home em camadas", pranchas aprovadas em novembro de 2026:
 
 ## Capítulos, lógica e tickets do mapa
 
-| Capítulo | Função em `Main.dc.html` | Ticket do mapa #112 | Descrição |
+| Capítulo | Função em `Main.dc.html` | Ticket | No código |
 | :--- | :--- | :--- | :--- |
-| **Abertura** | `buildAbertura` | #121 | Descanso da hero, pose fechada e passagem em disco para serviços |
-| **Serviços** | `buildServicos` | #115 | Palco com 5 trocas na mesma medida, o Giro salta na linha de estações |
-| **Projetos** | `buildProjetos` | #116 | Título desdobrado "No ar.", 5 janelas de projetos e virada isométrica para trás |
-| **Processo** | `buildProcesso` | #117 | A mesma interface sendo feita em 4 etapas (Conversa, Roteiro, Código, Entrega) |
-| **Sobre** | `buildSobre` | #118 | Foto recortada com duotone azul, Giro pousado no ombro e texto passando por trás |
-| **Blog** | `buildBlog` | #119 | Notas de campo: o capítulo calmo, Giro cochila até o hover |
-| **Contato** | `buildContato` | #119 | Formulário integrado: o Giro vira o botão de envio e reage à digitação |
-| **Fim** | `buildFim` | #120 | A página inteira deita na perspectiva isométrica e fecha em pilha |
+| **Abertura e Estados** | `buildAbertura`, `setDemo` | #123 | `HomeOpening.tsx`, `StatesDemo.tsx`, `states-stage.ts` |
+| **Serviços** | `buildServicos` | #116 | `HomeServices.tsx`, `service-stage.ts` |
+| **Projetos** | `buildProjetos` | #117 | `HomeProjects.tsx`, `project-stage.ts` |
+| **Processo** | `buildProcesso` | #118 | `HomeProcess.tsx`, `process-stage.ts` |
+| **Sobre** | `buildSobre` | #119 | `HomeAbout.tsx`, `about-stage.ts` |
+| **Blog** | `buildBlog` | #120 | `HomeBlog.tsx`, `blog-contact-stage.ts` |
+| **Contato** | `buildContato` | #120 | `HomeContact.tsx`, `ContactForm.tsx`, `blog-contact-stage.ts` |
+| **Fim** | `buildFim`, `drawFimRail` | #121 | `HomeEnd.tsx`, `end-stage.ts` |
+
+Os componentes ficam em `src/components/home/`. Cada capítulo tem a lógica pura num `*-stage.ts` com teste e o CSS num arquivo próprio em `src/styles/` (`home-estados.css`, `home-sobre.css`, `home-blog.css`, `home-contact.css`, `home-fim.css`; Serviços, Projetos e Processo ficam em `giro-home.css`).
 
 Tarefas complementares do mapa:
-- #113: Levar as pranchas da home em camadas para o repositório (este handoff).
-- #114: Adicionar GSAP com ScrollTrigger e revisar a ADR 0001.
-- #122: Trilho de ícones em todas as páginas (substitui barra de abas no celular).
-- #123: Home completa no celular.
-- #124: Conferência da home: rolagem contínua, movimento reduzido e métricas.
+- #113: levar as pranchas para o repositório (este handoff).
+- #114: base dos capítulos, GSAP só na home e versão sem animação (`story/useChapterScenes.ts`).
+- #115: um Giro só atravessando os capítulos (`story/HomeGiro.tsx`, `chapters.ts`, `giro-jump.ts`).
+- #122: trilho de ícones em todas as páginas (`src/components/nav/Dock.tsx`, `dock-map.ts`).
+- #124: conferência final e documentação.
+
+## O que mudou no porte
+
+- Uma linha do tempo por capítulo, montada por `useChapterScenes` com `scene()` (`start top top`, `end bottom bottom`, `scrub 0.35`, sem `pin`). O capítulo fica preso por `position: sticky` no CSS.
+- Toda regra de palco vive sob `html[data-scenes="on"]`, que o `Layout.astro` liga antes do primeiro paint quando não há movimento reduzido. Sem JS ou com movimento reduzido, cada capítulo é leitura em ordem.
+- O Giro da história (`HomeGiro`) lê o passo de cada capítulo a cada quadro. Hover, digitação e envio chegam pelos sinais de `story/story-signals.ts`, não por estado do componente.
+- A passagem de mão entre o Giro da hero e o `HomeGiro` usa `html[data-giro-hand="story"]`: o runtime da hero para e o rider some, para nunca haver dois rostos.
+- O `SiteFooter` não é montado na home: o rodapé faz parte do capítulo Fim. No celular, a troca de idioma das páginas internas fica no rodapé, porque o trilho não tem menu.
+- No celular, a câmera da pilha do Fim é calculada para caber entre o texto e o rodapé (`fitEndCamera`), em vez do `y` fixo da prancha.
+- A placa "estados" do Fim leva para `#hero`, porque o capítulo Estados divide o palco com a hero.
+
+## Pendências para a conferência em aparelho real (#111)
+
+- Telas baixas (390 x 667): o trilho cobre o texto da etapa em Processo, e a base da hero corta abaixo de cerca de 760 px de altura.
+- Sem JS, a pilha da hero cobre parte do título.
+- Safari, GPU real e celular real ainda não foram conferidos.
 
 ## Como rodar a prancha fora do canvas
 
