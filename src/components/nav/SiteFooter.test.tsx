@@ -1,6 +1,7 @@
-import { describe, it, expect, vi, afterEach } from "vitest";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { contactData } from "@/config/site";
+import { getLocale, setLocale } from "@/lib/i18n";
 import { SiteFooter } from "./SiteFooter";
 
 afterEach(() => {
@@ -37,5 +38,13 @@ describe("SiteFooter", () => {
       expect(screen.getByRole("button", { name: "Copiado" })).toBeTruthy();
     });
     expect(writeText).toHaveBeenCalledWith(contactData.email);
+  });
+
+  it("troca o idioma, já que o trilho do celular não tem menu", () => {
+    render(<SiteFooter />);
+    const group = screen.getByRole("group", { name: "Idioma" });
+    fireEvent.click(within(group).getByRole("button", { name: "en" }));
+    expect(getLocale()).toBe("en");
+    setLocale("pt");
   });
 });

@@ -1,13 +1,14 @@
 import { ArrowUpRight } from "lucide-react";
-import { contactData } from "@/config/site";
 import { CopyButton } from "@/components/giro/CopyButton";
+import { LanguageSwitch } from "@/components/giro/LanguageSwitch";
+import { contactData } from "@/config/site";
 import { useLocale } from "@/hooks/useLocale";
 import { t } from "@/lib/i18n";
 import { Signature } from "./Signature";
 
 const FOOTER_LINK_IDS = ["github", "linkedin"];
 
-/** Rodapé em azul: assinatura, copiar e-mail, redes e linha de base. */
+/** Rodapé em azul: assinatura, copiar e-mail, idioma, redes e linha de base. */
 export function SiteFooter() {
   const locale = useLocale();
   const links = contactData.socialLinks.filter(link => FOOTER_LINK_IDS.includes(link.id));
@@ -23,6 +24,8 @@ export function SiteFooter() {
           errorLabel={t(locale, "post.link.copy_error")}
           errorHint={t(locale, "contact.direct.copy_error_hint")}
         />
+        {/* No celular o trilho não tem menu: a troca de idioma das páginas internas fica aqui. */}
+        <LanguageSwitch groupLabel={t(locale, "language.group_label")} />
       </div>
       <nav className="g-site-footer__links">
         {links.map(link => (

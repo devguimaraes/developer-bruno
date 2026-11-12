@@ -52,6 +52,30 @@ export function calcEndGap(progress: number, mobile: boolean): number {
   return GAP_MIN + (max - GAP_MIN) * eased;
 }
 
+/** Placa da pilha, vão aberto do celular e quanto uma placa sobe no hover, em px. */
+export const PLATE = { w: 420, h: 280 } as const;
+export const LIFT = 30;
+
+/**
+ * Câmera da pilha no celular: escala e altura da origem para a pilha aberta caber entre o fim do
+ * texto (`top`) e o começo do rodapé (`bottom`), centrada no vão. Mantém `kMax` quando cabe; numa tela
+ * baixa encolhe.
+ */
+export function fitEndCamera(space: { top: number; bottom: number }, kMax: number) {
+  // Com a câmera em rotateX 60 e rotateZ -45, a altura na tela de um ponto (x, y, z) da pilha,
+  // em escala 1 e origem 0, é (x * sin45 + y * cos45) * cos60 - z * sin60.
+  const rx = (60 * Math.PI) / 180;
+  const s45 = Math.SQRT1_2;
+  const along = (x: number, y: number) => (-x * s45 + y * s45) * Math.cos(rx);
+  const ups = [0, PLATE.w].flatMap(x => [0, PLATE.h].map(y => along(x, y)));
+  const zTop = (END_LAYERS.length - 1) * GAP_MAX.mobile + LIFT;
+  const minY = Math.min(...ups) - zTop * Math.sin(rx);
+  const maxY = Math.max(...ups);
+  const k = Math.min(kMax, Math.max(0, space.bottom - space.top) / (maxY - minY));
+  // Centraliza no vão: numa tela alta sobra ar dos dois lados, não só embaixo.
+  return { k, y: (space.top + space.bottom) / 2 - (k * (minY + maxY)) / 2 };
+}
+
 /** Onde o Giro deve estar e com que rosto: hover numa placa tem prioridade sobre a rolagem. */
 export function calcEndStep(
   progress: number,

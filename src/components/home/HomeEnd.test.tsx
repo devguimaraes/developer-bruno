@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { setLocale } from "@/lib/i18n";
+import { getLocale, setLocale } from "@/lib/i18n";
 import { HomeEnd } from "./HomeEnd";
 import { getStorySignals, resetStorySignals } from "./story/story-signals";
 
@@ -146,5 +146,14 @@ describe("HomeEnd", () => {
       "https://github.com/devguimaraes"
     );
     expect(screen.getByText("© 2026 Bruno Guimarães")).toBeInTheDocument();
+  });
+
+  it("troca o idioma pelo rodapé da cena, já que o trilho do celular não tem menu", () => {
+    render(<HomeEnd />);
+    fireEvent.click(
+      within(screen.getByRole("group", { name: "Idioma" })).getByRole("button", { name: "en" })
+    );
+    expect(getLocale()).toBe("en");
+    setLocale("pt");
   });
 });

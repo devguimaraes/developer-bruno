@@ -7,23 +7,19 @@ import {
   useRef,
   useState,
 } from "react";
+import { LanguageSwitch } from "@/components/giro/LanguageSwitch";
 import { type Camera, project } from "@/components/hero/stack";
 import { Signature } from "@/components/nav/Signature";
 import { contactData } from "@/config/site";
 import { useLocale } from "@/hooks/useLocale";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { type TranslationKey, t } from "@/lib/i18n";
-import { calcEndGap, END_LAYERS } from "./end-stage";
+import { calcEndGap, END_LAYERS, fitEndCamera, LIFT, PLATE } from "./end-stage";
 import { SCENE_MOBILE_QUERY } from "./story/chapters";
 import { setStorySignal } from "./story/story-signals";
 import { type SceneBuilder, useChapterScenes } from "./story/useChapterScenes";
 
 const FOOTER_LINK_IDS = ["linkedin", "github"];
-
-/** Placa de 420 x 280, como na prancha. */
-const PLATE = { w: 420, h: 280 };
-/** Quanto a placa sob o ponteiro ou o foco sobe. */
-const LIFT = 30;
 
 /** Título gravado na face de cada placa. */
 const FACE_TITLES: Record<string, TranslationKey> = {
@@ -161,7 +157,14 @@ export function HomeEnd() {
     const W = window.innerWidth;
     const H = window.innerHeight;
     const mobile = window.matchMedia(SCENE_MOBILE_QUERY).matches;
-    const o = mobile ? { x: W * 0.4, y: 566, k: 0.42 } : { x: W * 0.62, y: H * 0.84, k: 0.62 };
+    // No celular a pilha cabe entre o texto e o rodapé, também em telas baixas.
+    const fit = mobile
+      ? fitEndCamera(
+          { top: copy.offsetTop + copy.offsetHeight + 16, bottom: foot.offsetTop - 16 },
+          0.42
+        )
+      : null;
+    const o = fit ? { x: W * 0.4, y: fit.y, k: fit.k } : { x: W * 0.62, y: H * 0.84, k: 0.62 };
     setVars(iso, {
       "--ox": `${o.x}px`,
       "--oy": `${o.y}px`,
@@ -337,6 +340,7 @@ export function HomeEnd() {
         <div className="fn-foot">
           <Signature className="fn-sig" />
           <div className="fn-foot__r">
+            <LanguageSwitch groupLabel={t(locale, "language.group_label")} />
             {socialLinks.map(link => (
               <a key={link.id} className="g-link" href={link.href}>
                 {link.label}
