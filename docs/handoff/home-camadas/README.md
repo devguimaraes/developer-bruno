@@ -40,7 +40,10 @@ Tarefas complementares do mapa:
 ## O que mudou no porte
 
 - Uma linha do tempo por capítulo, montada por `useChapterScenes` com `scene()` (`start top top`, `end bottom bottom`, `scrub 0.35`, sem `pin`). O capítulo fica preso por `position: sticky` no CSS.
-- Exceção, desde 12 de novembro de 2026 (piloto): no Processo a rolagem só escolhe a etapa e a cena dela toca no tempo (`PROCESS_BEATS`, `calcProcessBeat`). Só a linha de estações e o disco da saída seguem escovados. As placas flutuam em CSS (`pc-float`).
+- Desde 12 de novembro de 2026 a linha do tempo de cada capítulo se divide em duas. As batidas (trocas discretas) ficam numa linha do tempo pausada, tocada no tempo por `createBeatPlayer` (`story/beats.ts`): a rolagem só escolhe a batida, pela função `calc*BeatTime` do `*-stage.ts` do capítulo. O que é contínuo (paralaxes, roteiro dos estados, linha de estações) e as Passagens continuam em `scene()` com scrub. Na montagem e no resize a cena pula direto para a batida atual (`jumpTo`), sem tocar de novo.
+- Batidas por capítulo: Abertura, a pilha vira tela (`SCREEN_FROM`, `SCREEN_BEAT`); Projetos, cada janela e a virada (`calcProjectBeatTime`); Processo, as quatro etapas (`PROCESS_BEATS`); Sobre, a troca da foto pela bio (`ABOUT_SWAP`); Fim, a pilha abre quando o capítulo entra na tela (`END_OPEN`, `END_ENTER_AT`).
+- Na volta ao topo, o Giro da hero só reassume quando a cena da tela fecha (`setScreenBusy` em `states-stage.ts`).
+- Flutuação em repouso: Processo e Projetos em CSS (`pc-float`, propriedade `translate`); hero e Fim no JS (`layerFloat`, `calcEndFloat`), porque a linha de estações, o assento do Giro e as ligações das etiquetas precisam subir junto.
 - O Giro da história segue a parada por mola (`stepSpring`), não mais colado quadro a quadro: leva a velocidade de um salto para o outro, estica na direção do movimento e troca de superfície no meio do voo. Uma parada sobre um disco de troca de cor declara a superfície em `data-surface`; um passo de capítulo pode declarar em `surface`.
 - Margem lateral e ritmo de cabeçalho são tokens em `giro.css` (`--G`, `--head-gap-eyebrow`, `--head-gap-lead`), usados por todos os capítulos e pelas páginas internas.
 - Toda regra de palco vive sob `html[data-scenes="on"]`, que o `Layout.astro` liga antes do primeiro paint quando não há movimento reduzido. Sem JS ou com movimento reduzido, cada capítulo é leitura em ordem.
@@ -52,7 +55,7 @@ Tarefas complementares do mapa:
 
 ## Pendências para a conferência em aparelho real (#111)
 
-- Telas baixas (375 x 667): o Processo já sobe e encolhe a cena (`calcProcessLift`, `--pc-up`). Continuam pendentes: a base da hero corta abaixo de cerca de 760 px de altura, as pílulas de Estados encostam no trilho e as etiquetas da pilha do Fim se sobrepõem.
+- Telas baixas (375 x 667): Processo, Estados e Fim encolhem o palco conforme a altura (`--pc-up`, `--ab-up`, `--fn-up`). Continua pendente a hero: o parágrafo e os botões ficam atrás do trilho abaixo de cerca de 760 px de altura.
 - Safari, GPU real e celular real ainda não foram conferidos.
 
 ## Como rodar a prancha fora do canvas
