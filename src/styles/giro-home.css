@@ -566,6 +566,21 @@
   visibility: hidden;
 }
 
+/* Deitadas em pilha, as janelas flutuam em onda (keyframes pc-float, mais abaixo). De frente,
+   sem perspectiva, subir no eixo z não muda nada na tela: a animação pode ficar sempre ligada. */
+[data-scenes="on"] .pj {
+  --float: 18px;
+  animation: pc-float 3.8s ease-in-out infinite alternate;
+}
+
+[data-scenes="on"] .pj:nth-child(2n) {
+  animation-delay: -1.3s;
+}
+
+[data-scenes="on"] .pj:nth-child(3n) {
+  animation-delay: -2.5s;
+}
+
 [data-scenes="on"] .pj-cover {
   min-height: 0;
 }

@@ -5,8 +5,15 @@ import { useLocale } from "@/hooks/useLocale";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { t } from "@/lib/i18n";
 import { splitOutcome } from "./copy";
-import { projectHost, projectSurface, projectTimeline } from "./project-stage";
+import {
+  calcProjectBeatTime,
+  PROJECT_ENTER,
+  projectHost,
+  projectSurface,
+  projectTimeline,
+} from "./project-stage";
 import { SCENE_MOBILE_QUERY } from "./story/chapters";
+import { createBeatPlayer } from "./story/beats";
 import { type SceneBuilder, useChapterScenes } from "./story/useChapterScenes";
 
 /**
@@ -46,16 +53,30 @@ export function HomeProjects() {
     setVars(world, { "--wk": 1, "--wrx": "0deg", "--wrz": "0deg", "--wx": "0px", "--wy": "0px" });
     gsap.set(wins, { y: H * 1.1, scale: 1, z: 0, visibility: "visible", "--dim": 0 });
 
-    const tl = scene(sec);
+    // As batidas tocam no tempo: cada janela entra inteira quando a rolagem chega nela, e a
+    // virada em pilha também. A rolagem só escolhe a batida.
+    const beats = gsap.timeline({ paused: true, defaults: { ease: "none" } });
+    const player = createBeatPlayer(beats);
+    let beatTime = 0;
+    // O título abrindo, a paralaxe das capas e a Passagem da saída seguem a rolagem.
+    const tl = scene(sec, {
+      onUpdate: (self: { progress: number }) => {
+        const next = calcProjectBeatTime(self.progress, wins.length);
+        if (next !== beatTime) {
+          beatTime = next;
+          player.playTo(next);
+        }
+      },
+    });
     tl.fromTo(big, { fontStretch: "50%" }, { fontStretch: "128%", duration: 1.1 }, 0);
 
     wins.forEach((win, i) => {
       const cover = win.querySelector(".pj-cover");
       const img = win.querySelector(".pj-cover img");
       const at = t0 + i * step;
-      tl.to(win, { y: 0, duration: 1, ease: "power2.out" }, at);
+      beats.to(win, { y: 0, duration: PROJECT_ENTER, ease: "power3.out" }, at);
       if (cover) {
-        tl.fromTo(
+        beats.fromTo(
           cover,
           { clipPath: "inset(0 0 100% 0)" },
           { clipPath: "inset(0 0 0% 0)", duration: 0.5 },
@@ -65,7 +86,7 @@ export function HomeProjects() {
       if (img) tl.fromTo(img, { yPercent: 6 }, { yPercent: -6, duration: step * 1.6 }, at);
       for (let j = 0; j < i; j += 1) {
         const n = i - j;
-        tl.to(
+        beats.to(
           wins[j],
           {
             y: -12 * n,
@@ -79,14 +100,15 @@ export function HomeProjects() {
       }
     });
 
-    tl.to([big, lead], { autoAlpha: 0, duration: 0.5 }, t0 + 0.2);
+    beats.to([big, lead], { autoAlpha: 0, duration: 0.5 }, t0 + 0.2);
 
     const zGap = mobile ? 62 : 120;
-    tl.to(
-      wins,
-      { y: 0, scale: 1, z: i => i * zGap, "--dim": 0, duration: 1.3, ease: "power2.inOut" },
-      tTilt
-    )
+    beats
+      .to(
+        wins,
+        { y: 0, scale: 1, z: i => i * zGap, "--dim": 0, duration: 1.3, ease: "power2.inOut" },
+        tTilt
+      )
       .to(
         world,
         {
@@ -100,10 +122,17 @@ export function HomeProjects() {
         },
         tTilt
       )
-      .fromTo(out, { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.6 }, tTilt + 1)
-      .to(disc, { "--dr": `${radius}px`, duration: 1, ease: "power2.in" }, tTilt + 3)
-      .to({}, { duration: 0.01 }, total);
-    return undefined;
+      .fromTo(out, { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.6 }, tTilt + 1);
+    tl.to(disc, { "--dr": `${radius}px`, duration: 1, ease: "power2.in" }, tTilt + 3).to(
+      {},
+      { duration: 0.01 },
+      total
+    );
+
+    // Montagem e remontagem (resize) começam já na batida atual, sem tocar a cena de novo.
+    beatTime = calcProjectBeatTime(tl.scrollTrigger?.progress ?? 0, wins.length);
+    player.jumpTo(beatTime);
+    return () => player.kill();
   }, []);
 
   useChapterScenes(buildScene, [], {

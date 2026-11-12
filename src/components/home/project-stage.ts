@@ -42,6 +42,25 @@ export function projectTimeline(count: number): ProjectTimeline {
   return { t0: PROJECT_T0, step: PROJECT_STEP, tTilt, total: tTilt + 4 };
 }
 
+/** Quanto dura a entrada de uma janela e a virada em pilha (com os números ao lado). */
+export const PROJECT_ENTER = 1;
+export const PROJECT_TILT = 1.6;
+
+/**
+ * Ponto da linha do tempo em que a batida do progresso atual está completa: nenhuma janela (0),
+ * a janela i assentada, ou a pilha deitada com os números. A rolagem escolhe a batida e a cena
+ * toca até este ponto.
+ */
+export function calcProjectBeatTime(progress: number, count: number): number {
+  const { t0, step, tTilt, total } = projectTimeline(count);
+  const p = Number.isNaN(progress) ? 0 : Math.max(0, Math.min(1, progress));
+  const t = p * total;
+  if (t < t0) return 0;
+  if (t >= tTilt) return tTilt + PROJECT_TILT;
+  const i = Math.min(count - 1, Math.floor((t - t0) / step));
+  return t0 + i * step + PROJECT_ENTER;
+}
+
 /**
  * Onde o Giro deve estar para um progresso do capítulo (0 a 1). Função pura da rolagem:
  * subir e descer dão a mesma chave.
