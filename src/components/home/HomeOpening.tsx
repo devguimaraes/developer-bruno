@@ -117,6 +117,9 @@ export function HomeOpening() {
       const outgoing = qa(".hb-copy, .hb-foot, .hb-top, .hb-hud");
       const faded = qa(".hb-line, .hb-floor-layer");
       if (!hero || !iso || plates.length !== 4 || !demoBox || !text || !disc || !exit || !world) {
+        // Sem a cena o CSS do palco deixaria título e tela de exemplo escondidos para sempre.
+        console.error("HomeOpening: palco incompleto, cena da abertura não montada");
+        for (const el of [text, demoBox]) el?.style.setProperty("visibility", "visible");
         return;
       }
 
