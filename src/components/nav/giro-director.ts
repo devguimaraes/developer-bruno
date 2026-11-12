@@ -71,13 +71,15 @@ function endMoment(): void {
   emit();
 }
 
-// Giros da navegação: a ilha no computador e a barra de abas no celular.
-const NAV_GIRO = ".g-island .g-giro, .g-tabbar .g-giro";
+// Giros da navegação: a ilha no computador e o trilho no celular.
+const NAV_GIRO = ".g-island .g-giro, .g-dock .g-giro";
 
-/** Algum Giro da navegação está à vista. A ilha escondida no hero e o Giro da barra emprestado
+/** Algum Giro da navegação está à vista. A ilha escondida no hero e o Giro emprestado
  * ao título não contam: o momento tocaria sem ninguém ver e gastaria o intervalo. */
 function navGiroOnScreen(): boolean {
   for (const giro of document.querySelectorAll(NAV_GIRO)) {
+    // Com o HomeGiro em cena o trilho mostra só o arco: o rosto que reagiria não está à vista.
+    if (giro.closest('[data-stage="true"]')) continue;
     // Sem checkVisibility (Safari antes do 17.4), vale como visível.
     if (typeof giro.checkVisibility !== "function") return true;
     if (giro.checkVisibility({ opacityProperty: true, visibilityProperty: true })) return true;

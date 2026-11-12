@@ -245,7 +245,7 @@ export function useGiroEggs(): GiroEggsSnapshot {
   return snapshot;
 }
 
-/** Prioridade do Giro na ilha e na barra. O primeiro que casa vence. */
+/** Prioridade do Giro na ilha e no trilho. O primeiro que casa vence. */
 export function resolveNavGiro(input: {
   navigating: boolean;
   celebrating: boolean;

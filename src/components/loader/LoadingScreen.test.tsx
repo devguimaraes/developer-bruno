@@ -236,13 +236,13 @@ describe("LoadingScreen", () => {
     wrapper.remove();
   });
 
-  it("no celular, o alvo é o centro da barra de abas", async () => {
+  it("no celular, o alvo é o arco do trilho", async () => {
     setInnerWidth(390);
-    const wrapper = addFlightTarget('<div class="g-tabbar__giro"><svg class="g-giro"></svg></div>');
+    const wrapper = addFlightTarget('<div class="g-dock__ring"><svg class="g-giro"></svg></div>');
     vi.spyOn(Element.prototype, "getBoundingClientRect").mockImplementation(function (
       this: Element
     ) {
-      return this.closest(".g-tabbar__giro") ? rect(175, 762, 40) : rect(125, 310, 140);
+      return this.closest(".g-dock__ring") ? rect(175, 762, 40) : rect(125, 310, 140);
     });
 
     render(<LoadingScreen />);

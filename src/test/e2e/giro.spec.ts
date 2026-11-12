@@ -71,8 +71,8 @@ test.describe("Giro: momentos", () => {
   });
 });
 
-// O Giro da navegação: a ilha no computador e a barra de abas no celular. Os dois seguem o diretor.
-const NAV_GIRO = ".g-island .g-giro, .g-tabbar .g-giro";
+// O Giro da navegação: a ilha no computador e o trilho no celular. Os dois seguem o diretor.
+const NAV_GIRO = ".g-island .g-giro, .g-dock .g-giro";
 
 async function setTabHidden(page: Page, hidden: boolean) {
   await page.evaluate(value => {
@@ -99,7 +99,7 @@ async function openPastHero(page: Page) {
 
 test.describe("Giro: reações da navegação", () => {
   test("Deve piscar ao escolher uma categoria do blog", async ({ page }) => {
-    // No celular a barra de abas está sempre à vista; no computador a ilha só depois do header.
+    // No celular o trilho está sempre à vista; no computador a ilha só depois do header.
     await page.setViewportSize({ width: 390, height: 844 });
     await recordMoments(page);
     await page.goto("/blog");
@@ -148,7 +148,7 @@ test.describe("Giro: reações da navegação", () => {
     await page.mouse.wheel(0, 120);
     // O evento de rolagem chega assíncrono: sem esperar, ele zeraria a contagem já adiantada.
     await page.waitForTimeout(300);
-    const box = page.locator(".g-island__giro, .g-tabbar__giro").filter({ visible: true }).first();
+    const box = page.locator(".g-island__giro, .g-dock__giro").filter({ visible: true }).first();
 
     await page.clock.fastForward(5_500);
     await expect(box).toHaveAttribute("style", /--g-tilt: 3deg/);
@@ -165,6 +165,66 @@ test.describe("Giro: reações da navegação", () => {
     await setTabHidden(page, false);
     await page.waitForTimeout(800);
     expect(await moments(page)).not.toContain("hello");
+  });
+});
+
+// O trilho de ícones só existe no celular: aqui o viewport é de 390 px.
+test.describe("Trilho de ícones", () => {
+  test.use({ viewport: { width: 390, height: 844 } });
+
+  const current = (page: Page) => page.locator(".g-dock [aria-current='page']");
+
+  test("Deve acender o ícone do capítulo em leitura na home", async ({ page }) => {
+    await page.goto("/#projetos");
+    await waitForHydration(page);
+    await expect(current(page)).toHaveAttribute("aria-label", "Projetos");
+    await expect(page.locator(".g-dock")).toHaveAttribute("data-tone", "dark");
+
+    await page.goto("/#sobre");
+    await expect(current(page)).toHaveAttribute("aria-label", "Sobre");
+    await expect(page.locator(".g-dock")).toHaveAttribute("data-tone", "light");
+  });
+
+  test("Deve acender Blog e Projetos pela rota, com o Giro no lugar do ícone", async ({ page }) => {
+    await page.goto("/blog");
+    await waitForHydration(page);
+    await expect(current(page)).toHaveAttribute("aria-label", "Blog");
+    await expect(page.locator(".g-dock")).toHaveAttribute("data-stage", "false");
+    await expect(page.locator(".g-dock .g-giro")).toBeVisible();
+
+    await page.goto("/projetos/atlas-marine-solutions");
+    await waitForHydration(page);
+    await expect(current(page)).toHaveAttribute("aria-label", "Projetos");
+  });
+
+  test("Deve levar Serviços e Sobre para a home quando se está fora dela", async ({ page }) => {
+    await page.goto("/blog");
+    await waitForHydration(page);
+    await page.getByRole("link", { name: "Sobre" }).click();
+    await expect(page).toHaveURL(/\/#sobre$/);
+  });
+
+  test("Deve trocar o arco de lugar sem animação com movimento reduzido", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/#sobre");
+    await waitForHydration(page);
+    await page.waitForTimeout(1500);
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await expect(current(page)).toHaveAttribute("aria-label", "Início");
+    await page.waitForTimeout(100);
+    const running = await page.evaluate(
+      () =>
+        document
+          .getAnimations()
+          .filter(
+            animation =>
+              animation.effect instanceof KeyframeEffect &&
+              animation.effect.target instanceof Element &&
+              animation.effect.target.matches(".g-dock__ring, .g-dock__giro, .g-dock__cover") &&
+              animation.playState === "running"
+          ).length
+    );
+    expect(running).toBe(0);
   });
 });
 

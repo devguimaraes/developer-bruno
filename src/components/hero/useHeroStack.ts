@@ -41,9 +41,9 @@ import {
 import type { HopRide } from "./stack";
 
 const DESKTOP_QUERY = "(min-width: 768px)";
-// Origem do lançamento: a assinatura no cabeçalho (computador) ou a aba do Giro (celular).
+// Origem do lançamento: a assinatura no cabeçalho (computador) ou o arco do trilho (celular).
 const SOURCE_DESKTOP = "[data-site-header] .g-signature__o .g-giro";
-const SOURCE_MOBILE = ".g-tabbar__giro .g-giro";
+const SOURCE_MOBILE = ".g-dock__ring .g-giro";
 const LAUNCH_MS = 1000;
 // Com a tela de carregamento, o Giro sai logo depois que a assinatura pousa e o loader some.
 const LAUNCH_AFTER_LOADER_MS = 300;
@@ -344,7 +344,8 @@ function createRuntime(
     // Antes do lançamento o botão está invisível: fora do Tab, para não haver foco que não se vê.
     rider.tabIndex = away && !handed() ? 0 : -1;
     // O Giro da origem some enquanto o Giro está na linha e volta quando o hero sai da tela.
-    if (src) src.style.opacity = away && visible ? "0" : "";
+    // Com o HomeGiro em cena o arco do trilho fica à vista: ele é o seletor, não um segundo rosto.
+    if (src) src.style.opacity = away && visible && !handed() ? "0" : "";
     if (away) placeSeat();
   };
 

@@ -1,6 +1,6 @@
-/* Navegação da Giro: assinatura, header, ilha de rolagem, barra de abas e rodapé.
+/* Navegação da Giro: assinatura, header, ilha de rolagem, trilho de ícones e rodapé.
    Vem do bundle do design system (components/bundle.css) com ajustes para o site:
-   a ilha e a barra de abas ficam fixas em docks, e o foco aparece nos itens novos. */
+   a ilha e o trilho de ícones ficam fixos, e o foco aparece nos itens novos. */
 
 /* ---------- Signature ---------- */
 
@@ -127,6 +127,21 @@
   background: var(--tinta);
   box-shadow: 0 0 0 1px rgba(246, 245, 240, 0.12);
   color: var(--papel);
+  transition:
+    background-color 260ms linear,
+    color 260ms linear;
+}
+/* Papel sobre azul e tinta, como o trilho: a ilha inverte com a superfície que passa embaixo. */
+.g-island[data-tone="light"] {
+  --s-bg: var(--papel);
+  --s-fg: var(--tinta);
+  --s-muted: var(--grafite);
+  --s-raised: rgba(11, 12, 31, 0.06);
+  --s-signal: var(--azul-sinal);
+  --s-focus: var(--azul-sinal);
+  background: var(--papel);
+  box-shadow: 0 0 0 1px rgba(11, 12, 31, 0.12);
+  color: var(--tinta);
 }
 .g-island .g-giro {
   flex: none;
@@ -216,104 +231,214 @@
   font: var(--text-rotulo);
 }
 
-/* ---------- Tab bar (mobile) ---------- */
+/* ---------- Trilho de ícones (celular) ---------- */
 
-/* Dock fixo embaixo da tela. O menu do Giro abre logo acima da barra. */
-.g-tabbar-dock {
+/* A cor do destino abre como disco a partir do ícone e cobre o salto. Fica sob o trilho. */
+.g-dock__cover {
   position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 40;
-}
-.g-tabbar-menu {
-  position: absolute;
-  left: 16px;
-  right: 16px;
-  bottom: calc(100% + 8px);
-}
-.g-tabbar {
-  position: relative;
-  height: 84px;
-  padding-bottom: env(safe-area-inset-bottom);
-}
-.g-tabbar__bg {
-  position: absolute;
   inset: 0;
-  background: var(--tinta);
-  -webkit-mask: radial-gradient(circle at 50% 2px, transparent 37px, #000 37.5px);
-  mask: radial-gradient(circle at 50% 2px, transparent 37px, #000 37.5px);
+  z-index: 39;
+  visibility: hidden;
+  pointer-events: none;
 }
-.g-tabbar__tabs {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr 1fr 84px 1fr 1fr;
-  height: 62px;
-  padding: 6px 8px 0;
-}
-.g-tab {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  height: 56px;
-  border-radius: 16px;
-  color: var(--nevoa-tinta);
-  font: 400 11px / 1.2 var(--font-mono);
-  text-decoration: none;
-  transition: color 200ms linear;
-}
-.g-tab__pill {
+/* Pílula fixa a 12 px das bordas, sem desfoque nem vidro. A superfície inverte com a página:
+   tinta sobre as de papel, papel nas outras (data-tone vem de dock-map). */
+.g-dock {
+  position: fixed;
+  z-index: 40;
+  right: 12px;
+  bottom: max(12px, env(safe-area-inset-bottom));
+  left: 12px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 52px;
-  height: 30px;
-  border-radius: var(--radius-pill);
+  box-sizing: border-box;
+  height: 64px;
+  padding: 0 6px;
+  border-radius: 32px;
+  background: var(--dock-bg);
+  color: var(--dock-fg);
+  box-shadow: 0 14px 30px -14px rgba(11, 12, 31, 0.55);
   transition:
-    background-color 200ms linear,
-    color 200ms linear;
+    background-color 260ms linear,
+    color 260ms linear;
 }
-.g-tab[aria-current="page"] {
-  color: var(--papel);
+.g-dock[data-tone="light"] {
+  --dock-bg: var(--papel);
+  --dock-fg: var(--tinta);
+  --dock-arc: var(--azul-sinal);
+  --dock-track: rgba(11, 12, 31, 0.2);
 }
-.g-tab[aria-current="page"] .g-tab__pill {
-  background: var(--tinta-2);
-  color: var(--lima);
+.g-dock[data-tone="dark"] {
+  --dock-bg: var(--tinta);
+  --dock-fg: var(--papel);
+  --dock-arc: var(--lima);
+  --dock-track: rgba(246, 245, 240, 0.26);
 }
-.g-tabbar__giro {
-  --s-signal: var(--lima);
-  --s-focus: var(--lima);
+.g-dock__rail {
   position: absolute;
-  left: 50%;
-  top: -28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 60px;
-  height: 60px;
-  margin-left: -30px;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: var(--tinta);
-  color: var(--lima);
-  cursor: pointer;
+  top: 50%;
+  right: 36px;
+  left: 36px;
+  margin-top: -1px;
+  border-top: 2px dotted var(--dock-track);
 }
-.g-tabbar__giro .g-giro {
-  font-size: 40px;
+/* O arco é o seletor. A estação vem de --dock-i, então o lugar existe antes de qualquer script
+   (o loader mede o voo em cima dele). O salto entre estações é animado em Dock.tsx. */
+.g-dock__ring {
+  position: absolute;
+  z-index: 3;
+  top: 5px;
+  left: calc(6px + (100% - 12px) * (var(--dock-i, 0) + 0.5) / 6);
+  width: 54px;
+  height: 54px;
+  margin-left: -27px;
+  color: var(--dock-arc);
+  pointer-events: none;
+  will-change: transform;
+}
+.g-dock__giro {
+  display: block;
+  width: 54px;
+  height: 54px;
+}
+.g-dock .g-giro {
+  --g-ink: var(--dock-arc);
+  --g-stroke: 9px;
+  display: block;
+}
+/* Com o HomeGiro em cena o trilho mostra só o arco. */
+.g-dock[data-stage="true"] :is(.g-giro__lid, .g-giro__face, .g-giro__z) {
+  visibility: hidden;
+}
+/* Fora da home o Giro ocupa o lugar do ícone aceso. */
+.g-dock[data-stage="false"] .g-dock__item.is-ring .g-dock__ico {
+  visibility: hidden;
+}
+.g-dock__tag {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: calc(6px + (100% - 12px) * (var(--dock-i, 0) + 0.5) / 6);
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--dock-bg);
+  color: var(--dock-fg);
+  font: var(--text-micro);
+  white-space: nowrap;
+  opacity: 0;
+  translate: -50% 0;
+  pointer-events: none;
+  animation: g-dock-tag 2240ms linear both;
+}
+.g-dock__tag[data-edge="start"] {
+  left: 0;
+  translate: 0 0;
+}
+.g-dock__tag[data-edge="end"] {
+  left: auto;
+  right: 0;
+  translate: 0 0;
+}
+@keyframes g-dock-tag {
+  0%,
+  13.4% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  23.2%,
+  89.3% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+.g-dock__item {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  flex: 1 1 0;
+  place-items: center;
+  height: 64px;
+  border-radius: 24px;
+  color: inherit;
+  text-decoration: none;
+  transition: color 180ms linear;
+  -webkit-tap-highlight-color: transparent;
+}
+.g-dock__plate {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--dock-bg);
+  transition: background-color 260ms linear;
+}
+.g-dock__ico {
+  display: block;
+  width: 32px;
+  height: 32px;
+  overflow: visible;
+}
+.g-dock__ico path,
+.g-dock__ico circle {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  transition:
+    fill 180ms linear,
+    stroke 180ms linear;
+}
+.g-dock__ico .g-dock__base {
+  fill: currentColor;
+  stroke: none;
+  opacity: 0.16;
+  transition: opacity 180ms linear;
+}
+.g-dock__glyph {
+  transition: transform 340ms var(--ease-hop);
+}
+/* O arco pousa em 420 ms: só então o ícone sobe da placa e enche com a cor de sinal. */
+.g-dock__item.is-on {
+  color: var(--dock-arc);
+  transition-delay: 420ms;
+}
+.g-dock__item.is-on .g-dock__glyph {
+  transform: translateY(-3px);
+  transition-delay: 420ms;
+}
+.g-dock__item.is-on .g-dock__ico .g-dock__f {
+  fill: currentColor;
+  transition-delay: 420ms;
+}
+.g-dock__item.is-on .g-dock__ico .g-dock__l {
+  stroke: var(--dock-bg);
+}
+.g-dock__item.is-on .g-dock__ico .g-dock__base {
+  opacity: 0.38;
+}
+@media (min-width: 768px) {
+  .g-dock,
+  .g-dock__cover {
+    display: none;
+  }
 }
 
 /* ---------- Focus (itens de navegação que não estão em giro-actions.css) ---------- */
 
 .g-signature:focus-visible,
 .g-nav-link:focus-visible,
-.g-menu__item:focus-visible,
-.g-tab:focus-visible,
-.g-tabbar__giro:focus-visible {
+.g-menu__item:focus-visible {
   outline: 2px solid var(--s-focus);
   outline-offset: 3px;
+}
+.g-dock__item:focus-visible {
+  outline: 2px solid var(--dock-arc);
+  outline-offset: -4px;
 }
 
 /* ---------- Site footer ---------- */
@@ -369,7 +494,31 @@
 /* Progresso sem animação (decisão 20). O resto já zera pelas durações de giro.css. */
 @media (prefers-reduced-motion: reduce) {
   .g-island .g-giro__arc,
-  .g-tabbar__giro .g-giro__arc {
+  .g-dock .g-giro__arc {
     transition: none;
+  }
+  .g-dock,
+  .g-dock__item,
+  .g-dock__plate,
+  .g-dock__ico path,
+  .g-dock__ico circle,
+  .g-dock__glyph {
+    transition: none;
+  }
+  .g-dock__tag {
+    animation-name: g-dock-tag-still;
+  }
+  @keyframes g-dock-tag-still {
+    0%,
+    10% {
+      opacity: 0;
+    }
+    20%,
+    89.3% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
   }
 }

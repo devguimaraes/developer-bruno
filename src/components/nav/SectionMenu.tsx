@@ -9,13 +9,12 @@ export interface SectionMenuProps {
   id: string;
   sections: readonly HomeSection[];
   activeId: string | null;
-  className?: string;
   /** Chamado ao tocar numa seção. Quem usa fecha o menu. */
   onNavigate?: () => void;
 }
 
-/** Painel do menu (g-menu): seções e troca de idioma. Usado pela ilha e pela barra de abas. */
-export function SectionMenu({ id, sections, activeId, className, onNavigate }: SectionMenuProps) {
+/** Painel do menu (g-menu): seções e troca de idioma. Usado pela ilha de rolagem. */
+export function SectionMenu({ id, sections, activeId, onNavigate }: SectionMenuProps) {
   const locale = useLocale();
   const panelRef = useRef<HTMLDivElement>(null);
 
@@ -28,7 +27,7 @@ export function SectionMenu({ id, sections, activeId, className, onNavigate }: S
     <div
       ref={panelRef}
       id={id}
-      className={["g-menu", className].filter(Boolean).join(" ")}
+      className="g-menu"
       role="dialog"
       aria-label={t(locale, "global.main_nav_label")}
     >

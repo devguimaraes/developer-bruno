@@ -55,7 +55,7 @@ function flightTarget(): Element | null {
   if (window.innerWidth >= DESKTOP_MIN_WIDTH) {
     return document.querySelector("[data-site-header] .g-signature__o .g-giro");
   }
-  return document.querySelector(".g-tabbar__giro .g-giro");
+  return document.querySelector(".g-dock__ring .g-giro");
 }
 
 /** Deslocamento e escala do elemento voando até o alvo. Null se algum dos dois não tem área. */

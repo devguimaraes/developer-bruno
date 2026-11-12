@@ -1,4 +1,4 @@
-import type { TranslationKey } from "@/lib/i18n";
+import { type Locale, type TranslationKey, t } from "@/lib/i18n";
 
 export interface HomeSection {
   /** id do elemento na home. Seções que não existem no DOM são ignoradas pelo scroll spy. */
@@ -7,7 +7,7 @@ export interface HomeSection {
   menuKey: TranslationKey;
   /** Rótulo mono da ilha, já com "// ", ex.: "// projetos". */
   labelKey: TranslationKey;
-  /** Aparece no menu da ilha, no computador. A barra de abas tira as seções que já têm aba. */
+  /** Aparece no menu da ilha, no computador. */
   inMenu: boolean;
 }
 
@@ -32,7 +32,7 @@ export interface TabItem {
   labelKey: TranslationKey;
 }
 
-/** As quatro abas do celular, nesta ordem: duas à esquerda do Giro, duas à direita. */
+/** Abas por rota. Nomeiam a página na ilha de rolagem; o trilho de ícones usa dock-map. */
 export const TABS: readonly TabItem[] = [
   { id: "home", href: "/", labelKey: "tabs.home" },
   { id: "projects", href: "/#projetos", labelKey: "tabs.projects" },
@@ -58,4 +58,12 @@ export function tabForLocation(pathname: string, sectionId: string | null): TabI
   if (pathname !== "/") return null;
   if (sectionId === null) return "home";
   return SECTION_TAB[sectionId] ?? null;
+}
+
+/** Rótulo mono da ilha: a seção em leitura ou, fora dela, a aba da rota ("// blog"). */
+export function islandLabel(locale: Locale, activeId: string | null, pathname: string): string {
+  const section = HOME_SECTIONS.find(item => item.id === activeId);
+  if (section) return t(locale, section.labelKey);
+  const tab = TABS.find(item => item.id === tabForLocation(pathname, null));
+  return tab ? `// ${t(locale, tab.labelKey).toLowerCase()}` : "";
 }

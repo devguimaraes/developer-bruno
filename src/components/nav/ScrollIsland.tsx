@@ -7,12 +7,12 @@ import { useNavigating } from "@/components/loader/navigation-state";
 import { useLocale } from "@/hooks/useLocale";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { t } from "@/lib/i18n";
-import type { Locale } from "@/lib/i18n";
 import { getPageGiro, subscribePageGiro } from "@/lib/page-giro";
 import { SectionMenu } from "./SectionMenu";
 import { useMenuDismiss } from "./useMenuDismiss";
 import { resolveNavGiro, useGiroEggs } from "./useGiroEggs";
-import { HOME_SECTIONS, SECTION_IDS, TABS, tabForLocation } from "./sections";
+import { type DockTone, dockToneFor } from "./dock-map";
+import { HOME_SECTIONS, SECTION_IDS, islandLabel } from "./sections";
 import { type DirectedMoment, useDirectedMoment } from "./giro-director";
 import { useCursorLook } from "./useCursorLook";
 import { type PeekPose, peekKey, peekStyle, usePeek } from "./usePeek";
@@ -22,14 +22,6 @@ const TOGGLE_ID = "scroll-island-toggle";
 const MENU_ID = "scroll-island-menu";
 const ISLAND_MENU = HOME_SECTIONS.filter(section => section.inMenu);
 
-/** Rótulo mono da ilha: a seção em leitura ou, fora dela, a aba da rota ("// blog"). */
-function islandLabel(locale: Locale, activeId: string | null, pathname: string): string {
-  const section = HOME_SECTIONS.find(item => item.id === activeId);
-  if (section) return t(locale, section.labelKey);
-  const tab = TABS.find(item => item.id === tabForLocation(pathname, null));
-  return tab ? `// ${t(locale, tab.labelKey).toLowerCase()}` : "";
-}
-
 export interface ScrollIslandViewProps {
   progress: number;
   label: string;
@@ -38,6 +30,8 @@ export interface ScrollIslandViewProps {
   fast?: boolean;
   /** Momento escolhido pelo diretor (giro-director): tonto, piscadela ou oi. */
   moment?: DirectedMoment;
+  /** Superfície da ilha, igual à do trilho: papel sobre azul e tinta, tinta sobre o papel. */
+  tone?: DockTone;
   /** Se a ilha aparece (depois do hero). */
   visible?: boolean;
   menuOpen?: boolean;
@@ -67,6 +61,7 @@ export function ScrollIslandView({
   direction,
   fast = false,
   moment,
+  tone = "dark",
   visible = true,
   menuOpen = false,
   activeId = null,
@@ -93,6 +88,7 @@ export function ScrollIslandView({
         className="g-island"
         aria-label={t(locale, "tabs.label")}
         data-fast={fast ? "true" : undefined}
+        data-tone={tone}
       >
         <span className="g-island__giro" ref={giroRef} style={peekStyle(peek)}>
           <Giro
@@ -173,6 +169,7 @@ export function ScrollIsland() {
       direction={scroll.direction}
       fast={fast}
       moment={moment}
+      tone={dockToneFor(scroll.pathname, scroll.activeId)}
       visible={scroll.pastHero}
       menuOpen={menuOpen}
       activeId={scroll.activeId}

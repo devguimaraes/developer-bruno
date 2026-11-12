@@ -655,9 +655,9 @@
   opacity: 1;
 }
 
-/* O Giro da origem (assinatura e aba) esmaece quando o hero o tira do lugar. */
+/* O Giro da origem (assinatura e arco do trilho) esmaece quando o hero o tira do lugar. */
 .g-signature__o .g-giro,
-.g-tabbar__giro .g-giro {
+.g-dock__ring .g-giro {
   transition:
     opacity 120ms linear,
     color 220ms linear,
@@ -666,7 +666,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .g-signature__o .g-giro,
-  .g-tabbar__giro .g-giro {
+  .g-dock__ring .g-giro {
     transition: none;
   }
 }
@@ -1221,7 +1221,7 @@
 html[data-loader="lay"] [data-iso="world"],
 html[data-loader="lay"] .hb-line,
 html[data-loader="lay"] [data-site-header] .g-signature,
-html[data-loader="lay"] .g-tabbar__giro .g-giro {
+html[data-loader="lay"] .g-dock__ring .g-giro {
   visibility: hidden;
 }
 

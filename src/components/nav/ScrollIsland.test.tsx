@@ -242,6 +242,17 @@ describe("ScrollIsland", () => {
     expect(screen.getByText("// processo")).toBeTruthy();
   });
 
+  it("inverte com a superfície: tinta sobre projetos, papel sobre processo", () => {
+    vi.mocked(useScrollState).mockReturnValue({ ...SCROLL, activeId: "projetos" });
+    const { container, unmount } = render(<ScrollIsland />);
+    expect(container.querySelector(".g-island")?.getAttribute("data-tone")).toBe("dark");
+    unmount();
+
+    vi.mocked(useScrollState).mockReturnValue({ ...SCROLL, activeId: "processo" });
+    const second = render(<ScrollIsland />);
+    expect(second.container.querySelector(".g-island")?.getAttribute("data-tone")).toBe("light");
+  });
+
   it("sem seção, usa a aba da rota", () => {
     vi.mocked(useScrollState).mockReturnValue({ ...SCROLL, activeId: null, pathname: "/blog" });
     render(<ScrollIsland />);

@@ -5,10 +5,10 @@ import "@/styles/markdown.css";
 import { ClientRouter } from "astro:transitions";
 import anybodyFont from "@/assets/fonts/anybody-latin-wdth-wght.woff2";
 import { LoadingScreen } from "@/components/loader/LoadingScreen";
+import { Dock } from "@/components/nav/Dock";
 import { ScrollIsland } from "@/components/nav/ScrollIsland";
 import { SiteFooter } from "@/components/nav/SiteFooter";
 import { SiteHeader } from "@/components/nav/SiteHeader";
-import { TabBar } from "@/components/nav/TabBar";
 import { siteConfig } from "@/config/site";
 import { t } from "@/lib/i18n";
 
@@ -161,9 +161,9 @@ const isHome = Astro.url.pathname === "/";
       <slot />
     </main>
     {!isHome && <SiteFooter client:visible />}
-    <!-- Ilhas que sobrevivem à navegação (ilha de rolagem, barra de abas) entram aqui com
+    <!-- Ilhas que sobrevivem à navegação (ilha de rolagem, trilho de ícones) entram aqui com
          transition:persist, para o ClientRouter manter a instância montada entre páginas. -->
     <ScrollIsland client:load transition:persist="scroll-island" transition:name="scroll-island" />
-    <TabBar client:load transition:persist="tab-bar" transition:name="tab-bar" />
+    <Dock client:load transition:persist="dock" transition:name="dock" />
   </body>
 </html>

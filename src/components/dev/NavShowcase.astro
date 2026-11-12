@@ -3,12 +3,12 @@ import "@/styles/giro-nav.css";
 import { Signature } from "@/components/nav/Signature";
 import { SiteHeader } from "@/components/nav/SiteHeader";
 import { ScrollIslandView } from "@/components/nav/ScrollIsland";
-import { TabBarView } from "@/components/nav/TabBar";
+import { DockView } from "@/components/nav/Dock";
 import { SiteFooter } from "@/components/nav/SiteFooter";
 
 // Só para conferir a navegação nas três superfícies e nos estados. Não entra em nenhuma página
-// de produção. As ilhas fixas (ilha e barra) ficam dentro de um quadro com transform, para o
-// position fixed não sair da vitrine; a barra mostra no quadro de 390 px mesmo no computador.
+// de produção. As peças fixas (ilha e trilho) ficam dentro de um quadro com transform, para o
+// position fixed não sair da vitrine; o trilho mostra no quadro de 390 px mesmo no computador.
 const surfaces = [
   { name: "g-azul", label: "azul-sinal · marca" },
   { name: "g-papel", label: "papel · leitura" },
@@ -55,18 +55,19 @@ const surfaces = [
   </section>
 
   <section class="g-papel mb-8 p-6">
-    <p class="rotulo text-s-muted">// barra de abas · 390 px</p>
-    <div class="nav-frame g-papel relative mt-4 h-[150px] max-w-[390px] overflow-hidden rounded-g-md">
-      <TabBarView client:load progress={40} activeTab="projects" activeId="processo" />
+    <p class="rotulo text-s-muted">// trilho de ícones · 390 px · papel sobre azul, tinta sobre papel</p>
+    <div class="nav-frame g-azul relative mt-4 h-[110px] max-w-[390px] overflow-hidden rounded-g-md">
+      <DockView client:load activeIndex={0} tone="light" progress={12} onStage={true} />
     </div>
-    <div class="nav-frame g-papel relative mt-4 h-[300px] max-w-[390px] overflow-hidden rounded-g-md">
-      <TabBarView
-        client:load
-        progress={100}
-        activeTab="blog"
-        activeId="sobre"
-        menuOpen={true}
-      />
+    <div class="nav-frame g-papel relative mt-4 h-[110px] max-w-[390px] overflow-hidden rounded-g-md">
+      <DockView client:load activeIndex={2} tone="dark" progress={40} onStage={true} />
+    </div>
+    <div class="nav-frame g-tinta relative mt-4 h-[110px] max-w-[390px] overflow-hidden rounded-g-md">
+      <DockView client:load activeIndex={3} tone="light" progress={64} onStage={true} />
+    </div>
+    <p class="rotulo text-s-muted mt-4">// fora da home: o Giro ocupa o lugar do ícone</p>
+    <div class="nav-frame g-papel relative mt-4 h-[110px] max-w-[390px] overflow-hidden rounded-g-md">
+      <DockView client:load activeIndex={4} tone="dark" progress={100} />
     </div>
   </section>
 
@@ -87,7 +88,7 @@ const surfaces = [
   .nav-frame .g-island-dock {
     display: flex;
   }
-  .nav-frame .g-tabbar-dock {
-    display: block;
+  .nav-frame .g-dock {
+    display: flex;
   }
 </style>

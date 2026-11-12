@@ -27,7 +27,7 @@ export function useMenuDismiss(
     };
     document.addEventListener("keydown", onKeyDown);
     document.addEventListener("pointerdown", onPointerDown);
-    // A ilha e a barra persistem entre páginas, então o menu aberto sobreviveria à troca.
+    // A ilha persiste entre páginas, então o menu aberto sobreviveria à troca.
     document.addEventListener("astro:before-preparation", close);
     document.addEventListener("astro:after-swap", close);
     window.addEventListener("hashchange", close);
