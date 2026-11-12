@@ -11,9 +11,10 @@ import { useCallback, useRef } from "react";
 import { useLocale } from "@/hooks/useLocale";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { type TranslationKey, t } from "@/lib/i18n";
-import { ABOUT_TIMELINE } from "./about-stage";
+import { ABOUT_SWAP, ABOUT_TIMELINE, calcAboutBeatTime } from "./about-stage";
 import { bareLabel } from "./copy";
 import { SCENE_MOBILE_QUERY } from "./story/chapters";
+import { createBeatPlayer } from "./story/beats";
 import { type SceneBuilder, useChapterScenes } from "./story/useChapterScenes";
 
 // Capacidades na ordem da prancha, cada uma com o ícone Lucide da própria linha.
@@ -53,7 +54,7 @@ export function HomeAbout() {
 
     const H = window.innerHeight;
     const W = window.innerWidth;
-    const { swapStart, swapEnd, photoSettle, namesFade, bioIn, bioDuration } = ABOUT_TIMELINE;
+    const { photoSettle } = ABOUT_TIMELINE;
 
     // No celular o palco não fixa: só um parallax curto enquanto o bloco passa pela tela.
     if (window.matchMedia(SCENE_MOBILE_QUERY).matches) {
@@ -65,24 +66,43 @@ export function HomeAbout() {
     }
 
     gsap.set(bio, { autoAlpha: 0, x: 80 });
-    const tl = scene(sec);
-    tl.fromTo(back, { y: H * 0.1 }, { y: -H * 0.08, duration: 1 }, 0)
-      .fromTo(front, { y: -H * 0.05 }, { y: H * 0.05, duration: 1 }, 0)
-      .fromTo(photo, { y: H * 0.08 }, { y: 0, duration: photoSettle }, 0)
-      .to([back, front], { autoAlpha: 0, duration: namesFade }, swapStart)
+    // A troca da foto pela bio é uma batida: toca no tempo quando a rolagem chega nela.
+    const beats = gsap.timeline({ paused: true, defaults: { ease: "none" } });
+    beats
+      .to([back, front], { autoAlpha: 0, duration: 0.3 }, 0)
       .to(
         photo,
         {
           x: -W * 0.27,
           scale: 0.92,
           transformOrigin: "50% 100%",
-          duration: swapEnd - swapStart,
-          ease: "power2.inOut",
+          duration: 0.9,
+          ease: "power3.inOut",
         },
-        swapStart
+        0
       )
-      .to(bio, { autoAlpha: 1, x: 0, duration: bioDuration, ease: "power2.out" }, bioIn);
-    return undefined;
+      .to(bio, { autoAlpha: 1, x: 0, duration: 0.6, ease: "power3.out" }, ABOUT_SWAP - 0.6);
+    const player = createBeatPlayer(beats);
+    let beatTime = 0;
+
+    // A paralaxe dos nomes e a subida da foto seguem a rolagem.
+    const tl = scene(sec, {
+      onUpdate: (self: { progress: number }) => {
+        const next = calcAboutBeatTime(self.progress);
+        if (next !== beatTime) {
+          beatTime = next;
+          player.playTo(next);
+        }
+      },
+    });
+    tl.fromTo(back, { y: H * 0.1 }, { y: -H * 0.08, duration: 1 }, 0)
+      .fromTo(front, { y: -H * 0.05 }, { y: H * 0.05, duration: 1 }, 0)
+      .fromTo(photo, { y: H * 0.08 }, { y: 0, duration: photoSettle }, 0);
+
+    // Montagem e remontagem (resize) começam já na batida atual, sem tocar a cena de novo.
+    beatTime = calcAboutBeatTime(tl.scrollTrigger?.progress ?? 0);
+    player.jumpTo(beatTime);
+    return () => player.kill();
   }, []);
 
   useChapterScenes(buildScene, [], {

@@ -1,19 +1,21 @@
 import type { ChapterStep } from "./story/chapters";
 
-/** Linha do tempo da cena de Sobre, com duração total 1 (o progresso do capítulo é o tempo). */
+/** Pontos da cena de Sobre no progresso do capítulo (0 a 1). */
 export const ABOUT_TIMELINE = {
-  /** Onde os nomes somem e a foto começa a ir para a esquerda. */
+  /** Onde a troca começa: os nomes somem, a foto vai para a esquerda e a bio entra. */
   swapStart: 0.42,
-  /** Onde a foto termina de pousar à esquerda. */
-  swapEnd: 0.68,
   /** Fim da subida da foto, antes da troca. */
   photoSettle: 0.45,
-  /** Duração do sumiço dos nomes. */
-  namesFade: 0.14,
-  /** Onde a bio começa a entrar pela direita, e quanto dura. */
-  bioIn: 0.52,
-  bioDuration: 0.2,
 } as const;
+
+/** Duração da troca da foto pela bio, em segundos: é uma batida, toca no tempo. */
+export const ABOUT_SWAP = 1.1;
+
+/** Ponto da cena da troca para um progresso do capítulo: nomes e foto (0) ou bio (ABOUT_SWAP). */
+export function calcAboutBeatTime(progress: number): number {
+  const p = Number.isNaN(progress) ? 0 : progress;
+  return p >= ABOUT_TIMELINE.swapStart ? ABOUT_SWAP : 0;
+}
 
 /** Onde o Giro deve estar e com que rosto, para um progresso do capítulo (0 a 1). */
 export function calcAboutStep(progress: number): ChapterStep {

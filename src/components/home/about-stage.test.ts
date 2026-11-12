@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ABOUT_TIMELINE, calcAboutStep } from "./about-stage";
+import { ABOUT_SWAP, ABOUT_TIMELINE, calcAboutBeatTime, calcAboutStep } from "./about-stage";
 
 describe("calcAboutStep", () => {
   it("antes da troca o Giro espia curioso no ombro da foto", () => {
@@ -19,12 +19,15 @@ describe("calcAboutStep", () => {
   });
 });
 
-describe("ABOUT_TIMELINE", () => {
-  it("a troca começa onde o Giro muda e a bio entra durante ela", () => {
-    const { swapStart, swapEnd, bioIn } = ABOUT_TIMELINE;
-    expect(swapStart).toBe(0.42);
-    expect(swapEnd).toBe(0.68);
-    expect(bioIn).toBeGreaterThan(swapStart);
-    expect(bioIn).toBeLessThan(swapEnd);
+describe("calcAboutBeatTime", () => {
+  it("a troca começa onde o Giro muda de rosto e toca até a bio estar em cena", () => {
+    const { swapStart } = ABOUT_TIMELINE;
+    expect(calcAboutBeatTime(swapStart - 0.01)).toBe(0);
+    expect(calcAboutBeatTime(swapStart)).toBe(ABOUT_SWAP);
+    expect(calcAboutStep(swapStart).k).toBe("1");
+  });
+
+  it("progresso inválido fica no começo", () => {
+    expect(calcAboutBeatTime(Number.NaN)).toBe(0);
   });
 });
