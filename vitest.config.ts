@@ -8,6 +8,8 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: "./src/test/setup.ts",
     testTimeout: 10000,
+    // Os testes de tempo (loader, hero) estouram com a suíte inteira em paralelo no WSL.
+    maxWorkers: 4,
     css: true,
     exclude: ["**/src/test/e2e/**", "**/.worktrees/**", "**/.claude/**", "**/node_modules/**", ".opencode/**"],
     coverage: {
