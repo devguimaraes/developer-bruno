@@ -374,7 +374,27 @@
   height: 42px;
   border-radius: 50%;
   background: var(--dock-bg);
-  transition: background-color 260ms linear;
+  transition:
+    background-color 260ms linear,
+    transform 220ms var(--ease-hop);
+}
+/* Fora do arco a placa sobe para dar lugar ao nome. */
+.g-dock__item:not(.is-ring) .g-dock__plate {
+  transform: translateY(-7px);
+}
+.g-dock__name {
+  position: absolute;
+  right: 0;
+  bottom: 7px;
+  left: 0;
+  overflow: hidden;
+  font: 400 9px / 1 var(--font-mono);
+  letter-spacing: -0.02em;
+  text-align: center;
+  text-overflow: clip;
+  white-space: nowrap;
+  opacity: 0.72;
+  pointer-events: none;
 }
 .g-dock__ico {
   display: block;

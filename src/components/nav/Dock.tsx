@@ -206,6 +206,12 @@ export function DockView({
             <span className="g-dock__plate">
               <DockIcon id={item.id} />
             </span>
+            {/* O arco marca a estação: o nome fica só nas outras. O link já tem aria-label. */}
+            {index !== ringIndex && (
+              <span className="g-dock__name" aria-hidden="true">
+                {t(locale, item.labelKey)}
+              </span>
+            )}
           </a>
         ))}
       </nav>

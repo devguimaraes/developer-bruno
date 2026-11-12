@@ -68,6 +68,14 @@ describe("DockView", () => {
     ]);
   });
 
+  it("mostra o nome embaixo dos ícones fora do arco e nenhum no do arco", () => {
+    const { container } = render(<DockView activeIndex={2} tone="dark" progress={40} />);
+    const names = [...container.querySelectorAll(".g-dock__item")].map(
+      item => item.querySelector(".g-dock__name")?.textContent ?? null
+    );
+    expect(names).toEqual(["Início", "Serviços", null, "Sobre", "Blog", "Contato"]);
+  });
+
   it("leva Serviços e Sobre para a home e Blog para a página do blog", () => {
     render(<DockView activeIndex={0} tone="light" progress={0} />);
     const href = (name: string) => screen.getByRole("link", { name }).getAttribute("href");
