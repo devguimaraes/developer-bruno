@@ -2,13 +2,6 @@
    Cores só por papel (--s-*), via g-papel, g-azul e g-tinta no elemento. Valores da prancha
    "Home" (desktop 1440, celular 390). */
 
-.home-services {
-  display: flex;
-  flex-direction: column;
-  gap: 64px;
-  min-width: 0;
-}
-
 /* ---------- Serviços: interfaces em camadas ---------- */
 
 /* O palco mede a largura do container (100cqw). Sem container-type a arte escala na viewport. */
@@ -1184,12 +1177,6 @@
   .sv-tags {
     margin-top: auto;
     padding-top: 14px;
-  }
-}
-
-@media (max-width: 640px) {
-  .home-services {
-    gap: 40px;
   }
 }
 
