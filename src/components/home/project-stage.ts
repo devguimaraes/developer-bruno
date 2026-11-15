@@ -69,9 +69,11 @@ export function calcProjectStep(progress: number, count: number): ChapterStep {
   const { t0, step, tTilt, total } = projectTimeline(count);
   const p = Number.isNaN(progress) ? 0 : Math.max(0, Math.min(1, progress));
   const t = p * total;
-  if (t < t0 + 0.35) return { k: "t", stop: "pj-dot", state: "idle" };
+  // Os limiares são os das batidas (calcProjectBeatTime): o Giro salta quando a cena dispara, e
+  // não depois, senão ficaria no ponto do título já apagado ou numa janela que está deitando.
+  if (t < t0) return { k: "t", stop: "pj-dot", state: "idle" };
   if (t >= tTilt + 3) return { k: "x", stop: "pj-exit", state: "curious" };
-  if (t >= tTilt + 0.9) return { k: "o", stop: "pj-out", state: "done" };
-  const i = Math.min(count - 1, Math.floor((t - t0 - 0.35) / step));
+  if (t >= tTilt) return { k: "o", stop: "pj-out", state: "done" };
+  const i = Math.min(count - 1, Math.floor((t - t0) / step));
   return { k: `pj${i}`, stop: `pj${i}`, state: "loading", after: [[820, "done"]] };
 }

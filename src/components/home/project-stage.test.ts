@@ -14,11 +14,11 @@ const at = (t: number) => calcProjectStep(t / TOTAL, 5);
 describe("calcProjectStep", () => {
   it("começa no ponto do título, parado", () => {
     expect(at(0)).toMatchObject({ k: "t", stop: "pj-dot", state: "idle" });
-    expect(at(1.5)).toMatchObject({ k: "t", stop: "pj-dot" });
+    expect(at(1.19)).toMatchObject({ k: "t", stop: "pj-dot" });
   });
 
   it("pousa na vaga de cada janela carregando e marca pronto 820 ms depois", () => {
-    expect(at(1.6)).toEqual({
+    expect(at(1.25)).toEqual({
       k: "pj0",
       stop: "pj0",
       state: "loading",
@@ -34,9 +34,19 @@ describe("calcProjectStep", () => {
     expect(at(TOTAL)).toMatchObject({ k: "x" });
   });
 
-  it("entre a última janela e a virada fica na última vaga", () => {
-    expect(at(8.6).stop).toBe("pj4");
-    expect(at(9.0).stop).toBe("pj4");
+  it("fica na última vaga até a virada e sai dela assim que a pilha começa a deitar", () => {
+    expect(at(8.1).stop).toBe("pj4");
+    expect(at(8.2).stop).toBe("pj-out");
+  });
+
+  it("o Giro troca de parada no mesmo ponto em que a batida dispara", () => {
+    const { t0, step, tTilt, total } = projectTimeline(5);
+    for (const t of [t0, t0 + step, t0 + step * 4, tTilt]) {
+      const before = (t - 0.01) / total;
+      const after = (t + 0.01) / total;
+      expect(calcProjectBeatTime(before, 5)).not.toBe(calcProjectBeatTime(after, 5));
+      expect(calcProjectStep(before, 5).k).not.toBe(calcProjectStep(after, 5).k);
+    }
   });
 
   it("prende o progresso fora de 0 a 1", () => {

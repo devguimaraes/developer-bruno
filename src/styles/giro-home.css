@@ -566,10 +566,11 @@
   visibility: hidden;
 }
 
-/* Deitadas em pilha, as janelas flutuam em onda (keyframes pc-float, mais abaixo). De frente,
-   sem perspectiva, subir no eixo z não muda nada na tela: a animação pode ficar sempre ligada. */
+/* Deitadas em pilha, as janelas flutuam em onda (keyframes pc-float, mais abaixo). --pj-lift vai
+   de 0 a 1 na batida da virada: de frente a flutuação fica zerada, porque num palco preserve-3d
+   a altura decide quem pinta por cima e uma janela antiga passaria na frente da atual. */
 [data-scenes="on"] .pj {
-  --float: 18px;
+  --float: calc(18px * var(--pj-lift, 0));
   animation: pc-float 3.8s ease-in-out infinite alternate;
 }
 

@@ -143,6 +143,8 @@ export function buildProvisionalChapters(
     }
 
     if (cfg.id === "processo") {
+      // Medido uma vez por montagem (e a cada resize): `at` roda a cada quadro.
+      const covered = processCovered(el);
       chapters.push(
         createChapter({
           id: "processo",
@@ -152,7 +154,7 @@ export function buildProvisionalChapters(
           altura: viewportH,
           lead: 0.5,
           surface: "tinta",
-          at: (p: number) => calcProcessChapterStep(p, processCovered(el)),
+          at: (p: number) => calcProcessChapterStep(p, covered),
         })
       );
       continue;

@@ -50,7 +50,14 @@ export function HomeProjects() {
     const radius = Math.hypot(Math.max(ex, W - ex), ey) + 40;
 
     // Sem valor inicial o GSAP parte de zero, e --wk é a escala: as janelas sumiriam na virada.
-    setVars(world, { "--wk": 1, "--wrx": "0deg", "--wrz": "0deg", "--wx": "0px", "--wy": "0px" });
+    setVars(world, {
+      "--wk": 1,
+      "--wrx": "0deg",
+      "--wrz": "0deg",
+      "--wx": "0px",
+      "--wy": "0px",
+      "--pj-lift": 0,
+    });
     gsap.set(wins, { y: H * 1.1, scale: 1, z: 0, visibility: "visible", "--dim": 0 });
 
     // As batidas tocam no tempo: cada janela entra inteira quando a rolagem chega nela, e a
@@ -74,7 +81,7 @@ export function HomeProjects() {
       const cover = win.querySelector(".pj-cover");
       const img = win.querySelector(".pj-cover img");
       const at = t0 + i * step;
-      beats.to(win, { y: 0, duration: PROJECT_ENTER, ease: "power3.out" }, at);
+      beats.to(win, { y: 0, duration: PROJECT_ENTER, ease: "back.out(0.9)" }, at);
       if (cover) {
         beats.fromTo(
           cover,
@@ -117,6 +124,7 @@ export function HomeProjects() {
           "--wk": mobile ? 0.5 : 0.46,
           "--wx": mobile ? "0px" : `${-W * 0.2}px`,
           "--wy": mobile ? `${-H * 0.21}px` : `${H * 0.05}px`,
+          "--pj-lift": 1,
           duration: 1.3,
           ease: "power2.inOut",
         },
