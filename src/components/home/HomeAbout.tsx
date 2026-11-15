@@ -59,7 +59,7 @@ export function HomeAbout() {
     // No celular o palco não fixa: só um parallax curto enquanto o bloco passa pela tela.
     if (window.matchMedia(SCENE_MOBILE_QUERY).matches) {
       const tl = scene(q(".sb-art") ?? sec, { start: "top bottom", end: "bottom top" });
-      tl.fromTo(back, { y: 90 }, { y: -70, duration: 1 }, 0)
+      tl.fromTo(back, { y: 40 }, { y: -30, duration: 1 }, 0)
         .fromTo(front, { y: -30 }, { y: 50, duration: 1 }, 0)
         .fromTo(photo, { y: 40 }, { y: -30, duration: 1 }, 0);
       return;

@@ -206,22 +206,27 @@
   [data-scenes="on"] .sb-art {
     position: relative;
     inset: auto;
-    height: 760px;
+    height: 470px;
     overflow: hidden;
   }
+  /* Os dois nomes cabem inteiros na largura da tela e ficam com a mesma largura. */
   [data-scenes="on"] .sb-back {
-    top: 44px;
-    font-size: 132px;
+    top: 40px;
+    font-size: min(24vw, 120px);
   }
   [data-scenes="on"] .sb-front {
     bottom: 32px;
-    font-size: 66px;
+    font-size: min(15vw, 75px);
   }
   [data-scenes="on"] .sb-photo {
     bottom: -190px;
     left: -5px;
     width: 400px;
     max-width: none;
+  }
+  /* A foto tem largura fixa: o Giro recua para não encostar na borda em telas de 360 px. */
+  [data-scenes="on"] .sb-peek {
+    right: 20%;
   }
   [data-scenes="on"] .sb-bio {
     position: static;
