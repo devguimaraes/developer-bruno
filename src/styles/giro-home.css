@@ -439,10 +439,10 @@
   margin-top: auto;
 }
 
-/* A capa aparece inteira em qualquer tamanho de janela: a caixa muda de proporção com a tela, então
-   a imagem se ajusta dentro dela em vez de preencher e cortar. A folga também cobre a paralaxe. */
+/* A capa preenche o painel inteiro. A caixa muda de proporção com a tela, então a capa precisa ser
+   um mockup com o assunto no centro e cenário sobrando; coverPosition (projects.ts) move o foco.
+   A sobra de 12px em cima e embaixo cobre a paralaxe. */
 .pj-cover {
-  --pj-pad: clamp(14px, 2.6vw, 36px);
   position: relative;
   min-height: 360px;
   margin: 0;
@@ -452,14 +452,11 @@
 
 .pj-cover img {
   position: absolute;
-  inset: var(--pj-pad);
-  width: auto;
-  max-width: calc(100% - var(--pj-pad) * 2);
-  height: auto;
-  max-height: calc(100% - var(--pj-pad) * 2);
-  margin: auto;
-  border-radius: 6px;
-  box-shadow: 0 0 0 1px var(--s-line);
+  top: -12px;
+  left: 0;
+  width: 100%;
+  height: calc(100% + 24px);
+  object-fit: cover;
 }
 
 .pj-out {

@@ -91,7 +91,7 @@ export function HomeProjects() {
           at + 0.05
         );
       }
-      // Em px e menor que a folga da capa (--pj-pad, mínimo 14px): a imagem nunca encosta na borda.
+      // Em px e menor que a sobra da capa (12px em cima e embaixo): a borda nunca aparece.
       if (img) tl.fromTo(img, { y: 10 }, { y: -10, duration: step * 1.6 }, at);
       for (let j = 0; j < i; j += 1) {
         const n = i - j;
@@ -217,7 +217,15 @@ export function HomeProjects() {
                   </a>
                 </div>
                 <figure className="pj-cover">
-                  <img src={project.image} alt="" loading="lazy" decoding="async" />
+                  <img
+                    src={project.image}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    style={
+                      project.coverPosition ? { objectPosition: project.coverPosition } : undefined
+                    }
+                  />
                 </figure>
               </div>
             </article>
