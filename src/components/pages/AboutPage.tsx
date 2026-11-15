@@ -39,7 +39,7 @@ export interface AboutPageProps {
   contributions: CalendarData | null;
 }
 
-// As mesmas seis capacidades do capítulo Sobre da home, com o ícone de cada linha.
+// As mesmas capacidades e os mesmos fatos do capítulo Sobre da home.
 const CAPABILITIES: readonly { key: TranslationKey; icon: LucideIcon }[] = [
   { key: "about.capability.development", icon: Code },
   { key: "about.capability.apis", icon: Plug },
@@ -50,9 +50,9 @@ const CAPABILITIES: readonly { key: TranslationKey; icon: LucideIcon }[] = [
 ];
 
 const FACTS: readonly { value: TranslationKey; label: TranslationKey }[] = [
-  { value: "aboutpage.fact.experience_value", label: "aboutpage.fact.experience_label" },
+  { value: "about.fact.experience_value", label: "about.fact.experience_label" },
   { value: "about.fact.education_value", label: "about.fact.education_label" },
-  { value: "aboutpage.fact.location_value", label: "aboutpage.fact.location_label" },
+  { value: "about.fact.location_value", label: "about.fact.location_label" },
 ];
 
 /** Data ISO lida como UTC, para o dia não mudar com o fuso. */

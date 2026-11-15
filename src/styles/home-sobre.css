@@ -247,3 +247,22 @@
     margin-bottom: calc(var(--head-gap-lead) - var(--sb-gap));
   }
 }
+
+/* Link para a página Sobre, na linha do rótulo: o palco é ajustado à janela e não tem altura
+   sobrando para mais uma linha. */
+.sb-bio {
+  position: relative;
+}
+.sb-more {
+  position: absolute;
+  top: -14px;
+  right: 0;
+}
+/* No celular o capítulo é leitura corrida: o link fecha a bio, depois dos fatos. */
+@media (max-width: 768px) {
+  .sb-bio .sb-more {
+    position: static;
+    order: 1;
+    align-self: flex-start;
+  }
+}

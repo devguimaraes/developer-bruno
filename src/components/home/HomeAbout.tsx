@@ -8,6 +8,8 @@ import {
   Users,
 } from "lucide-react";
 import { useCallback, useRef } from "react";
+import { ArrowLink } from "@/components/giro/Button";
+import { ABOUT_PATH } from "@/components/nav/sections";
 import { useLocale } from "@/hooks/useLocale";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { type TranslationKey, t } from "@/lib/i18n";
@@ -142,6 +144,9 @@ export function HomeAbout() {
           <h2 className="sb-title" id="sb-title">
             {t(locale, "about.title")}
           </h2>
+          <ArrowLink className="sb-more" href={ABOUT_PATH}>
+            {t(locale, "about.page_link")}
+          </ArrowLink>
           <p className="sb-lead">{t(locale, "about.bio_1")}</p>
           <p className="sb-body">{t(locale, "about.bio_2")}</p>
 

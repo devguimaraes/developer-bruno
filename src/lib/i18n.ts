@@ -190,7 +190,7 @@ const ptDictionary = {
   "about.label": "// sobre",
   "about.title": "Bruno Guimarães",
   "about.bio_1":
-    "Trabalho com front-end há 5 anos, no ponto em que design e engenharia se encontram.",
+    "Trabalho com front-end há mais de 5 anos, no ponto em que design e engenharia se encontram.",
   "about.bio_2":
     "Crio e mantenho design systems: tokens, componentes e documentação que deixam o produto consistente e o time mais rápido. No código, uso React, TypeScript e Next.js com foco em performance, Core Web Vitals e acessibilidade, e mantenho testes automatizados e CI/CD em projetos com tráfego real.",
   "about.photo_alt": "Bruno Guimarães, de braços cruzados, sorrindo",
@@ -318,12 +318,13 @@ const ptDictionary = {
   // Home · outros sites no ar e fatos do sobre (issue #52)
   "outcomes.label": "// outros sites no ar",
   "outcomes.measured": "números medidos em cada projeto",
-  "about.fact.experience_value": "5 anos",
-  "about.fact.experience_label": "de front-end",
+  "about.fact.experience_value": "+5 anos",
+  "about.fact.experience_label": "de experiência",
   "about.fact.education_value": "Senac",
   "about.fact.education_label": "Desenvolvimento de Sistemas Web",
-  "about.fact.location_value": "Remoto",
-  "about.fact.location_label": "base no Brasil",
+  "about.fact.location_value": "RJ",
+  "about.fact.location_label": "presencial e remoto",
+  "about.page_link": "Ver minha trajetória",
 
   // Página Sobre (/sobre, issue #129)
   "meta.about_title": "Sobre · Bruno Guimarães",
@@ -336,10 +337,6 @@ const ptDictionary = {
   "aboutpage.about_heading": "Sobre",
   "aboutpage.bio":
     "Formado em Desenvolvimento de Sistemas Web pelo Senac Rio em 2019, atuo como desenvolvedor front-end na Pixel Pro Technologies, minha empresa, e na Agência Multi BR. Trabalho com React, TypeScript, Next.js e Astro e entrego design systems, SEO técnico, testes automatizados e CI/CD, da arquitetura ao deploy.",
-  "aboutpage.fact.experience_value": "+5 anos",
-  "aboutpage.fact.experience_label": "de experiência",
-  "aboutpage.fact.location_value": "RJ",
-  "aboutpage.fact.location_label": "presencial e remoto",
   "aboutpage.experience_heading": "Experiência",
   "aboutpage.education_heading": "Formação",
   "aboutpage.stack_heading": "Stack",
@@ -544,7 +541,7 @@ const enDictionary: Record<TranslationKey, string> = {
   // Home · about
   "about.label": "// about",
   "about.title": "Bruno Guimarães",
-  "about.bio_1": "I've worked in front-end for 5 years, where design and engineering meet.",
+  "about.bio_1": "I've worked in front-end for over 5 years, where design and engineering meet.",
   "about.bio_2":
     "I create and maintain design systems: tokens, components and documentation that keep a product consistent and a team faster. In code, I use React, TypeScript and Next.js with a focus on performance, Core Web Vitals and accessibility, and I maintain automated tests and CI/CD on projects with real traffic.",
   "about.photo_alt": "Bruno Guimarães, arms crossed, smiling",
@@ -672,12 +669,13 @@ const enDictionary: Record<TranslationKey, string> = {
   // Home · outros sites no ar e fatos do sobre (issue #52)
   "outcomes.label": "// other live sites",
   "outcomes.measured": "numbers measured on each project",
-  "about.fact.experience_value": "5 years",
-  "about.fact.experience_label": "of front-end",
+  "about.fact.experience_value": "5+ years",
+  "about.fact.experience_label": "of experience",
   "about.fact.education_value": "Senac",
   "about.fact.education_label": "Web Systems Development",
-  "about.fact.location_value": "Remote",
-  "about.fact.location_label": "based in Brazil",
+  "about.fact.location_value": "Rio",
+  "about.fact.location_label": "on-site and remote",
+  "about.page_link": "See my background",
 
   // About page (/sobre, issue #129)
   "meta.about_title": "About · Bruno Guimarães",
@@ -690,10 +688,6 @@ const enDictionary: Record<TranslationKey, string> = {
   "aboutpage.about_heading": "About",
   "aboutpage.bio":
     "I graduated in Web Systems Development from Senac Rio in 2019 and work as a front-end developer at Pixel Pro Technologies, my own company, and at Agência Multi BR. I work with React, TypeScript, Next.js and Astro and deliver design systems, technical SEO, automated tests and CI/CD, from architecture to deployment.",
-  "aboutpage.fact.experience_value": "5+ years",
-  "aboutpage.fact.experience_label": "of experience",
-  "aboutpage.fact.location_value": "Rio",
-  "aboutpage.fact.location_label": "on-site and remote",
   "aboutpage.experience_heading": "Experience",
   "aboutpage.education_heading": "Education",
   "aboutpage.stack_heading": "Stack",

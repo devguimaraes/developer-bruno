@@ -45,7 +45,7 @@ export const experience: readonly CareerEntry[] = [
     name: "Connect Solutions",
     role: { pt: "Newsletter Manager", en: "Newsletter Manager" },
     period: { pt: "jun 2026 a hoje", en: "Jun 2026 to present" },
-    logo: null,
+    logo: "/logos/connect-solutions.webp",
     initials: "CS",
   },
   {

@@ -60,10 +60,17 @@ describe("HomeAbout", () => {
     expect(screen.getByText(/Crio e mantenho design systems/)).toBeInTheDocument();
   });
 
-  it("mostra os fatos: 5 anos, Senac e remoto", () => {
+  it("mostra os fatos: +5 anos, Senac e RJ", () => {
     const { container } = render(<HomeAbout />);
     const facts = Array.from(container.querySelectorAll(".sb-facts dt")).map(el => el.textContent);
-    expect(facts).toEqual(["5 anos", "Senac", "Remoto"]);
+    expect(facts).toEqual(["+5 anos", "Senac", "RJ"]);
+  });
+
+  it("leva para a página Sobre", () => {
+    render(<HomeAbout />);
+    expect(screen.getByRole("link", { name: "Ver minha trajetória" }).getAttribute("href")).toBe(
+      "/sobre"
+    );
   });
 
   it("lista as seis capacidades", () => {
