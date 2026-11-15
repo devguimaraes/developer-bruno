@@ -228,4 +228,17 @@
     width: auto;
     padding: 36px var(--G) var(--sec-bottom);
   }
+  /* O nome já está escrito grande na arte logo acima: o título fica só para leitor de tela. */
+  [data-scenes="on"] .sb-title {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  [data-scenes="on"] .sb-bio .g-eyebrow {
+    margin-bottom: calc(var(--head-gap-lead) - var(--sb-gap));
+  }
 }
