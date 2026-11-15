@@ -193,6 +193,8 @@
 }
 
 .sv-tags li {
+  display: inline-flex;
+  align-items: center;
   padding: 5px 12px;
   border: 1px solid var(--s-line-strong);
   border-radius: var(--radius-pill, 999px);
@@ -425,6 +427,8 @@
 }
 
 .pj-stack li {
+  display: inline-flex;
+  align-items: center;
   padding: 4px 11px;
   border: 1px solid var(--s-line-strong);
   border-radius: 999px;
@@ -435,7 +439,10 @@
   margin-top: auto;
 }
 
+/* A capa aparece inteira em qualquer tamanho de janela: a caixa muda de proporção com a tela, então
+   a imagem se ajusta dentro dela em vez de preencher e cortar. A folga também cobre a paralaxe. */
 .pj-cover {
+  --pj-pad: clamp(14px, 2.6vw, 36px);
   position: relative;
   min-height: 360px;
   margin: 0;
@@ -445,11 +452,14 @@
 
 .pj-cover img {
   position: absolute;
-  top: -8%;
-  left: 0;
-  width: 100%;
-  height: 116%;
-  object-fit: cover;
+  inset: var(--pj-pad);
+  width: auto;
+  max-width: calc(100% - var(--pj-pad) * 2);
+  height: auto;
+  max-height: calc(100% - var(--pj-pad) * 2);
+  margin: auto;
+  border-radius: 6px;
+  box-shadow: 0 0 0 1px var(--s-line);
 }
 
 .pj-out {
@@ -593,6 +603,28 @@
   width: calc(var(--u) * 30);
   max-width: none;
   visibility: hidden;
+}
+
+/* Tela em pé e larga (tablet): a janela ganha altura e a capa vai para cima do texto, senão a
+   coluna da capa fica estreita e alta demais para uma imagem deitada. */
+@media (min-width: 769px) and (max-aspect-ratio: 1 / 1) {
+  .pj-ch {
+    --ph: min(calc(100svh - 176px), 920px);
+  }
+  .pj-body {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .pj-cover {
+    flex: 1;
+    min-height: 0;
+  }
+  .pj-text {
+    flex: none;
+  }
+  .pj-text .g-button {
+    margin-top: 28px;
+  }
 }
 
 @media (max-width: 768px) {

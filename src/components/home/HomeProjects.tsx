@@ -1,5 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import { useCallback, useRef } from "react";
+import { StackLogo } from "@/components/giro/ToolLogo";
 import { homeCases, outcomeSites } from "@/data/projects";
 import { useLocale } from "@/hooks/useLocale";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
@@ -90,7 +91,8 @@ export function HomeProjects() {
           at + 0.05
         );
       }
-      if (img) tl.fromTo(img, { yPercent: 6 }, { yPercent: -6, duration: step * 1.6 }, at);
+      // Em px e menor que a folga da capa (--pj-pad, mínimo 14px): a imagem nunca encosta na borda.
+      if (img) tl.fromTo(img, { y: 10 }, { y: -10, duration: step * 1.6 }, at);
       for (let j = 0; j < i; j += 1) {
         const n = i - j;
         beats.to(
@@ -202,7 +204,10 @@ export function HomeProjects() {
                   <p>{project.summary[locale]}</p>
                   <ul className="pj-stack" aria-label={t(locale, "projects.stack")}>
                     {project.stack.map(item => (
-                      <li key={item}>{item}</li>
+                      <li key={item}>
+                        <StackLogo name={item} />
+                        {item}
+                      </li>
                     ))}
                   </ul>
                   <a className="g-button" href={`/projetos/${project.slug}`}>
@@ -212,15 +217,7 @@ export function HomeProjects() {
                   </a>
                 </div>
                 <figure className="pj-cover">
-                  <img
-                    src={project.image}
-                    alt=""
-                    loading="lazy"
-                    decoding="async"
-                    style={
-                      project.coverPosition ? { objectPosition: project.coverPosition } : undefined
-                    }
-                  />
+                  <img src={project.image} alt="" loading="lazy" decoding="async" />
                 </figure>
               </div>
             </article>

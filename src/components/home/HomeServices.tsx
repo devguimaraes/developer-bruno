@@ -1,4 +1,5 @@
 import { type FC, useCallback, useEffect, useRef, useState } from "react";
+import { StackLogo } from "@/components/giro/ToolLogo";
 import { ServiceArt } from "@/components/services/ServiceArt";
 import { useLocale } from "@/hooks/useLocale";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
@@ -203,7 +204,10 @@ export const HomeServices: FC = () => {
                       {t(locale, item.tagsKey)
                         .split(" · ")
                         .map(tag => (
-                          <li key={tag}>{tag}</li>
+                          <li key={tag}>
+                            <StackLogo name={tag} />
+                            {tag}
+                          </li>
                         ))}
                     </ul>
                   </div>

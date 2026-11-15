@@ -34,7 +34,6 @@ export const homeCases = [
     github: "https://github.com/devguimaraes/estudio-entre",
     image: "/capa-estudio-entre.webp",
     bannerImage: "/capa-estudio-entre.webp",
-    coverPosition: null,
     tags: ["cultura", "hub", "independente", "e-commerce", "cms"],
     pendingConfirmation: [],
     context: {
@@ -171,7 +170,6 @@ export const homeCases = [
     github: null,
     image: "/agencia-multi-br.webp",
     bannerImage: null,
-    coverPosition: null,
     tags: ["marketing", "web-design", "seo", "branding"],
     pendingConfirmation: [],
     context: {
@@ -242,8 +240,6 @@ export const homeCases = [
     github: null,
     image: "/atlas-marine-solutions.webp",
     bannerImage: null,
-    // A capa tem o texto à esquerda: o recorte da janela da home ancora nesse lado.
-    coverPosition: "0% 50%",
     tags: [],
     pendingConfirmation: [],
     context: {
@@ -315,7 +311,6 @@ export const homeCases = [
     github: null,
     image: "/banner-movies-event-house-bremen.webp",
     bannerImage: "/banner-movies-event-house-bremen.webp",
-    coverPosition: null,
     tags: ["entretenimento", "premium", "internacional", "adult"],
     pendingConfirmation: [],
     context: {
@@ -386,7 +381,6 @@ export const homeCases = [
     github: null,
     image: "/banner-danila-rizo.webp",
     bannerImage: "/banner-danila-rizo.webp",
-    coverPosition: null,
     tags: ["rh", "internacionalização", "business", "premium"],
     pendingConfirmation: [],
     context: {
