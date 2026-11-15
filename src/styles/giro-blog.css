@@ -13,7 +13,8 @@
   gap: 64px;
   max-width: 1440px;
   margin: 0 auto;
-  padding: 96px 64px;
+  /* Sem link de volta no topo: o título começa com o dobro do respiro das outras páginas. */
+  padding: calc(var(--page-top) * 2) var(--G) var(--page-bottom);
 }
 .blog-page__head {
   display: grid;
@@ -119,7 +120,6 @@
 @media (max-width: 640px) {
   .blog-page__inner {
     gap: 40px;
-    padding: 48px 16px 128px;
   }
   .blog-page__title {
     font-size: 58px;

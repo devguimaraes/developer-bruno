@@ -71,6 +71,12 @@
   --G: 64px;
   --head-gap-eyebrow: 12px;
   --head-gap-lead: 24px;
+  /* Respiro vertical. --sec-*: topo e base de um capítulo de leitura da home (sem palco preso).
+     --page-*: topo e base do conteúdo das páginas internas, abaixo do cabeçalho do site. */
+  --sec-top: 120px;
+  --sec-bottom: 176px;
+  --page-top: 48px;
+  --page-bottom: 96px;
 
   --radius-sm: 10px;
   --radius-md: 22px;
@@ -112,6 +118,9 @@
     --G: 16px;
     --head-gap-eyebrow: 10px;
     --head-gap-lead: 16px;
+    --sec-top: 72px;
+    --sec-bottom: 112px;
+    --page-top: 24px;
   }
 }
 

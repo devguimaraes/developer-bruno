@@ -13,7 +13,7 @@
   box-sizing: border-box;
   max-width: 1440px;
   margin: 0 auto;
-  padding: 144px var(--G) calc(var(--u) * 3);
+  padding: var(--sec-top) var(--G) calc(var(--u) * 3);
 }
 
 .fn-copy .g-eyebrow {

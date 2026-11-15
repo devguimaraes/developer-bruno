@@ -17,7 +17,7 @@
   gap: 64px;
   max-width: 1440px;
   margin: 0 auto;
-  padding: 144px var(--G) 176px;
+  padding: var(--sec-top) var(--G) var(--sec-bottom);
 }
 
 /* A cabeça acompanha a lista. Nenhum ancestral pode ter overflow que não seja clip. */
@@ -134,7 +134,6 @@
 @media (max-width: 768px) {
   .bl-in {
     display: block;
-    padding: 72px var(--G) 112px;
   }
   .bl-head {
     position: static;

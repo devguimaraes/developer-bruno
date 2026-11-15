@@ -6,7 +6,7 @@
   width: 100%;
   max-width: 1440px;
   margin: 0 auto;
-  padding: 40px 64px 96px;
+  padding: var(--page-top) var(--G) var(--page-bottom);
 }
 
 .case-hero {
@@ -356,7 +356,7 @@
 
 @media (max-width: 1100px) {
   .case-page__inner {
-    padding: 36px 32px 88px;
+    padding: var(--page-top) 32px var(--page-bottom);
   }
   .case-body {
     grid-template-columns: 148px minmax(0, 1fr);
@@ -366,7 +366,7 @@
 
 @media (max-width: 767px) {
   .case-page__inner {
-    padding: 24px 16px calc(128px + env(safe-area-inset-bottom, 0px));
+    padding: var(--page-top) var(--G) var(--page-bottom);
   }
   .case-back__desktop {
     display: none;

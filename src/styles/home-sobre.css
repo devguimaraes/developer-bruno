@@ -165,7 +165,7 @@
   .sb-stage {
     grid-template-columns: minmax(0, 1fr);
     gap: 36px;
-    padding: 88px var(--G) 120px;
+    padding: var(--sec-top) var(--G) var(--sec-bottom);
   }
   .sb-photo {
     max-width: 400px;
@@ -226,6 +226,6 @@
   [data-scenes="on"] .sb-bio {
     position: static;
     width: auto;
-    padding: 36px var(--G) 120px;
+    padding: 36px var(--G) var(--sec-bottom);
   }
 }

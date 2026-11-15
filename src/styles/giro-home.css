@@ -1100,7 +1100,7 @@
 
 @media (max-width: 768px) {
   .sv-intro {
-    padding: 96px 16px 32px;
+    padding: var(--sec-top) var(--G) 32px;
   }
   .sv-intro .g-eyebrow {
     margin: 0;

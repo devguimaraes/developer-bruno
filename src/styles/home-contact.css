@@ -14,7 +14,7 @@
   box-sizing: border-box;
   max-width: 1440px;
   margin: 0 auto;
-  padding: 120px var(--G) 176px;
+  padding: var(--sec-top) var(--G) var(--sec-bottom);
 }
 
 .ct-in > .g-eyebrow {
@@ -135,9 +135,6 @@
 }
 
 @media (max-width: 768px) {
-  .ct-in {
-    padding: 72px var(--G) 112px;
-  }
   .ct-title {
     font-size: 50px;
     white-space: normal;

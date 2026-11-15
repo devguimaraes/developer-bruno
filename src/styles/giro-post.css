@@ -10,7 +10,7 @@
   box-sizing: border-box;
   max-width: 1440px;
   margin: 0 auto;
-  padding: 48px 64px 96px;
+  padding: var(--page-top) var(--G) var(--page-bottom);
 }
 
 .post-header {
@@ -147,10 +147,6 @@
 }
 
 @media (max-width: 767px) {
-  .post-page__inner {
-    padding: 28px 16px 72px;
-  }
-
   .post-header {
     max-width: none;
     margin-bottom: 32px;

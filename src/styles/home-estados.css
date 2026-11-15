@@ -278,7 +278,7 @@
 
 @media (max-width: 768px) {
   .ab-st {
-    padding-top: 96px;
+    padding-top: var(--sec-top);
   }
 
   .ab-st__title {
