@@ -324,6 +324,40 @@ const ptDictionary = {
   "about.fact.education_label": "Desenvolvimento de Sistemas Web",
   "about.fact.location_value": "Remoto",
   "about.fact.location_label": "base no Brasil",
+
+  // Página Sobre (/sobre, issue #129)
+  "meta.about_title": "Sobre · Bruno Guimarães",
+  "meta.about_description":
+    "Bruno Guimarães, desenvolvedor front-end no Rio de Janeiro há mais de 5 anos. Experiência, formação, stack, projetos no ar e contato.",
+  "aboutpage.eyebrow": "// desenvolvedor front-end · rio de janeiro",
+  "aboutpage.title": "Oi, eu sou o Bruno.",
+  "aboutpage.lead":
+    "Desenvolvedor front-end há mais de 5 anos. Trabalho com agências, startups, empresas e designers para transformar ideia em interface.",
+  "aboutpage.about_heading": "Sobre",
+  "aboutpage.bio":
+    "Formado em Desenvolvimento de Sistemas Web pelo Senac Rio em 2019, atuo como desenvolvedor front-end na Pixel Pro Technologies, minha empresa, e na Agência Multi BR. Trabalho com React, TypeScript, Next.js e Astro e entrego design systems, SEO técnico, testes automatizados e CI/CD, da arquitetura ao deploy.",
+  "aboutpage.fact.experience_value": "+5 anos",
+  "aboutpage.fact.experience_label": "de experiência",
+  "aboutpage.fact.location_value": "RJ",
+  "aboutpage.fact.location_label": "presencial e remoto",
+  "aboutpage.experience_heading": "Experiência",
+  "aboutpage.education_heading": "Formação",
+  "aboutpage.stack_heading": "Stack",
+  "aboutpage.github.heading": "GitHub",
+  "aboutpage.github.year": "contribuições nos últimos 12 meses",
+  "aboutpage.github.half": "contribuições em 12 meses. Abaixo, os últimos 6.",
+  "aboutpage.github.year_alt":
+    "Calendário de contribuições no GitHub: {total} nos últimos 12 meses",
+  "aboutpage.github.half_alt":
+    "Calendário de contribuições no GitHub nos últimos 6 meses. Total de {total} em 12 meses",
+  "aboutpage.github.less": "menos",
+  "aboutpage.github.more": "mais",
+  "aboutpage.github.profile": "Ver perfil no GitHub",
+  "aboutpage.github.unavailable":
+    "O calendário de contribuições não carregou desta vez. O histórico completo está no perfil.",
+  "aboutpage.projects_link": "Ver projetos",
+  "aboutpage.blog_link": "Ver todos",
+  "aboutpage.contact_cta": "Falar comigo",
 } as const;
 
 export type TranslationKey = keyof typeof ptDictionary;
@@ -644,6 +678,39 @@ const enDictionary: Record<TranslationKey, string> = {
   "about.fact.education_label": "Web Systems Development",
   "about.fact.location_value": "Remote",
   "about.fact.location_label": "based in Brazil",
+
+  // About page (/sobre, issue #129)
+  "meta.about_title": "About · Bruno Guimarães",
+  "meta.about_description":
+    "Bruno Guimarães, a front-end developer in Rio de Janeiro for over 5 years. Experience, education, stack, live projects and contact.",
+  "aboutpage.eyebrow": "// front-end developer · rio de janeiro",
+  "aboutpage.title": "Hi, I'm Bruno.",
+  "aboutpage.lead":
+    "Front-end developer for over 5 years. I work with agencies, startups, companies and designers to turn ideas into interfaces.",
+  "aboutpage.about_heading": "About",
+  "aboutpage.bio":
+    "I graduated in Web Systems Development from Senac Rio in 2019 and work as a front-end developer at Pixel Pro Technologies, my own company, and at Agência Multi BR. I work with React, TypeScript, Next.js and Astro and deliver design systems, technical SEO, automated tests and CI/CD, from architecture to deployment.",
+  "aboutpage.fact.experience_value": "5+ years",
+  "aboutpage.fact.experience_label": "of experience",
+  "aboutpage.fact.location_value": "Rio",
+  "aboutpage.fact.location_label": "on-site and remote",
+  "aboutpage.experience_heading": "Experience",
+  "aboutpage.education_heading": "Education",
+  "aboutpage.stack_heading": "Stack",
+  "aboutpage.github.heading": "GitHub",
+  "aboutpage.github.year": "contributions in the last 12 months",
+  "aboutpage.github.half": "contributions in 12 months. Below, the last 6.",
+  "aboutpage.github.year_alt": "GitHub contribution calendar: {total} in the last 12 months",
+  "aboutpage.github.half_alt":
+    "GitHub contribution calendar for the last 6 months. {total} in total over 12 months",
+  "aboutpage.github.less": "less",
+  "aboutpage.github.more": "more",
+  "aboutpage.github.profile": "View GitHub profile",
+  "aboutpage.github.unavailable":
+    "The contribution calendar didn't load this time. The full history is on the profile.",
+  "aboutpage.projects_link": "View projects",
+  "aboutpage.blog_link": "See all",
+  "aboutpage.contact_cta": "Get in touch",
 };
 
 export const dictionary = {

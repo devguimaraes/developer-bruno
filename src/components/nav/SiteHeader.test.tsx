@@ -43,9 +43,16 @@ describe("SiteHeader", () => {
     expect(sobre.getAttribute("aria-current")).toBeNull();
   });
 
-  it("os links apontam para a seção na home", () => {
+  it("os links apontam para a seção na home, e Sobre para a própria página", () => {
     render(<SiteHeader />);
     expect(screen.getByRole("link", { name: "Contato" }).getAttribute("href")).toBe("/#contato");
+    expect(screen.getByRole("link", { name: "Sobre" }).getAttribute("href")).toBe("/sobre");
+  });
+
+  it("na página Sobre, o link Sobre é a página atual", () => {
+    vi.mocked(useScrollState).mockReturnValue({ ...SCROLL, activeId: null, pathname: "/sobre/" });
+    render(<SiteHeader />);
+    expect(screen.getByRole("link", { name: "Sobre" }).getAttribute("aria-current")).toBe("page");
   });
 
   it("traz a troca de idioma pt e en", () => {

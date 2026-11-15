@@ -1,0 +1,40 @@
+---
+import { getCollection } from "astro:content";
+import AboutPage from "@/components/pages/AboutPage";
+import Layout from "@/layouts/Layout.astro";
+import { convertBrazilianDate, generateSlug, toISODate } from "@/lib/blog";
+import { parseReadingTime } from "@/lib/blog/content";
+import { loadContributionCalendar } from "@/lib/github/contributions";
+import { t } from "@/lib/i18n";
+import "@/styles/giro-sobre.css";
+
+// Os quatro posts mais recentes para a linha do tempo. Datas "DD MMM AAAA" viram ISO.
+const entries = await getCollection("blog");
+const posts = entries
+  .map(entry => ({ entry, time: convertBrazilianDate(entry.data.date).getTime() }))
+  .sort((a, b) => b.time - a.time)
+  .slice(0, 4)
+  .map(({ entry }) => ({
+    slug: generateSlug(entry.id),
+    title: entry.data.title,
+    date: toISODate(entry.data.date),
+    category: entry.data.tags[0] ?? "",
+    readTime: parseReadingTime(entry.data.readTime) ?? 5,
+  }));
+
+// O calendário é buscado no build, com o token do dono da conta: é o que traz as contribuições
+// em repositórios privados. No `astro dev` o .env entra em import.meta.env; na Vercel, em process.env.
+const result = await loadContributionCalendar(
+  process.env.GITHUB_CONTRIBUTIONS_TOKEN ?? import.meta.env.GITHUB_CONTRIBUTIONS_TOKEN
+);
+if (!result.ok) {
+  // Sem calendário a seção mostra o aviso com o link do perfil. O build avisa o motivo.
+  console.warn(
+    `[sobre] Calendário do GitHub indisponível (${result.reason}${result.detail ? `: ${result.detail}` : ""}).`
+  );
+}
+---
+
+<Layout title={t("pt", "meta.about_title")} description={t("pt", "meta.about_description")} ogType="profile">
+  <AboutPage posts={posts} contributions={result.ok ? result.calendar : null} client:load />
+</Layout>

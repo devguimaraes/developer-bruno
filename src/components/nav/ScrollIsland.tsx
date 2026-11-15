@@ -12,7 +12,7 @@ import { SectionMenu } from "./SectionMenu";
 import { useMenuDismiss } from "./useMenuDismiss";
 import { resolveNavGiro, useGiroEggs } from "./useGiroEggs";
 import { type DockTone, dockToneFor } from "./dock-map";
-import { HOME_SECTIONS, SECTION_IDS, islandLabel } from "./sections";
+import { HOME_SECTIONS, SECTION_IDS, islandLabel, routeSectionId } from "./sections";
 import { type DirectedMoment, useDirectedMoment } from "./giro-director";
 import { useCursorLook } from "./useCursorLook";
 import { type PeekPose, peekKey, peekStyle, usePeek } from "./usePeek";
@@ -172,7 +172,7 @@ export function ScrollIsland() {
       tone={dockToneFor(scroll.pathname, scroll.activeId)}
       visible={scroll.pastHero}
       menuOpen={menuOpen}
-      activeId={scroll.activeId}
+      activeId={scroll.activeId ?? routeSectionId(scroll.pathname)}
       navigating={navigating}
       asleep={asleep}
       celebrating={celebrating}

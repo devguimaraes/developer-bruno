@@ -197,11 +197,20 @@ test.describe("Trilho de ícones", () => {
     await expect(current(page)).toHaveAttribute("aria-label", "Projetos");
   });
 
-  test("Deve levar Serviços e Sobre para a home quando se está fora dela", async ({ page }) => {
+  test("Deve levar Serviços para a home quando se está fora dela", async ({ page }) => {
+    await page.goto("/blog");
+    await waitForHydration(page);
+    await page.getByRole("link", { name: "Serviços" }).click();
+    await expect(page).toHaveURL(/\/#servicos$/);
+  });
+
+  test("Deve abrir a página Sobre pelo trilho e acender o ícone dela", async ({ page }) => {
     await page.goto("/blog");
     await waitForHydration(page);
     await page.getByRole("link", { name: "Sobre" }).click();
-    await expect(page).toHaveURL(/\/#sobre$/);
+    await expect(page).toHaveURL(/\/sobre\/?$/);
+    await expect(current(page)).toHaveAttribute("aria-label", "Sobre");
+    await expect(page.locator(".g-dock")).toHaveAttribute("data-tone", "dark");
   });
 
   test("Deve trocar o arco de lugar sem animação com movimento reduzido", async ({ page }) => {

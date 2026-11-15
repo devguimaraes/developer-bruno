@@ -7,6 +7,8 @@ import type { Project } from "@/data/projects";
 type CardCase = Pick<Project, "title"> & {
   readonly stack: readonly string[];
   readonly image: string | null;
+  /** Ponto focal da capa (object-position), quando o centro corta o assunto. */
+  readonly coverPosition?: string | null;
 };
 
 export interface ProjectCardProps {
@@ -24,7 +26,15 @@ export function ProjectCard({ project, kicker, summary, ctaLabel, href }: Projec
   return (
     <a className="g-project-card" href={href}>
       <div className="g-project-card__media">
-        {project.image && <img src={project.image} alt="" loading="lazy" decoding="async" />}
+        {project.image && (
+          <img
+            src={project.image}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            style={project.coverPosition ? { objectPosition: project.coverPosition } : undefined}
+          />
+        )}
       </div>
       <div className="g-project-card__body">
         <span className="g-project-card__meta">{kicker}</span>

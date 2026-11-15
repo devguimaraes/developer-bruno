@@ -1,5 +1,13 @@
 import { describe, it, expect } from "vitest";
-import { HOME_SECTIONS, SECTION_IDS, TABS, tabForLocation } from "./sections";
+import {
+  HOME_SECTIONS,
+  SECTION_IDS,
+  TABS,
+  islandLabel,
+  routeSectionId,
+  sectionHref,
+  tabForLocation,
+} from "./sections";
 
 describe("HOME_SECTIONS", () => {
   it("lista as seções da home na ordem do documento, com serviços logo depois do hero", () => {
@@ -9,6 +17,43 @@ describe("HOME_SECTIONS", () => {
   it("o menu da ilha leva as cinco seções, para o computador não ficar sem Blog e Contato", () => {
     const inMenu = HOME_SECTIONS.filter(section => section.inMenu).map(section => section.id);
     expect(inMenu).toEqual(["projetos", "processo", "sobre", "blog", "contato"]);
+  });
+});
+
+describe("sectionHref", () => {
+  it("Sobre tem página própria e as outras seções levam ao capítulo na home", () => {
+    const hrefs = Object.fromEntries(
+      HOME_SECTIONS.map(section => [section.id, sectionHref(section)])
+    );
+    expect(hrefs).toMatchObject({
+      projetos: "/#projetos",
+      sobre: "/sobre",
+      contato: "/#contato",
+    });
+  });
+});
+
+describe("routeSectionId", () => {
+  it("a página Sobre representa a seção sobre, com ou sem barra no fim", () => {
+    expect(routeSectionId("/sobre")).toBe("sobre");
+    expect(routeSectionId("/sobre/")).toBe("sobre");
+  });
+
+  it("as outras rotas não representam seção", () => {
+    expect(routeSectionId("/")).toBeNull();
+    expect(routeSectionId("/blog")).toBeNull();
+    expect(routeSectionId("/sobre-nos")).toBeNull();
+  });
+});
+
+describe("islandLabel", () => {
+  it("na página Sobre a ilha mostra o rótulo da seção", () => {
+    expect(islandLabel("pt", null, "/sobre/")).toBe("// sobre");
+    expect(islandLabel("en", null, "/sobre")).toBe("// about");
+  });
+
+  it("no blog continua valendo a aba da rota", () => {
+    expect(islandLabel("pt", null, "/blog")).toBe("// blog");
   });
 });
 

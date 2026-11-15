@@ -1,4 +1,5 @@
 import type { TranslationKey } from "@/lib/i18n";
+import { ABOUT_PATH, routeSectionId } from "./sections";
 
 export type DockTone = "light" | "dark";
 
@@ -10,6 +11,8 @@ export interface DockItem {
   sectionId: string;
   /** Cor do disco que cobre o salto. É a superfície do destino. */
   cover: "azul" | "papel";
+  /** Abre a página do href mesmo na home, em vez de saltar para o capítulo. */
+  opensPage?: boolean;
 }
 
 /** Os seis ícones do trilho, na ordem em que aparecem. */
@@ -29,7 +32,14 @@ export const DOCK_ITEMS: readonly DockItem[] = [
     sectionId: "projetos",
     cover: "papel",
   },
-  { id: "about", href: "/#sobre", labelKey: "menu.about", sectionId: "sobre", cover: "azul" },
+  {
+    id: "about",
+    href: ABOUT_PATH,
+    labelKey: "menu.about",
+    sectionId: "sobre",
+    cover: "papel",
+    opensPage: true,
+  },
   { id: "blog", href: "/blog", labelKey: "tabs.blog", sectionId: "blog", cover: "papel" },
   {
     id: "contact",
@@ -42,6 +52,7 @@ export const DOCK_ITEMS: readonly DockItem[] = [
 
 const HOME_ICON = 0;
 const PROJECTS_ICON = 2;
+const ABOUT_ICON = 3;
 const BLOG_ICON = 4;
 
 const CHAPTER_ICON: Readonly<Record<string, number>> = {
@@ -49,7 +60,7 @@ const CHAPTER_ICON: Readonly<Record<string, number>> = {
   servicos: 1,
   projetos: PROJECTS_ICON,
   processo: PROJECTS_ICON,
-  sobre: 3,
+  sobre: ABOUT_ICON,
   blog: BLOG_ICON,
   contato: 5,
   fim: 5,
@@ -67,6 +78,7 @@ export function chapterToDockIndex(chapterId: string): number {
 export function routeToDockIndex(pathname: string): number | null {
   if (pathname.startsWith("/blog")) return BLOG_ICON;
   if (pathname.startsWith("/projetos")) return PROJECTS_ICON;
+  if (routeSectionId(pathname) === "sobre") return ABOUT_ICON;
   return null;
 }
 
@@ -76,7 +88,7 @@ export function dockIndexFor(pathname: string, chapterId: string | null): number
   return routeToDockIndex(pathname);
 }
 
-/** Tinta sobre as páginas de papel (serviços, projetos, blog, cases), papel sobre azul e tinta. */
+/** Tinta sobre as páginas de papel (serviços, projetos, blog, cases, sobre), papel sobre azul e tinta. */
 export function dockToneFor(pathname: string, chapterId: string | null): DockTone {
   if (pathname === "/") {
     return chapterId !== null && DARK_CHAPTERS.has(chapterId) ? "dark" : "light";

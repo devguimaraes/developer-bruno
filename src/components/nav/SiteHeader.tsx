@@ -2,7 +2,7 @@ import { LanguageSwitch } from "@/components/giro/LanguageSwitch";
 import { useLocale } from "@/hooks/useLocale";
 import { t } from "@/lib/i18n";
 import { Signature } from "./Signature";
-import { HOME_SECTIONS, SECTION_IDS } from "./sections";
+import { HOME_SECTIONS, SECTION_IDS, routeSectionId, sectionHref } from "./sections";
 import { useScrollState } from "./useScrollState";
 
 const HEADER_LINKS = HOME_SECTIONS.filter(section => section.inMenu);
@@ -10,7 +10,8 @@ const HEADER_LINKS = HOME_SECTIONS.filter(section => section.inMenu);
 /** Header do hero, só no computador. Sai com o hero e a ilha assume o lugar. */
 export function SiteHeader() {
   const locale = useLocale();
-  const { activeId } = useScrollState(SECTION_IDS);
+  const { activeId, pathname } = useScrollState(SECTION_IDS);
+  const pageId = routeSectionId(pathname);
 
   return (
     <div className="hidden md:block g-azul">
@@ -22,8 +23,10 @@ export function SiteHeader() {
               <a
                 key={section.id}
                 className="g-nav-link"
-                href={`/#${section.id}`}
-                aria-current={section.id === activeId ? "true" : undefined}
+                href={sectionHref(section)}
+                aria-current={
+                  section.id === pageId ? "page" : section.id === activeId ? "true" : undefined
+                }
               >
                 {t(locale, section.menuKey)}
               </a>

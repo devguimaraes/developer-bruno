@@ -76,12 +76,12 @@ describe("DockView", () => {
     expect(names).toEqual(["Início", "Serviços", null, "Sobre", "Blog", "Contato"]);
   });
 
-  it("leva Serviços e Sobre para a home e Blog para a página do blog", () => {
+  it("leva Serviços para a home e Sobre e Blog para as suas páginas", () => {
     render(<DockView activeIndex={0} tone="light" progress={0} />);
     const href = (name: string) => screen.getByRole("link", { name }).getAttribute("href");
     expect(href("Início")).toBe("/");
     expect(href("Serviços")).toBe("/#servicos");
-    expect(href("Sobre")).toBe("/#sobre");
+    expect(href("Sobre")).toBe("/sobre");
     expect(href("Blog")).toBe("/blog");
   });
 
@@ -248,12 +248,12 @@ describe("Dock", () => {
       scrollTo = vi.fn();
       Object.defineProperty(window, "scrollTo", { configurable: true, value: scrollTo });
       const section = document.createElement("section");
-      section.id = "sobre";
+      section.id = "servicos";
       document.body.append(section);
     });
 
     afterEach(() => {
-      document.getElementById("sobre")?.remove();
+      document.getElementById("servicos")?.remove();
     });
 
     it("na home não troca de página: salta para o capítulo", () => {
@@ -267,10 +267,17 @@ describe("Dock", () => {
           }) as unknown as MediaQueryList
       );
       render(<Dock />);
-      const notPrevented = fireEvent.click(screen.getByRole("link", { name: "Sobre" }));
+      const notPrevented = fireEvent.click(screen.getByRole("link", { name: "Serviços" }));
       expect(notPrevented).toBe(false);
       expect(scrollTo).toHaveBeenCalledWith(expect.objectContaining({ behavior: "instant" }));
       vi.restoreAllMocks();
+    });
+
+    it("na home, Sobre abre a própria página em vez de saltar para o capítulo", () => {
+      render(<Dock />);
+      const notPrevented = fireEvent.click(screen.getByRole("link", { name: "Sobre" }));
+      expect(notPrevented).toBe(true);
+      expect(scrollTo).not.toHaveBeenCalled();
     });
 
     it("fora da home deixa o link seguir para a página", () => {

@@ -19,11 +19,11 @@ describe("DOCK_ITEMS", () => {
     ]);
   });
 
-  it("Serviços e Sobre levam para a home, e Blog para a página do blog", () => {
+  it("Serviços leva para a home, e Sobre e Blog para as suas páginas", () => {
     const hrefs = Object.fromEntries(DOCK_ITEMS.map(item => [item.id, item.href]));
     expect(hrefs).toMatchObject({
       services: "/#servicos",
-      about: "/#sobre",
+      about: "/sobre",
       blog: "/blog",
     });
   });
@@ -52,6 +52,16 @@ describe("routeToDockIndex", () => {
     expect(routeToDockIndex("/blog")).toBe(4);
     expect(routeToDockIndex("/blog/")).toBe(4);
     expect(routeToDockIndex("/blog/meu-post")).toBe(4);
+  });
+
+  it("a página Sobre acende Sobre, em tinta por ser página de papel", () => {
+    expect(routeToDockIndex("/sobre")).toBe(3);
+    expect(routeToDockIndex("/sobre/")).toBe(3);
+    expect(dockToneFor("/sobre", null)).toBe("dark");
+  });
+
+  it("só Sobre abre a própria página a partir da home", () => {
+    expect(DOCK_ITEMS.filter(item => item.opensPage).map(item => item.id)).toEqual(["about"]);
   });
 
   it("a home e as outras rotas não têm ícone próprio", () => {

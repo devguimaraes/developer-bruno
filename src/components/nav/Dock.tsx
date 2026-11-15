@@ -347,7 +347,7 @@ export function Dock() {
 
   const onItemClick = (event: MouseEvent<HTMLAnchorElement>, item: DockItem) => {
     // Fora da home é navegação normal, a cargo do ClientRouter.
-    if (scroll.pathname !== "/") return;
+    if (scroll.pathname !== "/" || item.opensPage) return;
     if (event.defaultPrevented || event.button !== 0) return;
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     event.preventDefault();

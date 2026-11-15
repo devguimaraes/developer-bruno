@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { LanguageSwitch } from "@/components/giro/LanguageSwitch";
 import { useLocale } from "@/hooks/useLocale";
 import { t } from "@/lib/i18n";
-import type { HomeSection } from "./sections";
+import { type HomeSection, sectionHref } from "./sections";
 
 export interface SectionMenuProps {
   id: string;
@@ -35,7 +35,7 @@ export function SectionMenu({ id, sections, activeId, onNavigate }: SectionMenuP
         <a
           key={section.id}
           className="g-menu__item"
-          href={`/#${section.id}`}
+          href={sectionHref(section)}
           aria-current={section.id === activeId ? "true" : undefined}
           onClick={onNavigate}
         >
