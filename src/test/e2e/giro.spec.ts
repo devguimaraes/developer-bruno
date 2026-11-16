@@ -185,11 +185,20 @@ test.describe("Trilho de ícones", () => {
     await expect(page.locator(".g-dock")).toHaveAttribute("data-tone", "light");
   });
 
-  test("Deve acender Blog e Projetos pela rota, com o Giro no lugar do ícone", async ({ page }) => {
+  test("Deve ter quatro ícones com o Giro no meio, e acender Projetos no case", async ({
+    page,
+  }) => {
     await page.goto("/blog");
     await waitForHydration(page);
-    await expect(current(page)).toHaveAttribute("aria-label", "Blog");
-    await expect(page.locator(".g-dock")).toHaveAttribute("data-stage", "false");
+    const dock = page.locator(".g-dock");
+    await expect(dock.getByRole("link")).toHaveCount(4);
+    await expect(current(page)).toHaveCount(0);
+    await expect(dock).toHaveAttribute("data-tone", "dark");
+    await expect(dock).toHaveAttribute("data-stage", "false");
+    await expect(page.locator(".g-dock__hub + .g-dock__item")).toHaveAttribute(
+      "aria-label",
+      "Serviços"
+    );
     await expect(page.locator(".g-dock .g-giro")).toBeVisible();
 
     await page.goto("/projetos/atlas-marine-solutions");
@@ -213,7 +222,7 @@ test.describe("Trilho de ícones", () => {
     await expect(page.locator(".g-dock")).toHaveAttribute("data-tone", "dark");
   });
 
-  test("Deve trocar o arco de lugar sem animação com movimento reduzido", async ({ page }) => {
+  test("Deve manter o trilho sem animação com movimento reduzido", async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto("/#sobre");
     await waitForHydration(page);

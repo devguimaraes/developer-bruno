@@ -1,11 +1,12 @@
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
+import * as framerMotion from "framer-motion";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { resetGiroOnStageForTesting, setGiroOnStage } from "@/lib/giroOnStage";
 import { setPageGiro } from "@/lib/page-giro";
 import { Dock, DockView } from "./Dock";
 import { endGiroParty } from "./useGiroEggs";
-import { useScrollState } from "./useScrollState";
 import type { ScrollState } from "./useScrollState";
+import { useScrollState } from "./useScrollState";
 
 vi.mock("./useScrollState", () => ({
   LOOK_PX: 3,
@@ -50,52 +51,58 @@ afterEach(() => {
   });
 });
 
-const NAMES = ["Início", "Serviços", "Projetos", "Sobre", "Blog", "Contato"];
+const NAMES = ["Início", "Sobre", "Serviços", "Projetos"];
 
 describe("DockView", () => {
-  it("tem os seis ícones na ordem, com o ativo marcado com aria-current=page", () => {
-    render(<DockView activeIndex={2} tone="dark" progress={40} />);
+  it("tem os quatro ícones na ordem, com o ativo marcado com aria-current=page", () => {
+    render(<DockView activeIndex={3} tone="dark" progress={40} />);
     const nav = screen.getByRole("navigation", { name: "Navegação" });
     const links = within(nav).getAllByRole("link");
     expect(links.map(link => link.getAttribute("aria-label"))).toEqual(NAMES);
     expect(links.map(link => link.getAttribute("aria-current"))).toEqual([
       null,
       null,
+      null,
       "page",
-      null,
-      null,
-      null,
     ]);
   });
 
-  it("mostra o nome embaixo dos ícones fora do arco e nenhum no do arco", () => {
-    const { container } = render(<DockView activeIndex={2} tone="dark" progress={40} />);
-    const names = [...container.querySelectorAll(".g-dock__item")].map(
-      item => item.querySelector(".g-dock__name")?.textContent ?? null
-    );
-    expect(names).toEqual(["Início", "Serviços", null, "Sobre", "Blog", "Contato"]);
+  it("deixa o Giro no meio, com dois ícones de cada lado", () => {
+    const { container } = render(<DockView activeIndex={0} tone="dark" progress={40} />);
+    const children = [...(container.querySelector(".g-dock")?.children ?? [])];
+    const order = children
+      .filter(el => el.matches(".g-dock__item, .g-dock__hub"))
+      .map(el => (el.matches(".g-dock__hub") ? "giro" : el.getAttribute("aria-label")));
+    expect(order).toEqual(["Início", "Sobre", "giro", "Serviços", "Projetos"]);
   });
 
-  it("leva Serviços para a home e Sobre e Blog para as suas páginas", () => {
+  it("mantém aria-label acessível sem texto visível embaixo dos ícones", () => {
+    const { container } = render(<DockView activeIndex={2} tone="dark" progress={40} />);
+    expect(container.querySelectorAll(".g-dock__name")).toHaveLength(0);
+    const labels = [...container.querySelectorAll(".g-dock__item")].map(item =>
+      item.getAttribute("aria-label")
+    );
+    expect(labels).toEqual(NAMES);
+  });
+
+  it("leva Serviços para a home e Sobre para a sua página, sem Blog nem Contato", () => {
     render(<DockView activeIndex={0} tone="light" progress={0} />);
     const href = (name: string) => screen.getByRole("link", { name }).getAttribute("href");
     expect(href("Início")).toBe("/");
     expect(href("Serviços")).toBe("/#servicos");
     expect(href("Sobre")).toBe("/sobre");
-    expect(href("Blog")).toBe("/blog");
+    expect(screen.queryByRole("link", { name: "Blog" })).toBeNull();
+    expect(screen.queryByRole("link", { name: "Contato" })).toBeNull();
   });
 
-  it("a superfície do trilho vem do tom e o arco fica na estação ativa", () => {
-    const { container } = render(<DockView activeIndex={4} tone="dark" progress={40} />);
-    const nav = container.querySelector(".g-dock");
-    expect(nav?.getAttribute("data-tone")).toBe("dark");
-    expect(nav?.getAttribute("style")).toContain("--dock-i: 4");
+  it("a superfície do trilho vem do tom", () => {
+    const { container } = render(<DockView activeIndex={3} tone="dark" progress={40} />);
+    expect(container.querySelector(".g-dock")?.getAttribute("data-tone")).toBe("dark");
   });
 
-  it("sem ícone próprio nenhum fica aceso e o arco espera em Início", () => {
+  it("sem ícone próprio nenhum fica aceso", () => {
     const { container } = render(<DockView activeIndex={null} tone="light" progress={0} />);
     expect(container.querySelector("[aria-current]")).toBeNull();
-    expect(container.querySelector(".g-dock")?.getAttribute("style")).toContain("--dock-i: 0");
   });
 
   it("com o HomeGiro em cena só o arco aparece, e fora dela o Giro ocupa o ícone", () => {
@@ -118,7 +125,7 @@ describe("DockView", () => {
 
   it("fora da cena, o momento tonto do diretor chega ao Giro", () => {
     const { container } = render(
-      <DockView activeIndex={4} tone="dark" progress={40} moment="dizzy" />
+      <DockView activeIndex={3} tone="dark" progress={40} moment="dizzy" />
     );
     expect(container.querySelector(".g-dock__ring .g-giro")?.getAttribute("data-moment")).toBe(
       "dizzy"
@@ -136,7 +143,7 @@ describe("DockView", () => {
 
   it("no fim da leitura o pulo do pronto vence o tonto", () => {
     const { container } = render(
-      <DockView activeIndex={4} tone="dark" progress={100} moment="dizzy" />
+      <DockView activeIndex={3} tone="dark" progress={100} moment="dizzy" />
     );
     const giro = container.querySelector(".g-dock__ring .g-giro");
     expect(giro?.getAttribute("data-state")).toBe("done");
@@ -145,7 +152,7 @@ describe("DockView", () => {
   });
 
   it("dorme quando a prop asleep está ligada, mesmo no fim da página", () => {
-    const { container } = render(<DockView activeIndex={4} tone="dark" progress={100} asleep />);
+    const { container } = render(<DockView activeIndex={3} tone="dark" progress={100} asleep />);
     const giro = container.querySelector(".g-dock__ring svg.g-giro");
     expect(giro?.getAttribute("data-state")).toBe("sleeping");
     expect(giro?.classList.contains("is-hop")).toBe(false);
@@ -153,23 +160,45 @@ describe("DockView", () => {
 
   it("festeja com data-state celebrating e a classe is-party", () => {
     const { container } = render(
-      <DockView activeIndex={4} tone="dark" progress={100} celebrating />
+      <DockView activeIndex={3} tone="dark" progress={100} celebrating />
     );
     const giro = container.querySelector(".g-dock__ring svg.g-giro");
     expect(giro?.getAttribute("data-state")).toBe("celebrating");
     expect(giro?.classList.contains("is-party")).toBe(true);
   });
 
-  it("mostra o nome do capítulo acima do arco, colado à borda nas pontas", () => {
-    const { container, rerender } = render(
+  it("mostra o nome do capítulo acima do Giro", () => {
+    const { container } = render(
       <DockView activeIndex={0} tone="light" progress={0} tag={{ text: "// início", key: 1 }} />
     );
     expect(container.querySelector(".g-dock__tag")?.textContent).toBe("// início");
-    expect(container.querySelector(".g-dock__tag")?.getAttribute("data-edge")).toBe("start");
-    rerender(
-      <DockView activeIndex={2} tone="dark" progress={0} tag={{ text: "// projetos", key: 2 }} />
-    );
-    expect(container.querySelector(".g-dock__tag")?.hasAttribute("data-edge")).toBe(false);
+  });
+
+  it("renderiza os quatro ícones animados dentro das placas e anima só ao ativar sem reducedMotion", () => {
+    const controlsList = Array.from({ length: 4 }, () => ({
+      start: vi.fn(),
+      stop: vi.fn(),
+      set: vi.fn(),
+    }));
+    let index = 0;
+    const useAnimationSpy = vi
+      .spyOn(framerMotion, "useAnimation")
+      .mockImplementation(() => controlsList[index++ % 4] as never);
+
+    const { container, rerender } = render(<DockView activeIndex={0} tone="light" progress={0} />);
+    expect(container.querySelectorAll(".g-dock__plate .g-dock__ico svg")).toHaveLength(4);
+    expect(controlsList[2].start).not.toHaveBeenCalled();
+
+    // Ativa Serviços (índice 2): Serviços anima e Início (índice 0) volta ao normal.
+    rerender(<DockView activeIndex={2} tone="dark" progress={40} />);
+    expect(controlsList[2].start).toHaveBeenCalledWith("animate");
+    expect(controlsList[0].start).toHaveBeenCalledWith("normal");
+
+    // Com movimento reduzido, ativar Projetos (índice 3) não dispara animação.
+    rerender(<DockView activeIndex={3} tone="dark" progress={60} reducedMotion />);
+    expect(controlsList[3].start).not.toHaveBeenCalledWith("animate");
+
+    useAnimationSpy.mockRestore();
   });
 });
 
@@ -194,10 +223,11 @@ describe("Dock", () => {
     expect(container.querySelector(".g-dock")?.getAttribute("data-tone")).toBe("dark");
   });
 
-  it("acende o Blog na rota /blog e Projetos num case", () => {
+  it("no blog nenhum ícone acende e o trilho é de tinta; num case acende Projetos", () => {
     vi.mocked(useScrollState).mockReturnValue({ ...SCROLL, pathname: "/blog/post-x" });
-    const { unmount } = render(<Dock />);
-    expect(screen.getByRole("link", { name: "Blog" }).getAttribute("aria-current")).toBe("page");
+    const { container, unmount } = render(<Dock />);
+    expect(container.querySelector("[aria-current]")).toBeNull();
+    expect(container.querySelector(".g-dock")?.getAttribute("data-tone")).toBe("dark");
     unmount();
 
     vi.mocked(useScrollState).mockReturnValue({ ...SCROLL, pathname: "/projetos/atlas" });

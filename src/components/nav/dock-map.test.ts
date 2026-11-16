@@ -8,23 +8,15 @@ import {
 } from "./dock-map";
 
 describe("DOCK_ITEMS", () => {
-  it("são seis, na ordem do trilho: Início, Serviços, Projetos, Sobre, Blog, Contato", () => {
-    expect(DOCK_ITEMS.map(item => item.id)).toEqual([
-      "home",
-      "services",
-      "projects",
-      "about",
-      "blog",
-      "contact",
-    ]);
+  it("são quatro, na ordem do trilho: Início, Sobre, Serviços, Projetos", () => {
+    expect(DOCK_ITEMS.map(item => item.id)).toEqual(["home", "about", "services", "projects"]);
   });
 
-  it("Serviços leva para a home, e Sobre e Blog para as suas páginas", () => {
+  it("Serviços leva para a home e Sobre para a sua página", () => {
     const hrefs = Object.fromEntries(DOCK_ITEMS.map(item => [item.id, item.href]));
     expect(hrefs).toMatchObject({
       services: "/#servicos",
       about: "/sobre",
-      blog: "/blog",
     });
   });
 });
@@ -32,13 +24,16 @@ describe("DOCK_ITEMS", () => {
 describe("chapterToDockIndex", () => {
   it("mapeia cada capítulo da home para o seu ícone", () => {
     expect(chapterToDockIndex("hero")).toBe(0);
-    expect(chapterToDockIndex("servicos")).toBe(1);
-    expect(chapterToDockIndex("projetos")).toBe(2);
-    expect(chapterToDockIndex("processo")).toBe(2);
-    expect(chapterToDockIndex("sobre")).toBe(3);
-    expect(chapterToDockIndex("blog")).toBe(4);
-    expect(chapterToDockIndex("contato")).toBe(5);
-    expect(chapterToDockIndex("fim")).toBe(5);
+    expect(chapterToDockIndex("servicos")).toBe(2);
+    expect(chapterToDockIndex("projetos")).toBe(3);
+    expect(chapterToDockIndex("processo")).toBe(3);
+    expect(chapterToDockIndex("sobre")).toBe(1);
+  });
+
+  it("blog, contato e fim não têm ícone: nenhum fica aceso", () => {
+    expect(chapterToDockIndex("blog")).toBeNull();
+    expect(chapterToDockIndex("contato")).toBeNull();
+    expect(chapterToDockIndex("fim")).toBeNull();
   });
 
   it("capítulo desconhecido fica em Início", () => {
@@ -47,16 +42,15 @@ describe("chapterToDockIndex", () => {
 });
 
 describe("routeToDockIndex", () => {
-  it("os cases acendem Projetos e o blog e seus posts acendem Blog", () => {
-    expect(routeToDockIndex("/projetos/atlas")).toBe(2);
-    expect(routeToDockIndex("/blog")).toBe(4);
-    expect(routeToDockIndex("/blog/")).toBe(4);
-    expect(routeToDockIndex("/blog/meu-post")).toBe(4);
+  it("os cases acendem Projetos e o blog não acende nenhum", () => {
+    expect(routeToDockIndex("/projetos/atlas")).toBe(3);
+    expect(routeToDockIndex("/blog")).toBeNull();
+    expect(routeToDockIndex("/blog/meu-post")).toBeNull();
   });
 
   it("a página Sobre acende Sobre, em tinta por ser página de papel", () => {
-    expect(routeToDockIndex("/sobre")).toBe(3);
-    expect(routeToDockIndex("/sobre/")).toBe(3);
+    expect(routeToDockIndex("/sobre")).toBe(1);
+    expect(routeToDockIndex("/sobre/")).toBe(1);
     expect(dockToneFor("/sobre", null)).toBe("dark");
   });
 
@@ -72,13 +66,13 @@ describe("routeToDockIndex", () => {
 
 describe("dockIndexFor", () => {
   it("na home segue o capítulo, e sem capítulo é o hero", () => {
-    expect(dockIndexFor("/", "sobre")).toBe(3);
+    expect(dockIndexFor("/", "sobre")).toBe(1);
     expect(dockIndexFor("/", null)).toBe(0);
   });
 
   it("fora da home a rota vale e o capítulo é ignorado", () => {
-    expect(dockIndexFor("/blog/post", "projetos")).toBe(4);
-    expect(dockIndexFor("/projetos/atlas", null)).toBe(2);
+    expect(dockIndexFor("/blog/post", "projetos")).toBeNull();
+    expect(dockIndexFor("/projetos/atlas", null)).toBe(3);
   });
 
   it("rota sem ícone não acende nenhum", () => {

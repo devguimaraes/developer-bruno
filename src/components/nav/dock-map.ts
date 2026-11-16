@@ -4,7 +4,7 @@ import { ABOUT_PATH, routeSectionId } from "./sections";
 export type DockTone = "light" | "dark";
 
 export interface DockItem {
-  id: "home" | "services" | "projects" | "about" | "blog" | "contact";
+  id: "home" | "services" | "projects" | "about";
   href: string;
   labelKey: TranslationKey;
   /** id do capítulo na home: na própria home o toque salta para ele em vez de trocar de página. */
@@ -15,9 +15,26 @@ export interface DockItem {
   opensPage?: boolean;
 }
 
-/** Os seis ícones do trilho, na ordem em que aparecem. */
+/**
+ * Os quatro ícones do trilho, na ordem em que aparecem: dois de cada lado do Giro. No celular,
+ * Blog e Contato ficam nos rodapés e nos capítulos da home.
+ */
 export const DOCK_ITEMS: readonly DockItem[] = [
-  { id: "home", href: "/", labelKey: "tabs.home", sectionId: "hero", cover: "azul" },
+  {
+    id: "home",
+    href: "/",
+    labelKey: "tabs.home",
+    sectionId: "hero",
+    cover: "azul",
+  },
+  {
+    id: "about",
+    href: ABOUT_PATH,
+    labelKey: "menu.about",
+    sectionId: "sobre",
+    cover: "papel",
+    opensPage: true,
+  },
   {
     id: "services",
     href: "/#servicos",
@@ -32,51 +49,35 @@ export const DOCK_ITEMS: readonly DockItem[] = [
     sectionId: "projetos",
     cover: "papel",
   },
-  {
-    id: "about",
-    href: ABOUT_PATH,
-    labelKey: "menu.about",
-    sectionId: "sobre",
-    cover: "papel",
-    opensPage: true,
-  },
-  { id: "blog", href: "/blog", labelKey: "tabs.blog", sectionId: "blog", cover: "papel" },
-  {
-    id: "contact",
-    href: "/#contato",
-    labelKey: "tabs.contact",
-    sectionId: "contato",
-    cover: "azul",
-  },
 ];
 
 const HOME_ICON = 0;
-const PROJECTS_ICON = 2;
-const ABOUT_ICON = 3;
-const BLOG_ICON = 4;
+const ABOUT_ICON = 1;
+const SERVICES_ICON = 2;
+const PROJECTS_ICON = 3;
 
-const CHAPTER_ICON: Readonly<Record<string, number>> = {
+// Blog, contato e fim não têm ícone no trilho: nesses capítulos nenhum fica aceso.
+const CHAPTER_ICON: Readonly<Record<string, number | null>> = {
   hero: HOME_ICON,
-  servicos: 1,
+  servicos: SERVICES_ICON,
   projetos: PROJECTS_ICON,
   processo: PROJECTS_ICON,
   sobre: ABOUT_ICON,
-  blog: BLOG_ICON,
-  contato: 5,
-  fim: 5,
+  blog: null,
+  contato: null,
+  fim: null,
 };
 
 // Capítulos em que a página é de papel e o trilho vira tinta.
 const DARK_CHAPTERS: ReadonlySet<string> = new Set(["servicos", "projetos", "blog"]);
 
-/** Ícone do trilho para um capítulo da home. Capítulo desconhecido cai em Início. */
-export function chapterToDockIndex(chapterId: string): number {
-  return CHAPTER_ICON[chapterId] ?? HOME_ICON;
+/** Ícone do trilho para um capítulo da home, ou null se ele não tem ícone. Desconhecido cai em Início. */
+export function chapterToDockIndex(chapterId: string): number | null {
+  return chapterId in CHAPTER_ICON ? CHAPTER_ICON[chapterId] : HOME_ICON;
 }
 
 /** Ícone de uma rota fora da home, ou null se a rota não tem ícone próprio. */
 export function routeToDockIndex(pathname: string): number | null {
-  if (pathname.startsWith("/blog")) return BLOG_ICON;
   if (pathname.startsWith("/projetos")) return PROJECTS_ICON;
   if (routeSectionId(pathname) === "sobre") return ABOUT_ICON;
   return null;
@@ -93,5 +94,5 @@ export function dockToneFor(pathname: string, chapterId: string | null): DockTon
   if (pathname === "/") {
     return chapterId !== null && DARK_CHAPTERS.has(chapterId) ? "dark" : "light";
   }
-  return routeToDockIndex(pathname) !== null ? "dark" : "light";
+  return pathname.startsWith("/blog") || routeToDockIndex(pathname) !== null ? "dark" : "light";
 }
