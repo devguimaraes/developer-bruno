@@ -140,7 +140,7 @@
 
 .dm-msg strong {
   display: block;
-  font: 800 22px/1.15 var(--font-sans);
+  font: 800 22px / 1.15 var(--font-sans);
   font-stretch: 110%;
 }
 
@@ -148,7 +148,7 @@
   display: block;
   margin-top: 6px;
   color: var(--grafite);
-  font: 450 15px/1.4 var(--font-sans);
+  font: 450 15px / 1.4 var(--font-sans);
 }
 
 .dm-prog {
@@ -208,7 +208,7 @@
   position: absolute;
   top: 18px;
   left: 22px;
-  font: 800 12px/1 var(--font-sans);
+  font: 800 12px / 1 var(--font-sans);
   font-stretch: 115%;
 }
 
@@ -216,7 +216,7 @@
   position: absolute;
   top: 26%;
   left: 20px;
-  font: 900 84px/0.9 var(--font-sans);
+  font: 900 84px / 0.9 var(--font-sans);
   letter-spacing: -0.035em;
 }
 
@@ -418,7 +418,9 @@ html[data-giro-hand="story"][data-scenes="on"] .ab-stage > .hb .hb-world {
      pílulas e a frase do estado caberem acima do trilho. */
   [data-scenes="on"] .ab {
     --ab-up: clamp(0px, calc((844px - 100svh) * 0.6), 100px);
-    height: calc(100svh * 3.6);
+    /* Mais alto que no computador: no celular um gesto rola quase uma tela, e cada estado precisa
+       durar perto disso para não passar direto. */
+    height: calc(100svh * 5.4);
   }
 
   [data-scenes="on"] .ab-st__title {
@@ -437,7 +439,7 @@ html[data-giro-hand="story"][data-scenes="on"] .ab-stage > .hb .hb-world {
 
   [data-scenes="on"] .ab-pills {
     position: absolute;
-    top: calc(490px - var(--ab-up) * 0.95);
+    top: calc(500px - var(--ab-up) * 1);
     flex-wrap: nowrap;
     gap: 6px;
     margin: 0;
@@ -450,7 +452,7 @@ html[data-giro-hand="story"][data-scenes="on"] .ab-stage > .hb .hb-world {
 
   [data-scenes="on"] .ab-beats {
     position: absolute;
-    top: calc(544px - var(--ab-up) * 0.95);
+    top: calc(562px - var(--ab-up) * 1.05);
     right: 0;
     left: 0;
     height: 78px;

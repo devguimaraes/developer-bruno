@@ -26,7 +26,7 @@ import {
   setDemoOverride,
   setScreenBusy,
 } from "./states-stage";
-import { createBeatPlayer } from "./story/beats";
+import { calcSceneProgress, createBeatPlayer } from "./story/beats";
 import { type SceneBuilder, useChapterScenes } from "./story/useChapterScenes";
 
 /** Altura das placas com a pilha fechada para virar tela, e onde cada uma fica na hero. */
@@ -221,7 +221,7 @@ export function HomeOpening() {
         OPENING_TOTAL
       );
 
-      progressRef.current = tl.scrollTrigger?.progress ?? 0;
+      progressRef.current = calcSceneProgress(sec.getBoundingClientRect(), window.innerHeight);
       // Montagem e remontagem (resize) começam já no ponto certo, sem tocar a cena de novo.
       beatTime = calcScreenBeatTime(progressRef.current);
       player.jumpTo(beatTime);

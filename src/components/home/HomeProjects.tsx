@@ -1,5 +1,5 @@
 import { ArrowRight } from "lucide-react";
-import { useCallback, useRef } from "react";
+import { type CSSProperties, useCallback, useRef } from "react";
 import { StackLogo } from "@/components/giro/ToolLogo";
 import { homeCases, outcomeSites } from "@/data/projects";
 import { useLocale } from "@/hooks/useLocale";
@@ -14,7 +14,7 @@ import {
   projectTimeline,
 } from "./project-stage";
 import { SCENE_MOBILE_QUERY } from "./story/chapters";
-import { createBeatPlayer } from "./story/beats";
+import { calcSceneProgress, createBeatPlayer } from "./story/beats";
 import { type SceneBuilder, useChapterScenes } from "./story/useChapterScenes";
 
 /**
@@ -29,6 +29,7 @@ export function HomeProjects() {
   const buildScene = useCallback<SceneBuilder>(({ gsap, scene, setVars }) => {
     const sec = sectionRef.current;
     if (!sec) return;
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
     const q = (s: string) => sec.querySelector<HTMLElement>(s);
     const wins = [...sec.querySelectorAll<HTMLElement>(".pj")];
     const world = q(".pj-world");
@@ -92,7 +93,8 @@ export function HomeProjects() {
         );
       }
       // Em px e menor que a sobra da capa (12px em cima e embaixo): a borda nunca aparece.
-      if (img) tl.fromTo(img, { y: 10 }, { y: -10, duration: step * 1.6 }, at);
+      // No celular a capa tem a proporção da imagem e a mostra inteira: sem sobra, sem paralaxe.
+      if (img && !isMobile) tl.fromTo(img, { y: 10 }, { y: -10, duration: step * 1.6 }, at);
       for (let j = 0; j < i; j += 1) {
         const n = i - j;
         beats.to(
@@ -140,7 +142,10 @@ export function HomeProjects() {
     );
 
     // Montagem e remontagem (resize) começam já na batida atual, sem tocar a cena de novo.
-    beatTime = calcProjectBeatTime(tl.scrollTrigger?.progress ?? 0, wins.length);
+    beatTime = calcProjectBeatTime(
+      calcSceneProgress(sec.getBoundingClientRect(), window.innerHeight),
+      wins.length
+    );
     player.jumpTo(beatTime);
     return () => player.kill();
   }, []);
@@ -216,7 +221,14 @@ export function HomeProjects() {
                     <ArrowRight className="g-icon g-button__arrow" aria-hidden="true" />
                   </a>
                 </div>
-                <figure className="pj-cover">
+                <figure
+                  className="pj-cover"
+                  style={
+                    {
+                      "--pj-ratio": `${project.imageSize.width} / ${project.imageSize.height}`,
+                    } as CSSProperties
+                  }
+                >
                   <img
                     src={project.image}
                     alt=""

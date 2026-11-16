@@ -16,7 +16,7 @@ import {
   calcProcessStage,
 } from "./process-stage";
 import { SCENE_MOBILE_QUERY } from "./story/chapters";
-import { createBeatPlayer } from "./story/beats";
+import { calcSceneProgress, createBeatPlayer } from "./story/beats";
 import { type SceneBuilder, useChapterScenes } from "./story/useChapterScenes";
 
 /** Notas da conversa: posição no chão da pilha e altura em que pousam. */
@@ -193,7 +193,9 @@ export function HomeProcess() {
         },
       });
 
-      const current = calcProcessStage(tl.scrollTrigger?.progress ?? 0);
+      const current = calcProcessStage(
+        calcSceneProgress(sec.getBoundingClientRect(), window.innerHeight)
+      );
       // O gatilho pode ter disparado na criação e começado a perseguir a etapa antiga.
       player.jumpTo(calcProcessBeatTime(inView ? current : -1));
       show(current);

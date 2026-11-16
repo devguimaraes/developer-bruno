@@ -162,11 +162,25 @@ export const HomeServices: FC = () => {
               <p className="sv-lead">{t(locale, "services.intro")}</p>
             </div>
 
-            <ol className="sv-list">
+            <ol
+              className="sv-list"
+              style={{ "--sv-p": activeIndex / (SERVICES.length - 1) } as React.CSSProperties}
+            >
               {SERVICES.map((item, index) => {
                 const isOn = activeIndex === index;
                 return (
-                  <li key={item.id}>
+                  <li
+                    key={item.id}
+                    className={
+                      isOn
+                        ? "is-on"
+                        : index < activeIndex
+                          ? "is-done"
+                          : index === activeIndex + 1
+                            ? "is-next"
+                            : undefined
+                    }
+                  >
                     <button
                       type="button"
                       className={`sv-row ${isOn ? "is-on" : ""}`}

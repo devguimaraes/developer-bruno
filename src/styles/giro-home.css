@@ -94,8 +94,34 @@
   position: relative;
 }
 
+/* O trecho já percorrido: uma linha cheia que cresce da primeira parada até a atual (--sv-p vai
+   de 0 a 1 e vem de HomeServices). */
+.sv-list::after {
+  content: "";
+  position: absolute;
+  top: calc(var(--u) * 1.8);
+  left: calc(var(--u) * 1.4);
+  width: 2px;
+  height: calc((100% - var(--u) * 3.6) * var(--sv-p, 0));
+  border-radius: 2px;
+  background: var(--s-signal);
+  transition: height 520ms var(--ease-resolve);
+}
+
+/* Âncora do Giro: sem tamanho. Quem desenha a parada é o li::before, logo abaixo. */
 .sv-dot {
   position: absolute;
+  top: 50%;
+  left: calc(var(--u) * -3);
+  margin: 0 0 0 1px;
+}
+
+/* As cinco paradas da linha: vazada a que ainda vem, cheia a que já passou. A próxima respira,
+   para mostrar que o caminho continua. */
+.sv-list li::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
   top: 50%;
   left: calc(var(--u) * -3);
   width: 12px;
@@ -104,6 +130,40 @@
   border-radius: 50%;
   background: var(--s-bg);
   box-shadow: inset 0 0 0 2px var(--s-line-strong);
+  pointer-events: none;
+  transition:
+    background-color 200ms linear,
+    box-shadow 200ms linear;
+}
+
+.sv-list li.is-done::before {
+  background: var(--s-signal);
+  box-shadow: inset 0 0 0 2px var(--s-signal);
+  animation: sv-stop-pop 420ms var(--ease-hop) 1;
+}
+
+.sv-list li.is-on::before {
+  box-shadow:
+    inset 0 0 0 2px var(--s-signal),
+    0 0 0 5px color-mix(in srgb, var(--s-signal) 18%, transparent);
+}
+
+.sv-list li.is-next::before {
+  animation: sv-stop-next 1600ms ease-in-out infinite;
+}
+
+@keyframes sv-stop-pop {
+  40% {
+    scale: 1.5;
+  }
+}
+
+@keyframes sv-stop-next {
+  50% {
+    box-shadow:
+      inset 0 0 0 2px var(--s-signal),
+      0 0 0 6px color-mix(in srgb, var(--s-signal) 16%, transparent);
+  }
 }
 
 .sv-row {
@@ -627,7 +687,7 @@
 @media (max-width: 768px) {
   .pj-ch {
     --pw: calc(100vw - 32px);
-    --ph: calc(100svh - 188px);
+    --ph: calc(100svh - 152px);
   }
   .pj-stage {
     gap: 40px;
@@ -659,13 +719,20 @@
     display: flex;
     flex-direction: column-reverse;
   }
+  /* No celular a capa tem a proporção da própria imagem (--pj-ratio, de projects.ts), então ela
+     aparece inteira e sem faixas. Só em tela curta, onde o texto não caberia, a capa cede altura
+     e a imagem corta um pouco nas bordas. */
   .pj-cover {
-    flex: none;
-    height: 212px;
-    min-height: 0;
+    flex: 0 1 auto;
+    aspect-ratio: var(--pj-ratio);
+    min-height: 120px;
+  }
+  .pj-cover img {
+    top: 0;
+    height: 100%;
   }
   .pj-text {
-    flex: 1;
+    flex: 1 0 auto;
     padding: 18px;
   }
   .pj-text h3 {
@@ -701,7 +768,7 @@
   }
 
   [data-scenes="on"] .pj-ch {
-    height: calc(100svh * 5.8);
+    height: calc(100svh * 8);
   }
   [data-scenes="on"] .pj-big {
     top: calc(50svh - 166px);
@@ -1086,7 +1153,7 @@
      da etapa caber acima do trilho. Mesma conta de calcProcessLift em process-stage.ts. */
   [data-scenes="on"] .pc-ch {
     --pc-up: clamp(0px, calc((844px - 100svh) * 0.6), 100px);
-    height: calc(100svh * 4.2);
+    height: calc(100svh * 5.6);
   }
   [data-scenes="on"] .pc-head {
     top: 28px;
@@ -1142,6 +1209,11 @@
     font-size: 18px;
     line-height: 1.45;
   }
+  /* Mais alto que no computador: no celular um gesto rola quase uma tela, e cada serviço precisa
+     durar perto disso para não passar direto. */
+  [data-scenes="on"] .sv-track {
+    height: calc(var(--H, 100svh) * 5.4);
+  }
   .sv-stage {
     display: flex;
     flex-direction: column;
@@ -1190,7 +1262,7 @@
     grid-template-columns: repeat(5, 1fr);
     margin: 0;
     padding: 0;
-    height: 48px;
+    height: 62px;
   }
   .sv-list::before {
     top: 24px;
@@ -1200,16 +1272,43 @@
     border-top: 2px dotted var(--s-line-strong);
     border-left: 0;
   }
-  .sv-dot {
+  .sv-list::after {
     top: 24px;
+    left: 10%;
+    width: calc(80% * var(--sv-p, 0));
+    height: 2px;
+    transition: width 520ms var(--ease-resolve);
+  }
+  .sv-dot {
+    top: 25px;
+    left: 50%;
+    margin: 0;
+  }
+  .sv-list li::before {
+    top: 25px;
     left: 50%;
     margin: -6px 0 0 -6px;
   }
   .sv-row {
     display: block;
-    height: 48px;
+    height: 62px;
   }
-  .sv-n,
+  /* O número de cada parada fica embaixo dela, fora do alcance do Giro. */
+  .sv-n {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    text-align: center;
+    transition: color 200ms linear;
+  }
+  .sv-list li.is-on .sv-n {
+    color: var(--s-fg);
+    font-weight: 700;
+  }
+  .sv-list li.is-done .sv-n {
+    color: var(--s-signal);
+  }
   .sv-name {
     position: absolute;
     overflow: hidden;
@@ -1255,8 +1354,12 @@
   .sv-name,
   .sv-detail,
   .sv-art,
-  .sv-panel {
+  .sv-panel,
+  .sv-list::after {
     transition: none !important;
+  }
+  .sv-list li::before {
+    animation: none !important;
   }
   .sv-panel__disc {
     display: none !important;

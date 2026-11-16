@@ -21,6 +21,21 @@ export function calcBeatIndex(t: number, starts: readonly number[]): number {
   return index;
 }
 
+/**
+ * Progresso (0 a 1) de uma cena que vai de "top top" a "bottom bottom", lido da posição do capítulo
+ * na tela. Na montagem o ScrollTrigger de uma timeline ainda não mediu nada e responde zero: quem
+ * retoma a batida por ele toca a cena de novo a cada remontagem (a barra de endereço do celular
+ * some, a janela muda de altura e a cena é refeita).
+ */
+export function calcSceneProgress(
+  rect: { readonly top: number; readonly height: number },
+  viewport: number
+): number {
+  const span = rect.height - viewport;
+  if (span <= 0) return 0;
+  return Math.min(1, Math.max(0, -rect.top / span));
+}
+
 export interface BeatPlayer {
   /** Toca a cena até `time`, no tempo, a partir de onde ela estiver. */
   playTo: (time: number) => void;

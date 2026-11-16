@@ -1,5 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
-import { BEAT_MAX, calcBeatDuration, calcBeatIndex, createBeatPlayer } from "./beats";
+import {
+  BEAT_MAX,
+  calcBeatDuration,
+  calcBeatIndex,
+  calcSceneProgress,
+  createBeatPlayer,
+} from "./beats";
 
 describe("calcBeatDuration", () => {
   it("entre batidas vizinhas é o tempo da própria cena", () => {
@@ -13,6 +19,27 @@ describe("calcBeatDuration", () => {
 
   it("já na batida não há o que tocar", () => {
     expect(calcBeatDuration(2.9, 2.9)).toBe(0);
+  });
+});
+
+describe("calcSceneProgress", () => {
+  it("vai de zero, com o topo do capítulo no topo da tela, a um, com o fim no fim da tela", () => {
+    expect(calcSceneProgress({ top: 0, height: 2340 }, 650)).toBe(0);
+    expect(calcSceneProgress({ top: -1690, height: 2340 }, 650)).toBe(1);
+  });
+
+  it("no meio do capítulo devolve a posição real, não zero", () => {
+    // Regressão: retomar do zero fazia a entrada da abertura tocar de novo no resize.
+    expect(calcSceneProgress({ top: -468, height: 2340 }, 650)).toBeCloseTo(0.277, 3);
+  });
+
+  it("antes e depois do capítulo fica nos limites", () => {
+    expect(calcSceneProgress({ top: 300, height: 2340 }, 650)).toBe(0);
+    expect(calcSceneProgress({ top: -3000, height: 2340 }, 650)).toBe(1);
+  });
+
+  it("capítulo que cabe na tela não tem percurso", () => {
+    expect(calcSceneProgress({ top: -10, height: 600 }, 650)).toBe(0);
   });
 });
 

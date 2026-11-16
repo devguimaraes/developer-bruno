@@ -16,7 +16,7 @@ import { type TranslationKey, t } from "@/lib/i18n";
 import { ABOUT_SWAP, ABOUT_TIMELINE, calcAboutBeatTime } from "./about-stage";
 import { bareLabel } from "./copy";
 import { SCENE_MOBILE_QUERY } from "./story/chapters";
-import { createBeatPlayer } from "./story/beats";
+import { calcSceneProgress, createBeatPlayer } from "./story/beats";
 import { type SceneBuilder, useChapterScenes } from "./story/useChapterScenes";
 
 // Capacidades na ordem da prancha, cada uma com o ícone Lucide da própria linha.
@@ -102,7 +102,9 @@ export function HomeAbout() {
       .fromTo(photo, { y: H * 0.08 }, { y: 0, duration: photoSettle }, 0);
 
     // Montagem e remontagem (resize) começam já na batida atual, sem tocar a cena de novo.
-    beatTime = calcAboutBeatTime(tl.scrollTrigger?.progress ?? 0);
+    beatTime = calcAboutBeatTime(
+      calcSceneProgress(sec.getBoundingClientRect(), window.innerHeight)
+    );
     player.jumpTo(beatTime);
     return () => player.kill();
   }, []);
