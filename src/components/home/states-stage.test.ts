@@ -63,11 +63,21 @@ describe("calcOpeningStep", () => {
     expect(calcOpeningStep(at(1.5))).toEqual({ k: "rest", stop: "hero", state: "curious" });
   });
 
-  it("de 2,25 a 9 o Giro é o estado: no centro da tela, e sobre a página azul em pronto", () => {
-    expect(calcOpeningStep(at(3))).toEqual({ k: "b0", stop: "card", state: "empty" });
-    expect(calcOpeningStep(at(4.5))).toEqual({ k: "b1", stop: "card", state: "loading" });
+  it("de 2,25 a 9 o Giro fica no assento único da tela: pula em vazio e carregando, treme em erro, veste azul em pronto", () => {
+    expect(calcOpeningStep(at(3))).toEqual({ k: "b0", stop: "card", state: "empty", hop: true });
+    expect(calcOpeningStep(at(4.5))).toEqual({
+      k: "b1",
+      stop: "card",
+      state: "loading",
+      hop: true,
+    });
     expect(calcOpeningStep(at(6))).toEqual({ k: "b2", stop: "card", state: "error" });
-    expect(calcOpeningStep(at(8))).toEqual({ k: "b3", stop: "card-done", state: "done" });
+    expect(calcOpeningStep(at(8))).toEqual({
+      k: "b3",
+      stop: "card",
+      state: "done",
+      surface: "g-azul",
+    });
   });
 
   it("em 9 salta para a saída", () => {
@@ -79,7 +89,12 @@ describe("calcOpeningStep", () => {
     setDemoOverride("error");
     expect(calcOpeningStep(at(3))).toEqual({ k: "over-error", stop: "card", state: "error" });
     setDemoOverride("done");
-    expect(calcOpeningStep(at(3))).toEqual({ k: "over-done", stop: "card-done", state: "done" });
+    expect(calcOpeningStep(at(3))).toEqual({
+      k: "over-done",
+      stop: "card",
+      state: "done",
+      surface: "g-azul",
+    });
     expect(calcOpeningStep(at(9.5)).stop).toBe("exit");
     expect(calcOpeningStep(at(1)).stop).toBe("hero");
   });

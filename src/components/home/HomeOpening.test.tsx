@@ -45,12 +45,13 @@ describe("HomeOpening", () => {
     expect(document.querySelectorAll(".ab-grid button")).toHaveLength(0);
   });
 
-  it("as paradas do Giro existem uma vez só: card e card-done na tela de exemplo, exit na saída", () => {
+  it("as paradas do Giro existem uma vez só: card na tela de exemplo, exit na saída", () => {
     render(<HomeOpening />);
 
-    for (const name of ["hero", "card", "card-done", "exit"]) {
+    for (const name of ["hero", "card", "exit"]) {
       expect(document.querySelectorAll(`[data-stop="${name}"]`)).toHaveLength(1);
     }
+    expect(document.querySelectorAll('[data-stop="card-done"]')).toHaveLength(0);
   });
 
   it("publicar vai a carregando e, em 1500 ms, a erro; tentar de novo vai a pronto em 1200 ms", () => {

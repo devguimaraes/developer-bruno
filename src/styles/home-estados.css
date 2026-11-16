@@ -124,79 +124,232 @@
   overflow: hidden;
 }
 
-.dm-stop {
-  top: 36%;
+.dm-stage {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px 18px;
+  align-content: start;
+  padding: 54px 24px 20px;
+}
+
+.dm-stage--live {
+  grid-template-columns: 64px minmax(0, 1fr);
+}
+
+.dm-slot {
+  position: relative;
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+  width: 64px;
+  height: 64px;
+}
+
+.dm-seat {
+  top: 50%;
   left: 50%;
 }
 
-.dm-msg {
+.dm-word-wrap {
+  position: relative;
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+  justify-self: start;
+}
+
+.dm-stage--live .dm-word-wrap {
+  grid-column: 2;
+}
+
+.dm-word {
+  display: block;
+  margin: 0;
+  font: 900 68px / 0.95 var(--font-sans);
+  letter-spacing: -0.03em;
+  white-space: pre;
+}
+
+.dm-ch {
+  display: inline-block;
+}
+
+.dm-word--fill {
   position: absolute;
-  top: 64%;
-  right: 24px;
-  left: 24px;
+  inset: 0;
+  color: var(--azul-sinal);
+  clip-path: inset(0 24% 0 0);
+  pointer-events: none;
+}
+
+.dm-word--fill .dm-ch::before {
+  content: attr(data-ch);
+}
+
+/* A palavra só aparece depois que o Giro pousa no assento. */
+html[data-scenes="on"][data-giro-hand="story"]:not([data-giro-stop="card"]) .ab-demo .dm-word {
+  opacity: 0;
+}
+
+html[data-scenes="on"][data-giro-hand="story"]:not([data-giro-stop="card"]) .ab-demo .dm-ch {
+  animation: none;
+}
+
+[data-scenes="on"] .ab-demo .dm-ch {
+  animation: dm-wave 420ms var(--ease-resolve) calc(var(--i) * 38ms) both;
+}
+
+@keyframes dm-wave {
+  from {
+    opacity: 0;
+    transform: translateX(-18px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Vazio: letras ocas em tinta, largura esticada a 140%. */
+.dm[data-st="empty"] .dm-word {
+  color: transparent;
+  font-stretch: 140%;
+  -webkit-text-stroke: 1.8px var(--s-fg);
+}
+
+/* Carregando: base suave, preenchimento azul-sinal da esquerda e largura respirando. */
+.dm[data-st="loading"] .dm-word {
+  color: var(--hi-mid);
+  font-stretch: 78%;
+}
+
+.dm[data-st="loading"] .dm-word--fill {
+  color: var(--azul-sinal);
+}
+
+[data-scenes="on"] .ab-demo .dm[data-st="loading"] .dm-word {
+  animation: dm-breathe 1800ms ease-in-out infinite alternate;
+}
+
+[data-scenes="on"] .ab-demo .dm[data-st="loading"] .dm-word--fill {
+  animation:
+    dm-breathe 1800ms ease-in-out infinite alternate,
+    dm-fill 1500ms var(--ease-resolve) forwards;
+}
+
+[data-scenes="on"] .ab-demo .dm[data-st="loading"][data-from="error"] .dm-word--fill {
+  animation:
+    dm-breathe 1800ms ease-in-out infinite alternate,
+    dm-fill-retry 1200ms var(--ease-resolve) forwards;
+}
+
+@keyframes dm-breathe {
+  from {
+    font-stretch: 64%;
+  }
+  to {
+    font-stretch: 90%;
+  }
+}
+
+@keyframes dm-fill {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 24% 0 0);
+  }
+}
+
+@keyframes dm-fill-retry {
+  from {
+    clip-path: inset(0 24% 0 0);
+  }
+  to {
+    clip-path: inset(0 0% 0 0);
+  }
+}
+
+.dm-msg {
+  grid-column: 1;
+  grid-row: 2;
   color: var(--s-fg);
-  text-align: center;
+  text-align: left;
+}
+
+.dm-stage--live .dm-msg {
+  grid-column: 2;
 }
 
 .dm-msg strong {
   display: block;
-  font: 800 22px / 1.15 var(--font-sans);
+  font: 800 20px / 1.15 var(--font-sans);
   font-stretch: 110%;
 }
 
 .dm-msg span {
   display: block;
-  margin-top: 6px;
+  margin-top: 5px;
   color: var(--grafite);
   font: 450 15px / 1.4 var(--font-sans);
 }
 
-.dm-prog {
-  position: absolute;
-  right: 26%;
-  bottom: 14px;
-  left: 26%;
-  height: 6px;
-  overflow: hidden;
-  border-radius: 3px;
-  background: var(--hi-soft);
-  opacity: 0;
-}
-
-.dm-prog b {
-  display: block;
-  width: 100%;
-  height: 100%;
-  background: var(--azul-sinal);
-  transform: scaleX(0);
-  transform-origin: 0 50%;
-}
-
-.dm[data-st="loading"] .dm-prog {
-  opacity: 1;
-}
-
-.dm[data-st="loading"] .dm-prog b {
-  animation: dm-prog 1.5s var(--ease-resolve) forwards;
-}
-
-@keyframes dm-prog {
-  to {
-    transform: scaleX(0.76);
-  }
-}
-
-/* Erro: o fundo da tela fica coral a 14%. */
+/* Erro: fundo coral a 14%, letras fora do lugar e tremida 420 ms depois do Giro. */
 .dm[data-st="error"] .dm-body {
   background: rgba(255, 92, 61, 0.14);
 }
 
-/* Pronto: a página pinta de cima para baixo em 10 passos. */
+.dm[data-st="error"] .dm-word {
+  color: var(--s-fg);
+  font-stretch: 100%;
+}
+
+[data-scenes="on"] .ab-demo .dm[data-st="error"] .dm-word {
+  animation: dm-word-shake 360ms ease-out 420ms 1;
+}
+
+.dm[data-st="error"] .dm-ch:nth-child(odd) {
+  rotate: -5deg;
+  translate: 0 4px;
+}
+
+.dm[data-st="error"] .dm-ch:nth-child(even) {
+  rotate: 4deg;
+  translate: 0 -3px;
+}
+
+@keyframes dm-word-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  18% {
+    transform: translateX(5px);
+  }
+  38% {
+    transform: translateX(-6px);
+  }
+  58% {
+    transform: translateX(4px);
+  }
+  78% {
+    transform: translateX(-2px);
+  }
+}
+
+/* Pronto: palavra em papel e página azul pintando da esquerda para a direita em 10 passos. */
+.dm[data-st="done"] .dm-word {
+  color: var(--papel);
+  font-stretch: 118%;
+}
+
 .dm-page {
   position: absolute;
   z-index: 1;
   inset: 0;
-  clip-path: inset(0 0 100% 0);
+  clip-path: inset(0 100% 0 0);
   transition: clip-path 620ms steps(10);
 }
 
@@ -207,23 +360,15 @@
 .dm-page__sig {
   position: absolute;
   top: 18px;
-  left: 22px;
+  left: 24px;
   font: 800 12px / 1 var(--font-sans);
   font-stretch: 115%;
 }
 
-.dm-page__title {
-  position: absolute;
-  top: 26%;
-  left: 20px;
-  font: 900 84px / 0.9 var(--font-sans);
-  letter-spacing: -0.035em;
-}
-
 .dm-page__bar {
   position: absolute;
-  top: 66%;
-  left: 22px;
+  top: 64%;
+  left: 24px;
   width: 42%;
   height: 7px;
   border-radius: 4px;
@@ -231,23 +376,61 @@
 }
 
 .dm-page__bar--2 {
-  top: calc(66% + 15px);
+  top: calc(64% + 15px);
   width: 30%;
 }
 
 .dm-page__cta {
   position: absolute;
-  top: 80%;
-  left: 22px;
+  top: 78%;
+  left: 24px;
   width: 104px;
   height: 28px;
   border-radius: 14px;
   background: var(--lima);
 }
 
-.dm-stop--done {
-  top: 60%;
-  right: 19%;
+/* Grade sem cenas: 4 células lado a lado com palavra ajustada à largura. */
+.ab-cell .dm-stage {
+  padding: 42px 18px 16px;
+  gap: 10px;
+}
+
+.ab-cell .dm-word {
+  font-size: 40px;
+}
+
+.ab-cell .dm[data-st="empty"] .dm-word {
+  -webkit-text-stroke-width: 1.4px;
+}
+
+.ab-cell .dm-msg strong {
+  font-size: 17px;
+}
+
+.ab-cell .dm-msg span {
+  font-size: 13.5px;
+}
+
+.ab-cell .dm-page__sig {
+  top: 14px;
+  left: 18px;
+}
+
+.ab-cell .dm-page__bar {
+  top: 63%;
+  left: 18px;
+}
+
+.ab-cell .dm-page__bar--2 {
+  top: calc(63% + 13px);
+}
+
+.ab-cell .dm-page__cta {
+  top: 77%;
+  left: 18px;
+  width: 88px;
+  height: 24px;
 }
 
 .dm-foot {
@@ -479,30 +662,73 @@ html[data-giro-hand="story"][data-scenes="on"] .ab-stage > .hb .hb-world {
     height: 60px;
   }
 
-  .dm-msg {
-    top: 60%;
-    right: 12px;
-    left: 12px;
+  .dm-stage {
+    padding: 40px 16px 14px;
+    gap: 10px 12px;
+  }
+
+  .dm-stage--live {
+    grid-template-columns: 44px minmax(0, 1fr);
+  }
+
+  .dm-slot {
+    width: 44px;
+    height: 44px;
+  }
+
+  .dm-word {
+    font-size: 40px;
+  }
+
+  .dm[data-st="empty"] .dm-word {
+    -webkit-text-stroke-width: 1.4px;
   }
 
   .dm-msg strong {
-    font-size: 19px;
+    font-size: 17px;
   }
 
   .dm-msg span {
-    font-size: 14px;
+    margin-top: 3px;
+    font-size: 13.5px;
   }
 
-  .dm-stop {
-    top: 32%;
+  .dm-page__sig {
+    top: 14px;
+    left: 16px;
   }
 
-  .dm-page__title {
-    top: 20%;
-    font-size: 58px;
+  .dm-page__bar {
+    top: 62%;
+    left: 16px;
+  }
+
+  .dm-page__bar--2 {
+    top: calc(62% + 13px);
+  }
+
+  .dm-page__cta {
+    top: 76%;
+    left: 16px;
+    width: 92px;
+    height: 24px;
   }
 
   [data-scenes="on"] .ab-exit {
     bottom: 170px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-scenes="on"] .ab-demo .dm-ch,
+  [data-scenes="on"] .ab-demo .dm[data-st="loading"] .dm-word,
+  [data-scenes="on"] .ab-demo .dm[data-st="loading"] .dm-word--fill,
+  [data-scenes="on"] .ab-demo .dm[data-st="loading"][data-from="error"] .dm-word--fill,
+  [data-scenes="on"] .ab-demo .dm[data-st="error"] .dm-word {
+    animation: none;
+  }
+
+  .dm-page {
+    transition: none;
   }
 }

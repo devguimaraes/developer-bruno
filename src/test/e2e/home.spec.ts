@@ -156,15 +156,23 @@ test.describe("Navegação Principal", () => {
       const s = document.getElementById("hero") as HTMLElement;
       window.scrollTo(0, (s.offsetHeight - window.innerHeight) * 0.3);
     });
+    await expect(page.locator('.ab-demo [data-stop="card"]')).toHaveCount(1);
+    await expect(page.locator('.ab-demo [data-stop="card-done"]')).toHaveCount(0);
+
     const status = page.getByText(/^estado: /).first();
+    const word = page.locator(".ab-demo .dm-word").first();
     await expect(status).toHaveText("estado: vazio");
+    await expect(word).toHaveText("vazio");
 
     await page.getByRole("button", { name: "Publicar", exact: true }).click();
     await expect(status).toHaveText("estado: carregando");
+    await expect(word).toHaveText("carregando");
     await expect(status).toHaveText("estado: erro", { timeout: 4000 });
+    await expect(word).toHaveText("erro");
 
     await page.getByRole("button", { name: "Tentar de novo" }).click();
     await expect(status).toHaveText("estado: carregando");
     await expect(status).toHaveText("estado: pronto", { timeout: 4000 });
+    await expect(word).toHaveText("No ar.");
   });
 });

@@ -23,6 +23,8 @@ import { buildProvisionalChapters } from "./provisional-story";
 
 // Marca no <html> que o Giro da home já tem dono: o hero e a pilha da abertura leem daqui.
 const HAND_ATTR = "data-giro-hand";
+// Marca no <html> a parada em que o Giro já pousou (limpa enquanto ele está no ar entre paradas).
+const STOP_ATTR = "data-giro-stop";
 
 /** Mola do Giro parado na estação: segue a parada com um pouco de atraso e assenta macio. */
 const GROUND_OMEGA = 38;
@@ -162,9 +164,9 @@ export const HomeGiro: FC<HomeGiroProps> = ({
       A.placed = true;
     };
 
-    // Toca de novo uma animação curta do corpo (impulso na saída, amassada no pouso).
-    const kick = (name: "is-squash" | "is-leap") => {
-      actorIn.classList.remove("is-squash", "is-leap");
+    // Toca de novo uma animação curta do corpo (impulso na saída, amassada no pouso, pulo no lugar).
+    const kick = (name: "is-squash" | "is-leap" | "is-hop") => {
+      actorIn.classList.remove("is-squash", "is-leap", "is-hop");
       // Força reflow para a animação recomeçar
       void actorIn.offsetWidth;
       actorIn.classList.add(name);
@@ -186,6 +188,11 @@ export const HomeGiro: FC<HomeGiroProps> = ({
       else document.documentElement.removeAttribute(HAND_ATTR);
     };
 
+    const setLandedStop = (stop: string | null) => {
+      if (stop) document.documentElement.setAttribute(STOP_ATTR, stop);
+      else document.documentElement.removeAttribute(STOP_ATTR);
+    };
+
     const findStop = (stopName: string): HTMLElement | null => {
       return (
         document.querySelector<HTMLElement>(`[data-stop="${stopName}"]`) ||
@@ -204,7 +211,9 @@ export const HomeGiro: FC<HomeGiroProps> = ({
       actor.removeAttribute("data-hidden");
       dress(A.next.cls);
       setGiroState(A.next.st);
+      setLandedStop(A.next.step.stop);
       if (!quiet) kick("is-squash");
+      else if (A.next.step.hop) kick("is-hop");
 
       onLand?.(A.next.step);
 
@@ -238,8 +247,10 @@ export const HomeGiro: FC<HomeGiroProps> = ({
       const p = pos(n);
       const hidden = d.hidden === true;
       actor.toggleAttribute("data-hidden", hidden);
+      if (!sameStop) setLandedStop(null);
       if (hidden) {
         // Escondido, o Giro só acompanha a parada, sem voar nem pousar: quem aparece é o da hero.
+        setLandedStop(null);
         A.fl = null;
         place(p);
         clearTimers();
@@ -427,6 +438,7 @@ export const HomeGiro: FC<HomeGiroProps> = ({
     return () => {
       cancelled = true;
       setHand(false);
+      setLandedStop(null);
       setGiroOnStage(false);
       clearTimers();
       if (resizeTimer) clearTimeout(resizeTimer);

@@ -360,4 +360,131 @@ describe("HomeGiro component", () => {
       expect(document.documentElement.hasAttribute("data-giro-hand")).toBe(false);
     });
   });
+
+  it("na mesma parada, passo com hop: true aplica is-hop; sem hop, fica quieto", () => {
+    vi.spyOn(reducedMotionHook, "useReducedMotion").mockReturnValue(false);
+    const stop = document.createElement("div");
+    stop.dataset.stop = "card";
+    stop.className = "g-papel";
+    stop.getBoundingClientRect = () => ({
+      left: 100,
+      top: 100,
+      width: 0,
+      height: 0,
+      right: 100,
+      bottom: 100,
+      x: 100,
+      y: 100,
+      toJSON: () => {},
+    });
+    document.body.appendChild(stop);
+
+    let step: { k: string; state: "empty" | "loading" | "error"; hop?: boolean } = {
+      k: "b0",
+      state: "empty",
+    };
+    const chapter: Chapter = createChapter({
+      id: "hero",
+      label: "// estados",
+      top: 0,
+      len: 1000,
+      surface: "azul",
+      at: () => ({ ...step, stop: "card" }),
+    });
+    let raf: FrameRequestCallback | null = null;
+    vi.spyOn(window, "requestAnimationFrame").mockImplementation(cb => {
+      raf = cb;
+      return 1;
+    });
+
+    const { container } = render(<HomeGiro chapters={[chapter]} initialStop="card" />);
+    const actorIn = container.querySelector(".hs-actor__in");
+    actorIn?.classList.remove("is-squash");
+
+    step = { k: "b1", state: "loading", hop: true };
+    act(() => {
+      raf?.(performance.now());
+    });
+    expect(actorIn?.classList.contains("is-hop")).toBe(true);
+    expect(actorIn?.classList.contains("is-squash")).toBe(false);
+
+    actorIn?.classList.remove("is-hop");
+    step = { k: "b2", state: "error" };
+    act(() => {
+      raf?.(performance.now() + 16);
+    });
+    expect(actorIn?.classList.contains("is-hop")).toBe(false);
+    expect(actorIn?.classList.contains("is-squash")).toBe(false);
+  });
+
+  it("marca data-giro-stop com o nome da parada só depois de pousar, e limpa ao sair ou desmontar", () => {
+    vi.spyOn(reducedMotionHook, "useReducedMotion").mockReturnValue(false);
+    const makeStop = (name: string, x: number, y: number) => {
+      const el = document.createElement("div");
+      el.dataset.stop = name;
+      el.className = "g-azul";
+      el.getBoundingClientRect = () => ({
+        left: x,
+        top: y,
+        width: 0,
+        height: 0,
+        right: x,
+        bottom: y,
+        x,
+        y,
+        toJSON: () => {},
+      });
+      document.body.appendChild(el);
+    };
+    makeStop("hero", 100, 100);
+    makeStop("card", 500, 300);
+    makeStop("exit", 500, 700);
+
+    let stopName = "hero";
+    const chapter: Chapter = createChapter({
+      id: "hero",
+      label: "// início",
+      top: 0,
+      len: 1000,
+      surface: "azul",
+      at: () => ({ k: stopName, stop: stopName, state: "empty" }),
+    });
+    let raf: FrameRequestCallback | null = null;
+    vi.spyOn(window, "requestAnimationFrame").mockImplementation(cb => {
+      raf = cb;
+      return 1;
+    });
+
+    const { unmount } = render(<HomeGiro chapters={[chapter]} initialStop="hero" />);
+    expect(document.documentElement.getAttribute("data-giro-stop")).toBe("hero");
+
+    // Inicia o salto da hero para card: no ar, remove a marca até pousar.
+    const t0 = performance.now();
+    stopName = "card";
+    act(() => {
+      raf?.(t0);
+    });
+    expect(document.documentElement.hasAttribute("data-giro-stop")).toBe(false);
+
+    // Pousa em card: agora sim marca data-giro-stop="card".
+    act(() => {
+      raf?.(t0 + 1500);
+    });
+    expect(document.documentElement.getAttribute("data-giro-stop")).toBe("card");
+
+    // Sai para exit: limpa a marca durante o voo e marca exit ao pousar.
+    const t1 = performance.now();
+    stopName = "exit";
+    act(() => {
+      raf?.(t1);
+    });
+    expect(document.documentElement.hasAttribute("data-giro-stop")).toBe(false);
+    act(() => {
+      raf?.(t1 + 1500);
+    });
+    expect(document.documentElement.getAttribute("data-giro-stop")).toBe("exit");
+
+    unmount();
+    expect(document.documentElement.hasAttribute("data-giro-stop")).toBe(false);
+  });
 });

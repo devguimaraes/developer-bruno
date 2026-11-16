@@ -64,8 +64,11 @@ export function setScreenBusy(busy: boolean): void {
   screenBusy = busy;
 }
 
-function stopFor(state: DemoState): string {
-  return state === "done" ? "card-done" : "card";
+function cardStep(k: string, state: DemoState): ChapterStep {
+  // Em pronto o próprio Giro já pula com g-done; em erro treme com g-flinch.
+  if (state === "done") return { k, stop: "card", state, surface: "g-azul" };
+  if (state === "error") return { k, stop: "card", state };
+  return { k, stop: "card", state, hop: true };
 }
 
 /** Onde o Giro deve estar e com que rosto, para um progresso da abertura. */
@@ -74,10 +77,9 @@ export function calcOpeningStep(progress: number): ChapterStep {
   if (t < HAND_AT && !screenBusy) return { k: "hand", stop: "hero", state: "done", hidden: true };
   if (t < BEATS_FROM) return { k: "rest", stop: "hero", state: t < 0.2 ? "done" : "curious" };
   if (t >= BEATS_TO) return { k: "exit", stop: "exit", state: "curious" };
-  if (override) return { k: `over-${override}`, stop: stopFor(override), state: override };
+  if (override) return cardStep(`over-${override}`, override);
   const beat = calcStatesBeat(progress);
-  const state = DEMO_ORDER[beat];
-  return { k: `b${beat}`, stop: stopFor(state), state };
+  return cardStep(`b${beat}`, DEMO_ORDER[beat]);
 }
 
 export interface DemoPress {

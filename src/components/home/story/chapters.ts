@@ -18,6 +18,8 @@ export interface ChapterStep {
    * de cor cobrindo o capítulo).
    */
   surface?: SurfaceClass;
+  /** Pulo no lugar quando o passo troca na mesma parada. */
+  hop?: boolean;
   /** Transições tardias opcionais [tempoEmMs, novoEstado]. */
   after?: Array<[ms: number, state: GiroState]>;
   [key: string]: unknown;
