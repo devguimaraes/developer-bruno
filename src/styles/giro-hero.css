@@ -143,6 +143,23 @@
   }
 }
 
+/* Celular baixo (com a barra do navegador visível): a prancha tem 804 px e os botões caíam atrás
+   do trilho. Texto e botões encolhem um pouco e o bloco sobe até ficar 12 px acima do trilho,
+   sem passar de 484 px, onde começaria a cobrir a pilha. */
+@media (max-width: 767px) and (max-height: 803px) {
+  .hb .hb-foot {
+    top: max(484px, calc(100svh - 254px));
+    gap: 10px;
+  }
+  .hb .hb-lede {
+    font-size: 16px;
+    line-height: 1.4;
+  }
+  .hb .hb-ctas .g-button {
+    --b-h: 44px;
+  }
+}
+
 .hb .hb-hud {
   display: none;
 }
