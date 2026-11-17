@@ -1,0 +1,12 @@
+---
+import { ProcessDiagram } from "@/components/giro/ProcessDiagram";
+
+// Vitrine só de dev: o diagrama do processo sobre a superfície de leitura (papel).
+---
+
+<section class="g-papel px-4 py-12 md:px-16 md:py-18">
+  <p class="g-eyebrow">{"// processo · diagrama"}</p>
+  <div class="mt-8">
+    <ProcessDiagram client:load />
+  </div>
+</section>

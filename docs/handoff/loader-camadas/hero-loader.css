@@ -1,0 +1,520 @@
+/* Tela de carregamento, direção "as cores eram camadas". Os três discos de cor são telas cheias
+   empilhadas, cada uma com o nome da sua camada. No fim elas deitam na câmera da hero, se separam
+   e assentam no lugar da pilha real. Discos, nome e cores em CSS; a parte isométrica vem do JS por
+   quadro, porque depende do tamanho da tela e da origem da pilha. */
+
+@property --g-stroke {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 12px;
+}
+
+.lc {
+  --d1t: calc(var(--d1) * var(--lc-t, 1));
+  --d2t: calc(var(--d2) * var(--lc-t, 1));
+  --d3t: calc(var(--d3) * var(--lc-t, 1));
+  --washt: calc(var(--wash) * var(--lc-t, 1));
+  --e1t: calc((var(--d1) + var(--wash)) * var(--lc-t, 1));
+  --e3t: calc((var(--d3) + var(--wash)) * var(--lc-t, 1));
+  --ease-wash: cubic-bezier(0.42, 0, 0.58, 1);
+  --r0: 52px;
+  --g-ox: 50%;
+  --g-oy: 50%;
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: clip;
+  touch-action: none;
+}
+
+.is-mobile .lc {
+  --r0: 20px;
+}
+
+.lc.is-off {
+  display: none;
+}
+
+.lc__bg {
+  position: absolute;
+  inset: 0;
+  background: var(--azul-sinal);
+}
+
+.lc.is-iso .lc__bg {
+  display: none;
+}
+
+/* ---------- Placas ---------- */
+
+.lc__scene {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+}
+
+.lc-pl {
+  position: absolute;
+  top: calc(var(--H) / -2);
+  left: calc(var(--W) / -2);
+  width: var(--W);
+  height: var(--H);
+  transform-style: preserve-3d;
+}
+
+.lc-pl__e,
+.lc-pl__face {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--br, 0);
+}
+
+/* A espessura só existe deitada: em tela cheia ela vazaria para fora do disco. */
+.lc-pl__e {
+  background: var(--e);
+  visibility: hidden;
+}
+
+.lc.is-iso .lc-pl__e {
+  visibility: visible;
+}
+
+.lc-pl__e:nth-child(1) {
+  transform: translateZ(-9px);
+}
+
+.lc-pl__e:nth-child(2) {
+  transform: translateZ(-6px);
+}
+
+.lc-pl__e:nth-child(3) {
+  transform: translateZ(-3px);
+}
+
+.lc-pl__face {
+  overflow: hidden;
+  background: var(--c);
+  clip-path: circle(0px at var(--g-ox) var(--g-oy));
+}
+
+.lc.is-iso .lc-pl__face {
+  clip-path: none;
+  animation: none;
+}
+
+.lc-pl__paper {
+  position: absolute;
+  inset: 0;
+  background: #fbfaf6;
+  clip-path: ellipse(0px 0px at 50% 50%);
+}
+
+/* O nome da camada é parte dela: aparece com o disco e deita junto. */
+.lc-pl__tag {
+  position: absolute;
+  bottom: 64px;
+  left: 64px;
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: clamp(15px, calc(15px + (100vw - 390px) * 11 / 1530), 26px);
+  font-weight: 400;
+  line-height: 1.2;
+  white-space: nowrap;
+  transform-origin: 0 100%;
+}
+
+.is-mobile .lc-pl__tag {
+  bottom: 40px;
+  left: 24px;
+  font-size: 15px;
+}
+
+/* ---------- Nome e Giro ---------- */
+
+.lc__stage {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--papel);
+}
+
+.lc__ink {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--azul-sinal);
+  clip-path: circle(0px at var(--g-ox) var(--g-oy));
+  pointer-events: none;
+}
+
+.lc__name {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: var(--font-sans);
+  font-size: clamp(50px, calc(50px + (100vw - 390px) * 86 / 1530), 136px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.is-mobile .lc__name {
+  font-size: 50px;
+}
+
+.lc__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.lc__left,
+.lc__right {
+  display: flex;
+  white-space: nowrap;
+}
+
+.lc__lt {
+  font-stretch: 50%;
+  opacity: 0;
+}
+
+/* O espaço entre os nomes vem do CSS: o template descarta um texto que só tem NBSP, e sem texto o
+   item perde a linha de base e o sobrenome sobe. */
+.lc__gap::before {
+  content: "\00a0";
+}
+
+.is-mobile .lc__row {
+  flex-wrap: wrap;
+  max-width: 358px;
+  white-space: normal;
+}
+
+.is-mobile .lc__right {
+  flex-basis: 100%;
+  justify-content: center;
+}
+
+.is-mobile .lc__gap {
+  display: none;
+}
+
+.lc__o {
+  position: relative;
+  top: 0.06em;
+  display: block;
+  width: 0.74em;
+  height: 0.74em;
+  margin: 0 0.03em;
+}
+
+.lc__fly,
+.lc__fly .g-giro {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.lc__o .g-giro {
+  --g-stroke: 12px;
+  color: var(--lima);
+}
+
+/* Seleção de componente: aparece só na camada de componentes. */
+.lc__sel {
+  --sel-out: clamp(3px, calc(3px + (100vw - 390px) * 3 / 1530), 6px);
+  --sel-hd: clamp(7px, calc(7px + (100vw - 390px) * 5 / 1530), 12px);
+  --sel-tag: clamp(10px, calc(10px + (100vw - 390px) * 6 / 1530), 16px);
+  position: absolute;
+  inset: calc(var(--sel-out) * -1);
+  box-sizing: border-box;
+  border: 2px solid var(--azul-sinal);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.is-mobile .lc__sel,
+.is-mobile .lc__hd {
+  border-width: 1.5px;
+}
+
+.lc__hd {
+  position: absolute;
+  box-sizing: border-box;
+  width: var(--sel-hd);
+  height: var(--sel-hd);
+  background: var(--papel);
+  border: 2px solid var(--azul-sinal);
+  transform: scale(0);
+}
+
+.lc__hd:nth-child(2) {
+  top: calc(var(--sel-hd) * -0.583);
+  left: calc(var(--sel-hd) * -0.583);
+}
+
+.lc__hd:nth-child(3) {
+  top: calc(var(--sel-hd) * -0.583);
+  right: calc(var(--sel-hd) * -0.583);
+}
+
+.lc__hd:nth-child(4) {
+  bottom: calc(var(--sel-hd) * -0.583);
+  left: calc(var(--sel-hd) * -0.583);
+}
+
+.lc__hd:nth-child(5) {
+  right: calc(var(--sel-hd) * -0.583);
+  bottom: calc(var(--sel-hd) * -0.583);
+}
+
+.lc__tag {
+  position: absolute;
+  bottom: calc(100% + var(--sel-tag) * 0.625);
+  left: -2px;
+  padding: calc(var(--sel-tag) * 0.25) calc(var(--sel-tag) * 0.625);
+  background: var(--azul-sinal);
+  color: var(--papel);
+  font-family: var(--font-mono);
+  font-size: var(--sel-tag);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.2;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+/* ---------- Relógio ---------- */
+
+.lc.is-play .lc__lt {
+  animation: lc-unfold calc(600ms * var(--lc-t, 1)) var(--ease-resolve) both;
+  animation-delay: calc((120ms + var(--i) * 53ms) * var(--lc-t, 1));
+}
+
+.lc.is-play .lc-pl[data-plate="0"] .lc-pl__face {
+  animation: lc-disk var(--washt) var(--ease-wash) var(--d1t) forwards;
+}
+
+.lc.is-play .lc-pl[data-plate="1"] .lc-pl__face {
+  animation: lc-disk var(--washt) var(--ease-wash) var(--d2t) forwards;
+}
+
+.lc.is-play .lc-pl[data-plate="2"] .lc-pl__face {
+  animation: lc-disk var(--washt) var(--ease-wash) var(--d3t) forwards;
+}
+
+/* O texto troca de cor no fim do disco que muda o contraste; até lá a cópia recortada resolve. */
+.lc.is-play .lc__stage {
+  animation:
+    lc-c-azul 0s linear var(--e1t) forwards,
+    lc-c-papel 0s linear var(--e3t) forwards;
+}
+
+.lc.is-play .lc__ink {
+  animation:
+    lc-disk var(--washt) var(--ease-wash) var(--d1t) forwards,
+    lc-disk var(--washt) var(--ease-wash) var(--d3t) forwards,
+    lc-c-papel 0s linear var(--d3t) forwards;
+}
+
+.lc.is-play .lc__o .g-giro {
+  animation:
+    lc-stroke calc(750ms * var(--lc-t, 1)) var(--ease-resolve) calc(225ms * var(--lc-t, 1)) forwards,
+    lc-c-azul 0s linear var(--d1t) forwards,
+    lc-c-lima 0s linear var(--d3t) forwards;
+}
+
+.lc.is-play .lc__sel {
+  animation:
+    lc-sel calc(330ms * var(--lc-t, 1)) var(--ease-resolve) calc(var(--d2t) + 60ms * var(--lc-t, 1)) both,
+    lc-hide 0s linear var(--d3t) forwards;
+}
+
+.lc.is-play .lc__hd {
+  animation: lc-hop calc(360ms * var(--lc-t, 1)) var(--ease-hop) both;
+  animation-delay: calc(var(--d2t) + (105ms + var(--h) * 45ms) * var(--lc-t, 1));
+}
+
+.lc.is-play .lc__tag {
+  animation: lc-tag calc(330ms * var(--lc-t, 1)) var(--ease-resolve) calc(var(--d2t) + 150ms * var(--lc-t, 1)) both;
+}
+
+/* ---------- Saída: a tela deita ---------- */
+
+.lc.is-iso .lc__lt {
+  font-stretch: 115%;
+  opacity: 1;
+  animation: none;
+}
+
+.lc.is-iso .lc__stage {
+  color: var(--papel);
+  animation: none;
+}
+
+.lc.is-iso .lc__ink {
+  visibility: hidden;
+}
+
+.lc.is-iso .lc__sel {
+  opacity: 0;
+  animation: none;
+}
+
+.lc.is-iso .lc__o .g-giro {
+  --g-stroke: 22px;
+  color: var(--lima);
+  animation: none;
+}
+
+.lc.is-iso .lc__name {
+  transition: transform calc(780ms * var(--lc-t, 1)) var(--ease-resolve);
+}
+
+.is-mobile .lc.is-iso .lc__name {
+  transition: none;
+}
+
+.is-mobile .lc.is-iso .lc__fly {
+  transition: transform calc(780ms * var(--lc-t, 1)) var(--ease-resolve);
+}
+
+.is-mobile .lc.is-iso .lc__o .g-giro {
+  --g-stroke: 14px;
+  transition: --g-stroke calc(780ms * var(--lc-t, 1)) var(--ease-resolve);
+}
+
+.is-mobile .lc.is-iso .lc__left,
+.is-mobile .lc.is-iso .lc__right {
+  opacity: 0;
+  transition: opacity calc(220ms * var(--lc-t, 1)) linear;
+}
+
+/* ---------- A hero por baixo ---------- */
+
+.hi.lc-on .hi-world,
+.hi.lc-on .hb-line__deco,
+.hi.lc-on .g-signature {
+  visibility: hidden;
+}
+
+.hi.lc-on .g-tabbar__giro .g-giro {
+  opacity: 0;
+}
+
+.hi.lc-on .hi-copy,
+.hi.lc-on .hi-foot {
+  translate: 0 24px;
+}
+
+.hi.lc-on.lc-exit .hi-copy,
+.hi.lc-on.lc-exit .hi-foot {
+  translate: 0 0;
+  transition: translate calc(780ms * var(--lc-t, 1)) var(--ease-resolve);
+}
+
+/* A pilha real entra com as placas já no lugar: só o conteúdo aparece, e a opacidade vai nas
+   peças sem filhos 3D, porque numa peça com preserve-3d ela achataria a cena. */
+.hi.lc-reveal .hi-world .iso-pl__face > *,
+.hi.lc-reveal .hi-world [data-layer="3"] > *,
+.hi.lc-reveal .hb-line__deco {
+  animation: lc-fade-in calc(320ms * var(--lc-t, 1)) linear both;
+}
+
+@keyframes lc-unfold {
+  to {
+    font-stretch: 115%;
+    opacity: 1;
+  }
+}
+
+@keyframes lc-disk {
+  from {
+    clip-path: circle(var(--r0) at var(--g-ox) var(--g-oy));
+  }
+  to {
+    clip-path: circle(150vmax at var(--g-ox) var(--g-oy));
+  }
+}
+
+@keyframes lc-c-azul {
+  to {
+    color: var(--azul-sinal);
+  }
+}
+
+@keyframes lc-c-papel {
+  to {
+    color: var(--papel);
+  }
+}
+
+@keyframes lc-c-lima {
+  to {
+    color: var(--lima);
+  }
+}
+
+@keyframes lc-stroke {
+  to {
+    --g-stroke: 22px;
+  }
+}
+
+@keyframes lc-sel {
+  from {
+    opacity: 0;
+    transform: scale(1.15);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes lc-hop {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes lc-tag {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes lc-hide {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes lc-fade-in {
+  from {
+    opacity: 0;
+  }
+}

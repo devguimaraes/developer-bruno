@@ -1,0 +1,337 @@
+/* ---------- Fim: a página vira pilha (issue #121) ----------
+   Base sem animação: título, lista de links em ordem para os capítulos e rodapé. Com
+   data-scenes="on" vira palco fixo de duas telas (1,9 no celular): as oito camadas da página
+   abrem em pilha, com a linha de estações ao lado (posições vindas do JS). */
+
+.fn-ch {
+  position: relative;
+  overflow-x: clip;
+}
+
+.fn-stage {
+  position: relative;
+  box-sizing: border-box;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: var(--sec-top) var(--G) calc(var(--u) * 3);
+}
+
+.fn-copy .g-eyebrow {
+  margin: 0;
+}
+
+.fn-title {
+  margin: var(--head-gap-eyebrow) 0 0;
+  max-width: 14ch;
+  font-size: calc(var(--u) * 5.6);
+  font-weight: 900;
+  font-stretch: 112%;
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+}
+
+.fn-lead {
+  margin: var(--head-gap-lead) 0 0;
+  color: var(--s-muted);
+  font: var(--text-corpo-l);
+}
+
+.fn-world {
+  display: none;
+}
+
+.fn-rail__svg {
+  display: none;
+}
+
+.fn-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin: 48px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fn-tag {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--nevoa-tinta);
+  font: var(--text-rotulo);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 160ms linear;
+}
+
+.fn-tag:hover,
+.fn-tag.is-on,
+.fn-tag:focus-visible {
+  color: var(--lima);
+}
+
+.fn-tag:focus-visible {
+  outline: 2px solid var(--s-signal);
+  outline-offset: 2px;
+}
+
+.fn-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 96px;
+}
+
+.fn-sig {
+  color: var(--s-fg);
+  font: 800 calc(var(--u) * 3) / 1 var(--font-sans);
+  font-stretch: 115%;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+
+.fn-foot__r {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 24px;
+}
+
+.fn-legal {
+  color: var(--s-muted);
+  font: var(--text-micro);
+}
+
+/* A pilha no escuro: mesma base de .pc-world, com as placas clicáveis. */
+.fn-world.hb {
+  --hi-side: #55577c;
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  min-height: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.fn-pl {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.fn-pl .iso-pl__face {
+  box-shadow: inset 0 0 0 1px rgba(246, 245, 240, 0.18);
+}
+
+.fn-pl.is-on .iso-pl__face {
+  box-shadow: 0 0 0 4px var(--lima);
+}
+
+.fn-face {
+  position: absolute;
+  inset: 0;
+  background: var(--s-bg);
+  color: var(--s-fg);
+}
+
+.fn-world .fn-face b {
+  color: inherit;
+}
+
+.fn-face__t {
+  top: 40px;
+  left: 28px;
+  right: 28px;
+  font: 900 44px / 0.92 var(--font-sans);
+  font-stretch: 110%;
+  letter-spacing: -0.03em;
+}
+
+.fn-face__e {
+  top: 18px;
+  left: 30px;
+  font: 500 12px / 1 var(--font-mono);
+  opacity: 0.8;
+}
+
+.fn-face__s {
+  border-radius: 6px;
+  background: currentColor;
+  opacity: 0.22;
+}
+
+.fn-face__a {
+  border-radius: 10px;
+  background: var(--s-signal);
+}
+
+.fn-face__img {
+  position: absolute;
+  right: 22px;
+  bottom: 22px;
+  width: 190px;
+  height: 130px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.fn-face__img--tall {
+  right: 20px;
+  bottom: 0;
+  width: 150px;
+  height: 200px;
+}
+
+/* Palco: só com as cenas ligadas. */
+[data-scenes="on"] .fn-ch {
+  height: calc(100svh * 2);
+}
+
+[data-scenes="on"] .fn-stage {
+  position: sticky;
+  top: 0;
+  max-width: none;
+  height: 100svh;
+  padding: 0;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+[data-scenes="on"] .fn-copy {
+  position: absolute;
+  z-index: 2;
+  top: calc(var(--u) * 7);
+  left: var(--G);
+  width: calc(var(--u) * 48);
+}
+
+[data-scenes="on"] .fn-title {
+  max-width: none;
+}
+
+[data-scenes="on"] .fn-world {
+  display: block;
+}
+
+[data-scenes="on"] .fn-rail {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+}
+
+[data-scenes="on"] .fn-rail__svg {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.fn-link {
+  stroke: rgba(212, 213, 250, 0.4);
+  stroke-width: 2;
+}
+
+.fn-spine {
+  stroke: rgba(212, 213, 250, 0.5);
+  stroke-width: 2;
+  stroke-dasharray: 2 7;
+  stroke-linecap: round;
+}
+
+[data-scenes="on"] .fn-tags {
+  display: block;
+  margin: 0;
+}
+
+[data-scenes="on"] .fn-tags li {
+  display: contents;
+}
+
+[data-scenes="on"] .fn-tag {
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-height: 0;
+  height: 32px;
+  margin-top: -16px;
+  padding: 0 8px;
+  pointer-events: auto;
+}
+
+[data-scenes="on"] .fn-tag .hs-stop {
+  top: 50%;
+  left: -22px;
+}
+
+[data-scenes="on"] .fn-foot {
+  position: absolute;
+  z-index: 3;
+  right: var(--G);
+  bottom: calc(var(--u) * 3);
+  left: var(--G);
+  margin: 0;
+  pointer-events: none;
+}
+
+[data-scenes="on"] .fn-sig,
+[data-scenes="on"] .fn-foot__r {
+  pointer-events: auto;
+}
+
+@media (max-width: 768px) {
+  /* --fn-up: em telas mais baixas que a prancha (844 px) o título e o respiro encolhem, e a
+     pilha ganha altura para as etiquetas não se sobreporem. */
+  .fn-stage {
+    --fn-up: clamp(0px, calc((844px - 100svh) * 0.6), 100px);
+    padding: calc(88px - var(--fn-up) * 0.24) var(--G) 32px;
+  }
+  .fn-title {
+    font-size: calc(44px - var(--fn-up) * 0.1);
+  }
+  .fn-lead {
+    font-size: 18px;
+  }
+  .fn-tags {
+    margin-top: 32px;
+  }
+  .fn-foot {
+    margin-top: 64px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .fn-sig {
+    font-size: 30px;
+  }
+  .fn-foot__r {
+    gap: 8px 16px;
+  }
+
+  [data-scenes="on"] .fn-ch {
+    height: calc(100svh * 1.9);
+  }
+  [data-scenes="on"] .fn-copy {
+    top: 28px;
+    right: var(--G);
+    width: auto;
+  }
+  [data-scenes="on"] .fn-tag {
+    height: 26px;
+    margin-top: -13px;
+    padding: 0 4px;
+    font-size: 11px;
+  }
+  [data-scenes="on"] .fn-tag .hs-stop {
+    left: -14px;
+  }
+  [data-scenes="on"] .fn-foot {
+    right: var(--G);
+    bottom: 120px;
+    left: var(--G);
+  }
+}

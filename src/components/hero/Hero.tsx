@@ -1,0 +1,151 @@
+import { type ReactNode, useEffect, useRef } from "react";
+import { Giro } from "@/components/brand/Giro";
+import { ButtonLink } from "@/components/giro/Button";
+import { LanguageSwitch } from "@/components/giro/LanguageSwitch";
+import { useLocale } from "@/hooks/useLocale";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+import type { Locale } from "@/lib/i18n";
+import { t } from "@/lib/i18n";
+import { StackScene } from "./StackScene";
+import { layerNames, stackLabelsFor } from "./stack-labels";
+import type { HudLabels } from "./useHeroStack";
+import { useHeroStack } from "./useHeroStack";
+
+/**
+ * Cada letra vira um span, para o runtime medir e afundar uma a uma. O espaço continua texto.
+ * A chave é o prefixo da linha até a letra: é única e não depende do índice.
+ */
+function letterSpans(line: string): ReactNode[] {
+  const out: ReactNode[] = [];
+  let prefix = "";
+  for (const ch of line) {
+    prefix += ch;
+    out.push(
+      ch === " " ? (
+        ch
+      ) : (
+        <span key={prefix} className="hb-ch">
+          {ch}
+        </span>
+      )
+    );
+  }
+  return out;
+}
+
+function hudLabelsFor(locale: Locale): HudLabels {
+  return {
+    states: {
+      idle: t(locale, "giro.state.idle"),
+      loading: t(locale, "giro.state.loading"),
+      done: t(locale, "giro.state.done"),
+      error: t(locale, "giro.state.error"),
+      curious: t(locale, "giro.state.curious"),
+      air: t(locale, "giro.state.air"),
+      roll: t(locale, "giro.state.roll"),
+    },
+    layers: layerNames(locale),
+    floor: t(locale, "hero.layer.floor"),
+  };
+}
+
+/** Hero "vista explodida": uma interface aberta em quatro camadas e o Giro numa linha ao lado. */
+export function Hero() {
+  const locale = useLocale();
+  const reduced = useReducedMotion();
+  const stageRef = useRef<HTMLElement>(null);
+  const riderRef = useRef<HTMLButtonElement>(null);
+  const seatRef = useRef<SVGSVGElement>(null);
+
+  const title = t(locale, "hero.title");
+  const words = title.split(" ");
+  const line1 = words[0] ?? title;
+  const line2 = words.slice(1).join(" ");
+
+  const labelsRef = useRef<HudLabels>(hudLabelsFor(locale));
+  useEffect(() => {
+    labelsRef.current = hudLabelsFor(locale);
+  });
+
+  useHeroStack({ stageRef, riderRef, seatRef, labelsRef, reduced, locale });
+
+  return (
+    <section ref={stageRef} className="g-azul hb">
+      {/* Celular: nome em mono e troca de idioma no topo do hero. No computador ficam no header. */}
+      <div className="hb-top">
+        <a className="hb-name" href="/" aria-label={t(locale, "global.signature_label")}>
+          bruno guimarães
+        </a>
+        <LanguageSwitch groupLabel={t(locale, "language.group_label")} />
+      </div>
+
+      <StackScene labels={stackLabelsFor(locale)} />
+
+      <div className="hb-copy">
+        <span className="g-eyebrow">{t(locale, "hero.label")}</span>
+        <h1 className="hb-title">
+          <span className="g-sr">{title}</span>
+          <span className="hb-title__line" aria-hidden="true">
+            {letterSpans(line1)}
+          </span>
+          <span className="hb-title__line" aria-hidden="true">
+            {letterSpans(line2)}
+          </span>
+        </h1>
+      </div>
+
+      <div className="hb-foot">
+        <p className="hb-lede">{t(locale, "hero.intro")}</p>
+        <div className="hb-ctas">
+          <ButtonLink href="#projetos" arrow>
+            {t(locale, "hero.cta_projects")}
+          </ButtonLink>
+          <ButtonLink href="#contato" variant="secondary">
+            {t(locale, "hero.cta_contact")}
+          </ButtonLink>
+        </div>
+      </div>
+
+      <svg ref={seatRef} className="hb-seat" viewBox="0 0 120 120" aria-hidden="true">
+        <circle cx="60" cy="60" r="44" />
+      </svg>
+
+      {/* Estação do Giro no chão da linha: o HomeGiro pousa aqui quando recebe o Giro da entrada. */}
+      <i
+        className="hs-stop hb-rest"
+        data-stop="hero"
+        data-size="64"
+        data-size-m="44"
+        aria-hidden="true"
+      />
+
+      <svg className="hb-trail" aria-hidden="true">
+        <path className="hb-trail__p" />
+      </svg>
+      <span className="hb-shadow" aria-hidden="true" />
+
+      <button
+        ref={riderRef}
+        type="button"
+        className="hb-rider"
+        aria-label={t(locale, "giro.jump_button")}
+        disabled={reduced}
+      >
+        <span className="hb-rider__in">
+          <Giro />
+        </span>
+      </button>
+
+      <div className="hb-hud" aria-hidden="true">
+        <dl>
+          <dt>{t(locale, "giro.label_state")}</dt>
+          <dd data-hud="state" />
+          <dt>{t(locale, "hero.hud.layer")}</dt>
+          <dd data-hud="layer" />
+          <dt>{t(locale, "hero.hud.open")}</dt>
+          <dd data-hud="open" />
+        </dl>
+      </div>
+    </section>
+  );
+}

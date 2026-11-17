@@ -1,0 +1,1338 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Home em camadas</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/giro/tokens.css">
+<link rel="stylesheet" href="ds/giro/components/bundle.css">
+<link rel="stylesheet" href="hero.css">
+<link rel="stylesheet" href="hero-b.css">
+<link rel="stylesheet" href="home-arts.css">
+<link rel="stylesheet" href="home.css">
+<script src="gsap.min.js"></script>
+<script src="ScrollTrigger.min.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,100..900&amp;family=Geist+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:#2b2eff}
+</style>
+</helmet>
+<div class="hs {{rootCls}}" ref="{{r.root}}">
+<div class="hs-scroll" ref="{{r.scroll}}">
+<section class="hs-ch ab" id="hero" aria-labelledby="ab-title">
+<div class="hs-stage g-azul ab-stage">
+
+<div class="ab-head only-d">
+<header class="g-site-header">
+<a class="g-signature" href="#hero" aria-label="Bruno Guimarães, início"><span>brun</span><span class="g-signature__o"><svg class="g-giro g-giro--signature" viewBox="0 0 120 120" aria-hidden="true"><g class="g-giro__body"><circle class="g-giro__track" cx="60" cy="60" r="44"></circle><g class="g-giro__turn"><g class="g-giro__spin"><circle class="g-giro__arc" cx="60" cy="60" r="44"></circle></g></g><g class="g-giro__blink"><ellipse class="g-giro__eye" cx="46" cy="54" rx="6" ry="9"></ellipse><ellipse class="g-giro__eye" cx="74" cy="54" rx="6" ry="9"></ellipse></g><path class="g-giro__face g-giro__face--happy" d="M38 60 Q46 46 54 60 M66 60 Q74 46 82 60"></path><path class="g-giro__face g-giro__face--x" d="M39 52 L53 62 M53 52 L39 62 M67 52 L81 62 M81 52 L67 62"></path><path class="g-giro__face g-giro__face--flat" d="M39 58 H53 M67 58 H81"></path><path class="g-giro__face g-giro__face--sleep" d="M39 55 Q46 62 53 55 M67 55 Q74 62 81 55"></path><path class="g-giro__z" d="M88 22 H98 L88 34 H98"></path></g></svg></span><span>&#160;guimarães</span></a>
+<div class="ab-head__end">
+<nav class="g-site-header__nav" aria-label="Principal"><a class="g-nav-link" href="#projetos">Projetos</a><a class="g-nav-link" href="#processo">Processo</a><a class="g-nav-link" href="#sobre">Sobre</a><a class="g-nav-link" href="#blog">Blog</a><a class="g-nav-link" href="#contato">Contato</a></nav>
+<div class="g-lang" role="group" aria-label="Idioma"><button type="button" class="g-lang__option" aria-pressed="true">pt</button><button type="button" class="g-lang__option" aria-pressed="false">en</button></div>
+</div>
+</header>
+</div>
+
+<div class="ab-top only-m">
+<a class="ab-name" href="#hero">bruno guimarães</a>
+<div class="g-lang" role="group" aria-label="Idioma"><button type="button" class="g-lang__option" aria-pressed="true">pt</button><button type="button" class="g-lang__option" aria-pressed="false">en</button></div>
+</div>
+
+<div class="ab-copy">
+<p class="g-eyebrow">// desenvolvedor front-end · design systems</p>
+<h1 class="ab-title" id="ab-title"><span>Interfaces</span><span>com vida.</span></h1>
+<p class="ab-lede">Construo interfaces em React, Next.js e Astro e crio os design systems que mantêm o produto consistente enquanto ele cresce. Do protótipo ao deploy, com tipos, testes e métricas.</p>
+<div class="ab-ctas">
+<a class="g-button" href="#projetos">Ver projetos<svg class="g-icon g-button__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a>
+<a class="g-button g-button--secondary" href="#contato">Falar comigo</a>
+</div>
+</div>
+
+<div class="hb ab-world"><div class="iso ab-iso">
+<div class="hb-floor"></div><div class="hb-base"></div>
+<div class="iso-pl hb-pl" data-layer="0" style="--x:0px;--y:0px;--w:330px;--h:230px;--r:18px;--zr:14px">
+<i class="iso-pl__e"></i><i class="iso-pl__e"></i><i class="iso-pl__e"></i>
+<div class="iso-pl__face">
+<b class="hb-sw" style="left:22px;top:20px;width:34px;height:34px;background:#2b2eff;--c:#2b2eff;--i:0"></b>
+<b class="hb-sw" style="left:66px;top:20px;width:34px;height:34px;background:#d2ff4d;--c:#d2ff4d;--i:1"></b>
+<b class="hb-sw hb-sw--papel" style="left:110px;top:20px;width:34px;height:34px;background:#f6f5f0;--c:#f6f5f0;--i:2"></b>
+<b class="hb-sw" style="left:154px;top:20px;width:34px;height:34px;background:#0b0c1f;--c:#0b0c1f;--i:3"></b>
+<b class="hb-sw" style="left:198px;top:20px;width:34px;height:34px;background:#ff5c3d;--c:#ff5c3d;--i:4"></b>
+<b class="t" style="left:25px;top:62px">azul</b>
+<b class="t" style="left:68px;top:62px">lima</b>
+<b class="t" style="left:110px;top:62px">papel</b>
+<b class="t" style="left:155px;top:62px">tinta</b>
+<b class="t" style="left:199px;top:62px">coral</b>
+<b class="hb-aa" style="left:20px;top:88px">Aa</b>
+<b class="t" style="left:24px;top:190px">Anybody · Geist Mono</b>
+<b class="hb-rule" style="left:196px;top:96px;width:10px;--i:0"></b>
+<b class="hb-rule" style="left:196px;top:110px;width:20px;--i:1"></b>
+<b class="hb-rule" style="left:196px;top:124px;width:30px;--i:2"></b>
+<b class="hb-rule" style="left:196px;top:138px;width:40px;--i:3"></b>
+<b class="hb-rule" style="left:196px;top:152px;width:60px;--i:4"></b>
+<b class="hb-rule" style="left:196px;top:166px;width:80px;--i:5"></b>
+<b class="t" style="left:288px;top:94px">4</b>
+<b class="t" style="left:288px;top:108px">8</b>
+<b class="t" style="left:288px;top:122px">12</b>
+<b class="t" style="left:288px;top:136px">16</b>
+<b class="t" style="left:288px;top:150px">24</b>
+<b class="t" style="left:288px;top:164px">32</b>
+<b class="hb-rad" style="left:196px;top:188px;width:22px;height:22px;border-radius:3px"></b>
+<b class="hb-rad" style="left:226px;top:188px;width:22px;height:22px;border-radius:7px"></b>
+<b class="hb-rad" style="left:256px;top:188px;width:22px;height:22px;border-radius:9px"></b>
+<b class="hb-rad" style="left:286px;top:188px;width:22px;height:22px;border-radius:50%"></b>
+</div>
+</div>
+
+<div class="iso-pl hb-pl" data-layer="1" style="--x:30px;--y:-30px;--w:330px;--h:230px;--r:18px;--zr:164px">
+<i class="iso-pl__e"></i><i class="iso-pl__e"></i><i class="iso-pl__e"></i>
+<div class="iso-pl__face">
+<b class="hb-btn hb-btn--pri" style="left:22px;top:22px;width:136px;height:40px">Ver projetos</b>
+<b class="hb-btn hb-btn--sec" style="left:170px;top:22px;width:136px;height:40px">Falar comigo</b>
+<b class="hb-tg" style="left:22px;top:84px;width:56px;height:30px"><b></b></b>
+<b class="hb-cb" style="left:94px;top:86px;width:26px;height:26px"><svg class="ck" viewBox="0 0 24 24"><path d="M5 12.5 L10 17 L19 7"></path></svg></b>
+<b class="hb-chip" style="left:136px;top:88px;width:78px;height:22px"><span class="t" style="color:#0b0c1f">pronto</span></b>
+<b class="hb-field" style="left:22px;top:132px;width:286px;height:40px"><b class="hb-typed" style="left:18px;top:12px;width:94px;height:16px">Olá, Bruno</b><b class="hb-caret" style="left:114px;top:12px"></b></b>
+<b class="hb-range" style="left:22px;top:196px;width:190px;height:6px"><b></b></b>
+<b class="t" style="left:228px;top:193px">gap 24</b>
+<span class="hb-note" style="left:22px;top:184px;width:286px;height:30px"><i></i>Não deu para enviar. Tente de novo.</span>
+</div>
+</div>
+
+<div class="iso-pl hb-pl" data-layer="2" style="--x:60px;--y:-60px;--w:330px;--h:230px;--r:18px;--zr:314px">
+<i class="iso-pl__e"></i><i class="iso-pl__e"></i><i class="iso-pl__e"></i>
+<div class="iso-pl__face">
+<b class="hb-chrome" style="left:0px;top:0px;width:330px;height:28px"></b>
+<b class="hb-dot" style="left:12px;top:10.5px"></b>
+<b class="hb-dot" style="left:24px;top:10.5px"></b>
+<b class="hb-dot" style="left:36px;top:10.5px"></b>
+<b class="hb-url" style="left:60px;top:6px;width:200px;height:16px"><b class="t hb-urltext" style="left:10px;top:3px;width:122px">devguimaraes.com.br</b></b>
+<b class="hb-page" style="left:0px;top:28px;width:330px;height:202px">
+<b class="hb-skel" style="left:14px;top:12px;width:80px;height:8px"></b>
+<b class="hb-skel" style="left:14px;top:40px;width:150px;height:24px"></b>
+<b class="hb-skel" style="left:14px;top:68px;width:120px;height:24px"></b>
+<b class="hb-skel" style="left:14px;top:104px;width:180px;height:6px"></b>
+<b class="hb-skel" style="left:14px;top:136px;width:70px;height:22px;border-radius:11px"></b>
+<b class="hb-skel" style="left:206px;top:44px;width:110px;height:80px;border-radius:8px"></b>
+<b class="hb-paint" style="left:0px;top:0px;width:330px;height:202px">
+<b class="hb-mini-sig" style="left:14px;top:12px">bruno guimarães</b>
+<b class="hb-bar" style="left:232px;top:14px;width:22px;height:5px"></b>
+<b class="hb-bar" style="left:260px;top:14px;width:20px;height:5px"></b>
+<b class="hb-bar" style="left:286px;top:14px;width:28px;height:5px"></b>
+<b class="hb-mini-title" style="left:14px;top:46px;font-size:44px">No ar.</b>
+<b class="hb-bar" style="left:14px;top:104px;width:176px;height:5px"></b>
+<b class="hb-bar" style="left:14px;top:114px;width:140px;height:5px"></b>
+<b class="hb-mini-cta" style="left:14px;top:136px;width:70px;height:22px"></b>
+<b class="hb-card" style="left:206px;top:44px;width:110px;height:80px"><b class="hb-mini-cta" style="left:12px;top:12px;width:18px;height:18px"></b><b class="hb-skel" style="left:12px;top:44px;width:80px;height:6px"></b><b class="hb-skel" style="left:12px;top:56px;width:56px;height:6px"></b></b>
+<b class="hb-card" style="left:206px;top:132px;width:52px;height:56px"></b>
+<b class="hb-card" style="left:264px;top:132px;width:52px;height:56px"></b>
+</b>
+</b>
+</div>
+</div>
+
+<div class="iso-pl hb-pl" data-layer="3" style="--x:10px;--y:-6px;--w:170px;--h:62px;--r:31px;--zr:464px">
+<i class="iso-pl__e"></i><i class="iso-pl__e"></i><i class="iso-pl__e"></i>
+<div class="iso-pl__face">
+<b class="hb-toast-dot" style="left:16px;top:23px"></b>
+<b class="hb-slot" style="left:42px;top:14px;width:116px;height:16px"><b class="hb-slot__a" style="left:0px">carregando</b><b class="hb-slot__b" style="left:0px">pronto</b></b>
+<b class="hb-prog" style="left:42px;top:38px;width:110px;height:5px"><b></b></b>
+</div>
+</div>
+</div></div>
+
+<div class="ab-rail hb" aria-hidden="true">
+<svg class="ab-rail__svg"><polyline class="hb-rail ab-rail__line" points="0,0 0,0"></polyline><circle class="hb-stop ab-rail__stop is-on" r="7"></circle><circle class="hb-stop ab-rail__stop is-on" r="7"></circle><circle class="hb-stop ab-rail__stop is-on" r="7"></circle><circle class="hb-stop ab-rail__stop is-on" r="7"></circle></svg>
+<span class="hb-tag ab-rail__tag is-on">// tokens</span><span class="hb-tag ab-rail__tag is-on">// componentes</span><span class="hb-tag ab-rail__tag is-on">// tela</span><span class="hb-tag ab-rail__tag is-on">// estado</span>
+<i class="hs-stop ab-rest" data-stop="hero" data-size="64"></i>
+</div>
+
+<div class="ab-st">
+<p class="g-eyebrow">// estados</p>
+<h2 class="ab-st__title">Uma interface não é uma tela.</h2>
+<p class="ab-st__lead">É tudo o que pode acontecer com ela.</p>
+<div class="ab-pills" role="group" aria-label="Estados da interface">
+<button type="button" class="g-chip" data-demo="empty" aria-pressed="true">vazio</button>
+<button type="button" class="g-chip" data-demo="loading" aria-pressed="false">carregando</button>
+<button type="button" class="g-chip" data-demo="error" aria-pressed="false">erro</button>
+<button type="button" class="g-chip" data-demo="done" aria-pressed="false">pronto</button>
+</div>
+<div class="ab-beats">
+<p class="ab-beat" data-for="empty">Antes de ter conteúdo, ela explica o que fazer.</p>
+<p class="ab-beat" data-for="loading">Enquanto busca, ela avisa e segura a ansiedade.</p>
+<p class="ab-beat" data-for="error">Quando falha, ela diz o que houve e como sair.</p>
+<p class="ab-beat" data-for="done">Quando dá certo, ela comemora pouco e sai da frente.</p>
+</div>
+</div>
+
+<div class="ab-demo">
+<div class="dm g-papel" data-st="empty">
+<div class="dm-bar"><i></i><i></i><i></i><span class="dm-url">seusite.com.br</span></div>
+<div class="dm-body">
+<i class="hs-stop dm-stop" data-stop="card" data-size="112" data-size-m="84"></i>
+<div class="dm-page g-azul">
+<span class="dm-page__sig">seu site</span>
+<strong class="dm-page__title">No ar.</strong>
+<span class="dm-page__bar"></span><span class="dm-page__bar dm-page__bar--2"></span>
+<span class="dm-page__cta"></span>
+<i class="hs-stop dm-stop--done" data-stop="card-done" data-size="88" data-size-m="60"></i>
+</div>
+<div class="dm-msg" data-for="empty"><strong>Nada publicado ainda.</strong><span>O site aparece aqui quando for ao ar.</span></div>
+<div class="dm-msg" data-for="loading"><strong>Publicando</strong><span>Três de quatro etapas.</span></div>
+<div class="dm-msg" data-for="error"><strong>Não deu para publicar.</strong><span>O domínio não respondeu. Seu rascunho está salvo.</span></div>
+<div class="dm-prog"><b></b></div>
+</div>
+<div class="dm-foot">
+<span class="dm-status"><span data-for="empty">estado: vazio</span><span data-for="loading">estado: carregando</span><span data-for="error">estado: erro</span><span data-for="done">estado: pronto</span></span>
+<button type="button" class="g-button dm-act"><span data-for="empty">Publicar</span><span data-for="loading">Publicando</span><span data-for="error">Tentar de novo</span><span data-for="done">Publicar de novo</span></button>
+</div>
+</div>
+</div>
+
+<i class="hs-stop ab-exit" data-stop="exit" data-size="64"></i>
+<div class="hs-disc g-papel"></div>
+</div>
+</section>
+
+<section class="hs-ch sv" id="servicos" aria-labelledby="sv-title">
+<div class="sv-intro g-papel only-m">
+<p class="g-eyebrow">// serviços</p>
+<h2 class="sv-title" id="sv-title">O que eu faço.</h2>
+<p class="sv-lead">Cinco jeitos de trabalharmos juntos, do site institucional à identidade que vira código.</p>
+</div>
+<div class="sv-track">
+<div class="hs-stage g-papel sv-stage">
+<div class="sv-left">
+<div class="sv-head only-d">
+<p class="g-eyebrow">// serviços</p>
+<p class="sv-title" role="heading" aria-level="2">O que eu faço.</p>
+<p class="sv-lead">Cinco jeitos de trabalharmos juntos, do site institucional à identidade que vira código.</p>
+</div>
+<ol class="sv-list">
+<li><button type="button" class="sv-row is-on" data-i="0" aria-label="Sites completos"><i class="hs-stop sv-dot" data-stop="sv0" data-size="44"></i><span class="sv-n">01</span><span class="sv-name">Sites completos</span></button></li>
+<li><button type="button" class="sv-row" data-i="1" aria-label="Landing pages"><i class="hs-stop sv-dot" data-stop="sv1" data-size="44"></i><span class="sv-n">02</span><span class="sv-name">Landing pages</span></button></li>
+<li><button type="button" class="sv-row" data-i="2" aria-label="Interfaces de produto"><i class="hs-stop sv-dot" data-stop="sv2" data-size="44"></i><span class="sv-n">03</span><span class="sv-name">Interfaces de produto</span></button></li>
+<li><button type="button" class="sv-row" data-i="3" aria-label="Full stack"><i class="hs-stop sv-dot" data-stop="sv3" data-size="44"></i><span class="sv-n">04</span><span class="sv-name">Full stack</span></button></li>
+<li><button type="button" class="sv-row" data-i="4" aria-label="Branding"><i class="hs-stop sv-dot" data-stop="sv4" data-size="44"></i><span class="sv-n">05</span><span class="sv-name">Branding</span></button></li>
+</ol>
+<div class="sv-slot">
+<div class="sv-detail is-on"><p>Do mapa do site à publicação: estrutura, conteúdo, SEO e um painel para editar sem depender de mim.</p><ul class="sv-tags"><li>Astro</li><li>SEO</li><li>CMS</li></ul></div>
+<div class="sv-detail"><p>Uma página, um objetivo. Carrega rápido, mede cada clique e é fácil de testar.</p><ul class="sv-tags"><li>Conversão</li><li>Analytics</li><li>Web Vitals</li></ul></div>
+<div class="sv-detail"><p>Telas com todos os estados: carregando, vazio, erro e o momento em que tudo funciona.</p><ul class="sv-tags"><li>React</li><li>Design system</li><li>Acessibilidade</li></ul></div>
+<div class="sv-detail"><p>O front-end com o back-end que ele precisa: formulários, APIs e banco.</p><ul class="sv-tags"><li>Next.js</li><li>APIs</li><li>Banco</li></ul></div>
+<div class="sv-detail"><p>Identidade que vira código: tokens, componentes e movimento.</p><ul class="sv-tags"><li>Identidade</li><li>Tokens</li><li>Motion</li></ul></div>
+</div>
+</div>
+<div class="sv-panel" data-c="azul">
+<div class="sv-panel__disc"></div>
+<div class="sv-art is-on" data-c="azul"><div class="sv-art__head only-m g-azul"><p class="g-eyebrow">// serviços · 01/05</p><p class="sv-art__name">Sites completos</p></div><div class="sv-art__stage"><span class="service-art" style="--ratio:1.527"><!-- Gerado por docs/handoff/servicos-camadas/gerador/arts.py. Não editar à mão: mude o gerador e exporte de novo. -->
+
+<span class="ar ar-sites is-pre" aria-hidden="true"><span class="ar__scene"><b class="fl" style="left:-23em;top:-5em;width:22em;height:15em;border-radius:1.1em"></b><div class="pl " style="--x:-23em;--y:-5em;--w:22em;--h:15em;--z:0em;--r:1.1em;--d:0ms"><div class="pl__b"><i class="pl__e" style="--e:-0.8em"></i><i class="pl__e" style="--e:-0.533em"></i><i class="pl__e" style="--e:-0.267em"></i><div class="pl__face"><b style="left:1.4em;top:1.3em"><span class="t" style="">mapa do site</span></b><b style="left:1.4em;top:6.1em;width:5em;height:2.4em;background:var(--ink);border-radius:1.2em"><b style="left:1.05em;top:0.82em"><span class="t" style="color:var(--paper)">seusite</span></b></b><b style="left:6.4em;top:7.22em;width:2.8em;height:0.16em;background:var(--ink-3)"></b><b style="left:9.12em;top:3.6em;width:0.16em;height:7.36em;background:var(--ink-3)"></b><b style="left:9.2em;top:3.52em;width:2.8em;height:0.16em;background:var(--ink-3)"></b><b style="left:9.2em;top:7.12em;width:2.8em;height:0.16em;background:var(--ink-3)"></b><b style="left:9.2em;top:10.72em;width:2.8em;height:0.16em;background:var(--ink-3)"></b><b class="s1-w0" style="left:6.4em;top:7.18em;width:2.8em;height:0.24em;background:var(--azul);transform-origin:left"></b><b style="left:12em;top:2.4em;width:6.4em;height:2.4em;background:var(--paper-2);border-radius:1.2em"><b style="left:0.95em;top:0.82em"><span class="t" style="color:var(--ink)">/</span></b></b><b style="left:12em;top:6em;width:6.4em;height:2.4em;background:var(--paper-2);border-radius:1.2em"><b style="left:0.95em;top:0.82em"><span class="t" style="color:var(--ink)">/sobre</span></b></b><b style="left:12em;top:9.6em;width:6.4em;height:2.4em;background:var(--paper-2);border-radius:1.2em"><b style="left:0.95em;top:0.82em"><span class="t" style="color:var(--ink)">/blog</span></b></b><b class="s1-node" style="left:11.6em;top:2em;width:7.2em;height:3.2em;border:.22em solid var(--azul);border-radius:1.6em"></b><b style="left:1.4em;top:12.6em"><span class="t" style="">3 páginas · 0 erros</span></b></div></div></div><div class="pl s1-chip" style="--x:9em;--y:10em;--w:9em;--h:4.6em;--z:5em;--r:1em;--d:220ms"><div class="pl__b"><i class="pl__e" style="--e:-0.8em"></i><i class="pl__e" style="--e:-0.533em"></i><i class="pl__e" style="--e:-0.267em"></i><div class="pl__face"><svg aria-hidden="true" viewBox="0 0 40 40" style="left:.7em;top:.7em;width:3.2em;height:3.2em"><circle cx="20" cy="20" r="15" style="fill:none;stroke:var(--ink-3);stroke-width:5"/><circle class="s1-ring" cx="20" cy="20" r="15" style="fill:none;stroke:var(--azul);stroke-width:5;stroke-linecap:round;stroke-dasharray:100" pathLength="100" transform="rotate(-90 20 20)"/></svg><b style="left:4.5em;top:0.95em"><span class="t" style="">SEO</span></b><b style="left:4.5em;top:2.25em"><span class="n" style="font-size:1.35em">100</span></b></div></div></div><div class="pl " style="--x:-13em;--y:-12em;--w:27em;--h:18em;--z:6.5em;--r:1.1em;--d:120ms"><div class="pl__b"><i class="pl__e" style="--e:-0.8em"></i><i class="pl__e" style="--e:-0.533em"></i><i class="pl__e" style="--e:-0.267em"></i><div class="pl__face"><b style="left:0em;top:0em;width:27em;height:2.6em;background:var(--paper-2)"></b><b style="left:1.1em;top:0.95em;width:0.7em;height:0.7em;background:#ff5c3d;border-radius:50%"></b><b style="left:2.2em;top:0.95em;width:0.7em;height:0.7em;background:var(--lima);border-radius:50%"></b><b style="left:3.3em;top:0.95em;width:0.7em;height:0.7em;background:var(--ink-3);border-radius:50%"></b><b style="left:5.2em;top:0.6em;width:14em;height:1.4em;background:var(--paper);border-radius:.7em;overflow:hidden"><b style="left:0.8em;top:0.34em"><span class="t" style="color:var(--ink)">seusite.com/</span></b><b style="left:6.75em;top:0em;width:6em;height:1.4em;overflow:hidden"><b class="s1-path" style="left:0em;top:0em;width:6em;height:5.6em;"><b style="left:0em;top:0.34em"><span class="t" style="color:var(--azul)"></span></b><b style="left:0em;top:1.74em"><span class="t" style="color:var(--azul)">sobre</span></b><b style="left:0em;top:3.14em"><span class="t" style="color:var(--azul)">blog</span></b><b style="left:0em;top:4.54em"><span class="t" style="color:var(--azul)"></span></b></b></b></b><b class="s1-prog" style="left:0em;top:2.45em;width:27em;height:0.22em;background:var(--azul);transform-origin:left;transform:scaleX(0)"></b><b style="left:1.6em;top:3.5em;width:1.5em;height:1.5em;border:.32em solid var(--azul);border-radius:50%"></b><b style="left:16.6em;top:3.95em;width:2.4em;height:0.5em;background:var(--ink-2);border-radius:.25em"></b><b style="left:19.6em;top:3.95em;width:2.4em;height:0.5em;background:var(--ink-2);border-radius:.25em"></b><b style="left:22.6em;top:3.95em;width:2.4em;height:0.5em;background:var(--ink-2);border-radius:.25em"></b><b class="s1-under" style="left:16.6em;top:4.9em;width:2.4em;height:0.26em;background:var(--azul);border-radius:.13em"></b><b class="ring s1-rp0" style="left:16.2em;top:2.6em;width:3.2em;height:3.2em;"></b><b class="ring s1-rp1" style="left:19.2em;top:2.6em;width:3.2em;height:3.2em;"></b><b class="ring s1-rp2" style="left:22.2em;top:2.6em;width:3.2em;height:3.2em;"></b><b style="left:1.6em;top:6em;width:23.8em;height:10.6em;overflow:hidden"><b class="s1-strip" style="left:0em;top:0em;width:95.2em;height:10.6em;"><b style="left:0em;top:0.4em;width:13em;height:1.6em;background:var(--ink);border-radius:.35em"></b><b style="left:0em;top:2.5em;width:9.5em;height:1.6em;background:var(--ink);border-radius:.35em"></b><b style="left:0em;top:4.9em;width:12em;height:0.55em;background:var(--ink-3);border-radius:.3em"></b><b style="left:0em;top:5.9em;width:8.6em;height:0.55em;background:var(--ink-3);border-radius:.3em"></b><b style="left:0em;top:7.7em;width:6.4em;height:2.1em;background:var(--azul);border-radius:1.05em"><b style="left:1.6em;top:0.8em;width:3.2em;height:0.5em;background:var(--paper);border-radius:.25em"></b></b><b style="left:7.2em;top:7.7em;width:5.4em;height:2.1em;border:.16em solid var(--ink-3);border-radius:1.05em"></b><b style="left:15em;top:0.4em;width:8.8em;height:9.6em;background:var(--lima);border-radius:.9em"><svg aria-hidden="true" class="gm " viewBox="0 0 120 120" style="left:2.1em;top:2.5em;width:4.6em;height:4.6em;color:var(--ink)"><circle class="gm__track" cx="60" cy="60" r="44"/><g class="gm__turn"><circle class="gm__arc" cx="60" cy="60" r="44"/></g><g class="gm__eyes"><ellipse cx="46" cy="54" rx="6" ry="9"/><ellipse cx="74" cy="54" rx="6" ry="9"/></g><path class="gm__f gm__happy" d="M38 60 Q46 46 54 60 M66 60 Q74 46 82 60"/><path class="gm__f gm__x" d="M39 50 L53 62 M53 50 L39 62 M67 50 L81 62 M81 50 L67 62"/><path class="gm__f gm__sleep" d="M39 55 Q46 62 53 55 M67 55 Q74 62 81 55"/></svg></b><b style="left:23.8em;top:0.4em;width:6.4em;height:6.4em;background:var(--azul);border-radius:50%"><b style="left:1.7em;top:1.7em;width:3em;height:3em;background:var(--lima);border-radius:50%"></b></b><b style="left:31.6em;top:0.7em;width:9.5em;height:1.5em;background:var(--ink);border-radius:.35em"></b><b style="left:31.6em;top:3.2em;width:14em;height:0.55em;background:var(--ink-3);border-radius:.3em"></b><b style="left:31.6em;top:4.3em;width:15.4em;height:0.55em;background:var(--ink-3);border-radius:.3em"></b><b style="left:31.6em;top:5.4em;width:11.6em;height:0.55em;background:var(--ink-3);border-radius:.3em"></b><b style="left:23.8em;top:8em;width:5em;height:1.6em;border:.16em solid var(--azul);border-radius:.8em"></b><b style="left:29.4em;top:8em;width:5em;height:1.6em;border:.16em solid var(--ink-3);border-radius:.8em"></b><b style="left:35em;top:8em;width:5em;height:1.6em;border:.16em solid var(--ink-3);border-radius:.8em"></b><b style="left:47.6em;top:0.2em;width:8em;height:1.5em;background:var(--ink);border-radius:.35em"></b><b style="left:47.6em;top:2.6em;width:7.6em;height:7.8em;background:var(--paper-2);border-radius:.8em"><b style="left:0.5em;top:0.5em;width:6.6em;height:3.8em;background:var(--azul);border-radius:.5em"></b><b style="left:0.5em;top:5em;width:5.6em;height:0.55em;background:var(--ink-2);border-radius:.3em"></b><b style="left:0.5em;top:6.1em;width:3.8em;height:0.55em;background:var(--ink-3);border-radius:.3em"></b></b><b style="left:55.7em;top:2.6em;width:7.6em;height:7.8em;background:var(--paper-2);border-radius:.8em"><b style="left:0.5em;top:0.5em;width:6.6em;height:3.8em;background:var(--lima);border-radius:.5em"></b><b style="left:0.5em;top:5em;width:5.6em;height:0.55em;background:var(--ink-2);border-radius:.3em"></b><b style="left:0.5em;top:6.1em;width:3.8em;height:0.55em;background:var(--ink-3);border-radius:.3em"></b></b><b style="left:63.8em;top:2.6em;width:7.6em;height:7.8em;background:var(--paper-2);border-radius:.8em"><b style="left:0.5em;top:0.5em;width:6.6em;height:3.8em;background:var(--ink);border-radius:.5em"></b><b style="left:0.5em;top:5em;width:5.6em;height:0.55em;background:var(--ink-2);border-radius:.3em"></b><b style="left:0.5em;top:6.1em;width:3.8em;height:0.55em;background:var(--ink-3);border-radius:.3em"></b></b><b style="left:71.4em;top:0.4em;width:13em;height:1.6em;background:var(--ink);border-radius:.35em"></b><b style="left:71.4em;top:2.5em;width:9.5em;height:1.6em;background:var(--ink);border-radius:.35em"></b><b style="left:71.4em;top:4.9em;width:12em;height:0.55em;background:var(--ink-3);border-radius:.3em"></b><b style="left:71.4em;top:5.9em;width:8.6em;height:0.55em;background:var(--ink-3);border-radius:.3em"></b><b style="left:71.4em;top:7.7em;width:6.4em;height:2.1em;background:var(--azul);border-radius:1.05em"><b style="left:1.6em;top:0.8em;width:3.2em;height:0.5em;background:var(--paper);border-radius:.25em"></b></b><b style="left:78.6em;top:7.7em;width:5.4em;height:2.1em;border:.16em solid var(--ink-3);border-radius:1.05em"></b><b style="left:86.4em;top:0.4em;width:8.8em;height:9.6em;background:var(--lima);border-radius:.9em"><svg aria-hidden="true" class="gm " viewBox="0 0 120 120" style="left:2.1em;top:2.5em;width:4.6em;height:4.6em;color:var(--ink)"><circle class="gm__track" cx="60" cy="60" r="44"/><g class="gm__turn"><circle class="gm__arc" cx="60" cy="60" r="44"/></g><g class="gm__eyes"><ellipse cx="46" cy="54" rx="6" ry="9"/><ellipse cx="74" cy="54" rx="6" ry="9"/></g><path class="gm__f gm__happy" d="M38 60 Q46 46 54 60 M66 60 Q74 46 82 60"/><path class="gm__f gm__x" d="M39 50 L53 62 M53 50 L39 62 M67 50 L81 62 M81 50 L67 62"/><path class="gm__f gm__sleep" d="M39 55 Q46 62 53 55 M67 55 Q74 62 81 55"/></svg></b></b></b></div></div></div><div class="bb s1-cur"><div class="bb__z s1-cur-z" style="transform:translateZ(8.9em)"><div class="bb__r"><svg aria-hidden="true" class="cur s1-cur-p" viewBox="0 0 24 24" style="left:-.33em;top:-.22em;width:2.6em;height:2.6em"><path d="M3 2 L3 19 L8 14.6 L11.4 22 L14.6 20.6 L11.2 13.4 L17.6 13.4 Z"/></svg></div></div></div></span></span></span></div></div>
+<div class="sv-art" data-c="nevoa"><div class="sv-art__head only-m g-papel"><p class="g-eyebrow">// serviços · 02/05</p><p class="sv-art__name">Landing pages</p></div><div class="sv-art__stage"><span class="service-art" style="--ratio:1.528"><!-- Gerado por docs/handoff/servicos-camadas/gerador/arts.py. Não editar à mão: mude o gerador e exporte de novo. -->
+
+<span class="ar ar-landing is-pre" aria-hidden="true"><span class="ar__scene"><b class="fl" style="left:-21em;top:-6em;width:19em;height:13em;border-radius:1.1em"></b><div class="pl " style="--x:-21em;--y:-6em;--w:19em;--h:13em;--z:0em;--r:1.1em;--d:0ms"><div class="pl__b"><i class="pl__e" style="--e:-0.8em"></i><i class="pl__e" style="--e:-0.533em"></i><i class="pl__e" style="--e:-0.267em"></i><div class="pl__face"><b style="left:1.4em;top:1.3em"><span class="t" style="">conversões · hoje</span></b><b style="left:1.4em;top:2.4em;width:7em;height:2.4em;overflow:hidden"><b class="s2-num" style="left:0em;top:0em;width:7em;height:4.8em;"><b style="left:0em;top:0.1em"><span class="n" style="font-size:2.2em">4,8%</span></b><b style="left:0em;top:2.5em"><span class="n" style="font-size:2.2em;color:var(--azul)">4,9%</span></b></b></b><b style="left:1.4em;top:5.4em;width:16.2em;height:6.4em;overflow:hidden"><svg aria-hidden="true" class="s2-spark" viewBox="0 0 324 66" preserveAspectRatio="none" style="left:0;top:0;width:32.4em;height:6.6em"><path d="M0 40 C 10 40 18 22 30 24 S 48 48 62 44 S 82 16 98 22 S 124 46 138 42 S 156 40 162 40 L162 66 L0 66 Z" style="fill:rgba(43,46,255,.10)"/><path d="M0 40 C 10 40 18 22 30 24 S 48 48 62 44 S 82 16 98 22 S 124 46 138 42 S 156 40 162 40" style="fill:none;stroke:var(--azul);stroke-width:2.6;vector-effect:non-scaling-stroke"/><g transform="translate(162 0)"><path d="M0 40 C 10 40 18 22 30 24 S 48 48 62 44 S 82 16 98 22 S 124 46 138 42 S 156 40 162 40 L162 66 L0 66 Z" style="fill:rgba(43,46,255,.10)"/><path d="M0 40 C 10 40 18 22 30 24 S 48 48 62 44 S 82 16 98 22 S 124 46 138 42 S 156 40 162 40" style="fill:none;stroke:var(--azul);stroke-width:2.6;vector-effect:non-scaling-stroke"/></g></svg></b><b style="left:1.4em;top:11.85em;width:16.2em;height:0.12em;background:var(--ink-3)"></b><b class="ring s2-splash" style="left:12.4em;top:5.2em;width:4.4em;height:4.4em;"></b><b class="pt s2-pt0" style="left:14.15em;top:6.95em;width:0.9em;height:0.9em;background:var(--azul)"></b><b class="pt s2-pt1" style="left:14.15em;top:6.95em;width:0.9em;height:0.9em;background:var(--lima)"></b><b class="pt s2-pt2" style="left:14.15em;top:6.95em;width:0.9em;height:0.9em;background:var(--ink)"></b><b class="pt s2-pt3" style="left:14.15em;top:6.95em;width:0.9em;height:0.9em;background:var(--azul)"></b><b class="pt s2-pt4" style="left:14.15em;top:6.95em;width:0.9em;height:0.9em;background:var(--lima)"></b><b class="pt s2-pt5" style="left:14.15em;top:6.95em;width:0.9em;height:0.9em;background:var(--ink)"></b><b class="s2-plus" style="left:12.6em;top:1.2em;width:4.6em;height:2.2em;background:var(--lima);border-radius:1.1em"><b style="left:1.15em;top:0.55em"><span class="n" style="font-size:1.05em">+1</span></b></b></div></div></div><div class="pl " style="--x:-12em;--y:-12em;--w:25em;--h:17em;--z:6.5em;--r:1.1em;--d:120ms"><div class="pl__b"><i class="pl__e" style="--e:-0.8em"></i><i class="pl__e" style="--e:-0.533em"></i><i class="pl__e" style="--e:-0.267em"></i><div class="pl__face"><b style="left:1.6em;top:1.4em;width:1.4em;height:1.4em;border:.3em solid var(--azul);border-radius:50%"></b><b style="left:18.4em;top:1.9em;width:2em;height:0.45em;background:var(--ink-3);border-radius:.25em"></b><b style="left:21em;top:1.9em;width:2em;height:0.45em;background:var(--ink-3);border-radius:.25em"></b><b class="s2-h1" style="left:1.6em;top:4.2em;width:14.5em;height:1.7em;border-radius:.35em"></b><b class="s2-h2" style="left:1.6em;top:6.3em;width:10.5em;height:1.7em;border-radius:.35em"></b><b class="s2-p1" style="left:1.6em;top:8.8em;width:13em;height:0.55em;border-radius:.3em"></b><b class="s2-p2" style="left:1.6em;top:9.8em;width:9.5em;height:0.55em;border-radius:.3em"></b><b class="s2-img" style="left:16.6em;top:4.2em;width:6.8em;height:10.2em;border-radius:.9em;overflow:hidden"><b class="s2-imgin" style="left:1.4em;top:3.1em;width:4em;height:4em;border-radius:50%;background:var(--lima)"></b></b><b class="s2-cta" style="left:1.6em;top:11.8em;width:8em;height:2.6em;background:var(--azul);border-radius:1.3em"><b class="s2-lbl" style="left:2em;top:1.05em;width:4em;height:0.5em;background:var(--paper);border-radius:.25em"></b><svg aria-hidden="true" class="gm s2-spin" viewBox="0 0 120 120" style="left:3.15em;top:0.45em;width:1.7em;height:1.7em;color:var(--paper)"><circle class="gm__track" cx="60" cy="60" r="44"/><g class="gm__turn"><circle class="gm__arc" cx="60" cy="60" r="44"/></g><g class="gm__eyes"><ellipse cx="46" cy="54" rx="6" ry="9"/><ellipse cx="74" cy="54" rx="6" ry="9"/></g><path class="gm__f gm__happy" d="M38 60 Q46 46 54 60 M66 60 Q74 46 82 60"/><path class="gm__f gm__x" d="M39 50 L53 62 M53 50 L39 62 M67 50 L81 62 M81 50 L67 62"/><path class="gm__f gm__sleep" d="M39 55 Q46 62 53 55 M67 55 Q74 62 81 55"/></svg><svg aria-hidden="true" class="ck s2-ck" viewBox="0 0 24 24" style="left:3.1em;top:0.4em;width:1.8em;height:1.8em;color:var(--paper)"><path d="M5 12.5 L10 17 L19 7" pathLength="1"/></svg></b><b style="left:10.6em;top:12.3em;width:4.6em;height:1.6em;border:.16em solid var(--ink-3);border-radius:.8em"></b><b class="ring s2-rp" style="left:3.6em;top:11.1em;width:4em;height:4em;"></b></div></div></div><div class="pl s2-chip" style="--x:9em;--y:6.2em;--w:9.6em;--h:4.8em;--z:12em;--r:1em;--d:240ms"><div class="pl__b"><i class="pl__e" style="--e:-0.8em"></i><i class="pl__e" style="--e:-0.533em"></i><i class="pl__e" style="--e:-0.267em"></i><div class="pl__face"><svg aria-hidden="true" viewBox="0 0 40 40" style="left:.8em;top:.75em;width:3.3em;height:3.3em"><circle cx="20" cy="20" r="15" style="fill:none;stroke:var(--ink-3);stroke-width:5"/><circle class="s2-ring" cx="20" cy="20" r="15" style="fill:none;stroke:var(--azul);stroke-width:5;stroke-linecap:round;stroke-dasharray:100" pathLength="100" transform="rotate(-90 20 20)"/></svg><b style="left:4.8em;top:1.05em"><span class="t" style="">LCP</span></b><b style="left:4.8em;top:2.35em"><span class="n" style="font-size:1.25em">0,8 s</span></b></div></div></div><div class="bb s2-dot"><div class="bb__z s2-dot-z"><div class="bb__r"><b class="bb__dot s2-dot-dot" style="left:-0.7em;top:-0.7em;width:1.4em;height:1.4em;background:var(--azul)"></b></div></div></div><div class="bb s2-cur"><div class="bb__z s2-cur-z" style="transform:translateZ(8.9em)"><div class="bb__r"><svg aria-hidden="true" class="cur s2-cur-p" viewBox="0 0 24 24" style="left:-.33em;top:-.22em;width:2.6em;height:2.6em"><path d="M3 2 L3 19 L8 14.6 L11.4 22 L14.6 20.6 L11.2 13.4 L17.6 13.4 Z"/></svg></div></div></div></span></span></span></div></div>
+<div class="sv-art" data-c="tinta"><div class="sv-art__head only-m g-tinta"><p class="g-eyebrow">// serviços · 03/05</p><p class="sv-art__name">Interfaces de produto</p></div><div class="sv-art__stage"><span class="service-art" style="--ratio:1.204"><!-- Gerado por docs/handoff/servicos-camadas/gerador/arts.py. Não editar à mão: mude o gerador e exporte de novo. -->
+
+<span class="ar ar-product is-pre" aria-hidden="true"><span class="ar__scene"><b class="fl" style="left:-15em;top:-1em;width:18em;height:12em;border-radius:1.1em"></b><div class="pl " style="--x:-15em;--y:-1em;--w:18em;--h:12em;--z:0em;--r:1.1em;--d:0ms"><div class="pl__b"><i class="pl__e" style="--e:-0.8em"></i><i class="pl__e" style="--e:-0.533em"></i><i class="pl__e" style="--e:-0.267em"></i><div class="pl__face"><b style="left:1.4em;top:1.2em"><span class="t" style="">componentes</span></b><b style="left:1.4em;top:3em;width:6em;height:2em;background:var(--azul);border-radius:1em"><b style="left:1.5em;top:0.78em;width:3em;height:0.45em;background:var(--paper);border-radius:.22em"></b></b><b class="s3-tg" style="left:8.6em;top:3.1em;width:3.4em;height:1.8em;border-radius:.9em"><b class="s3-knob" style="left:0.2em;top:0.2em;width:1.4em;height:1.4em;background:var(--paper);border-radius:50%"></b></b><b class="s3-cb" style="left:13.4em;top:3.1em;width:1.8em;height:1.8em;border-radius:.45em;border:.18em solid var(--ink)"><svg aria-hidden="true" class="ck s3-cbk" viewBox="0 0 24 24" style="left:0.12em;top:0.12em;width:1.25em;height:1.25em;color:var(--paper)"><path d="M5 12.5 L10 17 L19 7" pathLength="1"/></svg></b><b style="left:1.4em;top:6.6em;width:10.6em;height:2.2em;border:.16em solid var(--ink-3);border-radius:.55em;background:var(--paper)"><b class="s3-caret" style="left:0.9em;top:0.45em;width:0.14em;height:1em;background:var(--ink)"></b></b><b class="s3-chip" style="left:13.4em;top:6.9em;width:3.2em;height:1.6em;border-radius:.8em"></b><b style="left:1.4em;top:9.8em;width:4em;height:0.5em;background:var(--ink-3);border-radius:.25em"></b><b style="left:6em;top:9.8em;width:6em;height:0.5em;background:var(--ink-4);border-radius:.25em"></b></div></div></div><div class="pl " style="--x:-11em;--y:-11em;--w:22em;--h:17em;--z:6.5em;--r:1.1em;--d:120ms"><div class="pl__b"><i class="pl__e" style="--e:-0.8em"></i><i class="pl__e" style="--e:-0.533em"></i><i class="pl__e" style="--e:-0.267em"></i><div class="pl__face"><b style="left:1.6em;top:1.5em;width:5.4em;height:1.1em;background:var(--ink);border-radius:.3em"></b><b class="s3-badge" style="left:7.6em;top:1.15em;width:1.8em;height:1.8em;background:var(--lima);border-radius:50%"><b style="left:0.55em;top:0.45em"><span class="n" style="font-size:.9em">3</span></b></b><b style="left:10.4em;top:1.35em;width:6.8em;height:1.4em;background:var(--ink-4);border-radius:.7em"></b><b style="left:18.8em;top:1.3em;width:1.6em;height:1.6em;background:var(--paper-2);border-radius:50%"></b><b style="left:0em;top:3.9em;width:22em;height:0.12em;background:var(--ink-4)"></b><b style="left:1.1em;top:4.7em;width:4.6em;height:1.5em;background:var(--ink-4);border-radius:.75em"></b><b style="left:1.7em;top:5.2em;width:3em;height:0.45em;background:var(--ink);border-radius:.22em"></b><b style="left:1.7em;top:7.1em;width:2.4em;height:0.45em;background:var(--ink-3);border-radius:.22em"></b><b style="left:1.7em;top:9em;width:2.8em;height:0.45em;background:var(--ink-3);border-radius:.22em"></b><b style="left:1.7em;top:10.9em;width:2em;height:0.45em;background:var(--ink-3);border-radius:.22em"></b><b style="left:6.3em;top:3.9em;width:0.12em;height:13.1em;background:var(--ink-4)"></b><b class="s3-gwrap" style="left:10.8em;top:4.6em;width:6.2em;height:6.2em;"><svg aria-hidden="true" class="gm s3-giro" viewBox="0 0 120 120" style="left:0em;top:0em;width:6.2em;height:6.2em;color:var(--ink)"><circle class="gm__track" cx="60" cy="60" r="44"/><g class="gm__turn"><circle class="gm__arc" cx="60" cy="60" r="44"/></g><g class="gm__eyes"><ellipse cx="46" cy="54" rx="6" ry="9"/><ellipse cx="74" cy="54" rx="6" ry="9"/></g><path class="gm__f gm__happy" d="M38 60 Q46 46 54 60 M66 60 Q74 46 82 60"/><path class="gm__f gm__x" d="M39 50 L53 62 M53 50 L39 62 M67 50 L81 62 M81 50 L67 62"/><path class="gm__f gm__sleep" d="M39 55 Q46 62 53 55 M67 55 Q74 62 81 55"/></svg></b><b class="s3-c0" style="left:11.4em;top:12.2em;width:5em;height:0.55em;background:var(--ink-3);border-radius:.3em;overflow:hidden"><b class="s3-shine" style="left:-2em;top:0em;width:2em;height:0.55em;background:rgba(255,255,255,.75)"></b></b><b class="s3-c1" style="left:10.2em;top:12em;width:7.4em;height:0.9em;background:var(--ink);border-radius:.3em"></b><b class="s3-c1" style="left:11.2em;top:13.4em;width:5.4em;height:0.5em;background:var(--ink-3);border-radius:.25em"></b><b class="s3-c2" style="left:10.5em;top:11.8em;width:6.8em;height:0.9em;background:var(--ink);border-radius:.3em"></b><b class="s3-c2" style="left:10.9em;top:13.2em;width:6em;height:1.9em;"><b class="s3-retry" style="left:0em;top:0em;width:6em;height:1.9em;background:var(--azul);border-radius:.95em"><b style="left:1.5em;top:0.7em;width:3em;height:0.5em;background:var(--paper);border-radius:.25em"></b></b></b><b class="s3-row s3-row0" style="left:7.2em;top:5em;width:13.4em;height:2.8em;"><b style="left:0em;top:0.4em;width:2em;height:2em;background:var(--azul);border-radius:50%"></b><b style="left:2.8em;top:0.55em;width:6.2em;height:0.7em;background:var(--ink);border-radius:.3em"></b><b style="left:2.8em;top:1.7em;width:4em;height:0.5em;background:var(--ink-3);border-radius:.25em"></b><b style="left:9.8em;top:0.7em;width:3.6em;height:1.4em;background:var(--lima);border-radius:.7em"><svg aria-hidden="true" class="ck " viewBox="0 0 24 24" style="left:1.15em;top:0.05em;width:1.3em;height:1.3em;color:var(--ink)"><path d="M5 12.5 L10 17 L19 7" pathLength="1"/></svg></b></b><b class="s3-row s3-row1" style="left:7.2em;top:8.3em;width:13.4em;height:2.8em;"><b style="left:0em;top:0.4em;width:2em;height:2em;background:var(--lima);border-radius:50%"></b><b style="left:2.8em;top:0.55em;width:6.2em;height:0.7em;background:var(--ink);border-radius:.3em"></b><b style="left:2.8em;top:1.7em;width:4em;height:0.5em;background:var(--ink-3);border-radius:.25em"></b><b style="left:9.8em;top:0.7em;width:3.6em;height:1.4em;background:var(--lima);border-radius:.7em"><svg aria-hidden="true" class="ck " viewBox="0 0 24 24" style="left:1.15em;top:0.05em;width:1.3em;height:1.3em;color:var(--ink)"><path d="M5 12.5 L10 17 L19 7" pathLength="1"/></svg></b></b><b class="s3-row s3-row2" style="left:7.2em;top:11.6em;width:13.4em;height:2.8em;"><b style="left:0em;top:0.4em;width:2em;height:2em;background:var(--ink);border-radius:50%"></b><b style="left:2.8em;top:0.55em;width:6.2em;height:0.7em;background:var(--ink);border-radius:.3em"></b><b style="left:2.8em;top:1.7em;width:4em;height:0.5em;background:var(--ink-3);border-radius:.25em"></b><b style="left:9.8em;top:0.7em;width:3.6em;height:1.4em;background:var(--lima);border-radius:.7em"><svg aria-hidden="true" class="ck " viewBox="0 0 24 24" style="left:1.15em;top:0.05em;width:1.3em;height:1.3em;color:var(--ink)"><path d="M5 12.5 L10 17 L19 7" pathLength="1"/></svg></b></b></div></div></div><div class="pl s3-toast" style="--x:5.4em;--y:2.6em;--w:10.5em;--h:3.4em;--z:12em;--r:1em;--d:240ms"><div class="pl__b"><i class="pl__e" style="--e:-0.8em"></i><i class="pl__e" style="--e:-0.533em"></i><i class="pl__e" style="--e:-0.267em"></i><div class="pl__face"><b class="s3-tw" style="left:0em;top:0em;width:10.5em;height:3.4em;"><b class="s3-dotc" style="left:0.9em;top:1.25em;width:0.9em;height:0.9em;border-radius:50%"></b><b style="left:2.5em;top:0.85em;width:7.4em;height:1.7em;overflow:hidden"><b class="s3-slot" style="left:0em;top:0em;width:7.4em;height:8.5em;"><b style="left:0em;top:0.45em"><span class="t" style="color:var(--ink);font-size:.86em">carregando</span></b><b style="left:0em;top:2.15em"><span class="t" style="color:var(--ink);font-size:.86em">vazio</span></b><b style="left:0em;top:3.85em"><span class="t" style="color:var(--ink);font-size:.86em">erro</span></b><b style="left:0em;top:5.55em"><span class="t" style="color:var(--ink);font-size:.86em">pronto</span></b><b style="left:0em;top:7.25em"><span class="t" style="color:var(--ink);font-size:.86em">carregando</span></b></b></b></b></div></div></div><div class="bb s3-cur"><div class="bb__z s3-cur-z" style="transform:translateZ(8.9em)"><div class="bb__r"><svg aria-hidden="true" class="cur s3-cur-p" viewBox="0 0 24 24" style="left:-.33em;top:-.22em;width:2.6em;height:2.6em"><path d="M3 2 L3 19 L8 14.6 L11.4 22 L14.6 20.6 L11.2 13.4 L17.6 13.4 Z"/></svg></div></div></div></span></span></span></div></div>
+<div class="sv-art" data-c="nevoa"><div class="sv-art__head only-m g-papel"><p class="g-eyebrow">// serviços · 04/05</p><p class="sv-art__name">Full stack</p></div><div class="sv-art__stage"><span class="service-art" style="--ratio:0.927"><!-- Gerado por docs/handoff/servicos-camadas/gerador/arts.py. Não editar à mão: mude o gerador e exporte de novo. -->
+
+<span class="ar ar-fullstack is-pre" aria-hidden="true"><span class="ar__scene"><b class="fl" style="left:-8.5em;top:-7em;width:17em;height:14em;border-radius:1.1em"></b><div class="pl " style="--x:-8.5em;--y:-7em;--w:17em;--h:14em;--z:0em;--r:1.1em;--d:0ms"><div class="pl__b"><i class="pl__e" style="--e:-0.8em"></i><i class="pl__e" style="--e:-0.533em"></i><i class="pl__e" style="--e:-0.267em"></i><div class="pl__face"><b style="left:1.4em;top:1.3em"><span class="t" style="">banco · contatos</span></b><b style="left:1.4em;top:2.5em;width:4.4em;height:2.2em;overflow:hidden"><b class="s4-count" style="left:0em;top:0em;width:4.4em;height:4.4em;"><b style="left:0em;top:0.2em"><span class="n" style="font-size:1.7em">128</span></b><b style="left:0em;top:2.4em"><span class="n" style="font-size:1.7em;color:var(--azul)">129</span></b></b></b><b style="left:0em;top:6.8em;width:17em;height:7.2em;overflow:hidden"><b class="s4-rows" style="left:0em;top:0em;width:17em;height:12em;"><b class="s4-tr " style="left:1.4em;top:0em;width:14.2em;height:2.2em;border-radius:.5em"><b style="left:0.6em;top:0.85em;width:2em;height:0.5em;background:var(--ink-2);border-radius:.25em"></b><b style="left:3.4em;top:0.85em;width:5.6em;height:0.5em;background:var(--ink);border-radius:.25em"></b><b style="left:9.8em;top:0.85em;width:3.4em;height:0.5em;background:var(--ink-3);border-radius:.25em"></b></b><b class="s4-tr " style="left:1.4em;top:2.4em;width:14.2em;height:2.2em;border-radius:.5em"><b style="left:0.6em;top:0.85em;width:2em;height:0.5em;background:var(--ink-2);border-radius:.25em"></b><b style="left:3.4em;top:0.85em;width:5.6em;height:0.5em;background:var(--ink);border-radius:.25em"></b><b style="left:9.8em;top:0.85em;width:3.4em;height:0.5em;background:var(--ink-3);border-radius:.25em"></b></b><b class="s4-tr " style="left:1.4em;top:4.8em;width:14.2em;height:2.2em;border-radius:.5em"><b style="left:0.6em;top:0.85em;width:2em;height:0.5em;background:var(--ink-2);border-radius:.25em"></b><b style="left:3.4em;top:0.85em;width:5.6em;height:0.5em;background:var(--ink);border-radius:.25em"></b><b style="left:9.8em;top:0.85em;width:3.4em;height:0.5em;background:var(--ink-3);border-radius:.25em"></b></b><b class="s4-tr s4-new" style="left:1.4em;top:7.2em;width:14.2em;height:2.2em;border-radius:.5em"><b style="left:0.6em;top:0.85em;width:2em;height:0.5em;background:var(--ink-2);border-radius:.25em"></b><b style="left:3.4em;top:0.85em;width:5.6em;height:0.5em;background:var(--ink);border-radius:.25em"></b><b style="left:9.8em;top:0.85em;width:3.4em;height:0.5em;background:var(--ink-3);border-radius:.25em"></b></b></b></b></div></div></div><div class="pl " style="--x:-8.5em;--y:-7em;--w:17em;--h:14em;--z:6.5em;--r:1.1em;--d:120ms"><div class="pl__b"><i class="pl__e" style="--e:-0.8em"></i><i class="pl__e" style="--e:-0.533em"></i><i class="pl__e" style="--e:-0.267em"></i><div class="pl__face"><b style="left:1.4em;top:1.3em"><span class="t" style="">api</span></b><b style="left:1.4em;top:2.6em"><span class="t" style="color:var(--ink)">route.ts</span></b><b style="left:1.4em;top:4em;width:5em;height:0.4em;background:var(--ink-4);border-radius:.2em"></b><b style="left:1.4em;top:5em;width:3.6em;height:0.4em;background:var(--ink-4);border-radius:.2em"></b><b style="left:1.4em;top:6em;width:4.4em;height:0.4em;background:var(--ink-4);border-radius:.2em"></b><b style="left:1.4em;top:8.4em"><span class="t" style="color:var(--ink);font-size:.86em">POST /api/contato</span></b><b class="s4-201" style="left:1.4em;top:10.3em;width:4em;height:1.8em;background:var(--lima);border-radius:.9em"><b style="left:1em;top:0.5em"><span class="t" style="color:var(--ink)">201</span></b></b><b style="left:5.9em;top:10.85em"><span class="s4-ms t" style="">38 ms</span></b><svg aria-hidden="true" class="gm s4-proc" viewBox="0 0 120 120" style="left:10.5em;top:10.7em;width:3.2em;height:3.2em;color:var(--azul)"><circle class="gm__track" cx="60" cy="60" r="44"/><g class="gm__turn"><circle class="gm__arc" cx="60" cy="60" r="44"/></g><g class="gm__eyes"><ellipse cx="46" cy="54" rx="6" ry="9"/><ellipse cx="74" cy="54" rx="6" ry="9"/></g><path class="gm__f gm__happy" d="M38 60 Q46 46 54 60 M66 60 Q74 46 82 60"/><path class="gm__f gm__x" d="M39 50 L53 62 M53 50 L39 62 M67 50 L81 62 M81 50 L67 62"/><path class="gm__f gm__sleep" d="M39 55 Q46 62 53 55 M67 55 Q74 62 81 55"/></svg></div></div></div><div class="pl " style="--x:-8.5em;--y:-7em;--w:17em;--h:14em;--z:13em;--r:1.1em;--d:240ms"><div class="pl__b"><i class="pl__e" style="--e:-0.8em"></i><i class="pl__e" style="--e:-0.533em"></i><i class="pl__e" style="--e:-0.267em"></i><div class="pl__face"><b style="left:1.4em;top:1.4em;width:6em;height:1em;background:var(--ink);border-radius:.3em"></b><b style="left:1.4em;top:3.5em;width:3.2em;height:0.45em;background:var(--ink-3);border-radius:.22em"></b><b class="s4-in1" style="left:1.4em;top:4.3em;width:14.2em;height:2.2em;border:.16em solid var(--ink-3);border-radius:.55em"><b class="s4-f1" style="left:0.7em;top:0.78em;width:8em;height:0.5em;background:var(--ink);border-radius:.25em;transform-origin:left"></b></b><b style="left:1.4em;top:7.4em;width:4.2em;height:0.45em;background:var(--ink-3);border-radius:.22em"></b><b class="s4-in2" style="left:1.4em;top:8.2em;width:14.2em;height:2.2em;border:.16em solid var(--ink-3);border-radius:.55em"><b class="s4-f2" style="left:0.7em;top:0.78em;width:10.5em;height:0.5em;background:var(--ink);border-radius:.25em;transform-origin:left"></b></b><b class="s4-cb" style="left:1.4em;top:11.5em;width:1.6em;height:1.6em;border:.16em solid var(--ink);border-radius:.4em"><svg aria-hidden="true" class="ck s4-cbk" viewBox="0 0 24 24" style="left:0.1em;top:0.1em;width:1.2em;height:1.2em;color:var(--paper)"><path d="M5 12.5 L10 17 L19 7" pathLength="1"/></svg></b><b style="left:3.6em;top:12.05em;width:3.6em;height:0.45em;background:var(--ink-3);border-radius:.22em"></b><b class="s4-btn" style="left:8.6em;top:11.2em;width:7em;height:2.2em;background:var(--azul);border-radius:1.1em"><b class="s4-lbl" style="left:2em;top:0.85em;width:3em;height:0.5em;background:var(--paper);border-radius:.25em"></b><svg aria-hidden="true" class="gm s4-spin" viewBox="0 0 120 120" style="left:2.75em;top:0.35em;width:1.5em;height:1.5em;color:var(--paper)"><circle class="gm__track" cx="60" cy="60" r="44"/><g class="gm__turn"><circle class="gm__arc" cx="60" cy="60" r="44"/></g><g class="gm__eyes"><ellipse cx="46" cy="54" rx="6" ry="9"/><ellipse cx="74" cy="54" rx="6" ry="9"/></g><path class="gm__f gm__happy" d="M38 60 Q46 46 54 60 M66 60 Q74 46 82 60"/><path class="gm__f gm__x" d="M39 50 L53 62 M53 50 L39 62 M67 50 L81 62 M81 50 L67 62"/><path class="gm__f gm__sleep" d="M39 55 Q46 62 53 55 M67 55 Q74 62 81 55"/></svg><svg aria-hidden="true" class="ck s4-ck" viewBox="0 0 24 24" style="left:2.7em;top:0.3em;width:1.6em;height:1.6em;color:var(--paper)"><path d="M5 12.5 L10 17 L19 7" pathLength="1"/></svg></b><b class="ring s4-rp" style="left:8.4em;top:11em;width:7.4em;height:2.6em;border-radius:1.3em"></b></div></div></div><div class="bb s4-q"><div class="bb__z s4-q-z"><div class="bb__r"><b class="bb__dot bb__pill s4-q-dot" style="left:-1.9em;top:-.8em;width:3.8em;height:1.6em;background:var(--azul);color:var(--paper)"><span>POST</span></b></div></div></div><div class="bb s4-r"><div class="bb__z s4-r-z"><div class="bb__r"><b class="bb__dot bb__pill s4-r-dot" style="left:-1.6em;top:-.8em;width:3.2em;height:1.6em;background:var(--lima);color:var(--ink)"><span>201</span></b></div></div></div><div class="bb s4-cur"><div class="bb__z s4-cur-z" style="transform:translateZ(15.4em)"><div class="bb__r"><svg aria-hidden="true" class="cur s4-cur-p" viewBox="0 0 24 24" style="left:-.33em;top:-.22em;width:2.6em;height:2.6em"><path d="M3 2 L3 19 L8 14.6 L11.4 22 L14.6 20.6 L11.2 13.4 L17.6 13.4 Z"/></svg></div></div></div></span></span></span></div></div>
+<div class="sv-art" data-c="azul"><div class="sv-art__head only-m g-azul"><p class="g-eyebrow">// serviços · 05/05</p><p class="sv-art__name">Branding</p></div><div class="sv-art__stage"><span class="service-art" style="--ratio:1.42"><!-- Gerado por docs/handoff/servicos-camadas/gerador/arts.py. Não editar à mão: mude o gerador e exporte de novo. -->
+
+<span class="ar ar-branding is-pre" aria-hidden="true"><span class="ar__scene"><b class="fl" style="left:-19em;top:-11em;width:13em;height:13em;border-radius:1.1em"></b><b class="fl" style="left:-4em;top:-2em;width:14em;height:9.6em;border-radius:1.1em"></b><div class="pl " style="--x:-19em;--y:-11em;--w:13em;--h:13em;--z:0em;--r:1.1em;--d:0ms"><div class="pl__b"><i class="pl__e" style="--e:-0.8em"></i><i class="pl__e" style="--e:-0.533em"></i><i class="pl__e" style="--e:-0.267em"></i><div class="pl__face"><b style="left:1.5em;top:1.5em;width:0.08em;height:10em;background:var(--ink-4)"></b><b style="left:3.5em;top:1.5em;width:0.08em;height:10em;background:var(--ink-4)"></b><b style="left:5.5em;top:1.5em;width:0.08em;height:10em;background:var(--ink-4)"></b><b style="left:7.5em;top:1.5em;width:0.08em;height:10em;background:var(--ink-4)"></b><b style="left:9.5em;top:1.5em;width:0.08em;height:10em;background:var(--ink-4)"></b><b style="left:11.5em;top:1.5em;width:0.08em;height:10em;background:var(--ink-4)"></b><b style="left:1.5em;top:1.5em;width:10em;height:0.08em;background:var(--ink-4)"></b><b style="left:1.5em;top:3.5em;width:10em;height:0.08em;background:var(--ink-4)"></b><b style="left:1.5em;top:5.5em;width:10em;height:0.08em;background:var(--ink-4)"></b><b style="left:1.5em;top:7.5em;width:10em;height:0.08em;background:var(--ink-4)"></b><b style="left:1.5em;top:9.5em;width:10em;height:0.08em;background:var(--ink-4)"></b><b style="left:1.5em;top:11.5em;width:10em;height:0.08em;background:var(--ink-4)"></b><b style="left:1em;top:1em;width:11em;height:11em;border:.08em dashed var(--ink-3);border-radius:50%"></b><svg aria-hidden="true" class="gm s5-giro" viewBox="0 0 120 120" style="left:1.5em;top:1.5em;width:10em;height:10em;color:var(--azul)"><circle class="gm__track" cx="60" cy="60" r="44"/><g class="gm__turn"><circle class="gm__arc" cx="60" cy="60" r="44"/></g><g class="gm__eyes"><ellipse cx="46" cy="54" rx="6" ry="9"/><ellipse cx="74" cy="54" rx="6" ry="9"/></g><path class="gm__f gm__happy" d="M38 60 Q46 46 54 60 M66 60 Q74 46 82 60"/><path class="gm__f gm__x" d="M39 50 L53 62 M53 50 L39 62 M67 50 L81 62 M81 50 L67 62"/><path class="gm__f gm__sleep" d="M39 55 Q46 62 53 55 M67 55 Q74 62 81 55"/></svg></div></div></div><div class="pl " style="--x:-4em;--y:-2em;--w:14em;--h:9.6em;--z:0em;--r:1.1em;--d:120ms"><div class="pl__b"><i class="pl__e" style="--e:-0.8em"></i><i class="pl__e" style="--e:-0.533em"></i><i class="pl__e" style="--e:-0.267em"></i><div class="pl__face"><b style="left:1.2em;top:1.4em;width:2.6em;height:2.6em;background:var(--paper);border-radius:50%;border:.16em solid var(--ink-3)"></b><b style="left:4.3em;top:1.4em;width:2.6em;height:2.6em;background:var(--azul);border-radius:50%;"></b><b style="left:7.4em;top:1.4em;width:2.6em;height:2.6em;background:var(--lima);border-radius:50%;"></b><b style="left:10.5em;top:1.4em;width:2.6em;height:2.6em;background:var(--tinta);border-radius:50%;"></b><b class="s5-sel" style="left:0.78em;top:0.98em;width:3.44em;height:3.44em;border:.22em solid var(--ink);border-radius:50%"></b><b style="left:1.4em;top:5.3em;width:7.8em;height:1.4em;overflow:hidden"><b class="s5-slot" style="left:0em;top:0em;width:9em;height:5.6em;"><b style="left:0em;top:0.3em"><span class="t" style="color:var(--ink)">--papel</span></b><b style="left:0em;top:1.7em"><span class="t" style="color:var(--ink)">--azul-sinal</span></b><b style="left:0em;top:3.1em"><span class="t" style="color:var(--ink)">--tinta</span></b><b style="left:0em;top:4.5em"><span class="t" style="color:var(--ink)">--papel</span></b></b></b><b style="left:1.4em;top:6.9em;width:9em;height:1.4em;overflow:hidden"><b class="s5-slot2" style="left:0em;top:0em;width:9em;height:5.6em;"><b style="left:0em;top:0.3em"><span class="t" style="">#f6f5f0</span></b><b style="left:0em;top:1.7em"><span class="t" style="">#2b2eff</span></b><b style="left:0em;top:3.1em"><span class="t" style="">#0b0c1f</span></b><b style="left:0em;top:4.5em"><span class="t" style="">#f6f5f0</span></b></b></b><b style="left:9.2em;top:5.5em"><span class="s5-aa" style="">Aa</span></b></div></div></div><div class="pl s5-comp" style="--x:-12.3em;--y:-6.1em;--w:15em;--h:10.5em;--z:12em;--r:1.1em;--d:240ms"><div class="pl__b"><i class="pl__e" style="--e:-0.8em"></i><i class="pl__e" style="--e:-0.533em"></i><i class="pl__e" style="--e:-0.267em"></i><div class="pl__face"><b class="s5-base" style="left:0em;top:0em;width:15em;height:10.5em;background:var(--paper)"><b style="left:1.4em;top:1.5em;width:6.4em;height:1.3em;background:var(--ink);border-radius:.35em"></b><b style="left:1.4em;top:3.5em;width:4.4em;height:1.3em;background:var(--ink);border-radius:.35em"></b><b style="left:1.4em;top:5.6em;width:8.6em;height:0.5em;background:var(--ink-3);border-radius:.25em"></b><b style="left:1.4em;top:6.6em;width:6.2em;height:0.5em;background:var(--ink-3);border-radius:.25em"></b><b class="s5-btn" style="left:1.4em;top:8em;width:5.8em;height:1.7em;background:var(--azul);border-radius:.85em"><b style="left:1.6em;top:0.6em;width:2.6em;height:0.5em;background:var(--paper);border-radius:.25em"></b></b><b style="left:8em;top:8.2em;width:1.3em;height:1.3em;background:var(--ink-3);border-radius:50%"></b><b class="s5-mk" style="left:10em;top:1.2em;width:3.4em;height:3.4em;border:.55em solid var(--azul);border-radius:50%;border-right-color:transparent"></b></b><b class="s5-ov s5-ov1" style="left:0em;top:0em;width:15em;height:10.5em;background:var(--azul)"><b style="left:1.4em;top:1.5em;width:6.4em;height:1.3em;background:var(--paper);border-radius:.35em"></b><b style="left:1.4em;top:3.5em;width:4.4em;height:1.3em;background:var(--paper);border-radius:.35em"></b><b style="left:1.4em;top:5.6em;width:8.6em;height:0.5em;background:rgba(246,245,240,.45);border-radius:.25em"></b><b style="left:1.4em;top:6.6em;width:6.2em;height:0.5em;background:rgba(246,245,240,.45);border-radius:.25em"></b><b class="s5-btn" style="left:1.4em;top:8em;width:5.8em;height:1.7em;background:var(--lima);border-radius:.85em"><b style="left:1.6em;top:0.6em;width:2.6em;height:0.5em;background:var(--ink);border-radius:.25em"></b></b><b style="left:8em;top:8.2em;width:1.3em;height:1.3em;background:rgba(246,245,240,.45);border-radius:50%"></b><b class="s5-mk" style="left:10em;top:1.2em;width:3.4em;height:3.4em;border:.55em solid var(--lima);border-radius:50%;border-right-color:transparent"></b></b><b class="s5-ov s5-ov2" style="left:0em;top:0em;width:15em;height:10.5em;background:var(--tinta)"><b style="left:1.4em;top:1.5em;width:6.4em;height:1.3em;background:var(--paper);border-radius:.35em"></b><b style="left:1.4em;top:3.5em;width:4.4em;height:1.3em;background:var(--paper);border-radius:.35em"></b><b style="left:1.4em;top:5.6em;width:8.6em;height:0.5em;background:rgba(246,245,240,.35);border-radius:.25em"></b><b style="left:1.4em;top:6.6em;width:6.2em;height:0.5em;background:rgba(246,245,240,.35);border-radius:.25em"></b><b class="s5-btn" style="left:1.4em;top:8em;width:5.8em;height:1.7em;background:var(--lima);border-radius:.85em"><b style="left:1.6em;top:0.6em;width:2.6em;height:0.5em;background:var(--ink);border-radius:.25em"></b></b><b style="left:8em;top:8.2em;width:1.3em;height:1.3em;background:rgba(246,245,240,.35);border-radius:50%"></b><b class="s5-mk" style="left:10em;top:1.2em;width:3.4em;height:3.4em;border:.55em solid var(--paper);border-radius:50%;border-right-color:transparent"></b></b><b class="s5-ov s5-ov3" style="left:0em;top:0em;width:15em;height:10.5em;background:var(--paper)"><b style="left:1.4em;top:1.5em;width:6.4em;height:1.3em;background:var(--ink);border-radius:.35em"></b><b style="left:1.4em;top:3.5em;width:4.4em;height:1.3em;background:var(--ink);border-radius:.35em"></b><b style="left:1.4em;top:5.6em;width:8.6em;height:0.5em;background:var(--ink-3);border-radius:.25em"></b><b style="left:1.4em;top:6.6em;width:6.2em;height:0.5em;background:var(--ink-3);border-radius:.25em"></b><b class="s5-btn" style="left:1.4em;top:8em;width:5.8em;height:1.7em;background:var(--azul);border-radius:.85em"><b style="left:1.6em;top:0.6em;width:2.6em;height:0.5em;background:var(--paper);border-radius:.25em"></b></b><b style="left:8em;top:8.2em;width:1.3em;height:1.3em;background:var(--ink-3);border-radius:50%"></b><b class="s5-mk" style="left:10em;top:1.2em;width:3.4em;height:3.4em;border:.55em solid var(--azul);border-radius:50%;border-right-color:transparent"></b></b></div></div></div><div class="bb s5-d"><div class="bb__z s5-d-z"><div class="bb__r"><b class="bb__dot s5-d-dot" style="left:-0.65em;top:-0.65em;width:1.3em;height:1.3em;background:var(--azul)"></b></div></div></div><div class="bb s5-cur"><div class="bb__z s5-cur-z" style="transform:translateZ(2.4em)"><div class="bb__r"><svg aria-hidden="true" class="cur s5-cur-p" viewBox="0 0 24 24" style="left:-.33em;top:-.22em;width:2.6em;height:2.6em"><path d="M3 2 L3 19 L8 14.6 L11.4 22 L14.6 20.6 L11.2 13.4 L17.6 13.4 Z"/></svg></div></div></div></span></span></span></div></div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="hs-ch pj-ch" id="projetos" aria-labelledby="pj-title">
+<div class="hs-stage g-papel pj-stage">
+<h2 class="pj-big" id="pj-title"><span class="pj-big__in">No ar.<i class="hs-stop pj-dot" data-stop="pj-dot" data-size="72" data-size-m="40"></i></span></h2>
+<p class="pj-lead">Cinco projetos em produção. Em cada um: o problema, as decisões técnicas e o resultado.</p>
+<div class="pj-world">
+<article class="pj g-tinta" aria-label="Estúdio Entre"><header class="pj-bar"><span class="pj-slot"><i class="hs-stop" data-stop="pj0" data-size="30"></i></span><span class="pj-url">estudioentre.com.br</span><span class="pj-live"><i></i>no ar</span><span class="pj-n">01/05</span></header><div class="pj-body"><div class="pj-text"><p class="g-eyebrow">// case · hub cultural · méier, rj</p><h3>Estúdio Entre</h3><p>Plataforma cultural com eventos, loja, acervo e conteúdo, gerida no Sanity e integrada a um CRM.</p><ul class="pj-stack"><li>Astro</li><li>React</li><li>Sanity</li><li>Tailwind CSS</li><li>Vercel</li></ul><a class="g-button" href="#projetos">Ver case<svg class="g-icon g-button__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a></div><figure class="pj-cover"><img src="img/capa-estudio-entre.webp" alt=""></figure></div></article>
+<article class="pj g-azul" aria-label="Agência Multi BR"><header class="pj-bar"><span class="pj-slot"><i class="hs-stop" data-stop="pj1" data-size="30"></i></span><span class="pj-url">agenciamultibr.com</span><span class="pj-live"><i></i>no ar</span><span class="pj-n">02/05</span></header><div class="pj-body"><div class="pj-text"><p class="g-eyebrow">// case · agência digital 360°</p><h3>Agência Multi BR</h3><p>Site institucional focado em conversão, com Next.js otimizado para Core Web Vitals.</p><ul class="pj-stack"><li>React</li><li>Next.js</li><li>Tailwind CSS</li></ul><a class="g-button" href="#projetos">Ver case<svg class="g-icon g-button__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a></div><figure class="pj-cover"><img src="img/agencia-multi-br.webp" alt=""></figure></div></article>
+<article class="pj g-papel" aria-label="Atlas Marine Solutions"><header class="pj-bar"><span class="pj-slot"><i class="hs-stop" data-stop="pj2" data-size="30"></i></span><span class="pj-url">atlasmarinesolutions.com</span><span class="pj-live"><i></i>no ar</span><span class="pj-n">03/05</span></header><div class="pj-body"><div class="pj-text"><p class="g-eyebrow">// case · agência marítima · eua e brasil</p><h3>Atlas Marine Solutions</h3><p>Site em quatro idiomas para serviços portuários em mais de 20 portos de 14 países.</p><ul class="pj-stack"><li>Next.js</li><li>React</li><li>Tailwind CSS</li></ul><a class="g-button" href="#projetos">Ver case<svg class="g-icon g-button__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a></div><figure class="pj-cover"><img src="img/atlas-marine-solutions.webp" alt="" style="object-position:0% 50%"></figure></div></article>
+<article class="pj g-tinta" aria-label="Movies Bremen"><header class="pj-bar"><span class="pj-slot"><i class="hs-stop" data-stop="pj3" data-size="30"></i></span><span class="pj-url">moviesbremen.com</span><span class="pj-live"><i></i>no ar</span><span class="pj-n">04/05</span></header><div class="pj-body"><div class="pj-text"><p class="g-eyebrow">// case · cinema e casa de eventos · bremen</p><h3>Movies Bremen</h3><p>Plataforma em alemão e inglês para um cinema premium, com regras de negócio complexas.</p><ul class="pj-stack"><li>Next.js</li><li>React</li><li>Tailwind CSS</li></ul><a class="g-button" href="#projetos">Ver case<svg class="g-icon g-button__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a></div><figure class="pj-cover"><img src="img/banner-movies-event-house-bremen.webp" alt=""></figure></div></article>
+<article class="pj g-azul" aria-label="Danila Rizo Palmieri"><header class="pj-bar"><span class="pj-slot"><i class="hs-stop" data-stop="pj4" data-size="30"></i></span><span class="pj-url">danilapalmieri.com</span><span class="pj-live"><i></i>no ar</span><span class="pj-n">05/05</span></header><div class="pj-body"><div class="pj-text"><p class="g-eyebrow">// case · rh e internacionalização · brasil e eua</p><h3>Danila Rizo Palmieri</h3><p>Site da consultoria de RH que leva empresas do Brasil para os EUA.</p><ul class="pj-stack"><li>WordPress</li><li>PHP</li><li>SEO</li></ul><a class="g-button" href="#projetos">Ver case<svg class="g-icon g-button__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a></div><figure class="pj-cover"><img src="img/banner-danila-rizo.webp" alt=""></figure></div></article>
+</div>
+<div class="pj-out">
+<p class="g-eyebrow pj-out__e"><i class="hs-stop pj-out__stop" data-stop="pj-out" data-size="44"></i>// outros sites no ar</p>
+<a class="pj-stat" href="https://www.agenciamultibr.com/"><strong>−30%</strong><span>na taxa de rejeição depois do redesign<small>Agência Multi BR · Next.js · Core Web Vitals</small></span></a>
+<a class="pj-stat" href="https://atlasmarinesolutions.com/"><strong>+40%</strong><span>de contatos de novos clientes internacionais<small>Atlas Marine Solutions · Next.js · site em quatro idiomas</small></span></a>
+<a class="pj-stat" href="https://societyshow.com.br/"><strong>3x</strong><span>mais rápido para carregar que o site anterior<small>Society Show · Astro · Vercel</small></span></a>
+<p class="pj-out__note">números medidos em cada projeto</p>
+</div>
+<i class="hs-stop pj-exit" data-stop="pj-exit" data-size="56"></i>
+<div class="hs-disc g-tinta"></div>
+</div>
+</section>
+<section class="hs-ch pc-ch" id="processo" aria-labelledby="pc-title">
+<div class="hs-stage g-tinta pc-stage">
+<div class="pc-head">
+<p class="g-eyebrow">// processo</p>
+<h2 class="pc-title" id="pc-title">Do escopo ao deploy.</h2>
+<p class="pc-intro only-d">Quatro etapas, da conversa ao site no ar. Cada ferramenta aparece na etapa em que entra.</p>
+</div>
+
+<div class="hb pc-world"><div class="iso pc-iso">
+<div class="pc-grid"></div>
+<div class="pc-out"></div>
+<div class="iso-pl pc-note" style="--x:-210px;--y:-30px;--w:190px;--h:70px;--r:16px;--zr:70px"><i class="iso-pl__e"></i><i class="iso-pl__e"></i><i class="iso-pl__e"></i><div class="iso-pl__face"><span class="pc-note__t">o que é?</span></div></div>
+<div class="iso-pl pc-note" style="--x:30px;--y:-190px;--w:190px;--h:70px;--r:16px;--zr:120px"><i class="iso-pl__e"></i><i class="iso-pl__e"></i><i class="iso-pl__e"></i><div class="iso-pl__face"><span class="pc-note__t">para quem?</span></div></div>
+<div class="iso-pl pc-note" style="--x:160px;--y:70px;--w:190px;--h:70px;--r:16px;--zr:90px"><i class="iso-pl__e"></i><i class="iso-pl__e"></i><i class="iso-pl__e"></i><div class="iso-pl__face"><span class="pc-note__t">até quando?</span></div></div>
+<div class="iso-pl pc-code" style="--x:-300px;--y:60px;--w:230px;--h:190px;--r:16px;--zr:150px"><i class="iso-pl__e"></i><i class="iso-pl__e"></i><i class="iso-pl__e"></i><div class="iso-pl__face"><span class="pc-code__l" style="--c:var(--lima)">&lt;Interface</span><span class="pc-code__l">  estado=&quot;pronto&quot;</span><span class="pc-code__l">  tipos testes</span><span class="pc-code__l" style="--c:var(--lima)">/&gt;</span><span class="pc-code__ok">3 testes passaram</span></div></div>
+<div class="iso-pl hb-pl" data-layer="0" style="--x:0px;--y:0px;--w:330px;--h:230px;--r:18px;--zr:14px">
+<i class="iso-pl__e"></i><i class="iso-pl__e"></i><i class="iso-pl__e"></i>
+<div class="iso-pl__face">
+<b class="hb-sw" style="left:22px;top:20px;width:34px;height:34px;background:#2b2eff;--c:#2b2eff;--i:0"></b>
+<b class="hb-sw" style="left:66px;top:20px;width:34px;height:34px;background:#d2ff4d;--c:#d2ff4d;--i:1"></b>
+<b class="hb-sw hb-sw--papel" style="left:110px;top:20px;width:34px;height:34px;background:#f6f5f0;--c:#f6f5f0;--i:2"></b>
+<b class="hb-sw" style="left:154px;top:20px;width:34px;height:34px;background:#0b0c1f;--c:#0b0c1f;--i:3"></b>
+<b class="hb-sw" style="left:198px;top:20px;width:34px;height:34px;background:#ff5c3d;--c:#ff5c3d;--i:4"></b>
+<b class="t" style="left:25px;top:62px">azul</b>
+<b class="t" style="left:68px;top:62px">lima</b>
+<b class="t" style="left:110px;top:62px">papel</b>
+<b class="t" style="left:155px;top:62px">tinta</b>
+<b class="t" style="left:199px;top:62px">coral</b>
+<b class="hb-aa" style="left:20px;top:88px">Aa</b>
+<b class="t" style="left:24px;top:190px">Anybody · Geist Mono</b>
+<b class="hb-rule" style="left:196px;top:96px;width:10px;--i:0"></b>
+<b class="hb-rule" style="left:196px;top:110px;width:20px;--i:1"></b>
+<b class="hb-rule" style="left:196px;top:124px;width:30px;--i:2"></b>
+<b class="hb-rule" style="left:196px;top:138px;width:40px;--i:3"></b>
+<b class="hb-rule" style="left:196px;top:152px;width:60px;--i:4"></b>
+<b class="hb-rule" style="left:196px;top:166px;width:80px;--i:5"></b>
+<b class="t" style="left:288px;top:94px">4</b>
+<b class="t" style="left:288px;top:108px">8</b>
+<b class="t" style="left:288px;top:122px">12</b>
+<b class="t" style="left:288px;top:136px">16</b>
+<b class="t" style="left:288px;top:150px">24</b>
+<b class="t" style="left:288px;top:164px">32</b>
+<b class="hb-rad" style="left:196px;top:188px;width:22px;height:22px;border-radius:3px"></b>
+<b class="hb-rad" style="left:226px;top:188px;width:22px;height:22px;border-radius:7px"></b>
+<b class="hb-rad" style="left:256px;top:188px;width:22px;height:22px;border-radius:9px"></b>
+<b class="hb-rad" style="left:286px;top:188px;width:22px;height:22px;border-radius:50%"></b>
+</div>
+</div>
+
+<div class="iso-pl hb-pl" data-layer="1" style="--x:30px;--y:-30px;--w:330px;--h:230px;--r:18px;--zr:164px">
+<i class="iso-pl__e"></i><i class="iso-pl__e"></i><i class="iso-pl__e"></i>
+<div class="iso-pl__face">
+<b class="hb-btn hb-btn--pri" style="left:22px;top:22px;width:136px;height:40px">Ver projetos</b>
+<b class="hb-btn hb-btn--sec" style="left:170px;top:22px;width:136px;height:40px">Falar comigo</b>
+<b class="hb-tg" style="left:22px;top:84px;width:56px;height:30px"><b></b></b>
+<b class="hb-cb" style="left:94px;top:86px;width:26px;height:26px"><svg class="ck" viewBox="0 0 24 24"><path d="M5 12.5 L10 17 L19 7"></path></svg></b>
+<b class="hb-chip" style="left:136px;top:88px;width:78px;height:22px"><span class="t" style="color:#0b0c1f">pronto</span></b>
+<b class="hb-field" style="left:22px;top:132px;width:286px;height:40px"><b class="hb-typed" style="left:18px;top:12px;width:94px;height:16px">Olá, Bruno</b><b class="hb-caret" style="left:114px;top:12px"></b></b>
+<b class="hb-range" style="left:22px;top:196px;width:190px;height:6px"><b></b></b>
+<b class="t" style="left:228px;top:193px">gap 24</b>
+<span class="hb-note" style="left:22px;top:184px;width:286px;height:30px"><i></i>Não deu para enviar. Tente de novo.</span>
+</div>
+</div>
+
+<div class="iso-pl hb-pl" data-layer="2" style="--x:60px;--y:-60px;--w:330px;--h:230px;--r:18px;--zr:314px">
+<i class="iso-pl__e"></i><i class="iso-pl__e"></i><i class="iso-pl__e"></i>
+<div class="iso-pl__face">
+<b class="hb-chrome" style="left:0px;top:0px;width:330px;height:28px"></b>
+<b class="hb-dot" style="left:12px;top:10.5px"></b>
+<b class="hb-dot" style="left:24px;top:10.5px"></b>
+<b class="hb-dot" style="left:36px;top:10.5px"></b>
+<b class="hb-url" style="left:60px;top:6px;width:200px;height:16px"><b class="t hb-urltext" style="left:10px;top:3px;width:122px">devguimaraes.com.br</b></b>
+<b class="hb-page" style="left:0px;top:28px;width:330px;height:202px">
+<b class="hb-skel" style="left:14px;top:12px;width:80px;height:8px"></b>
+<b class="hb-skel" style="left:14px;top:40px;width:150px;height:24px"></b>
+<b class="hb-skel" style="left:14px;top:68px;width:120px;height:24px"></b>
+<b class="hb-skel" style="left:14px;top:104px;width:180px;height:6px"></b>
+<b class="hb-skel" style="left:14px;top:136px;width:70px;height:22px;border-radius:11px"></b>
+<b class="hb-skel" style="left:206px;top:44px;width:110px;height:80px;border-radius:8px"></b>
+<b class="hb-paint" style="left:0px;top:0px;width:330px;height:202px">
+<b class="hb-mini-sig" style="left:14px;top:12px">bruno guimarães</b>
+<b class="hb-bar" style="left:232px;top:14px;width:22px;height:5px"></b>
+<b class="hb-bar" style="left:260px;top:14px;width:20px;height:5px"></b>
+<b class="hb-bar" style="left:286px;top:14px;width:28px;height:5px"></b>
+<b class="hb-mini-title" style="left:14px;top:46px;font-size:44px">No ar.</b>
+<b class="hb-bar" style="left:14px;top:104px;width:176px;height:5px"></b>
+<b class="hb-bar" style="left:14px;top:114px;width:140px;height:5px"></b>
+<b class="hb-mini-cta" style="left:14px;top:136px;width:70px;height:22px"></b>
+<b class="hb-card" style="left:206px;top:44px;width:110px;height:80px"><b class="hb-mini-cta" style="left:12px;top:12px;width:18px;height:18px"></b><b class="hb-skel" style="left:12px;top:44px;width:80px;height:6px"></b><b class="hb-skel" style="left:12px;top:56px;width:56px;height:6px"></b></b>
+<b class="hb-card" style="left:206px;top:132px;width:52px;height:56px"></b>
+<b class="hb-card" style="left:264px;top:132px;width:52px;height:56px"></b>
+</b>
+</b>
+</div>
+</div>
+
+<div class="iso-pl hb-pl" data-layer="3" style="--x:10px;--y:-6px;--w:170px;--h:62px;--r:31px;--zr:464px">
+<i class="iso-pl__e"></i><i class="iso-pl__e"></i><i class="iso-pl__e"></i>
+<div class="iso-pl__face">
+<b class="hb-toast-dot" style="left:16px;top:23px"></b>
+<b class="hb-slot" style="left:42px;top:14px;width:116px;height:16px"><b class="hb-slot__a" style="left:0px">carregando</b><b class="hb-slot__b" style="left:0px">pronto</b></b>
+<b class="hb-prog" style="left:42px;top:38px;width:110px;height:5px"><b></b></b>
+</div>
+</div>
+</div></div>
+
+<div class="pc-copy">
+<div class="pc-slot is-on"><p class="pc-count">etapa 01 de 04</p><h3 class="pc-name">Conversa</h3><p class="pc-body">Entendo o negócio, quem vai usar e qual resultado o projeto precisa entregar.</p><p class="pc-get"><b>você recebe </b>escopo e prazo por escrito</p><ul class="pc-tools"><li>Google Meet</li><li>WhatsApp</li><li>Slack</li><li>Google Drive</li><li>Linear</li></ul></div>
+<div class="pc-slot"><p class="pc-count">etapa 02 de 04</p><h3 class="pc-name">Desenho</h3><p class="pc-body">Defino tokens, componentes e os estados de cada tela antes de escrever código.</p><p class="pc-get"><b>você recebe </b>protótipo e design system</p><ul class="pc-tools"><li>Figma</li><li>Claude</li></ul></div>
+<div class="pc-slot"><p class="pc-count">etapa 03 de 04</p><h3 class="pc-name">Código</h3><p class="pc-body">Construo sobre o design system, com componentes tipados, testes e revisão em cada entrega.</p><p class="pc-get"><b>você recebe </b>código tipado, testado e documentado</p><ul class="pc-tools"><li>React</li><li>Next.js</li><li>Astro</li><li>TypeScript</li><li>Tailwind CSS</li><li>shadcn/ui</li><li>Motion</li><li>Sanity</li><li>WordPress</li><li>GitHub</li><li>Claude Code</li></ul></div>
+<div class="pc-slot"><p class="pc-count">etapa 04 de 04</p><h3 class="pc-name">Entrega</h3><p class="pc-body">Publico com CI/CD, meço Core Web Vitals e acompanho o site depois do lançamento.</p><p class="pc-get"><b>você recebe </b>site no ar com métricas</p><ul class="pc-tools"><li>Vercel</li><li>Cloudflare</li><li>Hostinger</li><li>AWS</li><li>GitHub Actions</li><li>Playwright</li><li>Plausible</li></ul></div>
+</div>
+
+<div class="pc-line">
+<div class="pc-line__rail"></div>
+<div class="pc-line__fill"></div>
+<button type="button" class="pc-st is-past" data-i="0"><i class="hs-stop" data-stop="pc0" data-size="48"></i>Conversa</button>
+<button type="button" class="pc-st" data-i="1"><i class="hs-stop" data-stop="pc1" data-size="48"></i>Desenho</button>
+<button type="button" class="pc-st" data-i="2"><i class="hs-stop" data-stop="pc2" data-size="48"></i>Código</button>
+<button type="button" class="pc-st" data-i="3"><i class="hs-stop" data-stop="pc3" data-size="48"></i>Entrega</button>
+</div>
+<div class="hs-disc g-azul"></div>
+</div>
+</section>
+
+<section class="hs-ch sb-ch" id="sobre" aria-label="Sobre">
+<div class="hs-stage g-azul sb-stage">
+<div class="sb-back" aria-hidden="true">Bruno</div>
+<figure class="sb-photo">
+<img src="img/bruno-duo.webp" alt="Bruno Guimarães, de braços cruzados, sorrindo" draggable="false">
+<i class="hs-stop sb-peek" data-stop="sb-peek" data-size="120" data-size-m="76"></i>
+</figure>
+<div class="sb-front" aria-hidden="true">Guimarães</div>
+<div class="sb-bio sb-bio--d only-d">
+<p class="g-eyebrow">// sobre</p>
+<h2 class="sb-title" id="sb-title">Bruno Guimarães</h2>
+<p class="sb-lead">Trabalho com front-end há 5 anos, no ponto em que design e engenharia se encontram.</p>
+<p class="sb-body">Crio e mantenho design systems: tokens, componentes e documentação que deixam o produto consistente e o time mais rápido. No código, uso React, TypeScript e Next.js com foco em performance, Core Web Vitals e acessibilidade, e mantenho testes automatizados e CI/CD em projetos com tráfego real.</p>
+<ul class="sb-caps"><li>Front-end em React e TypeScript</li><li>Integração com APIs</li><li>Deploy e CI/CD</li><li>Acessibilidade e UX</li><li>Design systems e documentação</li><li>Colaboração com design e produto</li></ul>
+<dl class="sb-facts"><div><dt>5 anos</dt><dd>de front-end</dd></div><div><dt>Senac</dt><dd>Desenvolvimento de Sistemas Web</dd></div><div><dt>Remoto</dt><dd>base no Brasil</dd></div></dl>
+</div>
+</div>
+<div class="sb-bio sb-bio--m only-m g-azul">
+<p class="g-eyebrow">// sobre</p>
+<h2 class="sb-title" id="sb-title-m">Bruno Guimarães</h2>
+<p class="sb-lead">Trabalho com front-end há 5 anos, no ponto em que design e engenharia se encontram.</p>
+<p class="sb-body">Crio e mantenho design systems: tokens, componentes e documentação que deixam o produto consistente e o time mais rápido. No código, uso React, TypeScript e Next.js com foco em performance, Core Web Vitals e acessibilidade, e mantenho testes automatizados e CI/CD em projetos com tráfego real.</p>
+<ul class="sb-caps"><li>Front-end em React e TypeScript</li><li>Integração com APIs</li><li>Deploy e CI/CD</li><li>Acessibilidade e UX</li><li>Design systems e documentação</li><li>Colaboração com design e produto</li></ul>
+<dl class="sb-facts"><div><dt>5 anos</dt><dd>de front-end</dd></div><div><dt>Senac</dt><dd>Desenvolvimento de Sistemas Web</dd></div><div><dt>Remoto</dt><dd>base no Brasil</dd></div></dl>
+</div>
+</section>
+
+<section class="hs-ch bl g-papel hs-sheet" id="blog" aria-labelledby="bl-title">
+<div class="bl-in">
+<div class="bl-head">
+<p class="g-eyebrow">// blog</p>
+<h2 class="bl-title" id="bl-title">Notas de campo.</h2>
+<p class="bl-lead">Front-end, arquitetura e performance, escrito a partir de projeto real. Os três posts mais recentes.</p>
+<a class="g-arrow-link bl-all" href="#blog">Ver o blog<svg class="g-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a>
+</div>
+<div class="bl-list">
+<div class="bl-rule"><i class="hs-stop bl-nap" data-stop="bl-nap" data-size="48"></i></div>
+<a class="bl-row" href="#blog" data-i="0"><i class="hs-stop bl-seat" data-stop="bl0" data-size="40"></i><time>22 abr 2026</time><div><h3>Vercel + Lovable: o que realmente vazou e como mitigar agora</h3><p>Uma análise direta dos incidentes recentes envolvendo Vercel e Lovable, com foco em clarificação técnica e plano prático de mitigação em 24h, 7 dias e 30 dias.</p><span class="bl-meta">Segurança · 8 min de leitura</span></div></a>
+<a class="bl-row" href="#blog" data-i="1"><i class="hs-stop bl-seat" data-stop="bl1" data-size="40"></i><time>10 abr 2026</time><div><h3>React 19 e Server Components: cortando JavaScript do cliente e ganhando pontos no Core Web Vitals</h3><p>Entenda como o React 19 e os Server Components reduzem o JavaScript enviado ao cliente e melhoram métricas reais de performance como LCP, TTI e CLS.</p><span class="bl-meta">React · 8 min de leitura</span></div></a>
+<a class="bl-row" href="#blog" data-i="2"><i class="hs-stop bl-seat" data-stop="bl2" data-size="40"></i><time>5 abr 2026</time><div><h3>Interfaces inteligentes: como usar IA no front-end para personalizar UI em tempo real</h3><p>Descubra como aplicar IA diretamente na interface para personalizar layouts, componentes e acessibilidade em tempo real, com exemplos práticos em React.</p><span class="bl-meta">IA · 7 min de leitura</span></div></a>
+</div>
+</div>
+</section>
+
+<section class="hs-ch ct g-azul hs-sheet" id="contato" aria-labelledby="ct-title">
+<div class="ct-in">
+<p class="g-eyebrow">// contato</p>
+<h2 class="ct-title" id="ct-title">Vamos conversar.</h2>
+<p class="ct-lead">Projeto novo, redesign ou um design system para o seu time. Me conta o contexto e eu respondo pelo e-mail que você deixar.</p>
+<div class="ct-grid">
+<form class="ct-form" aria-label="Formulário de contato">
+<label class="ct-f"><span>nome</span><input type="text" placeholder="Como posso te chamar" autocomplete="off"></label>
+<label class="ct-f"><span>e-mail</span><input type="email" placeholder="voce@empresa.com" autocomplete="off"></label>
+<div class="ct-f ct-f--wide"><span>tipo de projeto</span><div class="ct-chips" role="group" aria-label="Tipo de projeto"><button type="button" class="g-chip" aria-pressed="true">site</button><button type="button" class="g-chip" aria-pressed="false">landing page</button><button type="button" class="g-chip" aria-pressed="false">loja</button><button type="button" class="g-chip" aria-pressed="false">sistema</button><button type="button" class="g-chip" aria-pressed="false">outro</button></div></div>
+<label class="ct-f ct-f--wide"><span>mensagem</span><textarea rows="4" placeholder="O que é, para quem e qual o prazo"></textarea></label>
+<div class="ct-send">
+<button type="submit" class="g-button ct-submit"><i class="hs-stop ct-seat" data-stop="ct-send" data-size="30"></i><span class="ct-submit__t" data-for="idle">Enviar mensagem</span><span class="ct-submit__t" data-for="loading">Enviando</span><span class="ct-submit__t" data-for="done">Enviado</span></button>
+<p class="ct-ok">Recebi sua mensagem. A resposta vai para o e-mail que você deixou.</p>
+</div>
+</form>
+<aside class="g-tinta ct-mail" aria-label="E-mail direto">
+<p class="g-eyebrow">// e-mail direto</p>
+<p class="ct-mail__a">bc.guimaraes@outlook.com</p>
+<button type="button" class="g-button g-button--secondary ct-mail__c">Copiar e-mail</button>
+<div class="ct-mail__l"><a class="g-arrow-link" href="https://github.com/devguimaraes">GitHub</a><a class="g-arrow-link" href="https://www.linkedin.com/">LinkedIn</a></div>
+</aside>
+</div>
+</div>
+</section>
+
+<section class="hs-ch fn-ch hs-sheet" id="fim" aria-labelledby="fn-title">
+<div class="hs-stage g-tinta fn-stage">
+<div class="fn-copy">
+<p class="g-eyebrow">// fim da pilha</p>
+<h2 class="fn-title" id="fn-title">Esta página também era camadas.</h2>
+<p class="fn-lead">Escolha uma para voltar a ela.</p>
+</div>
+<div class="hb fn-world"><div class="iso fn-iso">
+<div class="pc-grid"></div>
+<div class="iso-pl fn-pl" data-i="7" data-to="contato" style="--x:0px;--y:0px;--w:420px;--h:280px;--r:22px;--zr:0px"><i class="iso-pl__e"></i><i class="iso-pl__e"></i><i class="iso-pl__e"></i><div class="iso-pl__face"><div class="fn-face g-azul"><b class="fn-face__e">// contato</b><b class="fn-face__t" style="top:46px">Vamos</b><b class="fn-face__t" style="top:88px">conversar.</b><b class="fn-face__s" style="left:30px;right:30px;bottom:64px;height:34px;border-radius:17px"></b><b class="fn-face__a" style="left:30px;bottom:22px;width:120px;height:30px;border-radius:15px"></b></div></div></div>
+<div class="iso-pl fn-pl" data-i="6" data-to="blog" style="--x:0px;--y:0px;--w:420px;--h:280px;--r:22px;--zr:0px"><i class="iso-pl__e"></i><i class="iso-pl__e"></i><i class="iso-pl__e"></i><div class="iso-pl__face"><div class="fn-face g-papel"><b class="fn-face__e">// blog</b><b class="fn-face__t" style="top:46px">Notas de</b><b class="fn-face__t" style="top:88px">campo.</b><b class="fn-face__s" style="left:30px;right:30px;bottom:70px;height:8px"></b><b class="fn-face__s" style="left:30px;right:90px;bottom:48px;height:8px"></b><b class="fn-face__s" style="left:30px;right:30px;bottom:26px;height:8px"></b></div></div></div>
+<div class="iso-pl fn-pl" data-i="5" data-to="sobre" style="--x:0px;--y:0px;--w:420px;--h:280px;--r:22px;--zr:0px"><i class="iso-pl__e"></i><i class="iso-pl__e"></i><i class="iso-pl__e"></i><div class="iso-pl__face"><div class="fn-face g-azul"><b class="fn-face__e">// sobre</b><b class="fn-face__t" style="top:46px">Bruno</b><b class="fn-face__t" style="top:88px">Guimarães</b><img class="fn-face__img" src="img/bruno-duo.webp" alt="" style="right:20px;bottom:0;width:150px;height:200px;object-fit:cover;object-position:50% 12%"></div></div></div>
+<div class="iso-pl fn-pl" data-i="4" data-to="processo" style="--x:0px;--y:0px;--w:420px;--h:280px;--r:22px;--zr:0px"><i class="iso-pl__e"></i><i class="iso-pl__e"></i><i class="iso-pl__e"></i><div class="iso-pl__face"><div class="fn-face g-tinta"><b class="fn-face__e">// processo</b><b class="fn-face__t" style="top:46px">Do escopo</b><b class="fn-face__t" style="top:88px">ao deploy.</b><b class="fn-face__s" style="left:30px;right:30px;bottom:44px;height:3px"></b><b class="fn-face__a" style="left:30px;bottom:34px;width:22px;height:22px;border-radius:50%"></b><b class="fn-face__a" style="left:140px;bottom:34px;width:22px;height:22px;border-radius:50%"></b></div></div></div>
+<div class="iso-pl fn-pl" data-i="3" data-to="projetos" style="--x:0px;--y:0px;--w:420px;--h:280px;--r:22px;--zr:0px"><i class="iso-pl__e"></i><i class="iso-pl__e"></i><i class="iso-pl__e"></i><div class="iso-pl__face"><div class="fn-face g-papel"><b class="fn-face__e">// projetos</b><b class="fn-face__t" style="top:46px">No ar.</b><img class="fn-face__img" src="img/capa-estudio-entre.webp" alt=""></div></div></div>
+<div class="iso-pl fn-pl" data-i="2" data-to="servicos" style="--x:0px;--y:0px;--w:420px;--h:280px;--r:22px;--zr:0px"><i class="iso-pl__e"></i><i class="iso-pl__e"></i><i class="iso-pl__e"></i><div class="iso-pl__face"><div class="fn-face g-papel"><b class="fn-face__e">// serviços</b><b class="fn-face__t" style="top:46px">O que</b><b class="fn-face__t" style="top:88px">eu faço.</b><b class="fn-face__a" style="right:0;top:0;width:150px;height:280px;border-radius:0"></b><b class="fn-face__s" style="left:30px;bottom:30px;width:150px;height:9px"></b></div></div></div>
+<div class="iso-pl fn-pl" data-i="1" data-to="hero" style="--x:0px;--y:0px;--w:420px;--h:280px;--r:22px;--zr:0px"><i class="iso-pl__e"></i><i class="iso-pl__e"></i><i class="iso-pl__e"></i><div class="iso-pl__face"><div class="fn-face g-azul"><b class="fn-face__e">// estados</b><b class="fn-face__t" style="top:46px">Vazio, erro,</b><b class="fn-face__t" style="top:88px">pronto.</b><b class="fn-face__a" style="right:34px;top:150px;width:64px;height:64px;border-radius:50%"></b><b class="fn-face__s" style="left:30px;bottom:30px;width:150px;height:9px"></b></div></div></div>
+<div class="iso-pl fn-pl" data-i="0" data-to="hero" style="--x:0px;--y:0px;--w:420px;--h:280px;--r:22px;--zr:0px"><i class="iso-pl__e"></i><i class="iso-pl__e"></i><i class="iso-pl__e"></i><div class="iso-pl__face"><div class="fn-face g-azul"><b class="fn-face__e">// início</b><b class="fn-face__t" style="top:46px">Interfaces</b><b class="fn-face__t" style="top:88px">com vida.</b><b class="fn-face__a" style="left:30px;bottom:26px;width:86px;height:28px"></b></div></div></div>
+</div></div>
+<div class="fn-rail">
+<svg class="fn-rail__svg" aria-hidden="true"><line class="fn-spine"></line><line class="fn-link"></line><line class="fn-link"></line><line class="fn-link"></line><line class="fn-link"></line><line class="fn-link"></line><line class="fn-link"></line><line class="fn-link"></line><line class="fn-link"></line></svg>
+<nav aria-label="Camadas da página"><a class="fn-tag" href="#hero" data-i="0"><i class="hs-stop" data-stop="fn0" data-size="48"></i>// início</a><a class="fn-tag" href="#hero" data-i="1"><i class="hs-stop" data-stop="fn1" data-size="48"></i>// estados</a><a class="fn-tag" href="#servicos" data-i="2"><i class="hs-stop" data-stop="fn2" data-size="48"></i>// serviços</a><a class="fn-tag" href="#projetos" data-i="3"><i class="hs-stop" data-stop="fn3" data-size="48"></i>// projetos</a><a class="fn-tag" href="#processo" data-i="4"><i class="hs-stop" data-stop="fn4" data-size="48"></i>// processo</a><a class="fn-tag" href="#sobre" data-i="5"><i class="hs-stop" data-stop="fn5" data-size="48"></i>// sobre</a><a class="fn-tag" href="#blog" data-i="6"><i class="hs-stop" data-stop="fn6" data-size="48"></i>// blog</a><a class="fn-tag" href="#contato" data-i="7"><i class="hs-stop" data-stop="fn7" data-size="48"></i>// contato</a></nav>
+</div>
+<div class="fn-foot">
+<a class="fn-sig" href="#hero" aria-label="Voltar ao início">bruno guimarães</a>
+<div class="fn-foot__r">
+<a class="g-arrow-link" href="https://www.linkedin.com/">LinkedIn</a>
+<a class="g-arrow-link" href="https://github.com/devguimaraes">GitHub</a>
+<span class="fn-legal">© 2026 Bruno Guimarães</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+<div class="hs-hud"><div class="hs-island only-d" ref="{{r.island}}"><svg class="hs-arc" viewBox="0 0 120 120" aria-hidden="true"><circle class="t" cx="60" cy="60" r="44"></circle><circle class="a" cx="60" cy="60" r="44" ref="{{r.arc}}"></circle></svg><span ref="{{r.islandLabel}}">// início</span></div><div class="hs-cut" ref="{{r.cut}}"></div><nav class="hs-dock only-m" data-tone="light" aria-label="Navegação" ref="{{r.dock}}"><span class="hs-dock__tag" ref="{{r.dockTag}}">// início</span><i class="hs-dock__rail"></i><span class="hs-dock__ring" ref="{{r.dockRing}}"><svg class="hs-arc" viewBox="0 0 120 120" aria-hidden="true"><circle class="t" cx="60" cy="60" r="44"></circle><circle class="a" cx="60" cy="60" r="44" ref="{{r.arcDock}}"></circle></svg></span><a class="hs-nav" href="#hero" aria-label="Início"><span class="hs-nav__i"><svg class="hs-ico" viewBox="0 0 32 32" aria-hidden="true"><path class="hs-ico__b" d="M16 20 L27 25.5 L16 31 L5 25.5 Z"></path><g class="hs-ico__o"><path d="M8 19 L16 23 L16 17 L12 10 L8 13 Z"></path><path d="M16 23 L24 19 L24 13 L16 17 Z"></path><path class="f" d="M16 17 L12 10 L20 6 L24 13 Z"></path></g></svg></span></a><a class="hs-nav" href="#servicos" aria-label="Serviços"><span class="hs-nav__i"><svg class="hs-ico" viewBox="0 0 32 32" aria-hidden="true"><path class="hs-ico__b" d="M16 20 L27 25.5 L16 31 L5 25.5 Z"></path><g class="hs-ico__o"><path class="f" d="M16 3.75 L25.5 8.5 L16 13.25 L6.5 8.5 Z"></path><path d="M6.5 13 L16 17.75 L25.5 13"></path><path d="M6.5 17.5 L16 22.25 L25.5 17.5"></path></g></svg></span></a><a class="hs-nav" href="#projetos" aria-label="Projetos"><span class="hs-nav__i"><svg class="hs-ico" viewBox="0 0 32 32" aria-hidden="true"><path class="hs-ico__b" d="M16 20 L27 25.5 L16 31 L5 25.5 Z"></path><g class="hs-ico__o"><path class="f" d="M16 4.8 L21.6 7.6 L16 10.399999999999999 L10.4 7.6 Z"></path><path class="f" d="M22.6 8.100000000000001 L28.200000000000003 10.9 L22.6 13.7 L17.0 10.9 Z"></path><path class="f" d="M9.4 8.100000000000001 L15.0 10.9 L9.4 13.7 L3.8000000000000007 10.9 Z"></path><path class="f" d="M16 11.399999999999999 L21.6 14.2 L16 17.0 L10.4 14.2 Z"></path></g></svg></span></a><a class="hs-nav" href="#sobre" aria-label="Sobre"><span class="hs-nav__i"><svg class="hs-ico" viewBox="0 0 32 32" aria-hidden="true"><path class="hs-ico__b" d="M16 20 L27 25.5 L16 31 L5 25.5 Z"></path><g class="hs-ico__o"><circle class="f" cx="16" cy="8" r="4.4"></circle><path d="M7.2 18.6 C7.8 15 11.5 13.8 16 13.8 C20.5 13.8 24.2 15 24.8 18.6 L16 22.8 Z"></path></g></svg></span></a><a class="hs-nav" href="#blog" aria-label="Blog"><span class="hs-nav__i"><svg class="hs-ico" viewBox="0 0 32 32" aria-hidden="true"><path class="hs-ico__b" d="M16 20 L27 25.5 L16 31 L5 25.5 Z"></path><g class="hs-ico__o"><path class="f" d="M16 6 L27 11.5 L16 17 L5 11.5 Z"></path><path d="M5 11.5 L5 14.5 L16 20 L27 14.5 L27 11.5"></path><path class="l" d="M10.5 10.9 L16.5 13.9"></path><path class="l" d="M13.7 9.1 L21.4 12.95"></path></g></svg></span></a><a class="hs-nav" href="#contato" aria-label="Contato"><span class="hs-nav__i"><svg class="hs-ico" viewBox="0 0 32 32" aria-hidden="true"><path class="hs-ico__b" d="M16 20 L27 25.5 L16 31 L5 25.5 Z"></path><g class="hs-ico__o"><path class="f" d="M16 4.5 L27 10 L16 15.5 L12.4 13.7 L9.4 18.6 L9.6 12.3 L5 10 Z"></path><path d="M27 10 L27 13 L16 18.5 L13.4 17.2"></path></g></svg></span></a></nav><div class="hs-actor g-azul" ref="{{r.actor}}"><div class="hs-actor__k"><div class="hs-actor__in" ref="{{r.actorIn}}"><svg class="g-giro" ref="{{r.giro}}" data-state="done" viewBox="0 0 120 120" aria-hidden="true"><g class="g-giro__body"><circle class="g-giro__track" cx="60" cy="60" r="44"></circle><g class="g-giro__turn"><g class="g-giro__spin"><circle class="g-giro__arc" cx="60" cy="60" r="44"></circle></g></g><g class="g-giro__blink"><ellipse class="g-giro__eye" cx="46" cy="54" rx="6" ry="9"></ellipse><ellipse class="g-giro__eye" cx="74" cy="54" rx="6" ry="9"></ellipse></g><path class="g-giro__face g-giro__face--happy" d="M38 60 Q46 46 54 60 M66 60 Q74 46 82 60"></path><path class="g-giro__face g-giro__face--x" d="M39 52 L53 62 M53 52 L39 62 M67 52 L81 62 M81 52 L67 62"></path><path class="g-giro__face g-giro__face--flat" d="M39 58 H53 M67 58 H81"></path><path class="g-giro__face g-giro__face--sleep" d="M39 55 Q46 62 53 55 M67 55 Q74 62 81 55"></path><path class="g-giro__z" d="M88 22 H98 L88 34 H98"></path></g></svg></div></div></div></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"layout": {"editor": null, "default": "desktop"}, "capitulo": {"editor": "enum", "options": ["início", "estados", "serviços", "projetos", "processo", "sobre", "blog", "contato", "fim"], "default": "início"}, "tour": {"editor": "boolean", "default": false}, "$preview": {"width": 1440, "height": 900}}'>
+class Component extends DCLogic {
+  // Duas regras guiam tudo aqui. A câmera (pilhas, parallax, discos) é escovada pela rolagem e volta
+  // junto. O Giro não: cada capítulo diz onde ele deveria estar e ele salta até lá no tempo dele.
+  componentDidMount() {
+    this.alive = true;
+    this.timers = [];
+    this.key = "";
+    this.hover = { bl: -1, fn: -1 };
+    this.A = { x: -200, y: -200, k: 1, kT: 1, tg: null, fl: null, roll: 0, st: "idle" };
+    this.frame = this.frame.bind(this);
+    this.onResize = () => {
+      clearTimeout(this.rz);
+      this.rz = setTimeout(() => this.alive && this.build(), 200);
+    };
+    window.addEventListener("resize", this.onResize);
+    const fonts = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+    fonts.then(() => {
+      if (!this.alive) return;
+      this.build();
+      this.bindUi();
+      this.jump();
+      this.raf = requestAnimationFrame(this.frame);
+    });
+    if (typeof window !== "undefined") window.__hs = this;
+  }
+
+  componentDidUpdate(prev) {
+    if (prev.capitulo !== this.props.capitulo) this.jump();
+    if (prev.tour !== this.props.tour) this.tourT = 0;
+  }
+
+  componentWillUnmount() {
+    this.alive = false;
+    cancelAnimationFrame(this.raf);
+    window.removeEventListener("resize", this.onResize);
+    this.clear();
+    if (this.ctx) this.ctx.revert();
+  }
+
+  clear() {
+    this.timers.forEach(clearTimeout);
+    this.timers = [];
+  }
+
+  later(fn, ms) {
+    this.timers.push(setTimeout(() => this.alive && fn(), ms));
+  }
+
+  q(s) {
+    return this.el.root.querySelector(s);
+  }
+
+  qa(s) {
+    return Array.from(this.el.root.querySelectorAll(s));
+  }
+
+  // Projeção da pilha, a mesma câmera da hero: rotateX(60deg) rotateZ(-45deg).
+  project(o, x, y, z) {
+    const X = 0.7071 * (x + y);
+    const Y = 0.7071 * (y - x);
+    return { x: o.x + o.k * X, y: o.y + o.k * (0.5 * Y - 0.866 * z) };
+  }
+
+  build() {
+    const { gsap, ScrollTrigger } = window;
+    if (!gsap || !ScrollTrigger) return;
+    gsap.registerPlugin(ScrollTrigger);
+    if (this.ctx) this.ctx.revert();
+    this.mobile = this.props.layout === "mobile";
+    const sc = (this.sc = this.el.scroll);
+    this.W = sc.clientWidth;
+    this.H = sc.clientHeight;
+    this.stops = {};
+    this.qa("[data-stop]").forEach((n) => (this.stops[n.dataset.stop] = n));
+    this.ctx = gsap.context(() => {
+      this.chs = [
+        this.buildAbertura(),
+        this.buildServicos(),
+        this.buildProjetos(),
+        this.buildProcesso(),
+        this.buildSobre(),
+        this.buildBlog(),
+        this.buildContato(),
+        this.buildFim(),
+      ];
+    }, this.el.root);
+    ScrollTrigger.refresh();
+    this.key = "";
+    this.dockI = undefined;
+    this.layoutKey = `${this.W}x${this.H}`;
+  }
+
+  scene(trigger, extra) {
+    return window.gsap.timeline({
+      defaults: { ease: "none" },
+      scrollTrigger: Object.assign(
+        { trigger, scroller: this.sc, start: "top top", end: "bottom bottom", scrub: 0.35 },
+        extra
+      ),
+    });
+  }
+
+  absTop(el) {
+    let top = 0;
+    for (let e = el; e && e !== this.sc; e = e.offsetParent) top += e.offsetTop;
+    return top;
+  }
+
+  chapter(id, label, el, at, lead) {
+    const top = this.absTop(el);
+    return { id, label, top, len: Math.max(1, el.offsetHeight - this.H), y0: top - this.H * (lead ?? 0.45), at };
+  }
+
+  // Tudo o que depende de onde o visitante está sai daqui: é uma função da rolagem, então subir e
+  // descer dão o mesmo resultado, e pular para um capítulo já chega no estado certo.
+  story() {
+    const y = this.sc.scrollTop;
+    let c = this.chs[0];
+    for (const x of this.chs) if (y >= x.y0) c = x;
+    const p = Math.min(1, Math.max(0, (y - c.top) / c.len));
+    const d = c.at(p);
+    const key = `${c.id}:${d.k}`;
+    if (key !== this.key) {
+      this.key = key;
+      this.clear();
+      if (d.apply) d.apply();
+      this.go(d);
+      if (d.after) d.after.forEach(([ms, st]) => this.later(() => this.setState(st), ms));
+    }
+    this.hud(c, y, d.label);
+  }
+
+  // A ilha é a mesma nos dois tamanhos e inverte com a superfície que passa embaixo dela.
+  hud(c, y, label) {
+    const max = this.sc.scrollHeight - this.H;
+    const off = 276.5 * (1 - Math.min(1, y / Math.max(1, max)));
+    const tone = ["servicos", "projetos", "blog"].includes(c.id) ? "dark" : "light";
+    const { arc, arcDock, island, islandLabel, dock } = this.el;
+    if (arc) arc.style.strokeDashoffset = off;
+    if (arcDock) arcDock.style.strokeDashoffset = off;
+    if (this.lastTone !== tone) {
+      this.lastTone = tone;
+      if (island) island.setAttribute("data-tone", tone);
+      if (dock) dock.setAttribute("data-tone", tone);
+    }
+    if (island) island.classList.toggle("is-on", y > this.H * 0.25);
+    if (this.mobile) this.setDock({ hero: 0, servicos: 1, projetos: 2, processo: 2, sobre: 3, blog: 4, contato: 5, fim: 5 }[c.id]);
+    const text = label || c.label;
+    if (this.lastLabel !== text) {
+      this.lastLabel = text;
+      if (islandLabel) islandLabel.textContent = text;
+      if (this.mobile) this.flashTag(text);
+    }
+  }
+
+  // No celular o arco é o seletor: salta de ícone em ícone e, ao pousar, o ícone sobe da placa.
+  setDock(i) {
+    if (this.dockI === i) return;
+    const { gsap } = window;
+    const first = this.dockI === undefined;
+    this.dockI = i;
+    const cells = this.qa(".hs-nav");
+    const ring = this.el.dockRing;
+    const x = cells[i].offsetLeft + cells[i].offsetWidth / 2;
+    const mark = () => cells.forEach((c, n) => {
+      c.classList.toggle("is-on", n === i);
+      if (n === i) c.setAttribute("aria-current", "true");
+      else c.removeAttribute("aria-current");
+    });
+    gsap.killTweensOf(ring);
+    if (first) {
+      gsap.set(ring, { x, y: 0 });
+      mark();
+      return;
+    }
+    gsap.timeline()
+      .to(ring, { x, duration: 0.46, ease: "none" }, 0)
+      .to(ring, { y: -30, duration: 0.23, ease: "sine.out" }, 0)
+      .to(ring, { y: 0, duration: 0.23, ease: "sine.in" }, 0.23)
+      .to(ring, { rotation: "+=360", duration: 0.46, ease: "none" }, 0)
+      .call(mark, null, 0.42)
+      .fromTo(ring, { scaleX: 1.22, scaleY: 0.78 }, { scaleX: 1, scaleY: 1, duration: 0.28, ease: "back.out(3)" }, 0.46);
+  }
+
+  // O nome do capítulo aparece em cima do arco quando ele chega e some sozinho.
+  flashTag(text) {
+    const { gsap } = window;
+    const tag = this.el.dockTag;
+    const dock = this.el.dock;
+    if (!tag || !dock) return;
+    tag.textContent = text;
+    const cells = this.qa(".hs-nav");
+    const c = cells[this.dockI === undefined ? 0 : this.dockI];
+    const half = tag.offsetWidth / 2;
+    const x = Math.min(dock.offsetWidth - half - 4, Math.max(half + 4, c.offsetLeft + c.offsetWidth / 2));
+    gsap.killTweensOf(tag);
+    gsap.set(tag, { x: x - half });
+    gsap.timeline()
+      .fromTo(tag, { autoAlpha: 0, y: 8 }, { autoAlpha: 1, y: 0, duration: 0.22, ease: "power2.out" }, 0.3)
+      .to(tag, { autoAlpha: 0, y: -4, duration: 0.24, ease: "power1.in" }, 2);
+  }
+
+  // Tocar num ícone não atravessa a página inteira: a cor do destino sai do ícone e cobre o salto.
+  navJump(a) {
+    const { gsap } = window;
+    const id = a.getAttribute("href").slice(1);
+    const color = { hero: "var(--azul-sinal)", sobre: "var(--azul-sinal)", contato: "var(--azul-sinal)" }[id] || "var(--papel)";
+    const cut = this.el.cut;
+    const r = a.getBoundingClientRect();
+    const R = this.el.root.getBoundingClientRect();
+    const x = r.left - R.left + r.width / 2;
+    const y = r.top - R.top + r.height / 2;
+    const full = Math.hypot(Math.max(x, R.width - x), y) + 30;
+    gsap.killTweensOf(cut);
+    gsap.set(cut, { background: color, autoAlpha: 1, clipPath: `circle(0px at ${x}px ${y}px)` });
+    gsap.to(cut, {
+      clipPath: `circle(${full}px at ${x}px ${y}px)`,
+      duration: 0.42,
+      ease: "power2.in",
+      onComplete: () => {
+        this.scrollToId(id, true);
+        gsap.to(cut, { autoAlpha: 0, duration: 0.24, delay: 0.32 });
+      },
+    });
+  }
+
+  setState(st) {
+    const s = this.el.giro;
+    if (s.getAttribute("data-state") === st) return;
+    s.setAttribute("data-from", s.getAttribute("data-state") || "idle");
+    s.setAttribute("data-state", st);
+  }
+
+  pos(n) {
+    const r = n.getBoundingClientRect();
+    const R = this.el.root.getBoundingClientRect();
+    const f = R.width / this.el.root.offsetWidth || 1;
+    return { x: (r.left - R.left + r.width / 2) / f, y: (r.top - R.top + r.height / 2) / f };
+  }
+
+  go(d) {
+    const A = this.A;
+    const n = this.stops[d.stop];
+    if (!n) return;
+    const surf = n.closest(".g-azul, .g-papel, .g-tinta");
+    const cls = surf ? ["g-azul", "g-papel", "g-tinta"].find((c) => surf.classList.contains(c)) : "g-azul";
+    A.next = { cls, st: d.state };
+    A.tg = n;
+    A.kT = (Number((this.mobile && n.dataset.sizeM) || n.dataset.size) || 64) / 96;
+    const p = this.pos(n);
+    if (A.x < -100) {
+      A.x = p.x;
+      A.y = p.y;
+      A.k = A.kT;
+      this.land();
+      return;
+    }
+    const dist = Math.hypot(p.x - A.x, p.y - A.y);
+    if (dist < 2) {
+      this.land();
+      return;
+    }
+    A.fl = {
+      x0: A.x,
+      y0: A.y,
+      t0: performance.now(),
+      T: Math.min(820, Math.max(340, 320 + dist / 2.3)),
+      h: Math.min(this.mobile ? 110 : 190, Math.max(30, dist * 0.3)),
+      spin: dist * 0.9,
+      r0: A.roll,
+    };
+    this.setState("idle");
+  }
+
+  land() {
+    const A = this.A;
+    if (!A.next) return;
+    this.el.actor.className = `hs-actor ${A.next.cls}`;
+    this.setState(A.next.st);
+    this.bump("is-squash");
+  }
+
+  bump(cls) {
+    const n = this.el.actorIn;
+    n.classList.remove("is-squash", "is-pulse");
+    void n.offsetWidth;
+    n.classList.add(cls);
+  }
+
+  frame(now) {
+    if (!this.alive) return;
+    this.raf = requestAnimationFrame(this.frame);
+    if (!this.chs) return;
+    const size = `${this.el.scroll.clientWidth}x${this.el.scroll.clientHeight}`;
+    if (size !== this.layoutKey) {
+      this.layoutKey = size;
+      this.onResize();
+    }
+    if (this.props.tour) {
+      const last = this.tourT || now;
+      this.tourT = now;
+      const nextY = this.sc.scrollTop + (Math.min(50, now - last) / 1000) * this.H * 0.42;
+      this.sc.scrollTop = nextY;
+    }
+    this.story();
+    const A = this.A;
+    if (!A.tg) return;
+    const t = this.pos(A.tg);
+    let x = t.x;
+    let y = t.y;
+    if (A.fl) {
+      const f = A.fl;
+      const u = Math.min(1, (now - f.t0) / f.T);
+      x = f.x0 + (t.x - f.x0) * u;
+      y = f.y0 + (t.y - f.y0) * u - f.h * 4 * u * (1 - u);
+      A.roll = f.r0 + f.spin * u;
+      if (u >= 1) {
+        A.fl = null;
+        this.land();
+      }
+    }
+    A.x = x;
+    A.y = y;
+    A.k += (A.kT - A.k) * 0.16;
+    this.el.actor.style.transform = `translate3d(${x.toFixed(1)}px,${y.toFixed(1)}px,0)`;
+    this.el.actor.style.setProperty("--gk", A.k.toFixed(3));
+    this.el.actor.style.setProperty("--roll", `${A.roll.toFixed(1)}deg`);
+  }
+
+  // ---------- Abertura: a pilha fecha, vira a tela e a tela mostra os estados ----------
+  buildAbertura() {
+    const { gsap } = window;
+    const sec = this.q(".ab");
+    const world = this.q(".ab-world");
+    const iso = this.q(".ab-iso");
+    const plates = this.qa(".ab-iso .iso-pl");
+    const demo = this.q(".ab-demo");
+    const st = this.q(".ab-st");
+    const disc = this.q(".ab .hs-disc");
+    const W = this.W;
+    const H = this.H;
+    const o = this.mobile ? { x: W / 2 - 65, y: 452, k: 0.5 } : { x: W / 2 + 270, y: H * 0.74, k: 0.92 };
+    gsap.set(iso, { "--ox": `${o.x}px`, "--oy": `${o.y}px`, "--k": o.k, "--rx": "60deg", "--rz": "-45deg" });
+    const open = [14, 164, 314, 464];
+    const pos = [[0, 0], [30, -30], [60, -60], [10, -6]];
+    gsap.set(plates, { "--zr": (i) => `${open[i]}px`, "--x": (i) => `${pos[i][0]}px`, "--y": (i) => `${pos[i][1]}px` });
+    this.drawHeroRail(o, open, pos);
+    const cx = demo.offsetLeft + demo.offsetWidth / 2;
+    const cy = demo.offsetTop + demo.offsetHeight / 2;
+    const K = demo.offsetWidth / 330;
+    const exit = this.q(".ab-exit");
+    gsap.set(disc, { "--dx": `${exit.offsetLeft}px`, "--dy": `${exit.offsetTop}px`, "--dr": "0px" });
+    const R = Math.hypot(Math.max(exit.offsetLeft, W - exit.offsetLeft), exit.offsetTop) + 40;
+    const hide = [this.q(".ab-copy"), this.q(".ab-head"), this.q(".ab-top")].filter(Boolean);
+    const tl = this.scene(sec);
+    tl.to(hide, { y: -H * 0.2, autoAlpha: 0, duration: 1.1 }, 0)
+      .to([".ab-rail", ".ab-iso .hb-floor", ".ab-iso .hb-base"], { autoAlpha: 0, duration: 0.5 }, 0)
+      .to(plates[3], { autoAlpha: 0, duration: 0.7 }, 0.1)
+      .to(plates, { "--zr": (i) => `${[2, 6, 10, 14][i]}px`, "--x": "0px", "--y": "0px", duration: 1.3, ease: "power1.inOut" }, 0.1)
+      .to(iso, { "--rx": "0deg", "--rz": "0deg", "--k": K, "--ox": `${cx}px`, "--oy": `${cy}px`, duration: 1.5, ease: "power2.inOut" }, 0.7)
+      .fromTo(st, { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 0.5 }, 1.9)
+      .to(world, { autoAlpha: 0, duration: 0.2 }, 2.2)
+      .fromTo(demo, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.2 }, 2.2)
+      .to(disc, { "--dr": `${R}px`, duration: 1, ease: "power2.in" }, 9)
+      .to({}, { duration: 0.01 }, 10);
+    const order = ["empty", "loading", "error", "done"];
+    return this.chapter("hero", "// início", sec, (p) => {
+      const t = p * 10;
+      if (t < 2.25) return { k: "rest", stop: "hero", state: t < 0.2 ? "done" : "curious", apply: () => this.setDemo("empty", true) };
+      if (t >= 9) return { k: "exit", stop: "exit", state: "curious" };
+      if (this.demoOver) {
+        const st0 = this.demoOver;
+        return { k: `over-${st0}`, stop: st0 === "done" ? "card-done" : "card", state: this.giroFor(st0) };
+      }
+      const b = Math.min(3, Math.floor(((t - 2.25) / 6.75) * 4));
+      const name = order[b];
+      return { k: `b${b}`, stop: name === "done" ? "card-done" : "card", state: this.giroFor(name), apply: () => this.setDemo(name, true), label: "// estados" };
+    }, 0);
+  }
+
+  giroFor(st) {
+    return { empty: "empty", loading: "loading", error: "error", done: "done" }[st];
+  }
+
+  setDemo(st) {
+    const d = this.q(".dm");
+    d.setAttribute("data-st", st);
+    this.qa("[data-demo]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.demo === st)));
+    this.qa(".ab-beat").forEach((p) => p.classList.toggle("is-on", p.dataset.for === st));
+  }
+
+  // Botão da tela de exemplo: a primeira publicação sempre falha, a segunda dá certo.
+  pressDemo() {
+    const cur = this.q(".dm").getAttribute("data-st");
+    if (cur === "loading") return;
+    if (cur === "done") return this.overDemo("empty");
+    const ok = cur === "error";
+    this.overDemo("loading");
+    clearTimeout(this.demoT);
+    this.demoT = setTimeout(() => this.alive && this.overDemo(ok ? "done" : "error"), ok ? 1200 : 1500);
+  }
+
+  overDemo(st) {
+    this.demoOver = st;
+    this.setDemo(st);
+    this.key = "";
+  }
+
+  drawHeroRail(o, open, pos) {
+    const rail = this.q(".ab-rail");
+    const stops = this.qa(".ab-rail__stop");
+    const tags = this.qa(".ab-rail__tag");
+    const w = 330;
+    const h = 230;
+    const pts = [0, 1, 2, 3].map((i) => {
+      const W0 = i === 3 ? 170 : w;
+      const H0 = i === 3 ? 62 : h;
+      return this.project(o, pos[i][0] + W0 / 2, pos[i][1] + H0 / 2, open[i]);
+    });
+    const x = Math.max(...pts.map((p) => p.x)) + (this.mobile ? 24 : 44);
+    const low = Math.max(...pts.map((p) => p.y)) + (this.mobile ? 28 : 56);
+    const line = this.q(".ab-rail__line");
+    line.setAttribute("points", `${x},${pts[3].y} ${x},${low}`);
+    pts.forEach((p, i) => {
+      stops[i].setAttribute("cx", x);
+      stops[i].setAttribute("cy", p.y);
+      tags[i].style.transform = `translate(${x + (this.mobile ? 12 : 22)}px, ${p.y - 9}px)`;
+    });
+    const rest = this.q(".ab-rest");
+    rest.style.left = `${x}px`;
+    rest.style.top = `${low}px`;
+    void rail;
+  }
+
+  // ---------- Serviços: um palco, cinco trocas ----------
+  buildServicos() {
+    const sec = this.q(".sv-track");
+    const colors = { azul: "var(--azul-sinal)", nevoa: "#edece8", tinta: "var(--tinta)" };
+    this.svColors = colors;
+    this.sv = -1;
+    this.setSv(0, true);
+    return this.chapter("servicos", "// serviços", sec, (p) => {
+      const i = Math.min(4, Math.floor(p * 5));
+      return { k: i, stop: `sv${i}`, state: "curious", apply: () => this.setSv(i) };
+    }, this.mobile ? 0.6 : 0.5);
+  }
+
+  setSv(i, instant) {
+    if (this.sv === i) return;
+    const { gsap } = window;
+    this.sv = i;
+    this.qa(".sv-row").forEach((r, n) => r.classList.toggle("is-on", n === i));
+    this.qa(".sv-detail").forEach((r, n) => r.classList.toggle("is-on", n === i));
+    const arts = this.qa(".sv-art");
+    arts.forEach((a, n) => {
+      const on = n === i;
+      a.classList.toggle("is-on", on);
+      const ar = a.querySelector(".ar");
+      if (!ar) return;
+      ar.classList.toggle("is-paused", !on);
+      if (on) {
+        ar.classList.remove("is-pre");
+        ar.getAnimations({ subtree: true }).forEach((x) => {
+          if (typeof CSSAnimation !== "undefined" && x instanceof CSSAnimation) x.currentTime = 0;
+        });
+      } else {
+        ar.classList.add("is-pre");
+      }
+    });
+    const panel = this.q(".sv-panel");
+    const disc = this.q(".sv-panel__disc");
+    const c = this.svColors[arts[i].dataset.c];
+    if (instant) {
+      panel.style.setProperty("--sv-c", c);
+      return;
+    }
+    panel.style.setProperty("--sv-next", c);
+    const r = panel.getBoundingClientRect();
+    gsap.killTweensOf(disc);
+    gsap.fromTo(
+      disc,
+      { clipPath: `circle(0px at 0px ${r.height * 0.5}px)` },
+      {
+        clipPath: `circle(${Math.hypot(r.width, r.height)}px at 0px ${r.height * 0.5}px)`,
+        duration: 0.56,
+        ease: "power2.out",
+        onComplete: () => panel.style.setProperty("--sv-c", c),
+      }
+    );
+  }
+
+  // ---------- Projetos: janelas que empilham e deitam ----------
+  buildProjetos() {
+    const { gsap } = window;
+    const sec = this.q(".pj-ch");
+    const wins = this.qa(".pj");
+    const out = this.q(".pj-out");
+    const big = this.q(".pj-big");
+    const disc = this.q(".pj-ch .hs-disc");
+    const exit = this.q(".pj-exit");
+    const H = this.H;
+    gsap.set(disc, { "--dx": `${exit.offsetLeft}px`, "--dy": `${exit.offsetTop}px`, "--dr": "0px" });
+    const R = Math.hypot(Math.max(exit.offsetLeft, this.W - exit.offsetLeft), exit.offsetTop) + 40;
+    const step = 1.4;
+    const t0 = 1.2;
+    const tTilt = t0 + wins.length * step;
+    const tl = this.scene(sec);
+    // Sem valor inicial o GSAP parte de zero, e --wk é a escala: as janelas sumiriam na virada.
+    gsap.set(this.q(".pj-world"), { "--wk": 1, "--wrx": "0deg", "--wrz": "0deg", "--wx": "0px", "--wy": "0px" });
+    gsap.set(wins, { y: H * 1.1, scale: 1, z: 0, visibility: "visible", "--dim": 0 });
+    tl.fromTo(big, { fontStretch: "50%" }, { fontStretch: "128%", duration: 1.1 }, 0).to({}, { duration: 0.01 }, 0);
+    wins.forEach((w, i) => {
+      const cover = w.querySelector(".pj-cover");
+      const img = w.querySelector(".pj-cover img");
+      const at = t0 + i * step;
+      tl.to(w, { y: 0, duration: 1, ease: "power2.out" }, at);
+      tl.fromTo(cover, { clipPath: "inset(0 0 100% 0)" }, { clipPath: "inset(0 0 0% 0)", duration: 0.5 }, at + 0.05);
+      tl.fromTo(img, { yPercent: 6 }, { yPercent: -6, duration: step * 1.6 }, at);
+      for (let j = 0; j < i; j += 1) {
+        const n = i - j;
+        tl.to(wins[j], { y: -12 * n, scale: 1 - 0.035 * n, "--dim": Math.min(0.5, 0.2 * n), duration: 0.9, ease: "power1.out" }, at);
+      }
+    });
+    tl.to([big, ".pj-lead"], { autoAlpha: 0, duration: 0.5 }, t0 + 0.2);
+    const zGap = this.mobile ? 62 : 120;
+    tl.to(wins, { y: 0, scale: 1, z: (i) => i * zGap, "--dim": 0, duration: 1.3, ease: "power2.inOut" }, tTilt)
+      .to(this.q(".pj-world"), {
+        "--wrx": "60deg",
+        "--wrz": "-45deg",
+        "--wk": this.mobile ? 0.5 : 0.46,
+        "--wx": this.mobile ? "0px" : `${-this.W * 0.2}px`,
+        "--wy": this.mobile ? `${-H * 0.21}px` : `${H * 0.05}px`,
+        duration: 1.3,
+        ease: "power2.inOut",
+      }, tTilt)
+      .fromTo(out, { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.6 }, tTilt + 1)
+      .to(disc, { "--dr": `${R}px`, duration: 1, ease: "power2.in" }, tTilt + 3)
+      .to({}, { duration: 0.01 }, tTilt + 4);
+    const total = tTilt + 4;
+    return this.chapter("projetos", "// projetos", sec, (p) => {
+      const t = p * total;
+      if (t < t0 + 0.35) return { k: "t", stop: "pj-dot", state: "idle" };
+      if (t >= tTilt + 3) return { k: "x", stop: "pj-exit", state: "curious" };
+      if (t >= tTilt + 0.9) return { k: "o", stop: "pj-out", state: "done" };
+      const i = Math.min(wins.length - 1, Math.floor((t - t0 - 0.35) / step));
+      return { k: i, stop: `pj${i}`, state: "loading", after: [[820, "done"]] };
+    }, 0.5);
+  }
+
+  // ---------- Processo: a mesma interface, feita em quatro etapas ----------
+  buildProcesso() {
+    const { gsap } = window;
+    const sec = this.q(".pc-ch");
+    const iso = this.q(".pc-iso");
+    const plates = this.qa(".pc-iso .iso-pl.hb-pl");
+    const notes = this.qa(".pc-note");
+    const code = this.q(".pc-code");
+    const out = this.q(".pc-out");
+    const paint = this.q(".pc-iso .hb-paint");
+    const disc = this.q(".pc-ch .hs-disc");
+    const H = this.H;
+    const W = this.W;
+    const o = this.mobile ? { x: W / 2 + 10, y: 306, k: 0.42 } : { x: W * 0.65, y: H * 0.62, k: 1 };
+    gsap.set(iso, { "--ox": `${o.x}px`, "--oy": `${o.y}px`, "--k": o.k, "--rx": "60deg", "--rz": "-45deg" });
+    const closed = [2, 6, 10, 30];
+    const opened = this.mobile ? [14, 112, 210, 300] : [14, 150, 290, 410];
+    gsap.set(plates, { "--zr": (i) => `${closed[i]}px`, "--x": "0px", "--y": "0px", autoAlpha: 0 });
+    gsap.set(notes, { autoAlpha: 0 });
+    gsap.set(code, { autoAlpha: 0, "--zr": "260px" });
+    gsap.set(out, { autoAlpha: 0 });
+    gsap.set(paint, { clipPath: "inset(0 0 100% 0)" });
+    gsap.set(disc, { "--dx": "50%", "--dy": "50%", "--dr": "0px" });
+    const stops = this.qa(".pc-st");
+    const place = this.mobile ? [11, 37, 63, 89] : [8, 36, 64, 92];
+    stops.forEach((n, i) => (n.style.left = `${place[i]}%`));
+    const fill = this.q(".pc-line__fill");
+    const sc = (x) => x / 100;
+    const tl = this.scene(sec);
+    tl.fromTo(fill, { scaleX: sc(place[0]) }, { scaleX: sc(place[3]), duration: 3.6 }, 0.2)
+      .to(out, { autoAlpha: 1, duration: 0.2 }, 0)
+      .fromTo(notes, { "--zr": "340px", autoAlpha: 0 }, { "--zr": (i) => `${[70, 120, 90][i]}px`, autoAlpha: 1, duration: 0.5, stagger: 0.12, ease: "power2.out" }, 0.05)
+      .to(notes, { "--zr": "420px", autoAlpha: 0, duration: 0.3, stagger: 0.05 }, 1)
+      .to(plates[2], { autoAlpha: 1, duration: 0.3 }, 1.1)
+      .to(out, { autoAlpha: 0, duration: 0.3 }, 1.3)
+      .to(plates[0], { autoAlpha: 1, duration: 0.2 }, 1.5)
+      .to(plates[1], { autoAlpha: 1, duration: 0.2 }, 1.7)
+      .to(plates, { "--zr": (i) => `${opened[i]}px`, duration: 0.6, ease: "power2.inOut" }, 2.15)
+      .to(plates[3], { autoAlpha: 1, duration: 0.3 }, 2.3)
+      .to(code, { autoAlpha: 1, "--zr": "150px", duration: 0.5, ease: "power2.out" }, 2.3)
+      .to(code, { autoAlpha: 0, duration: 0.3 }, 3.1)
+      .to(plates, { "--zr": (i) => `${closed[i]}px`, duration: 0.5, ease: "power2.inOut" }, 3.2)
+      .to(paint, { clipPath: "inset(0 0 0% 0)", duration: 0.5 }, 3.45)
+      .to(disc, { "--dr": `${Math.hypot(W, H) * 0.56}px`, duration: 0.6, ease: "power2.in" }, 4.4)
+      .to({}, { duration: 0.01 }, 5);
+    const total = 5;
+    const face = ["curious", "thinking", "loading", "celebrating"];
+    return this.chapter("processo", "// processo", sec, (p) => {
+      const t = p * total;
+      const i = t < 1.05 ? 0 : t < 2.1 ? 1 : t < 3.15 ? 2 : 3;
+      return { k: i, stop: `pc${i}`, state: face[i], apply: () => this.setPc(i), after: i === 3 ? [[1600, "done"]] : null };
+    }, 0.5);
+  }
+
+  setPc(i) {
+    this.qa(".pc-slot").forEach((n, k) => n.classList.toggle("is-on", k === i));
+    this.qa(".pc-st").forEach((n, k) => n.classList.toggle("is-past", k <= i));
+  }
+
+  // ---------- Sobre ----------
+  buildSobre() {
+    const sec = this.q(".sb-ch");
+    const stage = this.q(".sb-stage");
+    const H = this.H;
+    if (this.mobile) {
+      const tl = window.gsap.timeline({
+        defaults: { ease: "none" },
+        scrollTrigger: { trigger: stage, scroller: this.sc, start: "top bottom", end: "bottom top", scrub: 0.35 },
+      });
+      tl.fromTo(".sb-back", { y: 90 }, { y: -70, duration: 1 }, 0)
+        .fromTo(".sb-front", { y: -30 }, { y: 50, duration: 1 }, 0)
+        .fromTo(".sb-photo", { y: 40 }, { y: -30, duration: 1 }, 0);
+      return this.chapter("sobre", "// sobre", stage, () => ({ k: 0, stop: "sb-peek", state: "curious" }), 0.5);
+    }
+    const tl = this.scene(sec);
+    tl.fromTo(".sb-back", { y: H * 0.1 }, { y: -H * 0.08, duration: 1 }, 0)
+      .fromTo(".sb-front", { y: -H * 0.05 }, { y: H * 0.05, duration: 1 }, 0)
+      .fromTo(".sb-photo", { y: H * 0.08 }, { y: 0, duration: 0.45 }, 0)
+      .to([".sb-back", ".sb-front"], { autoAlpha: 0, duration: 0.14 }, 0.42)
+      .to(".sb-photo", { x: -this.W * 0.27, scale: 0.92, transformOrigin: "50% 100%", duration: 0.26, ease: "power2.inOut" }, 0.42)
+      .fromTo(".sb-bio--d", { autoAlpha: 0, x: 80 }, { autoAlpha: 1, x: 0, duration: 0.2, ease: "power2.out" }, 0.52);
+    return this.chapter("sobre", "// sobre", sec, (p) => (p < 0.42 ? { k: 0, stop: "sb-peek", state: "curious" } : { k: 1, stop: "sb-peek", state: "done" }), 0.5);
+  }
+
+  // ---------- Blog: o Giro cochila até alguém chegar perto ----------
+  buildBlog() {
+    const sec = this.q(".bl");
+    return this.chapter("blog", "// blog", sec, () => {
+      const h = this.hover.bl;
+      return h < 0 ? { k: "nap", stop: "bl-nap", state: "sleeping" } : { k: `h${h}`, stop: `bl${h}`, state: "curious" };
+    }, 0.6);
+  }
+
+  // ---------- Contato: o Giro é o botão e ouve quem escreve ----------
+  buildContato() {
+    const sec = this.q(".ct");
+    if (!sec.getAttribute("data-send")) sec.setAttribute("data-send", "idle");
+    return this.chapter("contato", "// contato", sec, () => {
+      const s = sec.getAttribute("data-send");
+      const state = s === "loading" ? "loading" : s === "done" ? "celebrating" : this.typing ? "curious" : "idle";
+      return { k: s + (this.typing ? "t" : ""), stop: "ct-send", state };
+    }, 0.55);
+  }
+
+  // ---------- Fim: a página inteira numa pilha, e cada camada é um link ----------
+  buildFim() {
+    const { gsap } = window;
+    const sec = this.q(".fn-ch");
+    const iso = this.q(".fn-iso");
+    const plates = this.fnPlates();
+    const n = plates.length;
+    const H = this.H;
+    const W = this.W;
+    const o = this.mobile ? { x: W * 0.4, y: 566, k: 0.42 } : { x: W * 0.62, y: H * 0.84, k: 0.62 };
+    this.fnO = o;
+    gsap.set(iso, { "--ox": `${o.x}px`, "--oy": `${o.y}px`, "--k": o.k, "--rx": "60deg", "--rz": "-45deg" });
+    const gapMax = this.mobile ? 62 : 92;
+    const S = { g: 6 };
+    const draw = () => {
+      plates.forEach((pl, i) => pl.style.setProperty("--zr", `${(n - 1 - i) * S.g + Number(pl.dataset.lift || 0)}px`));
+      this.drawFimRail(S.g);
+    };
+    draw();
+    const tl = this.scene(sec, { onUpdate: draw });
+    tl.to(S, { g: gapMax, duration: 0.7, ease: "power2.out", onUpdate: draw }, 0)
+      .fromTo(".fn-copy", { y: 50, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.3 }, 0.05)
+      .fromTo([".fn-rail", ".fn-foot"], { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.25 }, 0.5)
+      .to({}, { duration: 0.01 }, 1);
+    this.fnDraw = draw;
+    return this.chapter("fim", "// fim da pilha", sec, (p) => {
+      const h = this.hover.fn;
+      if (h >= 0) return { k: `h${h}`, stop: `fn${h}`, state: "curious" };
+      return p < 0.55 ? { k: "up", stop: "fn0", state: "loading" } : { k: "top", stop: "fn0", state: "celebrating", after: [[2200, "done"], [7000, "sleeping"]] };
+    }, 0.4);
+  }
+
+  // No DOM a de baixo vem primeiro, para pintar antes; aqui a ordem é a da leitura da página.
+  fnPlates() {
+    return this.qa(".fn-pl").sort((a, b) => Number(a.dataset.i) - Number(b.dataset.i));
+  }
+
+  drawFimRail(g) {
+    const o = this.fnO;
+    const plates = this.fnPlates();
+    const n = plates.length;
+    const w = 420;
+    const h = 280;
+    const pts = plates.map((_, i) => this.project(o, w / 2, h / 2, (n - 1 - i) * g));
+    const spineX = Math.max(...pts.map((p) => p.x)) + (this.mobile ? 22 : 56);
+    const links = this.qa(".fn-link");
+    const tags = this.qa(".fn-tag");
+    const spine = this.q(".fn-spine");
+    spine.setAttribute("x1", spineX);
+    spine.setAttribute("x2", spineX);
+    spine.setAttribute("y1", pts[0].y);
+    spine.setAttribute("y2", pts[n - 1].y);
+    pts.forEach((p, i) => {
+      const l = links[i];
+      l.setAttribute("x1", p.x);
+      l.setAttribute("y1", p.y);
+      l.setAttribute("x2", spineX);
+      l.setAttribute("y2", p.y);
+      tags[i].style.transform = `translate(${spineX + (this.mobile ? 6 : 20)}px, ${p.y}px)`;
+    });
+  }
+
+  // ---------- Interações ----------
+  bindUi() {
+    const root = this.el.root;
+    root.addEventListener("click", (e) => {
+      const a = e.target.closest("a[href^='#']");
+      if (a) {
+        e.preventDefault();
+        if (a.classList.contains("hs-nav")) this.navJump(a);
+        else this.scrollToId(a.getAttribute("href").slice(1));
+        return;
+      }
+      const ext = e.target.closest("a[href^='http']");
+      if (ext) {
+        e.preventDefault();
+        return;
+      }
+      const demo = e.target.closest("[data-demo]");
+      if (demo) return this.overDemo(demo.dataset.demo);
+      if (e.target.closest(".dm-act")) return this.pressDemo();
+      const row = e.target.closest(".sv-row");
+      if (row) return this.scrollStep(".sv-track", Number(row.dataset.i) / 5 + 0.04);
+      const st = e.target.closest(".pc-st");
+      if (st) return this.scrollStep(".pc-ch", ([0.05, 0.27, 0.48, 0.72])[Number(st.dataset.i)]);
+      const pl = e.target.closest(".fn-pl");
+      if (pl) return this.scrollToId(pl.dataset.to);
+      const chip = e.target.closest(".ct-chips .g-chip");
+      if (chip) this.qa(".ct-chips .g-chip").forEach((c) => c.setAttribute("aria-pressed", String(c === chip)));
+    });
+    this.sc = this.el.scroll;
+    this.sc.addEventListener("scroll", () => {
+      if (this.demoOver) this.demoOver = null;
+    }, { passive: true });
+    const blog = this.q(".bl-list");
+    blog.addEventListener("pointerover", (e) => {
+      const r = e.target.closest(".bl-row");
+      this.hover.bl = r ? Number(r.dataset.i) : this.hover.bl;
+    });
+    blog.addEventListener("pointerleave", () => (this.hover.bl = -1));
+    const setFn = (i) => {
+      if (this.hover.fn === i) return;
+      this.hover.fn = i;
+      this.fnPlates().forEach((p, k) => {
+        p.dataset.lift = k === i ? 30 : 0;
+        p.classList.toggle("is-on", k === i);
+      });
+      this.qa(".fn-tag").forEach((p, k) => p.classList.toggle("is-on", k === i));
+      if (this.fnDraw) this.fnDraw();
+    };
+    const fn = this.q(".fn-stage");
+    fn.addEventListener("pointerover", (e) => {
+      const t = e.target.closest(".fn-pl, .fn-tag");
+      setFn(t ? Number(t.dataset.i) : -1);
+    });
+    fn.addEventListener("pointerleave", () => setFn(-1));
+    const ct = this.q(".ct");
+    ct.addEventListener("input", () => {
+      this.bump("is-pulse");
+      this.typing = true;
+      clearTimeout(this.typeT);
+      this.typeT = setTimeout(() => (this.typing = false), 900);
+    });
+    ct.addEventListener("submit", (e) => {
+      e.preventDefault();
+      ct.setAttribute("data-send", "loading");
+      setTimeout(() => this.alive && ct.setAttribute("data-send", "done"), 1500);
+    });
+  }
+
+  scrollToId(id, instant) {
+    const t = id === "hero" ? 0 : (this.q(`#${id}`) || {}).offsetTop;
+    if (typeof t === "number") this.sc.scrollTo({ top: t, behavior: instant ? "auto" : "smooth" });
+  }
+
+  scrollStep(sel, f) {
+    const n = this.q(sel);
+    this.sc.scrollTo({ top: this.absTop(n) + (n.offsetHeight - this.H) * f, behavior: "smooth" });
+  }
+
+  jump() {
+    if (!this.chs) return;
+    const go = this.props.capitulo || "início";
+    const map = { "início": 0 };
+    if (go === "estados") {
+      this.sc.scrollTop = (this.q(".ab").offsetHeight - this.H) * 0.33;
+      return;
+    }
+    const ids = { "serviços": "servicos", projetos: "projetos", processo: "processo", sobre: "sobre", blog: "blog", contato: "contato", fim: "fim" };
+    if (go in map) this.sc.scrollTop = 0;
+    else if (ids[go]) this.sc.scrollTop = this.q(`#${ids[go]}`).offsetTop;
+  }
+
+  renderVals() {
+    if (!this.el) this.el = {};
+    if (!this.r) {
+      const keep = (k) => (node) => {
+        if (node) this.el[k] = node;
+      };
+      this.r = {
+        root: keep("root"),
+        scroll: keep("scroll"),
+        actor: keep("actor"),
+        actorIn: keep("actorIn"),
+        giro: keep("giro"),
+        arc: keep("arc"),
+        arcDock: keep("arcDock"),
+        dock: keep("dock"),
+        dockTag: keep("dockTag"),
+        dockRing: keep("dockRing"),
+        cut: keep("cut"),
+        island: keep("island"),
+        islandLabel: keep("islandLabel"),
+      };
+    }
+    return { r: this.r, rootCls: this.props.layout === "mobile" ? "is-mobile" : "" };
+  }
+}
+</script>
+</body>
+</html>

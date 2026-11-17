@@ -1,0 +1,1296 @@
+/* Hero da vista explodida (direção B): pilha isométrica em CSS 3D com quatro camadas (tokens,
+   componentes, tela e estado), uma linha de estações à direita e o Giro andando por ela.
+   Tudo tem escopo em .hb, a <section> raiz (class="g-azul hb"). O palco começa no topo da section
+   e o Giro sai do header, então o eixo y fica visível. Cores pelos papéis --s-*, pelos tokens e
+   pelos --hi-* definidos aqui. Mobile primeiro; a partir de 768px vale o computador. */
+
+.hb {
+  --hi-ink: #0b0c1f;
+  --hi-ink-2: rgba(11, 12, 31, 0.58);
+  --hi-mid: rgba(11, 12, 31, 0.2);
+  --hi-soft: rgba(11, 12, 31, 0.08);
+  --hi-paper: #fbfaf6;
+  --hi-paper-2: #efeee8;
+  --hi-side: #c9cae9;
+  --rx: 60deg;
+  --rz: -45deg;
+  --k: 1;
+  --lo: 1;
+  --fo: 1;
+  position: relative;
+  isolation: isolate;
+  overflow-x: clip;
+  overflow-y: visible;
+  min-height: max(100svh, 760px);
+  touch-action: pan-y pinch-zoom;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Texto e palco ---------- */
+
+/* Celular: nome e idioma numa barra no topo. No computador o header já tem os dois. */
+.hb .hb-top {
+  position: absolute;
+  z-index: 4;
+  top: 0;
+  right: 0;
+  left: 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--s-line);
+}
+
+.hb .hb-name {
+  color: var(--s-fg);
+  font: var(--text-rotulo);
+  text-decoration: none;
+}
+
+.hb .hb-name:focus-visible {
+  outline: 2px solid var(--s-focus);
+  outline-offset: 3px;
+}
+
+.hb .hb-copy {
+  position: absolute;
+  z-index: 2;
+  top: 92px;
+  right: 16px;
+  left: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.hb .hb-title {
+  margin: 0;
+  color: var(--s-fg);
+  font-family: var(--font-sans);
+  font-size: 54px;
+  font-weight: 900;
+  line-height: 0.92;
+  font-stretch: 100%;
+  letter-spacing: -0.03em;
+}
+
+.hb .hb-title__line {
+  display: block;
+  white-space: nowrap;
+}
+
+/* Cada letra é um bloco próprio, para afundar e medir sem mexer no resto da linha. */
+.hb .hb-title .hb-ch {
+  display: inline-block;
+  white-space: pre;
+}
+
+/* O ponto final é o trampolim: amassa com o Giro e devolve. */
+.hb .hb-title .hb-ch.is-tramp {
+  transform-origin: 50% 82%;
+  animation: tj-tramp 460ms var(--ease-resolve);
+}
+
+@keyframes tj-tramp {
+  0% {
+    scale: 1.4 0.5;
+  }
+  38% {
+    scale: 0.84 1.45;
+  }
+  70% {
+    scale: 1.07 0.94;
+  }
+  100% {
+    scale: 1 1;
+  }
+}
+
+.hb .hb-foot {
+  position: absolute;
+  z-index: 2;
+  top: 514px;
+  right: 16px;
+  left: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.hb .hb-lede {
+  margin: 0;
+  color: var(--s-muted);
+  font: var(--text-corpo);
+  text-wrap: pretty;
+}
+
+.hb .hb-ctas {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 10px;
+}
+
+/* Os dois botões numa linha só, acima da barra de abas. O tamanho padrão vem do computador. */
+@media (max-width: 767px) {
+  .hb .hb-ctas .g-button {
+    --b-h: 48px;
+    --b-pad: 18px;
+    --b-font: 16px;
+  }
+}
+
+/* Celular baixo (com a barra do navegador visível): a prancha tem 804 px e os botões caíam atrás
+   do trilho. Texto e botões encolhem um pouco e o bloco sobe até ficar 12 px acima do trilho,
+   sem passar de 484 px, onde começaria a cobrir a pilha. */
+@media (max-width: 767px) and (max-height: 803px) {
+  .hb .hb-foot {
+    top: max(484px, calc(100svh - 254px));
+    gap: 10px;
+  }
+  .hb .hb-lede {
+    font-size: 16px;
+    line-height: 1.4;
+  }
+  .hb .hb-ctas .g-button {
+    --b-h: 44px;
+  }
+}
+
+.hb .hb-hud {
+  display: none;
+}
+
+.hb .hb-hud dl {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 6px 20px;
+  margin: 0;
+}
+
+.hb .hb-hud dt,
+.hb .hb-hud dd {
+  margin: 0;
+}
+
+.hb .hb-hud dd {
+  min-width: 15ch;
+  color: var(--s-fg);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (min-width: 768px) {
+  .hb {
+    min-height: 812px;
+  }
+
+  .hb .hb-top {
+    display: none;
+  }
+
+  .hb .hb-copy {
+    top: 116px;
+    right: auto;
+    left: 64px;
+    width: min(640px, 46vw);
+    gap: 26px;
+  }
+
+  .hb .hb-title {
+    font-size: min(120px, 8.34vw);
+    line-height: 0.94;
+    letter-spacing: -0.035em;
+  }
+
+  .hb .hb-foot {
+    top: 470px;
+    right: auto;
+    left: 64px;
+    width: min(540px, 40vw);
+    gap: 28px;
+  }
+
+  .hb .hb-lede {
+    font: var(--text-corpo-l);
+  }
+
+  .hb .hb-ctas {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .hb .hb-hud {
+    position: absolute;
+    z-index: 4;
+    right: 64px;
+    bottom: 44px;
+    display: block;
+    color: var(--s-muted);
+    font: var(--text-micro);
+    pointer-events: none;
+  }
+}
+
+/* ---------- Camadas do palco ---------- */
+
+.hb .hb-floor-layer {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hb .hb-world {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* ---------- Peças isométricas (primitivas de hero.css) ---------- */
+
+.hb .iso {
+  position: absolute;
+  top: var(--oy, 50%);
+  left: var(--ox, 50%);
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  transform: scale(var(--k)) rotateX(var(--rx)) rotateZ(var(--rz));
+}
+
+.hb .iso *,
+.hb .iso *::before,
+.hb .iso *::after {
+  box-sizing: border-box;
+}
+
+.hb .iso b {
+  position: absolute;
+  display: block;
+  font-weight: inherit;
+}
+
+.hb .iso-pl {
+  position: absolute;
+  top: calc(var(--y) - var(--h) / 2);
+  left: calc(var(--x) - var(--w) / 2);
+  width: var(--w);
+  height: var(--h);
+  transform-style: preserve-3d;
+  transform: translateZ(var(--zr, 2px));
+  transition: transform 650ms var(--ease-resolve);
+}
+
+.hb .iso-pl__e,
+.hb .iso-pl__face {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r, 14px);
+}
+
+.hb .iso-pl__e {
+  background: var(--hi-side);
+}
+
+.hb .iso-pl__e:nth-child(1) {
+  transform: translateZ(-9px);
+}
+
+.hb .iso-pl__e:nth-child(2) {
+  transform: translateZ(-6px);
+}
+
+.hb .iso-pl__e:nth-child(3) {
+  transform: translateZ(-3px);
+}
+
+.hb .iso-pl__face {
+  overflow: hidden;
+  background: var(--hi-paper);
+}
+
+/* ---------- Direção B: pilha, chão e linha de estações ---------- */
+
+/* As alturas vêm do JS a cada quadro (abertura, ponteiro e rolagem), então as camadas não têm
+   transição. */
+.hb .iso-pl {
+  transition: none;
+}
+
+.hb .iso-pl__face {
+  box-shadow: inset 0 0 0 1px rgba(11, 12, 31, 0.06);
+}
+
+.hb .iso-pl.is-hover .iso-pl__face {
+  box-shadow:
+    inset 0 0 0 1px rgba(11, 12, 31, 0.06),
+    0 0 0 3px var(--lima);
+}
+
+.hb b {
+  color: var(--hi-ink);
+}
+
+.hb .t {
+  font: 500 11px / 1 var(--font-mono);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  color: var(--hi-ink-2);
+}
+
+.hb .ck {
+  overflow: visible;
+}
+
+.hb .ck path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------- Chão ---------- */
+
+.hb .hb-floor {
+  position: absolute;
+  top: -620px;
+  left: -620px;
+  width: 1240px;
+  height: 1240px;
+  background-image: radial-gradient(circle, rgba(212, 213, 250, 0.34) 0 1.6px, transparent 2.2px);
+  background-size: 30px 30px;
+  -webkit-mask-image: radial-gradient(closest-side, #000 30%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 30%, transparent 100%);
+  opacity: var(--fo, 1);
+}
+
+.hb .hb-base {
+  position: absolute;
+  top: -125px;
+  left: -175px;
+  width: 350px;
+  height: 250px;
+  border-radius: 22px;
+  background: rgba(11, 12, 31, 0.26);
+  opacity: var(--fo, 1);
+  transform: translateZ(0.5px);
+}
+
+/* ---------- Linha do estado, ao lado da pilha ----------
+   Uma estação por camada, como a linha de metrô do processo. O Giro anda pela linha no azul,
+   para em cada estação, manda o sinal pela ligação e a camada dispara. Tudo em 2D por cima da
+   cena: as posições vêm da projeção a cada quadro. */
+
+.hb .hb-line {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hb .hb-line__deco {
+  position: absolute;
+  inset: 0;
+  opacity: var(--lo, 1);
+}
+
+.hb .hb-line__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.hb .hb-rail {
+  fill: none;
+  stroke: rgba(212, 213, 250, 0.5);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 2 7;
+}
+
+.hb .hb-stop {
+  fill: var(--azul-sinal);
+  stroke: var(--nevoa-azul);
+  stroke-width: 2;
+  transition:
+    fill 200ms linear,
+    stroke 200ms linear;
+}
+
+.hb .hb-stop.is-on {
+  fill: var(--lima);
+  stroke: var(--lima);
+}
+
+.hb .hb-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 2px;
+  border-radius: 1px;
+  background: rgba(212, 213, 250, 0.45);
+  transform-origin: 100% 50%;
+}
+
+.hb .hb-link.is-live {
+  background: var(--lima);
+  animation: hb-link 280ms var(--ease-resolve) both;
+}
+
+@keyframes hb-link {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+.hb .hb-tag {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: var(--nevoa-azul);
+  font: var(--text-rotulo);
+  white-space: nowrap;
+  /* Escondido até o Giro chegar na estação. Ao fechar a pilha, esmaece e o recorte volta ao zero. */
+  opacity: 0;
+  clip-path: inset(0 100% 0 0);
+  transition:
+    opacity 240ms linear,
+    clip-path 0s linear 240ms,
+    color 200ms linear;
+}
+
+/* Digitado, um caractere por passo (a fonte é mono, então cada passo é uma letra). */
+.hb .hb-tag.is-shown {
+  opacity: 1;
+  clip-path: inset(0 0 0 0);
+  transition:
+    opacity 60ms linear,
+    clip-path calc(var(--n, 10) * 34ms) steps(var(--n, 10), end),
+    color 200ms linear;
+}
+
+/* Movimento reduzido: os quatro rótulos ficam visíveis, sem digitação. */
+.hb.is-still .hb-tag {
+  opacity: 1;
+  clip-path: none;
+  transition: none;
+}
+
+.hb .hb-tag.is-on {
+  color: var(--lima);
+}
+
+/* Celular: a etiqueta da estação fica um pouco menor. */
+@media (max-width: 767px) {
+  .hb .hb-tag {
+    font-size: 11px;
+  }
+}
+
+/* ---------- Giro que anda na linha ----------
+   O Hero renderiza <button class="hb-rider"><span class="hb-rider__in"><svg class="g-giro">.
+   O botão é um ponto no palco; o tamanho vive no span, centrado no ponto. */
+
+.hb .hb-rider {
+  --gs: 44px;
+  position: absolute;
+  z-index: 6;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  opacity: 0;
+  will-change: transform;
+}
+
+@media (min-width: 768px) {
+  .hb .hb-rider {
+    --gs: 64px;
+  }
+}
+
+.hb.is-away .hb-rider {
+  opacity: 1;
+}
+
+.hb .hb-rider:disabled {
+  cursor: default;
+}
+
+.hb .hb-rider__in {
+  position: absolute;
+  top: calc(var(--gs) / -2);
+  left: calc(var(--gs) / -2);
+  width: var(--gs);
+  height: var(--gs);
+  transform-origin: 50% 50%;
+  scale: var(--gscale, 1);
+}
+
+/* Miolo azul: a linha e a estação não aparecem por dentro do anel enquanto o Giro passa. */
+.hb .hb-rider__in::before {
+  content: "";
+  position: absolute;
+  inset: 13%;
+  border-radius: 50%;
+  background: var(--azul-sinal);
+}
+
+.hb .hb-rider .g-giro {
+  --s-signal: var(--lima);
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.hb .hb-rider .g-giro__spin {
+  rotate: var(--roll, 0deg);
+}
+
+/* Na linha, o giro do loading vem do laço (--roll), somado ao da viagem. A animação de CSS
+   pulava até uma volta inteira ao sair do loading. */
+.hb .hb-rider .g-giro[data-state="loading"] .g-giro__spin {
+  animation: none;
+}
+
+/* No celular o Giro tem 44 px: traço do tamanho médio. */
+@media (max-width: 767px) {
+  .hb .hb-rider .g-giro {
+    --g-stroke: 14px;
+    --g-face: 8px;
+    --g-eye: 1.15;
+  }
+}
+
+.hb .hb-rider__in.is-squash {
+  animation: hb-squash 280ms var(--ease-resolve);
+}
+
+/* Agacha antes de saltar para a próxima estação. */
+.hb .hb-rider .hb-rider__in.is-crouch {
+  transform-origin: 50% 100%;
+  animation: tj-crouch 110ms var(--ease-resolve) both;
+}
+
+@keyframes tj-crouch {
+  to {
+    transform: scale(1.18, 0.78);
+  }
+}
+
+@keyframes hb-squash {
+  0% {
+    transform: scale(1.24, 0.72);
+  }
+  55% {
+    transform: scale(0.94, 1.07);
+  }
+  100% {
+    transform: scale(1, 1);
+  }
+}
+
+.hb .hb-rider:focus-visible .hb-rider__in {
+  outline: 2px solid var(--s-focus);
+  outline-offset: 6px;
+  border-radius: 50%;
+}
+
+/* Rastro da bola: uma faixa só, em lima, desenhada pelo runtime atrás do Giro. */
+.hb .hb-trail {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.hb .hb-trail__p {
+  fill: var(--lima);
+  opacity: 0.72;
+}
+
+/* Aperta os olhos a cada toque e arregala quando vê para onde está indo. */
+.g-giro.is-squint .g-giro__eye {
+  scale: var(--g-eye) calc(var(--g-eye) * 0.3);
+}
+
+.g-giro.is-wide .g-giro__eye {
+  scale: calc(var(--g-eye) * 1.32);
+}
+
+/* A camada 2 acende no instante do impacto. */
+.hb [data-layer="2"].is-hit .iso-pl__face,
+.hb .iso-pl.is-hit .iso-pl__face {
+  box-shadow:
+    inset 0 0 0 1px rgba(11, 12, 31, 0.06),
+    0 0 0 3px var(--lima);
+}
+
+/* Sombra desativada no trajeto novo. */
+.hb .hb-shadow {
+  display: none;
+}
+
+/* Lugar vazio que o Giro deixa ao sair da linha. */
+.hb .hb-seat {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  overflow: visible;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms linear;
+}
+
+.hb .hb-seat circle {
+  fill: none;
+  stroke: var(--s-line-strong);
+  stroke-width: 16px;
+  stroke-dasharray: 4 16;
+  stroke-linecap: round;
+}
+
+.hb.is-away .hb-seat {
+  opacity: 1;
+}
+
+/* O Giro da origem (assinatura e arco do trilho) esmaece quando o hero o tira do lugar. */
+.g-signature__o .g-giro,
+.g-dock__ring .g-giro {
+  transition:
+    opacity 120ms linear,
+    color 220ms linear,
+    background-color 220ms linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .g-signature__o .g-giro,
+  .g-dock__ring .g-giro {
+    transition: none;
+  }
+}
+
+/* ---------- Camada 0: tokens ---------- */
+
+.hb .hb-sw {
+  border-radius: 50%;
+}
+
+.hb .hb-sw--papel {
+  box-shadow: inset 0 0 0 1.5px var(--hi-ink);
+}
+
+.hb .hb-aa {
+  font: 900 86px / 1 var(--font-sans);
+  font-stretch: 100%;
+  letter-spacing: -0.03em;
+}
+
+.hb .hb-rule {
+  height: 7px;
+  border-radius: 2px;
+  background: var(--azul-sinal);
+}
+
+.hb .hb-rad {
+  width: 26px;
+  height: 26px;
+  box-shadow: inset 0 0 0 2px var(--hi-ink);
+}
+
+.hb .is-fire .hb-sw {
+  animation: hb-swap 1100ms steps(1) both;
+  animation-delay: calc(var(--i) * 90ms);
+}
+
+.hb .is-fire .hb-aa {
+  animation: hb-stretch 1300ms var(--ease-resolve) both;
+}
+
+.hb .is-fire .hb-rule {
+  transform-origin: 0 50%;
+  animation: hb-grow-x 520ms var(--ease-resolve) both;
+  animation-delay: calc(200ms + var(--i) * 70ms);
+}
+
+@keyframes hb-swap {
+  0% {
+    background-color: var(--azul-sinal);
+  }
+  25% {
+    background-color: var(--papel);
+  }
+  50% {
+    background-color: var(--tinta);
+  }
+  75% {
+    background-color: var(--lima);
+  }
+  100% {
+    background-color: var(--c);
+  }
+}
+
+@keyframes hb-stretch {
+  0% {
+    font-stretch: 62%;
+  }
+  45% {
+    font-stretch: 125%;
+  }
+  100% {
+    font-stretch: 100%;
+  }
+}
+
+@keyframes hb-grow-x {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+/* ---------- Camada 1: componentes ---------- */
+
+.hb .iso .hb-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font: 700 14px / 1 var(--font-sans);
+  font-stretch: 110%;
+  white-space: nowrap;
+}
+
+.hb .hb-btn--pri {
+  background: var(--azul-sinal);
+  color: var(--papel);
+}
+
+.hb .hb-btn--sec {
+  box-shadow: inset 0 0 0 2px var(--hi-ink);
+}
+
+.hb .hb-tg {
+  border-radius: 15px;
+  background: var(--hi-soft);
+}
+
+.hb .hb-tg b {
+  top: 3px;
+  left: 3px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--hi-paper);
+  box-shadow: 0 1px 3px rgba(11, 12, 31, 0.3);
+}
+
+.hb .hb-cb {
+  border-radius: 7px;
+  box-shadow: inset 0 0 0 2px var(--hi-ink);
+  color: var(--papel);
+}
+
+.hb .hb-cb svg {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  opacity: 0;
+}
+
+.hb .iso .hb-chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--lima);
+}
+
+.hb .hb-field {
+  border-radius: 999px;
+  background: var(--hi-paper);
+  box-shadow: inset 0 0 0 1.5px var(--hi-mid);
+  transition: box-shadow 200ms linear;
+}
+
+.hb .hb-typed {
+  overflow: hidden;
+  font: 450 14px / 1 var(--font-sans);
+  white-space: nowrap;
+}
+
+.hb .hb-caret {
+  width: 2px;
+  height: 16px;
+  background: var(--hi-ink);
+  animation: hb-blink 1s steps(1) infinite;
+}
+
+.hb .hb-range {
+  border-radius: 3px;
+  background: var(--hi-soft);
+}
+
+.hb .hb-range b {
+  top: -6px;
+  left: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--azul-sinal);
+  transform: translateX(var(--rv, 120px));
+}
+
+.hb .hb-note {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: var(--tinta);
+  color: var(--papel);
+  font: 500 11px / 1 var(--font-mono);
+  white-space: nowrap;
+  opacity: 0;
+}
+
+.hb .hb-note i {
+  display: block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--coral);
+}
+
+.hb .hb-tg,
+.hb .hb-cb {
+  background: var(--hi-soft);
+}
+
+.hb .iso-pl:not(.is-fresh) .hb-tg {
+  background: var(--azul-sinal);
+}
+
+.hb .iso-pl:not(.is-fresh) .hb-tg b {
+  transform: translateX(26px);
+}
+
+.hb .iso-pl:not(.is-fresh) .hb-cb {
+  background: var(--hi-ink);
+}
+
+.hb .iso-pl:not(.is-fresh) .hb-cb svg {
+  opacity: 1;
+}
+
+/* Variante de erro: o campo pede correção e o aviso aparece em tinta. */
+.hb .is-error .hb-field {
+  box-shadow: inset 0 0 0 2px var(--hi-ink);
+}
+
+.hb .is-error .hb-note {
+  opacity: 1;
+  transition: opacity 200ms linear;
+}
+
+.hb .is-error .hb-range {
+  opacity: 0;
+}
+
+.hb .is-fire .hb-btn--pri {
+  animation: hb-press 360ms var(--ease-resolve) both;
+}
+
+.hb .is-fire .hb-tg {
+  animation: hb-tg 360ms var(--ease-resolve) 160ms both;
+}
+
+.hb .is-fire .hb-tg b {
+  animation: hb-knob 420ms var(--ease-hop) 160ms both;
+}
+
+.hb .is-fire .hb-cb {
+  animation: hb-cb 300ms linear 320ms both;
+}
+
+.hb .is-fire .hb-cb svg {
+  animation: hb-show 200ms linear 380ms both;
+}
+
+.hb .is-fire .hb-chip {
+  animation: hb-pop 460ms var(--ease-hop) 480ms both;
+}
+
+.hb .is-fire .hb-typed {
+  animation: hb-type 900ms steps(10) 220ms both;
+}
+
+.hb .is-fire .hb-range b {
+  animation: hb-range 900ms var(--ease-resolve) 300ms both;
+}
+
+/* O cursor de texto anda junto com o que é digitado. */
+.hb .is-fire .hb-caret {
+  animation:
+    hb-caret 900ms steps(10) 220ms both,
+    hb-blink 1s steps(1) infinite;
+}
+
+@keyframes hb-caret {
+  from {
+    transform: translateX(-94px);
+  }
+}
+
+@keyframes hb-press {
+  40% {
+    transform: scale(0.93);
+  }
+}
+
+@keyframes hb-tg {
+  from {
+    background-color: var(--hi-soft);
+  }
+  to {
+    background-color: var(--azul-sinal);
+  }
+}
+
+@keyframes hb-knob {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(26px);
+  }
+}
+
+@keyframes hb-cb {
+  from {
+    background-color: var(--hi-soft);
+  }
+  to {
+    background-color: var(--hi-ink);
+  }
+}
+
+@keyframes hb-show {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes hb-pop {
+  from {
+    transform: scale(0);
+  }
+}
+
+@keyframes hb-type {
+  from {
+    width: 0;
+  }
+}
+
+@keyframes hb-range {
+  from {
+    transform: translateX(0);
+  }
+}
+
+@keyframes hb-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ---------- Camada 2: tela ---------- */
+
+.hb .hb-chrome {
+  background: var(--hi-paper-2);
+}
+
+.hb .hb-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--hi-mid);
+}
+
+.hb .hb-url {
+  border-radius: 999px;
+  background: var(--hi-paper);
+  box-shadow: inset 0 0 0 1px var(--hi-mid);
+}
+
+.hb .hb-urltext {
+  overflow: hidden;
+  font-size: 10px;
+}
+
+.hb .is-fire .hb-urltext {
+  animation: hb-type 700ms steps(12) both;
+}
+
+.hb .hb-paint {
+  background: var(--azul-sinal);
+}
+
+.hb .hb-page {
+  overflow: hidden;
+  background: var(--azul-sinal);
+}
+
+.hb .hb-page b {
+  color: var(--papel);
+}
+
+.hb .hb-mini-sig {
+  font: 800 10px / 1 var(--font-sans);
+  font-stretch: 115%;
+  white-space: nowrap;
+}
+
+.hb .hb-mini-title {
+  font: 900 30px / 0.92 var(--font-sans);
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+
+.hb .hb-bar {
+  border-radius: 3px;
+  background: rgba(212, 213, 250, 0.55);
+}
+
+.hb .hb-mini-cta {
+  border-radius: 999px;
+  background: var(--lima);
+}
+
+.hb .hb-card {
+  border-radius: 8px;
+  background: var(--hi-paper);
+}
+
+.hb .hb-skel {
+  border-radius: 3px;
+  background: rgba(11, 12, 31, 0.1);
+}
+
+.hb .is-fire .hb-paint {
+  animation: hb-paint 1000ms steps(10) 160ms both;
+}
+
+@keyframes hb-paint {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* ---------- Camada 3: estado ---------- */
+
+.hb .hb-toast-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--lima);
+  box-shadow: inset 0 0 0 1.5px rgba(11, 12, 31, 0.18);
+}
+
+.hb .hb-slot {
+  overflow: hidden;
+  height: 16px;
+}
+
+.hb .hb-slot b {
+  font: 500 12px / 16px var(--font-mono);
+  white-space: nowrap;
+  color: var(--hi-ink);
+}
+
+.hb .hb-slot__a {
+  top: 0;
+  opacity: 0;
+}
+
+.hb .hb-slot__b {
+  top: 0;
+}
+
+.hb .hb-prog {
+  overflow: hidden;
+  border-radius: 3px;
+  background: var(--hi-soft);
+}
+
+.hb .hb-prog b {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--azul-sinal);
+  transform-origin: 0 50%;
+}
+
+.hb .is-fire .hb-toast-dot {
+  animation: hb-dot 1100ms steps(1) both;
+}
+
+.hb .is-fire .hb-slot__a {
+  animation: hb-out 1100ms linear both;
+}
+
+.hb .is-fire .hb-slot__b {
+  animation: hb-in 1100ms linear both;
+}
+
+.hb .is-fire .hb-prog b {
+  animation: hb-grow-x 900ms var(--ease-resolve) both;
+}
+
+@keyframes hb-dot {
+  0% {
+    background-color: var(--azul-sinal);
+  }
+  85%,
+  100% {
+    background-color: var(--lima);
+  }
+}
+
+@keyframes hb-out {
+  0%,
+  80% {
+    opacity: 1;
+  }
+  90%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes hb-in {
+  0%,
+  82% {
+    opacity: 0;
+  }
+  92%,
+  100% {
+    opacity: 1;
+  }
+}
+
+/* ---------- Movimento reduzido ---------- */
+
+/* Estado .is-still (preferência do visitante, lida pelo Hero). */
+/* O Giro fica de fora: com movimento reduzido ele ainda pisca, pelas regras de giro.css. */
+.hb.is-still :is(.hb-floor-layer, .hb-world, .hb-line) *,
+.hb.is-still :is(.hb-floor-layer, .hb-world, .hb-line) *::before,
+.hb.is-still :is(.hb-floor-layer, .hb-world, .hb-line) *::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hb :is(.hb-floor-layer, .hb-world, .hb-line) *,
+  .hb :is(.hb-floor-layer, .hb-world, .hb-line) *::before,
+  .hb :is(.hb-floor-layer, .hb-world, .hb-line) *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Com movimento reduzido não há bola, rastro nem sombra. */
+.hb.is-still .hb-trail,
+.hb.is-still .hb-shadow {
+  display: none;
+}
+
+/* ---------- Transição do loader (Issue #105) ---------- */
+html[data-loader="lay"] [data-iso="world"],
+html[data-loader="lay"] .hb-line,
+html[data-loader="lay"] [data-site-header] .g-signature,
+html[data-loader="lay"] .g-dock__ring .g-giro {
+  visibility: hidden;
+}
+
+.hb.is-reveal .iso-pl__face > *,
+.hb.is-reveal [data-layer="3"] > *,
+.hb.is-reveal .hb-line {
+  animation: g-hero-fade-in 320ms linear both;
+}
+
+@keyframes g-hero-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ---------- Passagem de mão para o HomeGiro (issue #123) ---------- */
+
+/* A estação do chão da linha. Quem a move é o runtime, a cada quadro. */
+.hb .hb-rest {
+  top: 0;
+  left: 0;
+}
+
+/* Com o HomeGiro em cena o Giro da entrada some: nunca há dois rostos na tela. */
+html[data-giro-hand="story"] .hb :is(.hb-rider, .hb-seat, .hb-trail, .hb-shadow) {
+  visibility: hidden;
+}
+
+/* ---------- Sem JS: a pilha na pose do runtime (stackOrigin e a escala do layout) ----------
+   O runtime escreve --ox, --oy e --k inline e vence estes valores. Sem ele, a origem caía no
+   centro do palco e a pilha cobria o título. */
+section.hb {
+  --k: 0.92;
+}
+section.hb [data-iso] {
+  --ox: calc(50% + 270px);
+  --oy: 69%;
+}
+@media (max-width: 1439px) {
+  section.hb {
+    --k: 0.68;
+  }
+  section.hb [data-iso] {
+    --ox: calc(50% + 200px);
+  }
+}
+@media (max-width: 768px) {
+  section.hb {
+    --k: 0.5;
+  }
+  section.hb [data-iso] {
+    --ox: calc(50% - 65px);
+    --oy: 452px;
+  }
+}

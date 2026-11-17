@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { generateSlug, toISODate } from ".";
+import { convertBrazilianDate, generateSlug, toISODate } from ".";
 
 describe("Blog Utils", () => {
   describe("generateSlug", () => {
@@ -41,5 +41,15 @@ describe("Blog Utils", () => {
       expect(toISODate("10 SET 2026")).toBe("2026-09-10");
       expect(toISODate("10 OUT 2026")).toBe("2026-10-10");
     });
+  });
+});
+
+describe("convertBrazilianDate", () => {
+  it("converte a data em pt-BR", () => {
+    expect(convertBrazilianDate("15 NOV 2025").getTime()).toBe(new Date(2025, 10, 15).getTime());
+  });
+
+  it("mês desconhecido não vira janeiro: a data fica inválida", () => {
+    expect(Number.isNaN(convertBrazilianDate("15 XXX 2025").getTime())).toBe(true);
   });
 });

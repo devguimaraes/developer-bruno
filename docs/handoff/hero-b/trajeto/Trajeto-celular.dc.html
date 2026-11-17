@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Giro, trajeto desenhado, celular</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/giro/tokens.css">
+<link rel="stylesheet" href="ds/giro/components/bundle.css">
+<link rel="stylesheet" href="hero.css">
+<link rel="stylesheet" href="hero-b.css">
+<link rel="stylesheet" href="hero-quique.css">
+<link rel="stylesheet" href="hero-loader.css">
+<link rel="stylesheet" href="hero-trajeto.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,100..900&amp;family=Geist+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:#2b2eff}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; overflow: hidden">
+<dc-import name="Trajeto" layout="mobile" autoplay="{{autoplay}}" reduced-motion="{{reducedMotion}}" velocidade="{{velocidade}}" com-loader="{{comLoader}}" so-entrada="{{soEntrada}}" repetir="{{repetir}}" hint-size="390px,844px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"autoplay":{"editor":"boolean","default":true},"reducedMotion":{"editor":"boolean","default":false},"velocidade":{"editor":"enum","options":["100%","50%","25%"],"default":"100%"},"comLoader":{"editor":"boolean","default":true},"soEntrada":{"editor":"boolean","default":false},"repetir":{"editor":"boolean","default":true},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  // O mesmo trajeto da prancha do computador, no layout do celular: o Giro sai da aba de baixo.
+  renderVals() {
+    const p = this.props;
+    return {
+      autoplay: p.autoplay !== false,
+      reducedMotion: p.reducedMotion === true,
+      velocidade: p.velocidade || "100%",
+      comLoader: p.comLoader !== false,
+      soEntrada: p.soEntrada === true,
+      repetir: p.repetir !== false,
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Home em camadas, celular</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/giro/tokens.css">
+<link rel="stylesheet" href="ds/giro/components/bundle.css">
+<link rel="stylesheet" href="hero.css">
+<link rel="stylesheet" href="hero-b.css">
+<link rel="stylesheet" href="home-arts.css">
+<link rel="stylesheet" href="home.css">
+<script src="gsap.min.js"></script>
+<script src="ScrollTrigger.min.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,100..900&amp;family=Geist+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:#2b2eff}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; overflow: hidden">
+<dc-import name="Main" layout="mobile" capitulo="{{capitulo}}" tour="{{tour}}" hint-size="390px,844px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"capitulo":{"editor":"enum","options":["início","estados","serviços","projetos","processo","sobre","blog","contato","fim"],"default":"início"},"tour":{"editor":"boolean","default":false},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { capitulo: this.props.capitulo ?? "início", tour: this.props.tour ?? false };
+  }
+}
+</script>
+</body>
+</html>

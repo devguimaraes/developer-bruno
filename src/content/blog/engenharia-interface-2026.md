@@ -1,22 +1,22 @@
 ---
-title: "Engenharia de interface: padroes de arquitetura para front-ends modernos em 2026"
+title: "Engenharia de interface: padrões de arquitetura para front-ends modernos em 2026"
 date: "01 ABR 2026"
 readTime: "9 min"
 tags: ["Arquitetura", "Front-end", "Design System", "Testes", "Observabilidade"]
-excerpt: "Front-end e engenharia de software. Conheca padroes de arquitetura, camadas, design systems e observabilidade que elevam a qualidade de projetos front-end."
+excerpt: "Front-end e engenharia de software. Conheça padrões de arquitetura, camadas, design systems e observabilidade que elevam a qualidade de projetos front-end."
 ---
 
-# Engenharia de interface: padroes de arquitetura para front-ends modernos
+# Engenharia de interface: padrões de arquitetura para front-ends modernos
 
-Front-end deixou de ser "cutucar CSS e jQuery" ha muitos anos. Em 2026, interfaces sao sistemas distribuidos que rodam no navegador — com estado, concorrencia, cache, roteamento, testes e monitoramento. Tratar front-end como engenharia de software nao e pedantismo, e pragmatismo.
+Front-end deixou de ser "cutucar CSS e jQuery" há muitos anos. Em 2026, interfaces são sistemas distribuídos que rodam no navegador: com estado, concorrência, cache, roteamento, testes e monitoramento. Tratar front-end como engenharia de software não é pedantismo, é pragmatismo.
 
 ## Arquitetura em camadas
 
-Uma aplicacao front-end bem estruturada separa responsabilidades em camadas claras, assim como back-ends maduros fazem ha decadas.
+Uma aplicação front-end bem estruturada separa responsabilidades em camadas claras, assim como back-ends maduros fazem há décadas.
 
-### Camada de apresentacao (UI)
+### Camada de apresentação (UI)
 
-Componentes visuais puros, sem logica de negocio. Recebem props, renderizam markup. Nada mais.
+Componentes visuais puros, sem lógica de negócio. Recebem props, renderizam markup. Nada mais.
 
 ```tsx
 // components/ui/Button.tsx
@@ -41,11 +41,11 @@ export function Button({ variant, size, children, onClick, disabled }: ButtonPro
 }
 ```
 
-Esses componentes sao testados com snapshot tests e storybooks. Nao dependem de APIs, estado global ou side effects.
+Esses componentes são testados com snapshot tests e storybooks. Não dependem de APIs, estado global ou side effects.
 
 ### Camada de estado
 
-Gerencia o estado da aplicacao com regras claras de propriedade e fluxo de dados.
+Gerencia o estado da aplicação com regras claras de propriedade e fluxo de dados.
 
 ```ts
 // stores/cart-store.ts
@@ -95,11 +95,11 @@ export const useCartStore = create<CartStore>((set, get) => ({
 }));
 ```
 
-A regra e: estado local (`useState`) para UI transitoria (modais abertos, inputs focados). Estado global (store) para dados que atravessam multiplos componentes.
+A regra é: estado local (`useState`) para UI transitória (modais abertos, inputs focados). Estado global (store) para dados que atravessam múltiplos componentes.
 
-### Camada de servicos
+### Camada de serviços
 
-Encapsula comunicacao com APIs, transformacoes de dados e cache. Componentes nunca chamam `fetch` diretamente.
+Encapsula comunicação com APIs, transformações de dados e cache. Componentes nunca chamam `fetch` diretamente.
 
 ```ts
 // services/product-service.ts
@@ -132,11 +132,11 @@ export function useProducts() {
 }
 ```
 
-Essa separacao permite trocar a fonte de dados (REST para GraphQL, adicionar cache local, mockar em testes) sem alterar um unico componente.
+Essa separação permite trocar a fonte de dados (REST para GraphQL, adicionar cache local, mockar em testes) sem alterar um único componente.
 
 ## Design system como contrato
 
-Um design system nao e uma biblioteca de componentes. E um contrato entre design e engenharia que garante consistencia visual e funcional.
+Um design system não é uma biblioteca de componentes. É um contrato entre design e engenharia que garante consistência visual e funcional.
 
 ### Tokens como base
 
@@ -213,18 +213,18 @@ export const CardContent = forwardRef<HTMLDivElement, CardProps>(
 </Card>
 ```
 
-## Acessibilidade como requisito, nao como feature
+## Acessibilidade como requisito, não como feature
 
-Acessibilidade nao e um ticket no backlog. E um requisito nao funcional, como performance ou seguranca. Deve ser validada continuamente, nao adicionada depois.
+Acessibilidade não é um ticket no backlog. É um requisito não funcional, como performance ou segurança. Deve ser validada continuamente, não adicionada depois.
 
-### Checklist pratico
+### Checklist prático
 
-- Todo elemento interativo e acessivel via teclado (tab, enter, escape)
-- Todo texto alternativo em imagens e descritivo e util
-- Contraste minimo de 4.5:1 para texto normal, 3:1 para texto grande
-- Formularios possuem labels associados e mensagens de erro acessiveis
+- Todo elemento interativo é acessível via teclado (tab, enter, escape)
+- Todo texto alternativo em imagens é descritivo e útil
+- Contraste mínimo de 4.5:1 para texto normal, 3:1 para texto grande
+- Formulários possuem labels associados e mensagens de erro acessíveis
 - ARIA labels em elementos interativos customizados
-- Focus visivel em todos os elementos focaveis
+- Focus visível em todos os elementos focáveis
 
 ### Testes automatizados de acessibilidade
 
@@ -248,11 +248,11 @@ describe('Button a11y', () => {
 });
 ```
 
-## Testes automatizados: estrategia em camadas
+## Testes automatizados: estratégia em camadas
 
-### Testes unitarios (componentes)
+### Testes unitários (componentes)
 
-Testam componentes isolados com entradas e saidas definidas.
+Testam componentes isolados com entradas e saídas definidas.
 
 ```ts
 // __tests__/components/Button.test.tsx
@@ -276,9 +276,9 @@ describe('Button', () => {
 });
 ```
 
-### Testes de integracao (fluxos)
+### Testes de integração (fluxos)
 
-Testam fluxos completos que envolvem multiplos componentes e estado.
+Testam fluxos completos que envolvem múltiplos componentes e estado.
 
 ```ts
 // __tests__/flows/cart.test.tsx
@@ -302,13 +302,13 @@ describe('Cart flow', () => {
 });
 ```
 
-### Testes E2E (caminhos criticos)
+### Testes E2E (caminhos críticos)
 
-Testam os caminhos que geram valor de negocio, como checkout e autenticacao.
+Testam os caminhos que geram valor de negócio, como checkout e autenticação.
 
 ## Observabilidade no front-end
 
-Saber que algo quebrou em producao e tao importante quanto escrever o codigo. Observabilidade no front-end tem tres pilares:
+Saber que algo quebrou em produção é tão importante quanto escrever o código. Observabilidade no front-end tem três pilares:
 
 ### 1. Performance metrics
 
@@ -367,10 +367,10 @@ export function initErrorTracking() {
 
 ### 3. User behavior analytics
 
-Rastreamento de eventos de interacao para entender onde os usuarios encontram atrito. Diferente de metricas de marketing, o foco e identificar pontos de confusao ou friccao na interface.
+Rastreamento de eventos de interação para entender onde os usuários encontram atrito. Diferente de métricas de marketing, o foco é identificar pontos de confusão ou fricção na interface.
 
-## Conclusao
+## Conclusão
 
-Front-end moderno exige disciplina de engenharia: camadas separadas, contratos claros, testes automatizados e observabilidade em producao. Nao se trata de over-engineering, mas de aplicar praticas que o back-end ja consolidou ha anos.
+Front-end moderno exige disciplina de engenharia: camadas separadas, contratos claros, testes automatizados e observabilidade em produção. Não se trata de over-engineering, mas de aplicar práticas que o back-end já consolidou há anos.
 
-O investimentos em arquitetura se paga rapidamente: bugs sao detectados antes de chegar ao usuario, refatoracoes sao seguras, e a velocidade de entrega aumenta porque cada mudanca e isolada em sua camada. Em 2026, front-end sem arquitetura e divida tecnica desde o primeiro deploy.
+O investimentos em arquitetura se paga rapidamente: bugs são detectados antes de chegar ao usuário, refatorações são seguras, e a velocidade de entrega aumenta porque cada mudança é isolada em sua camada. Em 2026, front-end sem arquitetura é dívida técnica desde o primeiro deploy.

@@ -1,0 +1,41 @@
+---
+// Vitrine só de dev: Field, TextArea, Search, Notice e EmptyState nas três superfícies.
+// O CSS (giro.css e giro-fields.css) é ligado pela página que usa esta vitrine.
+import { Field, Search, TextArea } from "../giro/Field";
+import { Notice, EmptyState } from "../giro/Notice";
+
+const surfaces = [
+  { name: "papel", className: "g-papel" },
+  { name: "azul", className: "g-azul" },
+  { name: "tinta", className: "g-tinta" },
+];
+---
+
+<div class="grid gap-3 p-6 md:grid-cols-3">
+  {
+    surfaces.map(surface => (
+      <div
+        class:list={[surface.className, "flex min-w-0 flex-col gap-4 rounded-[22px] p-6"]}
+        data-surface={surface.name}
+      >
+        <Field client:load label="nome" placeholder="Como posso te chamar" />
+        <Field client:load label="e-mail" defaultValue="marina@" error="E-mail inválido." />
+        <Field client:load label="telefone" disabled placeholder="Desabilitado durante o envio" />
+        <Search client:load label="Buscar no blog" placeholder="Buscar no blog" />
+        <TextArea
+          client:load
+          label="mensagem"
+          placeholder="Me conta o que você quer construir"
+        />
+        <Notice variant="success">Recebi sua mensagem.</Notice>
+        <Notice variant="error">Tente de novo.</Notice>
+        <EmptyState
+          title="Nada com “astro 6” por aqui."
+          text="Tente outra palavra ou veja todos os posts."
+          backHref="/blog"
+          backLabel="Ver todos os posts"
+        />
+      </div>
+    ))
+  }
+</div>

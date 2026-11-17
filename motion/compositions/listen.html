@@ -1,0 +1,130 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+    }
+    #listen-giro {
+      position: absolute;
+      left: 200px;
+      top: 270px;
+      width: 400px;
+      height: 400px;
+    }
+    #listen-field-label {
+      position: absolute;
+      left: 760px;
+      top: 330px;
+      font-family: var(--font-mono);
+      font-size: 28px;
+      color: var(--nevoa-azul);
+    }
+    #listen-field {
+      position: absolute;
+      left: 760px;
+      top: 384px;
+      width: 1000px;
+      height: 150px;
+      border-radius: 22px;
+      border: 3px solid var(--papel);
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      font-size: 48px;
+      font-weight: 450;
+      white-space: pre;
+      color: var(--papel);
+    }
+    .listen-ch {
+      display: none;
+    }
+    #listen-caret {
+      display: inline-block;
+      width: 4px;
+      height: 56px;
+      margin-left: 4px;
+      background: var(--lima);
+    }
+  </style>
+  <div data-hf-id="hf-3f60" id="root" data-composition-id="listen" data-width="1920" data-height="1080">
+    <p data-hf-id="hf-min5" id="listen-label" class="scene-label">// ouvindo · campo do contato em foco</p>
+    <svg data-hf-id="hf-k3y1" id="listen-giro" class="giro" viewBox="0 0 120 120" aria-hidden="true">
+      <circle data-hf-id="hf-ynie" class="g-disc" cx="60" cy="60" r="60" />
+      <g data-hf-id="hf-qz6i" class="g-body">
+        <g data-hf-id="hf-vqgr" class="g-turn"><g data-hf-id="hf-m906" class="g-spin"><circle data-hf-id="hf-0qp3" class="g-arc" cx="60" cy="60" r="44" /></g></g>
+        <g data-hf-id="hf-eis9" class="g-lid g-lid-l"><ellipse data-hf-id="hf-j586" class="g-eye g-eye-l" cx="46" cy="54" rx="6" ry="9" /></g>
+        <g data-hf-id="hf-mbev" class="g-lid g-lid-r"><ellipse data-hf-id="hf-hogj" class="g-eye g-eye-r" cx="74" cy="54" rx="6" ry="9" /></g>
+        <path data-hf-id="hf-l604" class="g-f g-happy-l" d="M38 60 Q46 46 54 60" />
+        <path data-hf-id="hf-75wd" class="g-f g-happy-r" d="M66 60 Q74 46 82 60" />
+        <path data-hf-id="hf-01op" class="g-f g-x" d="M39 52 L53 62" />
+        <path data-hf-id="hf-4dfp" class="g-f g-x" d="M53 52 L39 62" />
+        <path data-hf-id="hf-hkoj" class="g-f g-x" d="M67 52 L81 62" />
+        <path data-hf-id="hf-6z6z" class="g-f g-x" d="M81 52 L67 62" />
+        <path data-hf-id="hf-2rup" class="g-f g-sleep-l" d="M39 55 Q46 62 53 55" />
+        <path data-hf-id="hf-a19g" class="g-f g-sleep-r" d="M67 55 Q74 62 81 55" />
+        <path data-hf-id="hf-glth" class="g-z" d="M88 22 H98 L88 34 H98" />
+      </g>
+    </svg>
+    <p data-hf-id="hf-awcs" id="listen-field-label">mensagem</p>
+    <div data-hf-id="hf-cb8j" id="listen-field"><span data-hf-id="hf-55w1" class="listen-ch">O</span><span data-hf-id="hf-rnh3" class="listen-ch">i</span><span data-hf-id="hf-j2m0" class="listen-ch">,</span><span data-hf-id="hf-4x6s" class="listen-ch"> </span><span data-hf-id="hf-75f6" class="listen-ch">B</span><span data-hf-id="hf-o2pu" class="listen-ch">r</span><span data-hf-id="hf-q28z" class="listen-ch">u</span><span data-hf-id="hf-sue6" class="listen-ch">n</span><span data-hf-id="hf-sg35" class="listen-ch">o</span><span data-hf-id="hf-obi7" class="listen-ch">!</span><span data-hf-id="hf-04l8" class="listen-ch"> </span><span data-hf-id="hf-2dqu" class="listen-ch">V</span><span data-hf-id="hf-utxb" class="listen-ch">a</span><span data-hf-id="hf-t8p7" class="listen-ch">m</span><span data-hf-id="hf-dlk5" class="listen-ch">o</span><span data-hf-id="hf-noet" class="listen-ch">s</span><span data-hf-id="hf-yxo5" class="listen-ch"> </span><span data-hf-id="hf-u1b9" class="listen-ch">c</span><span data-hf-id="hf-esh8" class="listen-ch">o</span><span data-hf-id="hf-5i2q" class="listen-ch">n</span><span data-hf-id="hf-pnxy" class="listen-ch">v</span><span data-hf-id="hf-wf5f" class="listen-ch">e</span><span data-hf-id="hf-i2p2" class="listen-ch">r</span><span data-hf-id="hf-y26h" class="listen-ch">s</span><span data-hf-id="hf-47i7" class="listen-ch">a</span><span data-hf-id="hf-ih03" class="listen-ch">r</span><span data-hf-id="hf-bish" class="listen-ch">?</span><span data-hf-id="hf-lcil" id="listen-caret"></span></div>
+    <p data-hf-id="hf-3ppy" id="listen-caption" class="caption">O arco pulsa com as teclas e os olhos seguem o texto.</p>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      const ft = GiroRig.ft;
+      const E = GiroRig.E;
+      const g = GiroRig.create(document.querySelector("#listen-giro"), { v: "nov" });
+      const P = g.P;
+      g.init(tl);
+      g.idle(tl, 0, 0.35);
+
+      // Entra em "ouvindo": arco curto no topo, olhos para baixo e à esquerda.
+      ft(tl, P.arc, { attr: { "stroke-dasharray": "240 37" } }, { attr: { "stroke-dasharray": "30 247" }, duration: 0.52, ease: E.resolve }, 0.35);
+      ft(tl, P.turn, { rotation: -21.5 }, { rotation: -105, duration: 0.56, ease: E.turn }, 0.35);
+      ft(tl, P.eyes, { x: 0, y: 0 }, { x: -5, y: 3, duration: 0.26, ease: E.resolve }, 0.35);
+
+      // Digitação com ritmo fixo: pausa maior depois de pontuação.
+      const chars = Array.prototype.slice.call(document.querySelectorAll("#listen-field .listen-ch"));
+      let at = 0.95;
+      const times = chars.map(function (ch) {
+        const t = at;
+        const c = ch.textContent;
+        at += c === "," || c === "!" ? 0.2 : c === " " ? 0.06 : 0.075 + (chars.indexOf(ch) % 3) * 0.015;
+        return t;
+      });
+      chars.forEach(function (ch, i) {
+        tl.set(ch, { display: "inline" }, times[i]);
+        if (i % 3 === 0) {
+          ft(tl, P.arc, { attr: { "stroke-dasharray": "30 247" } }, { attr: { "stroke-dasharray": "46 231" }, duration: 0.06, ease: E.easeOut }, times[i]);
+          ft(tl, P.arc, { attr: { "stroke-dasharray": "46 231" } }, { attr: { "stroke-dasharray": "30 247" }, duration: 0.14, ease: E.resolve }, times[i] + 0.06);
+        }
+      });
+      // Olhos acompanham o texto a cada quatro letras.
+      let lastX = -5;
+      for (let i = 4; i < chars.length; i += 4) {
+        const x = -5 + (10 * i) / (chars.length - 1);
+        ft(tl, P.eyes, { x: lastX }, { x: x, duration: 0.26, ease: E.resolve }, times[i]);
+        lastX = x;
+      }
+      const typedEnd = times[times.length - 1];
+
+      // Cursor pisca depois que a digitação para.
+      GiroRig.loop(tl, typedEnd + 0.3, 4.5, function (e) {
+        gsap.set("#listen-caret", { opacity: Math.floor(e / 0.5) % 2 === 0 ? 0 : 1 });
+      });
+
+      // Volta ao repouso.
+      const back = typedEnd + 0.3;
+      ft(tl, P.arc, { attr: { "stroke-dasharray": "30 247" } }, { attr: { "stroke-dasharray": "240 37" }, duration: 0.52, ease: E.resolve }, back);
+      ft(tl, P.turn, { rotation: -105 }, { rotation: -21.5, duration: 0.56, ease: E.turn }, back);
+      ft(tl, P.eyes, { x: lastX, y: 3 }, { x: 0, y: 0, duration: 0.34, ease: E.resolve }, back);
+      g.idle(tl, back + 0.6, 4.5);
+
+      tl.fromTo("#listen-label", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.18, ease: "power4.out" }, 0);
+      tl.fromTo("#listen-caption", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.18, ease: "power4.out" }, 0.1);
+      tl.to(["#listen-label", "#listen-caption"], { opacity: 0, filter: "blur(8px)", duration: 0.15, ease: "power2.in" }, 4.3);
+      window.__timelines["listen"] = tl;
+    })();
+  </script>
+</template>

@@ -2,44 +2,45 @@
 // src/layouts/Layout.astro
 import "@/index.css";
 import "@/styles/markdown.css";
+import { ClientRouter } from "astro:transitions";
+import anybodyFont from "@/assets/fonts/anybody-latin-wdth-wght.woff2";
+import { LoadingScreen } from "@/components/loader/LoadingScreen";
+import { Dock } from "@/components/nav/Dock";
+import { ScrollIsland } from "@/components/nav/ScrollIsland";
+import { SiteFooter } from "@/components/nav/SiteFooter";
+import { SiteHeader } from "@/components/nav/SiteHeader";
 import { siteConfig } from "@/config/site";
-
-import Navigation from "@/components/Navigation.tsx";
-import Footer from "@/components/Footer.tsx";
-
-import { Toaster } from "@/components/ui/sonner.tsx";
-import GrainOverlay from "@/components/ui/GrainOverlay";
-import CustomCursor from "@/components/ui/CustomCursor";
-import SmoothScroll from "@/components/ui/SmoothScroll";
-import { LiquidGlassProvider } from "@/components/ui/LiquidGlassProvider";
+import { t } from "@/lib/i18n";
 
 interface Props {
   title?: string;
   description?: string;
   image?: string;
-  structuredData?: object;
   ogType?: string;
   noindex?: boolean;
   articlePublishedTime?: string;
+  /** Tira o header do topo. A ilha de rolagem assume a navegação desde o início. */
+  hideHeader?: boolean;
 }
 
 const {
   title,
   description,
   image,
-  structuredData,
   ogType,
   noindex = false,
   articlePublishedTime,
+  hideHeader = false,
 } = Astro.props;
 
-// Meta values with fallbacks
-const finalTitle = title
-  ? `${title} | ${siteConfig.title}`
-  : `${siteConfig.title} | Desenvolvedor Web RJ`;
+// Meta values with fallbacks. A página passa o título completo, sem sufixo da marca.
+const finalTitle = title || t("pt", "meta.home_title");
 const finalDesc = description || siteConfig.description;
+const usesDefaultImage = !image;
 const finalImage = image ? new URL(image, Astro.url) : new URL(siteConfig.seo.image, Astro.url);
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+// Na home o rodapé faz parte do capítulo final (HomeEnd).
+const isHome = Astro.url.pathname === "/";
 ---
 
 <!doctype html>
@@ -47,9 +48,42 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
+    <!-- Tela de carregamento: liga o overlay só na primeira visita da sessão, antes do primeiro paint.
+         is:inline para o Astro não empacotar nem adiar o script. Sem JS, nada é ligado. O backstop
+         tira o overlay se o React não montar em 8 s, para a página nunca ficar presa. -->
+    <script is:inline>
+      try {
+        if (sessionStorage.getItem("giro:loaded") === null) {
+          var html = document.documentElement;
+          html.setAttribute("data-loader", "on");
+          setTimeout(function () {
+            if (html.getAttribute("data-loader") === "on") html.removeAttribute("data-loader");
+          }, 8000);
+        }
+      } catch (e) { /* sessionStorage bloqueado: a página aparece direto */ }
+    </script>
+    <!-- Base sem animação: define data-scenes="on" antes do primeiro paint, salvo quando o visitante
+         prefere movimento reduzido. Sem esse atributo cada capítulo se comporta como leitura normal. -->
+    <script is:inline>
+      try {
+        var mql = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)");
+        if (!mql || !mql.matches) {
+          document.documentElement.setAttribute("data-scenes", "on");
+        }
+      } catch (e) {}
+    </script>
+    <!-- A coreografia espera esta fonte. O href é o mesmo arquivo do @font-face, para o preload
+         e o CSS dividirem um único download. -->
+    <link rel="preload" href={anybodyFont} as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#2B2EFF" />
     <meta name="generator" content={Astro.generator} />
-    
+    <!-- Navegação sem recarregar a página (ADR 0002). Troca só o body; o head vem da página nova. -->
+    <ClientRouter />
+
     <!-- Primary Meta Tags -->
     <title>{finalTitle}</title>
     <meta name="title" content={finalTitle} />
@@ -71,6 +105,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:title" content={finalTitle} />
     <meta property="og:description" content={finalDesc} />
     <meta property="og:image" content={finalImage} />
+    {usesDefaultImage && <meta property="og:image:width" content="1200" />}
+    {usesDefaultImage && <meta property="og:image:height" content="630" />}
+    {usesDefaultImage && <meta property="og:image:alt" content={finalTitle} />}
     <meta property="og:locale" content="pt_BR" />
     <meta property="og:site_name" content={siteConfig.seo.siteName} />
     {articlePublishedTime && <meta property="article:published_time" content={articlePublishedTime} />}
@@ -82,49 +119,61 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta property="twitter:description" content={finalDesc} />
     <meta property="twitter:image" content={finalImage} />
 
-    <!-- Preconnects -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Jersey+15&family=Silkscreen&family=Newsreader:ital,wght@0,400;1,400&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
-
     <!-- Performance/Analytics scripts base (como Plausible se houver) -->
     { import.meta.env.PROD && (
       <script defer data-domain="devguimaraes.com.br" src="https://plausible.io/js/script.js"></script>
     )}
 
-    {structuredData && (
-      <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
-    )}
-
-    <!-- Client-side locale detection for lang/og attributes -->
+    <!-- Client-side locale detection for lang/og attributes.
+         O ClientRouter copia os atributos do <html> da página nova no swap (voltando para pt-BR),
+         então o locale é reaplicado depois de cada navegação, não só no primeiro carregamento. -->
     <script>
-      (function() {
+      function applyLocale() {
         try {
           var locale = localStorage.getItem('locale') || 'pt';
           document.documentElement.lang = locale === 'en' ? 'en' : 'pt-BR';
           var ogLocale = document.querySelector('meta[property="og:locale"]');
           if (ogLocale) ogLocale.content = locale === 'en' ? 'en_US' : 'pt_BR';
-        } catch(e) { /* localStorage pode não estar disponível (ambientes restritivos, SSR) */ }
-      })();
+        } catch(e) { /* localStorage pode não estar disponível (ambientes restritivos) */ }
+      }
+      function applyScenes() {
+        try {
+          var mql = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)");
+          if (!mql || !mql.matches) {
+            document.documentElement.setAttribute("data-scenes", "on");
+          } else {
+            document.documentElement.removeAttribute("data-scenes");
+          }
+        } catch(e) {}
+      }
+      applyLocale();
+      applyScenes();
+      document.addEventListener('astro:after-swap', applyLocale);
+      document.addEventListener('astro:after-swap', applyScenes);
+      document.addEventListener('astro:page-load', applyLocale);
+      document.addEventListener('astro:page-load', applyScenes);
+    </script>
+    <!-- Aba escondida: o Giro do favicon dorme. O ClientRouter troca o head, então reaplica após cada troca. -->
+    <script>
+      function applyFavicon() {
+        var icon = document.querySelector('link[rel="icon"][type="image/svg+xml"]');
+        if (icon) icon.setAttribute('href', document.hidden ? '/favicon-sleep.svg' : '/favicon.svg');
+      }
+      applyFavicon();
+      document.addEventListener('visibilitychange', applyFavicon);
+      document.addEventListener('astro:after-swap', applyFavicon);
     </script>
   </head>
-  <body class="bg-black">
-    <CustomCursor client:load />
-
-    <SmoothScroll client:load>
-      <LiquidGlassProvider client:load>
-        <Navigation client:load />
-        <main class="w-full relative">
-          <slot />
-        </main>
-        <Footer client:visible />
-      </LiquidGlassProvider>
-    </SmoothScroll>
-
-    <Toaster client:load />
-    
-    {/* Global Assets for Sasha Aesthetic */}
-    <GrainOverlay client:load />
+  <body>
+    <LoadingScreen client:load />
+    {!hideHeader && <SiteHeader client:load />}
+    <main class="w-full relative">
+      <slot />
+    </main>
+    {!isHome && <SiteFooter client:visible />}
+    <!-- Ilhas que sobrevivem à navegação (ilha de rolagem, trilho de ícones) entram aqui com
+         transition:persist, para o ClientRouter manter a instância montada entre páginas. -->
+    <ScrollIsland client:load transition:persist="scroll-island" transition:name="scroll-island" />
+    <Dock client:load transition:persist="dock" transition:name="dock" />
   </body>
 </html>

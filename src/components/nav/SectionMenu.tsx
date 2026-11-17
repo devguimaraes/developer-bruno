@@ -1,0 +1,53 @@
+import { useEffect, useRef } from "react";
+import { ArrowRight } from "lucide-react";
+import { LanguageSwitch } from "@/components/giro/LanguageSwitch";
+import { useLocale } from "@/hooks/useLocale";
+import { t } from "@/lib/i18n";
+import { type HomeSection, sectionHref } from "./sections";
+
+export interface SectionMenuProps {
+  id: string;
+  sections: readonly HomeSection[];
+  activeId: string | null;
+  /** Chamado ao tocar numa seção. Quem usa fecha o menu. */
+  onNavigate?: () => void;
+}
+
+/** Painel do menu (g-menu): seções e troca de idioma. Usado pela ilha de rolagem. */
+export function SectionMenu({ id, sections, activeId, onNavigate }: SectionMenuProps) {
+  const locale = useLocale();
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  // O painel só monta quando o menu abre: o foco vai para o primeiro item.
+  useEffect(() => {
+    panelRef.current?.querySelector("a")?.focus();
+  }, []);
+
+  return (
+    <div
+      ref={panelRef}
+      id={id}
+      className="g-menu"
+      role="dialog"
+      aria-label={t(locale, "global.main_nav_label")}
+    >
+      {sections.map(section => (
+        <a
+          key={section.id}
+          className="g-menu__item"
+          href={sectionHref(section)}
+          aria-current={section.id === activeId ? "true" : undefined}
+          onClick={onNavigate}
+        >
+          {t(locale, section.menuKey)}
+          <ArrowRight className="g-icon" aria-hidden="true" />
+        </a>
+      ))}
+      <div className="g-menu__divider" aria-hidden="true" />
+      <div className="g-menu__row">
+        <span>{t(locale, "language.group_label")}</span>
+        <LanguageSwitch groupLabel={t(locale, "language.group_label")} />
+      </div>
+    </div>
+  );
+}

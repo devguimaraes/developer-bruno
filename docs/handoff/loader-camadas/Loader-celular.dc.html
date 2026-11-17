@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Loader, as cores eram camadas, celular</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/giro/tokens.css">
+<link rel="stylesheet" href="ds/giro/components/bundle.css">
+<link rel="stylesheet" href="hero.css">
+<link rel="stylesheet" href="hero-b.css">
+<link rel="stylesheet" href="hero-quique.css">
+<link rel="stylesheet" href="hero-loader.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,100..900&amp;family=Geist+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:#2b2eff}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; overflow: hidden">
+<dc-import name="Loader" layout="mobile" autoplay="{{autoplay}}" reduced-motion="{{reducedMotion}}" velocidade="{{velocidade}}" so-loader="{{soLoader}}" cadencia="{{cadencia}}" iso-ms="{{isoMs}}" abertura="{{abertura}}" repetir="{{repetir}}" hint-size="390px,844px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"autoplay":{"editor":"boolean","default":true},"reducedMotion":{"editor":"boolean","default":false},"velocidade":{"editor":"enum","options":["100%","50%","25%"],"default":"100%"},"soLoader":{"editor":"boolean","default":false},"cadencia":{"editor":"range","default":480,"min":300,"max":700,"step":20,"unit":"ms"},"isoMs":{"editor":"range","default":950,"min":600,"max":1600,"step":50,"unit":"ms"},"abertura":{"editor":"range","default":100,"min":40,"max":140,"step":5,"unit":"%"},"repetir":{"editor":"boolean","default":true},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  // O mesmo loader da prancha do computador, no layout do celular: o Giro pousa na aba de baixo.
+  renderVals() {
+    const p = this.props;
+    const num = (v, d) => (Number.isFinite(Number(v)) && v !== undefined && v !== null ? Number(v) : d);
+    return {
+      autoplay: p.autoplay !== false,
+      reducedMotion: p.reducedMotion === true,
+      velocidade: p.velocidade || "100%",
+      soLoader: p.soLoader === true,
+      cadencia: num(p.cadencia, 480),
+      isoMs: num(p.isoMs, 950),
+      abertura: num(p.abertura, 100),
+      repetir: p.repetir !== false,
+    };
+  }
+}
+</script>
+</body>
+</html>

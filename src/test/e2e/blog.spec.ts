@@ -1,4 +1,5 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
+import { waitForHydration } from "./ready";
 
 test.describe("Fluxo do Blog", () => {
   test.beforeEach(async ({ page }) => {
@@ -8,8 +9,8 @@ test.describe("Fluxo do Blog", () => {
   test("Deve listar os posts do blog e permitir navegação para um post específico", async ({
     page,
   }) => {
-    // O h1 da página de blog é "POSTS" (i18n blog.heading)
-    await expect(page.locator("h1").first()).toContainText(/POSTS/i);
+    // O h1 da página de blog é "Blog" (i18n blog.heading)
+    await expect(page.locator("h1").first()).toHaveText("Blog");
 
     // Os cards de post são links <a> com href /blog/{slug}
     const blogCards = page.locator("a[href^='/blog/']");
@@ -20,7 +21,7 @@ test.describe("Fluxo do Blog", () => {
     expect(initialCount).toBeGreaterThan(0);
 
     // Pega o título do primeiro post para comparar depois
-    const firstPostTitle = await blogCards.first().locator("h2").textContent();
+    const firstPostTitle = await blogCards.first().locator("h3").textContent();
 
     const postHref = await blogCards.first().getAttribute("href");
     expect(postHref).toMatch(/^\/blog\/.+/);
@@ -43,17 +44,20 @@ test.describe("Fluxo do Blog", () => {
   });
 
   test("Deve permitir voltar da página do post para a listagem", async ({ page }) => {
-    // Cards são links <a>, não <article>
-    const blogCard = page.locator("a[href^='/blog/']").first();
+    // A primeira visita cobre a página com a tela de carregamento. O clique só vale depois dela.
+    await waitForHydration(page);
+
+    const blogCard = page.locator("main a[href^='/blog/']").first();
     await blogCard.click();
+    await expect(page).toHaveURL(/\/blog\/.+/);
 
-    // Botão de voltar (na página de post)
+    // No computador o link é "Blog". No celular, "Voltar para o blog".
     const backButton = page
-      .getByRole("link", { name: /VOLTAR AO BLOG/i })
-      .or(page.getByRole("link", { name: /back to blog/i }));
-    await backButton.first().click();
+      .locator("main")
+      .getByRole("link", { name: /^(Blog|Voltar para o blog|Back to the blog)$/i });
+    await backButton.click();
 
-    await expect(page).toHaveURL(/.*blog$/);
+    await expect(page).toHaveURL(/\/blog\/?$/);
   });
 
   test("Deve exibir erro 404 para posts inexistentes", async ({ page }) => {

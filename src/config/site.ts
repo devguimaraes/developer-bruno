@@ -1,4 +1,5 @@
 import type { SiteConfig, ContactData } from "@/types";
+import { t } from "@/lib/i18n";
 
 /**
  * Site configuration and metadata
@@ -6,8 +7,7 @@ import type { SiteConfig, ContactData } from "@/types";
 export const siteConfig: SiteConfig = {
   title: "Bruno Guimarães",
 
-  description:
-    "Desenvolvedor Front-End especializado em React, TypeScript e interfaces modernas. Criação de Sites e Softwares de alta performance.",
+  description: t("pt", "meta.home_description"),
   author: "Bruno Guimarães",
   email: "bc.guimaraes@outlook.com",
   location: "Rio de Janeiro, Brasil",
@@ -15,50 +15,15 @@ export const siteConfig: SiteConfig = {
   github: "https://github.com/devguimaraes",
   linkedin: "https://www.linkedin.com/in/bcguimaraes/",
   avatar: "/avatar.webp",
-  cv: {
-    url: "/cv-bruno-guimaraes.pdf",
-    filename: "Bruno-Guimaraes-CV.pdf",
-  },
   seo: {
-    keywords: [
-      // Brazilian Market Keywords
-      "desenvolvedor Web",
-      "programador React",
-      "desenvolvedor Web Rio de Janeiro",
-      "desenvolvedor TypeScript",
-      "portfolio desenvolvedor web",
-      "Bruno Guimarães front-end",
-      "Bruno Guimarães Desenvolvedor Web",
-      "desenvolvedor web São Paulo",
-      "programador JavaScript ",
-      "front-end developer",
-      "desenvolvedor React ",
-      "portfolio desenvolvimento web",
-
-      // Technical Keywords
-      "desenvolvedor front-end",
-      "react developer",
-      "typescript",
-      "next.js",
-      "ui developer",
-      "web development",
-      "bruno guimarães",
-      "front-end rio de janeiro",
-
-      // Location-specific
-      "desenvolvedor Rio de Janeiro",
-      "programador Brasil",
-      "front-end developer Brasil",
-      "web developer Rio de Janeiro",
-      "desenvolvedor web Brasil",
-    ],
-    image: "/og-image.webp",
+    image: "/og-image.png",
     siteName: "Bruno Guimarães Portfolio",
     locale: "pt_BR",
     region: "BR",
   },
 
-  // Performance Budget Configuration for Brazilian Market
+  // Performance Budget Configuration for Brazilian Market.
+  // Vale para o que carrega antes da tela de carregamento terminar (ADR 0002). O resto carrega depois.
   performanceBudget: {
     javascript: 300000, // 300KB for Brazilian mobile networks
     images: 500000, // 500KB for images

@@ -71,7 +71,8 @@ jobs:
         run: bun run build
 
   e2e:
-    runs-on: ubuntu-latest
+    # Playwright 1.57 does not support ubuntu-latest (26.04) yet
+    runs-on: ubuntu-24.04
     needs:
       - lint
       - unit

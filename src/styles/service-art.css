@@ -1,0 +1,219 @@
+/* Gerado por docs/handoff/servicos-camadas/gerador/arts.py. Não editar à mão: mude o gerador e exporte de novo. */
+
+.ar {
+  --ink: #0b0c1f;
+  --ink-2: rgba(11, 12, 31, 0.58);
+  --ink-3: rgba(11, 12, 31, 0.17);
+  --ink-4: rgba(11, 12, 31, 0.07);
+  --paper: #fbfaf6;
+  --paper-2: #efeee8;
+  --side: #d6d4cb;
+  --azul: #2b2eff;
+  --lima: #d2ff4d;
+  --tinta: #0b0c1f;
+  --floor: rgba(11, 12, 31, 0.07);
+  --er: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --eh: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --eio: cubic-bezier(0.65, 0, 0.35, 1);
+  position: relative;
+  display: block;
+  width: 48em;
+  height: var(--ah, 32em);
+  font-size: calc(100cqw / 48);
+  font-family: "Anybody", system-ui, sans-serif;
+  color: var(--ink);
+  pointer-events: none;
+  user-select: none;
+}
+.ar *,
+.ar *::before,
+.ar *::after {
+  box-sizing: border-box;
+}
+.ar b {
+  position: absolute;
+  display: block;
+  font-weight: inherit;
+}
+.ar b > span {
+  display: block;
+}
+.ar svg {
+  position: absolute;
+  overflow: visible;
+}
+.ar .t {
+  font:
+    500 0.78em / 1 "Geist Mono",
+    ui-monospace,
+    monospace;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  color: var(--ink-2);
+}
+.ar .n {
+  font:
+    800 1em / 1 "Anybody",
+    sans-serif;
+  font-stretch: 115%;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.ar__scene {
+  position: absolute;
+  left: var(--sx, 50%);
+  top: var(--sy, 56%);
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  transform: scale(var(--k, 1)) rotateX(60deg) rotateZ(-45deg);
+}
+.ar .pl {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--w);
+  height: var(--h);
+  transform-style: preserve-3d;
+  transform: translateZ(var(--z));
+  transition: translate 0.9s var(--er) calc(var(--cd, 0ms) + var(--d, 0ms));
+}
+.ar .pl__b {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+.ar .pl__e,
+.ar .pl__face {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r);
+  transition: opacity 0.4s linear calc(var(--cd, 0ms) + var(--d, 0ms));
+}
+.ar .pl__e {
+  background: var(--side);
+  transform: translateZ(var(--e));
+}
+.ar .pl__face {
+  background: var(--paper);
+  overflow: hidden;
+}
+.ar .fl {
+  background: var(--floor);
+  transform: translateZ(-1.6em);
+  transition: opacity 0.6s linear;
+}
+.ar .bb,
+.ar .bb__z,
+.ar .bb__r {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+}
+.ar .bb__r {
+  transform: rotateZ(45deg) rotateX(-60deg);
+}
+.ar .bb__dot {
+  border-radius: 999px;
+  opacity: 0;
+}
+.ar .bb__pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font:
+    600 0.82em / 1 "Geist Mono",
+    monospace;
+}
+.ar .bb__pill span {
+  font-size: 1em;
+}
+.ar .cur {
+  transform-origin: 0.33em 0.22em;
+}
+.ar .cur path {
+  fill: var(--ink);
+  stroke: var(--paper);
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+}
+.ar .gm__track {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 14;
+  opacity: 0;
+}
+.ar .gm__arc {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 14;
+  stroke-linecap: round;
+  stroke-dasharray: 240 37;
+}
+.ar .gm__turn {
+  transform-origin: 60px 60px;
+  transform: rotate(-21.5deg);
+}
+.ar .gm__eyes {
+  fill: currentColor;
+  transform-origin: 60px 54px;
+}
+.ar .gm__f {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0;
+}
+.ar .ck path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+.ar .ring {
+  border-radius: 50%;
+  border: 0.2em solid var(--azul);
+  opacity: 0;
+}
+.ar .pt {
+  border-radius: 50%;
+  opacity: 0;
+}
+/* Entrada: as placas sobem do chão em cascata. O loop já corre por baixo. */
+.ar.is-pre .pl {
+  translate: 0 0 -5em;
+}
+.ar.is-pre .pl__e,
+.ar.is-pre .pl__face,
+.ar.is-pre .fl,
+.ar.is-pre .cur {
+  opacity: 0;
+}
+.ar.is-pre .pl__e,
+.ar.is-pre .pl__face,
+.ar.is-pre .pl {
+  transition-delay: 0ms;
+  transition-duration: 0ms;
+}
+.ar .cur {
+  transition: opacity 0.3s linear calc(var(--cd, 0ms) + 700ms);
+}
+/* Fora de vista e com movimento reduzido, o relógio para. */
+.ar.is-paused * {
+  animation-play-state: paused !important;
+}
+.ar.is-still * {
+  animation: none !important;
+}
+.ar.is-still .cur {
+  opacity: 0;
+}

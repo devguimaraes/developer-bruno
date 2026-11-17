@@ -1,0 +1,457 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; }
+    .clip { position: absolute; inset: 0; }
+    .ld-card { background: var(--azul-fundo); }
+
+    /* Tomada: destino embaixo, camadas de cor no meio, assinatura que voa por cima. */
+    .ld-overlay { position: absolute; inset: 0; z-index: 2; }
+    .ld-layer { position: absolute; inset: 0; clip-path: circle(0px at 50% 50%); }
+    .ld-base { clip-path: none; }
+    .ld-azul { background: var(--azul-sinal); color: var(--papel); }
+    .ld-lima { background: var(--lima); color: var(--azul-sinal); }
+    .ld-papel { background: var(--papel); color: var(--azul-sinal); }
+    .ld-tinta { background: var(--tinta); color: var(--papel); }
+
+    /* Assinatura (giro-nav.css): o "o" é o Giro, 0,74 em, 0,06 em abaixo da linha de base.
+       A origem do .sig é o centro do "o" na horizontal e o topo da linha: o texto encosta nele. */
+    .sig {
+      position: absolute;
+      font-family: var(--font-sans);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      white-space: pre;
+    }
+    .sig-l { position: absolute; right: 0.4em; top: 0; }
+    .sig-r { position: absolute; left: 0.4em; top: 0; }
+    .lt { font-stretch: 50%; opacity: 0; }
+    .sig-giro { position: absolute; left: -0.37em; top: 0.1em; width: 0.74em; height: 0.74em; white-space: normal; }
+    .sig-giro > svg { display: block; width: 100%; height: 100%; }
+    .ld-fly-sig { z-index: 3; color: var(--papel); }
+    .ld-fly-sig .lt { font-stretch: 115%; opacity: 1; }
+    .ld-fly-sig .sig-l, .ld-fly-sig .sig-r { opacity: 0; }
+    .d .sig { left: 677.8px; top: 392px; font-size: 136px; }
+    .m .sig { left: 199px; top: 306px; font-size: 50px; }
+    .m .sig-r { left: 0; top: 1em; }
+
+    /* Linhas de código: Geist Mono, digitadas com cursor de bloco. */
+    .lines {
+      position: absolute;
+      left: 0;
+      font-family: var(--font-mono);
+      font-weight: 400;
+      font-stretch: 100%;
+      letter-spacing: 0;
+      white-space: normal;
+    }
+    .d .lines { top: 176px; font-size: 26px; line-height: 39px; }
+    .m .lines { top: 124px; font-size: 15px; line-height: 22px; }
+    .ln { position: relative; margin: 0; white-space: pre; }
+    .ch { opacity: 0; }
+    .cur {
+      position: absolute;
+      left: 0;
+      top: 0.25em;
+      width: 0.6em;
+      height: 1.05em;
+      background: currentColor;
+      opacity: 0;
+    }
+
+    /* No papel, o "o" aparece selecionado como componente. */
+    .sel { position: absolute; box-sizing: border-box; border: 2px solid var(--azul-sinal); opacity: 0; }
+    .d .sel { left: 621.5px; top: 399.6px; width: 112.6px; height: 112.6px; }
+    .m .sel { left: 177.5px; top: 308px; width: 43px; height: 43px; border-width: 1.5px; }
+    .hd { position: absolute; box-sizing: border-box; background: var(--papel); border: 2px solid var(--azul-sinal); }
+    .d .hd { width: 12px; height: 12px; }
+    .m .hd { width: 7px; height: 7px; border-width: 1.5px; }
+    .d .hd-1, .d .hd-3 { left: -7px; } .d .hd-2, .d .hd-4 { right: -7px; }
+    .d .hd-1, .d .hd-2 { top: -7px; } .d .hd-3, .d .hd-4 { bottom: -7px; }
+    .m .hd-1, .m .hd-3 { left: -4.25px; } .m .hd-2, .m .hd-4 { right: -4.25px; }
+    .m .hd-1, .m .hd-2 { top: -4.25px; } .m .hd-3, .m .hd-4 { bottom: -4.25px; }
+    .tag {
+      position: absolute;
+      left: -2px;
+      background: var(--azul-sinal);
+      color: var(--papel);
+      font-family: var(--font-mono);
+      white-space: pre;
+      line-height: 1.2;
+    }
+    .d .tag { bottom: calc(100% + 10px); padding: 4px 10px; font-size: 16px; }
+    .m .tag { bottom: calc(100% + 6px); padding: 2px 6px; font-size: 10px; }
+
+    /* Destino do computador: header de 88 px em azul-sinal e página de case em papel. */
+    .ld-dest { position: absolute; inset: 0; z-index: 1; background: var(--papel); }
+    .ld-head {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 88px;
+      box-sizing: border-box;
+      background: var(--azul-sinal);
+      border-bottom: 1px solid rgba(246, 245, 240, 0.22);
+    }
+    .ld-kicker {
+      position: absolute;
+      left: 64px;
+      top: 152px;
+      margin: 0;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.4;
+      color: #5b5e78;
+    }
+    .ld-case {
+      position: absolute;
+      left: 64px;
+      top: 180px;
+      margin: 0;
+      font-family: var(--font-sans);
+      font-size: 72px;
+      font-weight: 900;
+      font-stretch: 115%;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      white-space: nowrap;
+      color: var(--tinta);
+    }
+
+    /* Destino do celular: página de papel e barra de abas de 84 px. */
+    .ld-dest-phone { position: absolute; inset: 0; z-index: 1; background: var(--papel); }
+    .ld-case-phone {
+      position: absolute;
+      left: 32px;
+      top: 112px;
+      width: 326px;
+      margin: 0;
+      font-family: var(--font-sans);
+      font-size: 46px;
+      font-weight: 900;
+      font-stretch: 115%;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      color: var(--tinta);
+    }
+    .ld-tabbar {
+      position: absolute;
+      left: 0;
+      top: 760px;
+      width: 390px;
+      height: 84px;
+      background: var(--tinta);
+      -webkit-mask: radial-gradient(circle at 50% 2px, transparent 37px, #000 37.5px);
+      mask: radial-gradient(circle at 50% 2px, transparent 37px, #000 37.5px);
+    }
+    .ld-tab {
+      position: absolute;
+      top: 800px;
+      width: 72.5px;
+      margin: 0;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      line-height: 13.2px;
+      text-align: center;
+      white-space: nowrap;
+      color: #9a9cc0;
+    }
+    .ld-tab-giro {
+      position: absolute;
+      left: 165px;
+      top: 732px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--tinta);
+    }
+    .ld-fly-phone { position: absolute; z-index: 3; left: 180.5px; top: 311px; width: 37px; height: 37px; }
+    .ld-fly-phone > svg { display: block; width: 100%; height: 100%; }
+
+    /* Moldura do celular: 10 px de tinta, conteúdo em escala 1,2. */
+    .ld-shot-phone { background: var(--azul-fundo); }
+    .ld-device {
+      position: absolute;
+      left: 716px;
+      top: 23px;
+      width: 488px;
+      height: 1033px;
+      padding: 10px;
+      border-radius: 66px;
+      background: var(--tinta);
+    }
+    .ld-screen { position: relative; height: 100%; overflow: hidden; border-radius: 56px; }
+    .ld-scale {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 390px;
+      height: 844px;
+      transform: scale(1.2);
+      transform-origin: 0 0;
+    }
+  </style>
+  <div id="root" data-composition-id="loader" data-width="1920" data-height="1080">
+    <div id="ld-card-1" class="clip ld-card" data-start="0" data-duration="1.4" data-track-index="1">
+      <p class="scene-label">// 1 · computador</p>
+      <p class="caption">O nome se monta em volta do Giro. Cada meia volta traz uma cor e uma linha, e a assinatura encolhe até o header.</p>
+    </div>
+
+    <div id="ld-shot-1" class="clip d" data-start="1.4" data-duration="5.9" data-track-index="1">
+      <div id="ld-s1-dest" class="ld-dest">
+        <div class="ld-head"></div>
+        <p class="ld-kicker">// contexto</p>
+        <p class="ld-case">Estúdio Entre</p>
+      </div>
+      <div id="ld-s1-overlay" class="ld-overlay">
+          <div id="ld-s1-azul" class="ld-layer ld-azul ld-base" data-layout-allow-occlusion data-layout-allow-overlap>
+            <div class="sig"><span class="sig-l"><span class="lt">b</span><span class="lt">r</span><span class="lt">u</span><span class="lt">n</span><div class="lines" data-layout-allow-overlap>
+              <p class="ln ln1"><span class="tx"><span class="ch">/</span><span class="ch">/</span><span class="ch"> </span><span class="ch">d</span><span class="ch">e</span><span class="ch">s</span><span class="ch">e</span><span class="ch">n</span><span class="ch">v</span><span class="ch">o</span><span class="ch">l</span><span class="ch">v</span><span class="ch">e</span><span class="ch">d</span><span class="ch">o</span><span class="ch">r</span><span class="ch"> </span><span class="ch">f</span><span class="ch">r</span><span class="ch">o</span><span class="ch">n</span><span class="ch">t</span><span class="ch">-</span><span class="ch">e</span><span class="ch">n</span><span class="ch">d</span></span><i class="cur"></i></p>
+              <p class="ln ln2"><span class="tx"><span class="ch">/</span><span class="ch">/</span><span class="ch"> </span><span class="ch">c</span><span class="ch">o</span><span class="ch">n</span><span class="ch">s</span><span class="ch">t</span><span class="ch">r</span><span class="ch">u</span><span class="ch">o</span><span class="ch"> </span><span class="ch">i</span><span class="ch">n</span><span class="ch">t</span><span class="ch">e</span><span class="ch">r</span><span class="ch">f</span><span class="ch">a</span><span class="ch">c</span><span class="ch">e</span><span class="ch">s</span></span><i class="cur"></i></p>
+              <p class="ln ln3"><span class="tx"><span class="ch">/</span><span class="ch">/</span><span class="ch"> </span><span class="ch">d</span><span class="ch">e</span><span class="ch">s</span><span class="ch">i</span><span class="ch">g</span><span class="ch">n</span><span class="ch"> </span><span class="ch">s</span><span class="ch">y</span><span class="ch">s</span><span class="ch">t</span><span class="ch">e</span><span class="ch">m</span><span class="ch">s</span></span><i class="cur"></i></p>
+            </div></span><span class="sig-r"><span class="lt"> </span><span class="lt">g</span><span class="lt">u</span><span class="lt">i</span><span class="lt">m</span><span class="lt">a</span><span class="lt">r</span><span class="lt">ã</span><span class="lt">e</span><span class="lt">s</span></span></div>
+          </div>
+          <div id="ld-s1-lima" class="ld-layer ld-lima" data-layout-allow-occlusion data-layout-allow-overlap>
+            <div class="sig"><span class="sig-l"><span class="lt">b</span><span class="lt">r</span><span class="lt">u</span><span class="lt">n</span><div class="lines" data-layout-allow-overlap>
+              <p class="ln ln1"><span class="tx"><span class="ch">/</span><span class="ch">/</span><span class="ch"> </span><span class="ch">d</span><span class="ch">e</span><span class="ch">s</span><span class="ch">e</span><span class="ch">n</span><span class="ch">v</span><span class="ch">o</span><span class="ch">l</span><span class="ch">v</span><span class="ch">e</span><span class="ch">d</span><span class="ch">o</span><span class="ch">r</span><span class="ch"> </span><span class="ch">f</span><span class="ch">r</span><span class="ch">o</span><span class="ch">n</span><span class="ch">t</span><span class="ch">-</span><span class="ch">e</span><span class="ch">n</span><span class="ch">d</span></span><i class="cur"></i></p>
+              <p class="ln ln2"><span class="tx"><span class="ch">/</span><span class="ch">/</span><span class="ch"> </span><span class="ch">c</span><span class="ch">o</span><span class="ch">n</span><span class="ch">s</span><span class="ch">t</span><span class="ch">r</span><span class="ch">u</span><span class="ch">o</span><span class="ch"> </span><span class="ch">i</span><span class="ch">n</span><span class="ch">t</span><span class="ch">e</span><span class="ch">r</span><span class="ch">f</span><span class="ch">a</span><span class="ch">c</span><span class="ch">e</span><span class="ch">s</span></span><i class="cur"></i></p>
+              <p class="ln ln3"><span class="tx"><span class="ch">/</span><span class="ch">/</span><span class="ch"> </span><span class="ch">d</span><span class="ch">e</span><span class="ch">s</span><span class="ch">i</span><span class="ch">g</span><span class="ch">n</span><span class="ch"> </span><span class="ch">s</span><span class="ch">y</span><span class="ch">s</span><span class="ch">t</span><span class="ch">e</span><span class="ch">m</span><span class="ch">s</span></span><i class="cur"></i></p>
+            </div></span><span class="sig-r"><span class="lt"> </span><span class="lt">g</span><span class="lt">u</span><span class="lt">i</span><span class="lt">m</span><span class="lt">a</span><span class="lt">r</span><span class="lt">ã</span><span class="lt">e</span><span class="lt">s</span></span></div>
+          </div>
+          <div id="ld-s1-papel" class="ld-layer ld-papel" data-layout-allow-occlusion data-layout-allow-overlap>
+            <div class="sig"><span class="sig-l"><span class="lt">b</span><span class="lt">r</span><span class="lt">u</span><span class="lt">n</span><div class="lines" data-layout-allow-overlap>
+              <p class="ln ln1"><span class="tx"><span class="ch">/</span><span class="ch">/</span><span class="ch"> </span><span class="ch">d</span><span class="ch">e</span><span class="ch">s</span><span class="ch">e</span><span class="ch">n</span><span class="ch">v</span><span class="ch">o</span><span class="ch">l</span><span class="ch">v</span><span class="ch">e</span><span class="ch">d</span><span class="ch">o</span><span class="ch">r</span><span class="ch"> </span><span class="ch">f</span><span class="ch">r</span><span class="ch">o</span><span class="ch">n</span><span class="ch">t</span><span class="ch">-</span><span class="ch">e</span><span class="ch">n</span><span class="ch">d</span></span><i class="cur"></i></p>
+              <p class="ln ln2"><span class="tx"><span class="ch">/</span><span class="ch">/</span><span class="ch"> </span><span class="ch">c</span><span class="ch">o</span><span class="ch">n</span><span class="ch">s</span><span class="ch">t</span><span class="ch">r</span><span class="ch">u</span><span class="ch">o</span><span class="ch"> </span><span class="ch">i</span><span class="ch">n</span><span class="ch">t</span><span class="ch">e</span><span class="ch">r</span><span class="ch">f</span><span class="ch">a</span><span class="ch">c</span><span class="ch">e</span><span class="ch">s</span></span><i class="cur"></i></p>
+              <p class="ln ln3"><span class="tx"><span class="ch">/</span><span class="ch">/</span><span class="ch"> </span><span class="ch">d</span><span class="ch">e</span><span class="ch">s</span><span class="ch">i</span><span class="ch">g</span><span class="ch">n</span><span class="ch"> </span><span class="ch">s</span><span class="ch">y</span><span class="ch">s</span><span class="ch">t</span><span class="ch">e</span><span class="ch">m</span><span class="ch">s</span></span><i class="cur"></i></p>
+            </div></span><span class="sig-r"><span class="lt"> </span><span class="lt">g</span><span class="lt">u</span><span class="lt">i</span><span class="lt">m</span><span class="lt">a</span><span class="lt">r</span><span class="lt">ã</span><span class="lt">e</span><span class="lt">s</span></span></div>
+            <div class="sel"><i class="hd hd-1"></i><i class="hd hd-2"></i><i class="hd hd-3"></i><i class="hd hd-4"></i><span class="tag">&lt;Giro /&gt;</span></div>
+          </div>
+          <div id="ld-s1-tinta" class="ld-layer ld-tinta" data-layout-allow-occlusion data-layout-allow-overlap>
+            <div class="sig"><span class="sig-l"><span class="lt">b</span><span class="lt">r</span><span class="lt">u</span><span class="lt">n</span><div class="lines" data-layout-allow-overlap>
+              <p class="ln ln1"><span class="tx"><span class="ch">/</span><span class="ch">/</span><span class="ch"> </span><span class="ch">d</span><span class="ch">e</span><span class="ch">s</span><span class="ch">e</span><span class="ch">n</span><span class="ch">v</span><span class="ch">o</span><span class="ch">l</span><span class="ch">v</span><span class="ch">e</span><span class="ch">d</span><span class="ch">o</span><span class="ch">r</span><span class="ch"> </span><span class="ch">f</span><span class="ch">r</span><span class="ch">o</span><span class="ch">n</span><span class="ch">t</span><span class="ch">-</span><span class="ch">e</span><span class="ch">n</span><span class="ch">d</span></span><i class="cur"></i></p>
+              <p class="ln ln2"><span class="tx"><span class="ch">/</span><span class="ch">/</span><span class="ch"> </span><span class="ch">c</span><span class="ch">o</span><span class="ch">n</span><span class="ch">s</span><span class="ch">t</span><span class="ch">r</span><span class="ch">u</span><span class="ch">o</span><span class="ch"> </span><span class="ch">i</span><span class="ch">n</span><span class="ch">t</span><span class="ch">e</span><span class="ch">r</span><span class="ch">f</span><span class="ch">a</span><span class="ch">c</span><span class="ch">e</span><span class="ch">s</span></span><i class="cur"></i></p>
+              <p class="ln ln3"><span class="tx"><span class="ch">/</span><span class="ch">/</span><span class="ch"> </span><span class="ch">d</span><span class="ch">e</span><span class="ch">s</span><span class="ch">i</span><span class="ch">g</span><span class="ch">n</span><span class="ch"> </span><span class="ch">s</span><span class="ch">y</span><span class="ch">s</span><span class="ch">t</span><span class="ch">e</span><span class="ch">m</span><span class="ch">s</span></span><i class="cur"></i></p>
+            </div></span><span class="sig-r"><span class="lt"> </span><span class="lt">g</span><span class="lt">u</span><span class="lt">i</span><span class="lt">m</span><span class="lt">a</span><span class="lt">r</span><span class="lt">ã</span><span class="lt">e</span><span class="lt">s</span></span></div>
+          </div>
+          <div id="ld-s1-azul2" class="ld-layer ld-azul" data-layout-allow-occlusion data-layout-allow-overlap>
+            <div class="sig"><span class="sig-l"><span class="lt">b</span><span class="lt">r</span><span class="lt">u</span><span class="lt">n</span><div class="lines" data-layout-allow-overlap>
+              <p class="ln ln1"><span class="tx"><span class="ch">/</span><span class="ch">/</span><span class="ch"> </span><span class="ch">d</span><span class="ch">e</span><span class="ch">s</span><span class="ch">e</span><span class="ch">n</span><span class="ch">v</span><span class="ch">o</span><span class="ch">l</span><span class="ch">v</span><span class="ch">e</span><span class="ch">d</span><span class="ch">o</span><span class="ch">r</span><span class="ch"> </span><span class="ch">f</span><span class="ch">r</span><span class="ch">o</span><span class="ch">n</span><span class="ch">t</span><span class="ch">-</span><span class="ch">e</span><span class="ch">n</span><span class="ch">d</span></span><i class="cur"></i></p>
+              <p class="ln ln2"><span class="tx"><span class="ch">/</span><span class="ch">/</span><span class="ch"> </span><span class="ch">c</span><span class="ch">o</span><span class="ch">n</span><span class="ch">s</span><span class="ch">t</span><span class="ch">r</span><span class="ch">u</span><span class="ch">o</span><span class="ch"> </span><span class="ch">i</span><span class="ch">n</span><span class="ch">t</span><span class="ch">e</span><span class="ch">r</span><span class="ch">f</span><span class="ch">a</span><span class="ch">c</span><span class="ch">e</span><span class="ch">s</span></span><i class="cur"></i></p>
+              <p class="ln ln3"><span class="tx"><span class="ch">/</span><span class="ch">/</span><span class="ch"> </span><span class="ch">d</span><span class="ch">e</span><span class="ch">s</span><span class="ch">i</span><span class="ch">g</span><span class="ch">n</span><span class="ch"> </span><span class="ch">s</span><span class="ch">y</span><span class="ch">s</span><span class="ch">t</span><span class="ch">e</span><span class="ch">m</span><span class="ch">s</span></span><i class="cur"></i></p>
+            </div></span><span class="sig-r"><span class="lt"> </span><span class="lt">g</span><span class="lt">u</span><span class="lt">i</span><span class="lt">m</span><span class="lt">a</span><span class="lt">r</span><span class="lt">ã</span><span class="lt">e</span><span class="lt">s</span></span></div>
+          </div>
+      </div>
+      <div id="ld-s1-fly" class="sig ld-fly-sig" data-layout-allow-overlap><span class="sig-l"><span class="lt">b</span><span class="lt">r</span><span class="lt">u</span><span class="lt">n</span></span><span class="sig-r"><span class="lt"> </span><span class="lt">g</span><span class="lt">u</span><span class="lt">i</span><span class="lt">m</span><span class="lt">a</span><span class="lt">r</span><span class="lt">ã</span><span class="lt">e</span><span class="lt">s</span></span><span class="sig-giro">
+          <svg id="ld-giro-1" class="giro" viewBox="0 0 120 120" aria-hidden="true">
+            <circle class="g-disc" cx="60" cy="60" r="60" />
+            <g class="g-body">
+              <g class="g-turn"><g class="g-spin"><circle class="g-arc" cx="60" cy="60" r="44" /></g></g>
+              <g class="g-lid g-lid-l"><ellipse class="g-eye g-eye-l" cx="46" cy="54" rx="6" ry="9" /></g>
+              <g class="g-lid g-lid-r"><ellipse class="g-eye g-eye-r" cx="74" cy="54" rx="6" ry="9" /></g>
+              <path class="g-f g-happy-l" d="M38 60 Q46 46 54 60" />
+              <path class="g-f g-happy-r" d="M66 60 Q74 46 82 60" />
+              <path class="g-f g-x" d="M39 52 L53 62" />
+              <path class="g-f g-x" d="M53 52 L39 62" />
+              <path class="g-f g-x" d="M67 52 L81 62" />
+              <path class="g-f g-x" d="M81 52 L67 62" />
+              <path class="g-f g-sleep-l" d="M39 55 Q46 62 53 55" />
+              <path class="g-f g-sleep-r" d="M67 55 Q74 62 81 55" />
+              <path class="g-z" d="M88 22 H98 L88 34 H98" />
+            </g>
+          </svg>
+        </span></div>
+    </div>
+
+    <div id="ld-card-2" class="clip ld-card" data-start="7.3" data-duration="1.4" data-track-index="1">
+      <p class="scene-label">// 2 · celular</p>
+      <p class="caption">No celular, o nome quebra em duas linhas, a volta termina na tinta e o Giro desce até a barra de abas.</p>
+    </div>
+
+    <div id="ld-shot-2" class="clip ld-shot-phone" data-start="8.7" data-duration="5.9" data-track-index="1">
+      <div class="ld-device">
+        <div class="ld-screen">
+          <div class="ld-scale m">
+            <div id="ld-s2-dest" class="ld-dest-phone">
+              <p class="ld-case-phone">Estúdio Entre</p>
+              <div class="ld-tabbar"></div>
+              <p class="ld-tab" style="left: 8px">Início</p>
+              <p class="ld-tab" style="left: 80.5px">Projetos</p>
+              <p class="ld-tab" style="left: 237px">Blog</p>
+              <p class="ld-tab" style="left: 309.5px">Contato</p>
+              <span class="ld-tab-giro"></span>
+            </div>
+            <div id="ld-s2-overlay" class="ld-overlay">
+          <div id="ld-s2-azul" class="ld-layer ld-azul ld-base" data-layout-allow-occlusion data-layout-allow-overlap>
+            <div class="sig"><span class="sig-l"><span class="lt">b</span><span class="lt">r</span><span class="lt">u</span><span class="lt">n</span><span class="sig-r"><span class="lt">g</span><span class="lt">u</span><span class="lt">i</span><span class="lt">m</span><span class="lt">a</span><span class="lt">r</span><span class="lt">ã</span><span class="lt">e</span><span class="lt">s</span></span><div class="lines" data-layout-allow-overlap>
+              <p class="ln ln1"><span class="tx"><span class="ch">/</span><span class="ch">/</span><span class="ch"> </span><span class="ch">d</span><span class="ch">e</span><span class="ch">s</span><span class="ch">e</span><span class="ch">n</span><span class="ch">v</span><span class="ch">o</span><span class="ch">l</span><span class="ch">v</span><span class="ch">e</span><span class="ch">d</span><span class="ch">o</span><span class="ch">r</span><span class="ch"> </span><span class="ch">f</span><span class="ch">r</span><span class="ch">o</span><span class="ch">n</span><span class="ch">t</span><span class="ch">-</span><span class="ch">e</span><span class="ch">n</span><span class="ch">d</span></span><i class="cur"></i></p>
+              <p class="ln ln2"><span class="tx"><span class="ch">/</span><span class="ch">/</span><span class="ch"> </span><span class="ch">c</span><span class="ch">o</span><span class="ch">n</span><span class="ch">s</span><span class="ch">t</span><span class="ch">r</span><span class="ch">u</span><span class="ch">o</span><span class="ch"> </span><span class="ch">i</span><span class="ch">n</span><span class="ch">t</span><span class="ch">e</span><span class="ch">r</span><span class="ch">f</span><span class="ch">a</span><span class="ch">c</span><span class="ch">e</span><span class="ch">s</span></span><i class="cur"></i></p>
+              <p class="ln ln3"><span class="tx"><span class="ch">/</span><span class="ch">/</span><span class="ch"> </span><span class="ch">d</span><span class="ch">e</span><span class="ch">s</span><span class="ch">i</span><span class="ch">g</span><span class="ch">n</span><span class="ch"> </span><span class="ch">s</span><span class="ch">y</span><span class="ch">s</span><span class="ch">t</span><span class="ch">e</span><span class="ch">m</span><span class="ch">s</span></span><i class="cur"></i></p>
+            </div></span></div>
+          </div>
+          <div id="ld-s2-lima" class="ld-layer ld-lima" data-layout-allow-occlusion data-layout-allow-overlap>
+            <div class="sig"><span class="sig-l"><span class="lt">b</span><span class="lt">r</span><span class="lt">u</span><span class="lt">n</span><span class="sig-r"><span class="lt">g</span><span class="lt">u</span><span class="lt">i</span><span class="lt">m</span><span class="lt">a</span><span class="lt">r</span><span class="lt">ã</span><span class="lt">e</span><span class="lt">s</span></span><div class="lines" data-layout-allow-overlap>
+              <p class="ln ln1"><span class="tx"><span class="ch">/</span><span class="ch">/</span><span class="ch"> </span><span class="ch">d</span><span class="ch">e</span><span class="ch">s</span><span class="ch">e</span><span class="ch">n</span><span class="ch">v</span><span class="ch">o</span><span class="ch">l</span><span class="ch">v</span><span class="ch">e</span><span class="ch">d</span><span class="ch">o</span><span class="ch">r</span><span class="ch"> </span><span class="ch">f</span><span class="ch">r</span><span class="ch">o</span><span class="ch">n</span><span class="ch">t</span><span class="ch">-</span><span class="ch">e</span><span class="ch">n</span><span class="ch">d</span></span><i class="cur"></i></p>
+              <p class="ln ln2"><span class="tx"><span class="ch">/</span><span class="ch">/</span><span class="ch"> </span><span class="ch">c</span><span class="ch">o</span><span class="ch">n</span><span class="ch">s</span><span class="ch">t</span><span class="ch">r</span><span class="ch">u</span><span class="ch">o</span><span class="ch"> </span><span class="ch">i</span><span class="ch">n</span><span class="ch">t</span><span class="ch">e</span><span class="ch">r</span><span class="ch">f</span><span class="ch">a</span><span class="ch">c</span><span class="ch">e</span><span class="ch">s</span></span><i class="cur"></i></p>
+              <p class="ln ln3"><span class="tx"><span class="ch">/</span><span class="ch">/</span><span class="ch"> </span><span class="ch">d</span><span class="ch">e</span><span class="ch">s</span><span class="ch">i</span><span class="ch">g</span><span class="ch">n</span><span class="ch"> </span><span class="ch">s</span><span class="ch">y</span><span class="ch">s</span><span class="ch">t</span><span class="ch">e</span><span class="ch">m</span><span class="ch">s</span></span><i class="cur"></i></p>
+            </div></span></div>
+          </div>
+          <div id="ld-s2-papel" class="ld-layer ld-papel" data-layout-allow-occlusion data-layout-allow-overlap>
+            <div class="sig"><span class="sig-l"><span class="lt">b</span><span class="lt">r</span><span class="lt">u</span><span class="lt">n</span><span class="sig-r"><span class="lt">g</span><span class="lt">u</span><span class="lt">i</span><span class="lt">m</span><span class="lt">a</span><span class="lt">r</span><span class="lt">ã</span><span class="lt">e</span><span class="lt">s</span></span><div class="lines" data-layout-allow-overlap>
+              <p class="ln ln1"><span class="tx"><span class="ch">/</span><span class="ch">/</span><span class="ch"> </span><span class="ch">d</span><span class="ch">e</span><span class="ch">s</span><span class="ch">e</span><span class="ch">n</span><span class="ch">v</span><span class="ch">o</span><span class="ch">l</span><span class="ch">v</span><span class="ch">e</span><span class="ch">d</span><span class="ch">o</span><span class="ch">r</span><span class="ch"> </span><span class="ch">f</span><span class="ch">r</span><span class="ch">o</span><span class="ch">n</span><span class="ch">t</span><span class="ch">-</span><span class="ch">e</span><span class="ch">n</span><span class="ch">d</span></span><i class="cur"></i></p>
+              <p class="ln ln2"><span class="tx"><span class="ch">/</span><span class="ch">/</span><span class="ch"> </span><span class="ch">c</span><span class="ch">o</span><span class="ch">n</span><span class="ch">s</span><span class="ch">t</span><span class="ch">r</span><span class="ch">u</span><span class="ch">o</span><span class="ch"> </span><span class="ch">i</span><span class="ch">n</span><span class="ch">t</span><span class="ch">e</span><span class="ch">r</span><span class="ch">f</span><span class="ch">a</span><span class="ch">c</span><span class="ch">e</span><span class="ch">s</span></span><i class="cur"></i></p>
+              <p class="ln ln3"><span class="tx"><span class="ch">/</span><span class="ch">/</span><span class="ch"> </span><span class="ch">d</span><span class="ch">e</span><span class="ch">s</span><span class="ch">i</span><span class="ch">g</span><span class="ch">n</span><span class="ch"> </span><span class="ch">s</span><span class="ch">y</span><span class="ch">s</span><span class="ch">t</span><span class="ch">e</span><span class="ch">m</span><span class="ch">s</span></span><i class="cur"></i></p>
+            </div></span></div>
+            <div class="sel"><i class="hd hd-1"></i><i class="hd hd-2"></i><i class="hd hd-3"></i><i class="hd hd-4"></i><span class="tag">&lt;Giro /&gt;</span></div>
+          </div>
+          <div id="ld-s2-tinta" class="ld-layer ld-tinta" data-layout-allow-occlusion data-layout-allow-overlap>
+            <div class="sig"><span class="sig-l"><span class="lt">b</span><span class="lt">r</span><span class="lt">u</span><span class="lt">n</span><span class="sig-r"><span class="lt">g</span><span class="lt">u</span><span class="lt">i</span><span class="lt">m</span><span class="lt">a</span><span class="lt">r</span><span class="lt">ã</span><span class="lt">e</span><span class="lt">s</span></span><div class="lines" data-layout-allow-overlap>
+              <p class="ln ln1"><span class="tx"><span class="ch">/</span><span class="ch">/</span><span class="ch"> </span><span class="ch">d</span><span class="ch">e</span><span class="ch">s</span><span class="ch">e</span><span class="ch">n</span><span class="ch">v</span><span class="ch">o</span><span class="ch">l</span><span class="ch">v</span><span class="ch">e</span><span class="ch">d</span><span class="ch">o</span><span class="ch">r</span><span class="ch"> </span><span class="ch">f</span><span class="ch">r</span><span class="ch">o</span><span class="ch">n</span><span class="ch">t</span><span class="ch">-</span><span class="ch">e</span><span class="ch">n</span><span class="ch">d</span></span><i class="cur"></i></p>
+              <p class="ln ln2"><span class="tx"><span class="ch">/</span><span class="ch">/</span><span class="ch"> </span><span class="ch">c</span><span class="ch">o</span><span class="ch">n</span><span class="ch">s</span><span class="ch">t</span><span class="ch">r</span><span class="ch">u</span><span class="ch">o</span><span class="ch"> </span><span class="ch">i</span><span class="ch">n</span><span class="ch">t</span><span class="ch">e</span><span class="ch">r</span><span class="ch">f</span><span class="ch">a</span><span class="ch">c</span><span class="ch">e</span><span class="ch">s</span></span><i class="cur"></i></p>
+              <p class="ln ln3"><span class="tx"><span class="ch">/</span><span class="ch">/</span><span class="ch"> </span><span class="ch">d</span><span class="ch">e</span><span class="ch">s</span><span class="ch">i</span><span class="ch">g</span><span class="ch">n</span><span class="ch"> </span><span class="ch">s</span><span class="ch">y</span><span class="ch">s</span><span class="ch">t</span><span class="ch">e</span><span class="ch">m</span><span class="ch">s</span></span><i class="cur"></i></p>
+            </div></span></div>
+          </div>
+            </div>
+            <div id="ld-s2-fly" class="ld-fly-phone">
+          <svg id="ld-giro-2" class="giro" viewBox="0 0 120 120" aria-hidden="true">
+            <circle class="g-disc" cx="60" cy="60" r="60" />
+            <g class="g-body">
+              <g class="g-turn"><g class="g-spin"><circle class="g-arc" cx="60" cy="60" r="44" /></g></g>
+              <g class="g-lid g-lid-l"><ellipse class="g-eye g-eye-l" cx="46" cy="54" rx="6" ry="9" /></g>
+              <g class="g-lid g-lid-r"><ellipse class="g-eye g-eye-r" cx="74" cy="54" rx="6" ry="9" /></g>
+              <path class="g-f g-happy-l" d="M38 60 Q46 46 54 60" />
+              <path class="g-f g-happy-r" d="M66 60 Q74 46 82 60" />
+              <path class="g-f g-x" d="M39 52 L53 62" />
+              <path class="g-f g-x" d="M53 52 L39 62" />
+              <path class="g-f g-x" d="M67 52 L81 62" />
+              <path class="g-f g-x" d="M81 52 L67 62" />
+              <path class="g-f g-sleep-l" d="M39 55 Q46 62 53 55" />
+              <path class="g-f g-sleep-r" d="M67 55 Q74 62 81 55" />
+              <path class="g-z" d="M88 22 H98 L88 34 H98" />
+            </g>
+          </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      const ft = GiroRig.ft;
+      const E = GiroRig.E;
+      const AZUL = "#2b2eff";
+      const LIMA = "#d2ff4d";
+      const all = (s) => Array.prototype.slice.call(document.querySelectorAll(s));
+
+      // Tempos locais da tomada (s). Primeira volta: o nome. Depois, uma cor e uma linha a cada meia volta.
+      const T = { unfold: 0.08, trocas: [1.0, 1.45, 1.9, 2.35], pronto: 2.565, saida: 2.965, voo: 0.52 };
+
+      // O nome se desdobra do Giro para fora: largura de 50% a 115%, 35 ms entre letras.
+      function unfold(s, t) {
+        const L = [];
+        const R = [];
+        all(s.id + " .ld-overlay .sig").forEach(function (sig) {
+          all("#" + sig.parentNode.id + " .sig-l > .lt").reverse().forEach(function (el, i) { (L[i] = L[i] || []).push(el); });
+          all("#" + sig.parentNode.id + " .sig-r > .lt").forEach(function (el, i) { (R[i] = R[i] || []).push(el); });
+        });
+        L.concat([]).forEach(function (els, i) { letter(els, t + i * 0.035); });
+        R.forEach(function (els, i) { letter(els, t + i * 0.035); });
+        if (s.shift) ft(tl, all(s.id + " .sig"), { x: s.shift }, { x: 0, duration: 0.72, ease: E.resolve }, t);
+      }
+      function letter(els, t) {
+        ft(tl, els, { fontStretch: "50%", opacity: 0 }, { fontStretch: "115%", opacity: 1, duration: 0.4, ease: E.resolve }, t);
+      }
+
+      // Troca: o disco da cor nova nasce do Giro e o Giro muda de cor no mesmo quadro.
+      function troca(s, g, camada, t, cor) {
+        tl.set(g.P.svg, { color: cor }, t);
+        const at = " at " + s.ox + "px " + s.oy + "px)";
+        ft(tl, camada, { clipPath: "circle(" + s.r0 + "px" + at }, { clipPath: "circle(" + s.r1 + "px" + at, duration: 0.215, ease: E.resolve }, t);
+      }
+
+      // Linha k: digitada em 260 ms, um caractere por passo, com o cursor na ponta.
+      function digita(s, k, t) {
+        const cur = all(s.id + " .ln" + k + " .cur");
+        const n = document.querySelector(s.id + " .ln" + k + " .tx").children.length;
+        for (let i = 0; i < n; i++) {
+          tl.set(all(s.id + " .ln" + k + " .ch:nth-child(" + (i + 1) + ")"), { opacity: 1 }, t + ((i + 1) * 0.26) / n);
+        }
+        if (k > 1) tl.set(all(s.id + " .ln" + (k - 1) + " .cur"), { opacity: 0 }, t);
+        tl.set(cur, { opacity: 1 }, t);
+        ft(tl, cur, { x: 0 }, { x: n * 0.6 * s.mono, duration: 0.26, ease: "steps(" + n + ")" }, t);
+      }
+
+      // No papel, o "o" é selecionado como componente: caixa, alças e etiqueta.
+      function seleciona(s, t) {
+        const box = all(s.id + " .sel");
+        ft(tl, box, { opacity: 0, scale: 1.15 }, { opacity: 1, scale: 1, duration: 0.22, ease: E.resolve }, t);
+        tl.set(all(s.id + " .hd"), { scale: 0 }, t - 0.001);
+        all(s.id + " .hd").forEach(function (hd, i) {
+          ft(tl, hd, { scale: 0 }, { scale: 1, duration: 0.24, ease: E.hop }, t + 0.03 + (i % 4) * 0.03);
+        });
+        ft(tl, all(s.id + " .tag"), { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.22, ease: E.resolve }, t + 0.06);
+      }
+
+      // Oi do hello.html e repouso.
+      function oi(g, t, fim) {
+        const turns = [44.5, 8, 72, 18, 60, 44.5];
+        const leans = [0, -4, 4, -3, 2, 0];
+        for (let i = 1; i < turns.length; i++) {
+          const at = t + (i - 1) * 0.3;
+          ft(tl, g.P.turn, { rotation: turns[i - 1] }, { rotation: turns[i], duration: 0.3, ease: E.inOut }, at);
+          ft(tl, g.P.body, { rotation: leans[i - 1], svgOrigin: "60 104" }, { rotation: leans[i], duration: 0.3, ease: E.inOut }, at);
+        }
+        g.settle(tl, t + 1.5);
+        g.idle(tl, t + 2.06, fim);
+      }
+
+      function tomada(s) {
+        const t0 = s.t0;
+        const g = GiroRig.create(document.querySelector(s.giro), { v: "nov" });
+        g.init(tl);
+        g.loading(tl, t0);
+        unfold(s, t0 + T.unfold);
+        // O traço engrossa até o peso das letras.
+        ft(tl, g.P.arc, { attr: { "stroke-width": 12 } }, { attr: { "stroke-width": 22 }, duration: 0.5, ease: E.resolve }, t0 + 0.15);
+        const cores = [AZUL, AZUL, LIMA, LIMA];
+        s.camadas.forEach(function (c, i) {
+          troca(s, g, c, t0 + T.trocas[i], cores[i]);
+          if (i < 3) digita(s, i + 1, t0 + T.trocas[i] + 0.05);
+        });
+        seleciona(s, t0 + T.trocas[1] + 0.05);
+        g.done(tl, t0 + T.pronto);
+        tl.set(all(s.id + " .cur"), { opacity: 0 }, t0 + T.pronto);
+        const te = t0 + T.saida;
+        s.saida(g, te);
+        oi(g, te + T.voo, s.fim);
+      }
+
+      // Computador: a assinatura inteira encolhe até o header e o painel azul sobe.
+      const D = { id: "#ld-shot-1", t0: 1.4, fim: 7.3, giro: "#ld-giro-1", ox: 677.8, oy: 455.9, r0: 52, r1: 1420, shift: 282.2, mono: 26,
+        camadas: ["#ld-s1-lima", "#ld-s1-papel", "#ld-s1-tinta", "#ld-s1-azul2"] };
+      D.saida = function (g, te) {
+        tl.set(all("#ld-s1-overlay .lt"), { opacity: 0 }, te);
+        tl.set(all("#ld-s1-fly .sig-l, #ld-s1-fly .sig-r"), { opacity: 1 }, te);
+        ft(tl, "#ld-s1-fly", { x: 0, y: 0, scale: 1, transformOrigin: "0px 0px" }, { x: 155 - 677.8, y: 31 - 392, scale: 26 / 136, duration: T.voo, ease: E.resolve }, te);
+        ft(tl, "#ld-s1-overlay", { clipPath: "inset(0% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 100% 0%)", duration: T.voo, ease: E.resolve }, te);
+        ft(tl, all("#ld-s1-dest .ld-kicker, #ld-s1-dest .ld-case"), { y: 24 }, { y: 0, duration: T.voo, ease: E.resolve }, te);
+      };
+
+      // Celular: a volta termina na tinta, o painel desce até a barra e o Giro pousa no botão.
+      const M = { id: "#ld-shot-2", t0: 8.7, fim: 14.6, giro: "#ld-giro-2", ox: 199, oy: 329.5, r0: 20, r1: 570, shift: 0, mono: 15,
+        camadas: ["#ld-s2-lima", "#ld-s2-papel", "#ld-s2-tinta"] };
+      M.saida = function (g, te) {
+        ft(tl, "#ld-s2-fly", { x: 0, y: 0, scale: 1 }, { x: 195 - 199, y: 762 - 329.5, scale: 40 / 37, duration: T.voo, ease: E.resolve }, te);
+        ft(tl, g.P.arc, { attr: { "stroke-width": 22 } }, { attr: { "stroke-width": 14 }, duration: T.voo, ease: E.resolve }, te);
+        ft(tl, "#ld-s2-overlay", { clipPath: "inset(0% 0% 0% 0%)" }, { clipPath: "inset(100% 0% 0% 0%)", duration: T.voo, ease: E.resolve }, te);
+        ft(tl, "#ld-s2-dest .ld-case-phone", { y: 24 }, { y: 0, duration: T.voo, ease: E.resolve }, te);
+      };
+
+      tomada(D);
+      tomada(M);
+      window.__timelines["loader"] = tl;
+    })();
+  </script>
+</template>
