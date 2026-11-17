@@ -19,9 +19,19 @@ interface Props {
   ogType?: string;
   noindex?: boolean;
   articlePublishedTime?: string;
+  /** Tira o header do topo. A ilha de rolagem assume a navegação desde o início. */
+  hideHeader?: boolean;
 }
 
-const { title, description, image, ogType, noindex = false, articlePublishedTime } = Astro.props;
+const {
+  title,
+  description,
+  image,
+  ogType,
+  noindex = false,
+  articlePublishedTime,
+  hideHeader = false,
+} = Astro.props;
 
 // Meta values with fallbacks. A página passa o título completo, sem sufixo da marca.
 const finalTitle = title || t("pt", "meta.home_title");
@@ -156,7 +166,7 @@ const isHome = Astro.url.pathname === "/";
   </head>
   <body>
     <LoadingScreen client:load />
-    <SiteHeader client:load />
+    {!hideHeader && <SiteHeader client:load />}
     <main class="w-full relative">
       <slot />
     </main>

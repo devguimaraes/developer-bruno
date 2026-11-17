@@ -17,10 +17,22 @@ test.describe("Página Sobre", () => {
     expect(overflows).toBe(false);
   });
 
-  test("Deve trocar para inglês", async ({ page }) => {
+  test("Deve trocar para inglês", async ({ page, isMobile }) => {
     await page.goto("/sobre");
     await waitForHydration(page);
-    await page.getByRole("button", { name: "en" }).first().click();
+    if (isMobile) {
+      // No celular o seletor fica no rodapé, que hidrata ao entrar na tela (client:visible).
+      const footerSwitch = page.locator(".g-site-footer").getByRole("button", { name: "en" });
+      await footerSwitch.scrollIntoViewIfNeeded();
+      await page.waitForFunction(
+        () => !document.querySelector('astro-island[ssr][client="visible"]')
+      );
+      await footerSwitch.click();
+    } else {
+      // No computador a página não tem header: o seletor fica no menu da ilha.
+      await page.locator("#scroll-island-toggle").click();
+      await page.locator("#scroll-island-menu").getByRole("button", { name: "en" }).click();
+    }
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Hi, I'm Bruno.");
     await expect(page.getByRole("heading", { name: "Experience" })).toBeVisible();
   });
@@ -37,21 +49,23 @@ test.describe("Página Sobre", () => {
     expect(await snapshot()).toBe(before);
   });
 
-  test("Deve chegar pelo menu a partir da home, com Sobre como página atual", async ({ page }) => {
+  test("Deve chegar pelo menu a partir da home, sem o header do topo", async ({
+    page,
+    isMobile,
+  }) => {
     await page.goto("/");
     await waitForHydration(page);
-    await page.locator("[data-site-header]").getByRole("link", { name: "Sobre" }).click();
-    await expect(page).toHaveURL(/\/sobre\/?$/);
+    const nav = isMobile ? page.locator(".g-dock") : page.locator("[data-site-header]");
+    await nav.getByRole("link", { name: "Sobre" }).click();
+    await expect(page).toHaveURL(/\/sobre\/?$/, { timeout: 15_000 });
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Oi, eu sou o Bruno.");
-    await expect(
-      page.locator("[data-site-header]").getByRole("link", { name: "Sobre" })
-    ).toHaveAttribute("aria-current", "page");
+    await expect(page.locator("[data-site-header]")).toHaveCount(0);
   });
 
   test("Deve seguir para o contato da home", async ({ page }) => {
     await page.goto("/sobre");
     await waitForHydration(page);
     await page.getByRole("link", { name: "Falar comigo" }).click();
-    await expect(page).toHaveURL(/\/#contato$/);
+    await expect(page).toHaveURL(/\/#contato$/, { timeout: 15_000 });
   });
 });

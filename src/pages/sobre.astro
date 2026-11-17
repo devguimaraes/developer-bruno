@@ -35,6 +35,6 @@ if (!result.ok) {
 }
 ---
 
-<Layout title={t("pt", "meta.about_title")} description={t("pt", "meta.about_description")} ogType="profile">
+<Layout title={t("pt", "meta.about_title")} description={t("pt", "meta.about_description")} ogType="profile" hideHeader>
   <AboutPage posts={posts} contributions={result.ok ? result.calendar : null} client:load />
 </Layout>
