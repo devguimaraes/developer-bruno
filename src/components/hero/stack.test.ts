@@ -10,6 +10,7 @@ import {
   layerFloat,
   layerHeights,
   layoutScale,
+  mobileShortfall,
   MOBILE_STACK,
   makeCamera,
   pointerOpen,
@@ -27,8 +28,8 @@ import {
 
 const W = 1440;
 const H = 900;
-const origin = stackOrigin(DESKTOP_STACK, W, H);
-const scale = layoutScale(DESKTOP_STACK, W);
+const origin = stackOrigin(DESKTOP_STACK, W, H, H);
+const scale = layoutScale(DESKTOP_STACK, W, 844);
 const cam = makeCamera(DESKTOP_STACK, origin, scale, 0, 0, 0);
 const zsClosed = layerHeights(DESKTOP_STACK, [0, 0, 0, 0], [0, 0, 0, 0]);
 
@@ -48,31 +49,57 @@ describe("configs e escala", () => {
   });
 
   it("layoutScale do desktop limita em 1 e do mobile em 1.15", () => {
-    expect(layoutScale(DESKTOP_STACK, 720)).toBeCloseTo(0.5);
-    expect(layoutScale(DESKTOP_STACK, 1920)).toBe(1);
-    expect(layoutScale(MOBILE_STACK, 195)).toBeCloseTo(0.5);
-    expect(layoutScale(MOBILE_STACK, 390)).toBe(1);
-    expect(layoutScale(MOBILE_STACK, 1000)).toBe(1.15);
+    expect(layoutScale(DESKTOP_STACK, 720, 844)).toBeCloseTo(0.5);
+    expect(layoutScale(DESKTOP_STACK, 1920, 844)).toBe(1);
+    expect(layoutScale(MOBILE_STACK, 195, 844)).toBeCloseTo(0.5);
+    expect(layoutScale(MOBILE_STACK, 390, 844)).toBe(1);
+    expect(layoutScale(MOBILE_STACK, 1000, 844)).toBe(1.15);
   });
 
   it("stackOrigin no desktop segue a escala do layout", () => {
-    const full = stackOrigin(DESKTOP_STACK, 1440, 900);
+    const full = stackOrigin(DESKTOP_STACK, 1440, 900, 900);
     expect(full.x).toBeCloseTo(990);
     expect(full.y).toBeCloseTo(621);
 
-    const half = stackOrigin(DESKTOP_STACK, 720, 500);
+    const half = stackOrigin(DESKTOP_STACK, 720, 500, 500);
     expect(half.x).toBeCloseTo(495);
     expect(half.y).toBeCloseTo(345);
   });
 
   it("stackOrigin no mobile fica em y 452 e recua 65px pela escala", () => {
-    const full = stackOrigin(MOBILE_STACK, 390, 844);
+    const full = stackOrigin(MOBILE_STACK, 390, 844, 844);
     expect(full.x).toBeCloseTo(130);
     expect(full.y).toBe(452);
 
-    const small = stackOrigin(MOBILE_STACK, 195, 844);
+    const small = stackOrigin(MOBILE_STACK, 195, 844, 844);
     expect(small.x).toBeCloseTo(65);
     expect(small.y).toBe(452);
+  });
+
+  it("mobileShortfall mede o que falta até a prancha de 844 px, até 244", () => {
+    expect(mobileShortfall(915)).toBe(0);
+    expect(mobileShortfall(844)).toBe(0);
+    expect(mobileShortfall(667)).toBe(177);
+    expect(mobileShortfall(500)).toBe(244);
+  });
+
+  it("no celular baixo a pilha sobe e encolhe; até 60 px a menos fica igual (#125)", () => {
+    expect(stackOrigin(MOBILE_STACK, 390, 900, 784)).toEqual(
+      stackOrigin(MOBILE_STACK, 390, 900, 844)
+    );
+    expect(layoutScale(MOBILE_STACK, 390, 784)).toBe(1);
+
+    const low = stackOrigin(MOBILE_STACK, 375, 760, 667);
+    expect(low.y).toBeCloseTo(452 - 0.66 * 117);
+    expect(layoutScale(MOBILE_STACK, 375, 667)).toBeCloseTo((375 / 390) * (1 - 0.0015 * 117));
+    expect(stackOrigin(MOBILE_STACK, 375, 760, 640).y).toBeLessThan(low.y);
+  });
+
+  it("a altura visível não mexe no desktop", () => {
+    expect(stackOrigin(DESKTOP_STACK, 1440, 900, 600)).toEqual(
+      stackOrigin(DESKTOP_STACK, 1440, 900, 900)
+    );
+    expect(layoutScale(DESKTOP_STACK, 1440, 600)).toBe(1);
   });
 });
 

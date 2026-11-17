@@ -81,19 +81,49 @@ function clamp01(v: number): number {
   return Math.max(0, Math.min(1, v));
 }
 
-/** Escala do layout pela largura do palco: desktop min(1, W/1440); mobile min(1.15, W/390). */
-export function layoutScale(cfg: StackConfig, W: number): number {
-  return cfg.mobile ? Math.min(1.15, W / 390) : Math.min(1, W / 1440);
+/** Altura da prancha do celular. */
+const MOBILE_BOARD_H = 844;
+/** Até onde a conta vai: uma tela de 600 px. Espelhado em --hb-short no giro-hero.css. */
+const MOBILE_MAX_SHORTFALL = 244;
+/**
+ * Até 60 px a menos o texto de baixo quase não sobe e a pilha fica onde está. Dali em diante
+ * ela sobe e encolhe por px que falta, medido em 375 x 667 e 360 x 640.
+ */
+const MOBILE_FIT_START = 60;
+const MOBILE_SHRINK_PER_PX = 0.0015;
+const MOBILE_LIFT_PER_PX = 0.66;
+
+/**
+ * Quanto a tela do celular é mais baixa que a prancha, de 0 a 244 px (tela de 600 px).
+ * viewH é a altura visível com a barra do navegador aberta (documentElement.clientHeight),
+ * a mesma que o CSS lê em 100svh.
+ */
+export function mobileShortfall(viewH: number): number {
+  return Math.max(0, Math.min(MOBILE_MAX_SHORTFALL, MOBILE_BOARD_H - viewH));
+}
+
+function mobileFitPx(viewH: number): number {
+  return Math.max(0, mobileShortfall(viewH) - MOBILE_FIT_START);
+}
+
+/**
+ * Escala do layout: desktop min(1, W/1440); mobile min(1.15, W/390), encolhida em telas mais
+ * baixas que a prancha para a pilha caber entre o título e o texto de baixo.
+ */
+export function layoutScale(cfg: StackConfig, W: number, viewH: number): number {
+  if (!cfg.mobile) return Math.min(1, W / 1440);
+  return Math.min(1.15, W / 390) * (1 - MOBILE_SHRINK_PER_PX * mobileFitPx(viewH));
 }
 
 /**
  * Origem da cena no palco. Desvio da prancha: a origem do desktop escala o recuo de 270px
- * pela escala do layout, como pede a API. A prancha usava 270 fixo.
+ * pela escala do layout, como pede a API. A prancha usava 270 fixo. No celular a origem sobe
+ * em telas mais baixas que a prancha, junto com o texto de baixo da hero.
  */
-export function stackOrigin(cfg: StackConfig, W: number, H: number): Point {
-  const sc = layoutScale(cfg, W);
+export function stackOrigin(cfg: StackConfig, W: number, H: number, viewH: number): Point {
+  const sc = layoutScale(cfg, W, viewH);
   if (cfg.mobile) {
-    return { x: W / 2 - 65 * sc, y: 452 };
+    return { x: W / 2 - 65 * sc, y: 452 - MOBILE_LIFT_PER_PX * mobileFitPx(viewH) };
   }
   return { x: W / 2 + 270 * sc, y: H * 0.69 };
 }

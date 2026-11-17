@@ -143,20 +143,39 @@
   }
 }
 
-/* Celular baixo (com a barra do navegador visível): a prancha tem 804 px e os botões caíam atrás
-   do trilho. Texto e botões encolhem um pouco e o bloco sobe até ficar 12 px acima do trilho,
-   sem passar de 484 px, onde começaria a cobrir a pilha. */
-@media (max-width: 767px) and (max-height: 803px) {
-  .hb .hb-foot {
-    top: max(484px, calc(100svh - 254px));
-    gap: 10px;
-  }
-  .hb .hb-lede {
-    font-size: 16px;
-    line-height: 1.4;
-  }
-  .hb .hb-ctas .g-button {
-    --b-h: 44px;
+/* Celular mais baixo que a prancha (844 px). --hb-short é o que falta de altura, até 244 px, a
+   mesma conta de mobileShortfall em stack.ts. Título e texto encolhem, o texto de baixo fica
+   12 px acima do trilho e o runtime sobe e encolhe a pilha para caber entre os dois. A hero
+   tem no mínimo 760 px, então o texto se ancora na tela visível, não no fim da hero. */
+@supports (height: 100svh) {
+  @media (max-width: 767px) and (max-height: 843px) {
+    .hb {
+      --hb-short: clamp(0px, 844px - 100svh, 244px);
+    }
+    .hb .hb-copy {
+      top: calc(92px - var(--hb-short) * 0.08);
+    }
+    .hb .hb-title {
+      font-size: calc(54px - var(--hb-short) * 0.04);
+    }
+    .hb .hb-foot {
+      top: auto;
+      /* Piso = topo do trilho (--dock-h + --dock-inset) + 12 px de folga. Sem safe-area
+         isso é 82 px; com home indicator o inset sobe e os CTAs sobem junto. */
+      bottom: calc(
+        max(100svh, 760px) -
+        100svh +
+        max(calc(var(--dock-h) + var(--dock-inset) + 12px), 128px - var(--hb-short))
+      );
+      gap: calc(18px - var(--hb-short) * 0.05);
+    }
+    .hb .hb-lede {
+      font-size: calc(16px - var(--hb-short) * 0.006);
+      line-height: 1.4;
+    }
+    .hb .hb-ctas .g-button {
+      --b-h: max(44px, calc(48px - var(--hb-short) * 0.025));
+    }
   }
 }
 
@@ -1292,5 +1311,22 @@ section.hb [data-iso] {
   section.hb [data-iso] {
     --ox: calc(50% - 65px);
     --oy: 452px;
+  }
+}
+/* Celular baixo: degraus de mobileFitPx (stack.ts) pelo meio de cada faixa, 742 e 667 px. */
+@media (max-width: 768px) and (max-height: 783px) {
+  section.hb {
+    --k: 0.47;
+  }
+  section.hb [data-iso] {
+    --oy: 424px;
+  }
+}
+@media (max-width: 768px) and (max-height: 700px) {
+  section.hb {
+    --k: 0.41;
+  }
+  section.hb [data-iso] {
+    --oy: 375px;
   }
 }

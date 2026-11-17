@@ -50,7 +50,7 @@ describe("lay-down pure logic", () => {
       const W = 1440;
       const H = 900;
       const cfg = DESKTOP_STACK;
-      const state = computeLayDown({ u: 0, cfg, W, H });
+      const state = computeLayDown({ u: 0, cfg, W, H, viewH: H });
 
       // Câmera sem rotação e no centro da tela
       expect(state.camera.tilt).toBe(0);
@@ -60,7 +60,7 @@ describe("lay-down pure logic", () => {
       expect(state.camera.cx).toBe(W / 2);
       expect(state.camera.cy).toBe(H / 2);
 
-      const k = cfg.k * layoutScale(cfg, W);
+      const k = cfg.k * layoutScale(cfg, W, H);
       expect(state.camera.k).toBeCloseTo(k);
       expect(state.camera.transform).toContain("rotateX(0.000deg) rotateZ(0.000deg)");
 
@@ -99,7 +99,7 @@ describe("lay-down pure logic", () => {
       const W = 390;
       const H = 844;
       const cfg = MOBILE_STACK;
-      const state = computeLayDown({ u: 0, cfg, W, H });
+      const state = computeLayDown({ u: 0, cfg, W, H, viewH: H });
 
       expect(state.camera.tilt).toBe(0);
       expect(state.camera.rxDeg).toBe(0);
@@ -107,7 +107,7 @@ describe("lay-down pure logic", () => {
       expect(state.camera.cx).toBe(W / 2);
       expect(state.camera.cy).toBe(H / 2);
 
-      const k = cfg.k * layoutScale(cfg, W);
+      const k = cfg.k * layoutScale(cfg, W, H);
       expect(state.camera.k).toBeCloseTo(k);
 
       for (const plate of state.plates) {
@@ -125,8 +125,8 @@ describe("lay-down pure logic", () => {
       const W = 1440;
       const H = 900;
       const cfg = DESKTOP_STACK;
-      const origin = stackOrigin(cfg, W, H);
-      const state = computeLayDown({ u: 1, cfg, W, H });
+      const origin = stackOrigin(cfg, W, H, H);
+      const state = computeLayDown({ u: 1, cfg, W, H, viewH: H });
 
       // Câmera pousou na rotação isométrica da hero (60deg, -45deg) e na origem
       expect(state.camera.tilt).toBe(1);
@@ -170,8 +170,8 @@ describe("lay-down pure logic", () => {
       const W = 390;
       const H = 844;
       const cfg = MOBILE_STACK;
-      const origin = stackOrigin(cfg, W, H);
-      const state = computeLayDown({ u: 1, cfg, W, H });
+      const origin = stackOrigin(cfg, W, H, H);
+      const state = computeLayDown({ u: 1, cfg, W, H, viewH: H });
 
       expect(state.camera.tilt).toBe(1);
       expect(state.camera.rxDeg).toBeCloseTo(60);
@@ -201,8 +201,8 @@ describe("lay-down pure logic", () => {
       const H = 900;
       const cfg = DESKTOP_STACK;
 
-      const midState = computeLayDown({ u: 0.5, cfg, W, H });
-      const endState = computeLayDown({ u: 1, cfg, W, H });
+      const midState = computeLayDown({ u: 0.5, cfg, W, H, viewH: H });
+      const endState = computeLayDown({ u: 1, cfg, W, H, viewH: H });
 
       expect(midState.camera.spread).toBeGreaterThan(0);
       // Na placa 2, o Z no ar com spread deve ser maior do que assentado

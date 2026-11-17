@@ -303,8 +303,9 @@ function createRuntime(
   const layout = (scroll: number): void => {
     const W = stage.clientWidth;
     const H = stage.clientHeight;
-    scale = layoutScale(cfg, W);
-    origin = stackOrigin(cfg, W, H);
+    const viewH = document.documentElement.clientHeight;
+    scale = layoutScale(cfg, W, viewH);
+    origin = stackOrigin(cfg, W, H, viewH);
     for (const n of isoEls) {
       n.style.setProperty("--ox", `${origin.x.toFixed(1)}px`);
       n.style.setProperty("--oy", `${origin.y.toFixed(1)}px`);

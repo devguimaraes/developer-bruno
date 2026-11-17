@@ -234,7 +234,9 @@ export function LoadingScreen() {
     }
     const heroEl = document.querySelector("section.hb");
     const stageTop = heroEl ? heroEl.getBoundingClientRect().top : 0;
-    const initialOrigin = stackOrigin(cfg, W, H);
+    // A mesma altura visível que a hero lê, para a pilha pousar onde a hero vai mantê-la.
+    const viewH = document.documentElement.clientHeight;
+    const initialOrigin = stackOrigin(cfg, W, H, viewH);
     const tagEl = platesRef.current[0]?.querySelector<HTMLElement>(".g-loader-pl__tag");
     const fontBody = tagEl ? parseFloat(getComputedStyle(tagEl).fontSize) || 20 : 20;
 
@@ -243,6 +245,7 @@ export function LoadingScreen() {
       cfg,
       W,
       H,
+      viewH,
       origin: initialOrigin,
       stageTop,
       fontBody,
@@ -398,7 +401,8 @@ export function LoadingScreen() {
     const stageTop = heroEl ? heroEl.getBoundingClientRect().top : 0;
     const W = window.innerWidth;
     const H = window.innerHeight;
-    const origin = stackOrigin(cfg, W, H);
+    const viewH = document.documentElement.clientHeight;
+    const origin = stackOrigin(cfg, W, H, viewH);
     const tagEl = platesRef.current[0]?.querySelector<HTMLElement>(".g-loader-pl__tag");
     const fontBody = tagEl ? parseFloat(getComputedStyle(tagEl).fontSize) || 20 : 20;
 
@@ -416,6 +420,7 @@ export function LoadingScreen() {
         cfg,
         W,
         H,
+        viewH,
         origin,
         stageTop,
         fontBody,
@@ -442,6 +447,7 @@ export function LoadingScreen() {
         cfg,
         W,
         H,
+        viewH,
         origin,
         stageTop,
         fontBody,
