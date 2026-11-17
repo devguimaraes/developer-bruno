@@ -40,6 +40,11 @@ const FLIGHT_ZETA = 0.82;
 /** Flutuação em repouso, em px na escala 1, e o período dela em ms. */
 const BOB_AMP = 2;
 const BOB_PERIOD = 2800;
+const MOBILE_BREAKPOINT = 768;
+/** Tempo parado no celular antes do Giro voltar para o menu inferior. */
+const MOBILE_IDLE_MS = 4000;
+const DOCK_SIZE = 54;
+const DOCK_FALLBACK_BOTTOM = 44;
 
 export interface HomeGiroProps {
   /** Lista customizada de capítulos para testes ou injeção; padrão: seções provisórias do DOM */
@@ -118,7 +123,11 @@ export const HomeGiro: FC<HomeGiroProps> = ({
       timersRef.current = [];
     };
 
-    setGiroOnStage(true);
+    const isMobileViewport = () => window.innerWidth < MOBILE_BREAKPOINT;
+
+    if (!isMobileViewport()) {
+      setGiroOnStage(true);
+    }
 
     const actor = actorRef.current;
     const actorIn = actorInRef.current;
@@ -127,6 +136,23 @@ export const HomeGiro: FC<HomeGiroProps> = ({
     let cancelled = false;
     let rafId: number;
     let chapters: Chapter[] = customChapters ? [...customChapters] : [];
+    let lastScrollAt = performance.now();
+    let dockReturn = false;
+    let dockIdle = false;
+
+    const dockTarget = () => {
+      const ring = document.querySelector<HTMLElement>(".g-dock__ring");
+      if (ring) {
+        const r = ring.getBoundingClientRect();
+        if (r.width > 0) return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+      }
+      return { x: window.innerWidth / 2, y: window.innerHeight - DOCK_FALLBACK_BOTTOM };
+    };
+
+    const dockSurface = (): SurfaceClass => {
+      const dock = document.querySelector<HTMLElement>(".g-dock");
+      return dock?.getAttribute("data-tone") === "dark" ? "g-tinta" : "g-papel";
+    };
 
     const updateChapters = () => {
       if (!customChapters) {
@@ -232,11 +258,12 @@ export const HomeGiro: FC<HomeGiroProps> = ({
     const go = (d: ChapterStep) => {
       const n = findStop(d.stop);
       if (!n) return;
+      const hidden = d.hidden === true;
       // Assume o Giro só depois de achar a parada: sem ela, o da hero continua visível.
-      setHand(d.hidden !== true);
+      setHand(!hidden);
 
       const surfCls = d.surface ?? detectSurface(n);
-      const isMobile = window.innerWidth < 768;
+      const isMobile = isMobileViewport();
       const targetSize = readStopSize(n, isMobile);
       A.kT = calcTargetScale(targetSize);
       A.next = { cls: surfCls, st: d.state, step: d };
@@ -245,12 +272,14 @@ export const HomeGiro: FC<HomeGiroProps> = ({
       A.tg = n;
 
       const p = pos(n);
-      const hidden = d.hidden === true;
-      actor.toggleAttribute("data-hidden", hidden);
+      dockReturn = false;
       if (!sameStop) setLandedStop(null);
       if (hidden) {
-        // Escondido, o Giro só acompanha a parada, sem voar nem pousar: quem aparece é o da hero.
         setLandedStop(null);
+        dockIdle = false;
+        if (isMobile) setGiroOnStage(false);
+        actor.toggleAttribute("data-hidden", true);
+        // Escondido, o Giro só acompanha a parada, sem voar nem pousar: quem aparece é o da hero.
         A.fl = null;
         place(p);
         clearTimers();
@@ -258,6 +287,18 @@ export const HomeGiro: FC<HomeGiroProps> = ({
         setGiroState(d.state);
         return;
       }
+      if (dockIdle) {
+        dockIdle = false;
+        const fromDock = dockTarget();
+        A.px = { x: fromDock.x, v: 0 };
+        A.py = { x: fromDock.y, v: 0 };
+        A.k = calcTargetScale(DOCK_SIZE);
+        A.lift = 0;
+        A.carry = 0;
+        A.placed = true;
+      }
+      setGiroOnStage(true);
+      actor.toggleAttribute("data-hidden", false);
       if (!A.placed) {
         place(p);
         land();
@@ -338,16 +379,58 @@ export const HomeGiro: FC<HomeGiroProps> = ({
     const frame = (now: number) => {
       if (cancelled) return;
 
+      const isMobile = isMobileViewport();
+      if (!isMobile && (dockIdle || dockReturn)) {
+        dockIdle = false;
+        dockReturn = false;
+        A.fl = null;
+        A.lift = 0;
+        if (A.next && !A.next.step.hidden) {
+          actor.removeAttribute("data-hidden");
+          setGiroOnStage(true);
+          key = "";
+        }
+      }
+
       story();
 
       const dt = A.last === 0 ? 1 / 60 : Math.min(MAX_FRAME, Math.max(0, (now - A.last) / 1000));
       A.last = now;
 
+      if (
+        isMobile &&
+        !dockIdle &&
+        !dockReturn &&
+        !A.fl &&
+        A.placed &&
+        A.next &&
+        !A.next.step.hidden &&
+        now - lastScrollAt >= MOBILE_IDLE_MS
+      ) {
+        const dest = dockTarget();
+        const dist = Math.hypot(dest.x - A.px.x, dest.y - A.py.x);
+        dockReturn = true;
+        A.seen = null;
+        A.kT = calcTargetScale(DOCK_SIZE);
+        A.rollT += calcJumpSpin(dist) * Math.sign(dest.x - A.px.x || 1);
+        A.fl = {
+          t0: now,
+          T: calcJumpDuration(dist),
+          h: calcJumpArcHeight(dist, true),
+          dressed: false,
+        };
+        clearTimers();
+        setGiroState("idle");
+        kick("is-leap");
+      }
+
       // Parada fora do DOM (capítulo remontado) mede 0,0: o Giro espera onde está.
-      if (A.tg?.isConnected) {
-        const isMobile = window.innerWidth < 768;
-        A.kT = calcTargetScale(readStopSize(A.tg, isMobile));
-        const t = pos(A.tg);
+      const targetPos = dockReturn ? dockTarget() : A.tg?.isConnected ? pos(A.tg) : null;
+      if (!dockIdle && targetPos) {
+        A.kT = dockReturn
+          ? calcTargetScale(DOCK_SIZE)
+          : calcTargetScale(readStopSize(A.tg as HTMLElement, isMobile));
+        const t = targetPos;
         const liftBefore = A.lift + A.carry;
         let omega = GROUND_OMEGA;
         let zeta = GROUND_ZETA;
@@ -361,14 +444,22 @@ export const HomeGiro: FC<HomeGiroProps> = ({
 
           // No meio do voo o Giro já veste a superfície de destino: a cor troca no ar, com
           // transição, em vez de pousar com o miolo da superfície de onde saiu.
-          if (!f.dressed && u >= 0.5 && A.next) {
+          if (!f.dressed && u >= 0.5) {
             f.dressed = true;
-            dress(A.next.cls);
+            if (dockReturn) dress(dockSurface());
+            else if (A.next) dress(A.next.cls);
           }
           if (u >= 1) {
             A.fl = null;
             A.lift = 0;
-            land();
+            if (dockReturn) {
+              dockReturn = false;
+              dockIdle = true;
+              actor.setAttribute("data-hidden", "");
+              setGiroOnStage(false);
+            } else {
+              land();
+            }
           }
         }
 
@@ -407,6 +498,16 @@ export const HomeGiro: FC<HomeGiroProps> = ({
       rafId = requestAnimationFrame(frame);
     };
 
+    const onScroll = () => {
+      lastScrollAt = performance.now();
+      if (!isMobileViewport()) return;
+      if (dockReturn || dockIdle) {
+        dockReturn = false;
+        // Reavalia a parada atual para saltar de volta à página mesmo sem trocar de capítulo.
+        key = "";
+      }
+    };
+
     let resizeTimer: ReturnType<typeof setTimeout> | null = null;
     const onResize = () => {
       if (resizeTimer) clearTimeout(resizeTimer);
@@ -424,10 +525,12 @@ export const HomeGiro: FC<HomeGiroProps> = ({
         cancelAnimationFrame(rafId);
       } else if (!isRunning) {
         isRunning = true;
+        if (!dockIdle) lastScrollAt = performance.now();
         rafId = requestAnimationFrame(frame);
       }
     };
 
+    window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize);
     document.addEventListener("visibilitychange", onVisibilityChange);
 
@@ -443,6 +546,7 @@ export const HomeGiro: FC<HomeGiroProps> = ({
       clearTimers();
       if (resizeTimer) clearTimeout(resizeTimer);
       cancelAnimationFrame(rafId);
+      window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
       document.removeEventListener("visibilitychange", onVisibilityChange);
     };

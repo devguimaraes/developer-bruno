@@ -359,6 +359,77 @@ describe("HomeGiro component", () => {
       unmount();
       expect(document.documentElement.hasAttribute("data-giro-hand")).toBe(false);
     });
+
+    it("no celular, volta para o menu ao parar de rolar e retorna à página ao rolar de novo", () => {
+      vi.spyOn(reducedMotionHook, "useReducedMotion").mockReturnValue(false);
+      const origWidth = window.innerWidth;
+      Object.defineProperty(window, "innerWidth", { configurable: true, value: 390 });
+
+      try {
+        const stop = document.createElement("div");
+        stop.dataset.stop = "s1";
+        stop.className = "g-azul";
+        stop.getBoundingClientRect = rectAt(150, 200);
+        document.body.appendChild(stop);
+
+        const chapter: Chapter = createChapter({
+          id: "ch",
+          label: "ch",
+          top: 0,
+          len: 1000,
+          surface: "azul",
+          at: () => ({ k: "s1", stop: "s1", state: "curious" }),
+        });
+
+        let now = 1000;
+        vi.spyOn(performance, "now").mockImplementation(() => now);
+        let raf: FrameRequestCallback | null = null;
+        vi.spyOn(window, "requestAnimationFrame").mockImplementation(cb => {
+          raf = cb;
+          return 1;
+        });
+
+        const { container } = render(<HomeGiro chapters={[chapter]} />);
+        const actor = container.querySelector<HTMLElement>(".hs-actor");
+
+        expect(getGiroOnStage()).toBe(true);
+        expect(actor?.hasAttribute("data-hidden")).toBe(false);
+
+        // Antes de 4000 ms sem rolar, o Giro ainda permanece na cena.
+        now = 4500;
+        act(() => {
+          raf?.(now);
+        });
+        expect(getGiroOnStage()).toBe(true);
+        expect(actor?.hasAttribute("data-hidden")).toBe(false);
+
+        // Passa 4000 ms sem rolar: inicia o salto de retorno ao trilho e depois desliga onStage.
+        now = 5100;
+        act(() => {
+          raf?.(now);
+        });
+        expect(getGiroOnStage()).toBe(true);
+
+        // Conclui o voo de retorno.
+        now = 6500;
+        act(() => {
+          raf?.(now);
+        });
+        expect(getGiroOnStage()).toBe(false);
+        expect(actor?.hasAttribute("data-hidden")).toBe(true);
+        expect(document.documentElement.getAttribute("data-giro-hand")).toBe("story");
+
+        // Ao rolar de novo, volta para a cena.
+        act(() => {
+          window.dispatchEvent(new Event("scroll"));
+          raf?.(now + 16);
+        });
+        expect(getGiroOnStage()).toBe(true);
+        expect(actor?.hasAttribute("data-hidden")).toBe(false);
+      } finally {
+        Object.defineProperty(window, "innerWidth", { configurable: true, value: origWidth });
+      }
+    });
   });
 
   it("na mesma parada, passo com hop: true aplica is-hop; sem hop, fica quieto", () => {
