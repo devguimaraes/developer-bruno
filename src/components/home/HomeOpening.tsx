@@ -131,8 +131,9 @@ export function HomeOpening() {
       const W = hero.clientWidth;
       const H = hero.clientHeight;
       const cfg = window.matchMedia(DESKTOP_QUERY).matches ? DESKTOP_STACK : MOBILE_STACK;
-      const origin = stackOrigin(cfg, W, H);
-      const k0 = cfg.k * layoutScale(cfg, W);
+      const viewH = document.documentElement.clientHeight;
+      const origin = stackOrigin(cfg, W, H, viewH);
+      const k0 = cfg.k * layoutScale(cfg, W, viewH);
       const rest = layerHeights(cfg, [0, 0, 0, 0], [0, 0, 0, 0]);
 
       const cx = demoBox.offsetLeft + demoBox.offsetWidth / 2;

@@ -53,6 +53,8 @@ export interface LayDownParams {
   cfg: StackConfig;
   W: number;
   H: number;
+  /** Altura visível que a hero usa para encolher a pilha (documentElement.clientHeight). */
+  viewH: number;
   origin?: Point;
   stageTop?: number;
   fontBody?: number;
@@ -101,6 +103,7 @@ export function computeLayDown({
   cfg,
   W,
   H,
+  viewH,
   origin,
   stageTop = 0,
   fontBody = 20,
@@ -113,8 +116,8 @@ export function computeLayDown({
   const shrink = c(clamp01((u - 0.03) / 0.6));
   const spread = c(clamp01((u - 0.08) / 0.5));
 
-  const k = cfg.k * layoutScale(cfg, W);
-  const targetOrigin = origin ?? stackOrigin(cfg, W, H);
+  const k = cfg.k * layoutScale(cfg, W, viewH);
+  const targetOrigin = origin ?? stackOrigin(cfg, W, H, viewH);
   const ox = targetOrigin.x;
   const oy = targetOrigin.y + stageTop;
 
