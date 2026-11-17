@@ -50,7 +50,14 @@ gha-creds-*.json
 
 .pi/
 
-# Design sync build artifacts
-.design-sync/compiled.css
+# Build artifacts
 ds-bundle/
 brand-kit/
+
+.claude/
+C:*
+**/lighthouse.*
+
+# Local tooling output
+.playwright-mcp/
+__pycache__/

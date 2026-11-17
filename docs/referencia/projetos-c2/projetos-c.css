@@ -1,0 +1,456 @@
+/* Versão C: troca de cor do loader. Cada case é uma faixa com a superfície dele.
+   Ao carregar, um disco lima e logo atrás o disco da cor nova saem do Giro (no centro da capa),
+   como em giro-loader.css: 520 ms, a mesma curva, o mesmo centro. O texto troca de cor
+   exatamente na borda do disco porque existe uma cópia recortada (.vc-ink) por cima.
+   Lima só passa no disco: nunca fica como fundo (regra do DS). */
+
+.pj-wrap.vc-top {
+  padding-bottom: 96px;
+}
+
+.vc-top .pj-head {
+  margin-bottom: 0;
+}
+
+.pj-wrap.vc-bottom {
+  padding-top: 96px;
+}
+
+.vc-bottom .pj-others {
+  margin-top: 0;
+}
+
+/* ---------- Faixa ---------- */
+
+.vc-band,
+.vc-ink {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  grid-template-rows: 1fr auto auto 1fr;
+  grid-template-areas:
+    ". cover"
+    "head cover"
+    "body cover"
+    ". cover";
+  column-gap: 64px;
+  padding: 96px var(--pad-x);
+}
+
+.vc-band {
+  --ease-wash: cubic-bezier(0.42, 0, 0.58, 1);
+  --pad-x: max(64px, calc((100% - 1312px) / 2));
+  /* Centro do disco e raio. O script mede a capa; estes valores valem para 1440 px. */
+  --ox: 1012px;
+  --oy: 400px;
+  --r: 1140px;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 800px;
+}
+
+.vc-band--azul {
+  --sel: var(--lima);
+  --sel-ink: var(--tinta);
+}
+
+.vc-band--papel {
+  --sel: var(--azul-sinal);
+  --sel-ink: var(--papel);
+}
+
+.vc-band--tinta {
+  --sel: var(--lima);
+  --sel-ink: var(--tinta);
+}
+
+.vc-disk {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  clip-path: circle(0px at var(--ox) var(--oy));
+  transition: clip-path 520ms var(--ease-wash);
+}
+
+.vc-disk--lima {
+  background: var(--lima);
+  transition-delay: 140ms;
+}
+
+.vc-band.is-painted .vc-disk {
+  clip-path: circle(var(--r) at var(--ox) var(--oy));
+}
+
+.vc-band.is-painted .vc-disk--lima {
+  transition-delay: 0ms;
+}
+
+.vc-band.is-painted .vc-disk--to {
+  transition-delay: 180ms;
+}
+
+/* Cópia do texto na cor nova, recortada pelo mesmo círculo do disco. */
+.vc-ink {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  clip-path: circle(0px at var(--ox) var(--oy));
+  transition: clip-path 520ms var(--ease-wash);
+}
+
+.vc-band.is-painted .vc-ink {
+  clip-path: circle(var(--r) at var(--ox) var(--oy));
+  transition-delay: 180ms;
+}
+
+.vc-band.is-settled .vc-ink {
+  visibility: hidden;
+}
+
+.vc-band .vc-head,
+.vc-band .vc-body,
+.vc-band .vc-ink {
+  background: transparent;
+}
+
+.vc-slot {
+  grid-area: cover;
+  align-self: center;
+  aspect-ratio: 16 / 10;
+}
+
+/* ---------- Texto ---------- */
+
+.vc-head {
+  grid-area: head;
+  align-self: end;
+  padding-bottom: 28px;
+}
+
+.vc-body {
+  grid-area: body;
+  align-self: start;
+}
+
+.vc-label {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin: 0 0 18px;
+  font: var(--text-rotulo);
+  color: var(--s-muted);
+}
+
+.vc-label__n {
+  color: var(--s-signal);
+}
+
+.vc-label__txt {
+  display: inline-block;
+  overflow: hidden;
+  width: calc(var(--n) * 1ch);
+  max-width: 100%;
+  white-space: nowrap;
+}
+
+.vc-title {
+  margin: 0;
+  font: 900 72px/0.95 var(--font-sans);
+  font-stretch: 110%;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.vc-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* O título é o link e o ::after cobre a faixa inteira, capa incluída. */
+.vc-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+}
+
+.vc-link:focus-visible {
+  outline: none;
+}
+
+.vc-link:focus-visible::after {
+  outline: 2px solid var(--s-focus);
+  outline-offset: -16px;
+  border-radius: 16px;
+}
+
+.vc-summary {
+  max-width: 30em;
+  margin: 0 0 24px;
+  font: 450 19px/1.5 var(--font-sans);
+}
+
+.vc-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 32px;
+  padding: 0;
+  list-style: none;
+}
+
+.vc-band:hover .vc-cta {
+  transform: translateY(-2px);
+}
+
+.vc-band:hover .vc-cta .g-button__arrow {
+  translate: 3px 0;
+}
+
+/* A linha do rótulo é digitada quando a cor chega, como as linhas do loader. */
+.vc-band.is-typing .vc-label__txt {
+  animation: vc-type 620ms steps(var(--n), end) 180ms both;
+}
+
+@keyframes vc-type {
+  from {
+    width: 0;
+  }
+  to {
+    width: calc(var(--n) * 1ch);
+  }
+}
+
+/* ---------- Capa: o Giro carrega no centro e vira selo no canto ---------- */
+
+.vc-cover {
+  position: relative;
+  z-index: 2;
+  grid-area: cover;
+  align-self: center;
+  aspect-ratio: 16 / 10;
+}
+
+.vc-cover__frame {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+}
+
+.vc-cover__img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 0;
+  opacity: 0;
+  transform: scale(1.04);
+  transition:
+    opacity 400ms linear,
+    transform 900ms var(--ease-resolve);
+}
+
+.vc-cover.is-loaded .vc-cover__img {
+  opacity: 1;
+  transform: none;
+}
+
+.vc-cover__giro {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 96px;
+  height: 96px;
+  margin: -48px 0 0 -48px;
+  border-radius: 50%;
+  background: var(--tinta);
+  font-size: 72px;
+  line-height: 0;
+  transition-property: top, left, width, height, margin, font-size;
+  transition-duration: 780ms;
+  transition-timing-function: var(--ease-resolve);
+}
+
+.vc-cover.is-loaded .vc-cover__giro {
+  top: calc(100% - 44px);
+  left: calc(100% - 44px);
+  width: 56px;
+  height: 56px;
+  margin: -28px 0 0 -28px;
+  font-size: 36px;
+}
+
+/* Seleção de editor, a mesma do <Giro /> no loader: caixa, alças e etiqueta. */
+.vc-sel {
+  position: absolute;
+  inset: -10px;
+  z-index: 2;
+  border: 2px solid var(--sel);
+  opacity: 0;
+  transform: scale(1.04);
+  pointer-events: none;
+  transition:
+    opacity 180ms linear,
+    transform 330ms var(--ease-resolve);
+}
+
+.vc-sel__hd {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--sel);
+  background: var(--papel);
+  transform: scale(0);
+  transition: transform 360ms var(--ease-hop);
+}
+
+.vc-sel__hd--tl {
+  top: -7px;
+  left: -7px;
+}
+
+.vc-sel__hd--tr {
+  top: -7px;
+  right: -7px;
+  transition-delay: 45ms;
+}
+
+.vc-sel__hd--bl {
+  bottom: -7px;
+  left: -7px;
+  transition-delay: 90ms;
+}
+
+.vc-sel__hd--br {
+  right: -7px;
+  bottom: -7px;
+  transition-delay: 135ms;
+}
+
+.vc-sel__tag {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: -2px;
+  padding: 4px 10px;
+  background: var(--sel);
+  color: var(--sel-ink);
+  font: var(--text-micro);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 200ms linear 90ms,
+    transform 330ms var(--ease-resolve) 90ms;
+}
+
+.vc-cover.is-selected .vc-sel,
+.vc-band:hover .vc-sel {
+  opacity: 1;
+  transform: none;
+}
+
+.vc-cover.is-selected .vc-sel__hd,
+.vc-band:hover .vc-sel__hd {
+  transform: scale(1);
+}
+
+.vc-cover.is-selected .vc-sel__tag,
+.vc-band:hover .vc-sel__tag {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- Celular ---------- */
+
+@container pj (max-width: 760px) {
+  .pj-wrap.vc-top {
+    padding-bottom: 56px;
+  }
+
+  .pj-wrap.vc-bottom {
+    padding-top: 72px;
+  }
+
+  .vc-band,
+  .vc-ink {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+      "head"
+      "cover"
+      "body";
+    padding: 56px 16px 64px;
+  }
+
+  .vc-band {
+    --ox: 195px;
+    --oy: 316px;
+    --r: 530px;
+    min-height: 0;
+  }
+
+  .vc-head {
+    padding-bottom: 24px;
+  }
+
+  .vc-label {
+    margin-bottom: 12px;
+  }
+
+  /* No celular o rótulo quebra linha: sem digitação, ele só aparece. */
+  .vc-label__txt {
+    width: auto;
+    white-space: normal;
+  }
+
+  .vc-band.is-typing .vc-label__txt {
+    animation: none;
+  }
+
+  .vc-title {
+    font-size: 40px;
+    line-height: 1;
+  }
+
+  .vc-cover,
+  .vc-slot {
+    margin-bottom: 28px;
+  }
+
+  .vc-cover__frame {
+    border-radius: var(--radius-md);
+  }
+
+  .vc-cover__giro {
+    width: 80px;
+    height: 80px;
+    margin: -40px 0 0 -40px;
+    font-size: 56px;
+  }
+
+  .vc-cover.is-loaded .vc-cover__giro {
+    top: calc(100% - 34px);
+    left: calc(100% - 34px);
+    width: 44px;
+    height: 44px;
+    margin: -22px 0 0 -22px;
+    font-size: 28px;
+  }
+
+  .vc-summary {
+    margin-bottom: 20px;
+    font-size: 16px;
+    line-height: 1.55;
+  }
+
+  .vc-tags {
+    margin-bottom: 28px;
+  }
+}

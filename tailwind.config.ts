@@ -1,9 +1,8 @@
 import type { Config } from "tailwindcss";
-import tailwindcssAnimate from "tailwindcss-animate";
 
 export default {
   darkMode: ["class"],
-  content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
+  content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{astro,ts,tsx}"],
   prefix: "",
   theme: {
     screens: {
@@ -27,102 +26,64 @@ export default {
     },
     extend: {
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
-        },
-        secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
-        },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
-        },
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
-        },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
-        },
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
-        },
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
-        },
-        // Neo-Brutalist Color Palette
-        brutal: {
-          bg: "#f5f5f4", // stone-100
-          dark: "#1c1917", // stone-900
-          orange: "#f97316", // orange-500
-          blue: "#3b82f6", // blue-500
+        // Identidade Giro: paleta e papéis da superfície ativa (g-papel, g-azul, g-tinta).
+        "azul-sinal": "var(--azul-sinal)",
+        "azul-fundo": "var(--azul-fundo)",
+        lima: "var(--lima)",
+        papel: "var(--papel)",
+        tinta: "var(--tinta)",
+        "tinta-2": "var(--tinta-2)",
+        grafite: "var(--grafite)",
+        "nevoa-azul": "var(--nevoa-azul)",
+        "nevoa-tinta": "var(--nevoa-tinta)",
+        coral: "var(--coral)",
+        "linha-papel": "var(--linha-papel)",
+        "linha-azul": "var(--linha-azul)",
+        s: {
+          bg: "var(--s-bg)",
+          fg: "var(--s-fg)",
+          muted: "var(--s-muted)",
+          line: "var(--s-line)",
+          "line-strong": "var(--s-line-strong)",
+          raised: "var(--s-raised)",
+          signal: "var(--s-signal)",
+          link: "var(--s-link)",
+          accent: "var(--s-accent)",
+          "on-accent": "var(--s-on-accent)",
+          focus: "var(--s-focus)",
+          field: "var(--s-field)",
         },
       },
       fontFamily: {
-        mono: ["JetBrains Mono", "monospace"],
-        sans: ["Satoshi", "system-ui", "sans-serif"],
-        pixel: ["Jersey 15", "monospace"],
+        mono: ["var(--font-mono)"],
+        sans: ["var(--font-sans)"],
       },
-      boxShadow: {
-        brutal: "var(--shadow-brutal)",
-        "brutal-sm": "var(--shadow-brutal-sm)",
-        "brutal-lg": "var(--shadow-brutal-lg)",
+      spacing: {
+        18: "var(--space-18)",
+      },
+      minHeight: {
+        touch: "var(--touch-min)",
+      },
+      minWidth: {
+        touch: "var(--touch-min)",
+      },
+      transitionTimingFunction: {
+        resolve: "var(--ease-resolve)",
+        hop: "var(--ease-hop)",
+      },
+      transitionDuration: {
+        resolve: "var(--dur-resolve)",
+        hop: "var(--dur-hop)",
+        shake: "var(--dur-shake)",
+        spin: "var(--dur-spin)",
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
-      },
-      keyframes: {
-        "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
-        },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
-        },
-        "slide-up": {
-          from: { transform: "translateY(20px)", opacity: "0" },
-          to: { transform: "translateY(0)", opacity: "1" },
-        },
-        "slide-right": {
-          from: { transform: "translateX(-20px)", opacity: "0" },
-          to: { transform: "translateX(0)", opacity: "1" },
-        },
-        "fade-in": {
-          from: { opacity: "0" },
-          to: { opacity: "1" },
-        },
-        "scale-in": {
-          from: { transform: "scale(0.95)", opacity: "0" },
-          to: { transform: "scale(1)", opacity: "1" },
-        },
-        marquee: {
-          from: { transform: "translateX(0)" },
-          to: { transform: "translateX(-50%)" },
-        },
-      },
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
-        "slide-up": "slide-up 0.5s ease-out",
-        "slide-right": "slide-right 0.5s ease-out",
-        "fade-in": "fade-in 0.5s ease-out",
-        "scale-in": "scale-in 0.3s ease-out",
-        marquee: "marquee 30s linear infinite",
+        "g-sm": "var(--radius-sm)",
+        "g-md": "var(--radius-md)",
+        "g-lg": "var(--radius-lg)",
+        pill: "var(--radius-pill)",
       },
     },
   },
-  plugins: [tailwindcssAnimate],
+  plugins: [],
 } satisfies Config;

@@ -1,0 +1,133 @@
+{
+  "sites-completos": {
+    "cssKey": "sites",
+    "loopSeconds": 6.4,
+    "ratio": 1.527,
+    "beats": [
+      {
+        "pct": 0,
+        "label": "Página inicial"
+      },
+      {
+        "pct": 19,
+        "label": "Clica em sobre"
+      },
+      {
+        "pct": 52,
+        "label": "Clica em blog"
+      },
+      {
+        "pct": 85,
+        "label": "Volta ao início"
+      }
+    ]
+  },
+  "landing-pages": {
+    "cssKey": "landing",
+    "loopSeconds": 5.6,
+    "ratio": 1.528,
+    "beats": [
+      {
+        "pct": 2,
+        "label": "Carrega em 0,8 s"
+      },
+      {
+        "pct": 23,
+        "label": "Clique no botão"
+      },
+      {
+        "pct": 38,
+        "label": "O clique desce"
+      },
+      {
+        "pct": 49,
+        "label": "Conta a conversão"
+      },
+      {
+        "pct": 86,
+        "label": "Nova visita"
+      }
+    ]
+  },
+  "product-ui": {
+    "cssKey": "product",
+    "loopSeconds": 7.2,
+    "ratio": 1.204,
+    "beats": [
+      {
+        "pct": 0,
+        "label": "Carregando"
+      },
+      {
+        "pct": 23,
+        "label": "Vazio"
+      },
+      {
+        "pct": 48,
+        "label": "Erro"
+      },
+      {
+        "pct": 69,
+        "label": "Tentar de novo"
+      },
+      {
+        "pct": 73,
+        "label": "Pronto"
+      }
+    ]
+  },
+  "full-stack": {
+    "cssKey": "fullstack",
+    "loopSeconds": 6.4,
+    "ratio": 0.927,
+    "beats": [
+      {
+        "pct": 4,
+        "label": "Preenche"
+      },
+      {
+        "pct": 25,
+        "label": "Aceita e envia"
+      },
+      {
+        "pct": 43,
+        "label": "A API processa"
+      },
+      {
+        "pct": 58,
+        "label": "Grava no banco"
+      },
+      {
+        "pct": 61,
+        "label": "201 sobe"
+      },
+      {
+        "pct": 77,
+        "label": "Enviado"
+      }
+    ]
+  },
+  "branding": {
+    "cssKey": "branding",
+    "loopSeconds": 7.8,
+    "ratio": 1.42,
+    "beats": [
+      {
+        "pct": 1,
+        "label": "Escolhe o azul"
+      },
+      {
+        "pct": 20,
+        "label": "O token pinta"
+      },
+      {
+        "pct": 34,
+        "label": "Escolhe tinta"
+      },
+      {
+        "pct": 67,
+        "label": "Volta ao papel"
+      }
+    ]
+  }
+}

@@ -18,21 +18,16 @@ const rootDir = resolve(__dirname, "..");
 
 // Imagens carregadas no viewport inicial da home (contam para o budget)
 const STRICT_HOME_IMAGES = [
-  { path: "public/hero-render-1.webp", category: "images" },
   { path: "public/brunoGuimaraes.webp", category: "images" },
   { path: "public/avatar.webp", category: "images" },
 ];
 
 const LAZY_HOME_IMAGES = [
   { path: "public/banner-movies-event-house-bremen.webp", category: "images" },
-  { path: "public/banner-multi-macbook.webp", category: "images" },
   { path: "public/banner-danila-rizo.webp", category: "images" },
 ];
 
-const VIDEO_FILES = [
-  { path: "public/backgroundvideo.webm", category: "video" },
-  { path: "public/backgroundvideo.mp4", category: "video" },
-];
+const VIDEO_FILES = [];
 
 // Parse budget from site.ts
 function parseBudget() {

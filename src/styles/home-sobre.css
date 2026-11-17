@@ -1,0 +1,268 @@
+/* ---------- Sobre: o nome passando por trás da foto (issue #119) ----------
+   Base sem animação: foto e bio lado a lado (em coluna no celular), na ordem de leitura. Com
+   data-scenes="on" o capítulo vira palco fixo de 2,2 telas: os nomes grandes ficam atrás e na
+   frente da foto, somem, e a foto cede lugar à bio. No celular o palco só rola, sem fixar. */
+
+.sb-ch {
+  position: relative;
+  overflow-x: clip;
+}
+
+.sb-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 460px) minmax(0, 1fr);
+  gap: 96px;
+  align-items: center;
+  box-sizing: border-box;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 144px var(--G);
+}
+
+.sb-back,
+.sb-front {
+  display: none;
+}
+
+.sb-photo {
+  position: relative;
+  margin: 0;
+}
+/* O duotone já vem no arquivo: sem filtro nem mix-blend-mode. */
+.sb-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
+}
+.sb-peek {
+  top: 44%;
+  right: 12%;
+}
+
+.sb-bio {
+  --sb-gap: calc(var(--u) * 1.8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sb-gap);
+  min-width: 0;
+}
+/* O cabeçalho segue o ritmo comum do site; o resto da bio usa o gap da coluna. */
+.sb-bio .g-eyebrow {
+  margin: 0 0 calc(var(--head-gap-eyebrow) - var(--sb-gap));
+}
+.sb-title {
+  margin: 0 0 calc(var(--head-gap-lead) - var(--sb-gap));
+  font-size: calc(var(--u) * 5.6);
+  font-weight: 900;
+  font-stretch: 112%;
+  line-height: 0.92;
+  letter-spacing: -0.035em;
+}
+.sb-lead {
+  margin: 0;
+  font: 800 calc(var(--u) * 1.9) / 1.2 var(--font-sans);
+  font-stretch: 108%;
+  text-wrap: pretty;
+}
+.sb-body {
+  margin: 0;
+  color: var(--s-muted);
+  font: 450 calc(var(--u) * 1.15) / 1.55 var(--font-sans);
+  text-wrap: pretty;
+}
+.sb-caps {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 calc(var(--u) * 2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.sb-caps li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 0;
+  border-top: 1px solid var(--s-line);
+  font: 600 14px / 1.25 var(--font-sans);
+}
+.sb-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: calc(var(--u) * 1.4);
+  margin: 0;
+}
+.sb-facts dt {
+  font: 900 calc(var(--u) * 2.5) / 1 var(--font-sans);
+  font-stretch: 112%;
+}
+.sb-facts dd {
+  margin: 6px 0 0;
+  color: var(--s-muted);
+  font: var(--text-micro);
+}
+
+/* Palco: só com as cenas ligadas. */
+[data-scenes="on"] .sb-ch {
+  height: calc(100svh * 2.2);
+}
+[data-scenes="on"] .sb-stage {
+  display: block;
+  position: sticky;
+  top: 0;
+  max-width: none;
+  height: 100svh;
+  padding: 0;
+  overflow: hidden;
+  isolation: isolate;
+}
+[data-scenes="on"] .sb-art {
+  position: absolute;
+  inset: 0;
+}
+[data-scenes="on"] .sb-back,
+[data-scenes="on"] .sb-front {
+  display: block;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  font-weight: 900;
+  line-height: 0.86;
+  letter-spacing: -0.045em;
+  text-align: center;
+  white-space: nowrap;
+  user-select: none;
+}
+[data-scenes="on"] .sb-back {
+  z-index: 1;
+  top: calc(var(--u) * 6);
+  font-size: calc(var(--u) * 25);
+  font-stretch: 112%;
+}
+[data-scenes="on"] .sb-front {
+  z-index: 3;
+  bottom: calc(var(--u) * 3.6);
+  font-size: calc(var(--u) * 14.6);
+  font-stretch: 100%;
+}
+[data-scenes="on"] .sb-photo {
+  position: absolute;
+  z-index: 2;
+  bottom: calc(var(--u) * -10);
+  left: calc(50% - var(--u) * 23);
+  width: calc(var(--u) * 46);
+}
+[data-scenes="on"] .sb-bio {
+  position: absolute;
+  z-index: 4;
+  top: calc(50svh - var(--u) * 21);
+  right: var(--G);
+  width: calc(var(--u) * 44);
+}
+
+@media (max-width: 768px) {
+  .sb-stage {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 36px;
+    padding: var(--sec-top) var(--G) var(--sec-bottom);
+  }
+  .sb-photo {
+    max-width: 400px;
+  }
+  .sb-bio {
+    --sb-gap: 18px;
+  }
+  .sb-title {
+    font-size: 44px;
+  }
+  .sb-lead {
+    font-size: 26px;
+  }
+  .sb-body {
+    font-size: 17px;
+  }
+  .sb-caps {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .sb-facts {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+  }
+  .sb-facts dt {
+    font-size: 32px;
+  }
+
+  /* Celular com cenas: palco de 760 px que rola, bio em fluxo normal embaixo. */
+  [data-scenes="on"] .sb-ch {
+    height: auto;
+  }
+  [data-scenes="on"] .sb-stage {
+    display: block;
+    position: relative;
+    height: auto;
+    overflow: visible;
+  }
+  [data-scenes="on"] .sb-art {
+    position: relative;
+    inset: auto;
+    height: 470px;
+    overflow: hidden;
+  }
+  /* Os dois nomes cabem inteiros na largura da tela e ficam com a mesma largura. */
+  [data-scenes="on"] .sb-back {
+    top: 40px;
+    font-size: min(24vw, 120px);
+  }
+  [data-scenes="on"] .sb-front {
+    bottom: 32px;
+    font-size: min(15vw, 75px);
+  }
+  [data-scenes="on"] .sb-photo {
+    bottom: -190px;
+    left: -5px;
+    width: 400px;
+    max-width: none;
+  }
+  /* A foto tem largura fixa: o Giro recua para não encostar na borda em telas de 360 px. */
+  [data-scenes="on"] .sb-peek {
+    right: 20%;
+  }
+  [data-scenes="on"] .sb-bio {
+    position: static;
+    width: auto;
+    padding: 36px var(--G) var(--sec-bottom);
+  }
+  /* O nome já está escrito grande na arte logo acima: o título fica só para leitor de tela. */
+  [data-scenes="on"] .sb-title {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  [data-scenes="on"] .sb-bio .g-eyebrow {
+    margin-bottom: calc(var(--head-gap-lead) - var(--sb-gap));
+  }
+}
+
+/* Link para a página Sobre, na linha do rótulo: o palco é ajustado à janela e não tem altura
+   sobrando para mais uma linha. */
+.sb-bio {
+  position: relative;
+}
+.sb-more {
+  position: absolute;
+  top: -14px;
+  right: 0;
+}
+/* No celular o capítulo é leitura corrida: o link fecha a bio, depois dos fatos. */
+@media (max-width: 768px) {
+  .sb-bio .sb-more {
+    position: static;
+    order: 1;
+    align-self: flex-start;
+  }
+}

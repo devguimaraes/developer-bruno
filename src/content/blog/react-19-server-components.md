@@ -3,22 +3,22 @@ title: "React 19 e Server Components: cortando JavaScript do cliente e ganhando 
 date: "10 ABR 2026"
 readTime: "8 min"
 tags: ["React", "Server Components", "Performance", "Core Web Vitals"]
-excerpt: "Entenda como o React 19 e os Server Components reduzem o JavaScript enviado ao cliente e melhoram metricas reais de performance como LCP, TTI e CLS."
+excerpt: "Entenda como o React 19 e os Server Components reduzem o JavaScript enviado ao cliente e melhoram métricas reais de performance como LCP, TTI e CLS."
 ---
 
 # React 19 e Server Components: cortando JavaScript do cliente
 
-O React 19 trouxe mudanças estruturais que impactam diretamente a performance das aplicações web. O principal vetor de melhoria sao os Server Components, que permitem renderizar componentes no servidor sem enviar seu JavaScript para o navegador.
+O React 19 trouxe mudanças estruturais que impactam diretamente a performance das aplicações web. O principal vetor de melhoria são os Server Components, que permitem renderizar componentes no servidor sem enviar seu JavaScript para o navegador.
 
 ## O problema: JavaScript demais no cliente
 
-Uma aplicacao React tipica carrega um bundle que inclui componentes de UI, logica de estado, utilitarios de formatacao e codigo de busca de dados. Em projetos de media complexidade, esse bundle facilmente ultrapassa 200 KB gzipped.
+Uma aplicação React típica carrega um bundle que inclui componentes de UI, lógica de estado, utilitários de formatação e código de busca de dados. Em projetos de média complexidade, esse bundle facilmente ultrapassa 200 KB gzipped.
 
-O impacto nos Core Web Vitals e direto:
+O impacto nos Core Web Vitals é direto:
 
-- **LCP (Largest Contentful Paint)** sofre porque o navegador precisa baixar, parsear e executar JavaScript antes de renderizar o conteudo principal.
-- **TTI (Time to Interactive)** e afetado porque a interatividade depende da hidratacao completa da arvore de componentes.
-- **INP (Interaction to Next Paint)** piora porque mais JavaScript significa mais trabalho na main thread durante a interacao.
+- **LCP (Largest Contentful Paint)** sofre porque o navegador precisa baixar, parsear e executar JavaScript antes de renderizar o conteúdo principal.
+- **TTI (Time to Interactive)** é afetado porque a interatividade depende da hidratação completa da árvore de componentes.
+- **INP (Interaction to Next Paint)** piora porque mais JavaScript significa mais trabalho na main thread durante a interação.
 
 ## Server Components: o antes e depois
 
@@ -50,7 +50,7 @@ export function ProductList() {
 }
 ```
 
-Nesse cenario, o cliente recebe: o componente, o `useState`, o `useEffect`, a funcao `fetchProducts`, a funcao `formatPrice` e faz uma requisicao adicional para buscar dados.
+Nesse cenário, o cliente recebe: o componente, o `useState`, o `useEffect`, a função `fetchProducts`, a função `formatPrice` e faz uma requisição adicional para buscar dados.
 
 ### Depois: Server Component
 
@@ -75,43 +75,43 @@ export async function ProductList() {
 }
 ```
 
-O resultado: zero JavaScript enviado ao cliente para esse componente. A busca no banco roda no servidor, a formatacao roda no servidor, e o cliente recebe apenas HTML.
+O resultado: zero JavaScript enviado ao cliente para esse componente. A busca no banco roda no servidor, a formatação roda no servidor, e o cliente recebe apenas HTML.
 
 ## Impacto real nos Core Web Vitals
 
-Medindo uma pagina de listagem de produtos com ~50 itens, os numeros falam por si:
+Medindo uma página de listagem de produtos com ~50 itens, os números falam por si:
 
-| Metrica | Antes (Client) | Depois (Server) | Melhoria |
+| Métrica | Antes (Client) | Depois (Server) | Melhoria |
 |---------|---------------|-----------------|----------|
 | LCP | 3.2s | 1.1s | 65% |
 | TTI | 4.8s | 1.4s | 70% |
 | INP | 180ms | 45ms | 75% |
 | Bundle JS | 245 KB | 68 KB | 72% |
-| Requisicoes | 12 | 3 | 75% |
+| Requisições | 12 | 3 | 75% |
 
-Esses dados foram coletados em uma conexao 4G tipica do Brasil (~10 Mbps), simulando o perfil de usuario mobile predominante no mercado nacional.
+Esses dados foram coletados em uma conexão 4G típica do Brasil (~10 Mbps), simulando o perfil de usuário mobile predominante no mercado nacional.
 
 ## Quando usar Server vs Client Components
 
-A regra e simples: comece com Server Components e migre para Client apenas o necessario.
+A regra é simples: comece com Server Components e migre para Client apenas o necessário.
 
-**Server Components** sao ideais para:
+**Server Components** são ideais para:
 
 - Busca de dados (database, APIs, filesystem)
 - Acesso a recursos exclusivos do servidor (env vars, secrets)
-- Renderizacao de conteudo estatico ou semi-estatico
-- Componentes pesados de formatacao ou transformacao de dados
+- Renderização de conteúdo estático ou semi-estático
+- Componentes pesados de formatação ou transformação de dados
 
-**Client Components** sao necessarios para:
+**Client Components** são necessários para:
 
 - Interatividade (event handlers, estado local)
 - Hooks do navegador (`useState`, `useEffect`, `useRef`)
-- Animacoes que dependem do DOM
+- Animações que dependem do DOM
 - Componentes que usam APIs do browser (IntersectionObserver, WebRTC)
 
-## Padrao pratico: composicao de fronteiras
+## Padrão prático: composição de fronteiras
 
-A abordagem mais eficaz e compor Server Components com Client Components em fronteiras bem definidas:
+A abordagem mais eficaz é compor Server Components com Client Components em fronteiras bem definidas:
 
 ```tsx
 // app/dashboard/page.tsx (Server Component)
@@ -156,16 +156,16 @@ export function Chart({ data }) {
 }
 ```
 
-Esse padrao garante que apenas o componente interativo (`Chart`) envia JavaScript ao cliente. Todo o resto — busca de dados, metricas estaticas — roda exclusivamente no servidor.
+Esse padrão garante que apenas o componente interativo (`Chart`) envia JavaScript ao cliente. Todo o resto, busca de dados, métricas estáticas, roda exclusivamente no servidor.
 
-## Consideracoes para deploy no Brasil
+## Considerações para deploy no Brasil
 
-Para o publico brasileiro, otimizar o bundle nao e luxo, e necessidade. Dados do Cetic indicam que quase 40% dos acessos mobile ainda ocorrem em conexoes 4G com latencia alta. Cada KB de JavaScript a menos se traduz em usuarios que conseguem usar a aplicacao.
+Para o público brasileiro, otimizar o bundle não é luxo, é necessidade. Dados do Cetic indicam que quase 40% dos acessos mobile ainda ocorrem em conexões 4G com latência alta. Cada KB de JavaScript a menos se traduz em usuários que conseguem usar a aplicação.
 
-Alem disso, o modelo de Server Components se alinha bem com estrategias de edge computing, que reduzem a latencia servindo conteudo de pontos de presenca mais proximos ao usuario.
+Além disso, o modelo de Server Components se alinha bem com estratégias de edge computing, que reduzem a latência servindo conteúdo de pontos de presença mais próximos ao usuário.
 
-## Conclusao
+## Conclusão
 
-O React 19 consolida os Server Components como parte fundamental do ecossistema. Nao se trata de uma feature experimental — e o padrao de arquitetura recomendado. Ao mover renderizacao e busca de dados para o servidor, voce reduz drasticamente o JavaScript enviado ao cliente e melhora todas as metricas de performance que importam para SEO e experiencia do usuario.
+O React 19 consolida os Server Components como parte fundamental do ecossistema. Não se trata de uma feature experimental. É o padrão de arquitetura recomendado. Ao mover renderização e busca de dados para o servidor, você reduz drasticamente o JavaScript enviado ao cliente e melhora todas as métricas de performance que importam para SEO e experiência do usuário.
 
-Se voce esta comecando um projeto novo, use Server Components por padrao. Se esta migrando um projeto existente, identifique os componentes que nao precisam de interatividade e migre-os primeiro. Os numeros nos Core Web Vitals vao mostrar o impacto desde o primeiro deploy.
+Se você está começando um projeto novo, use Server Components por padrão. Se está migrando um projeto existente, identifique os componentes que não precisam de interatividade e migre-os primeiro. Os números nos Core Web Vitals vão mostrar o impacto desde o primeiro deploy.

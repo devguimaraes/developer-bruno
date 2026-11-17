@@ -1,0 +1,80 @@
+/* Entrada quicando da hero B. O Giro sai da assinatura, quica nas letras do título, cai no chão
+   e rola até a estação de partida, deixando um rastro curto em lima. Tudo vem do JS por quadro:
+   posição, amasso, giro do anel, rastro, sombra e o afundar das letras. */
+
+/* O Giro bate nas bordas da tela: a hero corta o que passa delas sem virar área rolável
+   (clip, e não hidden, que ainda deixa rolar por script ou foco). */
+.hq .hi {
+  overflow: clip;
+}
+
+/* A linha fica acima do header e da barra de abas: o Giro sai delas e passa por cima. */
+.hq .hb-line {
+  z-index: 6;
+}
+
+/* Cada letra é uma peça que afunda um pouco quando o Giro pisa nela. */
+.hq .hi-title .hq-ch {
+  display: inline-block;
+  white-space: pre;
+}
+
+.hq .hb-rider .hi-giro__in {
+  will-change: transform;
+}
+
+.hq-trail {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.hq-trail__p {
+  fill: var(--lima);
+  opacity: 0.72;
+}
+
+/* Sombra no chão invisível do azul: diz onde o chão está antes de o Giro chegar nele. */
+.hq-shadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 56px;
+  height: 12px;
+  margin: -6px 0 0 -28px;
+  border-radius: 50%;
+  background: rgba(11, 12, 31, 0.34);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 260ms linear;
+}
+
+.is-mobile .hq-shadow {
+  width: 40px;
+  height: 9px;
+  margin: -4.5px 0 0 -20px;
+}
+
+/* Rótulos da linha: escondidos até o Giro chegar na estação, então aparecem digitados, um
+   caractere por passo (a fonte é mono, então cada passo é uma letra). Ao fechar a pilha, somem
+   num esmaecer e o recorte volta ao zero depois, pronto para digitar de novo. */
+.hq .hb-tag {
+  opacity: 0;
+  clip-path: inset(0 100% 0 0);
+  transition:
+    opacity 240ms linear,
+    clip-path 0s linear 240ms,
+    color 200ms linear;
+}
+
+.hq .hb-tag.is-shown {
+  opacity: 1;
+  clip-path: inset(0 0 0 0);
+  transition:
+    opacity 60ms linear,
+    clip-path calc(var(--n, 10) * 34ms) steps(var(--n, 10), end),
+    color 200ms linear;
+}

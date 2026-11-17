@@ -1,0 +1,472 @@
+/* Nova hero: layout comum às direções A e B e as peças isométricas.
+   Mesma construção das artes de serviços: cena em rotateX(60deg) rotateZ(-45deg), placas com
+   borda empilhada e billboards que encaram a câmera. Cores só pelos papéis da superfície g-azul. */
+
+.hi-board {
+  width: 100%;
+  min-width: 1200px;
+}
+
+.hi-board.is-mobile {
+  width: 390px;
+  min-width: 0;
+}
+
+.hi {
+  --hi-ink: #0b0c1f;
+  --hi-ink-2: rgba(11, 12, 31, 0.58);
+  --hi-mid: rgba(11, 12, 31, 0.2);
+  --hi-soft: rgba(11, 12, 31, 0.08);
+  --hi-paper: #fbfaf6;
+  --hi-paper-2: #efeee8;
+  --hi-side: #c9cae9;
+  --hi-wire: rgba(212, 213, 250, 0.55);
+  --hi-wire-2: rgba(212, 213, 250, 0.3);
+  --rx: 60deg;
+  --rz: -45deg;
+  --k: 1;
+  position: relative;
+  height: 900px;
+  overflow: hidden;
+  isolation: isolate;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.is-mobile .hi {
+  height: 844px;
+}
+
+/* ---------- Header do computador ---------- */
+
+.hi-head {
+  position: relative;
+  z-index: 1;
+}
+
+.is-mobile .hi-head {
+  display: none;
+}
+
+.hi-head__end {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Lugar vazio que o Giro deixa ao sair da assinatura ou das abas. */
+.hi-seat {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms linear;
+}
+
+.hi-seat circle {
+  fill: none;
+  stroke: var(--s-line-strong);
+  stroke-width: 16px;
+  stroke-dasharray: 4 16;
+  stroke-linecap: round;
+}
+
+.hi-o .g-giro {
+  transition: opacity 120ms linear;
+}
+
+.hi.is-away .hi-o .g-giro {
+  opacity: 0;
+}
+
+.hi.is-away .hi-seat {
+  opacity: 1;
+}
+
+.g-tabbar__giro .hi-seat {
+  inset: 10px;
+  width: 40px;
+  height: 40px;
+}
+
+.g-tabbar__giro .hi-seat circle {
+  stroke: rgba(210, 255, 77, 0.55);
+}
+
+/* ---------- Palco ---------- */
+
+.hi-stage {
+  position: absolute;
+  top: 88px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  touch-action: pan-y pinch-zoom;
+}
+
+.is-mobile .hi-stage {
+  top: 0;
+}
+
+.hi-floor,
+.hi-world {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hi-floor {
+  z-index: 1;
+}
+
+.hi-copy,
+.hi-foot {
+  z-index: 2;
+}
+
+.hi-world {
+  z-index: 3;
+}
+
+.hi-hud {
+  z-index: 4;
+}
+
+.hi-copy {
+  position: absolute;
+  top: 116px;
+  left: 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  width: 640px;
+}
+
+.hi-title {
+  margin: 0;
+  color: var(--s-fg);
+  font: 900 120px/0.94 var(--font-sans);
+  font-stretch: 100%;
+  letter-spacing: -0.035em;
+}
+
+.hi-title span {
+  display: block;
+  white-space: nowrap;
+}
+
+.hi-foot {
+  position: absolute;
+  top: 470px;
+  left: 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  width: 540px;
+}
+
+.hi-lede {
+  margin: 0;
+  color: var(--s-muted);
+  font: var(--text-corpo-l);
+  text-wrap: pretty;
+}
+
+.hi-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.hi-hud {
+  position: absolute;
+  right: 64px;
+  bottom: 44px;
+  color: var(--s-muted);
+  font: var(--text-micro);
+  pointer-events: none;
+}
+
+.hi-hud dl {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 6px 20px;
+  margin: 0;
+}
+
+.hi-hud dt,
+.hi-hud dd {
+  margin: 0;
+}
+
+.hi-hud dd {
+  min-width: 15ch;
+  color: var(--s-fg);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Celular ---------- */
+
+.hi-top,
+.hi-tabs {
+  display: none;
+}
+
+.is-mobile .hi-top {
+  position: absolute;
+  z-index: 4;
+  top: 0;
+  right: 0;
+  left: 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--s-line);
+}
+
+.hi-name {
+  color: var(--s-fg);
+  font: var(--text-rotulo);
+  text-decoration: none;
+}
+
+.is-mobile .hi-copy {
+  top: 92px;
+  right: 16px;
+  left: 16px;
+  gap: 16px;
+  width: auto;
+}
+
+.is-mobile .hi-title {
+  font-size: 54px;
+  line-height: 0.92;
+  font-stretch: 100%;
+  letter-spacing: -0.03em;
+}
+
+.is-mobile .hi-foot {
+  top: 514px;
+  right: 16px;
+  left: 16px;
+  gap: 18px;
+  width: auto;
+}
+
+.is-mobile .hi-lede {
+  font: var(--text-corpo);
+}
+
+/* Os dois botões numa linha só, acima da barra de abas. */
+.is-mobile .hi-ctas {
+  flex-wrap: nowrap;
+  gap: 10px;
+}
+
+.is-mobile .hi-ctas .g-button {
+  --b-h: 48px;
+  --b-pad: 18px;
+  --b-font: 16px;
+}
+
+.is-mobile .hi-hud {
+  display: none;
+}
+
+.is-mobile .hi-tabs {
+  position: absolute;
+  z-index: 5;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
+}
+
+.hi-tabs .g-tab[aria-current="page"] {
+  color: var(--lima);
+}
+
+.hi-tabs .g-tab[aria-current="page"] .g-tab__pill {
+  background: var(--tinta-2);
+}
+
+/* ---------- Peças isométricas ---------- */
+
+.iso {
+  position: absolute;
+  top: var(--oy, 50%);
+  left: var(--ox, 50%);
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  transform: scale(var(--k)) rotateX(var(--rx)) rotateZ(var(--rz));
+}
+
+.iso *,
+.iso *::before,
+.iso *::after {
+  box-sizing: border-box;
+}
+
+.iso b {
+  position: absolute;
+  display: block;
+  font-weight: inherit;
+}
+
+.iso-pl {
+  position: absolute;
+  top: calc(var(--y) - var(--h) / 2);
+  left: calc(var(--x) - var(--w) / 2);
+  width: var(--w);
+  height: var(--h);
+  transform-style: preserve-3d;
+  transform: translateZ(var(--zr, 2px));
+  transition: transform 650ms var(--ease-resolve);
+}
+
+.iso-pl__e,
+.iso-pl__face {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r, 14px);
+}
+
+.iso-pl__e {
+  background: var(--hi-side);
+}
+
+.iso-pl__e:nth-child(1) {
+  transform: translateZ(-9px);
+}
+
+.iso-pl__e:nth-child(2) {
+  transform: translateZ(-6px);
+}
+
+.iso-pl__e:nth-child(3) {
+  transform: translateZ(-3px);
+}
+
+.iso-pl__face {
+  overflow: hidden;
+  background: var(--hi-paper);
+}
+
+/* Sombra no chão, embaixo de cada placa. */
+.iso-fl {
+  position: absolute;
+  top: calc(var(--y) - var(--h) / 2);
+  left: calc(var(--x) - var(--w) / 2);
+  width: var(--w);
+  height: var(--h);
+  border-radius: var(--r, 14px);
+  background: rgba(11, 12, 31, 0.24);
+  opacity: 0;
+  transform: translateZ(0.5px);
+  transition: opacity 500ms linear;
+}
+
+.iso-bb,
+.iso-bb__r {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+}
+
+.iso-bb {
+  transform: translate3d(var(--bx, 0px), var(--by, 0px), var(--bz, 0px));
+}
+
+.iso-bb__r {
+  transform: rotateZ(calc(var(--rz) * -1)) rotateX(calc(var(--rx) * -1));
+}
+
+/* ---------- Giro que sai da assinatura ---------- */
+
+.hi-giro {
+  --gs: 64px;
+  opacity: 0;
+}
+
+.hi-giro.is-on {
+  opacity: 1;
+}
+
+.hi-giro__in {
+  position: absolute;
+  top: calc(var(--gs) * -1);
+  left: calc(var(--gs) / -2);
+  width: var(--gs);
+  height: var(--gs);
+  transform-origin: 50% 100%;
+  scale: var(--gscale, 1);
+}
+
+.hi-giro .g-giro {
+  --s-signal: var(--lima);
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.hi-giro .g-giro__spin {
+  rotate: var(--roll, 0deg);
+}
+
+/* No celular o Giro do hero tem 44 px: traço do tamanho médio. */
+.is-mobile .hi-giro .g-giro {
+  --g-stroke: 14px;
+  --g-face: 8px;
+  --g-eye: 1.15;
+}
+
+.hi-giro__in.is-squash {
+  animation: hi-squash 280ms var(--ease-resolve);
+}
+
+@keyframes hi-squash {
+  0% {
+    transform: scale(1.24, 0.72);
+  }
+  55% {
+    transform: scale(0.94, 1.07);
+  }
+  100% {
+    transform: scale(1, 1);
+  }
+}
+
+.hi-shadow {
+  position: absolute;
+  top: -24px;
+  left: -24px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(11, 12, 31, 0.3);
+  opacity: 0;
+  transform: translate3d(var(--sx, 0px), var(--sy, 0px), 1px) scale(var(--ss, 1));
+}
+
+.hi.is-away .hi-shadow {
+  opacity: 1;
+}
+
+/* ---------- Movimento reduzido ---------- */
+
+.is-still .hi *,
+.is-still .hi *::before,
+.is-still .hi *::after {
+  animation: none !important;
+  transition: none !important;
+}

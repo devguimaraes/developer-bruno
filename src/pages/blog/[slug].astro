@@ -1,9 +1,11 @@
 ---
-import Layout from "@/layouts/Layout.astro";
-import BlogPostPageClient from "@/components/pages/BlogPostPage";
 import { getCollection, render } from "astro:content";
-import { generateSlug, toISODate, convertBrazilianDate } from "@/lib/blog";
+import BlogPostPageClient from "@/components/pages/BlogPostPage";
+import Layout from "@/layouts/Layout.astro";
+import { convertBrazilianDate, generateSlug, toISODate } from "@/lib/blog";
+import { t } from "@/lib/i18n";
 import type { BlogPost } from "@/types/blog";
+import "@/styles/giro-post.css";
 
 export async function getStaticPaths() {
   const entries = await getCollection("blog");
@@ -38,57 +40,22 @@ export async function getStaticPaths() {
     params: { slug: generateSlug(entry.id) },
     props: {
       post: toBlogPost(entry),
-      next: index < sortedEntries.length - 1 ? toBlogPost(sortedEntries[index + 1]) : null,
+      following: sortedEntries.slice(index + 1, index + 3).map(item => toBlogPost(item)),
       Content,
     },
   }));
 }
 
-const { post, next, Content } = Astro.props;
-const structuredDataImage = post.image
-  ? post.image.startsWith("http://") || post.image.startsWith("https://")
-    ? post.image
-    : `https://devguimaraes.com.br${post.image}`
-  : "https://devguimaraes.com.br/og-image.webp";
+const { post, following, Content } = Astro.props;
 ---
 
 <Layout
-  title={post.title}
+  title={t("pt", "meta.post_title", { title: post.title })}
   description={post.excerpt}
   ogType="article"
   articlePublishedTime={toISODate(post.date)}
-  structuredData={{
-    '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    headline: post.title,
-    description: post.excerpt,
-    author: {
-      '@type': 'Person',
-      name: post.author,
-      url: 'https://devguimaraes.com.br',
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'Bruno Guimarães',
-      url: 'https://devguimaraes.com.br',
-      logo: {
-        '@type': 'ImageObject',
-        url: 'https://devguimaraes.com.br/logo.webp',
-      },
-    },
-    datePublished: toISODate(post.date),
-    dateModified: toISODate(post.date),
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': `https://devguimaraes.com.br/blog/${post.slug}`,
-    },
-    image: structuredDataImage,
-    inLanguage: 'pt-BR',
-    articleSection: post.tags?.[0] || 'Desenvolvimento Web',
-    keywords: post.tags?.join(', '),
-  }}
 >
-  <BlogPostPageClient post={post} next={next} client:load>
+  <BlogPostPageClient post={post} following={following} client:load>
     <Content />
   </BlogPostPageClient>
 </Layout>

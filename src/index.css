@@ -1,30 +1,32 @@
+@import "./styles/giro.css";
+@import "./styles/giro-actions.css";
+@import "./styles/giro-fields.css";
+@import "./styles/giro-content.css";
+@import "./styles/giro-nav.css";
+@import "./styles/giro-process.css";
+@import "./styles/giro-loader.css";
+@import "./styles/giro-hero.css";
+@import "./styles/service-art.css";
+@import "./styles/giro-home.css";
+@import "./styles/home-estados.css";
+@import "./styles/home-sobre.css";
+@import "./styles/home-blog.css";
+@import "./styles/home-contact.css";
+@import "./styles/home-fim.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --background: 0 0% 0%;
-    --foreground: 0 0% 100%;
-    --primary: 0 0% 100%;
-    --accent: 45 87% 57%;
-    --border: 0 0% 100%;
-    --radius: 0rem;
-    --sidebar-width: 0px;
-    --font-pixel-display: "Jersey 15", monospace;
-    --font-pixel-tech: "Silkscreen", monospace;
-    --font-serif: "Newsreader", serif;
-    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
-  }
-
   html,
   body {
     margin: 0;
     padding: 0;
-    background-color: #000;
+    background-color: var(--papel, #f6f5f0);
     color: #fff;
-    overflow-x: hidden;
+    /* clip não cria contêiner de rolagem; hidden faria html, body e main rolarem por conta própria. */
+    overflow-x: clip;
   }
 
   html {
@@ -33,7 +35,7 @@
   }
 
   main {
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   body {
@@ -43,117 +45,8 @@
   }
 
   *:focus-visible {
-    outline: 2px solid hsl(var(--accent));
+    outline: 2px solid var(--s-focus);
     outline-offset: 2px;
-  }
-}
-
-@layer utilities {
-  .font-pixel {
-    font-family: var(--font-pixel-display);
-  }
-
-  .font-hero-pixel,
-  .font-vt {
-    font-family: var(--font-pixel-display);
-  }
-
-  .type-raster-hero {
-    @apply font-pixel uppercase tracking-[-0.05em] leading-[0.8];
-  }
-
-  .type-raster-section {
-    @apply font-pixel uppercase tracking-[-0.02em] leading-[0.9];
-  }
-
-  .type-mono {
-    @apply font-mono text-[12px] md:text-[13px] lg:text-sm tracking-[0.2em] opacity-70 uppercase;
-  }
-
-  .type-display-hero {
-    @apply font-hero-pixel uppercase tracking-[0.05em] leading-[0.92];
-  }
-
-  .type-display-section {
-    @apply font-pixel uppercase tracking-[0.06em] leading-[0.9];
-  }
-
-  .type-display-card {
-    @apply font-pixel uppercase tracking-[0.035em] leading-[0.98];
-  }
-
-  .type-ui-label {
-    @apply font-pixel uppercase tracking-[0.22em] leading-none;
-  }
-
-  .type-body {
-    @apply font-sans tracking-[0.01em] leading-relaxed text-stone-600;
-  }
-
-  .type-body-lg {
-    @apply font-sans tracking-[0.01em] leading-[1.6] text-stone-600;
-  }
-}
-
-.modular-grid {
-  display: flex;
-  flex-direction: column;
-  margin: 0;
-  width: 100%;
-}
-
-.collage-item {
-  position: relative;
-  will-change: transform;
-}
-
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-@layer components {
-  .pixel-border {
-    @apply shadow-[4px_0_0_0_#000,-4px_0_0_0_#000,0_4px_0_0_0_#000,0_-4px_0_0_0_#000];
-  }
-
-  .pixel-border-sm {
-    @apply shadow-[2px_0_0_0_#000,-2px_0_0_0_#000,0_2px_0_0_0_#000,0_-2px_0_0_0_#000];
-  }
-
-  .grid-technical {
-    background-image:
-      linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
-    background-size: 80px 80px;
-  }
-
-  .grid-dots {
-    background-image: radial-gradient(circle, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
-    background-size: 40px 40px;
-  }
-
-  .scanlines {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .scanlines::before {
-    content: "";
-    @apply pointer-events-none absolute inset-0 z-10;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.05) 50%);
-    background-size: 100% 4px;
-  }
-
-  .pressable {
-    transition: transform 160ms ease-out;
-  }
-
-  .pressable:active {
-    transform: scale(0.97);
   }
 }
 
@@ -163,71 +56,15 @@
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-[#f5f5f4];
+  background: var(--papel, #f6f5f0);
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-black border-2 border-[#f5f5f4];
+  background: var(--tinta, #0b0c1f);
+  border: 3px solid var(--papel, #f6f5f0);
+  border-radius: 999px;
 }
 
-@layer components {
-  /* Container horizontal principal — flex em linha, snap x mandatory */
-  .horizontal-scroll-container {
-    display: flex;
-    width: 100%;
-    height: 100vh;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-  }
-
-  /* Cada seção ocupa 100% da viewport */
-  .horizontal-section {
-    flex: 0 0 100%;
-    width: 100vw;
-    height: 100vh;
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
-    position: relative;
-  }
-
-  /* Container interno com scroll vertical + snap */
-  .vertical-scroll-inner {
-    width: 100%;
-    height: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
-    overscroll-behavior: contain;
-    scroll-snap-type: y proximity;
-    padding: 0 1rem;
-  }
-
-  @media (min-width: 768px) {
-    .vertical-scroll-inner {
-      padding: 0 3rem;
-    }
-  }
-
-  /* Cada bloco interno como unidade de snap vertical */
-  .vertical-snap-child {
-    min-height: 100%;
-    scroll-snap-align: start;
-  }
-}
-
-/* Marquee Animation — complemento ao animate-marquee do Tailwind */
-.animate-marquee {
-  display: flex;
-  width: max-content;
-}
-
-.animate-marquee:hover {
-  animation-play-state: paused;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .animate-marquee {
-    animation: none;
-  }
+::-webkit-scrollbar-thumb:hover {
+  background: var(--azul-sinal, #2b2eff);
 }

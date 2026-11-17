@@ -1,0 +1,153 @@
+/* ---------- Contato: o Giro é o botão (issue #120) ----------
+   Folha azul que sobe sobre o blog. O formulário é o real (ContactForm, /api/contato); aqui só
+   o capítulo e o layout. Com cenas ligadas o Giro da história pousa na parada .ct-seat, então o
+   Giro de dentro do botão fica escondido para nunca haver dois rostos. */
+
+.ct {
+  position: relative;
+  z-index: 2;
+  margin-top: -32px;
+  border-radius: 32px 32px 0 0;
+}
+
+.ct-in {
+  box-sizing: border-box;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: var(--sec-top) var(--G) var(--sec-bottom);
+}
+
+.ct-in > .g-eyebrow {
+  margin: 0;
+}
+
+.ct-title {
+  margin: var(--head-gap-eyebrow) 0 0;
+  font-size: calc(var(--u) * 8.1);
+  font-weight: 900;
+  font-stretch: 112%;
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+  white-space: nowrap;
+}
+
+.ct-lead {
+  max-width: 48ch;
+  margin: var(--head-gap-lead) 0 0;
+  color: var(--s-muted);
+  font: var(--text-corpo-l);
+}
+
+.ct-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 400px;
+  gap: 32px;
+  align-items: start;
+  margin-top: 56px;
+}
+
+.ct-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+  margin: 0;
+}
+
+.ct-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  align-items: start;
+}
+
+.ct-types {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.ct-types legend {
+  margin-bottom: 12px;
+  padding: 0;
+}
+
+.ct-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ct-send {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+.ct-submit {
+  position: relative;
+}
+
+/* Parada do Giro da história: dentro do botão, onde fica o Giro de 28 px (14 px de recuo). */
+.ct-seat {
+  top: 50%;
+  left: 28px;
+}
+
+/* Com cenas, o Giro da história é quem aparece sobre a parada. O do botão só ocupa o lugar. */
+[data-scenes="on"] .ct-submit .g-giro {
+  visibility: hidden;
+}
+
+.ct-mail {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 28px;
+  border-radius: 28px;
+}
+
+.ct-mail .g-eyebrow {
+  margin: 0;
+}
+
+.ct-mail__a {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font: var(--text-codigo);
+  user-select: all;
+}
+
+.ct-mail__l {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 24px;
+  align-self: stretch;
+  padding-top: 16px;
+  border-top: 1px solid var(--s-line);
+}
+
+@media (max-width: 768px) {
+  .ct-title {
+    font-size: 50px;
+    white-space: normal;
+  }
+  .ct-lead {
+    font-size: 18px;
+  }
+  .ct-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+    margin-top: 40px;
+  }
+  .ct-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

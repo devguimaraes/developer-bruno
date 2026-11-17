@@ -27,10 +27,10 @@ export function convertBrazilianDate(dateStr: string): Date {
   const parts = dateStr.split(" ");
   if (parts.length === 3) {
     const day = Number.parseInt(parts[0], 10);
-    const month = months[parts[1].toUpperCase()] ?? 0;
+    const month = months[parts[1].toUpperCase()];
     const year = Number.parseInt(parts[2], 10);
 
-    if (!Number.isNaN(day) && !Number.isNaN(year)) {
+    if (!Number.isNaN(day) && month !== undefined && !Number.isNaN(year)) {
       return new Date(year, month, day);
     }
   }

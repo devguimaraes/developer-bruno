@@ -1,0 +1,1564 @@
+/* ---------- Home: seções depois do hero (issue #52) ----------
+   Cores só por papel (--s-*), via g-papel, g-azul e g-tinta no elemento. Valores da prancha
+   "Home" (desktop 1440, celular 390). */
+
+/* ---------- Serviços: interfaces em camadas ---------- */
+
+/* O palco mede a largura do container (100cqw). Sem container-type a arte escala na viewport. */
+.service-art {
+  display: block;
+  container-type: inline-size;
+}
+.service-art__host {
+  display: block;
+}
+/* Se a arte não carregar, a caixa mantém a proporção e mostra um bloco neutro. */
+.service-art[data-failed] {
+  background: var(--s-raised);
+  border-radius: 12px;
+}
+
+/* ---------- Serviços: um palco, cinco trocas (issue #116) ---------- */
+
+.sv-track {
+  position: relative;
+}
+
+[data-scenes="on"] .sv-track {
+  height: calc(var(--H, 100svh) * 3.6);
+}
+
+.sv-stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: 45% 55%;
+  width: 100%;
+  min-height: 100svh;
+  box-sizing: border-box;
+}
+
+[data-scenes="on"] .sv-stage {
+  position: sticky;
+  top: 0;
+  height: var(--H, 100svh);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.sv-left {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 100svh;
+  padding: calc(var(--u) * 7) calc(var(--u) * 4) calc(var(--u) * 3) var(--G, 64px);
+}
+
+.sv-head .g-eyebrow,
+.sv-intro .g-eyebrow {
+  margin: 0;
+}
+
+.sv-title {
+  margin-top: var(--head-gap-eyebrow);
+  font-size: calc(var(--u) * 6.4);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+
+.sv-lead {
+  max-width: 44ch;
+  margin: var(--head-gap-lead) 0 0;
+  color: var(--s-muted);
+  font: 450 max(16px, calc(var(--u) * 1.25)) / 1.45 var(--font-sans);
+}
+
+.sv-list {
+  position: relative;
+  margin: calc(var(--u) * 2.6) 0 0;
+  padding: 0 0 0 calc(var(--u) * 4.4);
+  list-style: none;
+}
+
+.sv-list::before {
+  content: "";
+  position: absolute;
+  top: calc(var(--u) * 1.8);
+  bottom: calc(var(--u) * 1.8);
+  left: calc(var(--u) * 1.4);
+  border-left: 2px dotted var(--s-line-strong);
+}
+
+.sv-list li {
+  position: relative;
+}
+
+/* O trecho já percorrido: uma linha cheia que cresce da primeira parada até a atual (--sv-p vai
+   de 0 a 1 e vem de HomeServices). */
+.sv-list::after {
+  content: "";
+  position: absolute;
+  top: calc(var(--u) * 1.8);
+  left: calc(var(--u) * 1.4);
+  width: 2px;
+  height: calc((100% - var(--u) * 3.6) * var(--sv-p, 0));
+  border-radius: 2px;
+  background: var(--s-signal);
+  transition: height 520ms var(--ease-resolve);
+}
+
+/* Âncora do Giro: sem tamanho. Quem desenha a parada é o li::before, logo abaixo. */
+.sv-dot {
+  position: absolute;
+  top: 50%;
+  left: calc(var(--u) * -3);
+  margin: 0 0 0 1px;
+}
+
+/* As cinco paradas da linha: vazada a que ainda vem, cheia a que já passou. A próxima respira,
+   para mostrar que o caminho continua. */
+.sv-list li::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: calc(var(--u) * -3);
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -5px;
+  border-radius: 50%;
+  background: var(--s-bg);
+  box-shadow: inset 0 0 0 2px var(--s-line-strong);
+  pointer-events: none;
+  transition:
+    background-color 200ms linear,
+    box-shadow 200ms linear;
+}
+
+.sv-list li.is-done::before {
+  background: var(--s-signal);
+  box-shadow: inset 0 0 0 2px var(--s-signal);
+  animation: sv-stop-pop 420ms var(--ease-hop) 1;
+}
+
+.sv-list li.is-on::before {
+  box-shadow:
+    inset 0 0 0 2px var(--s-signal),
+    0 0 0 5px color-mix(in srgb, var(--s-signal) 18%, transparent);
+}
+
+.sv-list li.is-next::before {
+  animation: sv-stop-next 1600ms ease-in-out infinite;
+}
+
+@keyframes sv-stop-pop {
+  40% {
+    scale: 1.5;
+  }
+}
+
+@keyframes sv-stop-next {
+  50% {
+    box-shadow:
+      inset 0 0 0 2px var(--s-signal),
+      0 0 0 6px color-mix(in srgb, var(--s-signal) 16%, transparent);
+  }
+}
+
+.sv-row {
+  appearance: none;
+  display: flex;
+  align-items: baseline;
+  gap: calc(var(--u) * 1.1);
+  width: 100%;
+  height: calc(var(--u) * 3.6);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--s-muted);
+  text-align: left;
+  cursor: pointer;
+}
+
+.sv-row:focus-visible {
+  outline: 2px solid var(--s-signal);
+  outline-offset: 2px;
+}
+
+.sv-n {
+  font: var(--text-micro);
+  font-family: var(--font-mono);
+}
+
+.sv-name {
+  font-size: calc(var(--u) * 2.2);
+  font-weight: 800;
+  font-stretch: 70%;
+  line-height: calc(var(--u) * 3.6);
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+  transition:
+    font-stretch 480ms var(--ease-resolve),
+    color 200ms linear;
+}
+
+.sv-row.is-on {
+  color: var(--s-fg);
+}
+
+.sv-row.is-on .sv-name {
+  font-stretch: 122%;
+}
+
+.sv-slot {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  margin-top: calc(var(--u) * 1.6);
+  margin-left: calc(var(--u) * 4.4);
+}
+
+.sv-detail {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition:
+    opacity 200ms linear,
+    transform 360ms var(--ease-resolve);
+}
+
+.sv-detail.is-on {
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+}
+
+.sv-detail p {
+  max-width: 46ch;
+  margin: 0;
+  color: var(--s-muted);
+  font: 450 calc(var(--u) * 1.2) / 1.5 var(--font-sans);
+}
+
+.sv-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: calc(var(--u) * 1) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sv-tags li {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border: 1px solid var(--s-line-strong);
+  border-radius: var(--radius-pill, 999px);
+  font: var(--text-micro);
+}
+
+.sv-panel {
+  position: relative;
+  overflow: hidden;
+  background: var(--sv-c, var(--azul-sinal));
+  transition: background-color 300ms ease;
+}
+
+.sv-panel__disc {
+  position: absolute;
+  inset: 0;
+  background: var(--sv-next, var(--azul-sinal));
+  clip-path: circle(0 at 0% var(--sv-oy, 50%));
+  pointer-events: none;
+}
+
+.sv-art__stage {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.sv-art {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms linear;
+}
+
+.sv-art.is-on {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sv-art .service-art {
+  display: block;
+  container-type: inline-size;
+  width: min(84%, calc(var(--H, 100svh) * 0.68 * var(--ratio)));
+}
+
+.sv-art[data-c="azul"] .ar {
+  --side: #c9cae9;
+  --floor: rgba(11, 12, 31, 0.16);
+}
+
+.sv-art[data-c="tinta"] .ar {
+  --side: #8d8fb3;
+  --floor: rgba(246, 245, 240, 0.1);
+}
+
+/* ---------- Projetos: janelas que empilham e deitam (issue #117) ----------
+   Base sem animação: título, janelas em coluna e números, em ordem. Com data-scenes="on" o
+   capítulo vira palco fixo de 6 telas e o GSAP empilha as janelas e deita a pilha. */
+
+.pj-ch {
+  --pw: min(91vw, 1312px);
+  --ph: min(calc(100svh - 176px), 700px);
+  position: relative;
+  overflow-x: clip;
+}
+
+.pj-stage {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 64px;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 144px var(--G);
+}
+
+.pj-big {
+  margin: 0;
+  font-size: calc(var(--u) * 23);
+  font-weight: 900;
+  font-stretch: 100%;
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+  white-space: nowrap;
+}
+
+.pj-big__in {
+  position: relative;
+  display: inline-block;
+}
+
+.pj-dot {
+  right: calc(var(--u) * -5.6);
+  bottom: calc(var(--u) * 5);
+}
+
+.pj-lead {
+  max-width: 34ch;
+  margin: var(--head-gap-lead) 0 0;
+  color: var(--s-muted);
+  font: var(--text-corpo-l);
+}
+
+.pj-world {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.pj {
+  --dim: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 28px;
+  box-shadow:
+    0 0 0 1px var(--s-line),
+    0 30px 60px -30px rgba(11, 12, 31, 0.45);
+}
+
+.pj::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--tinta);
+  opacity: var(--dim);
+  pointer-events: none;
+}
+
+.pj-bar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 56px;
+  padding: 0 20px;
+  border-bottom: 1px solid var(--s-line);
+}
+
+.pj-slot {
+  position: relative;
+  flex: none;
+  width: 30px;
+  height: 30px;
+}
+
+.pj-slot__stop {
+  top: 50%;
+  left: 50%;
+}
+
+.pj-url {
+  display: flex;
+  flex: 0 1 320px;
+  align-items: center;
+  height: 30px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: var(--s-raised);
+  font: var(--text-micro);
+}
+
+.pj-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-left: auto;
+  font: var(--text-micro);
+}
+
+.pj-live i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--s-signal);
+}
+
+.pj-n {
+  color: var(--s-muted);
+  font: var(--text-micro);
+}
+
+.pj-body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  min-height: 0;
+}
+
+.pj-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 40px;
+}
+
+.pj-text .g-eyebrow {
+  margin: 0;
+}
+
+.pj-text h3 {
+  margin: 16px 0 0;
+  font-size: calc(var(--u) * 5);
+  font-weight: 900;
+  font-stretch: 108%;
+  line-height: 0.94;
+  letter-spacing: -0.03em;
+}
+
+.pj-text > p:not(.g-eyebrow) {
+  margin: 20px 0 0;
+  color: var(--s-muted);
+  font: var(--text-corpo);
+}
+
+.pj-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pj-stack li {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 11px;
+  border: 1px solid var(--s-line-strong);
+  border-radius: 999px;
+  font: var(--text-micro);
+}
+
+.pj-text .g-button {
+  margin-top: auto;
+}
+
+/* A capa preenche o painel inteiro. A caixa muda de proporção com a tela, então a capa precisa ser
+   um mockup com o assunto no centro e cenário sobrando; coverPosition (projects.ts) move o foco.
+   A sobra de 12px em cima e embaixo cobre a paralaxe. */
+.pj-cover {
+  position: relative;
+  min-height: 360px;
+  margin: 0;
+  overflow: hidden;
+  background: var(--s-raised);
+}
+
+.pj-cover img {
+  position: absolute;
+  top: -12px;
+  left: 0;
+  width: 100%;
+  height: calc(100% + 24px);
+  object-fit: cover;
+}
+
+.pj-out {
+  position: relative;
+  z-index: 4;
+  max-width: 560px;
+}
+
+.pj-out__e {
+  position: relative;
+  margin: 0 0 calc(var(--u) * 1.2);
+}
+
+.pj-out__stop {
+  top: 50%;
+  left: calc(var(--u) * -2.6);
+}
+
+.pj-stat {
+  display: grid;
+  grid-template-columns: calc(var(--u) * 12.6) minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+  padding: calc(var(--u) * 1.3) 0;
+  border-top: 1px solid var(--s-line);
+  color: var(--s-fg);
+  text-decoration: none;
+}
+
+.pj-stat:focus-visible {
+  outline: 2px solid var(--s-signal);
+  outline-offset: 2px;
+}
+
+.pj-stat strong {
+  font-size: calc(var(--u) * 5);
+  font-weight: 900;
+  font-stretch: 112%;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.pj-stat span {
+  font: 500 15px / 1.3 var(--font-sans);
+}
+
+.pj-stat small {
+  display: block;
+  margin-top: 6px;
+  color: var(--s-muted);
+  font: var(--text-micro);
+}
+
+.pj-out__note {
+  margin: 8px 0 0;
+  color: var(--s-muted);
+  font: var(--text-micro);
+}
+
+.pj-exit {
+  bottom: 12%;
+  left: 50%;
+}
+
+/* Palco: só com as cenas ligadas. */
+[data-scenes="on"] .pj-ch {
+  height: calc(100svh * 6);
+}
+
+[data-scenes="on"] .pj-stage {
+  position: sticky;
+  top: 0;
+  display: block;
+  max-width: none;
+  height: 100svh;
+  padding: 0;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+[data-scenes="on"] .pj-big {
+  position: absolute;
+  top: calc(50svh - var(--u) * 13);
+  left: var(--G);
+}
+
+[data-scenes="on"] .pj-lead {
+  position: absolute;
+  bottom: calc(var(--u) * 5);
+  left: var(--G);
+  margin: 0;
+}
+
+[data-scenes="on"] .pj-world {
+  position: absolute;
+  z-index: 3;
+  top: calc(50% + 28px);
+  left: 50%;
+  display: block;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  transform: translate3d(var(--wx, 0px), var(--wy, 0px), 0) scale(var(--wk, 1))
+    rotateX(var(--wrx, 0deg)) rotateZ(var(--wrz, 0deg));
+}
+
+/* Escondidas até o GSAP pôr cada janela abaixo da tela. */
+[data-scenes="on"] .pj {
+  position: absolute;
+  top: calc(var(--ph) / -2);
+  left: calc(var(--pw) / -2);
+  width: var(--pw);
+  height: var(--ph);
+  visibility: hidden;
+}
+
+/* Deitadas em pilha, as janelas flutuam em onda (keyframes pc-float, mais abaixo). --pj-lift vai
+   de 0 a 1 na batida da virada: de frente a flutuação fica zerada, porque num palco preserve-3d
+   a altura decide quem pinta por cima e uma janela antiga passaria na frente da atual. */
+[data-scenes="on"] .pj {
+  --float: calc(18px * var(--pj-lift, 0));
+  animation: pc-float 3.8s ease-in-out infinite alternate;
+}
+
+[data-scenes="on"] .pj:nth-child(2n) {
+  animation-delay: -1.3s;
+}
+
+[data-scenes="on"] .pj:nth-child(3n) {
+  animation-delay: -2.5s;
+}
+
+[data-scenes="on"] .pj-cover {
+  min-height: 0;
+}
+
+[data-scenes="on"] .pj-out {
+  position: absolute;
+  top: calc(50svh - var(--u) * 15);
+  right: var(--G);
+  width: calc(var(--u) * 30);
+  max-width: none;
+  visibility: hidden;
+}
+
+/* Tela em pé e larga (tablet): a janela ganha altura e a capa vai para cima do texto, senão a
+   coluna da capa fica estreita e alta demais para uma imagem deitada. */
+@media (min-width: 769px) and (max-aspect-ratio: 1 / 1) {
+  .pj-ch {
+    --ph: min(calc(100svh - 176px), 920px);
+  }
+  .pj-body {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .pj-cover {
+    flex: 1;
+    min-height: 0;
+  }
+  .pj-text {
+    flex: none;
+  }
+  .pj-text .g-button {
+    margin-top: 28px;
+  }
+}
+
+@media (max-width: 768px) {
+  .pj-ch {
+    --pw: calc(100vw - 32px);
+    --ph: calc(100svh - 152px);
+  }
+  .pj-stage {
+    gap: 40px;
+    padding: 88px var(--G);
+  }
+  .pj-big {
+    font-size: 96px;
+  }
+  .pj-dot {
+    right: -24px;
+    bottom: 28px;
+  }
+  .pj-bar {
+    height: 48px;
+    padding: 0 12px;
+    gap: 8px;
+  }
+  .pj-url {
+    flex: 1;
+    height: 28px;
+    padding: 0 10px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .pj-n {
+    display: none;
+  }
+  .pj-body {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  /* No celular a capa tem a proporção da própria imagem (--pj-ratio, de projects.ts), então ela
+     aparece inteira e sem faixas. Só em tela curta, onde o texto não caberia, a capa cede altura
+     e a imagem corta um pouco nas bordas. */
+  .pj-cover {
+    flex: 0 1 auto;
+    aspect-ratio: var(--pj-ratio);
+    min-height: 120px;
+  }
+  .pj-cover img {
+    top: 0;
+    height: 100%;
+  }
+  .pj-text {
+    flex: 1 0 auto;
+    padding: 18px;
+  }
+  .pj-text h3 {
+    margin-top: 8px;
+    font-size: 38px;
+  }
+  .pj-text > p:not(.g-eyebrow) {
+    margin-top: 12px;
+    font-size: 16px;
+    line-height: 1.45;
+  }
+  .pj-stack {
+    margin-top: 12px;
+  }
+  .pj-text .g-button {
+    margin-top: 16px;
+  }
+  .pj-out__stop {
+    top: 50%;
+    right: 18px;
+    left: auto;
+  }
+  .pj-stat {
+    grid-template-columns: 104px minmax(0, 1fr);
+    gap: 10px;
+    padding: 11px 0;
+  }
+  .pj-stat strong {
+    font-size: 38px;
+  }
+  .pj-stat span {
+    font-size: 14px;
+  }
+
+  [data-scenes="on"] .pj-ch {
+    height: calc(100svh * 8);
+  }
+  [data-scenes="on"] .pj-big {
+    top: calc(50svh - 166px);
+  }
+  [data-scenes="on"] .pj-lead {
+    top: calc(50svh - 50px);
+    right: var(--G);
+    bottom: auto;
+  }
+  [data-scenes="on"] .pj-world {
+    top: calc(50% - 22px);
+  }
+  [data-scenes="on"] .pj-text .g-button {
+    margin-top: auto;
+  }
+  [data-scenes="on"] .pj-out {
+    top: calc(50svh - 50px);
+    right: var(--G);
+    left: var(--G);
+    width: auto;
+  }
+  .pj-exit {
+    bottom: 170px;
+  }
+}
+
+/* ---------- Processo: a mesma interface sendo feita (issue #118) ----------
+   Base sem animação: título e as quatro etapas em grade. Com data-scenes="on" vira palco fixo
+   de 4,4 telas: a pilha da hero (StackPlates, CSS em .hb) é desenhada, aberta e pintada. */
+
+.pc-ch {
+  position: relative;
+  overflow-x: clip;
+}
+
+.pc-stage {
+  position: relative;
+  box-sizing: border-box;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 144px var(--G);
+}
+
+.pc-head .g-eyebrow {
+  margin: 0;
+}
+
+.pc-title {
+  margin: var(--head-gap-eyebrow) 0 0;
+  font-size: calc(var(--u) * 6);
+  font-weight: 900;
+  font-stretch: 112%;
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+}
+
+.pc-intro {
+  /* Duas linhas no computador: em telas baixas a terceira encostava no texto da etapa. */
+  max-width: 52ch;
+  margin: var(--head-gap-lead) 0 0;
+  color: var(--s-muted);
+  font: 450 max(16px, calc(var(--u) * 1.25)) / 1.45 var(--font-sans);
+}
+
+.pc-world,
+.pc-line {
+  display: none;
+}
+
+.pc-copy {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 48px 64px;
+  margin-top: 64px;
+}
+
+.pc-count {
+  margin: 0;
+  color: var(--s-muted);
+  font: var(--text-micro);
+}
+
+.pc-name {
+  margin: 8px 0 0;
+  font: 900 calc(var(--u) * 3.4) / 1 var(--font-sans);
+  font-stretch: 112%;
+  letter-spacing: -0.025em;
+}
+
+.pc-body {
+  margin: 10px 0 0;
+  color: var(--s-muted);
+  font: var(--text-corpo);
+}
+
+.pc-get {
+  margin: 10px 0 0;
+  font: var(--text-micro);
+}
+
+.pc-get b {
+  color: var(--s-muted);
+  font-weight: 400;
+}
+
+.pc-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pc-tools li {
+  padding: 4px 10px;
+  border: 1px solid var(--s-line);
+  border-radius: 999px;
+  color: var(--s-muted);
+  font: var(--text-micro);
+}
+
+/* A pilha da hero no escuro: bordas mais fundas e a página em esqueleto sobre papel. */
+.pc-world.hb {
+  --hi-side: #55577c;
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  min-height: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.pc-world.hb .hb-page {
+  background: var(--hi-paper);
+}
+
+.pc-grid {
+  position: absolute;
+  top: -720px;
+  left: -720px;
+  width: 1440px;
+  height: 1440px;
+  background-image: radial-gradient(circle, rgba(212, 213, 250, 0.26) 0 1.6px, transparent 2.2px);
+  background-size: 30px 30px;
+  mask-image: radial-gradient(closest-side, #000 30%, transparent 100%);
+}
+
+.pc-out {
+  position: absolute;
+  top: -115px;
+  left: -165px;
+  width: 330px;
+  height: 230px;
+  border-radius: 18px;
+  outline: 2px dashed rgba(212, 213, 250, 0.6);
+  outline-offset: -2px;
+}
+
+.pc-note .iso-pl__face {
+  display: grid;
+  place-items: center;
+}
+
+.pc-note__t {
+  color: var(--hi-ink);
+  font: 500 16px / 1 var(--font-mono);
+}
+
+.pc-code .iso-pl__face {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 22px;
+  background: var(--tinta-2);
+  box-shadow: inset 0 0 0 1px rgba(246, 245, 240, 0.14);
+}
+
+.pc-code__l {
+  color: var(--papel);
+  font: 500 14px / 1.2 var(--font-mono);
+  white-space: pre;
+}
+
+.pc-code__l--tag {
+  color: var(--lima);
+}
+
+.pc-code__ok {
+  margin-top: auto;
+  color: var(--lima);
+  font: 500 12px / 1 var(--font-mono);
+}
+
+.pc-line__rail {
+  position: absolute;
+  inset: 0;
+  border-top: 2px dotted var(--s-line-strong);
+}
+
+.pc-line__fill {
+  position: absolute;
+  inset: 0;
+  background: var(--lima);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+}
+
+.pc-st {
+  appearance: none;
+  position: absolute;
+  top: 1px;
+  left: var(--pd);
+  width: 112px;
+  height: 56px;
+  margin: -14px 0 0 -56px;
+  padding: 26px 0 0;
+  border: 0;
+  background: none;
+  color: var(--s-muted);
+  font: var(--text-rotulo);
+  cursor: pointer;
+}
+
+.pc-st::before {
+  content: "";
+  position: absolute;
+  top: 7px;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  margin-left: -7px;
+  border-radius: 50%;
+  background: var(--tinta);
+  box-shadow: inset 0 0 0 2px var(--s-line-strong);
+}
+
+.pc-st:focus-visible {
+  outline: 2px solid var(--s-signal);
+  outline-offset: 2px;
+}
+
+.pc-st.is-past {
+  color: var(--s-fg);
+}
+
+.pc-st.is-past::before {
+  background: var(--lima);
+  box-shadow: none;
+}
+
+.pc-st__stop {
+  top: 14px;
+  left: 50%;
+}
+
+/* Palco: só com as cenas ligadas. */
+[data-scenes="on"] .pc-ch {
+  height: calc(100svh * 4.4);
+}
+
+[data-scenes="on"] .pc-stage {
+  position: sticky;
+  top: 0;
+  max-width: none;
+  height: 100svh;
+  padding: 0;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+[data-scenes="on"] .pc-head {
+  position: absolute;
+  z-index: 2;
+  top: calc(var(--u) * 7);
+  left: var(--G);
+  width: calc(var(--u) * 42);
+}
+
+[data-scenes="on"] .pc-world {
+  display: block;
+}
+
+/* Vida própria da cena: as placas flutuam com a rolagem parada ou não. Usa a propriedade
+   translate, que soma com o transform (a altura --zr vem do GSAP). A pilha sobe e desce junta,
+   na mesma fase: fechada, as placas ficam a 4 px uma da outra e fora de fase se atravessariam.
+   Só as notas da conversa, que estão soltas, têm fase própria. */
+[data-scenes="on"] .pc-iso .iso-pl {
+  animation: pc-float 3.4s ease-in-out infinite alternate;
+}
+
+[data-scenes="on"] .pc-iso .pc-note {
+  --float: 14px;
+  animation-duration: 2.6s;
+  animation-delay: var(--float-delay, 0s);
+}
+
+@keyframes pc-float {
+  from {
+    translate: 0 0 0;
+  }
+  to {
+    translate: 0 0 var(--float, 8px);
+  }
+}
+
+[data-scenes="on"] .pc-copy {
+  position: absolute;
+  z-index: 2;
+  bottom: calc(var(--u) * 10.4);
+  left: var(--G);
+  display: block;
+  width: calc(var(--u) * 34);
+  height: calc(var(--u) * 24);
+  margin: 0;
+}
+
+/* As quatro etapas no mesmo lugar: a troca não empurra nada. */
+[data-scenes="on"] .pc-slot {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(12px);
+  transition:
+    opacity 200ms linear,
+    transform 380ms var(--ease-resolve);
+}
+
+[data-scenes="on"] .pc-slot.is-on {
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+}
+
+[data-scenes="on"] .pc-line {
+  position: absolute;
+  z-index: 2;
+  right: var(--G);
+  bottom: calc(var(--u) * 5);
+  left: var(--G);
+  display: block;
+  height: 2px;
+}
+
+@media (max-width: 768px) {
+  .pc-stage {
+    padding: 88px var(--G);
+  }
+  .pc-title {
+    font-size: 40px;
+  }
+  .pc-copy {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 40px;
+    margin-top: 40px;
+  }
+  .pc-name {
+    font-size: 30px;
+  }
+  .pc-body {
+    font-size: 16px;
+    line-height: 1.4;
+  }
+  .pc-tools {
+    margin-top: 10px;
+  }
+  .pc-tools li {
+    padding: 2px 8px;
+    font-size: 11px;
+  }
+  .pc-st {
+    left: var(--pm);
+    width: 86px;
+    margin-left: -43px;
+    font-size: 11px;
+  }
+
+  /* --pc-up: em telas mais baixas que a prancha (844 px) a cena sobe até 100 px, para o texto
+     da etapa caber acima do trilho. Mesma conta de calcProcessLift em process-stage.ts. */
+  [data-scenes="on"] .pc-ch {
+    --pc-up: clamp(0px, calc((844px - 100svh) * 0.6), 100px);
+    height: calc(100svh * 5.6);
+  }
+  [data-scenes="on"] .pc-head {
+    top: 28px;
+    right: var(--G);
+    width: auto;
+  }
+  [data-scenes="on"] .pc-intro {
+    display: none;
+  }
+  [data-scenes="on"] .pc-copy {
+    top: calc(448px - var(--pc-up));
+    right: var(--G);
+    bottom: auto;
+    width: auto;
+    height: 262px;
+  }
+  [data-scenes="on"] .pc-slot {
+    top: 44px;
+    bottom: auto;
+  }
+  [data-scenes="on"] .pc-line {
+    top: calc(428px - var(--pc-up));
+    bottom: auto;
+  }
+}
+
+/* Classes de visibilidade da home em camadas */
+@media (max-width: 768px) {
+  .only-d {
+    display: none !important;
+  }
+}
+@media (min-width: 769px) {
+  .only-m {
+    display: none !important;
+  }
+}
+
+/* ---------- Celular (app web: seções mais baixas, uma coluna) ---------- */
+
+@media (max-width: 768px) {
+  .sv-intro {
+    padding: var(--sec-top) var(--G) 32px;
+  }
+  .sv-intro .g-eyebrow {
+    margin: 0;
+  }
+  .sv-title {
+    font-size: 58px;
+    line-height: 0.95;
+  }
+  .sv-lead {
+    font-size: 18px;
+    line-height: 1.45;
+  }
+  /* Mais alto que no computador: no celular um gesto rola quase uma tela, e cada serviço precisa
+     durar perto disso para não passar direto. */
+  [data-scenes="on"] .sv-track {
+    height: calc(var(--H, 100svh) * 5.4);
+  }
+  .sv-stage {
+    display: flex;
+    flex-direction: column;
+    height: var(--H, 100svh);
+  }
+  /* A cor e a arte ocupam o que sobrar da tela; o texto fica colado na ilha, sem vão embaixo. */
+  .sv-panel {
+    order: 0;
+    flex: 1 1 0;
+    min-height: 0;
+  }
+  .sv-art {
+    grid-template-rows: auto minmax(0, 1fr);
+    place-items: stretch;
+  }
+  .sv-art__head {
+    padding: 24px 16px 0;
+    background: none;
+  }
+  .sv-art__head .g-eyebrow {
+    margin: 0;
+  }
+  .sv-art__name {
+    margin: 10px 0 0;
+    font-size: 50px;
+    font-weight: 900;
+    font-stretch: 104%;
+    line-height: 0.94;
+    letter-spacing: -0.03em;
+  }
+  .sv-art__stage {
+    container-type: size;
+  }
+  .sv-art .service-art {
+    width: min(100cqw, calc(94cqh * var(--ratio)));
+  }
+  .sv-left {
+    order: 1;
+    flex: none;
+    height: auto;
+    min-height: auto;
+    padding: 2px 16px 96px;
+  }
+  .sv-list {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    margin: 0;
+    padding: 0;
+    height: 62px;
+  }
+  .sv-list::before {
+    top: 24px;
+    right: 10%;
+    bottom: auto;
+    left: 10%;
+    border-top: 2px dotted var(--s-line-strong);
+    border-left: 0;
+  }
+  .sv-list::after {
+    top: 24px;
+    left: 10%;
+    width: calc(80% * var(--sv-p, 0));
+    height: 2px;
+    transition: width 520ms var(--ease-resolve);
+  }
+  .sv-dot {
+    top: 25px;
+    left: 50%;
+    margin: 0;
+  }
+  .sv-list li::before {
+    top: 25px;
+    left: 50%;
+    margin: -6px 0 0 -6px;
+  }
+  .sv-row {
+    display: block;
+    height: 62px;
+  }
+  /* O número de cada parada fica embaixo dela, fora do alcance do Giro. */
+  .sv-n {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    text-align: center;
+    transition: color 200ms linear;
+  }
+  .sv-list li.is-on .sv-n {
+    color: var(--s-fg);
+    font-weight: 700;
+  }
+  .sv-list li.is-done .sv-n {
+    color: var(--s-signal);
+  }
+  .sv-name {
+    position: absolute;
+    overflow: hidden;
+    width: 1px;
+    height: 1px;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  /* Os cinco textos no mesmo lugar da grade: o bloco mede o mais alto e nada pula na troca. */
+  .sv-slot {
+    display: grid;
+    flex: none;
+    margin: 4px 0 0;
+    margin-left: 0;
+  }
+  .sv-detail {
+    position: relative;
+    inset: auto;
+    grid-area: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .sv-detail p {
+    font-size: 18px;
+    line-height: 1.42;
+  }
+  .sv-tags {
+    margin-top: auto;
+    padding-top: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-scenes="on"] .sv-track {
+    height: auto;
+  }
+  [data-scenes="on"] .sv-stage {
+    position: relative;
+    height: auto;
+    min-height: auto;
+  }
+  .sv-name,
+  .sv-detail,
+  .sv-art,
+  .sv-panel,
+  .sv-list::after {
+    transition: none !important;
+  }
+  .sv-list li::before {
+    animation: none !important;
+  }
+  .sv-panel__disc {
+    display: none !important;
+  }
+  .ar * {
+    animation: none !important;
+  }
+  .ar .pl,
+  .ar .pl__e,
+  .ar .pl__face,
+  .ar .fl {
+    transition: none;
+  }
+}
+
+/* ---------- Capítulos da home em camadas (issue #114) ---------- */
+
+.home-chapter {
+  position: relative;
+  box-sizing: border-box;
+  overflow-x: clip;
+}
+
+/* Sem data-scenes="on", os capítulos fluem normalmente como leitura sequencial. */
+[data-scenes="on"] .home-chapter {
+  height: calc(100svh * var(--ch-screens, 1));
+}
+
+[data-scenes="on"] .home-chapter__stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow-x: clip;
+  box-sizing: border-box;
+}
+
+/* Passagem: disco na cor do capítulo seguinte, aberto pela rolagem. Só existe com as cenas. */
+.hs-disc {
+  display: none;
+}
+
+[data-scenes="on"] .hs-disc {
+  position: absolute;
+  z-index: 30;
+  inset: 0;
+  display: block;
+  clip-path: circle(var(--dr, 0px) at var(--dx, 50%) var(--dy, 88%));
+  pointer-events: none;
+}
+
+/* ---------- Ator do Giro e paradas da home (issue #115) ---------- */
+
+.home-giro-stage {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 60;
+}
+
+.hs-actor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  background: none;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.hs-actor__k {
+  position: absolute;
+  top: -48px;
+  left: -48px;
+  width: 96px;
+  height: 96px;
+  /* --va e --st: o corpo estica na direção em que está indo e afina na outra. */
+  transform: scale(var(--gk, 1)) rotate(var(--va, 0deg))
+    scale(calc(1 + var(--st, 0)), calc(1 - var(--st, 0) * 0.7)) rotate(calc(var(--va, 0deg) * -1));
+}
+
+.hs-actor__in {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  /* Agacha e amassa a partir da base, como quem pisa no chão. */
+  transform-origin: 50% 86%;
+}
+
+.hs-actor__in::before {
+  content: "";
+  position: absolute;
+  inset: 13%;
+  border-radius: 50%;
+  background: var(--s-bg);
+  opacity: var(--core, 1);
+  /* O miolo troca de cor no ar junto com o traço (220 ms no .g-giro). */
+  transition: background-color 220ms linear;
+}
+
+.hs-actor .g-giro {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.hs-actor .g-giro__spin {
+  rotate: var(--roll, 0deg);
+}
+
+.hs-actor__in.is-squash {
+  animation: hs-squash 300ms var(--ease-resolve);
+}
+
+/* Impulso na saída do salto: agacha e solta. */
+.hs-actor__in.is-leap {
+  animation: hs-leap 260ms var(--ease-resolve);
+}
+
+.hs-actor__in.is-pulse {
+  animation: hs-pulse 180ms var(--ease-resolve);
+}
+
+.hs-actor__in.is-hop {
+  animation: hs-hop var(--dur-hop) var(--ease-hop);
+}
+
+@keyframes hs-squash {
+  0% {
+    transform: scale(1.26, 0.7);
+  }
+  55% {
+    transform: scale(0.93, 1.08);
+  }
+  100% {
+    transform: scale(1, 1);
+  }
+}
+
+@keyframes hs-leap {
+  0% {
+    transform: scale(1.14, 0.84);
+  }
+  60% {
+    transform: scale(0.94, 1.1);
+  }
+  100% {
+    transform: scale(1, 1);
+  }
+}
+
+@keyframes hs-pulse {
+  40% {
+    transform: scale(1.14);
+  }
+}
+
+@keyframes hs-hop {
+  0%,
+  100% {
+    transform: translateY(0) scale(1, 1);
+  }
+  20% {
+    transform: translateY(0) scale(1.1, 0.88);
+  }
+  55% {
+    transform: translateY(-16px) scale(0.95, 1.06);
+  }
+  80% {
+    transform: translateY(0) scale(1.05, 0.95);
+  }
+}
+
+.hs-stop {
+  position: absolute;
+  display: block;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.home-section__stop {
+  position: absolute;
+  top: 180px;
+  right: 64px;
+}
+
+@media (max-width: 768px) {
+  .home-section__stop {
+    top: 100px;
+    right: 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-giro-stage,
+  .hs-actor {
+    display: none;
+  }
+}

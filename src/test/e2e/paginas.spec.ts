@@ -1,0 +1,56 @@
+import { expect, test } from "@playwright/test";
+import { waitForHydration } from "./ready";
+
+test.describe("Case, 404 e movimento reduzido", () => {
+  test("Deve abrir o case e seguir para o próximo", async ({ page }) => {
+    await page.goto("/projetos/estudio-entre");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Estúdio Entre");
+    await expect(page.locator("link[rel=canonical]")).toHaveAttribute(
+      "href",
+      /\/projetos\/estudio-entre/
+    );
+
+    await waitForHydration(page);
+    await page
+      .getByRole("link", { name: /Agência Multi BR/ })
+      .last()
+      .click();
+    await expect(page).toHaveURL(/\/projetos\/agencia-multi-br/);
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Agência Multi BR");
+  });
+
+  test("Deve mostrar a 404 com o endereço pedido e voltar ao início", async ({ page }) => {
+    const response = await page.goto("/rota-que-nao-existe");
+    expect(response?.status()).toBe(404);
+    await expect(page.getByRole("heading", { name: "Essa página se perdeu." })).toBeVisible();
+    await expect(page.getByText("// endereço: /rota-que-nao-existe")).toBeVisible();
+
+    await waitForHydration(page);
+    await page.getByRole("link", { name: "Voltar ao início" }).click();
+    await expect(page).toHaveURL(/\/$/);
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Interfaces com vida.");
+  });
+
+  test("Com movimento reduzido o Giro do hero fica parado e a página continua usável", async ({
+    page,
+  }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Interfaces com vida.");
+    // Só desabilita depois da hidratação, que demora mais com o servidor frio.
+    await expect(page.locator(".hb-rider")).toBeDisabled({ timeout: 45_000 });
+    await page.getByRole("link", { name: "Ver projetos" }).click();
+    await expect(page).toHaveURL(/#projetos$/);
+  });
+
+  test("Deve deixar o rodapé para o capítulo final na home e mostrá-lo nas outras páginas", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    await expect(page.locator(".g-site-footer")).toHaveCount(0);
+    await expect(page.locator("#fim .fn-foot")).toBeAttached();
+
+    await page.goto("/blog");
+    await expect(page.locator(".g-site-footer")).toBeAttached();
+  });
+});

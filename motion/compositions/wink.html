@@ -1,0 +1,103 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+    }
+    #wink-giro {
+      position: absolute;
+      left: 260px;
+      top: 230px;
+      width: 460px;
+      height: 460px;
+    }
+    #wink-btn {
+      position: absolute;
+      left: 980px;
+      top: 404px;
+      height: 112px;
+      width: 520px;
+      border-radius: 999px;
+      background: var(--lima);
+      color: var(--tinta);
+      font-size: 46px;
+      font-weight: 600;
+      font-stretch: 110%;
+    }
+    #wink-done {
+      opacity: 0;
+    }
+    .wink-txt {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+  <div data-hf-id="hf-lim0" id="root" data-composition-id="wink" data-width="1920" data-height="1080">
+    <p data-hf-id="hf-r09f" id="wink-label" class="scene-label">// piscadela · ao copiar o e-mail</p>
+    <svg data-hf-id="hf-4cf9" id="wink-giro" class="giro" viewBox="0 0 120 120" aria-hidden="true">
+      <circle data-hf-id="hf-ynie" class="g-disc" cx="60" cy="60" r="60" />
+      <g data-hf-id="hf-qz6i" class="g-body">
+        <g data-hf-id="hf-vqgr" class="g-turn"><g data-hf-id="hf-m906" class="g-spin"><circle data-hf-id="hf-0qp3" class="g-arc" cx="60" cy="60" r="44" /></g></g>
+        <g data-hf-id="hf-eis9" class="g-lid g-lid-l"><ellipse data-hf-id="hf-j586" class="g-eye g-eye-l" cx="46" cy="54" rx="6" ry="9" /></g>
+        <g data-hf-id="hf-mbev" class="g-lid g-lid-r"><ellipse data-hf-id="hf-hogj" class="g-eye g-eye-r" cx="74" cy="54" rx="6" ry="9" /></g>
+        <path data-hf-id="hf-l604" class="g-f g-happy-l" d="M38 60 Q46 46 54 60" />
+        <path data-hf-id="hf-75wd" class="g-f g-happy-r" d="M66 60 Q74 46 82 60" />
+        <path data-hf-id="hf-01op" class="g-f g-x" d="M39 52 L53 62" />
+        <path data-hf-id="hf-4dfp" class="g-f g-x" d="M53 52 L39 62" />
+        <path data-hf-id="hf-hkoj" class="g-f g-x" d="M67 52 L81 62" />
+        <path data-hf-id="hf-6z6z" class="g-f g-x" d="M81 52 L67 62" />
+        <path data-hf-id="hf-2rup" class="g-f g-sleep-l" d="M39 55 Q46 62 53 55" />
+        <path data-hf-id="hf-a19g" class="g-f g-sleep-r" d="M67 55 Q74 62 81 55" />
+        <path data-hf-id="hf-glth" class="g-z" d="M88 22 H98 L88 34 H98" />
+      </g>
+    </svg>
+    <div data-hf-id="hf-9usb" id="wink-btn">
+      <span data-hf-id="hf-xiu9" id="wink-copy" class="wink-txt">copiar e-mail</span>
+      <span data-hf-id="hf-4w9m" id="wink-done" class="wink-txt">copiado</span>
+    </div>
+    <p data-hf-id="hf-4roy" id="wink-caption" class="caption">Sucesso pequeno, reação pequena: uma piscadela.</p>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      const ft = GiroRig.ft;
+      const E = GiroRig.E;
+      const g = GiroRig.create(document.querySelector("#wink-giro"), { v: "nov" });
+      const P = g.P;
+      g.init(tl);
+      g.idle(tl, 0, 1.15);
+
+      // Clique no botão e troca do texto.
+      ft(tl, "#wink-btn", { scale: 1 }, { scale: 0.96, duration: 0.08, ease: E.easeOut }, 1.0);
+      ft(tl, "#wink-btn", { scale: 0.96 }, { scale: 1, duration: 0.3, ease: E.hop }, 1.08);
+      ft(tl, "#wink-copy", { opacity: 1, filter: "blur(0px)" }, { opacity: 0, filter: "blur(8px)", duration: 0.13, ease: "power2.in" }, 1.08);
+      ft(tl, "#wink-done", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.13, ease: "power4.out" }, 1.18);
+
+      // Piscadela: o olho direito fecha e vira sorriso.
+      ft(tl, P.lids[1], { scaleY: 1 }, { scaleY: 0.1, duration: 0.12, ease: E.easeIn }, 1.15);
+      ft(tl, P.eyes[1], { opacity: 1 }, { opacity: 0, duration: 0.06, ease: "none" }, 1.25);
+      ft(tl, P.happy[1], { opacity: 0 }, { opacity: 1, duration: 0.06, ease: "none" }, 1.25);
+      ft(tl, P.happy[1], { attr: { "stroke-dashoffset": 23 } }, { attr: { "stroke-dashoffset": 0 }, duration: 0.28, ease: E.resolve }, 1.25);
+      GiroRig.seq(tl, P.body, 1.15, { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0, svgOrigin: "60 104" }, [
+        { d: 0.16, e: E.resolve, v: { rotation: -6, y: -4 } },
+        { d: 0.3, e: E.inOut, v: { rotation: -3, y: 0 } },
+        { d: 0.4, e: E.inOut, v: { rotation: 0 } },
+      ]);
+
+      // Abre de novo.
+      ft(tl, P.happy[1], { opacity: 1 }, { opacity: 0, duration: 0.1, ease: "none" }, 2.45);
+      ft(tl, P.happy[1], { attr: { "stroke-dashoffset": 0 } }, { attr: { "stroke-dashoffset": 23 }, duration: 0.12, ease: E.easeIn }, 2.45);
+      ft(tl, P.eyes[1], { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "none" }, 2.51);
+      ft(tl, P.lids[1], { scaleY: 0.1 }, { scaleY: 1, duration: 0.34, ease: E.hop }, 2.53);
+      g.idle(tl, 3.0, 3.5);
+
+      tl.fromTo("#wink-label", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.18, ease: "power4.out" }, 0);
+      tl.fromTo("#wink-caption", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.18, ease: "power4.out" }, 0.1);
+      tl.to(["#wink-label", "#wink-caption"], { opacity: 0, filter: "blur(8px)", duration: 0.15, ease: "power2.in" }, 3.3);
+      window.__timelines["wink"] = tl;
+    })();
+  </script>
+</template>

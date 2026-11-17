@@ -1,0 +1,666 @@
+/* Tela de carregamento da primeira visita (LoadingScreen). Escondida até o <html> ganhar
+   data-loader, que o script inline de Layout.astro põe antes do primeiro paint. Sem JS, nunca
+   ganha o atributo e a página não fica presa.
+
+   Coreografia em camadas: os discos concêntricos expandem revelando as quatro camadas da interface
+   (tokens, componentes, tela e estado). Na home e com a coreografia completa, a tela deita em 3D
+   e transfere o palco para a pilha da hero. Se o usuário adiantar por interação ou ao abrir
+   rotas internas diretamente, a saída acontece por cortina vertical.
+
+   Tamanho: variante A. O nome vai de 50px em 390 até 136px em 1920. O código, de 15px a 26px.
+   Abaixo de 960px o sobrenome desce. Cada lado do nome é nowrap: o eixo de largura da Anybody
+   não pode reflowar a linha. O "o" fica no centro e as letras crescem para fora. */
+
+@property --g-stroke {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 12px;
+}
+
+.g-azul.g-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  touch-action: none;
+  background: transparent;
+  /* O resolve dispara cedo. No disco, isso cobria a tela antes de a cor aparecer.
+     A mesma duração vale no celular: lá só muda o raio inicial. */
+  --ease-wash: cubic-bezier(0.42, 0, 0.58, 1);
+}
+
+html[data-loader] .g-loader {
+  display: flex;
+}
+
+.g-loader__layers {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  --g-ox: 50%;
+  --g-oy: 50%;
+}
+
+.g-loader__bg {
+  position: absolute;
+  inset: 0;
+  background: var(--azul-sinal);
+}
+
+.g-loader[data-lay] .g-loader__bg {
+  display: none;
+}
+
+.g-loader__scene {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+}
+
+.g-loader-pl {
+  position: absolute;
+  top: calc(var(--H, 100vh) / -2);
+  left: calc(var(--W, 100vw) / -2);
+  width: var(--W, 100vw);
+  height: var(--H, 100vh);
+  transform-style: preserve-3d;
+}
+
+.g-loader-pl__e,
+.g-loader-pl__face {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--br, 0);
+}
+
+/* A espessura só existe deitada: em tela cheia ela vazaria para fora do disco. */
+.g-loader-pl__e {
+  background: var(--e, transparent);
+  visibility: hidden;
+}
+
+.g-loader[data-lay] .g-loader-pl__e {
+  visibility: visible;
+}
+
+.g-loader-pl__e:nth-child(1) {
+  transform: translateZ(-9px);
+}
+
+.g-loader-pl__e:nth-child(2) {
+  transform: translateZ(-6px);
+}
+
+.g-loader-pl__e:nth-child(3) {
+  transform: translateZ(-3px);
+}
+
+.g-loader-pl__face {
+  overflow: hidden;
+  clip-path: circle(0px at var(--g-ox) var(--g-oy));
+}
+
+.g-loader[data-lay] .g-loader-pl__face {
+  clip-path: none;
+  animation: none;
+}
+
+.g-loader-pl__paper {
+  position: absolute;
+  inset: 0;
+  background: #fbfaf6;
+  clip-path: ellipse(0px 0px at 50% 50%);
+}
+
+.g-loader-pl__tag {
+  position: absolute;
+  bottom: 64px;
+  left: 64px;
+  font-family: var(--font-mono);
+  font-size: clamp(15px, calc(15px + (100vw - 390px) * 11 / 1530), 26px);
+  font-weight: 400;
+  line-height: 1.2;
+  white-space: nowrap;
+  transform-origin: 0 100%;
+}
+
+@media (max-width: 767px) {
+  .g-loader-pl__tag {
+    bottom: 40px;
+    left: 24px;
+    font-size: 15px;
+  }
+}
+
+.g-loader__layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  clip-path: circle(0px at var(--g-ox) var(--g-oy));
+}
+
+.g-loader__layer--azul {
+  background: var(--azul-sinal);
+  clip-path: none;
+}
+
+.g-loader__layer--lima {
+  background: var(--lima);
+  color: var(--azul-sinal);
+}
+
+.g-loader__layer--papel {
+  background: var(--papel);
+  color: var(--azul-sinal);
+}
+
+.g-loader__layer--tinta {
+  background: var(--tinta);
+  color: var(--papel);
+}
+
+/* O nome da camada aparece com o disco recortado. */
+.g-loader__layer-tag,
+.g-loader__layer .g-loader__tag {
+  position: absolute;
+  bottom: 64px;
+  left: 64px;
+  font-family: var(--font-mono);
+  font-size: clamp(15px, calc(15px + (100vw - 390px) * 11 / 1530), 26px);
+  font-weight: 400;
+  line-height: 1.2;
+  white-space: nowrap;
+  transform-origin: 0 100%;
+}
+
+.g-loader__layer--lima .g-loader__layer-tag,
+.g-loader__layer--lima .g-loader__tag,
+.g-loader__layer--papel .g-loader__layer-tag,
+.g-loader__layer--papel .g-loader__tag {
+  color: var(--azul-sinal);
+}
+
+.g-loader__layer--tinta .g-loader__layer-tag,
+.g-loader__layer--tinta .g-loader__tag {
+  color: var(--papel);
+}
+
+@media (max-width: 767px) {
+  .g-loader__layer-tag,
+  .g-loader__layer .g-loader__tag {
+    bottom: 40px;
+    left: 24px;
+    font-size: 15px;
+  }
+}
+
+.g-loader__stage {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--papel);
+}
+
+.g-loader__ink {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  color: var(--azul-sinal);
+  --g-ox: 50%;
+  --g-oy: 50%;
+  clip-path: circle(0px at var(--g-ox) var(--g-oy));
+}
+
+.g-loader__name {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: var(--font-sans);
+  font-size: clamp(50px, calc(50px + (100vw - 390px) * 86 / 1530), 136px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.g-loader__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.g-loader__o {
+  position: relative;
+  top: 0.06em;
+  display: block;
+  width: 0.74em;
+  height: 0.74em;
+  margin: 0 0.03em;
+}
+
+/* O Giro pinta com --g-ink (lima, porque a tela é g-azul). A cor da coreografia tem que
+   vencer essa declaração no próprio svg. */
+.g-loader__o .g-giro {
+  color: var(--lima);
+  --g-stroke: 12px;
+}
+
+.g-loader__fly,
+.g-loader__fly .g-giro {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.g-loader__left,
+.g-loader__right {
+  display: flex;
+  white-space: nowrap;
+}
+
+.g-loader__lt {
+  font-stretch: 50%;
+  opacity: 0;
+}
+
+/* Seleção do estudo: caixa, alça e etiqueta nos quadros de 390 e de 1920. */
+.g-loader__sel {
+  --sel-out: clamp(3px, calc(3px + (100vw - 390px) * 3 / 1530), 6px);
+  --sel-hd: clamp(7px, calc(7px + (100vw - 390px) * 5 / 1530), 12px);
+  --sel-tag: clamp(10px, calc(10px + (100vw - 390px) * 6 / 1530), 16px);
+  position: absolute;
+  inset: calc(var(--sel-out) * -1);
+  box-sizing: border-box;
+  border: 2px solid var(--azul-sinal);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.g-loader__hd {
+  position: absolute;
+  box-sizing: border-box;
+  width: var(--sel-hd);
+  height: var(--sel-hd);
+  background: var(--papel);
+  border: 2px solid var(--azul-sinal);
+  transform: scale(0);
+}
+
+.g-loader__hd:nth-child(2) {
+  top: calc(var(--sel-hd) * -0.583);
+  left: calc(var(--sel-hd) * -0.583);
+}
+
+.g-loader__hd:nth-child(3) {
+  top: calc(var(--sel-hd) * -0.583);
+  right: calc(var(--sel-hd) * -0.583);
+}
+
+.g-loader__hd:nth-child(4) {
+  bottom: calc(var(--sel-hd) * -0.583);
+  left: calc(var(--sel-hd) * -0.583);
+}
+
+.g-loader__hd:nth-child(5) {
+  right: calc(var(--sel-hd) * -0.583);
+  bottom: calc(var(--sel-hd) * -0.583);
+}
+
+.g-loader__sel .g-loader__tag {
+  position: absolute;
+  bottom: calc(100% + var(--sel-tag) * 0.625);
+  left: -2px;
+  padding: calc(var(--sel-tag) * 0.25) calc(var(--sel-tag) * 0.625);
+  background: var(--azul-sinal);
+  color: var(--papel);
+  font-family: var(--font-mono);
+  font-size: var(--sel-tag);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.2;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+@media (max-width: 767px) {
+  .g-loader__sel,
+  .g-loader__hd {
+    border-width: 1.5px;
+  }
+}
+
+@media (max-width: 959px) {
+  .g-loader__row {
+    flex-wrap: wrap;
+    justify-content: center;
+    white-space: normal;
+    max-width: calc(100vw - 32px);
+  }
+
+  .g-loader__right {
+    flex-basis: 100%;
+    justify-content: center;
+  }
+
+  .g-loader__gap {
+    display: none;
+  }
+}
+
+html[data-loader] main {
+  transform: translateY(24px);
+}
+
+html[data-loader="exit"] main,
+html[data-loader="lay"] main {
+  transform: translateY(0);
+  transition: transform 780ms var(--ease-resolve);
+}
+
+/* Relógio da coreografia. As animações só correm com data-run="play", depois da Anybody. */
+
+.g-loader[data-run="play"] .g-loader__lt {
+  animation: g-loader-unfold 600ms var(--ease-resolve) both;
+  animation-delay: var(--d);
+}
+
+.g-loader[data-run="play"] .g-loader__layer--lima {
+  animation: g-loader-disk 520ms var(--ease-wash) 1200ms forwards;
+}
+
+.g-loader[data-run="play"] .g-loader__layer--papel {
+  animation: g-loader-disk 520ms var(--ease-wash) 1680ms forwards;
+}
+
+.g-loader[data-run="play"] .g-loader__layer--tinta {
+  animation: g-loader-disk 520ms var(--ease-wash) 2160ms forwards;
+}
+
+.g-loader[data-run="play"] .g-loader__stage {
+  animation:
+    g-loader-c-azul 0s linear 1720ms forwards,
+    g-loader-c-papel 0s linear 2680ms forwards;
+}
+
+.g-loader[data-run="play"] .g-loader__ink {
+  animation:
+    g-loader-disk 520ms var(--ease-wash) 1200ms forwards,
+    g-loader-disk 520ms var(--ease-wash) 2160ms forwards,
+    g-loader-c-papel 0s linear 2160ms forwards;
+}
+
+.g-loader[data-run="play"] .g-loader__o .g-giro {
+  --g-stroke: 12px;
+  animation:
+    g-loader-stroke 750ms var(--ease-resolve) 225ms forwards,
+    g-loader-c-azul 0s linear 1200ms forwards,
+    g-loader-c-lima 0s linear 2160ms forwards;
+}
+
+.g-loader[data-run="play"] .g-loader__sel {
+  animation:
+    g-loader-sel 330ms var(--ease-resolve) 1740ms both,
+    g-loader-hide 0s linear 2160ms forwards;
+}
+
+.g-loader[data-run="play"] .g-loader__hd {
+  animation: g-loader-hop 360ms var(--ease-hop) both;
+}
+
+.g-loader[data-run="play"] .g-loader__hd:nth-child(2) {
+  animation-delay: 1785ms;
+}
+
+.g-loader[data-run="play"] .g-loader__hd:nth-child(3) {
+  animation-delay: 1830ms;
+}
+
+.g-loader[data-run="play"] .g-loader__hd:nth-child(4) {
+  animation-delay: 1875ms;
+}
+
+.g-loader[data-run="play"] .g-loader__hd:nth-child(5) {
+  animation-delay: 1920ms;
+}
+
+.g-loader[data-run="play"] .g-loader__sel .g-loader__tag {
+  animation: g-loader-tag 330ms var(--ease-resolve) 1830ms both;
+}
+
+.g-loader[data-run="still"] .g-loader__lt {
+  font-stretch: 115%;
+  opacity: 1;
+}
+
+.g-loader[data-exit] .g-loader__lt {
+  font-stretch: 115%;
+  opacity: 1;
+  animation: none;
+}
+
+.g-loader[data-exit] .g-loader__sel {
+  opacity: 0;
+  animation: none;
+}
+
+.g-loader[data-exit] .g-loader__stage {
+  color: var(--papel);
+  animation: none;
+}
+
+.g-loader[data-exit] .g-loader__o .g-giro {
+  --g-stroke: 22px;
+  animation: none;
+}
+
+.g-loader[data-exit] .g-loader__ink {
+  visibility: hidden;
+}
+
+.g-loader[data-exit] .g-loader__layers {
+  animation: g-loader-up 780ms var(--ease-resolve) forwards;
+}
+
+.g-loader[data-lay] .g-loader__lt {
+  font-stretch: 115%;
+  opacity: 1;
+  animation: none;
+}
+
+.g-loader[data-lay] .g-loader__sel {
+  opacity: 0;
+  animation: none;
+}
+
+.g-loader[data-lay] .g-loader__stage {
+  color: var(--papel);
+  animation: none;
+}
+
+.g-loader[data-lay] .g-loader__o .g-giro {
+  --g-stroke: 22px;
+  animation: none;
+}
+
+.g-loader[data-lay] .g-loader__ink {
+  visibility: hidden;
+}
+
+@media (max-width: 767px) {
+  .g-loader[data-run="play"] .g-loader__layer--lima,
+  .g-loader[data-run="play"] .g-loader__layer--papel,
+  .g-loader[data-run="play"] .g-loader__layer--tinta {
+    animation-name: g-loader-disk-m;
+  }
+
+  .g-loader[data-run="play"] .g-loader__ink {
+    animation-name: g-loader-disk-m, g-loader-disk-m, g-loader-c-papel;
+  }
+
+  .g-loader[data-exit] .g-loader__layers {
+    animation-name: g-loader-down;
+  }
+
+  .g-loader[data-exit] .g-loader__o .g-giro {
+    --g-stroke: 14px;
+    transition: --g-stroke 780ms var(--ease-resolve);
+  }
+
+  .g-loader[data-exit] .g-loader__left,
+  .g-loader[data-exit] .g-loader__right {
+    opacity: 0;
+    animation: none;
+    transition: opacity 780ms var(--ease-resolve);
+  }
+
+  .g-loader[data-lay] .g-loader__o .g-giro {
+    --g-stroke: 14px;
+    transition: --g-stroke 780ms var(--ease-resolve);
+  }
+
+  .g-loader[data-lay] .g-loader__left,
+  .g-loader[data-lay] .g-loader__right {
+    opacity: 0;
+    animation: none;
+    transition: opacity 220ms linear;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-loader] main,
+  html[data-loader="exit"] main,
+  html[data-loader="lay"] main {
+    transform: none;
+    transition: none;
+  }
+
+  .g-loader__lt {
+    font-stretch: 115%;
+    opacity: 1;
+  }
+
+  .g-loader[data-run="play"] .g-loader__lt,
+  .g-loader[data-run="play"] .g-loader__layer,
+  .g-loader[data-run="play"] .g-loader-pl__face,
+  .g-loader[data-run="play"] .g-loader__stage,
+  .g-loader[data-run="play"] .g-loader__ink,
+  .g-loader[data-run="play"] .g-loader__o,
+  .g-loader[data-run="play"] .g-loader__o .g-giro,
+  .g-loader[data-run="play"] .g-loader__sel,
+  .g-loader[data-run="play"] .g-loader__hd,
+  .g-loader[data-run="play"] .g-loader__sel .g-loader__tag {
+    animation: none;
+  }
+}
+
+@keyframes g-loader-unfold {
+  to {
+    font-stretch: 115%;
+    opacity: 1;
+  }
+}
+
+@keyframes g-loader-hide {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes g-loader-disk {
+  from {
+    clip-path: circle(52px at var(--g-ox) var(--g-oy));
+  }
+  to {
+    clip-path: circle(150vmax at var(--g-ox) var(--g-oy));
+  }
+}
+
+@keyframes g-loader-disk-m {
+  from {
+    clip-path: circle(20px at var(--g-ox) var(--g-oy));
+  }
+  to {
+    clip-path: circle(150vmax at var(--g-ox) var(--g-oy));
+  }
+}
+
+@keyframes g-loader-c-azul {
+  to {
+    color: var(--azul-sinal);
+  }
+}
+
+@keyframes g-loader-c-papel {
+  to {
+    color: var(--papel);
+  }
+}
+
+@keyframes g-loader-c-lima {
+  to {
+    color: var(--lima);
+  }
+}
+
+@keyframes g-loader-stroke {
+  to {
+    --g-stroke: 22px;
+  }
+}
+
+@keyframes g-loader-sel {
+  from {
+    opacity: 0;
+    transform: scale(1.15);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes g-loader-hop {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes g-loader-tag {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes g-loader-up {
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes g-loader-down {
+  to {
+    transform: translateY(100%);
+  }
+}

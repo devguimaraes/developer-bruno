@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Hero B, entrada quicando, celular</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/giro/tokens.css">
+<link rel="stylesheet" href="ds/giro/components/bundle.css">
+<link rel="stylesheet" href="hero.css">
+<link rel="stylesheet" href="hero-b.css">
+<link rel="stylesheet" href="hero-quique.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,100..900&amp;family=Geist+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:#2b2eff}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; overflow: hidden">
+<dc-import name="Quique" layout="mobile" autoplay="{{autoplay}}" reduced-motion="{{reducedMotion}}" rolagem="{{rolagem}}" elasticidade="{{elasticidade}}" velocidade="{{velocidade}}" rastro="{{rastro}}" rastro-ms="{{rastroMs}}" letras="{{letras}}" so-entrada="{{soEntrada}}" repetir="{{repetir}}" hint-size="390px,844px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"autoplay":{"editor":"boolean","default":true},"reducedMotion":{"editor":"boolean","default":false},"rolagem":{"editor":"range","default":0,"min":0,"max":100,"step":1,"unit":"%"},"elasticidade":{"editor":"range","default":58,"min":40,"max":80,"step":1,"unit":"%"},"velocidade":{"editor":"enum","options":["100%","50%","25%"],"default":"100%"},"rastro":{"editor":"boolean","default":true},"rastroMs":{"editor":"range","default":320,"min":100,"max":700,"step":10,"unit":"ms"},"letras":{"editor":"boolean","default":true},"soEntrada":{"editor":"boolean","default":false},"repetir":{"editor":"boolean","default":true},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  // A mesma entrada da prancha do computador, no layout do celular: o Giro sai da aba de baixo.
+  renderVals() {
+    const p = this.props;
+    return {
+      autoplay: p.autoplay !== false,
+      reducedMotion: p.reducedMotion === true,
+      rolagem: Number(p.rolagem) || 0,
+      elasticidade: Number.isFinite(Number(p.elasticidade)) ? Number(p.elasticidade) : 58,
+      velocidade: p.velocidade || "100%",
+      rastro: p.rastro !== false,
+      rastroMs: Number.isFinite(Number(p.rastroMs)) ? Number(p.rastroMs) : 320,
+      letras: p.letras !== false,
+      soEntrada: p.soEntrada === true,
+      repetir: p.repetir !== false,
+    };
+  }
+}
+</script>
+</body>
+</html>

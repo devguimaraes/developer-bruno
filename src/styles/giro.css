@@ -1,0 +1,1156 @@
+/* Identidade Giro: tokens, fontes, superfícies e movimento.
+   Fonte de verdade: Design System "Giro" (tokens.json e components/bundle.css). */
+
+/* Subset latin (inclui os acentos do português), hospedado localmente. */
+@font-face {
+  font-family: "Anybody";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  font-stretch: 50% 150%;
+  src: url("../assets/fonts/anybody-latin-wdth-wght.woff2") format("woff2-variations");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+    U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("../assets/fonts/geist-mono-latin-wght.woff2") format("woff2-variations");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+    U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Display serif só para títulos do blog (lista, post e h2/h3 do markdown). Só existe o 400.
+   O navegador só baixa o arquivo nas páginas que usam a família. */
+@font-face {
+  font-family: "Geist Serif";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("../assets/fonts/geist-serif-latin-regular.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+    U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  /* Unidade base proporcional da home em camadas: 14,4 px em 1440 x 900 */
+  --u: min(1vw, 1.6svh);
+
+  /* Paleta. Texto lima ou coral nunca vai sobre papel (contrastes no README do DS). */
+  --azul-sinal: #2b2eff;
+  --azul-fundo: #1f22d6;
+  --lima: #d2ff4d;
+  --papel: #f6f5f0;
+  --tinta: #0b0c1f;
+  --tinta-2: #15172e;
+  --grafite: #5b5e78;
+  --nevoa-azul: #d4d5fa;
+  --nevoa-tinta: #9a9cc0;
+  --coral: #ff5c3d;
+  --linha-papel: rgba(11, 12, 31, 0.14);
+  --linha-azul: rgba(246, 245, 240, 0.22);
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-18: 72px;
+
+  /* Margem lateral das páginas e o ritmo do cabeçalho (rótulo, título, texto de apoio). Valem
+     para todos os capítulos da home e para as páginas internas; no celular mudam mais abaixo. */
+  --G: 64px;
+  --head-gap-eyebrow: 12px;
+  --head-gap-lead: 24px;
+  /* Respiro vertical. --sec-*: topo e base de um capítulo de leitura da home (sem palco preso).
+     --page-*: topo e base do conteúdo das páginas internas, abaixo do cabeçalho do site. */
+  --sec-top: 120px;
+  --sec-bottom: 176px;
+  --page-top: 48px;
+  --page-bottom: 96px;
+
+  --radius-sm: 10px;
+  --radius-md: 22px;
+  --radius-lg: 28px;
+  --radius-pill: 999px;
+
+  --font-sans: "Anybody", "Arial Black", system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-serif: "Geist Serif", "Times New Roman", Times, serif;
+
+  --text-corpo-l: 450 20px / 1.5 var(--font-sans);
+  --text-corpo: 450 17px / 1.6 var(--font-sans);
+  --text-nav: 600 16px / 1.2 var(--font-sans);
+  --text-rotulo: 400 13px / 1.4 var(--font-mono);
+  --text-codigo: 400 15px / 1.6 var(--font-mono);
+  --text-micro: 400 12px / 1.4 var(--font-mono);
+
+  /* Movimento (decisão 43: estados em CSS, Framer Motion só para voos). */
+  --ease-resolve: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-hop: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-resolve: 400ms;
+  --dur-hop: 480ms;
+  --dur-shake: 300ms;
+  --dur-spin: 900ms;
+
+  /* Estados de interação (decisão 46). */
+  --lift: 2px;
+  --lift-card: 4px;
+  --press-scale: 0.98;
+  --press-dur: 120ms;
+  --focus-width: 2px;
+  --focus-offset: 3px;
+  --disabled-opacity: 0.4;
+  --touch-min: 44px;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --G: 16px;
+    --head-gap-eyebrow: 10px;
+    --head-gap-lead: 16px;
+    --sec-top: 72px;
+    --sec-bottom: 112px;
+    --page-top: 24px;
+  }
+}
+
+/* Com movimento reduzido nada sobe, encolhe ou pula. --dur-spin fica de fora: o Giro
+   decide como piscar no lugar de girar. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-resolve: 0ms;
+    --dur-hop: 0ms;
+    --dur-shake: 0ms;
+    --press-dur: 0ms;
+    --lift: 0px;
+    --lift-card: 0px;
+    --press-scale: 1;
+  }
+}
+
+/* Superfícies (decisão 42): definem papéis de cor e os componentes leem só os papéis. */
+:root,
+.g-papel {
+  --s-bg: var(--papel);
+  --s-fg: var(--tinta);
+  --s-muted: var(--grafite);
+  --s-line: var(--linha-papel);
+  --s-line-strong: rgba(11, 12, 31, 0.5);
+  --s-raised: rgba(11, 12, 31, 0.06);
+  --s-signal: var(--azul-sinal);
+  --s-link: var(--azul-sinal);
+  --s-accent: var(--azul-sinal);
+  --s-on-accent: var(--papel);
+  --s-focus: var(--azul-sinal);
+  --s-field: var(--papel);
+}
+
+.g-azul {
+  --s-bg: var(--azul-sinal);
+  --s-fg: var(--papel);
+  --s-muted: var(--nevoa-azul);
+  --s-line: var(--linha-azul);
+  --s-line-strong: rgba(246, 245, 240, 0.62);
+  --s-raised: var(--azul-fundo);
+  --s-signal: var(--lima);
+  --s-link: var(--papel);
+  --s-accent: var(--lima);
+  --s-on-accent: var(--tinta);
+  --s-focus: var(--lima);
+  --s-field: var(--azul-fundo);
+}
+
+.g-tinta {
+  --s-bg: var(--tinta);
+  --s-fg: var(--papel);
+  --s-muted: var(--nevoa-tinta);
+  --s-line: rgba(246, 245, 240, 0.12);
+  --s-line-strong: rgba(246, 245, 240, 0.4);
+  --s-raised: var(--tinta-2);
+  --s-signal: var(--lima);
+  --s-link: var(--papel);
+  --s-accent: var(--lima);
+  --s-on-accent: var(--tinta);
+  --s-focus: var(--lima);
+  --s-field: var(--tinta-2);
+}
+
+.g-papel,
+.g-azul,
+.g-tinta {
+  background: var(--s-bg);
+  color: var(--s-fg);
+}
+
+/* Tipografia. No celular os títulos encolhem (nota de uso de cada estilo no DS). */
+.titulo-hero,
+.titulo-1,
+.titulo-2,
+.titulo-3 {
+  font-family: var(--font-sans);
+}
+
+.titulo-hero {
+  font-size: 124px;
+  line-height: 0.94;
+  font-weight: 900;
+  font-stretch: 106%;
+  letter-spacing: -0.035em;
+}
+
+.titulo-1 {
+  font-size: 72px;
+  line-height: 1;
+  font-weight: 900;
+  font-stretch: 115%;
+  letter-spacing: -0.03em;
+}
+
+.titulo-2 {
+  font-size: 40px;
+  line-height: 1.05;
+  font-weight: 900;
+  font-stretch: 112%;
+  letter-spacing: -0.025em;
+}
+
+.titulo-3 {
+  font-size: 26px;
+  line-height: 1.15;
+  font-weight: 800;
+  font-stretch: 110%;
+  letter-spacing: -0.015em;
+}
+
+@media (max-width: 767px) {
+  .titulo-hero {
+    font-size: 46px;
+    font-stretch: 104%;
+  }
+
+  .titulo-1 {
+    font-size: 44px;
+  }
+
+  .titulo-2 {
+    font-size: 30px;
+  }
+}
+
+.corpo-l,
+.corpo,
+.nav {
+  font-family: var(--font-sans);
+}
+
+.corpo-l {
+  font-size: 20px;
+  line-height: 1.5;
+  font-weight: 450;
+}
+
+.corpo {
+  font-size: 17px;
+  line-height: 1.6;
+  font-weight: 450;
+}
+
+.nav {
+  font-size: 16px;
+  line-height: 1.2;
+  font-weight: 600;
+  font-stretch: 110%;
+}
+
+.rotulo,
+.codigo,
+.micro {
+  font-family: var(--font-mono);
+  font-weight: 400;
+}
+
+.rotulo {
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.codigo {
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.micro {
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* ---------- Giro ---------- */
+
+/* Coreografia aprovada no estudo de movimento (motion/SPEC.md). Cada troca de estado é um take:
+   os olhos fecham, o rosto novo é desenhado traço a traço e o corpo assenta. Os números de loading
+   também vivem em src/components/brand/giro-motion.ts, que termina a volta ao sair dele. */
+
+.g-giro {
+  --g-ink: var(--s-signal);
+  --g-stroke: 12px;
+  --g-face: 7px;
+  --g-eye: 1;
+  --g-amp: 1;
+  --g-ease-turn: cubic-bezier(0.34, 1.3, 0.64, 1);
+  --g-ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
+  --g-ease-close: cubic-bezier(0.5, 0, 0.75, 0);
+  width: 1em;
+  height: 1em;
+  flex: none;
+  overflow: visible;
+  color: var(--g-ink);
+  transition:
+    color 220ms linear,
+    background-color 220ms linear;
+}
+/* --g-amp: pulos, tremidas e flutuação estão em unidades do desenho e encolhem junto com o Giro.
+   Em 40 px a tremida de 7 viraria 2 px; abaixo de 60 px a amplitude cresce para continuar
+   visível (cena "40 px" do estudo motion/). */
+.g-giro--md {
+  --g-stroke: 14px;
+  --g-face: 8px;
+  --g-eye: 1.15;
+  --g-amp: 1.9;
+}
+.g-giro--sm {
+  --g-stroke: 16px;
+  --g-face: 9px;
+  --g-eye: 1.15;
+  --g-amp: 2.6;
+}
+.g-giro--xs {
+  --g-stroke: 18px;
+  --g-face: 10px;
+  --g-eye: 1.2;
+  --g-amp: 2.6;
+}
+.g-giro--signature {
+  --g-stroke: 22px;
+  --g-face: 11px;
+  --g-eye: 1.28;
+}
+.g-giro__body,
+.g-giro__turn,
+.g-giro__spin,
+.g-giro__lid {
+  transform-box: view-box;
+  transform-origin: 60px 60px;
+}
+/* O corpo se apoia na base: respiração, pulos e inclinação partem do chão. */
+.g-giro__body {
+  transform-origin: 60px 104px;
+  rotate: var(--g-tilt, 0deg);
+  transition: rotate var(--dur-resolve) var(--ease-resolve);
+}
+.g-giro__turn {
+  transform: rotate(-21.5deg);
+  transition: transform 560ms var(--g-ease-turn);
+}
+.g-giro__arc,
+.g-giro__track {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--g-stroke);
+  stroke-linecap: round;
+}
+.g-giro__arc {
+  stroke-dasharray: 240 37;
+  transition:
+    stroke-dasharray 520ms var(--ease-resolve),
+    stroke var(--dur-resolve) linear;
+}
+.g-giro__track {
+  opacity: 0;
+  stroke-opacity: 0.22;
+}
+/* Pálpebras: o olho direito pisca 40 ms depois do esquerdo e às vezes pisca duas vezes. */
+.g-giro__lid {
+  animation: g-blink 9s ease-in-out infinite;
+}
+.g-giro__lid--l {
+  transform-origin: 46px 54px;
+}
+.g-giro__lid--r {
+  transform-origin: 74px 54px;
+  animation-delay: 40ms;
+}
+/* Voltando a abrir, os olhos saltam um pouco além do tamanho e assentam. */
+.g-giro__eye {
+  fill: currentColor;
+  transform-box: fill-box;
+  transform-origin: center;
+  translate: var(--g-look-x, 0px) var(--g-look-y, 0px);
+  scale: var(--g-eye);
+  /* --g-look-dur e --g-look-ease: quem guia o olhar (o espiando) escolhe o tempo de cada passo. */
+  transition:
+    translate var(--g-look-dur, 260ms) var(--g-look-ease, var(--ease-resolve)),
+    scale 340ms var(--ease-hop) 80ms,
+    opacity 120ms linear 60ms;
+}
+/* Cada traço do rosto é desenhado pelo stroke-dashoffset: --g-len é o comprimento dele e
+   --g-delay a defasagem entre os lados. */
+.g-giro__face {
+  --g-len: 23;
+  --g-delay: 0ms;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--g-face);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: var(--g-len) 60;
+  stroke-dashoffset: var(--g-len);
+  opacity: 0;
+  transition:
+    opacity 100ms linear,
+    stroke-dashoffset 120ms ease-in;
+}
+.g-giro__face--x {
+  --g-len: 18;
+}
+.g-giro__face--flat {
+  --g-len: 15;
+}
+.g-giro__face--sleep {
+  --g-len: 17;
+}
+.g-giro__face--l2 {
+  --g-delay: 60ms;
+}
+.g-giro__face--r {
+  --g-delay: 50ms;
+}
+.g-giro__face--r2 {
+  --g-delay: 110ms;
+}
+.g-giro__z {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 6px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0;
+}
+
+/* Pulo avulso (is-hop) e festa dos atalhos (is-party). Vêm antes dos estados: no pronto, o pulo
+   do próprio estado vence. */
+.g-giro.is-hop .g-giro__body {
+  animation: g-hop var(--dur-hop) var(--ease-hop) 1;
+}
+.g-giro.is-party .g-giro__body {
+  animation: g-party 2.4s linear 1;
+}
+
+/* idle: respira mais alto e mais estreito, apoiado na base. */
+.g-giro:not([data-state]) .g-giro__body,
+.g-giro[data-state="idle"] .g-giro__body {
+  animation: g-breathe 3.4s ease-in-out infinite;
+}
+/* Saindo do erro, solta o ar antes de voltar a respirar. */
+.g-giro[data-from="error"]:not([data-state]) .g-giro__body {
+  animation:
+    g-breathe 3.4s ease-in-out 700ms infinite,
+    g-sigh 540ms var(--g-ease-in-out) 160ms 1;
+}
+/* Acordando, dá um pulinho de susto. */
+.g-giro[data-from="sleeping"]:not([data-state]) .g-giro__body {
+  animation:
+    g-breathe 3.4s ease-in-out 600ms infinite,
+    g-startle 480ms linear 1;
+}
+
+/* loading: recua antes de girar, a primeira volta acelera e o arco cresce e encolhe. */
+.g-giro[data-state="loading"] .g-giro__body {
+  animation: g-antic 280ms var(--ease-resolve) 1;
+}
+.g-giro[data-state="loading"] .g-giro__arc {
+  stroke-dasharray: 24 253;
+  transition-duration: 320ms;
+  animation: g-dash 1.8s ease-in-out 320ms infinite;
+}
+.g-giro[data-state="loading"] .g-giro__spin {
+  animation:
+    g-spin-in 1s cubic-bezier(0.5, 0, 0.7, 0.67) 1,
+    g-spin var(--dur-spin) linear 1s infinite;
+}
+.g-giro[data-state="loading"] .g-giro__eye {
+  translate: var(--g-look-x, 0px) 5px;
+  scale: var(--g-eye) calc(var(--g-eye) * 0.4);
+  transition:
+    translate 220ms var(--ease-resolve),
+    scale 220ms var(--ease-resolve);
+}
+
+/* Olhos fecham antes do rosto novo aparecer. */
+.g-giro[data-state="done"] .g-giro__eye,
+.g-giro[data-state="error"] .g-giro__eye,
+.g-giro[data-state="empty"] .g-giro__eye,
+.g-giro[data-state="celebrating"] .g-giro__eye {
+  opacity: 0;
+  scale: var(--g-eye) calc(var(--g-eye) * 0.12);
+  transition:
+    scale 150ms var(--g-ease-close),
+    opacity 70ms linear 130ms;
+}
+.g-giro[data-state="done"] .g-giro__face--happy,
+.g-giro[data-state="celebrating"] .g-giro__face--happy,
+.g-giro[data-state="error"] .g-giro__face--x,
+.g-giro[data-state="empty"] .g-giro__face--flat {
+  opacity: 1;
+  stroke-dashoffset: 0;
+  transition:
+    opacity 60ms linear calc(170ms + var(--g-delay)),
+    stroke-dashoffset 320ms var(--ease-resolve) calc(170ms + var(--g-delay));
+}
+
+/* done: termina a volta (giro-motion.ts), desenha o sorriso e faz squash, pulo e assentamento. */
+.g-giro[data-state="done"] .g-giro__arc,
+.g-giro[data-state="error"] .g-giro__arc,
+.g-giro[data-state="celebrating"] .g-giro__arc {
+  stroke-dasharray: 70 207;
+}
+.g-giro[data-state="done"] .g-giro__turn,
+.g-giro[data-state="celebrating"] .g-giro__turn {
+  transform: rotate(44.5deg);
+}
+.g-giro[data-state="done"] .g-giro__body {
+  animation: g-done 680ms linear 120ms 1 both;
+}
+
+/* error: recua, treme perdendo força e desenha o X. Coral pede o disco de tinta (DS). */
+.g-giro[data-state="error"] {
+  --g-ink: var(--coral);
+  background-color: var(--tinta);
+  border-radius: 50%;
+}
+.g-giro[data-state="error"] .g-giro__turn {
+  transform: rotate(224.5deg);
+}
+.g-giro[data-state="error"] .g-giro__body {
+  animation: g-flinch 480ms ease-out 1;
+}
+
+/* empty: flutua com uma leve inclinação. */
+.g-giro[data-state="empty"] .g-giro__arc {
+  stroke-dasharray: 1 276;
+}
+.g-giro[data-state="empty"] .g-giro__turn {
+  transform: rotate(90deg);
+}
+.g-giro[data-state="empty"] .g-giro__body {
+  animation: g-float 3.6s ease-in-out infinite;
+}
+
+.g-giro[data-state="thinking"] {
+  --g-tilt: 6deg;
+  --g-look-y: -3px;
+}
+.g-giro[data-state="thinking"] .g-giro__arc {
+  stroke-dasharray: 30 247;
+}
+.g-giro[data-state="thinking"] .g-giro__spin {
+  animation: g-spin 2.4s linear infinite;
+}
+.g-giro[data-state="lost"] .g-giro__arc {
+  stroke-dasharray: 50 227;
+}
+.g-giro[data-state="lost"] .g-giro__spin {
+  animation: g-sweep 2s ease-in-out infinite;
+}
+
+/* sleeping: as pálpebras pesam devagar, o arco fecha depois e a respiração fica funda. */
+.g-giro[data-state="sleeping"] .g-giro__eye {
+  opacity: 0;
+  scale: var(--g-eye) calc(var(--g-eye) * 0.1);
+  transition:
+    scale 520ms var(--g-ease-in-out),
+    opacity 80ms linear 470ms;
+}
+.g-giro[data-state="sleeping"] .g-giro__face--sleep {
+  opacity: 1;
+  stroke-dashoffset: 0;
+  transition:
+    opacity 60ms linear calc(480ms + var(--g-delay)),
+    stroke-dashoffset 420ms var(--g-ease-in-out) calc(480ms + var(--g-delay));
+}
+.g-giro[data-state="sleeping"] .g-giro__arc {
+  stroke-dasharray: 1 276;
+  transition: stroke-dasharray 900ms var(--g-ease-in-out) 200ms;
+}
+.g-giro[data-state="sleeping"] .g-giro__turn {
+  transform: rotate(90deg);
+}
+.g-giro[data-state="sleeping"] .g-giro__body {
+  animation: g-sleep 4.8s ease-in-out 600ms infinite;
+}
+.g-giro[data-state="sleeping"] .g-giro__z {
+  transform-box: fill-box;
+  animation: g-z 2.8s ease-out 1s infinite;
+}
+
+.g-giro[data-state="celebrating"] .g-giro__body {
+  animation: g-party 2.4s linear infinite;
+}
+
+.g-giro[data-progress] .g-giro__arc {
+  stroke-dasharray: var(--g-dash, 240 37);
+  transition: stroke-dasharray 120ms linear;
+}
+.g-giro[data-progress] .g-giro__turn {
+  transform: rotate(-90deg);
+}
+.g-giro[data-progress] .g-giro__track {
+  opacity: 1;
+}
+
+/* ---------- Momentos (data-moment) ----------
+   Reações curtas por cima do estado, com os tempos de motion/compositions. Piscadela e oi tocam
+   uma vez: g-moment é o relógio, e no fim dele o Giro tira o atributo. Ouvindo fica enquanto o
+   atributo ficar. Vêm depois dos estados para vencer na mesma especificidade. */
+.g-giro[data-moment="wink"] {
+  animation: g-moment 1720ms linear 1;
+}
+.g-giro[data-moment="hello"] {
+  animation: g-moment 2000ms linear 1;
+}
+.g-giro[data-moment="dizzy"] {
+  animation: g-moment 1400ms linear 1;
+}
+
+/* wink: o olho direito fecha, vira sorriso e o corpo inclina para o lado. */
+.g-giro[data-moment="wink"] .g-giro__lid--r .g-giro__eye {
+  animation: g-wink-eye 1720ms linear 1;
+}
+.g-giro[data-moment="wink"] .g-giro__face--happy.g-giro__face--r {
+  animation: g-wink-smile 1720ms linear 1;
+}
+.g-giro[data-moment="wink"] .g-giro__body {
+  animation: g-wink-body 1720ms linear 1;
+}
+
+/* hello: parte da pose do pronto (o loader chega sorrindo), o arco do sorriso balança como um
+   aceno e o corpo inclina para o lado oposto. No fim volta ao estado de baixo. */
+.g-giro[data-moment="hello"] .g-giro__arc {
+  animation: g-hello-arc 2000ms linear 1;
+}
+.g-giro[data-moment="hello"] .g-giro__turn {
+  animation: g-hello-turn 2000ms linear 1;
+}
+.g-giro[data-moment="hello"] .g-giro__body {
+  animation: g-hello-body 2000ms linear 1;
+}
+.g-giro[data-moment="hello"] .g-giro__eye {
+  animation: g-hello-eye 2000ms linear 1;
+}
+.g-giro[data-moment="hello"] .g-giro__face--happy {
+  animation: g-hello-smile 2000ms linear 1;
+}
+
+/* dizzy: depois de uma rolagem rápida e longa, o corpo balança perdendo força e os olhos vão
+   para o lado oposto. O arco fica onde está: na navegação ele é o progresso. */
+.g-giro[data-moment="dizzy"] .g-giro__body {
+  animation: g-dizzy-body 1400ms linear 1;
+}
+.g-giro[data-moment="dizzy"] .g-giro__eye {
+  animation: g-dizzy-eye 1400ms linear 1;
+}
+
+/* listening: arco curto no alto, olhos para baixo seguindo o texto e um pulso a cada tecla
+   (data-pulse alterna entre dois nomes para a animação recomeçar). */
+.g-giro[data-moment="listening"] .g-giro__arc {
+  stroke-dasharray: 30 247;
+}
+.g-giro[data-moment="listening"] .g-giro__turn {
+  transform: rotate(-105deg);
+}
+.g-giro[data-moment="listening"] .g-giro__eye {
+  translate: calc(var(--g-look-x, 0px) * var(--g-amp)) calc(var(--g-look-y, 0px) * var(--g-amp));
+}
+.g-giro[data-moment="listening"][data-pulse="0"] .g-giro__arc {
+  animation: g-pulse-a 200ms var(--ease-resolve) 1;
+}
+.g-giro[data-moment="listening"][data-pulse="1"] .g-giro__arc {
+  animation: g-pulse-b 200ms var(--ease-resolve) 1;
+}
+
+/* Respiração e sono usam scale; pulos e tremidas usam transform. Assim um não apaga o outro. */
+@keyframes g-breathe {
+  0%,
+  100% {
+    scale: 1 1;
+  }
+  50% {
+    scale: 0.988 1.03;
+  }
+}
+@keyframes g-sigh {
+  0%,
+  100% {
+    scale: 1 1;
+  }
+  48% {
+    scale: 1.025 0.955;
+  }
+}
+@keyframes g-sleep {
+  0%,
+  100% {
+    scale: 1 1;
+  }
+  50% {
+    scale: 1.02 0.965;
+  }
+}
+@keyframes g-blink {
+  0%,
+  43%,
+  47%,
+  88%,
+  92.5%,
+  96%,
+  100% {
+    transform: scaleY(1);
+  }
+  45%,
+  90%,
+  94% {
+    transform: scaleY(0.08);
+  }
+}
+@keyframes g-antic {
+  0%,
+  100% {
+    transform: rotate(0deg) scale(1, 1);
+  }
+  40% {
+    transform: rotate(-4deg) scale(1.03, 0.97);
+  }
+}
+@keyframes g-spin-in {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes g-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes g-dash {
+  0% {
+    stroke-dasharray: 24 253;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 150 127;
+    stroke-dashoffset: -60;
+  }
+  100% {
+    stroke-dasharray: 24 253;
+    stroke-dashoffset: -277;
+  }
+}
+@keyframes g-sweep {
+  0%,
+  100% {
+    transform: rotate(-70deg);
+  }
+  50% {
+    transform: rotate(70deg);
+  }
+}
+@keyframes g-done {
+  0% {
+    transform: translateY(0) scale(1, 1);
+    animation-timing-function: cubic-bezier(0.3, 0, 0.6, 1);
+  }
+  20% {
+    transform: translateY(0) scale(1.09, 0.9);
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.4, 1);
+  }
+  50% {
+    transform: translateY(calc(-13px * var(--g-amp))) scale(0.96, 1.05);
+    animation-timing-function: cubic-bezier(0.5, 0, 0.8, 0.4);
+  }
+  72% {
+    transform: translateY(0) scale(1.05, 0.95);
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  100% {
+    transform: translateY(0) scale(1, 1);
+  }
+}
+@keyframes g-flinch {
+  0% {
+    transform: translateX(0) scale(1);
+  }
+  12% {
+    transform: translateX(calc(3px * var(--g-amp))) scale(0.93);
+  }
+  30% {
+    transform: translateX(calc(-7px * var(--g-amp))) scale(1);
+  }
+  48% {
+    transform: translateX(calc(5px * var(--g-amp))) scale(1);
+  }
+  66% {
+    transform: translateX(calc(-3px * var(--g-amp))) scale(1);
+  }
+  84% {
+    transform: translateX(calc(1.5px * var(--g-amp))) scale(1);
+  }
+  100% {
+    transform: translateX(0) scale(1);
+  }
+}
+@keyframes g-startle {
+  0% {
+    transform: translateY(0) scale(1, 1);
+    animation-timing-function: cubic-bezier(0, 0, 0.58, 1);
+  }
+  17% {
+    transform: translateY(0) scale(1.06, 0.92);
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  46% {
+    transform: translateY(calc(-8px * var(--g-amp))) scale(0.97, 1.04);
+    animation-timing-function: cubic-bezier(0.42, 0, 1, 1);
+  }
+  75% {
+    transform: translateY(0) scale(1.03, 0.97);
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  100% {
+    transform: translateY(0) scale(1, 1);
+  }
+}
+@keyframes g-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(calc(-6px * var(--g-amp))) rotate(-3deg);
+  }
+}
+@keyframes g-hop {
+  0%,
+  100% {
+    transform: translateY(0) scale(1, 1);
+  }
+  20% {
+    transform: translateY(0) scale(1.1, 0.88);
+  }
+  55% {
+    transform: translateY(calc(-16px * var(--g-amp))) scale(0.95, 1.06);
+  }
+  80% {
+    transform: translateY(0) scale(1.05, 0.95);
+  }
+}
+@keyframes g-z {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(10px, -24px);
+  }
+}
+/* A volta tem antecipação e cada pouso amassa o corpo. useGiroEggs espera o nome g-party. */
+@keyframes g-party {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1, 1);
+    animation-timing-function: ease-out;
+  }
+  8% {
+    transform: translateY(0) rotate(0deg) scale(1.08, 0.9);
+    animation-timing-function: cubic-bezier(0.45, 0, 0.2, 1);
+  }
+  30% {
+    transform: translateY(calc(-18px * var(--g-amp))) rotate(360deg) scale(0.95, 1.06);
+    animation-timing-function: ease-in;
+  }
+  40% {
+    transform: translateY(0) rotate(360deg) scale(1.08, 0.92);
+    animation-timing-function: ease-out;
+  }
+  50% {
+    transform: translateY(calc(-8px * var(--g-amp))) rotate(360deg) scale(1, 1);
+    animation-timing-function: ease-in;
+  }
+  58% {
+    transform: translateY(0) rotate(360deg) scale(1.04, 0.96);
+    animation-timing-function: ease-out;
+  }
+  66%,
+  100% {
+    transform: translateY(0) rotate(360deg) scale(1, 1);
+  }
+}
+
+/* Só conta o tempo do momento: nada muda no svg. */
+@keyframes g-moment {
+  to {
+    --g-moment: 1;
+  }
+}
+@keyframes g-wink-eye {
+  0% {
+    scale: var(--g-eye);
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.42, 0, 1, 1);
+  }
+  6% {
+    opacity: 1;
+  }
+  7% {
+    scale: var(--g-eye) calc(var(--g-eye) * 0.1);
+  }
+  9%,
+  79% {
+    opacity: 0;
+  }
+  80% {
+    scale: var(--g-eye) calc(var(--g-eye) * 0.1);
+    animation-timing-function: var(--ease-hop);
+  }
+  86% {
+    opacity: 1;
+  }
+  100% {
+    scale: var(--g-eye);
+    opacity: 1;
+  }
+}
+@keyframes g-wink-smile {
+  0%,
+  6% {
+    opacity: 0;
+    stroke-dashoffset: var(--g-len);
+    animation-timing-function: var(--ease-resolve);
+  }
+  9% {
+    opacity: 1;
+  }
+  22% {
+    stroke-dashoffset: 0;
+  }
+  76% {
+    opacity: 1;
+    stroke-dashoffset: 0;
+    animation-timing-function: cubic-bezier(0.42, 0, 1, 1);
+  }
+  81% {
+    opacity: 0;
+  }
+  83%,
+  100% {
+    opacity: 0;
+    stroke-dashoffset: var(--g-len);
+  }
+}
+@keyframes g-wink-body {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    animation-timing-function: var(--ease-resolve);
+  }
+  9% {
+    transform: translateY(calc(-4px * var(--g-amp))) rotate(-6deg);
+    animation-timing-function: var(--g-ease-in-out);
+  }
+  27% {
+    transform: translateY(0) rotate(-3deg);
+    animation-timing-function: var(--g-ease-in-out);
+  }
+  50%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+}
+/* Aceno: cinco balanços de 300 ms (75% de 2 s), depois 500 ms para voltar. */
+@keyframes g-hello-arc {
+  0%,
+  75% {
+    stroke-dasharray: 70 207;
+    animation-timing-function: var(--ease-resolve);
+  }
+}
+@keyframes g-hello-turn {
+  0% {
+    transform: rotate(44.5deg);
+    animation-timing-function: var(--g-ease-in-out);
+  }
+  15% {
+    transform: rotate(8deg);
+    animation-timing-function: var(--g-ease-in-out);
+  }
+  30% {
+    transform: rotate(72deg);
+    animation-timing-function: var(--g-ease-in-out);
+  }
+  45% {
+    transform: rotate(18deg);
+    animation-timing-function: var(--g-ease-in-out);
+  }
+  60% {
+    transform: rotate(60deg);
+    animation-timing-function: var(--g-ease-in-out);
+  }
+  75% {
+    transform: rotate(44.5deg);
+    animation-timing-function: var(--g-ease-turn);
+  }
+}
+@keyframes g-hello-body {
+  0% {
+    transform: rotate(0deg);
+    animation-timing-function: var(--g-ease-in-out);
+  }
+  15% {
+    transform: rotate(-4deg);
+    animation-timing-function: var(--g-ease-in-out);
+  }
+  30% {
+    transform: rotate(4deg);
+    animation-timing-function: var(--g-ease-in-out);
+  }
+  45% {
+    transform: rotate(-3deg);
+    animation-timing-function: var(--g-ease-in-out);
+  }
+  60% {
+    transform: rotate(2deg);
+    animation-timing-function: var(--g-ease-in-out);
+  }
+  75%,
+  100% {
+    transform: rotate(0deg);
+  }
+}
+@keyframes g-hello-eye {
+  0%,
+  76% {
+    scale: var(--g-eye) calc(var(--g-eye) * 0.12);
+    opacity: 0;
+    animation-timing-function: var(--ease-hop);
+  }
+  82% {
+    opacity: 1;
+  }
+}
+@keyframes g-hello-smile {
+  0%,
+  74% {
+    opacity: 1;
+    stroke-dashoffset: 0;
+    animation-timing-function: cubic-bezier(0.42, 0, 1, 1);
+  }
+  80% {
+    opacity: 0;
+    stroke-dashoffset: var(--g-len);
+  }
+}
+/* Cada balanço tem a metade do anterior, com ida e volta em inOut. */
+@keyframes g-dizzy-body {
+  0% {
+    transform: rotate(0deg);
+    animation-timing-function: var(--ease-resolve);
+  }
+  12% {
+    transform: rotate(12deg);
+    animation-timing-function: var(--g-ease-in-out);
+  }
+  30% {
+    transform: rotate(-9deg);
+    animation-timing-function: var(--g-ease-in-out);
+  }
+  48% {
+    transform: rotate(6deg);
+    animation-timing-function: var(--g-ease-in-out);
+  }
+  64% {
+    transform: rotate(-3.5deg);
+    animation-timing-function: var(--g-ease-in-out);
+  }
+  80% {
+    transform: rotate(1.5deg);
+    animation-timing-function: var(--g-ease-in-out);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+/* Sem 0% e 100%: parte do olhar da navegação (--g-look-*) e volta a ele. */
+@keyframes g-dizzy-eye {
+  12% {
+    translate: calc(-3px * var(--g-amp)) calc(1px * var(--g-amp));
+  }
+  30% {
+    translate: calc(2.5px * var(--g-amp)) calc(-1px * var(--g-amp));
+  }
+  48% {
+    translate: calc(-1.8px * var(--g-amp)) calc(1px * var(--g-amp));
+  }
+  64% {
+    translate: calc(1px * var(--g-amp)) 0;
+  }
+}
+@keyframes g-pulse-a {
+  30% {
+    stroke-dasharray: 46 231;
+  }
+}
+@keyframes g-pulse-b {
+  30% {
+    stroke-dasharray: 46 231;
+  }
+}
+
+/* Abaixo de 24px sobra só o anel (favicon). */
+.g-giro--xs .g-giro__eye,
+.g-giro--xs .g-giro__face {
+  display: none;
+}
+
+/* Movimento reduzido: troca de estado sem transição e só pisca. A classe repetida iguala a
+   especificidade das regras de estado (o bloco vem por último, então vence sem !important). */
+@media (prefers-reduced-motion: reduce) {
+  .g-giro.g-giro.g-giro,
+  .g-giro.g-giro.g-giro * {
+    animation: none;
+    transition-duration: 0ms;
+    transition-delay: 0ms;
+  }
+  .g-giro.g-giro.g-giro .g-giro__lid {
+    animation: g-blink 9s ease-in-out infinite;
+  }
+  .g-giro.g-giro.g-giro .g-giro__lid--r {
+    animation-delay: 40ms;
+  }
+  /* Parado, o arco curto do loading não lê como carregamento: fica o de antes. */
+  .g-giro.g-giro.g-giro[data-state="loading"] .g-giro__arc {
+    stroke-dasharray: 100 177;
+  }
+}
