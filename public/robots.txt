@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://devguimaraes.com.br/sitemap-index.xml
+Sitemap: https://brunoguimaraes.dev/sitemap-index.xml

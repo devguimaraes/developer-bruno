@@ -7,7 +7,7 @@ import { rehypePostContent } from './src/lib/blog/headings.ts';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://devguimaraes.com.br',
+  site: 'https://brunoguimaraes.dev',
   // Páginas pré-geradas. A função da Vercel só entra quando houver rota com prerender = false (contato, #54).
   adapter: vercel(),
   integrations: [

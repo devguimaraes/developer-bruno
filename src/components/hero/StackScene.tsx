@@ -228,7 +228,7 @@ export function StackPlates({ labels }: { labels: StackLabels }) {
           ))}
           <b className="hb-url" style={{ left: 60, top: 6, width: 200, height: 16 }}>
             <b className="t hb-urltext" style={{ left: 10, top: 3, width: 122 }}>
-              devguimaraes.com.br
+              brunoguimaraes.dev
             </b>
           </b>
           <b className="hb-page" style={{ left: 0, top: 28, width: 330, height: 202 }}>

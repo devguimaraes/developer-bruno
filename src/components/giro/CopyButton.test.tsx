@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { CopyButton, COPIED_FEEDBACK_MS } from "./CopyButton";
 
-const VALUE = "https://devguimaraes.com.br/blog/post";
+const VALUE = "https://brunoguimaraes.dev/blog/post";
 const HINT = "Copie o endereço da barra do navegador.";
 
 const props = {
