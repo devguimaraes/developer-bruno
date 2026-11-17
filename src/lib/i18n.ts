@@ -257,7 +257,7 @@ const ptDictionary = {
     "Nome: {name} · E-mail: {email} · Tipo: {type} · Idioma do site: {language} · Mensagem: {message}",
   "email.reply.subject": "Recebi sua mensagem",
   "email.reply.body":
-    "Oi. Recebi sua mensagem pelo devguimaraes.com.br e respondo por este e-mail. Se quiser acrescentar alguma coisa, é só responder. Bruno Guimarães",
+    "Oi. Recebi sua mensagem pelo brunoguimaraes.dev e respondo por este e-mail. Se quiser acrescentar alguma coisa, é só responder. Bruno Guimarães",
 
   // Página de case (rótulos de UI)
   "case.page.back": "Projetos",
@@ -608,7 +608,7 @@ const enDictionary: Record<TranslationKey, string> = {
     "Nome: {name} · E-mail: {email} · Tipo: {type} · Idioma do site: {language} · Mensagem: {message}",
   "email.reply.subject": "I got your message",
   "email.reply.body":
-    "Hi. I got your message from devguimaraes.com.br and I'll reply to this email. If you want to add anything, just reply. Bruno Guimarães",
+    "Hi. I got your message from brunoguimaraes.dev and I'll reply to this email. If you want to add anything, just reply. Bruno Guimarães",
 
   // Case page (UI labels)
   "case.page.back": "Projects",

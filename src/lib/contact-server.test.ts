@@ -22,7 +22,7 @@ const brunoText =
   "Nome: Ana · E-mail: ana@empresa.com.br · Tipo: site · Idioma do site: pt · Mensagem: Preciso de um site.";
 
 const confirmationText =
-  "Oi. Recebi sua mensagem pelo devguimaraes.com.br e respondo por este e-mail. Se quiser acrescentar alguma coisa, é só responder. Bruno Guimarães";
+  "Oi. Recebi sua mensagem pelo brunoguimaraes.dev e respondo por este e-mail. Se quiser acrescentar alguma coisa, é só responder. Bruno Guimarães";
 
 function sender() {
   return vi.fn<(mail: ContactMail) => Promise<void>>().mockResolvedValue(undefined);
@@ -189,7 +189,7 @@ describe("handleContactSubmission", () => {
       to: "ana@empresa.com.br",
       replyTo: "bc.guimaraes@outlook.com",
       subject: "I got your message",
-      text: "Hi. I got your message from devguimaraes.com.br and I'll reply to this email. If you want to add anything, just reply. Bruno Guimarães",
+      text: "Hi. I got your message from brunoguimaraes.dev and I'll reply to this email. If you want to add anything, just reply. Bruno Guimarães",
     });
   });
 
@@ -257,10 +257,10 @@ describe("resolveResendApiKey", () => {
 });
 
 describe("isSameOriginRequest", () => {
-  const url = "https://devguimaraes.com.br/api/contato";
+  const url = "https://brunoguimaraes.dev/api/contato";
 
   it("aceita a própria origem, inclusive em preview e no dev", () => {
-    expect(isSameOriginRequest("https://devguimaraes.com.br", url)).toBe(true);
+    expect(isSameOriginRequest("https://brunoguimaraes.dev", url)).toBe(true);
     expect(isSameOriginRequest("http://localhost:4321", "http://localhost:4321/api/contato")).toBe(
       true
     );

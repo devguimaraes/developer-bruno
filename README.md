@@ -14,7 +14,7 @@
 
 Portfólio autoral de alta performance com a identidade Giro: um spinner com rosto, azul sinal e lima, e blog editorial integrado.
 
-[Visualizar Demo](https://devguimaraes.com.br) • [ADR da identidade](docs/adr/0001-identidade-visual-giro.md) • [ADR da arquitetura](docs/adr/0002-astro-com-funcao-na-vercel.md)
+[Visualizar Demo](https://brunoguimaraes.dev) • [ADR da identidade](docs/adr/0001-identidade-visual-giro.md) • [ADR da arquitetura](docs/adr/0002-astro-com-funcao-na-vercel.md)
 
 </div>
 
