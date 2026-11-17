@@ -244,6 +244,7 @@ export default function AboutPage({ posts, contributions }: AboutPageProps) {
         </section>
 
         <section className="sobre-feature sobre-contact" aria-labelledby="sobre-pagina-contato">
+          <FlickeringGrid className="sobre-contact__grid" />
           <div className="sobre-feature__head">
             <p className="g-eyebrow">{t(locale, "contact.label")}</p>
             <h2 className="sobre-feature__title" id="sobre-pagina-contato">
