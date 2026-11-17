@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { setLocale } from "@/lib/i18n";
 import { HomeProcess } from "./HomeProcess";
 import { calcProcessScrollTop } from "./process-stage";
+import { loadGsap } from "./story/useChapterScenes";
 
 afterEach(() => {
   setLocale("pt");
@@ -51,7 +52,7 @@ describe("HomeProcess", () => {
     expect(past).toEqual([true, true, true, false]);
   });
 
-  it("com as cenas ligadas, clicar numa estação rola até a etapa", () => {
+  it("com as cenas ligadas, clicar numa estação rola até a etapa", async () => {
     document.documentElement.setAttribute("data-scenes", "on");
     const scrollTo = vi.spyOn(window, "scrollTo").mockImplementation(() => {});
     render(<HomeProcess />);
@@ -65,6 +66,9 @@ describe("HomeProcess", () => {
       top: calcProcessScrollTop(3, 0, len),
       behavior: "smooth",
     });
+
+    // As cenas ligadas disparam o import dinâmico do GSAP; espera ele terminar antes do teardown.
+    await loadGsap();
   });
 
   it("em inglês troca título e etapas", () => {
