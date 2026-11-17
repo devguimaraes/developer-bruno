@@ -160,7 +160,13 @@
     }
     .hb .hb-foot {
       top: auto;
-      bottom: calc(max(100svh, 760px) - 100svh + max(82px, 128px - var(--hb-short)));
+      /* Piso = topo do trilho (--dock-h + --dock-inset) + 12 px de folga. Sem safe-area
+         isso é 82 px; com home indicator o inset sobe e os CTAs sobem junto. */
+      bottom: calc(
+        max(100svh, 760px) -
+        100svh +
+        max(calc(var(--dock-h) + var(--dock-inset) + 12px), 128px - var(--hb-short))
+      );
       gap: calc(18px - var(--hb-short) * 0.05);
     }
     .hb .hb-lede {

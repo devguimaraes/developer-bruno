@@ -233,6 +233,13 @@
 
 /* ---------- Trilho de ícones (celular) ---------- */
 
+/* Altura e inset do trilho. O pé da hero (giro-hero) usa os mesmos tokens para ficar 12 px
+   acima dele, inclusive quando o home indicator levanta o trilho. */
+:root {
+  --dock-h: 58px;
+  --dock-inset: max(12px, env(safe-area-inset-bottom));
+}
+
 /* A cor do destino abre como disco a partir do ícone e cobre o salto. Fica sob o trilho. */
 .g-dock__cover {
   position: fixed;
@@ -247,13 +254,13 @@
   position: fixed;
   z-index: 40;
   right: 0;
-  bottom: max(12px, env(safe-area-inset-bottom));
+  bottom: var(--dock-inset);
   left: 0;
   display: flex;
   align-items: center;
   box-sizing: border-box;
   width: min(calc(100% - 24px), 296px);
-  height: 58px;
+  height: var(--dock-h);
   margin-inline: auto;
   padding: 0 8px;
   border-radius: 29px;
