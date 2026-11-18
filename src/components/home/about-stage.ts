@@ -17,9 +17,6 @@ export function calcAboutBeatTime(progress: number): number {
   return p >= ABOUT_TIMELINE.swapStart ? ABOUT_SWAP : 0;
 }
 
-/** Paradas da rolagem no celular: a foto com os nomes (0) e a bio (1). */
-export const ABOUT_SNAP_POINTS: readonly number[] = [0, 1];
-
 /** Onde o Giro deve estar e com que rosto, para um progresso do capítulo (0 a 1). */
 export function calcAboutStep(progress: number): ChapterStep {
   const p = Number.isNaN(progress) ? 0 : progress;
