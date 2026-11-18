@@ -13,10 +13,9 @@ import { ABOUT_PATH } from "@/components/nav/sections";
 import { useLocale } from "@/hooks/useLocale";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { type TranslationKey, t } from "@/lib/i18n";
-import { ABOUT_SNAP_POINTS, ABOUT_SWAP, ABOUT_TIMELINE, calcAboutBeatTime } from "./about-stage";
+import { ABOUT_SWAP, ABOUT_TIMELINE, calcAboutBeatTime } from "./about-stage";
 import { bareLabel } from "./copy";
 import { SCENE_MOBILE_QUERY } from "./story/chapters";
-import { BeatSnap } from "./story/BeatSnap";
 import { calcSceneProgress, createBeatPlayer } from "./story/beats";
 import { type SceneBuilder, useChapterScenes } from "./story/useChapterScenes";
 
@@ -172,7 +171,6 @@ export function HomeAbout() {
           </dl>
         </div>
       </div>
-      <BeatSnap sectionRef={sectionRef} points={ABOUT_SNAP_POINTS} />
     </section>
   );
 }
