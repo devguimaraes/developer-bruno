@@ -1,4 +1,4 @@
-import "@testing-library/jest-dom";
+import "@testing-library/jest-dom/vitest";
 import { vi } from "vitest";
 
 // Mock de IntersectionObserver
@@ -46,6 +46,17 @@ Object.defineProperty(window, "ResizeObserver", {
   configurable: true,
   value: ResizeObserverMock,
 });
+
+// AnimationEvent: o jsdom 31 expõe WebkitAnimation no style mas não tem AnimationEvent, e o React
+// toma isso por WebKit antigo e passa a escutar webkitAnimationEnd em vez de animationend. Os
+// navegadores de verdade têm a classe, então o ambiente de teste também.
+if (!("AnimationEvent" in window)) {
+  Object.defineProperty(window, "AnimationEvent", {
+    writable: true,
+    configurable: true,
+    value: class AnimationEvent extends Event {},
+  });
+}
 
 // Mock da Web Animations API (o Giro termina a volta do loading com element.animate). Os testes
 // que conferem a chamada trocam estes por espiões.

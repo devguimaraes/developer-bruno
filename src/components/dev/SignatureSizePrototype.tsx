@@ -90,7 +90,7 @@ function NameLine({
 }: {
   size: number | string;
   probe?: string;
-  measureRef?: RefObject<HTMLSpanElement>;
+  measureRef?: RefObject<HTMLSpanElement | null>;
   children: ReactNode;
 }) {
   const fontSize = typeof size === "number" ? `${size}px` : size;
@@ -109,7 +109,7 @@ function OneLine({
 }: {
   size: number | string;
   live: boolean;
-  measureRef?: RefObject<HTMLSpanElement>;
+  measureRef?: RefObject<HTMLSpanElement | null>;
   probe?: string;
 }) {
   return (

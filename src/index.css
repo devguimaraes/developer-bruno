@@ -1,3 +1,7 @@
+/* Tailwind 4. O CSS do site fica fora de layer, como era no v3 (vinha antes do @tailwind base e
+   saía sem @layer nativo): os tokens do :root e as regras do site ganham do tema e dos utilitários
+   do Tailwind, que agora vivem em @layer. */
+@import "tailwindcss" source(none);
 @import "./styles/giro.css";
 @import "./styles/giro-actions.css";
 @import "./styles/giro-fields.css";
@@ -14,40 +18,96 @@
 @import "./styles/home-contact.css";
 @import "./styles/home-fim.css";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@source "./**/*.{astro,ts,tsx}";
 
+/* inline reference: os utilitários usam direto os tokens do site (font-sans → var(--font-sans)) e
+   o tema não redeclara no :root nomes que o giro.css já define, como --font-sans e --radius-md. */
+@theme inline reference {
+  --color-azul-sinal: var(--azul-sinal);
+  --color-azul-fundo: var(--azul-fundo);
+  --color-lima: var(--lima);
+  --color-papel: var(--papel);
+  --color-tinta: var(--tinta);
+  --color-tinta-2: var(--tinta-2);
+  --color-grafite: var(--grafite);
+  --color-nevoa-azul: var(--nevoa-azul);
+  --color-nevoa-tinta: var(--nevoa-tinta);
+  --color-coral: var(--coral);
+  --color-linha-papel: var(--linha-papel);
+  --color-linha-azul: var(--linha-azul);
+
+  --color-s-bg: var(--s-bg);
+  --color-s-fg: var(--s-fg);
+  --color-s-muted: var(--s-muted);
+  --color-s-line: var(--s-line);
+  --color-s-line-strong: var(--s-line-strong);
+  --color-s-raised: var(--s-raised);
+  --color-s-signal: var(--s-signal);
+  --color-s-link: var(--s-link);
+  --color-s-accent: var(--s-accent);
+  --color-s-on-accent: var(--s-on-accent);
+  --color-s-focus: var(--s-focus);
+  --color-s-field: var(--s-field);
+
+  --font-mono: var(--font-mono);
+  --font-sans: var(--font-sans);
+
+  --spacing-18: var(--space-18);
+  --min-height-touch: var(--touch-min);
+  --min-width-touch: var(--touch-min);
+
+  --ease-resolve: var(--ease-resolve);
+  --ease-hop: var(--ease-hop);
+  --transition-duration-resolve: var(--dur-resolve);
+  --transition-duration-hop: var(--dur-hop);
+  --transition-duration-shake: var(--dur-shake);
+  --transition-duration-spin: var(--dur-spin);
+
+  --radius-g-sm: var(--radius-sm);
+  --radius-g-md: var(--radius-md);
+  --radius-g-lg: var(--radius-lg);
+  --radius-pill: var(--radius-pill);
+}
+
+/* No v3 a cor padrão de borda era gray-200; no v4 é currentcolor. */
 @layer base {
-  html,
-  body {
-    margin: 0;
-    padding: 0;
-    background-color: var(--papel, #f6f5f0);
-    color: #fff;
-    /* clip não cria contêiner de rolagem; hidden faria html, body e main rolarem por conta própria. */
-    overflow-x: clip;
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: #e5e7eb;
   }
+}
 
-  html {
-    touch-action: manipulation;
-    font-size: 16px;
-  }
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--papel, #f6f5f0);
+  color: #fff;
+  /* clip não cria contêiner de rolagem; hidden faria html, body e main rolarem por conta própria. */
+  overflow-x: clip;
+}
 
-  main {
-    overflow-x: clip;
-  }
+html {
+  touch-action: manipulation;
+  font-size: 16px;
+}
 
-  body {
-    @apply font-sans;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-  }
+main {
+  overflow-x: clip;
+}
 
-  *:focus-visible {
-    outline: 2px solid var(--s-focus);
-    outline-offset: 2px;
-  }
+body {
+  @apply font-sans;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--s-focus);
+  outline-offset: 2px;
 }
 
 /* Custom Scrollbar */

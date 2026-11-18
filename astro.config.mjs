@@ -2,6 +2,7 @@ import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import vercel from '@astrojs/vercel';
+import tailwindcss from '@tailwindcss/vite';
 import { unified } from '@astrojs/markdown-remark';
 import { rehypePostContent } from './src/lib/blog/headings.ts';
 
@@ -11,7 +12,6 @@ export default defineConfig({
   // Páginas pré-geradas. A função da Vercel só entra quando houver rota com prerender = false (contato, #54).
   adapter: vercel(),
   integrations: [
-    // Tailwind entra pelo postcss.config.js: a integração @astrojs/tailwind parou no Astro 5.
     react(),
     sitemap({
       i18n: {
@@ -24,6 +24,9 @@ export default defineConfig({
     }),
   ],
   output: 'static',
+  vite: {
+    plugins: [tailwindcss()],
+  },
   // O padrão do Astro 7 ('jsx') tira espaços entre elementos. true mantém a compressão sem perda.
   compressHTML: true,
   // A barra de dev cobre a barra de abas no celular e intercepta cliques. Só o e2e a desliga.

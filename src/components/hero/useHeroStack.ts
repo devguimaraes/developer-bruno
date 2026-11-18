@@ -1,4 +1,4 @@
-import type { MutableRefObject, RefObject } from "react";
+import type { RefObject } from "react";
 import { useEffect, useRef } from "react";
 import { playGiroMoment } from "@/components/brand/giro-states";
 import type { EntryPathBall, EntryPathConfig, Letter, LetterSpring } from "./entry-path";
@@ -75,10 +75,10 @@ export interface HudLabels {
 }
 
 export interface HeroStackOptions {
-  stageRef: RefObject<HTMLElement>;
-  riderRef: RefObject<HTMLButtonElement>;
-  seatRef: RefObject<SVGSVGElement>;
-  labelsRef: MutableRefObject<HudLabels>;
+  stageRef: RefObject<HTMLElement | null>;
+  riderRef: RefObject<HTMLButtonElement | null>;
+  seatRef: RefObject<SVGSVGElement | null>;
+  labelsRef: RefObject<HudLabels>;
   reduced: boolean;
   locale: string;
 }
@@ -138,7 +138,7 @@ function createRuntime(
   stage: HTMLElement,
   rider: HTMLButtonElement,
   seat: SVGSVGElement | null,
-  labelsRef: MutableRefObject<HudLabels>,
+  labelsRef: RefObject<HudLabels>,
   reduced: boolean
 ): Runtime | null {
   const inner = rider.querySelector<HTMLElement>(".hb-rider__in");
