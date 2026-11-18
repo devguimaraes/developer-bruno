@@ -156,15 +156,6 @@ export async function readLimitedText(request: Request, maxBytes: number): Promi
   return text + decoder.decode();
 }
 
-export function resolveResendApiKey(
-  processValue: string | undefined,
-  fileValue: string | undefined
-): string | undefined {
-  if (processValue) return processValue;
-  if (fileValue) return fileValue;
-  return undefined;
-}
-
 export function createResendMailSender(apiKey: string | undefined): ContactMailSender {
   return async mail => {
     if (!apiKey) {

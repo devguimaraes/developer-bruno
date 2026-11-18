@@ -11,11 +11,12 @@ function getSvg(props: Parameters<typeof Giro>[0] = {}) {
 }
 
 describe("Giro — estados", () => {
-  it.each(
-    GIRO_STATES.filter(state => state !== "idle")
-  )("estado %s gera data-state com o mesmo nome", (state: GiroState) => {
-    expect(getSvg({ state }).getAttribute("data-state")).toBe(state);
-  });
+  it.each(GIRO_STATES.filter(state => state !== "idle"))(
+    "estado %s gera data-state com o mesmo nome",
+    (state: GiroState) => {
+      expect(getSvg({ state }).getAttribute("data-state")).toBe(state);
+    }
+  );
 
   it("idle não tem data-state (o CSS trata o repouso pela ausência do atributo)", () => {
     expect(getSvg({ state: "idle" }).hasAttribute("data-state")).toBe(false);

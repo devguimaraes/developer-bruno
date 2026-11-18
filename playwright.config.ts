@@ -58,7 +58,9 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'E2E=1 bun run dev -- --host 127.0.0.1 --port 4321',
+    // --ignore-lock: o Astro 7 manda o dev para segundo plano quando detecta um agente, e o
+    // Playwright tomaria a saída do processo por falha.
+    command: 'E2E=1 bun run dev -- --host 127.0.0.1 --port 4321 --ignore-lock',
     url: 'http://127.0.0.1:4321',
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,

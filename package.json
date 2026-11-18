@@ -23,41 +23,41 @@
     "check:media-budget": "bun run scripts/check-media-budget.mjs"
   },
   "dependencies": {
-    "@astrojs/react": "^4.4.2",
-    "@astrojs/sitemap": "^3.7.2",
-    "@astrojs/tailwind": "^6.0.2",
-    "@astrojs/vercel": "^9.0.5",
-    "astro": "^5.18.1",
+    "@astrojs/markdown-remark": "^7.3.9",
+    "@astrojs/react": "^7.1.9",
+    "@astrojs/sitemap": "^3.7.5",
+    "@astrojs/vercel": "^11.0.22",
+    "astro": "^7.4.12",
     "clsx": "^2.1.1",
-    "framer-motion": "^12.23.24",
+    "framer-motion": "^12.43.0",
     "gsap": "^3.15.1",
     "lucide-react": "^0.462.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "resend": "^6.34.1",
-    "tailwind-merge": "^2.6.0",
+    "resend": "^6.38.1",
+    "tailwind-merge": "^2.6.1",
     "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.10",
-    "@playwright/test": "^1.56.1",
-    "@testing-library/dom": "^10.4.1",
-    "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.3.1",
-    "@types/node": "^22.16.5",
-    "@types/react": "^18.3.23",
+    "@biomejs/biome": "^2.6.8",
+    "@playwright/test": "^1.65.1",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/jest-dom": "^6.10.0",
+    "@testing-library/react": "^16.3.3",
+    "@types/node": "^22.20.5",
+    "@types/react": "^18.3.31",
     "@types/react-dom": "^18.3.7",
-    "@vitest/coverage-v8": "^4.1.4",
-    "autoprefixer": "^10.4.21",
+    "@vitest/coverage-v8": "^4.1.12",
+    "autoprefixer": "^10.6.2",
     "husky": "^9.1.7",
     "jsdom": "^27.4.0",
-    "lint-staged": "^16.3.0",
+    "lint-staged": "^16.4.0",
     "open-cli": "^9.0.0",
-    "postcss": "^8.5.6",
+    "postcss": "^8.5.33",
     "sharp": "^0.35.5",
-    "tailwindcss": "^3.4.17",
-    "typescript": "^5.8.3",
-    "vitest": "^4.0.16"
+    "tailwindcss": "^3.4.19",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.12"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx}": [
@@ -65,8 +65,5 @@
       "biome format --write",
       "bash -c 'tsc -p tsconfig.app.json --noEmit'"
     ]
-  },
-  "overrides": {
-    "vite": "^6.2.3"
   }
 }

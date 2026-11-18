@@ -51,11 +51,14 @@
   white-space: nowrap;
   color: var(--ink-2);
 }
+/* Propriedades separadas: com o atalho font, o minificador do Vite 8 (Lightning CSS) junta o
+   font-stretch em porcentagem no atalho, que só aceita palavra-chave, e o navegador descarta tudo. */
 .ar .n {
-  font:
-    800 1em / 1 "Anybody",
-    sans-serif;
+  font-family: "Anybody", sans-serif;
+  font-size: 1em;
+  font-weight: 800;
   font-stretch: 115%;
+  line-height: 1;
   letter-spacing: -0.02em;
   color: var(--ink);
   white-space: nowrap;
