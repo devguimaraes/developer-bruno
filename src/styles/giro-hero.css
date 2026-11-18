@@ -656,6 +656,8 @@
   height: 100%;
   overflow: visible;
   pointer-events: none;
+  /* O rastro é redesenhado a cada quadro da entrada: na própria camada, não leva a pilha junto. */
+  will-change: transform;
 }
 
 .hb .hb-trail__p {
