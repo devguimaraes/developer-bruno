@@ -338,14 +338,17 @@ export function StackScene({ labels }: { labels: StackLabels }) {
       {/* Linha de estações à direita da pilha. O Giro não entra aqui: o Hero o renderiza. */}
       <div className="hb-line" aria-hidden="true">
         <div className="hb-line__deco">
-          <svg className="hb-line__svg" aria-hidden="true">
-            <polyline className="hb-rail" points="0,0 0,0" />
-            <circle className="hb-stop" data-stop="-1" cx="0" cy="0" r={4} />
-            <circle className="hb-stop" data-stop="0" cx="0" cy="0" r={5} />
-            <circle className="hb-stop" data-stop="1" cx="0" cy="0" r={5} />
-            <circle className="hb-stop" data-stop="2" cx="0" cy="0" r={5} />
-            <circle className="hb-stop" data-stop="3" cx="0" cy="0" r={5} />
-          </svg>
+          {/* Trilho e estações em HTML, movidos só por translate: redesenhar um SVG do tamanho
+              do palco a cada quadro fazia o navegador do Instagram piscar a tela. */}
+          <b className="hb-rail" data-seg="0" />
+          <b className="hb-rail" data-seg="1" />
+          <b className="hb-rail" data-seg="2" />
+          <b className="hb-rail" data-seg="3" />
+          <b className="hb-stop hb-stop--rest" data-stop="-1" />
+          <b className="hb-stop" data-stop="0" />
+          <b className="hb-stop" data-stop="1" />
+          <b className="hb-stop" data-stop="2" />
+          <b className="hb-stop" data-stop="3" />
           <b className="hb-link" data-link="0" />
           <b className="hb-link" data-link="1" />
           <b className="hb-link" data-link="2" />

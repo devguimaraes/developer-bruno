@@ -143,11 +143,11 @@ function createRuntime(
 ): Runtime | null {
   const inner = rider.querySelector<HTMLElement>(".hb-rider__in");
   const svg = rider.querySelector<SVGSVGElement>(".g-giro");
-  const rail = stage.querySelector<SVGPolylineElement>(".hb-rail");
   const isoEls = Array.from(stage.querySelectorAll<HTMLElement>("[data-iso]"));
   const layerMap = byData(stage, "data-layer");
   const layers = Array.from({ length: LAYER_COUNT }, (_, i) => layerMap.get(i) as HTMLElement);
-  if (!inner || !svg || !rail || isoEls.length === 0 || layers.some(n => !n)) return null;
+  if (!inner || !svg || isoEls.length === 0 || layers.some(n => !n)) return null;
+  const segs = byData(stage, "data-seg");
   const stops = byData(stage, "data-stop");
   const links = byData(stage, "data-link");
   const tags = byData(stage, "data-tag");
@@ -366,25 +366,30 @@ function createRuntime(
   const drawLine = (dt = 0): void => {
     if (!cam) return;
     const st: Station[] = stations(cfg, cam, zs, scale);
-    rail.setAttribute("points", st.map(s => `${s.x.toFixed(1)},${s.y.toFixed(1)}`).join(" "));
+    // Só translate, rotate e a largura de peças pequenas: cada uma tem a própria camada, então a
+    // flutuação não redesenha o palco a cada quadro.
     st.forEach((s, idx) => {
       const i = idx - 1;
       const stop = stops.get(i);
-      if (stop) {
-        stop.setAttribute("cx", s.x.toFixed(1));
-        stop.setAttribute("cy", s.y.toFixed(1));
+      if (stop) stop.style.translate = `${s.x.toFixed(1)}px ${s.y.toFixed(1)}px`;
+      const seg = segs.get(idx);
+      const next = st[idx + 1];
+      if (seg && next) {
+        const dx = next.x - s.x;
+        const dy = next.y - s.y;
+        seg.style.translate = `${s.x.toFixed(1)}px ${s.y.toFixed(1)}px`;
+        seg.style.rotate = `${((Math.atan2(dy, dx) * 180) / Math.PI).toFixed(2)}deg`;
+        seg.style.width = `${Math.hypot(dx, dy).toFixed(1)}px`;
       }
       if (i < 0) return;
       const link = links.get(i);
       if (link) {
-        link.style.left = `${s.cx.toFixed(1)}px`;
-        link.style.top = `${(s.y - 1).toFixed(1)}px`;
+        link.style.translate = `${s.cx.toFixed(1)}px ${(s.y - 1).toFixed(1)}px`;
         link.style.width = `${Math.max(0, s.x - s.cx).toFixed(1)}px`;
       }
       const tag = tags.get(i);
       if (tag) {
-        tag.style.left = `${(s.x + cfg.tagGap * scale).toFixed(1)}px`;
-        tag.style.top = `${(s.y - 9).toFixed(1)}px`;
+        tag.style.translate = `${(s.x + cfg.tagGap * scale).toFixed(1)}px ${(s.y - 9).toFixed(1)}px`;
       }
     });
     const floor = st[0];

@@ -103,19 +103,21 @@ html[data-loader] .g-loader {
 
 .g-loader-pl__face {
   overflow: hidden;
-  clip-path: circle(0px at var(--g-ox) var(--g-oy));
 }
 
+/* Deitada, a placa pinta a própria cor e o disco sai: mesma cor, a troca não aparece. */
 .g-loader[data-lay] .g-loader-pl__face {
-  clip-path: none;
-  animation: none;
+  background: var(--layer-bg);
 }
 
+/* O papel cobre a placa ao deitar: uma elipse do tamanho dela, escalada pelo JS. */
 .g-loader-pl__paper {
   position: absolute;
   inset: 0;
+  border-radius: 50%;
   background: #fbfaf6;
-  clip-path: ellipse(0px 0px at 50% 50%);
+  transform: scale(0);
+  will-change: transform;
 }
 
 .g-loader-pl__tag {
@@ -142,27 +144,55 @@ html[data-loader] .g-loader {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  clip-path: circle(0px at var(--g-ox) var(--g-oy));
 }
 
 .g-loader__layer--azul {
   background: var(--azul-sinal);
-  clip-path: none;
 }
 
 .g-loader__layer--lima {
-  background: var(--lima);
+  --layer-bg: var(--lima);
   color: var(--azul-sinal);
 }
 
 .g-loader__layer--papel {
-  background: var(--papel);
+  --layer-bg: var(--papel);
   color: var(--azul-sinal);
 }
 
 .g-loader__layer--tinta {
-  background: var(--tinta);
+  --layer-bg: var(--tinta);
   color: var(--papel);
+}
+
+/* Disco de cor de cada camada. Cresce por scale, na própria camada: recortar a camada inteira
+   (clip-path) redesenhava a tela a cada quadro, e o navegador do Instagram (WebView do Android)
+   mostrava pedaços da camada de baixo. Raio 150vmax, como o recorte antigo. */
+.g-loader__disc {
+  position: absolute;
+  top: calc(var(--g-oy) - 150vmax);
+  left: calc(var(--g-ox) - 150vmax);
+  width: 300vmax;
+  height: 300vmax;
+  border-radius: 50%;
+  background: var(--layer-bg);
+  transform: scale(0);
+  will-change: transform;
+}
+
+/* O nome da camada aparece quando o disco chega no canto dele, e não antes. Em visibility: a
+   opacidade é do JS (inline), que esmaece o nome ao deitar. */
+.g-loader:not([data-lay]) .g-loader-pl__tag {
+  visibility: hidden;
+}
+
+.g-loader[data-lay] .g-loader__disc {
+  display: none;
+}
+
+/* Deitada, quem esmaece o nome é o JS (opacidade inline): a animação de entrada sai. */
+.g-loader[data-lay] .g-loader-pl__tag {
+  animation: none;
 }
 
 /* O nome da camada aparece com o disco recortado. */
@@ -200,9 +230,12 @@ html[data-loader] .g-loader {
   }
 }
 
+/* O nome se desdobra e o Giro gira a cada quadro: na própria camada, do tamanho do nome, eles não
+   redesenham as camadas de tela cheia. */
 .g-loader__stage {
   position: relative;
   z-index: 2;
+  will-change: transform;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -213,6 +246,8 @@ html[data-loader] .g-loader {
   position: absolute;
   inset: 0;
   z-index: 3;
+  /* Na própria camada, o recorte do nome não redesenha o resto da tela. */
+  will-change: transform;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -378,16 +413,29 @@ html[data-loader="lay"] main {
   animation-delay: var(--d);
 }
 
-.g-loader[data-run="play"] .g-loader__layer--lima {
-  animation: g-loader-disk 520ms var(--ease-wash) 1200ms forwards;
+.g-loader[data-run="play"] .g-loader__layer--lima > .g-loader__disc {
+  animation: g-loader-disc 520ms var(--ease-wash) 1200ms forwards;
 }
 
-.g-loader[data-run="play"] .g-loader__layer--papel {
-  animation: g-loader-disk 520ms var(--ease-wash) 1680ms forwards;
+.g-loader[data-run="play"] .g-loader__layer--papel > .g-loader__disc {
+  animation: g-loader-disc 520ms var(--ease-wash) 1680ms forwards;
 }
 
-.g-loader[data-run="play"] .g-loader__layer--tinta {
-  animation: g-loader-disk 520ms var(--ease-wash) 2160ms forwards;
+.g-loader[data-run="play"] .g-loader__layer--tinta > .g-loader__disc {
+  animation: g-loader-disc 520ms var(--ease-wash) 2160ms forwards;
+}
+
+/* ~230 ms depois do início do disco, a borda dele passa pelo canto do nome. */
+.g-loader[data-run="play"] .g-loader__layer--lima > .g-loader-pl__tag {
+  animation: g-loader-show 0s linear 1430ms both;
+}
+
+.g-loader[data-run="play"] .g-loader__layer--papel > .g-loader-pl__tag {
+  animation: g-loader-show 0s linear 1910ms both;
+}
+
+.g-loader[data-run="play"] .g-loader__layer--tinta > .g-loader-pl__tag {
+  animation: g-loader-show 0s linear 2390ms both;
 }
 
 .g-loader[data-run="play"] .g-loader__stage {
@@ -501,10 +549,8 @@ html[data-loader="lay"] main {
 }
 
 @media (max-width: 767px) {
-  .g-loader[data-run="play"] .g-loader__layer--lima,
-  .g-loader[data-run="play"] .g-loader__layer--papel,
-  .g-loader[data-run="play"] .g-loader__layer--tinta {
-    animation-name: g-loader-disk-m;
+  .g-loader[data-run="play"] .g-loader__layer > .g-loader__disc {
+    animation-name: g-loader-disc-m;
   }
 
   .g-loader[data-run="play"] .g-loader__ink {
@@ -555,6 +601,8 @@ html[data-loader="lay"] main {
 
   .g-loader[data-run="play"] .g-loader__lt,
   .g-loader[data-run="play"] .g-loader__layer,
+  .g-loader[data-run="play"] .g-loader__disc,
+  .g-loader[data-run="play"] .g-loader-pl__tag,
   .g-loader[data-run="play"] .g-loader-pl__face,
   .g-loader[data-run="play"] .g-loader__stage,
   .g-loader[data-run="play"] .g-loader__ink,
@@ -586,6 +634,41 @@ html[data-loader="lay"] main {
   }
   to {
     clip-path: circle(150vmax at var(--g-ox) var(--g-oy));
+  }
+}
+
+/* Mesmos raios do recorte: 52 px (20 px no celular) até 150vmax. A variável --disc-sync não pinta
+   nada: ela tira a animação do compositor, para o disco ser amostrado no mesmo quadro que o recorte
+   do nome (.g-loader__ink, na thread principal). Sem ela, com a thread principal atrasada, o nome
+   ficava branco dentro do disco. Só o transform muda: a camada do disco não é redesenhada. */
+@keyframes g-loader-disc {
+  from {
+    --disc-sync: 0;
+    transform: scale(0.022);
+  }
+  to {
+    --disc-sync: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes g-loader-disc-m {
+  from {
+    --disc-sync: 0;
+    transform: scale(0.016);
+  }
+  to {
+    --disc-sync: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes g-loader-show {
+  from {
+    visibility: hidden;
+  }
+  to {
+    visibility: visible;
   }
 }
 

@@ -116,7 +116,7 @@ function applyLayDownState(
 
     const paper = plEl.querySelector<HTMLElement>(".g-loader-pl__paper");
     if (paper) {
-      paper.style.clipPath = plState.paperClipPath;
+      paper.style.transform = plState.paperTransform;
     }
 
     const edges = plEl.querySelectorAll<HTMLElement>(".g-loader-pl__e");
@@ -564,6 +564,7 @@ export function LoadingScreen() {
             <i className="g-loader-pl__e" />
             <i className="g-loader-pl__e" />
             <div className="g-loader-pl__face g-loader__layer g-loader__layer--lima">
+              <i className="g-loader__disc" />
               <i className="g-loader-pl__paper" />
               <span className="g-loader-pl__tag g-loader__layer-tag g-loader__tag">{`// ${t(locale, "hero.layer.tokens")}`}</span>
             </div>
@@ -580,6 +581,7 @@ export function LoadingScreen() {
             <i className="g-loader-pl__e" />
             <i className="g-loader-pl__e" />
             <div className="g-loader-pl__face g-loader__layer g-loader__layer--papel">
+              <i className="g-loader__disc" />
               <i className="g-loader-pl__paper" />
               <span className="g-loader-pl__tag g-loader__layer-tag g-loader__tag">{`// ${t(locale, "hero.layer.components")}`}</span>
             </div>
@@ -596,6 +598,7 @@ export function LoadingScreen() {
             <i className="g-loader-pl__e" />
             <i className="g-loader-pl__e" />
             <div className="g-loader-pl__face g-loader__layer g-loader__layer--tinta">
+              <i className="g-loader__disc" />
               <i className="g-loader-pl__paper" />
               <span className="g-loader-pl__tag g-loader__layer-tag g-loader__tag">{`// ${t(locale, "hero.layer.screen")}`}</span>
             </div>

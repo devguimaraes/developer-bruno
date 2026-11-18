@@ -155,8 +155,8 @@ export function HomeEnd() {
     const copy = q(".fn-copy");
     const rail = q(".fn-rail");
     const foot = q(".fn-foot");
-    const spine = sec.querySelector<SVGLineElement>(".fn-spine");
-    const links = [...sec.querySelectorAll<SVGLineElement>(".fn-link")];
+    const spine = q(".fn-spine");
+    const links = qa(".fn-link");
     // No DOM a placa de baixo vem primeiro (pinta antes): a ordem de leitura vem do data-i.
     const plates = qa(".fn-pl").sort((a, b) => Number(a.dataset.i) - Number(b.dataset.i));
     const tags = qa(".fn-tag");
@@ -212,15 +212,15 @@ export function HomeEnd() {
       });
       const pts = plates.map((_, i) => project(cam, PLATE.w / 2, PLATE.h / 2, heights[i]));
       const spineX = Math.max(...pts.map(p => p.x)) + (mobile ? 22 : 56);
-      spine.setAttribute("x1", String(spineX));
-      spine.setAttribute("x2", String(spineX));
-      spine.setAttribute("y1", String(pts[0].y));
-      spine.setAttribute("y2", String(pts[n - 1].y));
+      // Só translate e o tamanho de peças pequenas, cada uma na própria camada: a flutuação não
+      // redesenha o palco a cada quadro (no navegador do Instagram isso fazia a tela piscar).
+      const ys = pts.map(p => p.y);
+      const top = Math.min(...ys);
+      spine.style.translate = `${spineX}px ${top}px`;
+      spine.style.height = `${Math.max(...ys) - top}px`;
       pts.forEach((p, i) => {
-        links[i].setAttribute("x1", String(p.x));
-        links[i].setAttribute("y1", String(p.y));
-        links[i].setAttribute("x2", String(spineX));
-        links[i].setAttribute("y2", String(p.y));
+        links[i].style.translate = `${p.x}px ${p.y}px`;
+        links[i].style.width = `${Math.max(0, spineX - p.x)}px`;
         tags[i].style.transform = `translate(${spineX + (mobile ? 6 : 20)}px, ${p.y}px)`;
       });
     };
@@ -356,12 +356,10 @@ export function HomeEnd() {
         </div>
 
         <div className="fn-rail">
-          <svg className="fn-rail__svg" aria-hidden="true">
-            <line className="fn-spine" />
-            {END_LAYERS.map(layer => (
-              <line key={layer.id} className="fn-link" />
-            ))}
-          </svg>
+          <i className="fn-spine" aria-hidden="true" />
+          {END_LAYERS.map(layer => (
+            <i key={layer.id} className="fn-link" aria-hidden="true" />
+          ))}
           <nav aria-label={t(locale, "story.end.nav")}>
             <ol className="fn-tags">
               {END_LAYERS.map((layer, i) => (
