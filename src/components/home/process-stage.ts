@@ -69,6 +69,14 @@ export function calcProcessScrollTop(index: number, chapterTop: number, chapterL
   return chapterTop + (STAGE_TARGETS[i] / PROCESS_TOTAL) * chapterLen;
 }
 
+/**
+ * Paradas da rolagem no celular, em progresso do capítulo (0 a 1): o começo (conversa), o ponto de
+ * cada estação seguinte e o fim, com o disco da saída. São os mesmos pontos do clique na estação.
+ */
+export function processSnapPoints(): number[] {
+  return [0, ...STAGE_TARGETS.slice(1).map(t => t / PROCESS_TOTAL), 1];
+}
+
 /** Altura de tela do celular em que a prancha foi desenhada, em px. */
 const MOBILE_BOARD_H = 844;
 

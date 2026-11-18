@@ -76,7 +76,8 @@ export interface PlatePose {
   edgeColor: string;
   tagTransform: string;
   tagOpacity: number;
-  paperClipPath: string;
+  /** Escala da elipse de papel (inset 0, raio 50%): cresce por transform, sem redesenhar a placa. */
+  paperTransform: string;
   wipe: number;
 }
 
@@ -176,7 +177,8 @@ export function computeLayDown({
     const R = (wipe * diag * 1.05) / 2;
     const clipX = R / sx;
     const clipY = R / sy;
-    const paperClipPath = `ellipse(${clipX.toFixed(1)}px ${clipY.toFixed(1)}px at 50% 50%)`;
+    // A elipse da placa tem raios W/2 e H/2: a escala leva esses raios a clipX e clipY.
+    const paperTransform = `scale(${((2 * clipX) / W).toFixed(4)}, ${((2 * clipY) / H).toFixed(4)})`;
 
     const edgeColor = lcMix(PLATE_EDGE_COLORS[i], PAPER_EDGE_COLOR, wipe);
 
@@ -195,7 +197,7 @@ export function computeLayDown({
       edgeColor,
       tagTransform,
       tagOpacity,
-      paperClipPath,
+      paperTransform,
       wipe,
     });
   }

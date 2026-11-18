@@ -4,7 +4,7 @@ import { contactData } from "@/config/site";
 import type { ContactType } from "@/lib/contact";
 import { type Locale, type TranslationKey, t } from "@/lib/i18n";
 
-const CONTACT_FROM = "contato@devguimaraes.com.br";
+const CONTACT_FROM = "contato@brunoguimaraes.dev";
 const RATE_LIMIT_MAX = 5;
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 

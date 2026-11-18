@@ -119,11 +119,6 @@ const isHome = Astro.url.pathname === "/";
     <meta property="twitter:description" content={finalDesc} />
     <meta property="twitter:image" content={finalImage} />
 
-    <!-- Performance/Analytics scripts base (como Plausible se houver) -->
-    { import.meta.env.PROD && (
-      <script defer data-domain="devguimaraes.com.br" src="https://plausible.io/js/script.js"></script>
-    )}
-
     <!-- Client-side locale detection for lang/og attributes.
          O ClientRouter copia os atributos do <html> da página nova no swap (voltando para pt-BR),
          então o locale é reaplicado depois de cada navegação, não só no primeiro carregamento. -->

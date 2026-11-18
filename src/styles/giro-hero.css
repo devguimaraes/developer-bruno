@@ -418,35 +418,53 @@
   opacity: var(--lo, 1);
 }
 
-.hb .hb-line__svg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
+/* Trilho, estações, ligações e etiquetas ficam em 0,0 e andam por translate, cada peça na própria
+   camada (will-change): a flutuação a cada quadro não redesenha o palco. Redesenhar a camada do
+   tamanho da tela fazia o navegador do Instagram (WebView do Android) piscar. */
+.hb .hb-rail,
+.hb .hb-stop,
+.hb .hb-link,
+.hb .hb-tag {
+  will-change: translate;
 }
 
+/* Um trecho tracejado entre duas estações, girado a partir da de cima. */
 .hb .hb-rail {
-  fill: none;
-  stroke: rgba(212, 213, 250, 0.5);
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-dasharray: 2 7;
+  position: absolute;
+  top: -1px;
+  left: 0;
+  height: 2px;
+  background:
+    linear-gradient(90deg, rgba(212, 213, 250, 0.5) 0 4px, transparent 4px) 0 0 / 9px 2px repeat-x;
+  border-radius: 1px;
+  transform-origin: 0 50%;
+  will-change: translate, rotate;
 }
 
 .hb .hb-stop {
-  fill: var(--azul-sinal);
-  stroke: var(--nevoa-azul);
-  stroke-width: 2;
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--nevoa-azul);
+  border-radius: 50%;
+  background: var(--azul-sinal);
   transition:
-    fill 200ms linear,
-    stroke 200ms linear;
+    background-color 200ms linear,
+    border-color 200ms linear;
+}
+
+.hb .hb-stop--rest {
+  top: -5px;
+  left: -5px;
+  width: 10px;
+  height: 10px;
 }
 
 .hb .hb-stop.is-on {
-  fill: var(--lima);
-  stroke: var(--lima);
+  border-color: var(--lima);
+  background: var(--lima);
 }
 
 .hb .hb-link {
@@ -638,6 +656,8 @@
   height: 100%;
   overflow: visible;
   pointer-events: none;
+  /* O rastro é redesenhado a cada quadro da entrada: na própria camada, não leva a pilha junto. */
+  will-change: transform;
 }
 
 .hb .hb-trail__p {

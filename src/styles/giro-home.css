@@ -148,8 +148,10 @@
     0 0 0 5px color-mix(in srgb, var(--s-signal) 18%, transparent);
 }
 
+/* O pulso anima box-shadow, que redesenha: na própria camada, só o ponto é redesenhado. */
 .sv-list li.is-next::before {
   animation: sv-stop-next 1600ms ease-in-out infinite;
+  will-change: transform;
 }
 
 @keyframes sv-stop-pop {
@@ -321,7 +323,7 @@
 
 .pj-ch {
   --pw: min(91vw, 1312px);
-  --ph: min(calc(100svh - 176px), 700px);
+  --ph: min(calc(100dvh - 176px), 700px);
   position: relative;
   overflow-x: clip;
 }
@@ -591,7 +593,7 @@
   top: 0;
   display: block;
   max-width: none;
-  height: 100svh;
+  height: 100dvh;
   padding: 0;
   overflow: hidden;
   isolation: isolate;
@@ -599,7 +601,7 @@
 
 [data-scenes="on"] .pj-big {
   position: absolute;
-  top: calc(50svh - var(--u) * 13);
+  top: calc(50dvh - var(--u) * 13);
   left: var(--G);
 }
 
@@ -655,7 +657,7 @@
 
 [data-scenes="on"] .pj-out {
   position: absolute;
-  top: calc(50svh - var(--u) * 15);
+  top: calc(50dvh - var(--u) * 15);
   right: var(--G);
   width: calc(var(--u) * 30);
   max-width: none;
@@ -666,7 +668,7 @@
    coluna da capa fica estreita e alta demais para uma imagem deitada. */
 @media (min-width: 769px) and (max-aspect-ratio: 1 / 1) {
   .pj-ch {
-    --ph: min(calc(100svh - 176px), 920px);
+    --ph: min(calc(100dvh - 176px), 920px);
   }
   .pj-body {
     display: flex;
@@ -687,7 +689,7 @@
 @media (max-width: 768px) {
   .pj-ch {
     --pw: calc(100vw - 32px);
-    --ph: calc(100svh - 152px);
+    --ph: calc(100dvh - 152px);
   }
   .pj-stage {
     gap: 40px;
@@ -748,6 +750,9 @@
     margin-top: 12px;
   }
   .pj-text .g-button {
+    --b-h: 44px;
+    --b-pad: 18px;
+    --b-font: 15px;
     margin-top: 16px;
   }
   .pj-out__stop {
@@ -771,10 +776,10 @@
     height: calc(100svh * 8);
   }
   [data-scenes="on"] .pj-big {
-    top: calc(50svh - 166px);
+    top: calc(50dvh - 166px);
   }
   [data-scenes="on"] .pj-lead {
-    top: calc(50svh - 50px);
+    top: calc(50dvh - 50px);
     right: var(--G);
     bottom: auto;
   }
@@ -785,7 +790,7 @@
     margin-top: auto;
   }
   [data-scenes="on"] .pj-out {
-    top: calc(50svh - 50px);
+    top: calc(50dvh - 50px);
     right: var(--G);
     left: var(--G);
     width: auto;
@@ -1034,7 +1039,7 @@
   position: sticky;
   top: 0;
   max-width: none;
-  height: 100svh;
+  height: 100dvh;
   padding: 0;
   overflow: hidden;
   isolation: isolate;
@@ -1152,7 +1157,7 @@
   /* --pc-up: em telas mais baixas que a prancha (844 px) a cena sobe até 100 px, para o texto
      da etapa caber acima do trilho. Mesma conta de calcProcessLift em process-stage.ts. */
   [data-scenes="on"] .pc-ch {
-    --pc-up: clamp(0px, calc((844px - 100svh) * 0.6), 100px);
+    --pc-up: clamp(0px, calc((844px - 100dvh) * 0.6), 100px);
     height: calc(100svh * 5.6);
   }
   [data-scenes="on"] .pc-head {
@@ -1391,7 +1396,7 @@
 [data-scenes="on"] .home-chapter__stage {
   position: sticky;
   top: 0;
-  height: 100svh;
+  height: 100dvh;
   overflow-x: clip;
   box-sizing: border-box;
 }
@@ -1560,5 +1565,52 @@
   .home-giro-stage,
   .hs-actor {
     display: none;
+  }
+}
+
+/* ---------- Paradas da rolagem no celular (BeatSnap) ----------
+   Cada marcador fica na rolagem de uma batida: o capítulo rola 100% da altura menos uma tela, e
+   --p é o progresso. Com html[data-beat-snap] (palco preso na tela) o snap é obrigatório e cada
+   gesto para no marcador seguinte. */
+.beat-snap {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  html[data-beat-snap] {
+    scroll-snap-type: y mandatory;
+  }
+
+  /* O topo dos capítulos sem paradas também é ponto de snap (sem stop): com o snap ligado, um
+     salto pelo trilho ou por âncora para no capítulo pedido, e não no marcador mais perto. Nos
+     capítulos com paradas o marcador 0 já faz isso; neles o section não pode ser área de snap,
+     porque uma área maior que a tela libera a rolagem dentro dela. */
+  [data-scenes="on"] main section[id]:not(:has(> .beat-snap)) {
+    scroll-snap-align: start;
+  }
+
+  [data-scenes="on"] .beat-snap {
+    position: absolute;
+    inset: 0;
+    display: block;
+    pointer-events: none;
+  }
+
+  .beat-snap__mark {
+    position: absolute;
+    top: calc((100% - 100dvh) * var(--p));
+    left: 0;
+    width: 1px;
+    height: 1px;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .beat-snap__mark--before {
+    top: -100dvh;
+  }
+
+  .beat-snap__mark--after {
+    top: 100%;
   }
 }

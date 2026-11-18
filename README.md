@@ -30,7 +30,7 @@ O projeto combina renderização estática com ilhas interativas em React, mante
 - **Animações**: estados do Giro em CSS com `data-state`; Framer Motion só para voos.
 - **Contato**: função sob demanda na Vercel (`/api/contato`) com Resend.
 - **Conteúdo**: Astro Content Collections para blog e dados tipados em `src/data/`.
-- **SEO & Analytics**: metadados em `Layout.astro`, JSON-LD e Plausible em produção.
+- **SEO**: metadados em `Layout.astro` e JSON-LD.
 
 ---
 
@@ -41,7 +41,7 @@ Desenvolvido para entregar a melhor experiência possível sob as condições de
 - **Performance Budget**: Limites rigorosos de 300KB JS e 1MB total, garantindo carregamento rápido em redes 3G/4G instáveis.
 - **Local SEO**: Metadados em `pt_BR`, Schema.org (JSON-LD) em português e geração automática de sitemap para o Google Brasil.
 - **Typography**: Anybody e Geist Mono, servidas localmente, sem requisição a terceiros.
-- **Privacy**: Implementação do Plausible Analytics, totalmente aderente à LGPD (sem cookies).
+- **Privacy**: sem analytics nem rastreamento de visitantes.
 
 ---
 

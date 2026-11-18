@@ -40,7 +40,8 @@
   display: none;
 }
 
-.fn-rail__svg {
+.fn-spine,
+.fn-link {
   display: none;
 }
 
@@ -193,7 +194,7 @@
   position: sticky;
   top: 0;
   max-width: none;
-  height: 100svh;
+  height: 100dvh;
   padding: 0;
   overflow: hidden;
   isolation: isolate;
@@ -222,25 +223,30 @@
   pointer-events: none;
 }
 
-[data-scenes="on"] .fn-rail__svg {
+/* Linha, ligações e etiquetas ficam em 0,0 e andam por translate, cada peça na própria camada
+   (will-change): a flutuação a cada quadro não redesenha o palco inteiro, o que fazia o navegador
+   do Instagram (WebView do Android) piscar. */
+[data-scenes="on"] .fn-spine,
+[data-scenes="on"] .fn-link {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
   display: block;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
+  will-change: translate;
 }
 
-.fn-link {
-  stroke: rgba(212, 213, 250, 0.4);
-  stroke-width: 2;
+[data-scenes="on"] .fn-link {
+  top: -1px;
+  height: 2px;
+  background: rgba(212, 213, 250, 0.4);
 }
 
-.fn-spine {
-  stroke: rgba(212, 213, 250, 0.5);
-  stroke-width: 2;
-  stroke-dasharray: 2 7;
-  stroke-linecap: round;
+[data-scenes="on"] .fn-spine {
+  left: -1px;
+  width: 2px;
+  background:
+    linear-gradient(rgba(212, 213, 250, 0.5) 0 4px, transparent 4px) 0 0 / 2px 9px repeat-y;
+  border-radius: 1px;
 }
 
 [data-scenes="on"] .fn-tags {
@@ -261,6 +267,7 @@
   margin-top: -16px;
   padding: 0 8px;
   pointer-events: auto;
+  will-change: transform;
 }
 
 [data-scenes="on"] .fn-tag .hs-stop {
@@ -287,7 +294,7 @@
   /* --fn-up: em telas mais baixas que a prancha (844 px) o título e o respiro encolhem, e a
      pilha ganha altura para as etiquetas não se sobreporem. */
   .fn-stage {
-    --fn-up: clamp(0px, calc((844px - 100svh) * 0.6), 100px);
+    --fn-up: clamp(0px, calc((844px - 100dvh) * 0.6), 100px);
     padding: calc(88px - var(--fn-up) * 0.24) var(--G) 32px;
   }
   .fn-title {

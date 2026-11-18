@@ -25,6 +25,16 @@ export type DemoState = "empty" | "loading" | "error" | "done";
 
 export const DEMO_ORDER: readonly DemoState[] = ["empty", "loading", "error", "done"];
 
+/**
+ * Paradas da rolagem no celular, em progresso da abertura (0 a 1): a hero, a tela montada, o
+ * meio de cada estado e o fim. Um gesto leva de uma à seguinte, sem pular estado.
+ */
+export function statesSnapPoints(): number[] {
+  const span = (BEATS_TO - BEATS_FROM) / DEMO_ORDER.length;
+  const beats = DEMO_ORDER.map((_, i) => (BEATS_FROM + (i + 0.5) * span) / OPENING_TOTAL);
+  return [0, (SCREEN_FROM + BEATS_FROM) / 2 / OPENING_TOTAL, ...beats, 1];
+}
+
 /** Batida (0 a 3) para um progresso do capítulo (0 a 1). */
 export function calcStatesBeat(progress: number): number {
   const p = Number.isNaN(progress) ? 0 : progress;
@@ -75,9 +85,12 @@ function cardStep(k: string, state: DemoState): ChapterStep {
 export function calcOpeningStep(progress: number): ChapterStep {
   const t = (Number.isNaN(progress) ? 0 : progress) * OPENING_TOTAL;
   if (t < HAND_AT && !screenBusy) return { k: "hand", stop: "hero", state: "done", hidden: true };
-  if (t < BEATS_FROM) return { k: "rest", stop: "hero", state: t < 0.2 ? "done" : "curious" };
+  if (t < SCREEN_FROM) return { k: "rest", stop: "hero", state: t < 0.2 ? "done" : "curious" };
   if (t >= BEATS_TO) return { k: "exit", stop: "exit", state: "curious" };
   if (override) return cardStep(`over-${override}`, override);
+  // A tela de exemplo se monta onde ficava a estação da hero, e o Giro parado ali caía em cima do
+  // botão Publicar. Ele já espera no assento da tela, curioso, até a primeira batida.
+  if (t < BEATS_FROM) return { k: "screen", stop: "card", state: "curious" };
   const beat = calcStatesBeat(progress);
   return cardStep(`b${beat}`, DEMO_ORDER[beat]);
 }

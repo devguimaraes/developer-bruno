@@ -86,7 +86,7 @@ describe("lay-down pure logic", () => {
 
         // Wipe de papel ainda zerado
         expect(plate.wipe).toBe(0);
-        expect(plate.paperClipPath).toContain("ellipse(0.0px 0.0px at 50% 50%)");
+        expect(plate.paperTransform).toBe("scale(0.0000, 0.0000)");
 
         // Cor de borda original
         expect(plate.edgeColor).toBe(

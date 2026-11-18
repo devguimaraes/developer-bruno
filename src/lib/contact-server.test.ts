@@ -136,14 +136,14 @@ describe("handleContactSubmission", () => {
 
     expect(result).toEqual({ status: 200, body: { ok: true } });
     expect(send).toHaveBeenNthCalledWith(1, {
-      from: "contato@devguimaraes.com.br",
+      from: "contato@brunoguimaraes.dev",
       to: "bc.guimaraes@outlook.com",
       replyTo: "ana@empresa.com.br",
       subject: "Contato pelo site: Ana · site",
       text: brunoText,
     });
     expect(send).toHaveBeenNthCalledWith(2, {
-      from: "contato@devguimaraes.com.br",
+      from: "contato@brunoguimaraes.dev",
       to: "ana@empresa.com.br",
       replyTo: "bc.guimaraes@outlook.com",
       subject: "Recebi sua mensagem",
@@ -185,7 +185,7 @@ describe("handleContactSubmission", () => {
       })
     );
     expect(send).toHaveBeenNthCalledWith(2, {
-      from: "contato@devguimaraes.com.br",
+      from: "contato@brunoguimaraes.dev",
       to: "ana@empresa.com.br",
       replyTo: "bc.guimaraes@outlook.com",
       subject: "I got your message",

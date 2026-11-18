@@ -27,6 +27,9 @@
   width: 0.74em;
   height: 0.74em;
   margin: 0 0.03em;
+  /* O Giro da assinatura anima o tempo todo: na própria camada, ele não redesenha a tela em volta
+     a cada quadro (no navegador do Instagram isso fazia o Fim piscar). */
+  will-change: transform;
 }
 .g-signature__o .g-giro {
   display: block;
