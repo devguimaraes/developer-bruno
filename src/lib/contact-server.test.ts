@@ -6,7 +6,6 @@ import {
   handleContactSubmission,
   isSameOriginRequest,
   readLimitedText,
-  resolveResendApiKey,
 } from "./contact-server";
 
 const validBody = {
@@ -243,16 +242,6 @@ describe("handleContactSubmission", () => {
     const logged = vi.mocked(console.error).mock.calls.flat().join(" ");
     expect(logged).toContain("RESEND_API_KEY is not set");
     expect(logged).not.toContain("Preciso de um site.");
-  });
-});
-
-describe("resolveResendApiKey", () => {
-  it("prefere a chave do processo e cai para a do arquivo", () => {
-    expect(resolveResendApiKey("re_process", "re_file")).toBe("re_process");
-    expect(resolveResendApiKey(undefined, "re_file")).toBe("re_file");
-    expect(resolveResendApiKey("", "re_file")).toBe("re_file");
-    expect(resolveResendApiKey(undefined, undefined)).toBeUndefined();
-    expect(resolveResendApiKey("", "")).toBeUndefined();
   });
 });
 

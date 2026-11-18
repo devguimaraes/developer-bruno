@@ -1,21 +1,15 @@
 import type { APIRoute } from "astro";
+import { getSecret } from "astro:env/server";
 import {
   CONTACT_MAX_BODY_BYTES,
   createResendMailSender,
   handleContactSubmission,
   isSameOriginRequest,
   readLimitedText,
-  resolveResendApiKey,
 } from "@/lib/contact-server";
 
 /** Função sob demanda na Vercel. O resto do site continua pré-gerado. */
 export const prerender = false;
-
-declare const process: {
-  env: {
-    RESEND_API_KEY?: string;
-  };
-};
 
 function jsonResponse(body: { ok: boolean }, status: number): Response {
   return new Response(JSON.stringify(body), {
@@ -47,10 +41,9 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   const result = await handleContactSubmission({
     body,
     ip: clientAddress,
-    send: createResendMailSender(
-      // No `astro dev` o .env entra em import.meta.env. Na Vercel a chave chega em process.env.
-      resolveResendApiKey(process.env.RESEND_API_KEY, import.meta.env.RESEND_API_KEY)
-    ),
+    // getSecret lê a chave em tempo de execução (process.env na Vercel, .env no dev). Desde o
+    // Astro 6, import.meta.env é embutido no bundle no build, e a chave iria junto.
+    send: createResendMailSender(getSecret("RESEND_API_KEY")),
   });
   return jsonResponse(result.body, result.status);
 };
