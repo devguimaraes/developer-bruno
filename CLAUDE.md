@@ -42,7 +42,7 @@ Workflow, branching (Gitflow: `feature/*` from `develop`, `hotfix/*` from `main`
 
 ## Architecture
 
-Astro 7 site with React 18 islands, TypeScript and Tailwind 3. Portfolio of a Brazilian front-end developer at `brunoguimaraes.dev`. Pages are prerendered (`output: 'static'`, `build.format: 'directory'`) with the `@astrojs/vercel` adapter. The only server code is the on-demand Vercel function for the contact form (`src/pages/api/contato.ts`, ADR 0002, #54), with `prerender = false`. There are no other API routes. Navigation between pages goes through Astro's `ClientRouter`, so the page does not reload.
+Astro 7 site with React 19 islands, TypeScript and Tailwind 4. Portfolio of a Brazilian front-end developer at `brunoguimaraes.dev`. Pages are prerendered (`output: 'static'`, `build.format: 'directory'`) with the `@astrojs/vercel` adapter. The only server code is the on-demand Vercel function for the contact form (`src/pages/api/contato.ts`, ADR 0002, #54), with `prerender = false`. There are no other API routes. Navigation between pages goes through Astro's `ClientRouter`, so the page does not reload.
 
 ### Astro shell, React content
 
@@ -79,7 +79,7 @@ Unit tests alias `astro:content` to `src/test/__mocks__/astro-content.ts` (`vite
 
 Identity Giro (ADR 0001) replaces the old dark, neo-brutalist theme. Source of truth: the "Giro" Design System artifact linked in the ADR. In code, tokens and surfaces live in `src/styles/giro.css`: `g-papel` (reading), `g-azul` (brand) and `g-tinta` (dark). Pages alternate brand and reading surfaces. There is no dark mode at launch.
 
-Fonts are Anybody (`sans`) and Geist Mono (`mono`), bundled in `src/assets/fonts/` and set as CSS variables in `giro.css`. Tailwind `fontFamily` only maps those two. Geist Serif (`--font-serif`, Regular 400 only, display face) is used only for blog post titles: the `/blog` list, the post `h1`, related posts and markdown `h2`/`h3`. Page titles and the home stay in Anybody. Check `tailwind.config.ts` and `giro.css` before using a token. Page gutter, heading rhythm and vertical breathing room are tokens in `giro.css` (`--G`, `--head-gap-eyebrow`, `--head-gap-lead`, `--sec-top`/`--sec-bottom` for reading chapters on the home, `--page-top`/`--page-bottom` for inner pages): use them instead of per-chapter values. Sticky stages keep their own offsets, because their layout is fitted to the viewport. The legacy `brutal` palette, shadcn tokens and `shadow-brutal*` classes were removed.
+Fonts are Anybody (`sans`) and Geist Mono (`mono`), bundled in `src/assets/fonts/` and set as CSS variables in `giro.css`. Tailwind `fontFamily` only maps those two. Geist Serif (`--font-serif`, Regular 400 only, display face) is used only for blog post titles: the `/blog` list, the post `h1`, related posts and markdown `h2`/`h3`. Page titles and the home stay in Anybody. Check the `@theme` block in `src/index.css` and `giro.css` before using a token. Page gutter, heading rhythm and vertical breathing room are tokens in `giro.css` (`--G`, `--head-gap-eyebrow`, `--head-gap-lead`, `--sec-top`/`--sec-bottom` for reading chapters on the home, `--page-top`/`--page-bottom` for inner pages): use them instead of per-chapter values. Sticky stages keep their own offsets, because their layout is fitted to the viewport. The legacy `brutal` palette, shadcn tokens and `shadow-brutal*` classes were removed.
 
 ## Testing
 
