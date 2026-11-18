@@ -25,7 +25,7 @@ type Size = { width: number; height: number };
 
 // Bordas de cada estação dentro do trilho, para os conectores saírem e entrarem nelas. Mede de novo
 // quando o trilho ou uma pílula muda de largura (troca de idioma, fonte que termina de carregar).
-function useStationEdges(trackRef: RefObject<HTMLDivElement>) {
+function useStationEdges(trackRef: RefObject<HTMLDivElement | null>) {
   const [edges, setEdges] = useState<Edge[]>([]);
 
   useLayoutEffect(() => {
@@ -54,7 +54,7 @@ function useStationEdges(trackRef: RefObject<HTMLDivElement>) {
   return edges;
 }
 
-function useElementSize(ref: RefObject<HTMLElement>): Size {
+function useElementSize(ref: RefObject<HTMLElement | null>): Size {
   const [size, setSize] = useState<Size>({ width: 0, height: 0 });
 
   useLayoutEffect(() => {
