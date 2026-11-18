@@ -12,6 +12,7 @@ import {
   SCREEN_FROM,
   setDemoOverride,
   setScreenBusy,
+  statesSnapPoints,
 } from "./states-stage";
 
 // Linha do tempo de 10 unidades: a pilha fecha até 2,2, as quatro batidas vão de 2,25 a 9.
@@ -154,5 +155,21 @@ describe("batida da tela", () => {
     expect(calcOpeningStep(0)).toMatchObject({ k: "rest", stop: "hero" });
     setScreenBusy(false);
     expect(calcOpeningStep(0).hidden).toBe(true);
+  });
+});
+
+describe("statesSnapPoints", () => {
+  it("para na hero, na tela montada, uma vez em cada estado e no fim", () => {
+    const points = statesSnapPoints();
+    expect(points).toHaveLength(7);
+    expect(points.map(p => calcOpeningStep(p).k)).toEqual([
+      "hand",
+      "screen",
+      "b0",
+      "b1",
+      "b2",
+      "b3",
+      "exit",
+    ]);
   });
 });

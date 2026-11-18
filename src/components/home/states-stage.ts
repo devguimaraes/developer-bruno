@@ -25,6 +25,16 @@ export type DemoState = "empty" | "loading" | "error" | "done";
 
 export const DEMO_ORDER: readonly DemoState[] = ["empty", "loading", "error", "done"];
 
+/**
+ * Paradas da rolagem no celular, em progresso da abertura (0 a 1): a hero, a tela montada, o
+ * meio de cada estado e o fim. Um gesto leva de uma à seguinte, sem pular estado.
+ */
+export function statesSnapPoints(): number[] {
+  const span = (BEATS_TO - BEATS_FROM) / DEMO_ORDER.length;
+  const beats = DEMO_ORDER.map((_, i) => (BEATS_FROM + (i + 0.5) * span) / OPENING_TOTAL);
+  return [0, (SCREEN_FROM + BEATS_FROM) / 2 / OPENING_TOTAL, ...beats, 1];
+}
+
 /** Batida (0 a 3) para um progresso do capítulo (0 a 1). */
 export function calcStatesBeat(progress: number): number {
   const p = Number.isNaN(progress) ? 0 : progress;

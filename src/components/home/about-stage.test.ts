@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { ABOUT_SWAP, ABOUT_TIMELINE, calcAboutBeatTime, calcAboutStep } from "./about-stage";
+import {
+  ABOUT_SNAP_POINTS,
+  ABOUT_SWAP,
+  ABOUT_TIMELINE,
+  calcAboutBeatTime,
+  calcAboutStep,
+} from "./about-stage";
 
 describe("calcAboutStep", () => {
   it("antes da troca o Giro espia curioso no ombro da foto", () => {
@@ -29,5 +35,11 @@ describe("calcAboutBeatTime", () => {
 
   it("progresso inválido fica no começo", () => {
     expect(calcAboutBeatTime(Number.NaN)).toBe(0);
+  });
+});
+
+describe("ABOUT_SNAP_POINTS", () => {
+  it("para na foto com os nomes e na bio", () => {
+    expect(ABOUT_SNAP_POINTS.map(calcAboutBeatTime)).toEqual([0, ABOUT_SWAP]);
   });
 });

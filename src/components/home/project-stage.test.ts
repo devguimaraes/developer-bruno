@@ -4,6 +4,7 @@ import {
   calcProjectStep,
   PROJECT_ENTER,
   PROJECT_TILT,
+  projectSnapPoints,
   projectTimeline,
 } from "./project-stage";
 
@@ -75,5 +76,17 @@ describe("calcProjectBeatTime", () => {
   it("na virada vai até a pilha deitada com os números", () => {
     expect(calcProjectBeatTime(at(tTilt), count)).toBe(tTilt + PROJECT_TILT);
     expect(calcProjectBeatTime(1, count)).toBe(tTilt + PROJECT_TILT);
+  });
+});
+
+describe("projectSnapPoints", () => {
+  it("para no título, em cada janela uma vez, na pilha deitada e no fim, em ordem", () => {
+    const points = projectSnapPoints(5);
+    expect(points).toHaveLength(8);
+    expect(points[0]).toBe(0);
+    expect(points.at(-1)).toBe(1);
+    expect([...points].sort((a, b) => a - b)).toEqual(points);
+    const keys = points.map(p => calcProjectStep(p, 5).k);
+    expect(keys).toEqual(["t", "pj0", "pj1", "pj2", "pj3", "pj4", "o", "x"]);
   });
 });

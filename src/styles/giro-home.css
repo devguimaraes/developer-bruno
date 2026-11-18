@@ -1565,3 +1565,50 @@
     display: none;
   }
 }
+
+/* ---------- Paradas da rolagem no celular (BeatSnap) ----------
+   Cada marcador fica na rolagem de uma batida: o capítulo rola 100% da altura menos uma tela, e
+   --p é o progresso. Com html[data-beat-snap] (palco preso na tela) o snap é obrigatório e cada
+   gesto para no marcador seguinte. */
+.beat-snap {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  html[data-beat-snap] {
+    scroll-snap-type: y mandatory;
+  }
+
+  /* O topo dos capítulos sem paradas também é ponto de snap (sem stop): com o snap ligado, um
+     salto pelo trilho ou por âncora para no capítulo pedido, e não no marcador mais perto. Nos
+     capítulos com paradas o marcador 0 já faz isso; neles o section não pode ser área de snap,
+     porque uma área maior que a tela libera a rolagem dentro dela. */
+  [data-scenes="on"] main section[id]:not(:has(> .beat-snap)) {
+    scroll-snap-align: start;
+  }
+
+  [data-scenes="on"] .beat-snap {
+    position: absolute;
+    inset: 0;
+    display: block;
+    pointer-events: none;
+  }
+
+  .beat-snap__mark {
+    position: absolute;
+    top: calc((100% - 100dvh) * var(--p));
+    left: 0;
+    width: 1px;
+    height: 1px;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .beat-snap__mark--before {
+    top: -100dvh;
+  }
+
+  .beat-snap__mark--after {
+    top: 100%;
+  }
+}

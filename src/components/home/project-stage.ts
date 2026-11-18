@@ -42,6 +42,16 @@ export function projectTimeline(count: number): ProjectTimeline {
   return { t0: PROJECT_T0, step: PROJECT_STEP, tTilt, total: tTilt + 4 };
 }
 
+/**
+ * Paradas da rolagem no celular, em progresso do capítulo (0 a 1): o título, o meio de cada
+ * janela, a pilha deitada e o fim. Um gesto leva de uma à seguinte, sem pular janela.
+ */
+export function projectSnapPoints(count: number): number[] {
+  const { t0, step, tTilt, total } = projectTimeline(count);
+  const windows = Array.from({ length: count }, (_, i) => (t0 + (i + 0.5) * step) / total);
+  return [0, ...windows, (tTilt + 1.5) / total, 1];
+}
+
 /** Quanto dura a entrada de uma janela e a virada em pilha (com os números ao lado). */
 export const PROJECT_ENTER = 1;
 export const PROJECT_TILT = 1.6;

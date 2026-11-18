@@ -11,6 +11,7 @@ import {
   PROCESS_DISC,
   PROCESS_TOTAL,
   PROCESS_BEATS,
+  processSnapPoints,
 } from "./process-stage";
 
 // Linha do tempo de 5 unidades: conversa até 1,05, desenho até 2,1, código até 3,15, depois entrega.
@@ -130,5 +131,16 @@ describe("Processo em telas baixas", () => {
 
   it("tela mais alta que a prancha não desce a cena", () => {
     expect(calcProcessLift(932)).toBe(0);
+  });
+});
+
+describe("processSnapPoints", () => {
+  it("para uma vez em cada etapa e no fim, nos mesmos pontos do clique na estação", () => {
+    const points = processSnapPoints();
+    expect(points.map(calcProcessStage)).toEqual([0, 1, 2, 3, 3]);
+    expect(points.at(-1)).toBe(1);
+    for (const i of [1, 2, 3]) {
+      expect(points[i]).toBeCloseTo(calcProcessScrollTop(i, 0, 1));
+    }
   });
 });

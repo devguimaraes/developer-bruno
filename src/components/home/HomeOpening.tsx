@@ -25,7 +25,9 @@ import {
   OPENING_TOTAL,
   setDemoOverride,
   setScreenBusy,
+  statesSnapPoints,
 } from "./states-stage";
+import { BeatSnap } from "./story/BeatSnap";
 import { calcSceneProgress, createBeatPlayer } from "./story/beats";
 import { type SceneBuilder, useChapterScenes } from "./story/useChapterScenes";
 
@@ -40,6 +42,7 @@ const SPREAD = [
 const DESKTOP_QUERY = "(min-width: 768px)";
 /** Largura da tela da pilha, em px: a tela de exemplo é desenhada nessa escala. */
 const SCREEN_W = 330;
+const SNAP_POINTS = statesSnapPoints();
 
 /**
  * Abertura: a hero e o capítulo Estados no mesmo palco. A pilha da hero fecha, vira a tela de
@@ -296,6 +299,7 @@ export function HomeOpening() {
         />
         <div className="hs-disc ab-disc g-papel" aria-hidden="true" />
       </div>
+      <BeatSnap sectionRef={sectionRef} points={SNAP_POINTS} />
     </section>
   );
 }

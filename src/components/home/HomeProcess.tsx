@@ -14,7 +14,9 @@ import {
   calcProcessDiscRadius,
   calcProcessMobileCamera,
   calcProcessStage,
+  processSnapPoints,
 } from "./process-stage";
+import { BeatSnap } from "./story/BeatSnap";
 import { SCENE_MOBILE_QUERY } from "./story/chapters";
 import { calcSceneProgress, createBeatPlayer } from "./story/beats";
 import { type SceneBuilder, useChapterScenes } from "./story/useChapterScenes";
@@ -35,6 +37,7 @@ const NOTES: ReadonlyArray<{
 
 /** Fração da tela em que o topo do capítulo precisa estar para a primeira etapa começar. */
 const ENTER_AT = 0.45;
+const SNAP_POINTS = processSnapPoints();
 
 const CLOSED = [2, 6, 10, 30];
 const OPENED = { desktop: [14, 150, 290, 410], mobile: [14, 112, 210, 300] };
@@ -326,6 +329,7 @@ export function HomeProcess() {
 
         <div className="hs-disc pc-disc g-azul" aria-hidden="true" />
       </div>
+      <BeatSnap sectionRef={sectionRef} points={SNAP_POINTS} />
     </section>
   );
 }

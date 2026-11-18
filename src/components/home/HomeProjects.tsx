@@ -10,12 +10,16 @@ import {
   calcProjectBeatTime,
   PROJECT_ENTER,
   projectHost,
+  projectSnapPoints,
   projectSurface,
   projectTimeline,
 } from "./project-stage";
 import { SCENE_MOBILE_QUERY } from "./story/chapters";
+import { BeatSnap } from "./story/BeatSnap";
 import { calcSceneProgress, createBeatPlayer } from "./story/beats";
 import { type SceneBuilder, useChapterScenes } from "./story/useChapterScenes";
+
+const SNAP_POINTS = projectSnapPoints(homeCases.length);
 
 /**
  * Projetos em janelas: cada case entra como uma janela por cima da anterior e, no fim, a pilha
@@ -288,6 +292,7 @@ export function HomeProjects() {
           />
         </div>
       </div>
+      <BeatSnap sectionRef={sectionRef} points={SNAP_POINTS} />
     </section>
   );
 }
