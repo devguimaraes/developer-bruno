@@ -488,7 +488,7 @@ html[data-scenes="on"][data-giro-hand="story"]:not([data-giro-stop="card"]) .ab-
 [data-scenes="on"] .ab-stage {
   position: sticky;
   top: 0;
-  height: 100svh;
+  height: 100dvh;
   overflow: hidden;
   isolation: isolate;
 }
@@ -528,7 +528,7 @@ html[data-giro-hand="story"][data-scenes="on"] .ab-stage > .hb .hb-world {
 [data-scenes="on"] .ab-st {
   position: absolute;
   z-index: 2;
-  top: calc(100svh * 0.5 - var(--u) * 15);
+  top: calc(100dvh * 0.5 - var(--u) * 15);
   left: var(--G);
   width: calc(var(--u) * 40);
   padding: 0;
@@ -577,7 +577,7 @@ html[data-giro-hand="story"][data-scenes="on"] .ab-stage > .hb .hb-world {
 [data-scenes="on"] .ab-demo {
   position: absolute;
   z-index: 2;
-  top: calc(100svh * 0.5 - var(--u) * 13.6);
+  top: calc(100dvh * 0.5 - var(--u) * 13.6);
   left: calc(50% + var(--u) * 3);
   display: block;
   width: calc(var(--u) * 39);
@@ -600,7 +600,7 @@ html[data-giro-hand="story"][data-scenes="on"] .ab-stage > .hb .hb-world {
   /* --ab-up: em telas mais baixas que a prancha (844 px) o palco encolhe até 100 px, para as
      pílulas e a frase do estado caberem acima do trilho. */
   [data-scenes="on"] .ab {
-    --ab-up: clamp(0px, calc((844px - 100svh) * 0.6), 100px);
+    --ab-up: clamp(0px, calc((844px - 100dvh) * 0.6), 100px);
     /* Mais alto que no computador: no celular um gesto rola quase uma tela, e cada estado precisa
        durar perto disso para não passar direto. */
     height: calc(100svh * 5.4);

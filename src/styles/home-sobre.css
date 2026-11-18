@@ -112,7 +112,7 @@
   position: sticky;
   top: 0;
   max-width: none;
-  height: 100svh;
+  height: 100dvh;
   padding: 0;
   overflow: hidden;
   isolation: isolate;
@@ -156,7 +156,7 @@
 [data-scenes="on"] .sb-bio {
   position: absolute;
   z-index: 4;
-  top: calc(50svh - var(--u) * 21);
+  top: calc(50dvh - var(--u) * 21);
   right: var(--G);
   width: calc(var(--u) * 44);
 }
