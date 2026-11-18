@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Commands
 
-Package manager is Bun (CI pins 1.3.12).
+Package manager is Bun (CI pins 1.4.2).
 
 ```bash
 bun install
