@@ -25,7 +25,7 @@ Portfólio autoral de alta performance com a identidade Giro: um spinner com ros
 O projeto combina renderização estática com ilhas interativas em React, mantendo uma base enxuta e direcionada à experiência visual.
 
 ### 🧩 Core Stack
-- **Engine**: Astro 7 (SSG) + React 18.3 + TypeScript para compilação ultra-rápida.
+- **Engine**: Astro 7 (SSG) + React 19 + TypeScript 7 para compilação ultra-rápida.
 - **UI Layer**: Tailwind CSS 3.4 + tokens e componentes da Giro em `src/styles/giro*.css`.
 - **Animações**: estados do Giro em CSS com `data-state`; Framer Motion só para voos.
 - **Contato**: função sob demanda na Vercel (`/api/contato`) com Resend.
