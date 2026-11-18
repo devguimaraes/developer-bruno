@@ -142,8 +142,9 @@ describe("Horizontal Rule (hr)", () => {
     const container = renderMarkdown(`<hr />`);
     const el = container.querySelector("hr") as HTMLElement;
     const style = getComputedStyle(el);
-    expect(style.marginTop).toBe("3rem");
-    expect(style.marginBottom).toBe("3rem");
+    // O jsdom 31 devolve o valor calculado em px, como o navegador: 3rem com a raiz em 16px.
+    expect(style.marginTop).toBe("48px");
+    expect(style.marginBottom).toBe("48px");
   });
 
   it("hr tem regra CSS com border: none e border-top customizado", () => {
