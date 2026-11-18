@@ -12,6 +12,7 @@ import {
   SCREEN_FROM,
   setDemoOverride,
   setScreenBusy,
+  statesSnapPoints,
 } from "./states-stage";
 
 // Linha do tempo de 10 unidades: a pilha fecha até 2,2, as quatro batidas vão de 2,25 a 9.
@@ -60,7 +61,16 @@ describe("calcOpeningStep", () => {
 
   it("logo depois a pilha começa a fechar: aparece na estação, feliz e depois curioso", () => {
     expect(calcOpeningStep(at(HAND_AT))).toEqual({ k: "rest", stop: "hero", state: "done" });
-    expect(calcOpeningStep(at(1.5))).toEqual({ k: "rest", stop: "hero", state: "curious" });
+    expect(calcOpeningStep(at(0.3))).toEqual({ k: "rest", stop: "hero", state: "curious" });
+  });
+
+  it("quando a tela começa a se montar o Giro já espera no assento dela, longe do botão", () => {
+    expect(calcOpeningStep(at(SCREEN_FROM))).toEqual({
+      k: "screen",
+      stop: "card",
+      state: "curious",
+    });
+    expect(calcOpeningStep(at(1.5))).toEqual({ k: "screen", stop: "card", state: "curious" });
   });
 
   it("de 2,25 a 9 o Giro fica no assento único da tela: pula em vazio e carregando, treme em erro, veste azul em pronto", () => {
@@ -85,7 +95,7 @@ describe("calcOpeningStep", () => {
     expect(calcOpeningStep(1)).toEqual({ k: "exit", stop: "exit", state: "curious" });
   });
 
-  it("o estado pedido pelo visitante manda na tela, mas não na saída nem na hero", () => {
+  it("o estado pedido pelo visitante manda na tela, mas não na saída nem na hero antes da tela", () => {
     setDemoOverride("error");
     expect(calcOpeningStep(at(3))).toEqual({ k: "over-error", stop: "card", state: "error" });
     setDemoOverride("done");
@@ -96,7 +106,8 @@ describe("calcOpeningStep", () => {
       surface: "g-azul",
     });
     expect(calcOpeningStep(at(9.5)).stop).toBe("exit");
-    expect(calcOpeningStep(at(1)).stop).toBe("hero");
+    expect(calcOpeningStep(at(1)).stop).toBe("card");
+    expect(calcOpeningStep(at(0.3)).stop).toBe("hero");
   });
 });
 
@@ -144,5 +155,21 @@ describe("batida da tela", () => {
     expect(calcOpeningStep(0)).toMatchObject({ k: "rest", stop: "hero" });
     setScreenBusy(false);
     expect(calcOpeningStep(0).hidden).toBe(true);
+  });
+});
+
+describe("statesSnapPoints", () => {
+  it("para na hero, na tela montada, uma vez em cada estado e no fim", () => {
+    const points = statesSnapPoints();
+    expect(points).toHaveLength(7);
+    expect(points.map(p => calcOpeningStep(p).k)).toEqual([
+      "hand",
+      "screen",
+      "b0",
+      "b1",
+      "b2",
+      "b3",
+      "exit",
+    ]);
   });
 });

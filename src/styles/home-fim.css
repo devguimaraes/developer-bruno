@@ -193,7 +193,7 @@
   position: sticky;
   top: 0;
   max-width: none;
-  height: 100svh;
+  height: 100dvh;
   padding: 0;
   overflow: hidden;
   isolation: isolate;
@@ -287,7 +287,7 @@
   /* --fn-up: em telas mais baixas que a prancha (844 px) o título e o respiro encolhem, e a
      pilha ganha altura para as etiquetas não se sobreporem. */
   .fn-stage {
-    --fn-up: clamp(0px, calc((844px - 100svh) * 0.6), 100px);
+    --fn-up: clamp(0px, calc((844px - 100dvh) * 0.6), 100px);
     padding: calc(88px - var(--fn-up) * 0.24) var(--G) 32px;
   }
   .fn-title {
