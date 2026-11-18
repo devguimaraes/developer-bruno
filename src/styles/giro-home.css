@@ -148,8 +148,10 @@
     0 0 0 5px color-mix(in srgb, var(--s-signal) 18%, transparent);
 }
 
+/* O pulso anima box-shadow, que redesenha: na própria camada, só o ponto é redesenhado. */
 .sv-list li.is-next::before {
   animation: sv-stop-next 1600ms ease-in-out infinite;
+  will-change: transform;
 }
 
 @keyframes sv-stop-pop {
